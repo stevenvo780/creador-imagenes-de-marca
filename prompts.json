@@ -2,11 +2,22 @@
   "marca": {
     "nombre_producto": "Agora",
     "nombre_corporativo": "Elenxos",
-    "tagline": "escribe con libertad, verifica con rigor",
+    "tagline": "Traducimos el caos en estructuras lógicas",
     "url_producto": "agora.elenxos.com",
     "url_corporativa": "www.elenxos.com",
-    "tono": "riguroso, academico, cercano, minimalista, intelectual",
-    "paleta_sugerida": "azul profundo (#1a237e), blanco, gris claro (#f5f5f5), acento dorado (#c9a96e), negro tipografico (#212121)"
+    "tono": "riguroso, místico, cercano, orgánico, intelectual — Misticismo Lógico",
+    "paleta": {
+      "primario": "verde bosque ancestral (#0F2519)",
+      "acento_logico": "azul kodama (#A3E4D7)",
+      "vitalidad": "rojo mascara (#8B0000)",
+      "estructura": "gris ceniza de hierro (#3A3F41)"
+    },
+    "tipografia": {
+      "titulos": "Playfair Display (serif, tradición)",
+      "cuerpo": "Inter (sans-serif, modernidad)"
+    },
+    "inspiracion_visual": "La Princesa Mononoke (Studio Ghibli) — bosque ancestral místico y salvaje, bioluminiscencia, kodamas",
+    "origen": "Valle de Aburrá, Universidad de Antioquia, Medellín"
   },
   "imagenes": [
     {
@@ -16,7 +27,7 @@
       "alto": 627,
       "plataforma": "LinkedIn",
       "tipo": "post",
-      "prompt": "Minimalist academic brand hero image, deep navy blue gradient background, abstract geometric network of interconnected luminous nodes representing knowledge and research, subtle golden accent lines, clean negative space for text overlay, professional and intellectual mood, modern editorial design, 8k quality, photorealistic lighting, soft depth of field"
+      "prompt": "Mystical ancient forest clearing at twilight, dense dark green canopy (#0F2519), bioluminescent teal-blue light (#A3E4D7) emanating from kodama-like spirits perched on massive moss-covered tree roots, subtle iron-grey stone structures with logical symbols carved into them emerging from the forest floor, atmospheric fog and volumetric god-rays filtering through branches, Studio Ghibli Princess Mononoke aesthetic, where nature and logic coexist, clean negative space for text overlay, 8k quality, painterly digital art, cinematic lighting"
     },
     {
       "id": "linkedin_post_diferenciador",
@@ -25,7 +36,7 @@
       "alto": 627,
       "plataforma": "LinkedIn",
       "tipo": "post",
-      "prompt": "Clean modern workspace visualization, four elegant abstract icons representing writing formalization verification collaboration flowing into one unified stream, deep blue and white color scheme with golden accents, minimalist editorial style, professional academic technology branding, soft volumetric lighting, 8k quality"
+      "prompt": "Dark enchanted forest scene, four luminous teal-blue (#A3E4D7) organic pathways representing writing formalization verification collaboration converging into one radiant ancient tree at center, deep forest green (#0F2519) atmosphere, bioluminescent mushrooms and moss along the paths, iron-grey (#3A3F41) geometric rune stones marking each pathway, subtle dark red (#8B0000) energy veins in the tree trunk, Ghibli mystical forest aesthetic, order emerging from wilderness, 8k quality, painterly illustration"
     },
     {
       "id": "linkedin_post_madurez",
@@ -34,7 +45,7 @@
       "alto": 627,
       "plataforma": "LinkedIn",
       "tipo": "post",
-      "prompt": "Sophisticated abstract representation of a structured document ecosystem, layered translucent panels floating in space showing text structure formulas and collaborative annotations, deep navy background, clean geometric composition, golden highlight accents, professional academic software brand imagery, 8k photorealistic render"
+      "prompt": "Ancient forest library carved into a massive living tree, translucent floating panels of structured knowledge glowing in teal-blue (#A3E4D7) light among the branches, deep dark green (#0F2519) environment, iron-grey stone shelves holding luminous scrolls and mathematical formulas, moss and roots intertwining with logical diagrams, atmospheric mist, Studio Ghibli aesthetic, nature holding human knowledge, 8k quality, painterly digital art, volumetric lighting"
     },
     {
       "id": "linkedin_banner",
@@ -43,7 +54,7 @@
       "alto": 396,
       "plataforma": "LinkedIn",
       "tipo": "banner",
-      "prompt": "Ultra-wide panoramic minimalist banner, deep navy blue to dark grey gradient, subtle abstract network pattern of luminous interconnected lines and nodes fading from left to right, clean negative space on left third for logo placement, elegant academic technology brand, golden accent particles, 8k quality, editorial design"
+      "prompt": "Ultra-wide panoramic view of a mystical ancient forest canopy stretching to the horizon, deep dark green (#0F2519) to iron grey (#3A3F41) gradient, scattered bioluminescent teal-blue (#A3E4D7) kodama spirits glowing softly among branches fading from right to left, clean negative space on left third for logo placement, atmospheric fog layers, subtle dark red (#8B0000) dawn light at horizon, Studio Ghibli Princess Mononoke panoramic landscape, 8k quality, cinematic wide shot"
     },
     {
       "id": "ig_post_tesis",
@@ -52,7 +63,7 @@
       "alto": 1080,
       "plataforma": "Instagram",
       "tipo": "post cuadrado",
-      "prompt": "Square format academic brand visual, centered abstract geometric composition of intersecting luminous planes representing unified knowledge workflow, deep navy blue background, golden accent lines, clean minimalist design with generous negative space, modern intellectual aesthetic, 8k quality, soft volumetric lighting"
+      "prompt": "Square format, centered ancient tree with roots forming a perfect geometric mandala pattern, bioluminescent teal-blue (#A3E4D7) light pulsing through root networks like logical connections, deep dark forest green (#0F2519) background, small kodama spirits sitting on branches observing, iron-grey (#3A3F41) stone circle at the base with carved symbols, Ghibli mystical forest aesthetic, nature as structured knowledge, generous negative space, 8k quality, painterly style"
     },
     {
       "id": "ig_carrusel_problema_1",
@@ -61,7 +72,7 @@
       "alto": 1080,
       "plataforma": "Instagram",
       "tipo": "carrusel",
-      "prompt": "Square format, dramatic visualization of fragmented academic workflow, scattered translucent document panels floating in disarray against dark background, disconnected icons for text chat files terminals, visual chaos representing research tool fragmentation, deep blue and grey tones, red accent highlights showing pain points, 8k quality editorial design"
+      "prompt": "Square format, dark chaotic overgrown forest at night, tangled dead branches and scattered broken stone tablets with illegible text, disconnected fragments of documents and tools lost among thorns and decay, dark oppressive green-black atmosphere, dark red (#8B0000) warning glow from dying embers on the ground, visual chaos representing research tool fragmentation and academic disorder, no bioluminescence only darkness, 8k quality, Ghibli dark forest aesthetic, ominous mood"
     },
     {
       "id": "ig_carrusel_problema_3",
@@ -70,7 +81,7 @@
       "alto": 1080,
       "plataforma": "Instagram",
       "tipo": "carrusel",
-      "prompt": "Square format, elegant visualization of unified academic workflow, four abstract elements writing formalization verification collaboration converging into one harmonious luminous structure, deep navy blue background, golden connecting lines, order emerging from previous chaos, clean modern design, 8k quality, professional brand imagery"
+      "prompt": "Square format, the same forest now healed and luminous, four organic streams of bioluminescent teal-blue (#A3E4D7) energy representing writing formalization verification collaboration flowing together into a central ancient tree now alive and glowing, deep forest green (#0F2519) environment restored, kodama spirits returning, iron-grey structures now integrated with living roots, order and life emerging from previous chaos, Studio Ghibli healing scene aesthetic, 8k quality, hopeful atmospheric lighting"
     },
     {
       "id": "ig_story_teaser",
@@ -79,7 +90,7 @@
       "alto": 1920,
       "plataforma": "Instagram",
       "tipo": "story",
-      "prompt": "Vertical format, immersive deep blue gradient background with subtle abstract knowledge network pattern, luminous golden particles floating upward, large clean central area for text overlay, elegant academic technology brand aesthetic, atmospheric depth, 8k quality, professional editorial design"
+      "prompt": "Vertical format, immersive view looking upward through a towering ancient forest canopy, deep dark green (#0F2519) foliage above, bioluminescent teal-blue (#A3E4D7) kodama spirits and glowing spores floating upward like ascending ideas, atmospheric god-rays penetrating the canopy, large clean central area for text overlay, subtle dark red (#8B0000) accent flowers on the forest floor at bottom, Ghibli mystical vertical forest scene, 8k quality, dreamy atmospheric depth"
     },
     {
       "id": "ig_reel_cover",
@@ -88,7 +99,7 @@
       "alto": 1920,
       "plataforma": "Instagram",
       "tipo": "reel cover",
-      "prompt": "Vertical format, bold minimalist cover image, large abstract geometric symbol representing academic rigor and cooperation at center, deep navy blue background, golden accent glow, clean negative space for title text at top and bottom, modern editorial design, 8k quality"
+      "prompt": "Vertical format, bold centered composition of a large luminous kodama spirit with teal-blue (#A3E4D7) glow standing on an iron-grey (#3A3F41) stone pedestal carved with Greek letters, deep dark forest green (#0F2519) background, bioluminescent roots radiating outward from the base, clean negative space at top and bottom for title text, dark red (#8B0000) subtle accent on the carved symbols, Ghibli spirit guardian aesthetic, 8k quality, striking and iconic"
     },
     {
       "id": "x_post_principal",
@@ -97,7 +108,7 @@
       "alto": 675,
       "plataforma": "X",
       "tipo": "post",
-      "prompt": "Wide format academic brand image, abstract minimalist composition of a luminous structured document transforming into verified formal notation, deep navy background with subtle grid pattern, golden accent highlights, clean editorial design suggesting intellectual rigor and modern technology, 8k quality, professional branding"
+      "prompt": "Wide format, ancient stone tablet covered in moss transforming into a luminous structured document, chaotic organic matter on the left resolving into precise teal-blue (#A3E4D7) glowing logical notation on the right, deep forest green (#0F2519) environment, iron-grey (#3A3F41) stone surface, bioluminescent moss tracing the transformation, Ghibli aesthetic where nature becomes structure, 8k quality, painterly digital art, atmospheric lighting"
     },
     {
       "id": "x_post_hilo",
@@ -106,7 +117,7 @@
       "alto": 675,
       "plataforma": "X",
       "tipo": "post hilo",
-      "prompt": "Wide format, elegant abstract visualization of a research workflow pipeline, five connected stages represented as luminous geometric shapes flowing left to right idea draft formalize verify collaborate, deep blue gradient background, golden connection lines, clean modern infographic style, 8k quality"
+      "prompt": "Wide format, five ancient standing stones arranged in a forest clearing forming a research pipeline from left to right — raw idea seed draft formalize verify collaborate — each stone progressively more luminous with teal-blue (#A3E4D7) bioluminescent connections between them, deep forest green (#0F2519) backdrop, iron-grey (#3A3F41) megaliths with carved symbols, glowing root network connecting their bases underground, Ghibli stone circle aesthetic, 8k quality"
     },
     {
       "id": "yt_thumbnail",
@@ -115,7 +126,7 @@
       "alto": 720,
       "plataforma": "YouTube",
       "tipo": "thumbnail",
-      "prompt": "Bold YouTube thumbnail style, dramatic lighting on abstract academic workspace visualization, deep navy blue and golden accents, high contrast, luminous geometric elements suggesting technology and knowledge, clean area on right side for bold title text, professional editorial brand design, 8k quality, eye-catching composition"
+      "prompt": "Bold YouTube thumbnail style, dramatic high-contrast scene of a glowing ancient forest gateway, massive dark tree trunks framing a brilliant teal-blue (#A3E4D7) bioluminescent portal at center, deep forest green (#0F2519) darkness on sides, dark red (#8B0000) energy crackling at the threshold, iron-grey stone arch with carved logical symbols, clean area on right for bold title text, Ghibli dramatic portal scene, 8k quality, eye-catching vivid composition"
     },
     {
       "id": "yt_banner",
@@ -124,7 +135,7 @@
       "alto": 1440,
       "plataforma": "YouTube",
       "tipo": "banner",
-      "prompt": "Ultra-wide YouTube channel banner, panoramic deep navy blue gradient with subtle abstract knowledge network extending across full width, luminous golden nodes and connecting lines concentrated at center, generous clean space for channel branding, professional academic technology aesthetic, 8k quality, modern editorial design"
+      "prompt": "Ultra-wide YouTube channel banner, panoramic mystical ancient forest extending across full width, deep dark green (#0F2519) canopy with scattered bioluminescent teal-blue (#A3E4D7) kodama spirits concentrated at center, iron-grey (#3A3F41) ancient stone ruins integrated with living trees, atmospheric fog layers creating depth, generous clean space at center for channel branding, subtle dark red (#8B0000) dawn glow at edges, Ghibli panoramic forest landscape, 8k quality, cinematic"
     },
     {
       "id": "whatsapp_perfil",
@@ -133,7 +144,7 @@
       "alto": 640,
       "plataforma": "WhatsApp",
       "tipo": "avatar",
-      "prompt": "Square format profile picture, centered bold abstract geometric symbol representing academic platform, single luminous golden icon on deep navy blue background, ultra-clean minimalist design, high contrast, recognizable at small size, professional brand mark aesthetic, 8k quality"
+      "prompt": "Square format profile picture, centered single luminous kodama spirit glowing teal-blue (#A3E4D7) on deep dark forest green (#0F2519) background, the spirit sits on a small iron-grey (#3A3F41) stone with a Greek epsilon carved into it, ultra-clean composition, high contrast bioluminescence, recognizable at small size, subtle dark red (#8B0000) accent glow beneath the stone, Ghibli kodama spirit aesthetic, 8k quality, iconic and simple"
     },
     {
       "id": "og_general",
@@ -142,7 +153,7 @@
       "alto": 630,
       "plataforma": "Web",
       "tipo": "OG image",
-      "prompt": "Wide format social share preview image, elegant deep navy blue background with subtle abstract academic network pattern, centered luminous geometric composition suggesting structured knowledge and collaboration, golden accent highlights, generous clean space for site title and description overlay, professional academic technology brand, 8k quality"
+      "prompt": "Wide format social share preview, mystical forest clearing with a central ancient tree whose roots form an intricate network pattern glowing teal-blue (#A3E4D7), deep dark forest green (#0F2519) atmosphere, iron-grey (#3A3F41) stone structures flanking the tree, bioluminescent kodama spirits scattered in the canopy, generous clean space for site title and description overlay, atmospheric fog, Ghibli ancient forest aesthetic, 8k quality, balanced painterly composition"
     }
   ]
 }
