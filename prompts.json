@@ -1,0 +1,148 @@
+{
+  "marca": {
+    "nombre_producto": "Agora",
+    "nombre_corporativo": "Elenxos",
+    "tagline": "escribe con libertad, verifica con rigor",
+    "url_producto": "agora.elenxos.com",
+    "url_corporativa": "www.elenxos.com",
+    "tono": "riguroso, academico, cercano, minimalista, intelectual",
+    "paleta_sugerida": "azul profundo (#1a237e), blanco, gris claro (#f5f5f5), acento dorado (#c9a96e), negro tipografico (#212121)"
+  },
+  "imagenes": [
+    {
+      "id": "linkedin_post_tesis",
+      "nombre": "LinkedIn - Tesis de marca",
+      "ancho": 1200,
+      "alto": 627,
+      "plataforma": "LinkedIn",
+      "tipo": "post",
+      "prompt": "Minimalist academic brand hero image, deep navy blue gradient background, abstract geometric network of interconnected luminous nodes representing knowledge and research, subtle golden accent lines, clean negative space for text overlay, professional and intellectual mood, modern editorial design, 8k quality, photorealistic lighting, soft depth of field"
+    },
+    {
+      "id": "linkedin_post_diferenciador",
+      "nombre": "LinkedIn - Diferenciador real",
+      "ancho": 1200,
+      "alto": 627,
+      "plataforma": "LinkedIn",
+      "tipo": "post",
+      "prompt": "Clean modern workspace visualization, four elegant abstract icons representing writing formalization verification collaboration flowing into one unified stream, deep blue and white color scheme with golden accents, minimalist editorial style, professional academic technology branding, soft volumetric lighting, 8k quality"
+    },
+    {
+      "id": "linkedin_post_madurez",
+      "nombre": "LinkedIn - Prueba de madurez",
+      "ancho": 1200,
+      "alto": 627,
+      "plataforma": "LinkedIn",
+      "tipo": "post",
+      "prompt": "Sophisticated abstract representation of a structured document ecosystem, layered translucent panels floating in space showing text structure formulas and collaborative annotations, deep navy background, clean geometric composition, golden highlight accents, professional academic software brand imagery, 8k photorealistic render"
+    },
+    {
+      "id": "linkedin_banner",
+      "nombre": "LinkedIn - Banner de perfil",
+      "ancho": 1584,
+      "alto": 396,
+      "plataforma": "LinkedIn",
+      "tipo": "banner",
+      "prompt": "Ultra-wide panoramic minimalist banner, deep navy blue to dark grey gradient, subtle abstract network pattern of luminous interconnected lines and nodes fading from left to right, clean negative space on left third for logo placement, elegant academic technology brand, golden accent particles, 8k quality, editorial design"
+    },
+    {
+      "id": "ig_post_tesis",
+      "nombre": "Instagram - Post tesis de marca",
+      "ancho": 1080,
+      "alto": 1080,
+      "plataforma": "Instagram",
+      "tipo": "post cuadrado",
+      "prompt": "Square format academic brand visual, centered abstract geometric composition of intersecting luminous planes representing unified knowledge workflow, deep navy blue background, golden accent lines, clean minimalist design with generous negative space, modern intellectual aesthetic, 8k quality, soft volumetric lighting"
+    },
+    {
+      "id": "ig_carrusel_problema_1",
+      "nombre": "Instagram - Carrusel Problema slide 1",
+      "ancho": 1080,
+      "alto": 1080,
+      "plataforma": "Instagram",
+      "tipo": "carrusel",
+      "prompt": "Square format, dramatic visualization of fragmented academic workflow, scattered translucent document panels floating in disarray against dark background, disconnected icons for text chat files terminals, visual chaos representing research tool fragmentation, deep blue and grey tones, red accent highlights showing pain points, 8k quality editorial design"
+    },
+    {
+      "id": "ig_carrusel_problema_3",
+      "nombre": "Instagram - Carrusel Problema slide 3 solucion",
+      "ancho": 1080,
+      "alto": 1080,
+      "plataforma": "Instagram",
+      "tipo": "carrusel",
+      "prompt": "Square format, elegant visualization of unified academic workflow, four abstract elements writing formalization verification collaboration converging into one harmonious luminous structure, deep navy blue background, golden connecting lines, order emerging from previous chaos, clean modern design, 8k quality, professional brand imagery"
+    },
+    {
+      "id": "ig_story_teaser",
+      "nombre": "Instagram - Story teaser",
+      "ancho": 1080,
+      "alto": 1920,
+      "plataforma": "Instagram",
+      "tipo": "story",
+      "prompt": "Vertical format, immersive deep blue gradient background with subtle abstract knowledge network pattern, luminous golden particles floating upward, large clean central area for text overlay, elegant academic technology brand aesthetic, atmospheric depth, 8k quality, professional editorial design"
+    },
+    {
+      "id": "ig_reel_cover",
+      "nombre": "Instagram - Cover de Reel",
+      "ancho": 1080,
+      "alto": 1920,
+      "plataforma": "Instagram",
+      "tipo": "reel cover",
+      "prompt": "Vertical format, bold minimalist cover image, large abstract geometric symbol representing academic rigor and cooperation at center, deep navy blue background, golden accent glow, clean negative space for title text at top and bottom, modern editorial design, 8k quality"
+    },
+    {
+      "id": "x_post_principal",
+      "nombre": "X/Twitter - Post principal",
+      "ancho": 1200,
+      "alto": 675,
+      "plataforma": "X",
+      "tipo": "post",
+      "prompt": "Wide format academic brand image, abstract minimalist composition of a luminous structured document transforming into verified formal notation, deep navy background with subtle grid pattern, golden accent highlights, clean editorial design suggesting intellectual rigor and modern technology, 8k quality, professional branding"
+    },
+    {
+      "id": "x_post_hilo",
+      "nombre": "X/Twitter - Imagen para hilo",
+      "ancho": 1200,
+      "alto": 675,
+      "plataforma": "X",
+      "tipo": "post hilo",
+      "prompt": "Wide format, elegant abstract visualization of a research workflow pipeline, five connected stages represented as luminous geometric shapes flowing left to right idea draft formalize verify collaborate, deep blue gradient background, golden connection lines, clean modern infographic style, 8k quality"
+    },
+    {
+      "id": "yt_thumbnail",
+      "nombre": "YouTube - Thumbnail",
+      "ancho": 1280,
+      "alto": 720,
+      "plataforma": "YouTube",
+      "tipo": "thumbnail",
+      "prompt": "Bold YouTube thumbnail style, dramatic lighting on abstract academic workspace visualization, deep navy blue and golden accents, high contrast, luminous geometric elements suggesting technology and knowledge, clean area on right side for bold title text, professional editorial brand design, 8k quality, eye-catching composition"
+    },
+    {
+      "id": "yt_banner",
+      "nombre": "YouTube - Banner del canal",
+      "ancho": 2560,
+      "alto": 1440,
+      "plataforma": "YouTube",
+      "tipo": "banner",
+      "prompt": "Ultra-wide YouTube channel banner, panoramic deep navy blue gradient with subtle abstract knowledge network extending across full width, luminous golden nodes and connecting lines concentrated at center, generous clean space for channel branding, professional academic technology aesthetic, 8k quality, modern editorial design"
+    },
+    {
+      "id": "whatsapp_perfil",
+      "nombre": "WhatsApp/Telegram - Foto de perfil",
+      "ancho": 640,
+      "alto": 640,
+      "plataforma": "WhatsApp",
+      "tipo": "avatar",
+      "prompt": "Square format profile picture, centered bold abstract geometric symbol representing academic platform, single luminous golden icon on deep navy blue background, ultra-clean minimalist design, high contrast, recognizable at small size, professional brand mark aesthetic, 8k quality"
+    },
+    {
+      "id": "og_general",
+      "nombre": "Open Graph general (compartir links)",
+      "ancho": 1200,
+      "alto": 630,
+      "plataforma": "Web",
+      "tipo": "OG image",
+      "prompt": "Wide format social share preview image, elegant deep navy blue background with subtle abstract academic network pattern, centered luminous geometric composition suggesting structured knowledge and collaboration, golden accent highlights, generous clean space for site title and description overlay, professional academic technology brand, 8k quality"
+    }
+  ]
+}
