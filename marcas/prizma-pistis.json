@@ -1,0 +1,78 @@
+{
+  "slug": "prizma-pistis",
+  "nombre_producto": "Pistis",
+  "nombre_corporativo": "Prizma",
+  "tagline": "Confianza verificable en cada transacción",
+  "url": "pistis.prizma.app",
+  "tono": "seguro, auditable, corporativo",
+  "simbolo": "✓",
+  "suite": "prizma",
+
+  "paleta": {
+    "bg":           "#0c0e10",
+    "primario":     "#0c0e10",
+    "acento":       "#f0b94a",
+    "acento_2":     "#d4622e",
+    "acento_3":     "#43b5a6",
+    "texto":        "#f0ece6",
+    "texto_muted":  "#a09080",
+    "surface":      "#16120e"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #f0b94a 0%, #d4622e 60%, #8b3a1a 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 60% 40%, #1a120a 0%, #0c0e10 65%)",
+
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo":  "Inter"
+  },
+
+  "logo_texto": "Pistis",
+  "logo_simbolo": "✓",
+
+  "textos": {
+    "linkedin_post": {
+      "titulo":    "Pistis",
+      "subtitulo": "Confianza verificable · Prizma",
+      "copy":      "Confianza verificable en cada transacción."
+    },
+    "linkedin_banner": {
+      "titulo":    "Pistis",
+      "copy":      "Auditoría, firma y confianza digital para la empresa moderna."
+    },
+    "ig_post": {
+      "titulo":    "✓",
+      "subtitulo": "Pistis",
+      "copy":      "Confianza verificable en cada transacción"
+    },
+    "ig_story": {
+      "titulo":    "Pistis",
+      "copy":      "New release ↓"
+    },
+    "x_post": {
+      "titulo":    "Pistis",
+      "copy":      "Confianza verificable en cada transacción"
+    },
+    "yt_thumbnail": {
+      "titulo":    "Pistis",
+      "copy":      "Watch"
+    },
+    "yt_banner": {
+      "titulo":    "Pistis",
+      "subtitulo": "Confianza verificable · Prizma"
+    },
+    "og_general": {
+      "titulo":    "Pistis",
+      "subtitulo": "Confianza verificable · Prizma",
+      "copy":      "Confianza verificable en cada transacción."
+    },
+    "whatsapp_perfil": {
+      "titulo":    "✓",
+      "copy":      "Pistis"
+    },
+    "contra_cover": {
+      "titulo":    "Pistis",
+      "copy":      "Confianza verificable · Prizma"
+    }
+  }
+}

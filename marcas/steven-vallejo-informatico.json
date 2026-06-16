@@ -1,0 +1,77 @@
+{
+  "slug": "steven-vallejo-informatico",
+  "nombre_producto": "Steven Vallejo · Informático",
+  "nombre_corporativo": "Steven Vallejo",
+  "tagline": "Software architecture, AI systems, and the craft of clean code",
+  "url": "stevenvallejo.dev",
+  "tono": "técnico, preciso, pragmático",
+  "simbolo": "lemniscata (∞)",
+
+  "paleta": {
+    "bg":           "#0b1417",
+    "primario":     "#0b1417",
+    "acento":       "#43b5a6",
+    "acento_2":     "#1a9c8c",
+    "acento_3":     "#e0a85e",
+    "texto":        "#e8e0d4",
+    "texto_muted":  "#8fa3a8",
+    "surface":      "#152028"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #43b5a6 0%, #1a9c8c 60%, #0b1417 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 20% 50%, #0d1e24 0%, #0b1417 60%)",
+
+  "tipografia": {
+    "titulos": "JetBrains Mono",
+    "cuerpo":  "JetBrains Mono"
+  },
+
+  "logo_texto": "SV",
+  "logo_simbolo": "∞",
+
+  "textos": {
+    "linkedin_post": {
+      "titulo":    "Steven Vallejo · Software Architect",
+      "subtitulo": "Software Architecture · AI Systems · Technical Writing",
+      "copy":      "Translating complex systems into structured clarity."
+    },
+    "linkedin_banner": {
+      "titulo":    "Steven Vallejo",
+      "copy":      "Building at the intersection of systems, intelligence, and craft."
+    },
+    "ig_post": {
+      "titulo":    "∞",
+      "subtitulo": "Steven Vallejo · Informático",
+      "copy":      "Software architecture and AI systems"
+    },
+    "ig_story": {
+      "titulo":    "Steven\nVallejo",
+      "copy":      "Tech ↓"
+    },
+    "x_post": {
+      "titulo":    "Steven Vallejo",
+      "copy":      "Software architecture, AI systems, and the craft of clean code"
+    },
+    "yt_thumbnail": {
+      "titulo":    "Steven Vallejo",
+      "copy":      "Watch"
+    },
+    "yt_banner": {
+      "titulo":    "Steven Vallejo",
+      "subtitulo": "Software · AI · Engineering"
+    },
+    "og_general": {
+      "titulo":    "Steven Vallejo · Software Architect",
+      "subtitulo": "Software Architecture · AI Systems",
+      "copy":      "Translating complex systems into structured clarity."
+    },
+    "whatsapp_perfil": {
+      "titulo":    "SV",
+      "copy":      "∞"
+    },
+    "contra_cover": {
+      "titulo":    "Steven Vallejo",
+      "copy":      "Software Architecture & AI Systems"
+    }
+  }
+}

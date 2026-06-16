@@ -1,0 +1,78 @@
+{
+  "slug": "pinakotheke-xenia",
+  "nombre_producto": "Xenía",
+  "nombre_corporativo": "Pinakothḗke",
+  "tagline": "CRM para PYMEs colombianas con 19 entidades: pipeline kanban, contactos, empresas, negocios, actividades, cotizaciones y facturas. Localizado para NIT, COP, departamentos y tipos societarios. React 19 + Vite + Express + Neon Postgres, desplegado en Vercel.",
+  "url": "https://xenia.stevenvallejo.com",
+  "tono": "hospitalario, relacional, PYME",
+  "simbolo": "⟡",
+  "frente": "informatica",
+
+  "paleta": {
+    "bg":           "#0b1417",
+    "primario":     "#0b1417",
+    "acento":       "#43b5a6",
+    "acento_2":     "#2a7a70",
+    "acento_3":     "#e0a85e",
+    "texto":        "#e8e0d4",
+    "texto_muted":  "#8fa3a8",
+    "surface":      "#131e22"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #43b5a6 0%, #2a7a70 50%, #e0a85e 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 35% 45%, #131e22 0%, #0b1417 70%)",
+
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo":  "Inter"
+  },
+
+  "logo_texto": "Xenía",
+  "logo_simbolo": "⟡",
+
+  "textos": {
+    "linkedin_post": {
+      "titulo":    "Xenía",
+      "subtitulo": "CRM para PYME · Pinakothḗke",
+      "copy":      "El CRM que trata a los clientes como huéspedes."
+    },
+    "linkedin_banner": {
+      "titulo":    "Xenía",
+      "copy":      "Relaciones duraderas. Clientes como huéspedes de honor."
+    },
+    "ig_post": {
+      "titulo":    "⟡",
+      "subtitulo": "Xenía",
+      "copy":      "El CRM que trata a los clientes como huéspedes"
+    },
+    "ig_story": {
+      "titulo":    "Xenía",
+      "copy":      "Nueva función ↓"
+    },
+    "x_post": {
+      "titulo":    "Xenía",
+      "copy":      "El CRM que trata a los clientes como huéspedes"
+    },
+    "yt_thumbnail": {
+      "titulo":    "Xenía",
+      "copy":      "Ver"
+    },
+    "yt_banner": {
+      "titulo":    "Xenía",
+      "subtitulo": "CRM para PYME · Pinakothḗke"
+    },
+    "og_general": {
+      "titulo":    "Xenía",
+      "subtitulo": "CRM para PYME · Pinakothḗke",
+      "copy":      "El CRM que trata a los clientes como huéspedes."
+    },
+    "whatsapp_perfil": {
+      "titulo":    "⟡",
+      "copy":      "Xenía"
+    },
+    "contra_cover": {
+      "titulo":    "Xenía",
+      "copy":      "CRM para PYME · Pinakothḗke"
+    }
+  }
+}

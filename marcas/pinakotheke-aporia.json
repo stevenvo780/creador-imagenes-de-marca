@@ -1,0 +1,83 @@
+{
+  "slug": "pinakotheke-aporia",
+  "nombre_producto": "Áporía",
+  "nombre_corporativo": "Pinakothḗke",
+  "tagline": "Plataforma editorial CMS full-stack (Next.js 16 + Neon/Postgres + Firebase Auth): publica papers, archiva investigación y corre experimentos colectivos con visualización en tiempo real. Panel /studio para CRUD editorial con auth real.",
+  "url": "",
+  "tono": "investigador, paradójico, fronterizo",
+  "simbolo": "∞",
+  "frente": "informatica",
+
+  "paleta": {
+    "bg":           "#0b1417",
+    "primario":     "#0b1417",
+    "acento":       "#6fd3c4",
+    "acento_2":     "#43b5a6",
+    "acento_3":     "#2a7a70",
+    "texto":        "#e8e0d4",
+    "texto_muted":  "#8fa3a8",
+    "surface":      "#131e22"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #6fd3c4 0%, #43b5a6 45%, #2a5a54 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 25% 55%, #0f2028 0%, #0b1417 70%)",
+
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo":  "Inter"
+  },
+
+  "logo_texto": "Áporía",
+  "logo_simbolo": "∞",
+
+  "textos": {
+    "og_product": {
+      "titulo":    "Áporía",
+      "subtitulo": "Paradojas · Fronteras del conocimiento · Ciencias",
+      "copy":      "Paradojas, problemas sin solución y las fronteras donde el rigor tropieza con lo inexplicable."
+    },
+    "og_general": {
+      "titulo":    "Áporía",
+      "subtitulo": "Ciencias · Pinakothḗke",
+      "copy":      "La ciencia en lo absurdo."
+    },
+    "linkedin_post": {
+      "titulo":    "Áporía",
+      "subtitulo": "Ciencias · Pinakothḗke",
+      "copy":      "La ciencia en lo absurdo."
+    },
+    "linkedin_banner": {
+      "titulo":    "Áporía",
+      "copy":      "Paradojas y fronteras donde el rigor tropieza con lo inexplicable."
+    },
+    "ig_post": {
+      "titulo":    "∞",
+      "subtitulo": "Áporía",
+      "copy":      "La ciencia en lo absurdo"
+    },
+    "ig_story": {
+      "titulo":    "Áporía",
+      "copy":      "Próximamente ↓"
+    },
+    "x_post": {
+      "titulo":    "Áporía",
+      "copy":      "La ciencia en lo absurdo"
+    },
+    "yt_thumbnail": {
+      "titulo":    "Áporía",
+      "copy":      "Ver"
+    },
+    "yt_banner": {
+      "titulo":    "Áporía",
+      "subtitulo": "Ciencias · Pinakothḗke"
+    },
+    "whatsapp_perfil": {
+      "titulo":    "∞",
+      "copy":      "Áporía"
+    },
+    "contra_cover": {
+      "titulo":    "Áporía",
+      "copy":      "Ciencias · Pinakothḗke"
+    }
+  }
+}

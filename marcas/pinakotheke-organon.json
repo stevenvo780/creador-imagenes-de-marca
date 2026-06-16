@@ -1,0 +1,132 @@
+{
+  "slug": "pinakotheke-organon",
+  "nombre_producto": "Órganon",
+  "nombre_corporativo": "Pinakothḗke",
+  "tagline": "Pipeline interactivo en vivo: entrada en español → autologic (formalizador NLP basado en reglas) → ST (lenguaje lógico con SAT solver CDCL propio, 6 333 tests) → resultado ejecutado. Sin IA, sin base de datos, todo en proceso serverless Vercel.",
+  "url": "https://organon.stevenvallejo.com",
+  "tono": "lógico, formal, computacional",
+  "simbolo": "⊢",
+  "frente": "informatica",
+
+  "paleta": {
+    "bg":           "#0b1417",
+    "primario":     "#0b1417",
+    "acento":       "#43b5a6",
+    "acento_2":     "#8d7cc0",
+    "acento_3":     "#A3E4D7",
+    "texto":        "#e8e0d4",
+    "texto_muted":  "#8fa3a8",
+    "surface":      "#131e22"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #43b5a6 0%, #8d7cc0 55%, #5a3a9a 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 30% 40%, #131e22 0%, #0b1417 70%)",
+
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo":  "JetBrains Mono"
+  },
+
+  "logo_texto": "Órganon",
+  "logo_simbolo": "⊢",
+
+  "textos": {
+    "linkedin_post": {
+      "titulo":    "Órganon",
+      "subtitulo": "NL → Lógica · Pinakothḗke",
+      "copy":      "Lenguaje natural, lógica precisa."
+    },
+    "linkedin_banner": {
+      "titulo":    "Órganon",
+      "copy":      "Traducción automática de lenguaje natural a lógica formal."
+    },
+    "ig_post": {
+      "titulo":    "⊢",
+      "subtitulo": "Órganon",
+      "copy":      "Lenguaje natural, lógica precisa"
+    },
+    "ig_story": {
+      "titulo":    "Órganon",
+      "copy":      "Nueva demo ↓"
+    },
+    "x_post": {
+      "titulo":    "Órganon",
+      "copy":      "Lenguaje natural, lógica precisa"
+    },
+    "yt_thumbnail": {
+      "titulo":    "Órganon",
+      "copy":      "Ver"
+    },
+    "yt_banner": {
+      "titulo":    "Órganon",
+      "subtitulo": "NL → Lógica · Pinakothḗke"
+    },
+    "og_general": {
+      "titulo":    "Órganon",
+      "subtitulo": "NL → Lógica · Pinakothḗke",
+      "copy":      "Lenguaje natural, lógica precisa."
+    },
+    "whatsapp_perfil": {
+      "titulo":    "⊢",
+      "copy":      "Órganon"
+    },
+    "contra_cover": {
+      "titulo":    "Órganon",
+      "copy":      "NL → Lógica · Pinakothḗke"
+    },
+    "ig_carousel": {
+      "titulo":    "⊢ Formalizar el lenguaje",
+      "subtitulo": "Órganon · NLP sin IA",
+      "copy":      "Escribes en español. auto.logic formaliza. ST ejecuta y verifica. Sin modelos de lenguaje, sin APIs externas."
+    },
+    "ig_reel_cover": {
+      "titulo":    "Texto → Lógica",
+      "subtitulo": "Órganon",
+      "copy":      "Demo en vivo"
+    },
+    "x_header": {
+      "titulo":    "Órganon",
+      "subtitulo": "NL → Lógica formal ejecutable · organon.stevenvallejo.com",
+      "copy":      "NLP por reglas · SAT solver CDCL propio · 6300+ tests"
+    },
+    "fb_cover": {
+      "titulo":    "Órganon",
+      "subtitulo": "Lenguaje natural → lógica formal",
+      "copy":      "La joya técnica de Pinakothḗke: donde la filosofía analítica y la ingeniería convergen en la misma línea de comandos."
+    },
+    "web_hero": {
+      "titulo":    "Lenguaje natural,\nlógica precisa",
+      "subtitulo": "Órganon · Pinakothḗke",
+      "copy":      "Convierte texto en español o inglés a lógica formal ejecutable. Once perfiles lógicos. SAT solver CDCL propio. Cero dependencias en ejecución."
+    },
+    "web_hero_mobile": {
+      "titulo":    "NL → Lógica",
+      "subtitulo": "Órganon",
+      "copy":      "Escribe. Formaliza. Ejecuta. Verifica."
+    },
+    "email_header": {
+      "titulo":    "Órganon",
+      "subtitulo": "NL → Lógica · Pinakothḗke",
+      "copy":      "Formalizador de lenguaje natural a lógica formal ejecutable"
+    },
+    "banner_ad": {
+      "titulo":    "Órganon",
+      "copy":      "Lenguaje natural → lógica formal · organon.stevenvallejo.com"
+    },
+    "business_card": {
+      "titulo":    "Órganon",
+      "subtitulo": "NL → Lógica formal",
+      "copy":      "organon.stevenvallejo.com"
+    },
+    "poster_a4": {
+      "titulo":    "Lenguaje natural,\nlógica precisa",
+      "subtitulo": "Órganon · Pinakothḗke",
+      "copy":      "Formalizador que convierte texto en lenguaje natural a lógica formal ejecutable. Once perfiles: proposicional, primer orden, modal, deóntico, epistémico, temporal, paraconsistente. SAT solver CDCL propio · 6300+ tests · zero runtime deps."
+    },
+    "og_product": {
+      "titulo":    "Órganon",
+      "subtitulo": "Lenguaje natural → lógica formal ejecutable",
+      "copy":      "NLP por reglas sin IA. Escribe un argumento en español, Órganon lo formaliza y ST lo ejecuta con un SAT solver CDCL propio."
+    }
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "slug": "steven-vallejo",
+  "nombre_producto": "Steven Vallejo",
+  "nombre_corporativo": "Steven Vallejo",
+  "tagline": "Architect of systems, chronicler of ideas",
+  "url": "stevenvallejo.dev",
+  "tono": "personal, reflexivo, técnico-humanista",
+  "simbolo": "lemniscata (∞)",
+
+  "paleta": {
+    "bg":           "#0b1417",
+    "primario":     "#0b1417",
+    "acento":       "#43b5a6",
+    "acento_2":     "#e0a85e",
+    "acento_3":     "#c0522a",
+    "texto":        "#e8e0d4",
+    "texto_muted":  "#8fa3a8",
+    "surface":      "#152028"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #e0a85e 0%, #c0522a 40%, #43b5a6 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 20% 50%, #152028 0%, #0b1417 60%)",
+
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo":  "Inter"
+  },
+
+  "logo_texto": "SV",
+  "logo_simbolo": "∞",
+
+  "textos": {
+    "linkedin_post": {
+      "titulo":    "Steven Vallejo",
+      "subtitulo": "Software Architect · AI Systems · Technical Writing",
+      "copy":      "Translating complex systems into structured clarity."
+    },
+    "linkedin_banner": {
+      "titulo":    "Steven Vallejo",
+      "copy":      "Building at the intersection of systems, intelligence, and craft."
+    },
+    "ig_post": {
+      "titulo":    "∞",
+      "subtitulo": "Steven Vallejo",
+      "copy":      "Architect of systems, chronicler of ideas"
+    },
+    "ig_story": {
+      "titulo":    "Steven\nVallejo",
+      "copy":      "New post ↓"
+    },
+    "x_post": {
+      "titulo":    "Steven Vallejo",
+      "copy":      "Architect of systems, chronicler of ideas"
+    },
+    "yt_thumbnail": {
+      "titulo":    "Steven Vallejo",
+      "copy":      "Watch"
+    },
+    "yt_banner": {
+      "titulo":    "Steven Vallejo",
+      "subtitulo": "Software · AI · Writing"
+    },
+    "og_general": {
+      "titulo":    "Steven Vallejo",
+      "subtitulo": "Software Architect · AI Systems",
+      "copy":      "Translating complex systems into structured clarity."
+    },
+    "whatsapp_perfil": {
+      "titulo":    "SV",
+      "copy":      "∞"
+    },
+    "contra_cover": {
+      "titulo":    "Steven Vallejo",
+      "copy":      "Software Architecture & AI Systems"
+    },
+    "ig_reel_cover": {
+      "titulo":    "∞",
+      "subtitulo": "Steven Vallejo",
+      "copy":      "12+ years of backend, agentic AI & devtools"
+    },
+    "ig_carousel": {
+      "titulo":    "Philosophy · Sciences · Engineering",
+      "subtitulo": "Steven Vallejo",
+      "copy":      "Three fronts. One framework. Structured clarity."
+    },
+    "x_header": {
+      "titulo":    "Steven Vallejo",
+      "subtitulo": "Architect of systems, chronicler of ideas",
+      "copy":      "stevenvallejo.com"
+    },
+    "fb_cover": {
+      "titulo":    "Steven Vallejo",
+      "subtitulo": "Software Architect · AI Systems · Technical Writing",
+      "copy":      "Building at the intersection of systems, intelligence, and craft."
+    },
+    "tiktok_cover": {
+      "titulo":    "SV",
+      "subtitulo": "Steven Vallejo",
+      "copy":      "Systems. Intelligence. Craft."
+    },
+    "web_hero": {
+      "titulo":    "Architect of systems,\nchronicler of ideas",
+      "subtitulo": "Software Architecture · Agentic AI · Philosophy of Mind",
+      "copy":      "12+ years translating complex systems into structured, maintainable software. From formal logic and NLP to multi-tenant platforms and OSS devtools."
+    },
+    "web_hero_mobile": {
+      "titulo":    "Steven\nVallejo",
+      "subtitulo": "Software Architect · AI Systems",
+      "copy":      "Translating complex systems into structured clarity."
+    },
+    "email_header": {
+      "titulo":    "Steven Vallejo",
+      "subtitulo": "Software Architecture · AI Systems · Technical Writing",
+      "copy":      "stevenvallejo.com"
+    },
+    "banner_ad": {
+      "titulo":    "Steven Vallejo",
+      "copy":      "Software Architecture & Agentic AI — stevenvallejo.com"
+    },
+    "business_card": {
+      "titulo":    "Steven Vallejo",
+      "subtitulo": "Software Architect · AI Systems",
+      "copy":      "stevenvallejo.com"
+    },
+    "poster_a4": {
+      "titulo":    "Steven Vallejo",
+      "subtitulo": "Software Architecture · Agentic AI · Philosophy of Mind",
+      "copy":      "Philosopher-engineer with 12+ years of backend, formal logic, and OSS devtools. Building systems that think and explaining systems that last."
+    },
+    "og_product": {
+      "titulo":    "Steven Vallejo — Projects",
+      "subtitulo": "Philosophy · Sciences · Engineering",
+      "copy":      "14 live products across formal logic, scientific simulation, multi-tenant platforms and SMB devtools. Mouseîon ecosystem."
+    }
+  }
+}

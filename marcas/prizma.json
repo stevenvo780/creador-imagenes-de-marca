@@ -1,0 +1,173 @@
+{
+  "slug": "prizma",
+  "nombre_producto": "Prizma",
+  "nombre_corporativo": "Prizma",
+  "tagline": "Suite corporativa modular en producción sobre Cloud Run: POS con facturación DIAN (Talanton), crédito sin interés (Pistis), marketing por WhatsApp (Iris), e-commerce conversacional (Hermes), logística última milla (Talaria) y CRM, orquestados por un hub de eventos (Nous). NestJS + Next.js, 8 microservicios desplegados.",
+  "url": "https://prisma-enterprice.cloud",
+  "tono": "corporativo, preciso, brillante, confiable",
+  "simbolo": "◈",
+
+  "paleta": {
+    "bg":           "#0c0e10",
+    "primario":     "#0c0e10",
+    "acento":       "#f0b94a",
+    "acento_2":     "#d4622e",
+    "acento_3":     "#43b5a6",
+    "texto":        "#f0ece6",
+    "texto_muted":  "#a09080",
+    "surface":      "#16120e"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #f0b94a 0%, #d4622e 55%, #9e3015 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 70% 30%, #1a120a 0%, #0c0e10 65%)",
+
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo":  "Inter"
+  },
+
+  "logo_texto": "P",
+  "logo_simbolo": "◈",
+
+  "textos": {
+    "linkedin_post": {
+      "titulo":    "Suite modular para PYME",
+      "subtitulo": "POS · Crédito · WhatsApp · E-commerce · Logística",
+      "copy":      "Prizma conecta facturación DIAN, crédito sin interés, marketing por WhatsApp y e-commerce conversacional en un solo ecosistema. NestJS + Next.js sobre Cloud Run."
+    },
+    "linkedin_banner": {
+      "titulo":    "Prizma",
+      "copy":      "La suite empresarial modular que conecta POS, crédito, WhatsApp y e-commerce para el comercio colombiano."
+    },
+    "ig_post": {
+      "titulo":    "◈",
+      "subtitulo": "Prizma",
+      "copy":      "POS · Crédito · Iris · Hermes"
+    },
+    "ig_story": {
+      "titulo":    "Prizma",
+      "copy":      "Suite enterprise para PYME ↓"
+    },
+    "ig_carousel": {
+      "titulo":    "6 módulos. 1 suite.",
+      "subtitulo": "Prizma",
+      "copy":      "Talanton · Pistis · Iris · Hermes · Talaria · Nous"
+    },
+    "ig_reel_cover": {
+      "titulo":    "Prizma en acción",
+      "copy":      "Del POS al WhatsApp en un ecosistema"
+    },
+    "x_post": {
+      "titulo":    "Prizma",
+      "copy":      "Suite modular para comercio: POS DIAN + crédito sin interés + WhatsApp marketing + e-commerce. Un hub de eventos. Muchas PYME."
+    },
+    "x_header": {
+      "titulo":    "Prizma — Corporate Intelligence Suite",
+      "copy":      "Clarity through structure. Power through precision."
+    },
+    "yt_thumbnail": {
+      "titulo":    "Prizma",
+      "copy":      "Suite enterprise en producción"
+    },
+    "yt_banner": {
+      "titulo":    "Prizma",
+      "subtitulo": "Corporate Intelligence Suite"
+    },
+    "og_general": {
+      "titulo":    "Prizma",
+      "subtitulo": "Corporate Intelligence Suite",
+      "copy":      "Suite modular para PYME: POS con facturación DIAN (Talanton), crédito sin interés (Pistis), WhatsApp marketing (Iris), e-commerce conversacional (Hermes) y logística de última milla (Talaria)."
+    },
+    "og_product": {
+      "titulo":    "Prizma",
+      "subtitulo": "Suite empresarial modular",
+      "copy":      "POS · Crédito · WhatsApp · E-commerce · Logística — en producción con clientes reales sobre Cloud Run."
+    },
+    "whatsapp_perfil": {
+      "titulo":    "P",
+      "copy":      "◈"
+    },
+    "contra_cover": {
+      "titulo":    "Prizma",
+      "copy":      "Corporate Intelligence Suite"
+    },
+    "fb_cover": {
+      "titulo":    "Prizma",
+      "subtitulo": "Suite modular para el comercio colombiano",
+      "copy":      "Facturación DIAN · Crédito sin interés · WhatsApp marketing · E-commerce · Logística"
+    },
+    "tiktok_cover": {
+      "titulo":    "Prizma",
+      "copy":      "El software que el comercio colombiano necesitaba"
+    },
+    "web_hero": {
+      "titulo":    "Clarity through structure.",
+      "subtitulo": "Corporate Intelligence Suite",
+      "copy":      "Suite modular para PYME: POS con facturación DIAN, crédito sin interés, marketing por WhatsApp y e-commerce conversacional — orquestados por un hub de eventos en tiempo real."
+    },
+    "web_hero_mobile": {
+      "titulo":    "Prizma",
+      "subtitulo": "Suite modular para PYME",
+      "copy":      "POS · Crédito · WhatsApp · E-commerce · Logística"
+    },
+    "email_header": {
+      "titulo":    "Prizma",
+      "copy":      "Corporate Intelligence Suite — clarity through structure"
+    },
+    "banner_ad": {
+      "titulo":    "Prizma",
+      "copy":      "Suite modular para PYME — POS · Crédito · WhatsApp · E-commerce"
+    },
+    "business_card": {
+      "titulo":    "Prizma",
+      "subtitulo": "Corporate Intelligence Suite",
+      "copy":      "prizma.app"
+    },
+    "poster_a4": {
+      "titulo":    "Prizma",
+      "subtitulo": "Suite empresarial modular",
+      "copy":      "POS con facturación DIAN · Crédito sin interés · Marketing por WhatsApp · E-commerce conversacional · Logística de última milla · Orquestación en tiempo real"
+    },
+    "sticker": {
+      "titulo":    "◈",
+      "copy":      "Prizma"
+    },
+    "logo_lockup_color": {
+      "titulo":    "Prizma",
+      "subtitulo": "Corporate Intelligence Suite"
+    },
+    "logo_lockup_dark": {
+      "titulo":    "Prizma",
+      "subtitulo": "Corporate Intelligence Suite"
+    },
+    "logo_lockup_light": {
+      "titulo":    "Prizma",
+      "subtitulo": "Corporate Intelligence Suite"
+    },
+    "logo_wordmark": {
+      "titulo":    "Prizma",
+      "subtitulo": "Clarity through structure"
+    },
+    "logo_symbol_color": {
+      "titulo":    "◈"
+    },
+    "logo_symbol_mono": {
+      "titulo":    "◈"
+    },
+    "app_icon_1024": {
+      "titulo":    "P"
+    },
+    "favicon_512": {
+      "titulo":    "P"
+    },
+    "favicon_192": {
+      "titulo":    "P"
+    },
+    "favicon_180": {
+      "titulo":    "P"
+    },
+    "favicon_32": {
+      "titulo":    "P"
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "slug": "prizma-mnemosyne",
+  "nombre_producto": "Mnemosyne",
+  "nombre_corporativo": "Prizma",
+  "tagline": "La memoria institucional que no olvida",
+  "url": "mnemosyne.prizma.app",
+  "tono": "archivístico, corporativo, duradero",
+  "simbolo": "◫",
+  "suite": "prizma",
+
+  "paleta": {
+    "bg":           "#0c0e10",
+    "primario":     "#0c0e10",
+    "acento":       "#f0b94a",
+    "acento_2":     "#d4622e",
+    "acento_3":     "#43b5a6",
+    "texto":        "#f0ece6",
+    "texto_muted":  "#a09080",
+    "surface":      "#16120e"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #c0862a 0%, #f0b94a 50%, #d4622e 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 40% 60%, #1a120a 0%, #0c0e10 65%)",
+
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo":  "Inter"
+  },
+
+  "logo_texto": "Mnemosyne",
+  "logo_simbolo": "◫",
+
+  "textos": {
+    "linkedin_post": {
+      "titulo":    "Mnemosyne",
+      "subtitulo": "Memoria institucional · Prizma",
+      "copy":      "La memoria institucional que no olvida."
+    },
+    "linkedin_banner": {
+      "titulo":    "Mnemosyne",
+      "copy":      "Archiva decisiones, contexto y conocimiento tácito de la empresa."
+    },
+    "ig_post": {
+      "titulo":    "◫",
+      "subtitulo": "Mnemosyne",
+      "copy":      "La memoria institucional que no olvida"
+    },
+    "ig_story": {
+      "titulo":    "Mnemosyne",
+      "copy":      "New archive ↓"
+    },
+    "x_post": {
+      "titulo":    "Mnemosyne",
+      "copy":      "La memoria institucional que no olvida"
+    },
+    "yt_thumbnail": {
+      "titulo":    "Mnemosyne",
+      "copy":      "Watch"
+    },
+    "yt_banner": {
+      "titulo":    "Mnemosyne",
+      "subtitulo": "Memoria institucional · Prizma"
+    },
+    "og_general": {
+      "titulo":    "Mnemosyne",
+      "subtitulo": "Memoria institucional · Prizma",
+      "copy":      "La memoria institucional que no olvida."
+    },
+    "whatsapp_perfil": {
+      "titulo":    "◫",
+      "copy":      "Mnemosyne"
+    },
+    "contra_cover": {
+      "titulo":    "Mnemosyne",
+      "copy":      "Memoria institucional · Prizma"
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "slug": "pinakotheke-eikon",
+  "nombre_producto": "Eikón",
+  "nombre_corporativo": "Pinakothḗke",
+  "tagline": "Generador de pack de imagen de marca en GPU local (SDXL / FLUX.1-schnell): produce 15+ renders sociales (LinkedIn, Instagram, X, YouTube, WhatsApp, OG) para el media kit. Python puro, RTX 5070 Ti requerida. Herramienta interna.",
+  "url": "",
+  "tono": "creativo, técnico, visual",
+  "simbolo": "◈",
+  "frente": "informatica",
+
+  "paleta": {
+    "bg":           "#0b1417",
+    "primario":     "#0b1417",
+    "acento":       "#43b5a6",
+    "acento_2":     "#e0a85e",
+    "acento_3":     "#cf6a3c",
+    "texto":        "#e8e0d4",
+    "texto_muted":  "#8fa3a8",
+    "surface":      "#131e22"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #43b5a6 0%, #e0a85e 50%, #cf6a3c 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 50% 30%, #152028 0%, #0b1417 65%)",
+
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo":  "JetBrains Mono"
+  },
+
+  "logo_texto": "Eikón",
+  "logo_simbolo": "◈",
+
+  "textos": {
+    "og_product": {
+      "titulo":    "Eikón",
+      "subtitulo": "Logos · Paletas · Kits de identidad visual · IA",
+      "copy":      "Generador de imagen de marca: logos, paletas, activos visuales y kits de identidad con IA."
+    },
+    "og_general": {
+      "titulo":    "Eikón",
+      "subtitulo": "Ingeniería · Pinakothḗke",
+      "copy":      "Generador de imagen de marca con IA."
+    },
+    "linkedin_post": {
+      "titulo":    "Eikón",
+      "subtitulo": "Ingeniería · Pinakothḗke",
+      "copy":      "Generador de imagen de marca con IA."
+    },
+    "linkedin_banner": {
+      "titulo":    "Eikón",
+      "copy":      "Logos, paletas y kits de identidad visual generados con IA."
+    },
+    "ig_post": {
+      "titulo":    "◈",
+      "subtitulo": "Eikón",
+      "copy":      "Imagen de marca con IA"
+    },
+    "ig_story": {
+      "titulo":    "Eikón",
+      "copy":      "Próximamente ↓"
+    },
+    "x_post": {
+      "titulo":    "Eikón",
+      "copy":      "Generador de imagen de marca con IA"
+    },
+    "yt_thumbnail": {
+      "titulo":    "Eikón",
+      "copy":      "Ver"
+    },
+    "yt_banner": {
+      "titulo":    "Eikón",
+      "subtitulo": "Ingeniería · Pinakothḗke"
+    },
+    "whatsapp_perfil": {
+      "titulo":    "◈",
+      "copy":      "Eikón"
+    },
+    "contra_cover": {
+      "titulo":    "Eikón",
+      "copy":      "Ingeniería · Pinakothḗke"
+    }
+  }
+}

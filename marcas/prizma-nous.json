@@ -1,0 +1,78 @@
+{
+  "slug": "prizma-nous",
+  "nombre_producto": "Nous",
+  "nombre_corporativo": "Prizma",
+  "tagline": "Inteligencia corporativa que razona, no procesa",
+  "url": "nous.prizma.app",
+  "tono": "estratégico, IA, decisión",
+  "simbolo": "⬟",
+  "suite": "prizma",
+
+  "paleta": {
+    "bg":           "#0c0e10",
+    "primario":     "#0c0e10",
+    "acento":       "#f0b94a",
+    "acento_2":     "#d4622e",
+    "acento_3":     "#43b5a6",
+    "texto":        "#f0ece6",
+    "texto_muted":  "#a09080",
+    "surface":      "#16120e"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #f0b94a 0%, #d4622e 40%, #43b5a6 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 45% 55%, #1a120a 0%, #0c0e10 65%)",
+
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo":  "Inter"
+  },
+
+  "logo_texto": "Nous",
+  "logo_simbolo": "⬟",
+
+  "textos": {
+    "linkedin_post": {
+      "titulo":    "Nous",
+      "subtitulo": "Corporate AI · Prizma",
+      "copy":      "Inteligencia corporativa que razona, no procesa."
+    },
+    "linkedin_banner": {
+      "titulo":    "Nous",
+      "copy":      "IA que apoya decisiones estratégicas. Con contexto. Con criterio."
+    },
+    "ig_post": {
+      "titulo":    "⬟",
+      "subtitulo": "Nous",
+      "copy":      "Inteligencia corporativa que razona, no procesa"
+    },
+    "ig_story": {
+      "titulo":    "Nous",
+      "copy":      "New insight ↓"
+    },
+    "x_post": {
+      "titulo":    "Nous",
+      "copy":      "Inteligencia corporativa que razona, no procesa"
+    },
+    "yt_thumbnail": {
+      "titulo":    "Nous",
+      "copy":      "Watch"
+    },
+    "yt_banner": {
+      "titulo":    "Nous",
+      "subtitulo": "Corporate AI · Prizma"
+    },
+    "og_general": {
+      "titulo":    "Nous",
+      "subtitulo": "Corporate AI · Prizma",
+      "copy":      "Inteligencia corporativa que razona, no procesa."
+    },
+    "whatsapp_perfil": {
+      "titulo":    "⬟",
+      "copy":      "Nous"
+    },
+    "contra_cover": {
+      "titulo":    "Nous",
+      "copy":      "Corporate AI · Prizma"
+    }
+  }
+}

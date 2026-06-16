@@ -1,0 +1,78 @@
+{
+  "slug": "agora-autologic",
+  "nombre_producto": "auto.logic",
+  "nombre_corporativo": "Elenxos",
+  "tagline": "Inferencia automática sobre estructuras formales",
+  "url_producto": "autologic.elenxos.com",
+  "tono": "computacional, automatizado, riguroso",
+  "simbolo": "⊨",
+  "suite": "agora",
+
+  "paleta": {
+    "bg":           "#0b1417",
+    "primario":     "#0F2519",
+    "acento":       "#43b5a6",
+    "acento_2":     "#A3E4D7",
+    "acento_3":     "#2a7a70",
+    "texto":        "#e8e0d4",
+    "texto_muted":  "#8fa3a8",
+    "surface":      "#0d1e12"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #43b5a6 0%, #A3E4D7 50%, #2a7a70 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 30% 55%, #0d1e12 0%, #0b1417 70%)",
+
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo":  "JetBrains Mono"
+  },
+
+  "logo_texto": "auto.logic",
+  "logo_simbolo": "⊨",
+
+  "textos": {
+    "linkedin_post": {
+      "titulo":    "auto.logic",
+      "subtitulo": "Motor de inferencia · Agora · Elenxos",
+      "copy":      "Inferencia automática sobre estructuras formales."
+    },
+    "linkedin_banner": {
+      "titulo":    "auto.logic",
+      "copy":      "Razona sobre grafos de conocimiento. Sin ambigüedad. Sin error."
+    },
+    "ig_post": {
+      "titulo":    "⊨",
+      "subtitulo": "auto.logic",
+      "copy":      "Inferencia automática sobre estructuras formales"
+    },
+    "ig_story": {
+      "titulo":    "auto.logic",
+      "copy":      "Nueva versión ↓"
+    },
+    "x_post": {
+      "titulo":    "auto.logic",
+      "copy":      "Inferencia automática sobre estructuras formales"
+    },
+    "yt_thumbnail": {
+      "titulo":    "auto.logic",
+      "copy":      "Ver"
+    },
+    "yt_banner": {
+      "titulo":    "auto.logic",
+      "subtitulo": "Motor de inferencia · Agora · Elenxos"
+    },
+    "og_general": {
+      "titulo":    "auto.logic",
+      "subtitulo": "Motor de inferencia · Agora · Elenxos",
+      "copy":      "Inferencia automática sobre estructuras formales."
+    },
+    "whatsapp_perfil": {
+      "titulo":    "⊨",
+      "copy":      "auto.logic"
+    },
+    "contra_cover": {
+      "titulo":    "auto.logic",
+      "copy":      "Motor de inferencia · Agora · Elenxos"
+    }
+  }
+}

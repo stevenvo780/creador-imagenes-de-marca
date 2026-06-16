@@ -1,0 +1,77 @@
+{
+  "slug": "steven-vallejo-cientifico",
+  "nombre_producto": "Steven Vallejo · Científico",
+  "nombre_corporativo": "Steven Vallejo",
+  "tagline": "Complex systems, emergence, and the mathematics of the real",
+  "url": "stevenvallejo.dev",
+  "tono": "analítico, curioso, riguroso",
+  "simbolo": "lemniscata (∞)",
+
+  "paleta": {
+    "bg":           "#0b1417",
+    "primario":     "#0b1417",
+    "acento":       "#43b5a6",
+    "acento_2":     "#7c5cbf",
+    "acento_3":     "#e0a85e",
+    "texto":        "#e8e0d4",
+    "texto_muted":  "#8fa3a8",
+    "surface":      "#152028"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #43b5a6 0%, #7c5cbf 60%, #0b1417 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 20% 50%, #120d1e 0%, #0b1417 60%)",
+
+  "tipografia": {
+    "titulos": "JetBrains Mono",
+    "cuerpo":  "JetBrains Mono"
+  },
+
+  "logo_texto": "SV",
+  "logo_simbolo": "∞",
+
+  "textos": {
+    "linkedin_post": {
+      "titulo":    "Steven Vallejo · Científico",
+      "subtitulo": "Complex Systems · Emergence · Computational Science",
+      "copy":      "The mathematics of the real, made legible."
+    },
+    "linkedin_banner": {
+      "titulo":    "Steven Vallejo",
+      "copy":      "Mapping emergence at the edge of complexity and code."
+    },
+    "ig_post": {
+      "titulo":    "∞",
+      "subtitulo": "Steven Vallejo · Científico",
+      "copy":      "Complex systems and the mathematics of the real"
+    },
+    "ig_story": {
+      "titulo":    "Steven\nVallejo",
+      "copy":      "Ciencia ↓"
+    },
+    "x_post": {
+      "titulo":    "Steven Vallejo",
+      "copy":      "Complex systems, emergence, and the mathematics of the real"
+    },
+    "yt_thumbnail": {
+      "titulo":    "Steven Vallejo",
+      "copy":      "Watch"
+    },
+    "yt_banner": {
+      "titulo":    "Steven Vallejo",
+      "subtitulo": "Complex Systems · Science · Computation"
+    },
+    "og_general": {
+      "titulo":    "Steven Vallejo · Científico",
+      "subtitulo": "Complex Systems · Computational Science",
+      "copy":      "The mathematics of the real, made legible."
+    },
+    "whatsapp_perfil": {
+      "titulo":    "SV",
+      "copy":      "∞"
+    },
+    "contra_cover": {
+      "titulo":    "Steven Vallejo",
+      "copy":      "Complex Systems & Computational Science"
+    }
+  }
+}

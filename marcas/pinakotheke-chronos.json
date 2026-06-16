@@ -1,0 +1,78 @@
+{
+  "slug": "pinakotheke-chronos",
+  "nombre_producto": "Chrónos",
+  "nombre_corporativo": "Pinakothḗke",
+  "tagline": "App SaaS de control de horas freelance y cuentas de cobro localizadas para Colombia: registro individual y masivo, cálculo de ingresos con tarifa configurable, exportación PDF, filtros por día de semana y llenado automático por promedios. Next.js 15 + SQLite.",
+  "url": "https://chronos.stevenvallejo.com",
+  "tono": "preciso, minimalista, profesional",
+  "simbolo": "⏱",
+  "frente": "informatica",
+
+  "paleta": {
+    "bg":           "#0b1417",
+    "primario":     "#0b1417",
+    "acento":       "#43b5a6",
+    "acento_2":     "#2a7a70",
+    "acento_3":     "#A3E4D7",
+    "texto":        "#e8e0d4",
+    "texto_muted":  "#8fa3a8",
+    "surface":      "#131e22"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #43b5a6 0%, #2a7a70 60%, #163a35 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 70% 30%, #131e22 0%, #0b1417 70%)",
+
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo":  "JetBrains Mono"
+  },
+
+  "logo_texto": "Chrónos",
+  "logo_simbolo": "⏱",
+
+  "textos": {
+    "linkedin_post": {
+      "titulo":    "Chrónos",
+      "subtitulo": "Seguimiento de horas · Pinakothḗke",
+      "copy":      "Tiempo registrado, valor demostrado."
+    },
+    "linkedin_banner": {
+      "titulo":    "Chrónos",
+      "copy":      "Horas, facturación y reportes para el freelance moderno."
+    },
+    "ig_post": {
+      "titulo":    "⏱",
+      "subtitulo": "Chrónos",
+      "copy":      "Tiempo registrado, valor demostrado"
+    },
+    "ig_story": {
+      "titulo":    "Chrónos",
+      "copy":      "Nueva función ↓"
+    },
+    "x_post": {
+      "titulo":    "Chrónos",
+      "copy":      "Tiempo registrado, valor demostrado"
+    },
+    "yt_thumbnail": {
+      "titulo":    "Chrónos",
+      "copy":      "Ver"
+    },
+    "yt_banner": {
+      "titulo":    "Chrónos",
+      "subtitulo": "Seguimiento de horas · Pinakothḗke"
+    },
+    "og_general": {
+      "titulo":    "Chrónos",
+      "subtitulo": "Seguimiento de horas · Pinakothḗke",
+      "copy":      "Tiempo registrado, valor demostrado."
+    },
+    "whatsapp_perfil": {
+      "titulo":    "⏱",
+      "copy":      "Chrónos"
+    },
+    "contra_cover": {
+      "titulo":    "Chrónos",
+      "copy":      "Seguimiento de horas · Pinakothḗke"
+    }
+  }
+}

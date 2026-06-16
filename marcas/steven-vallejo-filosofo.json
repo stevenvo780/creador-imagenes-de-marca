@@ -1,0 +1,77 @@
+{
+  "slug": "steven-vallejo-filosofo",
+  "nombre_producto": "Steven Vallejo · Filósofo",
+  "nombre_corporativo": "Steven Vallejo",
+  "tagline": "Pensamiento riguroso en los márgenes del lenguaje y la razón",
+  "url": "stevenvallejo.dev",
+  "tono": "reflexivo, humanista, riguroso",
+  "simbolo": "lemniscata (∞)",
+
+  "paleta": {
+    "bg":           "#0b1417",
+    "primario":     "#0b1417",
+    "acento":       "#e0a85e",
+    "acento_2":     "#c0522a",
+    "acento_3":     "#43b5a6",
+    "texto":        "#e8e0d4",
+    "texto_muted":  "#8fa3a8",
+    "surface":      "#152028"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #e0a85e 0%, #c0522a 60%, #0b1417 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 20% 50%, #1c1408 0%, #0b1417 60%)",
+
+  "tipografia": {
+    "titulos": "Cormorant Garamond",
+    "cuerpo":  "Cormorant Garamond"
+  },
+
+  "logo_texto": "SV",
+  "logo_simbolo": "∞",
+
+  "textos": {
+    "linkedin_post": {
+      "titulo":    "Steven Vallejo · Filósofo",
+      "subtitulo": "Filosofía del lenguaje · Epistemología · Pensamiento crítico",
+      "copy":      "Las preguntas correctas son más valiosas que las respuestas rápidas."
+    },
+    "linkedin_banner": {
+      "titulo":    "Steven Vallejo",
+      "copy":      "Pensamiento riguroso en los márgenes del lenguaje y la razón."
+    },
+    "ig_post": {
+      "titulo":    "∞",
+      "subtitulo": "Steven Vallejo · Filósofo",
+      "copy":      "Pensamiento riguroso en los márgenes del lenguaje"
+    },
+    "ig_story": {
+      "titulo":    "Steven\nVallejo",
+      "copy":      "Filosofía ↓"
+    },
+    "x_post": {
+      "titulo":    "Steven Vallejo",
+      "copy":      "Pensamiento riguroso en los márgenes del lenguaje y la razón"
+    },
+    "yt_thumbnail": {
+      "titulo":    "Steven Vallejo",
+      "copy":      "Ver"
+    },
+    "yt_banner": {
+      "titulo":    "Steven Vallejo",
+      "subtitulo": "Filosofía · Lenguaje · Razón"
+    },
+    "og_general": {
+      "titulo":    "Steven Vallejo · Filósofo",
+      "subtitulo": "Filosofía del lenguaje · Epistemología",
+      "copy":      "Las preguntas correctas son más valiosas que las respuestas rápidas."
+    },
+    "whatsapp_perfil": {
+      "titulo":    "SV",
+      "copy":      "∞"
+    },
+    "contra_cover": {
+      "titulo":    "Steven Vallejo",
+      "copy":      "Filosofía del lenguaje & Pensamiento crítico"
+    }
+  }
+}

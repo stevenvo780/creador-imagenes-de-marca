@@ -1,0 +1,78 @@
+{
+  "slug": "prizma-prisma",
+  "nombre_producto": "Prisma",
+  "nombre_corporativo": "Prizma",
+  "tagline": "El núcleo que refracta la suite completa",
+  "url": "prisma.prizma.app",
+  "tono": "central, arquitectural, técnico",
+  "simbolo": "◈",
+  "suite": "prizma",
+
+  "paleta": {
+    "bg":           "#0c0e10",
+    "primario":     "#0c0e10",
+    "acento":       "#f0b94a",
+    "acento_2":     "#d4622e",
+    "acento_3":     "#43b5a6",
+    "texto":        "#f0ece6",
+    "texto_muted":  "#a09080",
+    "surface":      "#16120e"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #f0b94a 0%, #d4622e 33%, #43b5a6 66%, #8d7cc0 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 50% 50%, #1a120a 0%, #0c0e10 65%)",
+
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo":  "Inter"
+  },
+
+  "logo_texto": "Prisma",
+  "logo_simbolo": "◈",
+
+  "textos": {
+    "linkedin_post": {
+      "titulo":    "Prisma",
+      "subtitulo": "Core de la suite · Prizma",
+      "copy":      "El núcleo que refracta la suite completa."
+    },
+    "linkedin_banner": {
+      "titulo":    "Prisma",
+      "copy":      "Un solo núcleo. Toda la suite Prizma desde un punto de claridad."
+    },
+    "ig_post": {
+      "titulo":    "◈",
+      "subtitulo": "Prisma",
+      "copy":      "El núcleo que refracta la suite completa"
+    },
+    "ig_story": {
+      "titulo":    "Prisma",
+      "copy":      "New update ↓"
+    },
+    "x_post": {
+      "titulo":    "Prisma",
+      "copy":      "El núcleo que refracta la suite completa"
+    },
+    "yt_thumbnail": {
+      "titulo":    "Prisma",
+      "copy":      "Watch"
+    },
+    "yt_banner": {
+      "titulo":    "Prisma",
+      "subtitulo": "Core de la suite · Prizma"
+    },
+    "og_general": {
+      "titulo":    "Prisma",
+      "subtitulo": "Core de la suite · Prizma",
+      "copy":      "El núcleo que refracta la suite completa."
+    },
+    "whatsapp_perfil": {
+      "titulo":    "◈",
+      "copy":      "Prisma"
+    },
+    "contra_cover": {
+      "titulo":    "Prisma",
+      "copy":      "Core de la suite · Prizma"
+    }
+  }
+}

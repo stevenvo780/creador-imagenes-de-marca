@@ -1,0 +1,78 @@
+{
+  "slug": "pinakotheke-ergon",
+  "nombre_producto": "Érgon",
+  "nombre_corporativo": "Pinakothḗke",
+  "tagline": "Landing comercial para una suite de tres starter kits PYME listos para customizar: CRM (React+Vite+Express), Hours Tracker (Next.js 15 + Turso) y VPN Manager (Flask+Docker). Modelo «80% construido, pagas el 20% a medida».",
+  "url": "https://ergon.stevenvallejo.com",
+  "tono": "productivo, pragmático, accesible",
+  "simbolo": "▣",
+  "frente": "informatica",
+
+  "paleta": {
+    "bg":           "#0b1417",
+    "primario":     "#0b1417",
+    "acento":       "#43b5a6",
+    "acento_2":     "#2a7a70",
+    "acento_3":     "#A3E4D7",
+    "texto":        "#e8e0d4",
+    "texto_muted":  "#8fa3a8",
+    "surface":      "#131e22"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #43b5a6 0%, #2a7a70 70%, #1a4a45 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 20% 60%, #131e22 0%, #0b1417 70%)",
+
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo":  "Inter"
+  },
+
+  "logo_texto": "Érgon",
+  "logo_simbolo": "▣",
+
+  "textos": {
+    "linkedin_post": {
+      "titulo":    "Érgon",
+      "subtitulo": "Starter kits PYME · Pinakothḗke",
+      "copy":      "Kits de arranque para la PYME moderna."
+    },
+    "linkedin_banner": {
+      "titulo":    "Érgon",
+      "copy":      "Turborepo con CRM, horas, VPN y landing. Listo para usar."
+    },
+    "ig_post": {
+      "titulo":    "▣",
+      "subtitulo": "Érgon",
+      "copy":      "Kits de arranque para la PYME moderna"
+    },
+    "ig_story": {
+      "titulo":    "Érgon",
+      "copy":      "Nuevo kit ↓"
+    },
+    "x_post": {
+      "titulo":    "Érgon",
+      "copy":      "Kits de arranque para la PYME moderna"
+    },
+    "yt_thumbnail": {
+      "titulo":    "Érgon",
+      "copy":      "Ver"
+    },
+    "yt_banner": {
+      "titulo":    "Érgon",
+      "subtitulo": "Starter kits PYME · Pinakothḗke"
+    },
+    "og_general": {
+      "titulo":    "Érgon",
+      "subtitulo": "Starter kits PYME · Pinakothḗke",
+      "copy":      "Kits de arranque para la PYME moderna."
+    },
+    "whatsapp_perfil": {
+      "titulo":    "▣",
+      "copy":      "Érgon"
+    },
+    "contra_cover": {
+      "titulo":    "Érgon",
+      "copy":      "Starter kits PYME · Pinakothḗke"
+    }
+  }
+}

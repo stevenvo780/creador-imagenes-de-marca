@@ -1,0 +1,78 @@
+{
+  "slug": "agora-st",
+  "nombre_producto": "ST-Lang",
+  "nombre_corporativo": "Elenxos",
+  "tagline": "El lenguaje que formaliza el pensamiento",
+  "url_producto": "st.elenxos.com",
+  "tono": "formal, lingüístico, riguroso",
+  "simbolo": "⟨⟩",
+  "suite": "agora",
+
+  "paleta": {
+    "bg":           "#0b1417",
+    "primario":     "#0F2519",
+    "acento":       "#43b5a6",
+    "acento_2":     "#A3E4D7",
+    "acento_3":     "#2a7a70",
+    "texto":        "#e8e0d4",
+    "texto_muted":  "#8fa3a8",
+    "surface":      "#0d1e12"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #43b5a6 0%, #2a7a70 60%, #0F2519 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 25% 60%, #0d1e12 0%, #0b1417 70%)",
+
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo":  "JetBrains Mono"
+  },
+
+  "logo_texto": "ST",
+  "logo_simbolo": "⟨⟩",
+
+  "textos": {
+    "linkedin_post": {
+      "titulo":    "ST-Lang",
+      "subtitulo": "Lenguaje formal · Agora · Elenxos",
+      "copy":      "El lenguaje que formaliza el pensamiento."
+    },
+    "linkedin_banner": {
+      "titulo":    "ST-Lang",
+      "copy":      "Sintaxis, tipos y semántica para el razonamiento académico riguroso."
+    },
+    "ig_post": {
+      "titulo":    "⟨⟩",
+      "subtitulo": "ST-Lang",
+      "copy":      "El lenguaje que formaliza el pensamiento"
+    },
+    "ig_story": {
+      "titulo":    "ST-Lang",
+      "copy":      "Nueva versión ↓"
+    },
+    "x_post": {
+      "titulo":    "ST-Lang",
+      "copy":      "El lenguaje que formaliza el pensamiento"
+    },
+    "yt_thumbnail": {
+      "titulo":    "ST-Lang",
+      "copy":      "Ver"
+    },
+    "yt_banner": {
+      "titulo":    "ST-Lang",
+      "subtitulo": "Lenguaje formal · Agora · Elenxos"
+    },
+    "og_general": {
+      "titulo":    "ST-Lang",
+      "subtitulo": "Lenguaje formal · Agora · Elenxos",
+      "copy":      "El lenguaje que formaliza el pensamiento."
+    },
+    "whatsapp_perfil": {
+      "titulo":    "⟨⟩",
+      "copy":      "ST-Lang"
+    },
+    "contra_cover": {
+      "titulo":    "ST-Lang",
+      "copy":      "Lenguaje formal · Agora · Elenxos"
+    }
+  }
+}

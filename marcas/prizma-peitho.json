@@ -1,0 +1,78 @@
+{
+  "slug": "prizma-peitho",
+  "nombre_producto": "Peitho",
+  "nombre_corporativo": "Prizma",
+  "tagline": "Persuasión basada en datos, no en intuición",
+  "url": "peitho.prizma.app",
+  "tono": "persuasivo, data-driven, ventas",
+  "simbolo": "◆",
+  "suite": "prizma",
+
+  "paleta": {
+    "bg":           "#0c0e10",
+    "primario":     "#0c0e10",
+    "acento":       "#f0b94a",
+    "acento_2":     "#d4622e",
+    "acento_3":     "#43b5a6",
+    "texto":        "#f0ece6",
+    "texto_muted":  "#a09080",
+    "surface":      "#16120e"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #f0b94a 0%, #d4622e 50%, #f0b94a 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 55% 45%, #1a120a 0%, #0c0e10 65%)",
+
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo":  "Inter"
+  },
+
+  "logo_texto": "Peitho",
+  "logo_simbolo": "◆",
+
+  "textos": {
+    "linkedin_post": {
+      "titulo":    "Peitho",
+      "subtitulo": "Sales intelligence · Prizma",
+      "copy":      "Persuasión basada en datos, no en intuición."
+    },
+    "linkedin_banner": {
+      "titulo":    "Peitho",
+      "copy":      "Cierra más. Argumenta mejor. Vende con inteligencia."
+    },
+    "ig_post": {
+      "titulo":    "◆",
+      "subtitulo": "Peitho",
+      "copy":      "Persuasión basada en datos, no en intuición"
+    },
+    "ig_story": {
+      "titulo":    "Peitho",
+      "copy":      "New insight ↓"
+    },
+    "x_post": {
+      "titulo":    "Peitho",
+      "copy":      "Persuasión basada en datos, no en intuición"
+    },
+    "yt_thumbnail": {
+      "titulo":    "Peitho",
+      "copy":      "Watch"
+    },
+    "yt_banner": {
+      "titulo":    "Peitho",
+      "subtitulo": "Sales intelligence · Prizma"
+    },
+    "og_general": {
+      "titulo":    "Peitho",
+      "subtitulo": "Sales intelligence · Prizma",
+      "copy":      "Persuasión basada en datos, no en intuición."
+    },
+    "whatsapp_perfil": {
+      "titulo":    "◆",
+      "copy":      "Peitho"
+    },
+    "contra_cover": {
+      "titulo":    "Peitho",
+      "copy":      "Sales intelligence · Prizma"
+    }
+  }
+}

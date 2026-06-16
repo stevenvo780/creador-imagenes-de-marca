@@ -1,0 +1,78 @@
+{
+  "slug": "pinakotheke-daimon",
+  "nombre_producto": "Daímon",
+  "nombre_corporativo": "Pinakothḗke",
+  "tagline": "Vitrina de la pila de IA personal: Jarvis v1/v2 (RAG + ChromaDB, modelos 14B–70B), chat GGUF local (llama-cpp-python), swarm MCP con Ollama (deepseek-r1 + qwen2.5) y conversor OCR PDF→Markdown en GPU. Documentación estática Next.js 15.",
+  "url": "https://daimon.stevenvallejo.com",
+  "tono": "íntimo, inteligente, soberano",
+  "simbolo": "◉",
+  "frente": "informatica",
+
+  "paleta": {
+    "bg":           "#0b1417",
+    "primario":     "#0b1417",
+    "acento":       "#43b5a6",
+    "acento_2":     "#8d7cc0",
+    "acento_3":     "#2a7a70",
+    "texto":        "#e8e0d4",
+    "texto_muted":  "#8fa3a8",
+    "surface":      "#131e22"
+  },
+
+  "gradiente_hero": "linear-gradient(135deg, #8d7cc0 0%, #43b5a6 60%, #2a7a70 100%)",
+  "gradiente_bg":   "radial-gradient(ellipse at 40% 30%, #131e22 0%, #0b1417 70%)",
+
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo":  "JetBrains Mono"
+  },
+
+  "logo_texto": "Daímon",
+  "logo_simbolo": "◉",
+
+  "textos": {
+    "linkedin_post": {
+      "titulo":    "Daímon",
+      "subtitulo": "Asistente IA local · Pinakothḗke",
+      "copy":      "Tu asistente de IA, local y soberano."
+    },
+    "linkedin_banner": {
+      "titulo":    "Daímon",
+      "copy":      "IA personal con RAG local. Sin cloud. Sin dependencias externas."
+    },
+    "ig_post": {
+      "titulo":    "◉",
+      "subtitulo": "Daímon",
+      "copy":      "Tu asistente de IA, local y soberano"
+    },
+    "ig_story": {
+      "titulo":    "Daímon",
+      "copy":      "Nueva feature ↓"
+    },
+    "x_post": {
+      "titulo":    "Daímon",
+      "copy":      "Tu asistente de IA, local y soberano"
+    },
+    "yt_thumbnail": {
+      "titulo":    "Daímon",
+      "copy":      "Ver"
+    },
+    "yt_banner": {
+      "titulo":    "Daímon",
+      "subtitulo": "Asistente IA local · Pinakothḗke"
+    },
+    "og_general": {
+      "titulo":    "Daímon",
+      "subtitulo": "Asistente IA local · Pinakothḗke",
+      "copy":      "Tu asistente de IA, local y soberano."
+    },
+    "whatsapp_perfil": {
+      "titulo":    "◉",
+      "copy":      "Daímon"
+    },
+    "contra_cover": {
+      "titulo":    "Daímon",
+      "copy":      "Asistente IA local · Pinakothḗke"
+    }
+  }
+}
