@@ -5,7 +5,7 @@
   "tagline": "CRM para PYMEs colombianas con 19 entidades: pipeline kanban, contactos, empresas, negocios, actividades, cotizaciones y facturas. Localizado para NIT, COP, departamentos y tipos societarios. React 19 + Vite + Express + Neon Postgres, desplegado en Vercel.",
   "url": "https://xenia.stevenvallejo.com",
   "tono": "hospitalario, relacional, PYME",
-  "simbolo": "⟡",
+  "simbolo": "◇",
   "frente": "informatica",
 
   "paleta": {
@@ -28,7 +28,7 @@
   },
 
   "logo_texto": "Xenía",
-  "logo_simbolo": "⟡",
+  "logo_simbolo": "◇",
 
   "textos": {
     "linkedin_post": {
@@ -41,7 +41,7 @@
       "copy":      "Relaciones duraderas. Clientes como huéspedes de honor."
     },
     "ig_post": {
-      "titulo":    "⟡",
+      "titulo":    "◇",
       "subtitulo": "Xenía",
       "copy":      "El CRM que trata a los clientes como huéspedes"
     },
@@ -67,7 +67,7 @@
       "copy":      "El CRM que trata a los clientes como huéspedes."
     },
     "whatsapp_perfil": {
-      "titulo":    "⟡",
+      "titulo":    "◇",
       "copy":      "Xenía"
     },
     "contra_cover": {

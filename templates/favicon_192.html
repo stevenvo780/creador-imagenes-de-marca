@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&display=swap');
+  :root {
+    --bg: #0b1417; --acento: #43b5a6; --acento-2: #e0a85e; --acento-3: #c0522a;
+    --grad-hero: linear-gradient(135deg, #e0a85e 0%, #c0522a 40%, #43b5a6 100%);
+    --grad-bg: radial-gradient(ellipse at 40% 35%, #1e2f38 0%, #0b1417 65%);
+    --font-titulo: 'Playfair Display', Georgia, serif;
+  }
+  body {
+    width: 192px; height: 192px;
+    background: var(--bg);
+    overflow: hidden; position: relative;
+  }
+  .bg { position: absolute; inset: 0; background: var(--grad-bg); }
+  .orb { position: absolute; border-radius: 50%; filter: blur(30px); }
+  .orb-1 { width: 130px; height: 130px; top: -40px; right: -30px; background: var(--acento); opacity: 0.18; }
+  .orb-2 { width: 110px; height: 110px; bottom: -30px; left: -30px; background: var(--acento-2); opacity: 0.14; }
+
+  .layout {
+    position: relative; z-index: 10;
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .simbolo {
+    font-family: var(--font-titulo); font-size: 128px; font-weight: 900; line-height: 1;
+    background: var(--grad-text, var(--grad-hero));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    display: flex; align-items: center; justify-content: center;
+    width: 154px; height: 142px; text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="layout">
+  <span class="simbolo" data-logo-simbolo data-fit data-fit-min="54"></span>
+</div>
+</body>
+</html>

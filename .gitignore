@@ -1,0 +1,23 @@
+# Entornos Python (pesados — venv2 tiene torch ~8GB)
+venv/
+venv2/
+
+# Playwright CLI session (navegación manual Gmail, no es parte del pipeline)
+.playwright-cli/
+
+# Salidas generadas por el motor
+output/
+output_hires/
+covers_branded/
+
+# Cache de render
+output/**/.cache.json
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+  :root {
+    --bg: #f5f2ee; --acento: #2a9688; --acento-2: #c8883a; --acento-3: #a03e1c;
+    --texto: #1a2428; --texto-muted: #5a6e74;
+    --grad-hero: linear-gradient(135deg, #c8883a 0%, #a03e1c 40%, #2a9688 100%);
+    --font-titulo: 'Playfair Display', Georgia, serif;
+    --font-cuerpo: 'Inter', system-ui, sans-serif;
+  }
+  body {
+    width: 1200px; height: 400px;
+    font-family: var(--font-cuerpo);
+    background: #f5f2ee; color: var(--texto);
+    overflow: hidden; position: relative;
+  }
+
+  .layout {
+    position: relative; z-index: 10;
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    gap: 54px;
+    padding: 46px 86px;
+    background: #f5f2ee;
+  }
+
+  .simbolo {
+    font-family: var(--font-titulo); font-size: 172px; font-weight: 900; line-height: 1;
+    background: var(--grad-text, var(--grad-hero));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    flex-shrink: 0;
+  }
+
+  .divider {
+    width: 1px; height: 160px;
+    background: rgba(0,0,0,0.15);
+    flex-shrink: 0;
+  }
+
+  .text-block {
+    display: flex; flex-direction: column; gap: 12px;
+    min-width: 0; max-width: 680px;
+  }
+
+  .wordmark {
+    font-family: var(--font-titulo); font-size: 70px; font-weight: 900; line-height: 1;
+    color: var(--texto);
+    max-height: 82px;
+  }
+
+  .tagline {
+    font-family: var(--font-cuerpo); font-size: 18px; font-weight: 400; line-height: 1.35;
+    color: var(--texto-muted); letter-spacing: 0.03em;
+    max-width: 680px; max-height: 52px;
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <span class="simbolo" data-logo-simbolo data-fit data-fit-min="86"></span>
+  <div class="divider"></div>
+  <div class="text-block">
+    <span class="wordmark" data-titulo data-fit data-fit-min="44"></span>
+    <span class="tagline" data-subtitulo data-fit data-fit-min="13"></span>
+  </div>
+</div>
+</body>
+</html>

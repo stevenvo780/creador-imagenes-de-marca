@@ -1,0 +1,292 @@
+{
+  "layouts": [
+    {
+      "id": "linkedin_post",
+      "template": "linkedin_post.html",
+      "ancho": 1200,
+      "alto": 627,
+      "plataforma": "linkedin",
+      "descripcion": "LinkedIn post (paisaje 1.91:1)"
+    },
+    {
+      "id": "linkedin_banner",
+      "template": "linkedin_banner.html",
+      "ancho": 1584,
+      "alto": 396,
+      "plataforma": "linkedin",
+      "descripcion": "LinkedIn banner de perfil (4:1)"
+    },
+    {
+      "id": "ig_post",
+      "template": "ig_post.html",
+      "ancho": 1080,
+      "alto": 1080,
+      "plataforma": "instagram",
+      "descripcion": "Instagram post cuadrado (1:1)"
+    },
+    {
+      "id": "ig_story",
+      "template": "ig_story.html",
+      "ancho": 1080,
+      "alto": 1920,
+      "plataforma": "instagram",
+      "descripcion": "Instagram story (9:16)"
+    },
+    {
+      "id": "x_post",
+      "template": "x_post.html",
+      "ancho": 1200,
+      "alto": 675,
+      "plataforma": "x",
+      "descripcion": "X/Twitter post (16:9)"
+    },
+    {
+      "id": "yt_thumbnail",
+      "template": "yt_thumbnail.html",
+      "ancho": 1280,
+      "alto": 720,
+      "plataforma": "youtube",
+      "descripcion": "YouTube thumbnail (16:9)"
+    },
+    {
+      "id": "yt_banner",
+      "template": "yt_banner.html",
+      "ancho": 2560,
+      "alto": 1440,
+      "plataforma": "youtube",
+      "descripcion": "YouTube banner (16:9 @2x)"
+    },
+    {
+      "id": "og_general",
+      "template": "og_general.html",
+      "ancho": 1200,
+      "alto": 630,
+      "plataforma": "web",
+      "descripcion": "Open Graph / meta-share (1.91:1)"
+    },
+    {
+      "id": "whatsapp_perfil",
+      "template": "whatsapp_perfil.html",
+      "ancho": 640,
+      "alto": 640,
+      "plataforma": "whatsapp",
+      "descripcion": "WhatsApp / Telegram avatar (1:1)"
+    },
+    {
+      "id": "contra_cover",
+      "template": "contra_cover.html",
+      "ancho": 1280,
+      "alto": 720,
+      "plataforma": "contra",
+      "descripcion": "Contra platform service cover (16:9)"
+    },
+    {
+      "id": "logo_lockup_color",
+      "template": "logo_lockup_color.html",
+      "ancho": 1200,
+      "alto": 400,
+      "plataforma": "logos",
+      "descripcion": "Logo lockup — simbolo + wordmark, paleta completa color"
+    },
+    {
+      "id": "logo_lockup_dark",
+      "template": "logo_lockup_dark.html",
+      "ancho": 1200,
+      "alto": 400,
+      "plataforma": "logos",
+      "descripcion": "Logo lockup — sobre fondo oscuro puro, texto claro"
+    },
+    {
+      "id": "logo_lockup_light",
+      "template": "logo_lockup_light.html",
+      "ancho": 1200,
+      "alto": 400,
+      "plataforma": "logos",
+      "descripcion": "Logo lockup — sobre fondo claro, inversion de paleta"
+    },
+    {
+      "id": "logo_symbol_color",
+      "template": "logo_symbol_color.html",
+      "ancho": 600,
+      "alto": 600,
+      "plataforma": "logos",
+      "descripcion": "Simbolo solo (lemniscata) con gradiente de marca"
+    },
+    {
+      "id": "logo_symbol_mono",
+      "template": "logo_symbol_mono.html",
+      "ancho": 600,
+      "alto": 600,
+      "plataforma": "logos",
+      "descripcion": "Simbolo solo monocromatico, sobre negro"
+    },
+    {
+      "id": "logo_wordmark",
+      "template": "logo_wordmark.html",
+      "ancho": 1200,
+      "alto": 300,
+      "plataforma": "logos",
+      "descripcion": "Wordmark solo — nombre con tagline, sin simbolo"
+    },
+    {
+      "id": "app_icon_1024",
+      "template": "app_icon_1024.html",
+      "ancho": 1024,
+      "alto": 1024,
+      "plataforma": "logos",
+      "descripcion": "App icon 1024x1024 (App Store / Play Store)"
+    },
+    {
+      "id": "favicon_512",
+      "template": "favicon_512.html",
+      "ancho": 512,
+      "alto": 512,
+      "plataforma": "logos",
+      "descripcion": "Favicon / PWA icon 512x512"
+    },
+    {
+      "id": "favicon_192",
+      "template": "favicon_192.html",
+      "ancho": 192,
+      "alto": 192,
+      "plataforma": "logos",
+      "descripcion": "Favicon / PWA icon 192x192"
+    },
+    {
+      "id": "favicon_180",
+      "template": "favicon_180.html",
+      "ancho": 180,
+      "alto": 180,
+      "plataforma": "logos",
+      "descripcion": "Apple touch icon 180x180"
+    },
+    {
+      "id": "favicon_32",
+      "template": "favicon_32.html",
+      "ancho": 32,
+      "alto": 32,
+      "plataforma": "logos",
+      "descripcion": "Favicon 32x32 browser tab"
+    },
+    {
+      "id": "ig_reel_cover",
+      "template": "ig_reel_cover.html",
+      "ancho": 1080,
+      "alto": 1920,
+      "plataforma": "instagram",
+      "descripcion": "Instagram Reel cover (9:16)"
+    },
+    {
+      "id": "ig_carousel",
+      "template": "ig_carousel.html",
+      "ancho": 1080,
+      "alto": 1080,
+      "plataforma": "instagram",
+      "descripcion": "Instagram carousel slide (1:1)"
+    },
+    {
+      "id": "x_header",
+      "template": "x_header.html",
+      "ancho": 1500,
+      "alto": 500,
+      "plataforma": "x",
+      "descripcion": "X/Twitter header banner (3:1)"
+    },
+    {
+      "id": "fb_cover",
+      "template": "fb_cover.html",
+      "ancho": 1640,
+      "alto": 856,
+      "plataforma": "facebook",
+      "descripcion": "Facebook cover photo"
+    },
+    {
+      "id": "tiktok_cover",
+      "template": "tiktok_cover.html",
+      "ancho": 1080,
+      "alto": 1920,
+      "plataforma": "tiktok",
+      "descripcion": "TikTok video cover (9:16)"
+    },
+    {
+      "id": "web_hero",
+      "template": "web_hero.html",
+      "ancho": 1920,
+      "alto": 1080,
+      "plataforma": "web",
+      "descripcion": "Hero web desktop (16:9 @1x)"
+    },
+    {
+      "id": "web_hero_mobile",
+      "template": "web_hero_mobile.html",
+      "ancho": 1080,
+      "alto": 1920,
+      "plataforma": "web",
+      "descripcion": "Hero web mobile (9:16)"
+    },
+    {
+      "id": "email_header",
+      "template": "email_header.html",
+      "ancho": 1200,
+      "alto": 400,
+      "plataforma": "email",
+      "descripcion": "Email newsletter header (3:1)"
+    },
+    {
+      "id": "banner_ad",
+      "template": "banner_ad.html",
+      "ancho": 1456,
+      "alto": 180,
+      "plataforma": "web",
+      "descripcion": "Banner publicitario leaderboard 728x90 @2x (1456x180)"
+    },
+    {
+      "id": "business_card",
+      "template": "business_card.html",
+      "ancho": 1050,
+      "alto": 600,
+      "plataforma": "print",
+      "descripcion": "Tarjeta de presentacion 3.5x2in @150dpi @2x"
+    },
+    {
+      "id": "poster_a4",
+      "template": "poster_a4.html",
+      "ancho": 1240,
+      "alto": 1754,
+      "plataforma": "print",
+      "descripcion": "Poster A4 @150dpi vertical"
+    },
+    {
+      "id": "sticker",
+      "template": "sticker.html",
+      "ancho": 1024,
+      "alto": 1024,
+      "plataforma": "print",
+      "descripcion": "Sticker circular 1024x1024"
+    },
+    {
+      "id": "og_product",
+      "template": "og_product.html",
+      "ancho": 1200,
+      "alto": 630,
+      "plataforma": "web",
+      "descripcion": "Open Graph de producto/proyecto (1.91:1)"
+    },
+    {
+      "id": "og_product_2x",
+      "template": "og_product.html",
+      "ancho": 2400,
+      "alto": 1260,
+      "plataforma": "web",
+      "descripcion": "Open Graph de producto @2x Retina (2400x1260)"
+    },
+    {
+      "id": "og_portrait",
+      "template": "og_portrait.html",
+      "ancho": 1080,
+      "alto": 1350,
+      "plataforma": "web",
+      "descripcion": "Portada vertical 4:5 para tarjetas en grid (1080x1350)"
+    }
+  ]
+}

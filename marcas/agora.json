@@ -7,6 +7,7 @@
   "url_corporativa": "www.elenxos.com",
   "tono": "riguroso, místico, cercano, orgánico, intelectual — Misticismo Lógico",
   "simbolo": "ε",
+  "frente": "agora",
 
   "paleta": {
     "bg":           "#0b1417",
@@ -131,6 +132,11 @@
       "titulo":    "Agora · Elenxos",
       "subtitulo": "Plataforma académica de lógica formal ejecutable",
       "copy":      "ST (SAT solver CDCL, 6333 tests) + auto.logic (NLP→lógica, 11 perfiles) + colaboración en tiempo real. Humanidades con el rigor de las ciencias."
+    },
+    "og_portrait": {
+      "titulo":    "Agora",
+      "subtitulo": "Agora",
+      "copy":      "Traducimos el caos en estructuras lógicas"
     },
     "logo_lockup_color": {
       "titulo":    "Agora",

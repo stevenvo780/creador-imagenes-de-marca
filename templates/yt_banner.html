@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+  :root {
+    --bg: #0b1417; --acento: #43b5a6; --acento-2: #e0a85e; --acento-3: #c0522a;
+    --texto: #e8e0d4; --texto-muted: #8fa3a8;
+    --grad-hero: linear-gradient(135deg, #e0a85e 0%, #c0522a 40%, #43b5a6 100%);
+    --grad-bg: radial-gradient(ellipse at 50% 50%, #152028 0%, #0b1417 55%);
+    --font-titulo: 'Playfair Display', Georgia, serif;
+    --font-cuerpo: 'Inter', system-ui, sans-serif;
+  }
+  body {
+    width: 2560px; height: 1440px;
+    font-family: var(--font-cuerpo); background: var(--bg); color: var(--texto);
+    overflow: hidden; position: relative;
+  }
+  .bg { position: absolute; inset: 0; background: var(--grad-bg); }
+  .noise {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 300px 300px;
+  }
+  .orb { position: absolute; border-radius: 50%; filter: blur(300px); opacity: 0.14; }
+  .orb-1 { width: 1600px; height: 1600px; top: -600px; right: -300px; background: var(--acento); }
+  .orb-2 { width: 1200px; height: 1200px; bottom: -500px; left: -300px; background: var(--acento-2); }
+  .orb-3 { width: 800px; height: 800px; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--acento-3); opacity: 0.06; filter: blur(200px); }
+
+  /* Horizontales decorativas */
+  .hline {
+    position: absolute; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(67,181,166,0.15) 30%, rgba(67,181,166,0.15) 70%, transparent);
+  }
+  .hline-1 { top: 200px; }
+  .hline-2 { bottom: 200px; }
+
+  /* Área segura de YouTube (1546×423px centrados) — visualización de referencia */
+  /* No visible en output, solo orientación de diseño */
+
+  .layout {
+    position: relative; z-index: 10;
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 48px; text-align: center;
+    padding: 200px;
+  }
+
+  .logo-simbolo {
+    font-family: var(--font-titulo); font-size: 200px; font-weight: 900; line-height: 1;
+    background: var(--grad-text, var(--grad-hero));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+
+  .accent-line { width: 120px; height: 6px; background: var(--grad-hero); border-radius: 3px; }
+
+  .titulo {
+    font-family: var(--font-titulo); font-size: 120px; font-weight: 900; line-height: 1.08;
+    background: var(--grad-text, var(--grad-hero));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    max-width: 1546px; max-height: 260px;
+  }
+  .subtitulo {
+    font-size: 52px; font-weight: 300; color: var(--texto-muted); letter-spacing: 0.04em;
+    max-width: 1546px; max-height: 70px;
+  }
+  .url { font-size: 34px; font-weight: 500; color: var(--acento); letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="noise"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="hline hline-1"></div>
+<div class="hline hline-2"></div>
+<div class="layout">
+  <span class="logo-simbolo" data-logo-simbolo data-fit data-fit-min="110"></span>
+  <div class="accent-line"></div>
+  <h1 class="titulo" data-titulo data-fit data-fit-min="72"></h1>
+  <p class="subtitulo" data-subtitulo data-fit data-fit-min="32"></p>
+  <span class="url" data-url data-fit data-fit-min="22"></span>
+</div>
+</body>
+</html>

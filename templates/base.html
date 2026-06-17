@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  /* ── Reset ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── Tokens de marca inyectados por render.py ── */
+  :root {
+    --bg:           #0b1417;
+    --primario:     #0b1417;
+    --acento:       #43b5a6;
+    --acento-2:     #e0a85e;
+    --acento-3:     #c0522a;
+    --texto:        #e8e0d4;
+    --texto-muted:  #8fa3a8;
+    --surface:      #152028;
+    --grad-hero:    linear-gradient(135deg, #e0a85e 0%, #c0522a 40%, #43b5a6 100%);
+    --grad-bg:      radial-gradient(ellipse at 20% 50%, #152028 0%, #0b1417 60%);
+    --font-titulo:  'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-cuerpo:  'Inter', system-ui, -apple-system, sans-serif;
+    --logo-texto:   'SV';
+    --logo-simbolo: '∞';
+    --tagline:      'Architect of systems, chronicler of ideas';
+    --nombre:       'Steven Vallejo';
+  }
+
+  /* ── Tipografía web (Google Fonts via @import, o local si se usa --offline) ── */
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  body {
+    font-family: var(--font-cuerpo);
+    background: var(--bg);
+    color: var(--texto);
+    overflow: hidden;
+  }
+
+  /* ── Utilidades compartidas ── */
+  .canvas {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Fondo con gradiente radial de marca */
+  .bg-layer {
+    position: absolute;
+    inset: 0;
+    background: var(--grad-bg);
+  }
+
+  /* Textura orgánica SVG — no requiere IA */
+  .texture-layer {
+    position: absolute;
+    inset: 0;
+    opacity: 0.08;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 400px 400px;
+  }
+
+  /* Glow orb decorativo de acento */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.18;
+  }
+  .orb-1 {
+    width: 55%;
+    height: 110%;
+    top: -30%;
+    right: -15%;
+    background: var(--acento);
+  }
+  .orb-2 {
+    width: 40%;
+    height: 80%;
+    bottom: -20%;
+    left: -10%;
+    background: var(--acento-2);
+  }
+
+  /* Logo / símbolo */
+  .logo-simbolo {
+    font-family: var(--font-titulo);
+    background: var(--grad-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    display: inline-block;
+  }
+
+  .logo-texto {
+    font-family: var(--font-cuerpo);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--texto-muted);
+    font-size: 0.75em;
+  }
+
+  /* Títulos */
+  .titulo {
+    font-family: var(--font-titulo);
+    font-weight: 900;
+    line-height: 1.05;
+    background: var(--grad-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitulo {
+    font-family: var(--font-cuerpo);
+    font-weight: 400;
+    color: var(--texto-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .copy {
+    font-family: var(--font-cuerpo);
+    font-weight: 300;
+    color: var(--texto);
+    line-height: 1.5;
+  }
+
+  /* Línea decorativa de acento */
+  .accent-line {
+    height: 3px;
+    background: var(--grad-hero);
+    border-radius: 2px;
+  }
+
+  /* Tag / pill */
+  .pill {
+    display: inline-block;
+    padding: 0.3em 0.9em;
+    border-radius: 100px;
+    border: 1px solid var(--acento);
+    color: var(--acento);
+    font-family: var(--font-cuerpo);
+    font-size: 0.75em;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Formas orgánicas SVG decorativas inline */
+  .deco-shape {
+    position: absolute;
+    opacity: 0.12;
+  }
+</style>
+</head>
+<body>
+<!-- Las plantillas hijas llenan el body con su layout especifico -->
+</body>
+</html>

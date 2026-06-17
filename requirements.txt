@@ -1,6 +1,12 @@
-torch
-diffusers
-transformers
-accelerate
-safetensors
-Pillow
+# Motor CSS/HTML → PNG (headless browser)
+playwright>=1.40
+
+# Utilidades base
+Pillow>=10.0
+
+# ELIMINADO (difusión GPU — ya no se usa):
+# torch
+# diffusers
+# transformers
+# accelerate
+# safetensors

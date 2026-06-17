@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+  :root {
+    --bg: #0b1417; --acento: #43b5a6; --acento-2: #e0a85e; --acento-3: #c0522a;
+    --texto: #e8e0d4; --texto-muted: #8fa3a8; --surface: #152028;
+    --grad-hero: linear-gradient(135deg, #e0a85e 0%, #c0522a 40%, #43b5a6 100%);
+    --grad-bg: radial-gradient(ellipse at 50% 40%, #1e2f38 0%, #0b1417 65%);
+    --font-titulo: 'Playfair Display', Georgia, serif;
+    --font-cuerpo: 'Inter', system-ui, sans-serif;
+  }
+  body {
+    width: 1024px; height: 1024px;
+    font-family: var(--font-cuerpo);
+    background: transparent;
+    overflow: hidden; position: relative;
+  }
+
+  /* Circular sticker shape */
+  .sticker {
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    background: var(--grad-bg);
+    overflow: hidden;
+  }
+
+  .noise {
+    position: absolute; inset: 0; opacity: 0.07;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 300px 300px; border-radius: 50%;
+  }
+
+  .orb { position: absolute; border-radius: 50%; filter: blur(80px); }
+  .orb-1 { width: 600px; height: 600px; top: -150px; right: -100px; background: var(--acento); opacity: 0.2; }
+  .orb-2 { width: 500px; height: 500px; bottom: -150px; left: -100px; background: var(--acento-2); opacity: 0.16; }
+
+  /* Outer ring */
+  .ring-outer {
+    position: absolute; inset: 20px; border-radius: 50%;
+    border: 2px solid rgba(67,181,166,0.25);
+  }
+  .ring-inner {
+    position: absolute; inset: 48px; border-radius: 50%;
+    border: 1px solid rgba(224,168,94,0.12);
+  }
+
+  .content {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 20px;
+    z-index: 10;
+  }
+
+  .simbolo {
+    font-family: var(--font-titulo); font-size: 320px; font-weight: 900; line-height: 1;
+    background: var(--grad-text, var(--grad-hero));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+
+  .accent-line { width: 40px; height: 3px; background: var(--grad-hero); border-radius: 2px; }
+
+  .name {
+    font-family: var(--font-cuerpo); font-size: 28px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--texto-muted);
+    max-width: 620px; text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="sticker">
+  <div class="noise"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="ring-outer"></div>
+  <div class="ring-inner"></div>
+  <div class="content">
+    <span class="simbolo" data-logo-simbolo data-fit data-fit-min="170"></span>
+    <div class="accent-line"></div>
+    <span class="name" data-logo-texto data-fit data-fit-min="15"></span>
+  </div>
+</div>
+</body>
+</html>

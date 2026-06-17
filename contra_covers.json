@@ -1,0 +1,58 @@
+{
+  "marca": {
+    "nombre_producto": "Agora",
+    "nombre_corporativo": "Elenxos",
+    "tagline": "Traducimos el caos en estructuras lógicas",
+    "paleta": {
+      "primario": "verde bosque ancestral (#0F2519)",
+      "acento_logico": "azul kodama (#A3E4D7)",
+      "vitalidad": "rojo mascara (#8B0000)",
+      "estructura": "gris ceniza de hierro (#3A3F41)"
+    },
+    "inspiracion_visual": "La Princesa Mononoke (Studio Ghibli)"
+  },
+  "imagenes": [
+    {
+      "id": "contra_whatsapp",
+      "nombre": "Contra - AI WhatsApp Assistant",
+      "ancho": 1280, "alto": 720, "plataforma": "Contra", "tipo": "cover",
+      "prompt": "Mystical ancient forest at twilight, deep forest green (#0F2519), bioluminescent teal-blue (#A3E4D7) chat-bubble shaped light orbs floating between mossy tree branches, small kodama spirits passing glowing messages of light from one to another like a living conversation network, soft volumetric god-rays, calm uncluttered composition with generous negative space, Studio Ghibli Princess Mononoke aesthetic, professional service cover image, no text, no watermark, painterly digital art, cinematic lighting, 8k"
+    },
+    {
+      "id": "contra_automation",
+      "nombre": "Contra - AI Workflow Automation",
+      "ancho": 1280, "alto": 720, "plataforma": "Contra", "tipo": "cover",
+      "prompt": "Ancient mystical forest floor, glowing teal (#A3E4D7) tree roots and luminous vines interconnecting into an elegant flowing logical network of nodes and lines, like an automated pipeline of light running through the forest, deep green (#0F2519) atmosphere, iron-grey (#3A3F41) carved stones with subtle gear and flow symbols, calm negative space, Studio Ghibli aesthetic, professional service cover, no text, no watermark, painterly digital art, cinematic volumetric lighting, 8k"
+    },
+    {
+      "id": "contra_backend",
+      "nombre": "Contra - Custom Backend / API",
+      "ancho": 1280, "alto": 720, "plataforma": "Contra", "tipo": "cover",
+      "prompt": "Towering ancient iron-grey (#3A3F41) stone monoliths and structured architecture standing like solid servers within a deep green (#0F2519) mystical forest, precise logical glyphs and connective lines carved and glowing teal-blue (#A3E4D7), strong sense of robust foundation and structure, atmospheric fog, calm uncluttered negative space, Studio Ghibli Princess Mononoke aesthetic, professional service cover, no text, no watermark, painterly digital art, cinematic lighting, 8k"
+    },
+    {
+      "id": "contra_website",
+      "nombre": "Contra - High-converting Website / Landing",
+      "ancho": 1280, "alto": 720, "plataforma": "Contra", "tipo": "cover",
+      "prompt": "A luminous clearing in an ancient mystical forest forming an elegant glowing portal of teal-blue light (#A3E4D7), clean structured geometric light framing the opening, inviting and modern yet organic, deep forest green (#0F2519) surroundings, sense of a fast elegant gateway, generous calm negative space, Studio Ghibli aesthetic, professional service cover, no text, no watermark, painterly digital art, cinematic volumetric lighting, 8k"
+    },
+    {
+      "id": "contra_rag",
+      "nombre": "Contra - AI / RAG / Agents Integration",
+      "ancho": 1280, "alto": 720, "plataforma": "Contra", "tipo": "cover",
+      "prompt": "A great ancient knowledge tree at the heart of a mystical forest, several small luminous kodama spirits (AI agents) gathered around it drawing threads of teal-blue light (#A3E4D7) from its glowing core, retrieval of knowledge made visible, deep green (#0F2519) atmosphere, soft fog and god-rays, calm negative space, Studio Ghibli Princess Mononoke aesthetic, professional service cover, no text, no watermark, painterly digital art, cinematic lighting, 8k"
+    },
+    {
+      "id": "contra_cms",
+      "nombre": "Contra - Editorial CMS / Publishing Site",
+      "ancho": 1280, "alto": 720, "plataforma": "Contra", "tipo": "cover",
+      "prompt": "Ancient open glowing books and unfurling luminous scrolls resting on moss-covered stone within a mystical deep-green (#0F2519) forest, pages emitting soft teal-blue light (#A3E4D7) like living published knowledge, a serene editorial sanctuary, iron-grey (#3A3F41) structure, calm uncluttered negative space, Studio Ghibli aesthetic, professional service cover, no text, no watermark, painterly digital art, cinematic volumetric lighting, 8k"
+    },
+    {
+      "id": "contra_photo",
+      "nombre": "Contra - AI Photo Upscaling & Restoration",
+      "ancho": 1280, "alto": 720, "plataforma": "Contra", "tipo": "cover",
+      "prompt": "A single beam of teal-blue light (#A3E4D7) refining and sharpening a misty blurred section of an ancient mystical forest into crisp luminous high-resolution detail, clear transition from soft fog to sharp clarity, deep green (#0F2519) tones, sense of restoration and enhancement, calm negative space, Studio Ghibli Princess Mononoke aesthetic, professional service cover, no text, no watermark, painterly digital art, cinematic lighting, 8k"
+    }
+  ]
+}

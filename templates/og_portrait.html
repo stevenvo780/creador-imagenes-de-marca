@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  :root {
+    --bg: #0b1417; --acento: #43b5a6; --acento-2: #e0a85e; --acento-3: #c0522a;
+    --texto: #e8e0d4; --texto-muted: #8fa3a8; --surface: #152028;
+    --grad-hero: linear-gradient(135deg, #e0a85e 0%, #c0522a 40%, #43b5a6 100%);
+    --grad-bg: radial-gradient(ellipse at 50% 18%, #1a2830 0%, #0b1417 62%);
+    --font-titulo: 'Playfair Display', Georgia, serif;
+    --font-cuerpo: 'Inter', system-ui, sans-serif;
+  }
+
+  body {
+    width: 1080px; height: 1350px;
+    font-family: var(--font-cuerpo);
+    background: var(--bg); color: var(--texto);
+    overflow: hidden; position: relative;
+    -webkit-font-smoothing: antialiased; text-rendering: geometricPrecision;
+  }
+
+  /* ── Ambient background ───────────────────────────────────────── */
+  .bg { position: absolute; inset: 0; background: var(--grad-bg); }
+  .noise {
+    position: absolute; inset: 0; opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 300px 300px;
+  }
+  .orb { position: absolute; border-radius: 50%; filter: blur(150px); }
+  .orb-1 { width: 760px; height: 760px; top: -240px; right: -180px; background: var(--acento);   opacity: 0.16; }
+  .orb-2 { width: 620px; height: 620px; bottom: -200px; left: -160px; background: var(--acento-2); opacity: 0.12; }
+
+  /* Glyph reduced to a quiet watermark in the top register: it's texture,
+     never the subject. Clipped by .plate so it can't dominate the canvas. */
+  .glyph-mark {
+    position: absolute; top: -90px; right: -40px;
+    font-family: var(--font-titulo); font-size: 460px; font-weight: 700; line-height: 1;
+    color: var(--acento);
+    opacity: 0.07;
+    pointer-events: none; user-select: none;
+    z-index: 1;
+  }
+
+  /* ── The catalog plate — a framed museum card ─────────────────── */
+  .plate {
+    position: absolute; inset: 56px;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 10px;
+    background:
+      linear-gradient(180deg, rgba(11,20,23,0.18) 0%, rgba(11,20,23,0.55) 60%, rgba(11,20,23,0.86) 100%);
+    overflow: hidden;
+    z-index: 5;
+    display: flex; flex-direction: column;
+    padding: 64px 64px 60px;
+  }
+  /* Top hairline accent inside the plate */
+  .plate::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+    background: var(--grad-hero); opacity: 0.9;
+  }
+
+  /* ── Header: catalog eyebrow + symbol chip ────────────────────── */
+  .head {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 24px;
+  }
+  .eyebrow {
+    display: flex; flex-direction: column; gap: 10px;
+    font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+  }
+  .eyebrow .frente { font-size: 19px; color: var(--acento); }
+  .eyebrow .casa    { font-size: 14px; color: var(--texto-muted); letter-spacing: 0.26em; }
+
+  .chip {
+    flex-shrink: 0;
+    width: 96px; height: 96px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.03);
+    font-family: var(--font-titulo); font-size: 56px; font-weight: 700; line-height: 1;
+    background-clip: padding-box;
+  }
+  .chip span {
+    background: var(--grad-text, var(--grad-hero));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+
+  /* ── Name block: THE HERO. Vertically centered in the plate. ──── */
+  .name-block {
+    flex: 1 1 auto;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 28px 0;
+  }
+  .titulo {
+    font-family: var(--font-titulo); font-weight: 900; line-height: 0.98;
+    letter-spacing: 0;
+    /* JS auto-fit sets the final size; this is the upper bound. */
+    font-size: 150px;
+    background: var(--grad-text, var(--grad-hero));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    /* Keep the painted text crisp against the dark plate. */
+    padding-bottom: 0.06em;
+  }
+  .accent-line {
+    width: 84px; height: 4px; border-radius: 2px;
+    background: var(--grad-hero);
+    margin-top: 30px;
+  }
+  .copy {
+    font-size: 30px; font-weight: 300; line-height: 1.42;
+    color: var(--texto); opacity: 0.92;
+    margin-top: 26px;
+    max-width: 760px; max-height: 132px;
+  }
+
+  /* ── Footer: URL + house signature ────────────────────────────── */
+  .foot {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 20px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .url {
+    font-family: var(--font-cuerpo);
+    font-size: 22px; font-weight: 500; letter-spacing: 0.04em;
+    color: var(--acento);
+  }
+  .sign {
+    font-size: 16px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--texto-muted);
+  }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="noise"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<div class="plate">
+  <span class="glyph-mark" data-logo-simbolo></span>
+
+  <div class="head">
+    <div class="eyebrow">
+      <span class="frente" data-subtitulo data-fit data-fit-min="13"></span>
+      <span class="casa">Pinakothḗke</span>
+    </div>
+    <div class="chip"><span data-logo-simbolo data-fit data-fit-min="32"></span></div>
+  </div>
+
+  <div class="name-block">
+    <h1 class="titulo" data-titulo data-fit data-fit-min="56"></h1>
+    <div class="accent-line"></div>
+    <p class="copy" data-copy data-fit data-fit-min="18"></p>
+  </div>
+
+  <div class="foot">
+    <span class="url" data-url data-fit data-fit-min="14"></span>
+    <span class="sign" data-logo-texto data-fit data-fit-min="11"></span>
+  </div>
+</div>
+
+<script>
+  /* Auto-fit the brand name so it is ALWAYS as large as possible without
+     overflowing the plate width — short names (Eikón) read huge, long ones
+     (Estructuras Preontológicas) shrink gracefully but stay dominant. */
+  (function () {
+    function fit() {
+      var el = document.querySelector('.titulo');
+      if (!el) return;
+      var plate = document.querySelector('.plate');
+      // available width inside the plate's horizontal padding
+      var cs = getComputedStyle(plate);
+      var avail = plate.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      var max = 150, min = 56, size = max;
+      el.style.fontSize = size + 'px';
+      // shrink until it fits on at most two lines and within width
+      var guard = 0;
+      while (size > min && guard < 200) {
+        var fitsWidth = el.scrollWidth <= avail + 1;
+        var lines = el.getClientRects().length;
+        // allow up to 2 visual lines; estimate via height vs line-height
+        var lineH = size * 0.98;
+        var tooTall = el.scrollHeight > lineH * 2.2;
+        if (fitsWidth && !tooTall) break;
+        size -= 3;
+        el.style.fontSize = size + 'px';
+        guard++;
+      }
+    }
+    if (document.readyState === 'complete') fit();
+    else window.addEventListener('load', fit);
+    // expose for the renderer to call after content injection
+    window.__fitTitulo = fit;
+  })();
+</script>
+</body>
+</html>
