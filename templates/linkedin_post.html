@@ -3,215 +3,158 @@
 <head>
 <meta charset="UTF-8">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
   :root {
-    --bg: #0b1417; --primario: #0b1417;
-    --acento: #43b5a6; --acento-2: #e0a85e; --acento-3: #c0522a;
-    --texto: #e8e0d4; --texto-muted: #8fa3a8; --surface: #152028;
-    --grad-hero: linear-gradient(135deg, #e0a85e 0%, #c0522a 40%, #43b5a6 100%);
-    --grad-bg: radial-gradient(ellipse at 20% 50%, #152028 0%, #0b1417 60%);
-    --font-titulo: 'Playfair Display', Georgia, serif;
-    --font-cuerpo: 'Inter', system-ui, sans-serif;
+    --bg: #0b1417;
+    --primario: #0b1417;
+    --acento: #43b5a6;
+    --acento-2: #8d7cc0;
+    --acento-3: #A3E4D7;
+    --texto: #e8e0d4;
+    --texto-muted: #8fa3a8;
+    --surface: #131e22;
+    --grad-hero: linear-gradient(135deg, #43b5a6 0%, #8d7cc0 60%, #4a3a80 100%);
+    --grad-bg: radial-gradient(ellipse at 30% 40%, #131e22 0%, #0b1417 70%);
+    --grad-text: var(--grad-hero);
+    --font-titulo: "Playfair Display", Georgia, "Times New Roman", serif;
+    --font-cuerpo: "Inter", "DejaVu Sans", Arial, system-ui, sans-serif;
+    --font-simbolo: var(--font-titulo);
+    --orb-opacity: 0.14;
+    --noise-opacity: 0.06;
   }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1200px; height: 627px; }
   body {
-    width: 1200px; height: 627px;
-    font-family: var(--font-cuerpo);
-    background: var(--bg);
-    color: var(--texto);
-    overflow: hidden;
     position: relative;
-  }
-
-  /* Fondo */
-  .bg { position: absolute; inset: 0; background: var(--grad-bg); }
-  .noise {
-    position: absolute; inset: 0; opacity: 0.05;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 300px 300px;
-  }
-
-  /* Orbs */
-  .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.16; }
-  .orb-1 { width: 500px; height: 500px; top: -150px; right: -80px; background: var(--acento); }
-  .orb-2 { width: 360px; height: 360px; bottom: -120px; left: -60px; background: var(--acento-2); }
-
-  /* Forma decorativa derecha */
-  .deco-right {
-    position: absolute; right: 0; top: 0; width: 420px; height: 100%;
-    background: linear-gradient(270deg, rgba(67,181,166,0.06) 0%, transparent 100%);
-    border-left: 1px solid rgba(67,181,166,0.1);
-  }
-
-  /* Grid decorativo sutil */
-  .grid-deco {
-    position: absolute; right: 20px; top: 20px;
-    width: 380px; height: 587px;
-    opacity: 0.04;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px);
-    background-size: 40px 40px;
-  }
-
-  /* SVG orgánico decorativo */
-  .deco-svg {
-    position: absolute; right: 30px; top: 50%;
-    transform: translateY(-50%);
-    opacity: 0.07;
-  }
-
-  /* Layout principal */
-  .layout {
-    position: relative; z-index: 10;
-    width: 100%; height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 52px 64px 48px;
-  }
-
-  /* Header: logo + pill */
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-
-  .logo-wrap { display: flex; flex-direction: column; gap: 4px; }
-  .logo-simbolo {
-    font-family: var(--font-titulo);
-    font-size: 38px; font-weight: 900;
-    background: var(--grad-text, var(--grad-hero));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1;
-  }
-  .logo-texto {
+    overflow: hidden;
+    color: var(--texto);
+    background: var(--bg);
     font-family: var(--font-cuerpo);
-    font-size: 15px; font-weight: 700;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--texto-muted);
-    max-width: 300px;
   }
-
-  .pill {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 16px; border-radius: 100px;
-    border: 1px solid rgba(67,181,166,0.4);
-    color: var(--acento);
-    font-size: 15px; font-weight: 600;
-    letter-spacing: 0.1em; text-transform: uppercase;
+  .noise {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    opacity: var(--noise-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.74' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+    background-size: 260px 260px;
+    mix-blend-mode: soft-light;
+    pointer-events: none;
   }
-  .pill-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--acento);
+  .visual {
+    position: absolute;
+    inset: 0 0 40% 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 30% 40%, color-mix(in srgb, var(--acento-3) 20%, transparent) 0%, transparent 54%),
+      var(--grad-hero);
   }
-
-  /* Cuerpo */
-  .body-content {
-    flex: 1;
+  .visual::before {
+    content: "";
+    position: absolute;
+    width: 780px;
+    height: 780px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg) 28%, transparent);
+    filter: blur(42px);
+    opacity: 0.32;
+  }
+  .hero-symbol {
+    position: relative;
+    z-index: 1;
+    color: rgba(255,255,255,0.14);
+    font-family: var(--font-simbolo);
+    font-size: 400px;
+    font-weight: 900;
+    line-height: 1;
+    opacity: 0.12;
+    filter: blur(1.5px);
+  }
+  .visual-line {
+    position: absolute;
+    bottom: 52px;
+    left: 50%;
+    z-index: 2;
+    width: 48px;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.62);
+    transform: translateX(-50%);
+  }
+  .content {
+    position: absolute;
+    inset: 60% 0 0 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    max-width: 720px;
-    gap: 18px;
+    gap: 10px;
+    padding: 42px 76px 44px;
+    background:
+      radial-gradient(ellipse at 82% 18%, color-mix(in srgb, var(--acento) 12%, transparent) 0%, transparent 48%),
+      var(--surface);
   }
-
-  .accent-line {
-    width: 48px; height: 3px;
-    background: var(--grad-hero);
-    border-radius: 2px;
+  .content::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 1px;
+    background: color-mix(in srgb, var(--texto) 12%, transparent);
   }
-
   .titulo {
+    position: relative;
+    z-index: 1;
+    max-width: 980px;
+    max-height: 96px;
     font-family: var(--font-titulo);
-    font-size: 64px; font-weight: 900; line-height: 1.04;
-    background: var(--grad-text, var(--grad-hero));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    font-size: 44px;
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: 0;
+    background: var(--grad-text);
+    -webkit-background-clip: text;
     background-clip: text;
-    max-height: 148px;
+    -webkit-text-fill-color: transparent;
   }
-
   .subtitulo {
-    font-family: var(--font-cuerpo);
-    font-size: 21px; font-weight: 500;
-    color: var(--texto-muted); letter-spacing: 0.04em;
-    max-height: 32px;
+    position: relative;
+    z-index: 1;
+    max-width: 940px;
+    max-height: 28px;
+    color: var(--texto-muted);
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.35;
+    letter-spacing: 0;
   }
-
   .copy {
-    font-family: var(--font-cuerpo);
-    font-size: 20px; font-weight: 300;
-    color: var(--texto); line-height: 1.42;
+    position: relative;
+    z-index: 1;
+    max-width: 940px;
+    max-height: 54px;
+    color: var(--texto);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.45;
+    letter-spacing: 0;
     opacity: 0.9;
-    max-height: 86px;
-  }
-
-  /* Footer */
-  .footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-  }
-
-  .url {
-    font-family: var(--font-cuerpo);
-    font-size: 15px; font-weight: 500;
-    color: var(--texto-muted); letter-spacing: 0.04em;
-  }
-
-  .footer-line {
-    height: 2px; width: 120px;
-    background: linear-gradient(90deg, var(--acento-2) 0%, transparent 100%);
-    margin-bottom: 4px;
   }
 </style>
 </head>
 <body>
-<div class="bg"></div>
-<div class="noise"></div>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="deco-right"></div>
-<div class="grid-deco"></div>
-
-<!-- SVG orgánico decorativo derecha -->
-<div class="deco-svg">
-  <svg width="340" height="540" viewBox="0 0 340 540" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="240" cy="160" r="180" stroke="white" stroke-width="1" fill="none" opacity="0.6"/>
-    <circle cx="180" cy="300" r="130" stroke="white" stroke-width="0.5" fill="none" opacity="0.4"/>
-    <circle cx="280" cy="380" r="80" stroke="white" stroke-width="0.5" fill="none" opacity="0.3"/>
-    <path d="M60 80 Q200 200 140 380 Q100 480 240 520" stroke="white" stroke-width="1" fill="none" opacity="0.4"/>
-    <path d="M120 40 Q300 180 260 340" stroke="white" stroke-width="0.5" fill="none" opacity="0.3"/>
-  </svg>
-</div>
-
-<div class="layout">
-  <div class="header">
-    <div class="logo-wrap">
-      <span class="logo-simbolo" data-logo-simbolo data-fit data-fit-min="24"></span>
-      <span class="logo-texto" data-logo-texto data-fit data-fit-min="10"></span>
-    </div>
-    <div class="pill">
-      <span class="pill-dot"></span>
-      <span data-plataforma>LinkedIn</span>
-    </div>
-  </div>
-
-  <div class="body-content">
-    <div class="accent-line"></div>
-    <h1 class="titulo" data-titulo data-fit data-fit-min="38"></h1>
-    <p class="subtitulo" data-subtitulo data-fit data-fit-min="15"></p>
-    <p class="copy" data-copy data-fit data-fit-min="15"></p>
-  </div>
-
-  <div class="footer">
-    <span class="url" data-url data-fit data-fit-min="11"></span>
-    <div>
-      <div class="footer-line"></div>
-    </div>
-  </div>
-</div>
+  <section class="visual">
+    <span class="hero-symbol" data-logo-simbolo></span>
+    <div class="visual-line"></div>
+  </section>
+  <section class="content">
+    <h1 class="titulo" data-titulo data-fit data-fit-min="30"></h1>
+    <p class="subtitulo" data-subtitulo data-fit data-fit-min="13"></p>
+    <p class="copy" data-copy data-fit data-fit-min="12"></p>
+  </section>
+  <div class="noise"></div>
 </body>
 </html>

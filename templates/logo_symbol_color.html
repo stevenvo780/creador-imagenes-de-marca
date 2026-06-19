@@ -3,54 +3,56 @@
 <head>
 <meta charset="UTF-8">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
   :root {
-    --bg: #0b1417; --acento: #43b5a6; --acento-2: #e0a85e; --acento-3: #c0522a;
-    --texto: #e8e0d4; --texto-muted: #8fa3a8; --surface: #152028;
-    --grad-hero: linear-gradient(135deg, #e0a85e 0%, #c0522a 40%, #43b5a6 100%);
-    --grad-bg: radial-gradient(ellipse at 50% 50%, #152028 0%, #0b1417 70%);
-    --font-titulo: 'Playfair Display', Georgia, serif;
-    --font-cuerpo: 'Inter', system-ui, sans-serif;
+    --acento: #43b5a6;
+    --acento-2: #8d7cc0;
+    --acento-3: #A3E4D7;
+    --grad-hero: linear-gradient(135deg, #43b5a6 0%, #8d7cc0 60%, #4a3a80 100%);
+    --grad-text: var(--grad-hero);
+    --font-titulo: "Playfair Display", Georgia, "Times New Roman", serif;
+    --font-simbolo: var(--font-titulo);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 512px;
+    height: 512px;
+    overflow: hidden;
+    background: transparent;
   }
   body {
-    width: 600px; height: 600px;
-    font-family: var(--font-cuerpo);
-    background: var(--bg); color: var(--texto);
-    overflow: hidden; position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .bg { position: absolute; inset: 0; background: var(--grad-bg); }
-  .noise {
-    position: absolute; inset: 0; opacity: 0.06;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 300px 300px;
-  }
-  .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.18; }
-  .orb-1 { width: 400px; height: 400px; top: -100px; right: -100px; background: var(--acento); }
-  .orb-2 { width: 350px; height: 350px; bottom: -100px; left: -100px; background: var(--acento-2); }
-
   .layout {
-    position: relative; z-index: 10;
-    width: 100%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
+    display: flex;
+    width: 70%;
+    height: 70%;
+    align-items: center;
+    justify-content: center;
   }
-
   .simbolo {
-    font-family: var(--font-titulo); font-size: 320px; font-weight: 900; line-height: 1;
-    background: var(--grad-text, var(--grad-hero));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    display: flex; align-items: center; justify-content: center;
-    width: 460px; height: 380px; text-align: center;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: var(--font-simbolo);
+    font-size: 290px;
+    font-weight: 900;
+    line-height: 1;
+    background: var(--grad-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 </style>
 </head>
 <body>
-<div class="bg"></div>
-<div class="noise"></div>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="layout">
-  <span class="simbolo" data-logo-simbolo data-fit data-fit-min="170"></span>
-</div>
+  <main class="layout">
+    <span class="simbolo" data-logo-simbolo data-fit data-fit-min="132"></span>
+  </main>
 </body>
 </html>
