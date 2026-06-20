@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1000, height=300, initial-scale=1">
+<title>Eikon - Wordmark</title>
+<style>
+  :root {
+    --bg: #0b1417; --texto: #e8e0d4; --acento: #43b5a6;
+    --font-titulo: 'Inter', sans-serif; --font-cuerpo: 'Inter', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1000px; height: 300px; overflow: hidden; }
+  body {
+    background-color: var(--bg);
+    color: var(--texto);
+    font-family: var(--font-cuerpo);
+    display: flex; align-items: center; justify-content: center;
+    padding: 40px;
+  }
+  /* VARIANTES */
+  body[data-variant="v1_dark"] { --bg: #0b1417; --texto: #e8e0d4; }
+  body[data-variant="v2_light"] { --bg: #f4f1ea; --texto: #0b1417; }
+
+  .container { display: flex; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
+  .title {
+    font-family: var(--font-titulo); font-size: 56px; font-weight: 700;
+    color: var(--texto); letter-spacing: -0.01em;
+  }
+  .tagline {
+    font-size: 15px; font-weight: 400; opacity: 0.7; color: var(--texto);
+    max-width: 640px; text-align: center; line-height: 1.4;
+  }
+  .accent-line {
+    width: 60px; height: 2px; border-radius: 1px;
+    background: linear-gradient(90deg, var(--acento), #8d7cc0);
+  }
+  .contract-fields { display: none !important; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title" data-logo-texto data-fit data-fit-min="28">Kósmos</h1>
+    <div class="accent-line"></div>
+    <p class="tagline" data-subtitulo data-fit data-fit-min="10">Subtítulo</p>
+  </div>
+  <div class="contract-fields" aria-hidden="true">
+    <span data-titulo></span><span data-subtitulo></span><span data-copy></span>
+    <span data-logo-simbolo></span><span data-logo-texto></span>
+    <span data-numero></span><span data-etiqueta></span><span data-url></span>
+  </div>
+</body>
+</html>

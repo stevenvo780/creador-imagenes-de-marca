@@ -6,6 +6,24 @@
 
 ---
 
+> ## Sobre el alcance de este brief
+>
+> Este brief define el **subconjunto editorial** que Eikón necesita
+> para producir los assets CORE de las marcas Cloud Atlas (Pinakothḗke)
+> y Prizma Enterprise. Específicamente: lockup, wordmark, isotipo,
+> business card, banners, OG y stationery.
+>
+> La **fuente narrativa amplia** de Cloud Atlas (los 14 productos
+> griegos, los 3 frentes, el ethos de catálogo) **vive en `/workspace/Yo/`**
+> y no se reproduce acá. Eikón consume el brief vía `marcas/<slug>.json`;
+> la taxonomía técnica de assets está en `MASTER-TAXONOMIA.md`.
+>
+> Si necesitás el marco narrativo completo de Cloud Atlas: ver
+> `/workspace/Yo/docs/`. Si necesitás la taxonomía de assets: ver
+> `MASTER-TAXONOMIA.md` en este mismo repo.
+
+---
+
 ## 1. Contexto Estratégico
 
 ### 1.1 Dos líneas de marca

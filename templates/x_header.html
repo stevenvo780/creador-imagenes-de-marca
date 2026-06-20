@@ -2,98 +2,163 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=1500, height=500, initial-scale=1">
+<title>Eikon - X/Twitter Header</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
   :root {
-    --bg: #0b1417; --acento: #43b5a6; --acento-2: #e0a85e; --acento-3: #c0522a;
-    --texto: #e8e0d4; --texto-muted: #8fa3a8; --surface: #152028;
-    --grad-hero: linear-gradient(135deg, #e0a85e 0%, #c0522a 40%, #43b5a6 100%);
-    --grad-bg: radial-gradient(ellipse at 25% 50%, #152028 0%, #0b1417 55%);
-    --font-titulo: 'Playfair Display', Georgia, serif;
-    --font-cuerpo: 'Inter', system-ui, sans-serif;
+    /* AA-compliant defaults: --texto #e8e0d4 sobre --bg #0b1417 → ratio 14.24 (≥4.5) */
+    --bg: #0b1417; --texto: #e8e0d4; --acento: #43b5a6; --acento-2: #8d7cc0;
+    --font-titulo: 'Inter', sans-serif; --font-cuerpo: 'Inter', sans-serif;
   }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1500px; height: 500px; overflow: hidden; }
   body {
-    width: 1500px; height: 500px;
+    background-color: var(--bg); color: var(--texto);
     font-family: var(--font-cuerpo);
-    background: var(--bg); color: var(--texto);
-    overflow: hidden; position: relative;
+    display: flex; align-items: center; padding: 80px 90px;
+    position: relative;
   }
-  .bg { position: absolute; inset: 0; background: var(--grad-bg); }
-  .noise {
-    position: absolute; inset: 0; opacity: 0.05;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 300px 300px;
+  /* ── Bottom gradient bar ── */
+  body::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--acento), var(--acento-2));
+    opacity: 0.5;
   }
-  .orb { position: absolute; border-radius: 50%; filter: blur(140px); }
-  .orb-1 { width: 800px; height: 800px; top: -300px; right: 200px; background: var(--acento); opacity: 0.14; }
-  .orb-2 { width: 600px; height: 600px; bottom: -300px; left: 100px; background: var(--acento-2); opacity: 0.12; }
 
-  .simbolo-bg {
+  /* ── VARIANTS ── */
+  /* v1: contenido left/logo right + borde vertical; AA texto/fondo 14.24:1 */
+  body[data-variant="v1_brand"] {
+    background: radial-gradient(ellipse at 20% 50%, #131e22 0%, #0b1417 65%);
+  }
+  body[data-variant="v1_brand"]::before {
+    content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 12px;
+    background: #43b5a6;
+  }
+
+  /* v2: layout invertido logo left/content right + bottom teal; AA texto/fondo 14.24:1 */
+  body[data-variant="v2_lanzamiento"] {
+    background:
+      linear-gradient(90deg, rgba(67,181,166,0.16) 0 26%, transparent 26%),
+      #0b1417;
+  }
+  body[data-variant="v2_lanzamiento"]::after {
+    height: 34px; background: #43b5a6; opacity: 1;
+  }
+
+  /* v3: logo top-center/content bottom-center + grid; AA texto/fondo 14.24:1 */
+  body[data-variant="v3_comunidad"] {
+    background:
+      repeating-linear-gradient(90deg, rgba(232,224,212,0.045) 0 1px, transparent 1px 58px),
+      repeating-linear-gradient(0deg, rgba(232,224,212,0.035) 0 1px, transparent 1px 58px),
+      #0b1417;
+  }
+  body[data-variant="v3_comunidad"]::after {
+    top: 176px; bottom: auto; left: 50%; right: auto; width: 460px; height: 4px;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, transparent, #43b5a6, transparent);
+    opacity: 1;
+  }
+
+  .content {
+    display: flex; flex-direction: column; gap: 16px; max-width: 800px;
+    z-index: 1;
+  }
+  body[data-variant="v2_lanzamiento"] .content {
+    position: absolute; top: 50%; right: 92px; transform: translateY(-50%);
+    max-width: 780px; align-items: flex-start; text-align: left;
+  }
+  body[data-variant="v3_comunidad"] .content {
+    position: absolute; left: 50%; bottom: 66px; transform: translateX(-50%);
+    max-width: 880px; align-items: center; text-align: center; gap: 12px;
+  }
+  .accent-line { width: 56px; height: 3px; border-radius: 2px;
+    background: linear-gradient(90deg, var(--acento), var(--acento-2)); }
+  body[data-variant="v2_lanzamiento"] .accent-line {
+    width: 104px; height: 5px; background: #43b5a6;
+  }
+  body[data-variant="v3_comunidad"] .accent-line {
+    width: 220px; height: 4px;
+  }
+
+  .headline {
+    font-family: var(--font-titulo); font-size: 50px; font-weight: 800;
+    line-height: 1.15; color: var(--texto);
+  }
+  body[data-variant="v2_lanzamiento"] .headline {
+    color: #e8e0d4; font-size: 64px; line-height: 1.05; max-width: 760px;
+  }
+  body[data-variant="v3_comunidad"] .headline {
+    max-width: 780px; font-size: 48px;
+  }
+  .subhead {
+    font-size: 20px; font-weight: 400; color: #a3c4c0;
+    line-height: 1.45; max-width: 600px;
+  }
+  body[data-variant="v2_lanzamiento"] .subhead {
+    font-size: 17px; max-width: 560px;
+  }
+  body[data-variant="v3_comunidad"] .subhead {
+    max-width: 620px;
+  }
+  .url-line {
+    font-size: 15px; font-weight: 600; color: var(--acento);
+    letter-spacing: 0.02em; margin-top: 6px;
+  }
+  .logo-block {
     position: absolute; right: 80px; top: 50%; transform: translateY(-50%);
-    font-family: var(--font-titulo); font-size: 480px; font-weight: 900;
-    background: var(--grad-text, var(--grad-hero));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    opacity: 0.06; user-select: none;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    opacity: 0.9;
+    z-index: 1;
   }
-
-  .accent-bottom {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    height: 3px; background: var(--grad-hero); opacity: 0.5;
+  .logo-block svg { width: 100px; height: 100px; }
+  .logo-block svg * { stroke: url(#xGrad); }
+  .logo-block-label {
+    font-size: 12px; font-weight: 600; color: #8fa3a8;
+    letter-spacing: 0.04em; text-transform: uppercase;
   }
-
-  .layout {
-    position: relative; z-index: 10;
-    width: 100%; height: 100%;
-    display: flex; align-items: center;
-    padding: 0 120px;
-    gap: 64px;
+  body[data-variant="v2_lanzamiento"] .logo-block {
+    left: 96px; right: auto; opacity: 1;
   }
-
-  .left-block { flex-shrink: 0; }
-
-  .simbolo {
-    font-family: var(--font-titulo); font-size: 180px; font-weight: 900; line-height: 1;
-    background: var(--grad-text, var(--grad-hero));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  body[data-variant="v2_lanzamiento"] .logo-block svg { width: 120px; height: 120px; }
+  body[data-variant="v2_lanzamiento"] .logo-block-label { color: #e8e0d4; }
+  body[data-variant="v3_comunidad"] .logo-block {
+    top: 56px; left: 50%; right: auto; transform: translateX(-50%);
+    opacity: 1;
   }
-
-  .right-block { display: flex; flex-direction: column; gap: 14px; min-width: 0; max-width: 860px; }
-
-  .accent-line { width: 48px; height: 3px; background: var(--grad-hero); border-radius: 2px; }
-
-  .titulo {
-    font-family: var(--font-titulo); font-size: 68px; font-weight: 900; line-height: 1.04;
-    background: var(--grad-text, var(--grad-hero));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    max-height: 142px;
-  }
-
-  .copy {
-    font-size: 24px; font-weight: 300; color: var(--texto); line-height: 1.34; opacity: 0.9;
-    max-height: 66px;
-  }
-
-  .url { font-size: 15px; color: var(--texto-muted); letter-spacing: 0.04em; margin-top: 2px; }
+  body[data-variant="v3_comunidad"] .logo-block svg { width: 84px; height: 84px; }
+  body[data-variant="v3_comunidad"] .logo-block-label { color: #e8e0d4; }
+  .contract-fields { display: none !important; }
 </style>
 </head>
 <body>
-<div class="bg"></div>
-<div class="noise"></div>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<span class="simbolo-bg" data-logo-simbolo></span>
-<div class="accent-bottom"></div>
-<div class="layout">
-  <div class="left-block">
-    <span class="simbolo" data-logo-simbolo data-fit data-fit-min="96"></span>
-  </div>
-  <div class="right-block">
+  <div class="content">
     <div class="accent-line"></div>
-    <h1 class="titulo" data-titulo data-fit data-fit-min="38"></h1>
-    <p class="copy" data-copy data-fit data-fit-min="16"></p>
-    <span class="url" data-url data-fit data-fit-min="11"></span>
+    <h1 class="headline" data-titulo data-fit data-fit-min="32">Kósmos · Simulación científica</h1>
+    <p class="subhead" data-copy data-fit data-fit-min="16">16 repos · 22 simulaciones · Sistemas complejos</p>
+    <div class="url-line" data-url data-fit data-fit-min="10">kosmos.stevenvallejo.com</div>
   </div>
-</div>
+  <div class="logo-block">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="xGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#43b5a6"/><stop offset="100%" stop-color="#8d7cc0"/>
+        </linearGradient>
+      </defs>
+      <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke-width="2.5"/>
+      <line x1="50" y1="5" x2="50" y2="95" stroke-width="1" opacity="0.45"/>
+      <line x1="7" y1="25" x2="93" y2="75" stroke-width="1" opacity="0.45"/>
+      <line x1="93" y1="25" x2="7" y2="75" stroke-width="1" opacity="0.45"/>
+      <circle cx="50" cy="50" r="3"/><circle cx="50" cy="5" r="2.5"/>
+      <circle cx="93" cy="25" r="2.5"/><circle cx="93" cy="75" r="2.5"/>
+      <circle cx="50" cy="95" r="2.5"/><circle cx="7" cy="75" r="2.5"/>
+      <circle cx="7" cy="25" r="2.5"/>
+    </svg>
+    <span class="logo-block-label" data-logo-texto data-fit data-fit-min="8">Kósmos</span>
+  </div>
+  <div class="contract-fields" aria-hidden="true">
+    <span data-titulo></span><span data-subtitulo></span><span data-copy></span>
+    <span data-logo-simbolo></span><span data-logo-texto></span><span data-url></span>
+    <span data-acento></span><span data-acento-2></span>
+  </div>
 </body>
 </html>

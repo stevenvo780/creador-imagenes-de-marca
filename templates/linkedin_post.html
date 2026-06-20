@@ -2,159 +2,357 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=1200, height=627, initial-scale=1">
+<title>Eikon - LinkedIn Post</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0b1417;
     --primario: #0b1417;
     --acento: #43b5a6;
     --acento-2: #8d7cc0;
-    --acento-3: #A3E4D7;
     --texto: #e8e0d4;
-    --texto-muted: #8fa3a8;
-    --surface: #131e22;
-    --grad-hero: linear-gradient(135deg, #43b5a6 0%, #8d7cc0 60%, #4a3a80 100%);
-    --grad-bg: radial-gradient(ellipse at 30% 40%, #131e22 0%, #0b1417 70%);
-    --grad-text: var(--grad-hero);
-    --font-titulo: "Playfair Display", Georgia, "Times New Roman", serif;
-    --font-cuerpo: "Inter", "DejaVu Sans", Arial, system-ui, sans-serif;
-    --font-simbolo: var(--font-titulo);
-    --orb-opacity: 0.14;
-    --noise-opacity: 0.06;
+    --bg: #0b1417;
+    --gradient-hero: linear-gradient(135deg, var(--acento), var(--acento-2));
+    --font-titulo: 'Playfair Display', Georgia, serif;
+    --font-cuerpo: 'Inter', Arial, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 627px; overflow: hidden; position: relative; }
+  body {
+    background: var(--bg); color: var(--texto);
+    font-family: var(--font-cuerpo);
+    display: flex; align-items: center; justify-content: center;
+    padding: 48px;
   }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 1200px; height: 627px; }
-  body {
-    position: relative;
-    overflow: hidden;
-    color: var(--texto);
-    background: var(--bg);
-    font-family: var(--font-cuerpo);
+  /* Capas de fondo */
+  .bg-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(128,128,128,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(128,128,128,0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none; z-index: 1;
   }
-  .noise {
-    position: absolute;
-    inset: 0;
-    z-index: 4;
-    opacity: var(--noise-opacity);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.74' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
-    background-size: 260px 260px;
-    mix-blend-mode: soft-light;
+  .bg-glow-1 {
+    position: absolute; top: -15%; left: -10%; width: 50%; height: 50%;
+    background: radial-gradient(circle, var(--acento) 0%, transparent 70%);
+    opacity: 0.18; filter: blur(60px); pointer-events: none; z-index: 1;
+  }
+  .bg-glow-2 {
+    position: absolute; bottom: -15%; right: -10%; width: 50%; height: 50%;
+    background: radial-gradient(circle, var(--acento-2) 0%, transparent 70%);
+    opacity: 0.15; filter: blur(60px); pointer-events: none; z-index: 1;
+  }
+
+  /* Marcadores del layout */
+  .layout-marker {
+    position: absolute; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.15em; opacity: 0.2; color: var(--texto);
     pointer-events: none;
   }
-  .visual {
-    position: absolute;
-    inset: 0 0 40% 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .marker-tl { top: 16px; left: 16px; }
+  .marker-tr { top: 16px; right: 16px; }
+  .marker-bl { bottom: 16px; left: 16px; }
+  .marker-br { bottom: 16px; right: 16px; }
+
+  [data-subtitulo]:empty, [data-cargo]:empty, [data-etiqueta]:empty, [data-autor]:empty {
+    display: none !important;
+  }
+
+  /* Contenedor principal */
+  .container {
+    width: 100%; height: 100%;
+    display: flex; position: relative; z-index: 10;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.01);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.2), 0 15px 40px rgba(0,0,0,0.3);
     overflow: hidden;
-    background:
-      radial-gradient(ellipse at 30% 40%, color-mix(in srgb, var(--acento-3) 20%, transparent) 0%, transparent 54%),
-      var(--grad-hero);
   }
-  .visual::before {
-    content: "";
-    position: absolute;
-    width: 780px;
-    height: 780px;
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--bg) 28%, transparent);
-    filter: blur(42px);
-    opacity: 0.32;
+
+  /* Barra de acento lateral */
+  .accent-bar {
+    width: 6px; height: 100%;
+    background: var(--gradient-hero);
+    flex-shrink: 0;
   }
-  .hero-symbol {
-    position: relative;
-    z-index: 1;
-    color: rgba(255,255,255,0.14);
-    font-family: var(--font-simbolo);
-    font-size: 400px;
-    font-weight: 900;
-    line-height: 1;
-    opacity: 0.12;
-    filter: blur(1.5px);
+
+  /* Layout de contenido */
+  .main-layout {
+    flex: 1; display: flex; flex-direction: column; justify-content: space-between;
+    padding: 44px 50px;
   }
-  .visual-line {
-    position: absolute;
-    bottom: 52px;
-    left: 50%;
-    z-index: 2;
-    width: 48px;
-    height: 3px;
-    border-radius: 2px;
-    background: rgba(255,255,255,0.62);
-    transform: translateX(-50%);
+
+  /* HEADER */
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 16px;
   }
-  .content {
-    position: absolute;
-    inset: 60% 0 0 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-    padding: 42px 76px 44px;
-    background:
-      radial-gradient(ellipse at 82% 18%, color-mix(in srgb, var(--acento) 12%, transparent) 0%, transparent 48%),
-      var(--surface);
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .symbol {
+    font-size: 32px; line-height: 1; font-weight: 800;
+    background: var(--gradient-hero);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
-  .content::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    height: 1px;
-    background: color-mix(in srgb, var(--texto) 12%, transparent);
+  .wordmark { font-family: var(--font-titulo); font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+
+  .etiqueta {
+    padding: 6px 14px; border: 1px solid var(--acento); border-radius: 999px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--acento); background: rgba(var(--acento), 0.04);
   }
-  .titulo {
-    position: relative;
-    z-index: 1;
-    max-width: 980px;
-    max-height: 96px;
-    font-family: var(--font-titulo);
-    font-size: 44px;
-    font-weight: 900;
-    line-height: 1.08;
-    letter-spacing: 0;
-    background: var(--grad-text);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+
+  /* BODY */
+  .body {
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+    gap: 12px; padding: 24px 0;
   }
+
   .subtitulo {
-    position: relative;
-    z-index: 1;
-    max-width: 940px;
-    max-height: 28px;
-    color: var(--texto-muted);
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 1.35;
-    letter-spacing: 0;
+    font-size: 13px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.2em; color: var(--acento-2);
   }
+
+  .titulo {
+    font-family: var(--font-titulo); font-size: 60px; line-height: 1.1;
+    font-weight: 700; letter-spacing: -0.025em; color: var(--texto);
+  }
+
   .copy {
-    position: relative;
-    z-index: 1;
-    max-width: 940px;
-    max-height: 54px;
+    font-size: 22px; line-height: 1.4; opacity: 0.85; max-width: 950px;
+    font-weight: 400; color: var(--texto);
+  }
+
+  /* FOOTER */
+  .footer {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 16px;
+  }
+
+  .autor-info { display: flex; flex-direction: column; gap: 2px; }
+  .autor { font-weight: 700; font-size: 17px; }
+  .cargo { font-size: 13px; opacity: 0.6; letter-spacing: 0.05em; text-transform: uppercase; }
+
+  .url {
+    font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 600;
+    color: var(--acento); display: flex; align-items: center; gap: 6px;
+  }
+  .url::before { content: "→"; font-family: sans-serif; }
+
+  /* ================= VARIANTES DE LINKEDIN ================= */
+
+  /* v1_tesis: Minimal limpio */
+  body[data-variant="v1_tesis"] {
+    background: var(--primario);
+  }
+  body[data-variant="v1_tesis"] .accent-bar {
+    width: 8px;
+    background: var(--acento);
+  }
+  body[data-variant="v1_tesis"] .titulo {
+    font-family: var(--font-titulo);
+    font-size: 52px;
+    font-weight: 700;
+  }
+  body[data-variant="v1_tesis"] .copy {
+    font-family: var(--font-cuerpo);
+    font-size: 18px;
+  }
+
+  /* v2_framework: Marco Metodológico / Cajas de Densidad */
+  body[data-variant="v2_framework"] {
+    background: linear-gradient(135deg, var(--primario) 0%, #101a23 100%);
+  }
+  body[data-variant="v2_framework"] .container {
+    border: 1px solid var(--acento);
+    box-shadow: inset 0 0 30px rgba(67, 181, 166, 0.12), 0 20px 45px rgba(0,0,0,0.4);
+  }
+  body[data-variant="v2_framework"] .main-layout {
+    padding: 30px;
+  }
+  body[data-variant="v2_framework"] .accent-bar {
+    background: linear-gradient(to bottom, var(--acento-2), var(--acento));
+  }
+
+  /* v3_insight: Pensamiento Crítico / Resaltado */
+  body[data-variant="v3_insight"] {
+    background: var(--bg);
+  }
+  body[data-variant="v3_insight"] .titulo {
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    border-bottom: 3px solid var(--acento);
+    padding-bottom: 12px;
+    display: inline-block;
+  }
+  body[data-variant="v3_insight"] .container {
+    outline: 1px solid var(--acento);
+    outline-offset: -8px;
+  }
+
+  /* v4_noticia: Periodístico / Prensa (Light Background) */
+  body[data-variant="v4_noticia"] {
+    background: #f5f1ed;
+  }
+  body[data-variant="v4_noticia"] .bg-grid {
+    background-image:
+      linear-gradient(rgba(11,20,23,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(11,20,23,0.04) 1px, transparent 1px);
+  }
+  body[data-variant="v4_noticia"] .bg-glow-1,
+  body[data-variant="v4_noticia"] .bg-glow-2 {
+    opacity: 0.04;
+  }
+  body[data-variant="v4_noticia"] .container {
+    background: rgba(255,255,255,0.7);
+    border-color: rgba(11, 20, 23, 0.1);
+    color: var(--primario);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+  }
+  body[data-variant="v4_noticia"] .layout-marker { color: var(--primario); opacity: 0.4; }
+  body[data-variant="v4_noticia"] .header { border-color: rgba(11, 20, 23, 0.1); }
+  body[data-variant="v4_noticia"] .footer { border-color: rgba(11, 20, 23, 0.1); }
+  body[data-variant="v4_noticia"] .accent-bar {
+    width: 12px;
+    background: var(--acento-2);
+  }
+  body[data-variant="v4_noticia"] .wordmark { color: var(--primario); }
+  body[data-variant="v4_noticia"] .titulo { color: var(--primario); font-family: var(--font-titulo); font-size: 56px; }
+  body[data-variant="v4_noticia"] .copy { color: var(--primario); opacity: 0.85; }
+  body[data-variant="v4_noticia"] .subtitulo { color: var(--acento-2); }
+  body[data-variant="v4_noticia"] .etiqueta { border-color: var(--primario); color: var(--primario); background: transparent; }
+  body[data-variant="v4_noticia"] .url { color: var(--acento-2); }
+
+  /* v5_equipo: Corporativo / Alta Energía (Gradient Background) */
+  body[data-variant="v5_equipo"] {
+    background: var(--gradient-hero);
+  }
+  body[data-variant="v5_equipo"] .bg-grid {
+    background-image:
+      linear-gradient(rgba(11,20,23,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(11,20,23,0.05) 1px, transparent 1px);
+  }
+  body[data-variant="v5_equipo"] .container {
+    background: rgba(11, 20, 23, 0.65);
+    border-color: rgba(255, 255, 255, 0.15);
     color: var(--texto);
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1.45;
-    letter-spacing: 0;
-    opacity: 0.9;
+    box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.05), 0 20px 50px rgba(0,0,0,0.3);
+  }
+  body[data-variant="v5_equipo"] .layout-marker { color: var(--texto); opacity: 0.6; }
+  body[data-variant="v5_equipo"] .header { border-color: rgba(255, 255, 255, 0.15); }
+  body[data-variant="v5_equipo"] .footer { border-color: rgba(255, 255, 255, 0.15); }
+  body[data-variant="v5_equipo"] .accent-bar { display: none; }
+  body[data-variant="v5_equipo"] .symbol {
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: rotateGlow 3s infinite ease-in-out;
+  }
+  body[data-variant="v5_equipo"] .wordmark { color: var(--texto); }
+  body[data-variant="v5_equipo"] .titulo { color: var(--texto); font-size: 58px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+  body[data-variant="v5_equipo"] .copy { color: var(--texto); opacity: 0.9; }
+  body[data-variant="v5_equipo"] .etiqueta { border-color: var(--texto); color: var(--texto); background: transparent; }
+  body[data-variant="v5_equipo"] .url { color: var(--acento); }
+
+  /* v6_informe: Corporativo Formal / Reporte Técnico */
+  body[data-variant="v6_informe"] {
+    background: var(--primario);
+  }
+  body[data-variant="v6_informe"] .container {
+    border-top: 6px solid var(--acento-2);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  body[data-variant="v6_informe"] .accent-bar {
+    display: none;
+  }
+  body[data-variant="v6_informe"] .main-layout {
+    padding-top: 40px;
+  }
+  body[data-variant="v6_informe"] .titulo {
+    font-size: 56px;
+    border-left: 4px solid var(--acento);
+    padding-left: 20px;
+  }
+
+  @keyframes rotateGlow {
+    0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(67, 181, 166, 0.5)); }
+    50% { transform: scale(1.1); filter: drop-shadow(0 0 10px rgba(141, 124, 192, 0.8)); }
+    100% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(67, 181, 166, 0.5)); }
+  }
+
+  .contract-fields {
+    position: absolute; left: -9999px; width: 1px; height: 1px;
+    overflow: hidden; opacity: 0; pointer-events: none;
   }
 </style>
 </head>
-<body>
-  <section class="visual">
-    <span class="hero-symbol" data-logo-simbolo></span>
-    <div class="visual-line"></div>
-  </section>
-  <section class="content">
-    <h1 class="titulo" data-titulo data-fit data-fit-min="30"></h1>
-    <p class="subtitulo" data-subtitulo data-fit data-fit-min="13"></p>
-    <p class="copy" data-copy data-fit data-fit-min="12"></p>
-  </section>
-  <div class="noise"></div>
+<body data-variant="v1_tesis">
+  <!-- Capas de fondo (decorativas) -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+
+  <!-- Marcadores de layout -->
+  <div class="layout-marker marker-tl">LINKEDIN</div>
+  <div class="layout-marker marker-tr">1200x627</div>
+  <div class="layout-marker marker-bl">EIKON</div>
+  <div class="layout-marker marker-br">v1_tesis</div>
+
+  <!-- Contenedor principal -->
+  <div class="container">
+    <!-- Barra de acento lateral -->
+    <div class="accent-bar"></div>
+
+    <!-- Layout de contenido -->
+    <div class="main-layout">
+      <!-- HEADER -->
+      <div class="header">
+        <div class="brand">
+          <span class="symbol" data-logo-simbolo>⚡</span>
+          <span class="wordmark" data-logo-texto>BRAND</span>
+        </div>
+        <span class="etiqueta" data-etiqueta data-fit data-fit-min="11"></span>
+      </div>
+
+      <!-- BODY -->
+      <div class="body">
+        <span class="subtitulo" data-subtitulo data-fit data-fit-min="11"></span>
+        <h1 class="titulo" data-titulo data-fit data-fit-min="32">Título Principal</h1>
+        <p class="copy" data-copy data-fit data-fit-min="14">Texto descriptivo</p>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="footer">
+        <div class="autor-info">
+          <span class="autor" data-autor></span>
+          <span class="cargo" data-cargo></span>
+        </div>
+        <span class="url" data-url></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Campos de inyección de datos (ocultos) -->
+  <div class="contract-fields" aria-hidden="true">
+    <span data-titulo></span>
+    <span data-subtitulo></span>
+    <span data-copy></span>
+    <span data-logo-simbolo></span>
+    <span data-logo-texto></span>
+    <span data-numero></span>
+    <span data-etiqueta></span>
+    <span data-autor></span>
+    <span data-cargo></span>
+    <span data-url></span>
+    <span data-acento></span>
+    <span data-acento-2></span>
+  </div>
 </body>
 </html>

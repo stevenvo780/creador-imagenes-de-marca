@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=2480, height=3508, initial-scale=1">
+<title>Eikon - Letterhead A4</title>
+<style>
+  :root {
+    --bg: #f4f1ea; --texto: #0b1417; --primario: #0b1417;
+    --acento: #43b5a6; --acento-2: #8d7cc0;
+    --font-titulo: 'Inter', sans-serif; --font-cuerpo: 'Inter', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 2480px; height: 3508px; overflow: hidden; }
+  body {
+    background-color: var(--bg); color: var(--texto);
+    font-family: var(--font-cuerpo);
+    position: relative;
+  }
+
+  /* VARIANTS */
+  /* v1_oficial: header formal + contenido centrado sobre blanco; AA texto/fondo 18.64:1 */
+  body[data-variant="v1_oficial"] {
+    --bg: #ffffff; --texto: #0b1417;
+  }
+  body[data-variant="v1_oficial"] .top-accent {
+    background: #0b1417; height: 12px;
+  }
+  body[data-variant="v1_oficial"] .header {
+    border-bottom: 2px solid #0b1417;
+  }
+  body[data-variant="v1_oficial"] .header-brand { font-size: 44px; }
+  body[data-variant="v1_oficial"] .side-line {
+    left: 104px; width: 1px; opacity: 0.8;
+    background: linear-gradient(180deg, #43b5a6 0%, transparent 74%);
+  }
+  body[data-variant="v1_oficial"] .content-area {
+    top: 520px; left: 310px; right: 310px; text-align: center;
+  }
+  body[data-variant="v1_oficial"] .content-body { margin: 0 auto; }
+
+  /* v2_interno: badge + watermark diagonal + footer dashed; AA texto/fondo 16.52:1 */
+  body[data-variant="v2_interno"] {
+    --bg: #f4f1ea; --texto: #0b1417;
+  }
+  body[data-variant="v2_interno"] .top-accent {
+    background: linear-gradient(90deg, #43b5a6, #8d7cc0);
+    height: 12px;
+  }
+  body[data-variant="v2_interno"] .header {
+    border-bottom: 2px solid rgba(11, 20, 23, 0.86);
+  }
+  body[data-variant="v2_interno"] .header-brand {
+    font-size: 40px; color: #0b1417;
+  }
+  body[data-variant="v2_interno"] .footer {
+    border-top: 2px dashed rgba(67, 181, 166, 0.58);
+  }
+  body[data-variant="v2_interno"] .side-line {
+    left: 86px; width: 6px; opacity: 0.65;
+    background: linear-gradient(180deg, #43b5a6 0%, #8d7cc0 55%, transparent 88%);
+  }
+
+  .interno-watermark {
+    display: none;
+    position: absolute; top: 52%; left: 50%; transform: translate(-50%,-50%) rotate(-22deg);
+    font-family: var(--font-titulo); font-size: 280px; font-weight: 800;
+    color: rgba(67,181,166,0.075); letter-spacing: 0.14em;
+    white-space: nowrap; pointer-events: none;
+    text-transform: uppercase;
+  }
+  body[data-variant="v2_interno"] .interno-watermark { display: block; }
+
+  .interno-badge {
+    display: none;
+    font-size: 11px; font-weight: 800; letter-spacing: 0.08em;
+    color: #0d5c4a; border: 1.5px solid #43b5a6;
+    padding: 5px 16px; border-radius: 999px; text-transform: uppercase;
+  }
+  body[data-variant="v2_interno"] .interno-badge { display: inline-block; }
+
+  /* v1_corporate: Prizma formal cream + serif lockup + gold rail; AA texto/fondo 17.48:1 */
+  body[data-variant="v1_corporate"] {
+    --bg: #f7f3ec; --texto: #0c0e10;
+  }
+  body[data-variant="v1_corporate"] .top-accent {
+    background: linear-gradient(90deg, #e0a85e 0%, #9a5a31 54%, #6f3d22 100%);
+    height: 14px;
+  }
+  body[data-variant="v1_corporate"] .header {
+    border-bottom: 3px solid #0c0e10;
+  }
+  body[data-variant="v1_corporate"] .header-left svg { width: 112px; height: 112px; }
+  body[data-variant="v1_corporate"] .header-brand {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 60px; color: #0c0e10;
+    letter-spacing: -0.01em;
+  }
+  body[data-variant="v1_corporate"] .header-tag {
+    color: #7b4425; font-weight: 700;
+  }
+  body[data-variant="v1_corporate"] .side-line {
+    left: 96px; width: 5px;
+    background: linear-gradient(180deg, #e0a85e 0%, #7b4425 60%, transparent 88%);
+    opacity: 0.78;
+  }
+  body[data-variant="v1_corporate"] .content-area {
+    top: 560px; left: 300px; right: 300px; text-align: center;
+  }
+  body[data-variant="v1_corporate"] .content-body { margin: 0 auto; }
+  body[data-variant="v1_corporate"] .footer {
+    border-top: 2px solid #0c0e10;
+  }
+  body[data-variant="v1_corporate"] .footer-right { color: #7b4425; }
+
+  .corp-tag {
+    display: none;
+    position: absolute; top: 210px; right: 180px;
+    font-size: 12px; font-weight: 800; letter-spacing: 0.18em;
+    color: #fbfaf6; background: #0c0e10;
+    padding: 7px 20px; border-radius: 4px;
+    text-transform: uppercase;
+  }
+  body[data-variant="v1_corporate"] .corp-tag { display: block; }
+
+  /* v2_invoice: logo pequeno centrado + tabla protagonista; AA texto/fondo 18.64:1 */
+  body[data-variant="v2_invoice"] {
+    --bg: #ffffff; --texto: #0c0e10;
+    background: #ffffff;
+  }
+  body[data-variant="v2_invoice"] .top-accent {
+    background: #0c0e10;
+    height: 12px;
+  }
+  body[data-variant="v2_invoice"] .header {
+    top: 96px; justify-content: center;
+    border-bottom: 1px solid rgba(12, 14, 16, 0.18);
+    padding-bottom: 38px;
+  }
+  body[data-variant="v2_invoice"] .header-left {
+    flex-direction: column; gap: 10px; text-align: center;
+  }
+  body[data-variant="v2_invoice"] .header-left svg { width: 58px; height: 58px; }
+  body[data-variant="v2_invoice"] .header-brand {
+    font-size: 34px; color: #0c0e10;
+  }
+  body[data-variant="v2_invoice"] .header-tag {
+    color: #7b4425; font-size: 13px; font-weight: 700;
+  }
+  body[data-variant="v2_invoice"] .header-right {
+    position: absolute; right: 0; top: 12px; font-size: 15px;
+  }
+  body[data-variant="v2_invoice"] .content-area { display: none; }
+  body[data-variant="v2_invoice"] .footer {
+    height: 88px; border-top: 1px solid rgba(12, 14, 16, 0.16);
+    justify-content: flex-end; font-size: 14px;
+  }
+  body[data-variant="v2_invoice"] .footer-left { display: none; }
+  body[data-variant="v2_invoice"] .footer-right { color: #7b4425; }
+  body[data-variant="v2_invoice"] .side-line { display: none; }
+
+  .invoice-area {
+    display: none;
+    position: absolute; top: 420px; left: 160px; right: 160px;
+    color: #0c0e10;
+  }
+  body[data-variant="v2_invoice"] .invoice-area { display: block; }
+
+  .inv-meta {
+    display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 34px;
+    margin-bottom: 54px;
+  }
+  .inv-box {
+    background: #fbfaf6;
+    border: 1px solid rgba(12, 14, 16, 0.16);
+    border-radius: 4px;
+    padding: 28px 32px;
+  }
+  .inv-box-title {
+    font-size: 11px; font-weight: 800; letter-spacing: 0.16em;
+    color: #7b4425; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .inv-box-line { font-size: 17px; color: #0c0e10; line-height: 1.7; }
+  .inv-box-line strong { font-weight: 700; }
+
+  .inv-table {
+    width: 100%; border-collapse: collapse; margin-bottom: 54px;
+    border-top: 4px solid #0c0e10; border-bottom: 4px solid #0c0e10;
+  }
+  .inv-table thead th {
+    text-align: left; font-size: 11px; font-weight: 800;
+    letter-spacing: 0.14em; color: #fbfaf6; background: #0c0e10;
+    text-transform: uppercase; padding: 18px 16px;
+    border-bottom: 2px solid #0c0e10;
+  }
+  .inv-table thead th.is-num { text-align: right; }
+  .inv-table tbody td {
+    font-size: 18px; color: #0c0e10; padding: 24px 16px;
+    border-bottom: 1px solid rgba(12, 14, 16, 0.14);
+  }
+  .inv-table tbody td.is-num { text-align: right; font-family: 'Menlo', monospace; font-weight: 600; }
+  .inv-table tbody td.is-desc { color: #2a3036; }
+
+  .inv-total {
+    display: flex; justify-content: flex-end; margin-top: 20px;
+  }
+  .inv-total-box {
+    min-width: 480px;
+    background: #0c0e10; color: #fbfaf6;
+    border-radius: 4px; padding: 30px 38px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .inv-total-row {
+    display: flex; justify-content: space-between;
+    font-size: 18px; font-weight: 500;
+  }
+  .inv-total-row.is-grand {
+    font-size: 30px; font-weight: 800; color: #e0a85e;
+    border-top: 1px solid rgba(224, 168, 94, 0.38);
+    padding-top: 12px; margin-top: 6px;
+  }
+
+  /* Decorative accent bar at top */
+  .top-accent {
+    position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: #0b1417;
+  }
+
+  /* Header section */
+  .header {
+    position: absolute; top: 120px; left: 180px; right: 180px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 60px;
+    border-bottom: 1px solid rgba(67, 181, 166, 0.3);
+  }
+  .header-left {
+    display: flex; align-items: center; gap: 28px;
+  }
+  .header-left svg { width: 80px; height: 80px; }
+  .header-left svg * { stroke: #0b1417; fill: #0b1417; }
+  .header-info { display: flex; flex-direction: column; gap: 6px; }
+  .header-brand {
+    font-family: var(--font-titulo); font-size: 40px; font-weight: 700;
+    color: #0b1417; letter-spacing: -0.01em;
+  }
+  .header-tag {
+    font-size: 18px; font-weight: 500; color: #2a3833; letter-spacing: 0.03em;
+  }
+  .header-right {
+    text-align: right; font-size: 17px; color: #2a3833; line-height: 1.6;
+  }
+  .header-right .url-line { color: #0d5c4a; font-weight: 600; }
+
+  /* Content area */
+  .content-area {
+    position: absolute; top: 440px; left: 180px; right: 180px;
+  }
+  .content-title {
+    font-family: var(--font-titulo); font-size: 64px; font-weight: 700;
+    color: #0b1417; margin-bottom: 40px; line-height: 1.15;
+  }
+  .content-body {
+    font-size: 32px; font-weight: 400; color: #112228;
+    line-height: 1.65; max-width: 1400px;
+  }
+  .content-body p { margin-bottom: 28px; }
+
+  /* Footer */
+  .footer {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 120px; padding: 0 180px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(67, 181, 166, 0.25);
+    font-size: 17px; color: #2a3833;
+  }
+  .footer-left { display: flex; gap: 40px; }
+  .footer-right { color: #0d5c4a; font-weight: 600; }
+
+  /* Side decorative line */
+  .side-line {
+    position: absolute; left: 100px; top: 120px; bottom: 120px;
+    width: 1px; background: linear-gradient(180deg, var(--acento), transparent 60%);
+    opacity: 0.3;
+  }
+
+  .contract-fields { display: none !important; }
+</style>
+</head>
+<body>
+  <div class="top-accent"></div>
+  <div class="side-line"></div>
+  <div class="interno-watermark">INTERNO</div>
+  <div class="corp-tag">Documento corporativo</div>
+
+  <div class="header">
+    <div class="header-left">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke-width="2.8"/>
+        <line x1="50" y1="5" x2="50" y2="95" stroke-width="1" opacity="0.45"/>
+        <line x1="7" y1="25" x2="93" y2="75" stroke-width="1" opacity="0.45"/>
+        <line x1="93" y1="25" x2="7" y2="75" stroke-width="1" opacity="0.45"/>
+        <circle cx="50" cy="50" r="3"/>
+        <circle cx="50" cy="5" r="2.2"/><circle cx="93" cy="25" r="2.2"/>
+        <circle cx="93" cy="75" r="2.2"/><circle cx="50" cy="95" r="2.2"/>
+        <circle cx="7" cy="75" r="2.2"/><circle cx="7" cy="25" r="2.2"/>
+      </svg>
+      <div class="header-info">
+        <span class="header-brand" data-logo-texto data-fit data-fit-min="18">Kósmos</span>
+        <span class="header-tag" data-subtitulo data-fit data-fit-min="8">Simulación del orden natural · Pinakothḗke</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="interno-badge">Interno</div>
+      <div class="url-line" data-url data-fit data-fit-min="10">kosmos.stevenvallejo.com</div>
+      <div>Documento corporativo</div>
+    </div>
+  </div>
+
+  <!-- Letter body (used by Cloud Atlas + Prizma corporate) -->
+  <div class="content-area">
+    <h1 class="content-title" data-titulo data-fit data-fit-min="28">Título del documento</h1>
+    <div class="content-body" data-copy data-fit data-fit-min="14">Contenido del membrete profesional. Este espacio alberga el texto principal del documento corporativo con formato adecuado para correspondencia oficial.</div>
+  </div>
+
+  <!-- Invoice area (Prizma v2_invoice only) -->
+  <div class="invoice-area">
+    <div class="inv-meta">
+      <div class="inv-box">
+        <div class="inv-box-title">Facturar a</div>
+        <div class="inv-box-line"><strong data-logo-texto data-fit data-fit-min="14">Cliente</strong></div>
+        <div class="inv-box-line">NIT · 900.123.456-7</div>
+        <div class="inv-box-line" data-subtitulo data-fit data-fit-min="10">Dirección comercial</div>
+        <div class="inv-box-line" data-url data-fit data-fit-min="10">cliente@empresa.co</div>
+      </div>
+      <div class="inv-box">
+        <div class="inv-box-title">Detalles</div>
+        <div class="inv-box-line"><strong>Factura</strong> &nbsp;#INV-2026-0142</div>
+        <div class="inv-box-line">Emisión: 18 jun 2026</div>
+        <div class="inv-box-line">Vencimiento: 18 jul 2026</div>
+        <div class="inv-box-line">Período: Junio 2026</div>
+      </div>
+    </div>
+    <table class="inv-table">
+      <thead>
+        <tr>
+          <th>Concepto</th>
+          <th class="is-num">Cant.</th>
+          <th class="is-num">Vr. unit.</th>
+          <th class="is-num">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="is-desc" data-etiqueta data-fit data-fit-min="14">Plan Prizma · Licencia mensual</td>
+          <td class="is-num">1</td>
+          <td class="is-num">$ 1.200.000</td>
+          <td class="is-num">$ 1.200.000</td>
+        </tr>
+        <tr>
+          <td class="is-desc" data-etiqueta-2 data-fit data-fit-min="14">Módulo adicional · Integraciones</td>
+          <td class="is-num">3</td>
+          <td class="is-num">$ 240.000</td>
+          <td class="is-num">$ 720.000</td>
+        </tr>
+        <tr>
+          <td class="is-desc" data-titulo data-fit data-fit-min="14">Soporte premium · 24/7</td>
+          <td class="is-num">1</td>
+          <td class="is-num">$ 380.000</td>
+          <td class="is-num">$ 380.000</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="inv-total">
+      <div class="inv-total-box">
+        <div class="inv-total-row"><span>Subtotal</span><span>$ 2.300.000</span></div>
+        <div class="inv-total-row"><span>IVA (19%)</span><span>$ 437.000</span></div>
+        <div class="inv-total-row is-grand"><span>Total COP</span><span>$ 2.737.000</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">
+      <span data-logo-texto data-fit data-fit-min="8">Kósmos</span>
+      <span>·</span>
+      <span data-subtitulo data-fit data-fit-min="8">Simulación del orden natural</span>
+    </div>
+    <div class="footer-right" data-url data-fit data-fit-min="8">kosmos.stevenvallejo.com</div>
+  </div>
+
+  <div class="contract-fields" aria-hidden="true">
+    <span data-titulo></span><span data-subtitulo></span><span data-copy></span>
+    <span data-logo-simbolo></span><span data-logo-texto></span>
+    <span data-numero></span><span data-etiqueta></span><span data-url></span>
+  </div>
+</body>
+</html>

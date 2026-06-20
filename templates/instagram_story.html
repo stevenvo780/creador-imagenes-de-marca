@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080, height=1920, initial-scale=1">
+<title>Eikon - Instagram Story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primario: #0b1417;
+    --acento-2: #8d7cc0;
+    --texto: #e8e0d4;
+    --bg: #0b1417;
+    --gradient-hero: linear-gradient(135deg, #43b5a6, #8d7cc0);
+    --font-titulo: 'Playfair Display', Georgia, serif;
+    --font-cuerpo: 'Inter', Arial, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; }
+  body {
+    background-color: var(--bg);
+    color: var(--texto);
+    font-family: var(--font-cuerpo);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+
+  /* VARIANTES */
+  body[data-variant="v1_cover"] { /* Variante 1 */ }
+  body[data-variant="v2_text_block"] { /* Variante 2 */ }
+  body[data-variant="v3_poll"] { /* Variante 3 */ }
+  body[data-variant="v4_qna"] { /* Variante 4 */ }
+  body[data-variant="v5_swipe_up"] { /* Variante 5 */ }
+
+
+  .container { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; }
+  .title { font-family: var(--font-titulo); font-size: 48px; font-weight: 700; }
+  .copy { font-size: 18px; line-height: 1.5; }
+  .symbol { font-size: 120px; font-weight: 700; }
+
+  .contract-fields { display: none !important; }
+</style>
+</head>
+<body data-variant="v1_cover">
+  <div class="container">
+    <h1 class="title" data-titulo data-fit data-fit-min="36">Título</h1>
+    <p class="copy" data-copy data-fit data-fit-min="16">Copy</p>
+  </div>
+
+  <div class="contract-fields" aria-hidden="true">
+    <span data-titulo></span>
+    <span data-subtitulo></span>
+    <span data-copy></span>
+    <span data-logo-simbolo></span>
+    <span data-logo-texto></span>
+    <span data-numero></span>
+    <span data-etiqueta></span>
+    <span data-autor></span>
+    <span data-cargo></span>
+    <span data-url></span>
+    <span data-acento></span>
+    <span data-acento-2></span>
+  </div>
+</body>
+</html>

@@ -6,7 +6,7 @@
   "url": "https://chronos.stevenvallejo.com",
   "tono": "preciso, minimalista, profesional",
   "simbolo": "⏱",
-  "frente": "informatica",
+  "frente": "ingenieria",
 
   "paleta": {
     "bg":           "#0b1417",
@@ -34,7 +34,7 @@
     "linkedin_post": {
       "titulo":    "Chrónos",
       "subtitulo": "Seguimiento de horas · Pinakothḗke",
-      "copy":      "Tiempo registrado, valor demostrado."
+      "copy":      "Horas, tarifa y cuentas de cobro para freelancers en Colombia. Registro individual y masivo, exportación PDF."
     },
     "linkedin_banner": {
       "titulo":    "Chrónos",
@@ -43,19 +43,19 @@
     "ig_post": {
       "titulo":    "⏱",
       "subtitulo": "Chrónos",
-      "copy":      "Tiempo registrado, valor demostrado"
+      "copy":      "Horas, tarifa, factura. Para el freelance colombiano"
     },
     "ig_story": {
       "titulo":    "Chrónos",
-      "copy":      "Nueva función ↓"
+      "copy":      "Cuentas de cobro PDF ↓"
     },
     "x_post": {
       "titulo":    "Chrónos",
-      "copy":      "Tiempo registrado, valor demostrado"
+      "copy":      "Horas registradas, cuentas claras. PDF en un click"
     },
     "yt_thumbnail": {
       "titulo":    "Chrónos",
-      "copy":      "Ver"
+      "copy":      "Horas → Cuenta de cobro"
     },
     "yt_banner": {
       "titulo":    "Chrónos",
@@ -64,7 +64,7 @@
     "og_general": {
       "titulo":    "Chrónos",
       "subtitulo": "Seguimiento de horas · Pinakothḗke",
-      "copy":      "Tiempo registrado, valor demostrado."
+      "copy":      "Horas registradas, cuentas claras. Factura PDF en un click."
     },
     "whatsapp_perfil": {
       "titulo":    "⏱",

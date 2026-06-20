@@ -6,7 +6,7 @@
   "url": "https://ergon.stevenvallejo.com",
   "tono": "productivo, pragmático, accesible",
   "simbolo": "▣",
-  "frente": "informatica",
+  "frente": "ingenieria",
 
   "paleta": {
     "bg":           "#0b1417",
@@ -34,7 +34,7 @@
     "linkedin_post": {
       "titulo":    "Érgon",
       "subtitulo": "Starter kits PYME · Pinakothḗke",
-      "copy":      "Kits de arranque para la PYME moderna."
+      "copy":      "Tres starter kits para PYMEs colombianas: CRM, horas y VPN. 80% construido, 20% a medida."
     },
     "linkedin_banner": {
       "titulo":    "Érgon",
@@ -43,19 +43,19 @@
     "ig_post": {
       "titulo":    "▣",
       "subtitulo": "Érgon",
-      "copy":      "Kits de arranque para la PYME moderna"
+      "copy":      "CRM, horas, VPN. Listos para customizar"
     },
     "ig_story": {
       "titulo":    "Érgon",
-      "copy":      "Nuevo kit ↓"
+      "copy":      "CRM, horas, VPN ↓"
     },
     "x_post": {
       "titulo":    "Érgon",
-      "copy":      "Kits de arranque para la PYME moderna"
+      "copy":      "80% listo, 20% a medida. Tres kits PYME en un turborepo"
     },
     "yt_thumbnail": {
       "titulo":    "Érgon",
-      "copy":      "Ver"
+      "copy":      "80% listo · 20% a medida"
     },
     "yt_banner": {
       "titulo":    "Érgon",
@@ -64,7 +64,7 @@
     "og_general": {
       "titulo":    "Érgon",
       "subtitulo": "Starter kits PYME · Pinakothḗke",
-      "copy":      "Kits de arranque para la PYME moderna."
+      "copy":      "Tres starter kits para PYMEs: CRM, horas, VPN. 80% construido, 20% a medida."
     },
     "whatsapp_perfil": {
       "titulo":    "▣",

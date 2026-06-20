@@ -3,7 +3,7 @@
   "nombre_producto": "Prizma",
   "nombre_corporativo": "Prizma",
   "tagline": "Suite corporativa modular en producción sobre Cloud Run: POS con facturación DIAN (Talanton), crédito sin interés (Pistis), marketing por WhatsApp (Iris), e-commerce conversacional (Hermes), logística última milla (Talaria) y CRM, orquestados por un hub de eventos (Nous). NestJS + Next.js, 8 microservicios desplegados.",
-  "url": "https://prisma-enterprice.cloud",
+  "url": "https://prisma-enterprise.cloud",
   "tono": "corporativo, preciso, brillante, confiable",
   "simbolo": "◈",
 
@@ -121,7 +121,7 @@
     "business_card": {
       "titulo":    "Prizma",
       "subtitulo": "Corporate Intelligence Suite",
-      "copy":      "prizma.app"
+      "copy":      "prisma-enterprise.cloud"
     },
     "poster_a4": {
       "titulo":    "Prizma",

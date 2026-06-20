@@ -2,95 +2,356 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=1200, height=675, initial-scale=1">
+<title>Eikon - X/Twitter Post</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
   :root {
-    --bg: #0b1417; --acento: #43b5a6; --acento-2: #e0a85e; --acento-3: #c0522a;
-    --texto: #e8e0d4; --texto-muted: #8fa3a8; --surface: #152028;
-    --grad-hero: linear-gradient(135deg, #e0a85e 0%, #c0522a 40%, #43b5a6 100%);
-    --grad-bg: radial-gradient(ellipse at 30% 50%, #152028 0%, #0b1417 60%);
+    --primario: #0b1417;
+    --acento: #43b5a6;
+    --acento-2: #8d7cc0;
+    --texto: #e8e0d4;
+    --bg: #0b1417;
+    --gradient-hero: linear-gradient(135deg, var(--acento), var(--acento-2));
     --font-titulo: 'Playfair Display', Georgia, serif;
-    --font-cuerpo: 'Inter', system-ui, sans-serif;
+    --font-cuerpo: 'Inter', Arial, sans-serif;
   }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 675px; overflow: hidden; position: relative; }
   body {
-    width: 1200px; height: 675px;
-    font-family: var(--font-cuerpo); background: var(--bg); color: var(--texto);
-    overflow: hidden; position: relative;
+    background: var(--bg); color: var(--texto);
+    font-family: var(--font-cuerpo);
+    display: flex; align-items: center; justify-content: center;
+    padding: 44px;
   }
-  .bg { position: absolute; inset: 0; background: var(--grad-bg); }
-  .noise {
-    position: absolute; inset: 0; opacity: 0.05;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 300px 300px;
+
+  /* Capas de fondo */
+  .bg-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(128,128,128,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(128,128,128,0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none; z-index: 1;
   }
-  .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.15; }
-  .orb-1 { width: 550px; height: 550px; top: -150px; right: -80px; background: var(--acento); }
-  .orb-2 { width: 400px; height: 400px; bottom: -130px; left: -60px; background: var(--acento-2); }
+  .bg-glow-1 {
+    position: absolute; top: -10%; left: -10%; width: 55%; height: 55%;
+    background: radial-gradient(circle, var(--acento) 0%, transparent 70%);
+    opacity: 0.18; filter: blur(70px); pointer-events: none; z-index: 1;
+  }
+  .bg-glow-2 {
+    position: absolute; bottom: -10%; right: -10%; width: 55%; height: 55%;
+    background: radial-gradient(circle, var(--acento-2) 0%, transparent 70%);
+    opacity: 0.15; filter: blur(70px); pointer-events: none; z-index: 1;
+  }
 
-  /* Línea superior de acento */
-  .accent-top { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-hero); opacity: 0.5; }
+  /* Marcadores técnicos */
+  .layout-marker {
+    position: absolute; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.15em; opacity: 0.2; color: var(--texto);
+    pointer-events: none;
+  }
+  .marker-tl { top: 16px; left: 16px; }
+  .marker-tr { top: 16px; right: 16px; }
+  .marker-bl { bottom: 16px; left: 16px; }
+  .marker-br { bottom: 16px; right: 16px; }
 
-  .layout {
-    position: relative; z-index: 10;
+  [data-etiqueta]:empty, [data-numero]:empty, [data-autor]:empty, [data-subtitulo]:empty {
+    display: none !important;
+  }
+
+  /* Contenedor principal */
+  .container {
     width: 100%; height: 100%;
-    display: flex; flex-direction: column;
-    justify-content: space-between;
-    padding: 56px 72px 52px;
-  }
-  .header { display: flex; justify-content: space-between; align-items: flex-start; }
-  .logo-wrap { display: flex; flex-direction: column; gap: 4px; }
-  .logo-simbolo {
-    font-family: var(--font-titulo); font-size: 36px; font-weight: 900; line-height: 1;
-    background: var(--grad-text, var(--grad-hero));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-  .logo-texto { font-size: 15px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--texto-muted); max-width: 300px; }
-
-  .platform-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 8px 16px; border-radius: 100px;
-    border: 1px solid rgba(255,255,255,0.1);
-    font-size: 15px; font-weight: 600; letter-spacing: 0.06em;
-    color: var(--texto-muted);
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    grid-template-rows: auto 1fr auto;
+    gap: 24px;
+    position: relative; z-index: 10;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.01);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 44px;
+    box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.2), 0 20px 45px rgba(0,0,0,0.35);
   }
 
-  .body-content { flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 770px; gap: 20px; }
-  .accent-line { width: 48px; height: 3px; background: var(--grad-hero); border-radius: 2px; }
+  /* Secciones del layout */
+  .header-brand {
+    grid-column: 1 / -1;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 16px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .symbol {
+    font-size: 30px; line-height: 1; font-weight: 800;
+    background: var(--gradient-hero);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .wordmark { font-family: var(--font-titulo); font-size: 19px; font-weight: 700; }
+
+  .etiqueta {
+    padding: 5px 12px; border: 1px solid var(--acento); border-radius: 999px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--acento); background: rgba(var(--acento), 0.04);
+    align-self: center;
+  }
+
+  .left {
+    grid-column: 1;
+    display: flex; flex-direction: column; justify-content: center;
+    gap: 16px; padding-right: 20px;
+  }
+
+  .subtitulo {
+    font-size: 12px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.2em; color: var(--acento-2);
+  }
+
   .titulo {
-    font-family: var(--font-titulo); font-size: 66px; font-weight: 900; line-height: 1.05;
-    background: var(--grad-text, var(--grad-hero));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    max-height: 148px;
+    font-family: var(--font-titulo); font-size: 58px; line-height: 1.1;
+    font-weight: 700; letter-spacing: -0.02em; color: var(--texto);
   }
-  .copy { font-size: 22px; font-weight: 300; color: var(--texto); line-height: 1.4; opacity: 0.9; max-height: 92px; }
 
-  .footer { display: flex; justify-content: flex-end; align-items: center; }
-  .url { font-size: 15px; color: var(--texto-muted); letter-spacing: 0.04em; }
+  .copy {
+    font-size: 20px; line-height: 1.45; opacity: 0.85; max-width: 760px;
+    font-weight: 400; color: var(--texto);
+  }
+
+  .right {
+    grid-column: 2;
+    display: flex; align-items: center; justify-content: center;
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+  }
+
+  .numero {
+    font-family: var(--font-titulo); font-size: 160px; font-weight: 800;
+    line-height: 1; letter-spacing: -0.05em;
+    background: var(--gradient-hero);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-align: center;
+  }
+
+  .footer {
+    grid-column: 1 / -1;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 16px;
+    font-size: 13px; opacity: 0.8;
+  }
+
+  .autor-info { display: flex; align-items: center; gap: 8px; font-weight: 700; }
+  .url {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600;
+    color: var(--acento); display: flex; align-items: center; gap: 4px;
+  }
+  .url::before { content: "→"; }
+
+  /* ================= VARIANTES X ================= */
+
+  /* v1_tesis: Tesis / Declaración */
+  body[data-variant="v1_tesis"] {
+    background: var(--primario);
+  }
+  body[data-variant="v1_tesis"] .container {
+    grid-template-columns: 1fr 300px;
+  }
+  body[data-variant="v1_tesis"] .left {
+    border-left: 4px solid var(--acento);
+    padding-left: 24px;
+  }
+  body[data-variant="v1_tesis"] .titulo {
+    font-size: 56px;
+  }
+  body[data-variant="v1_tesis"] .copy {
+    font-size: 18px;
+  }
+  body[data-variant="v1_tesis"] .right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  body[data-variant="v1_tesis"] .numero {
+    font-size: 120px;
+  }
+
+  /* v2_cita: Cita Editorial (Light/Contrastada) */
+  body[data-variant="v2_cita"] {
+    background: #f5f1ed;
+  }
+  body[data-variant="v2_cita"] .bg-grid {
+    background-image:
+      linear-gradient(rgba(11,20,23,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(11,20,23,0.04) 1px, transparent 1px);
+  }
+  body[data-variant="v2_cita"] .bg-glow-1,
+  body[data-variant="v2_cita"] .bg-glow-2 {
+    opacity: 0.04;
+  }
+  body[data-variant="v2_cita"] .container {
+    grid-template-columns: 200px 1fr;
+    background: rgba(255,255,255,0.75);
+    border-color: rgba(11, 20, 23, 0.1);
+    color: var(--primario);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+  }
+  body[data-variant="v2_cita"] .layout-marker { color: var(--primario); opacity: 0.4; }
+  body[data-variant="v2_cita"] .header-brand { border-color: rgba(11, 20, 23, 0.1); }
+  body[data-variant="v2_cita"] .right {
+    grid-column: 1;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  body[data-variant="v2_cita"] .left {
+    grid-column: 2;
+    padding-left: 30px;
+    border: none;
+  }
+  body[data-variant="v2_cita"] .footer { border-color: rgba(11, 20, 23, 0.1); }
+  body[data-variant="v2_cita"] .wordmark { color: var(--primario); }
+  body[data-variant="v2_cita"] .titulo { color: var(--primario); font-family: var(--font-titulo); font-style: italic; font-weight: 600; font-size: 38px; line-height: 1.35; }
+  body[data-variant="v2_cita"] .copy { color: var(--primario); opacity: 0.85; font-family: var(--font-titulo); font-style: italic; font-size: 20px; }
+  body[data-variant="v2_cita"] .subtitulo { color: var(--acento-2); }
+  body[data-variant="v2_cita"] .etiqueta { border-color: var(--primario); color: var(--primario); background: transparent; }
+  body[data-variant="v2_cita"] .url { color: var(--acento-2); }
+  body[data-variant="v2_cita"] .numero {
+    color: var(--acento);
+    opacity: 0.15;
+    font-size: 140px;
+  }
+  body[data-variant="v2_cita"] .numero::before {
+    content: """;
+    font-family: var(--font-titulo);
+  }
+
+  /* v3_anuncio: Promoción Hero / Gradient */
+  body[data-variant="v3_anuncio"] {
+    background: linear-gradient(135deg, rgba(67, 181, 166, 0.15) 0%, rgba(141, 124, 192, 0.15) 100%), var(--bg);
+  }
+  body[data-variant="v3_anuncio"] .bg-grid {
+    background-image:
+      linear-gradient(rgba(11,20,23,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(11,20,23,0.05) 1px, transparent 1px);
+  }
+  body[data-variant="v3_anuncio"] .container {
+    grid-template-columns: 1fr;
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 0 25px rgba(255, 255, 255, 0.05);
+  }
+  body[data-variant="v3_anuncio"] .layout-marker { color: var(--texto); opacity: 0.6; }
+  body[data-variant="v3_anuncio"] .header-brand { border-color: rgba(255, 255, 255, 0.08); }
+  body[data-variant="v3_anuncio"] .right { display: none; }
+  body[data-variant="v3_anuncio"] .left {
+    grid-column: 1 / -1;
+    align-items: center;
+    text-align: center;
+    padding: 0 40px;
+  }
+  body[data-variant="v3_anuncio"] .symbol { background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  body[data-variant="v3_anuncio"] .wordmark { color: var(--texto); }
+  body[data-variant="v3_anuncio"] .titulo {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: inline-block;
+    position: relative;
+    padding-bottom: 16px;
+    color: var(--texto);
+  }
+  body[data-variant="v3_anuncio"] .titulo::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 2px;
+    background: var(--gradient-hero);
+  }
+  body[data-variant="v3_anuncio"] .copy { color: var(--texto); opacity: 0.9; font-size: 16px; }
+  body[data-variant="v3_anuncio"] .etiqueta { border-color: var(--acento); color: var(--acento); background: transparent; }
+  body[data-variant="v3_anuncio"] .url { color: var(--acento); }
+
+  /* v4_stat: Estadístico */
+  body[data-variant="v4_stat"] {
+    background: var(--bg);
+  }
+  body[data-variant="v4_stat"] .numero {
+    font-size: 180px;
+    opacity: 0.9;
+  }
+
+  .contract-fields {
+    position: absolute; left: -9999px; width: 1px; height: 1px;
+    overflow: hidden; opacity: 0; pointer-events: none;
+  }
 </style>
 </head>
-<body>
-<div class="bg"></div>
-<div class="noise"></div>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="accent-top"></div>
-<div class="layout">
-  <div class="header">
-    <div class="logo-wrap">
-      <span class="logo-simbolo" data-logo-simbolo data-fit data-fit-min="24"></span>
-      <span class="logo-texto" data-logo-texto data-fit data-fit-min="10"></span>
+<body data-variant="v1_tesis">
+  <!-- Capas de fondo -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+
+  <!-- Marcadores de layout -->
+  <div class="layout-marker marker-tl">X POST</div>
+  <div class="layout-marker marker-tr">1200x675</div>
+  <div class="layout-marker marker-bl">EIKON</div>
+  <div class="layout-marker marker-br">v1_tesis</div>
+
+  <!-- Contenedor principal -->
+  <div class="container">
+    <!-- HEADER BRAND -->
+    <div class="header-brand">
+      <div class="brand">
+        <span class="symbol" data-logo-simbolo>⚡</span>
+        <span class="wordmark" data-logo-texto>BRAND</span>
+      </div>
+      <span class="etiqueta" data-etiqueta data-fit data-fit-min="9"></span>
     </div>
-    <div class="platform-badge">X / Twitter</div>
+
+    <!-- LEFT (Contenido principal) -->
+    <div class="left">
+      <span class="subtitulo" data-subtitulo data-fit data-fit-min="10"></span>
+      <h1 class="titulo" data-titulo data-fit data-fit-min="28">Título Principal</h1>
+      <p class="copy" data-copy data-fit data-fit-min="12">Texto descriptivo</p>
+    </div>
+
+    <!-- RIGHT (Dato / Número) -->
+    <div class="right">
+      <span class="numero" data-numero data-fit data-fit-min="72"></span>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div class="autor-info">
+        <span class="autor" data-autor></span>
+      </div>
+      <span class="url" data-url></span>
+    </div>
   </div>
-  <div class="body-content">
-    <div class="accent-line"></div>
-    <h1 class="titulo" data-titulo data-fit data-fit-min="38"></h1>
-    <p class="copy" data-copy data-fit data-fit-min="16"></p>
+
+  <!-- Campos de inyección de datos (ocultos) -->
+  <div class="contract-fields" aria-hidden="true">
+    <span data-titulo></span>
+    <span data-subtitulo></span>
+    <span data-copy></span>
+    <span data-logo-simbolo></span>
+    <span data-logo-texto></span>
+    <span data-numero></span>
+    <span data-etiqueta></span>
+    <span data-autor></span>
+    <span data-cargo></span>
+    <span data-url></span>
+    <span data-acento></span>
+    <span data-acento-2></span>
   </div>
-  <div class="footer">
-    <span class="url" data-url data-fit data-fit-min="11"></span>
-  </div>
-</div>
 </body>
 </html>

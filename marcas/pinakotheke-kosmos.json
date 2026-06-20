@@ -2,7 +2,7 @@
   "slug": "pinakotheke-kosmos",
   "nombre_producto": "Kósmos",
   "nombre_corporativo": "Pinakothḗke",
-  "tagline": "Catálogo educativo interactivo de 16 repos en sistemas complejos, emergencia y cómputo científico: ABM + ODE acoplados, métrica de emergencia propia (EDI) y su fundamento en realismo estructural operativo. 22 páginas SSG, sin base de datos.",
+  "tagline": "Simulación del orden natural",
   "url": "https://kosmos.stevenvallejo.com",
   "tono": "científico, sistémico, visual",
   "simbolo": "⬡",
@@ -36,10 +36,23 @@
       "subtitulo": "Kósmos · Pinakothḗke · Ciencias de la complejidad",
       "copy":      "Sistemas complejos, emergencia y filosofía de la ciencia reunidos en un solo catálogo educativo SSG. Cada página es una simulación ejecutable."
     },
-    "linkedin_banner": {
+    "linkedin_header": {
       "titulo":    "Kósmos — Catálogo de simulación científica",
-      "subtitulo": "Pinakothḗke · kosmos.stevenvallejo.com",
-      "copy":      "Emergencia, caos, redes y agentes: 16 repos de sistemas complejos en un solo lugar."
+      "subtitulo": "Pinakothḗke",
+      "copy":      "16 repos · 22 simulaciones · Sistemas complejos, emergencia y autoorganización"
+    },
+    "twitter_header": {
+      "titulo":    "Kósmos · Simulación científica",
+      "subtitulo": "Pinakothḗke",
+      "copy":      "16 repos · 22 simulaciones · Sistemas complejos"
+    },
+    "youtube_header": {
+      "titulo":    "Kósmos — Catálogo de simulación científica",
+      "copy":      "Sistemas complejos · Emergencia · Filosofía de la ciencia · Pinakothḗke"
+    },
+    "web_hero_desktop": {
+      "titulo":    "Kósmos",
+      "copy":      "Catálogo de simulación científica · Pinakothḗke"
     },
     "ig_post": {
       "titulo":    "⬡",
@@ -66,9 +79,9 @@
       "subtitulo": "Sistemas complejos · Emergencia · Filosofía de la ciencia · Pinakothḗke"
     },
     "og_general": {
-      "titulo":    "Kósmos — Catálogo de simulación científica",
+      "titulo":    "Kósmos — Simulación del orden natural",
       "subtitulo": "Pinakothḗke · Ciencias de la complejidad",
-      "copy":      "Catálogo educativo que unifica 16 repos de sistemas complejos, emergencia y filosofía de la ciencia. 22 páginas SSG, open source."
+      "copy":      "Catálogo educativo que unifica 16 repos de sistemas complejos, emergencia y filosofía de la ciencia. 22 simulaciones SSG, open source."
     },
     "og_product": {
       "titulo":    "Kósmos",
@@ -128,10 +141,36 @@
       "titulo":    "Kósmos · Simulación científica",
       "copy":      "16 repos · 22 páginas · kosmos.stevenvallejo.com"
     },
+    "ad_leaderboard": {
+      "titulo":    "Catálogo de simulación científica",
+      "subtitulo": "16 repositorios · 22 simulaciones ejecutables",
+      "copy":      "Emergencia, caos y autoorganización en un solo catálogo open source.",
+      "url":       "kosmos.stevenvallejo.com"
+    },
+    "ad_rectangle": {
+      "titulo":    "Simulación científica open source",
+      "subtitulo": "Kósmos · Pinakothḗke",
+      "copy":      "22 simulaciones de emergencia y sistemas complejos. Explora el catálogo.",
+      "url":       "kosmos.stevenvallejo.com"
+    },
+    "stat_card": {
+      "titulo":    "Kósmos",
+      "numero":    "22",
+      "etiqueta":  "Simulaciones ejecutables",
+      "numero_2":  "16",
+      "etiqueta_2": "Repositorios integrados",
+      "copy":      "Catálogo educativo de sistemas complejos, emergencia y filosofía de la ciencia."
+    },
     "business_card": {
       "titulo":    "Kósmos",
-      "subtitulo": "Catálogo de simulación científica",
-      "copy":      "kosmos.stevenvallejo.com · Pinakothḗke"
+      "subtitulo": "Simulación del orden natural",
+      "copy":      "Catálogo educativo de sistemas complejos · Pinakothḗke · kosmos.stevenvallejo.com"
+    },
+    "letterhead": {
+      "titulo":    "Kósmos — Pinakothḗke",
+      "subtitulo": "Simulación del orden natural",
+      "copy":      "Catálogo educativo de sistemas complejos, emergencia y filosofía de la ciencia. 16 repositorios, 22 simulaciones ejecutables. Open source, rigor cuantitativo.",
+      "url":       "kosmos.stevenvallejo.com"
     },
     "poster_a4": {
       "titulo":    "Kósmos",

@@ -3,6 +3,7 @@ playwright>=1.40
 
 # Utilidades base
 Pillow>=10.0
+numpy>=1.24
 
 # ELIMINADO (difusión GPU — ya no se usa):
 # torch

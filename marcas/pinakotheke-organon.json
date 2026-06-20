@@ -47,7 +47,7 @@
     },
     "ig_story": {
       "titulo":    "Órganon",
-      "copy":      "Nueva demo ↓"
+      "copy":      "Pipeline en vivo ↓"
     },
     "x_post": {
       "titulo":    "Órganon",
@@ -55,7 +55,7 @@
     },
     "yt_thumbnail": {
       "titulo":    "Órganon",
-      "copy":      "Ver"
+      "copy":      "NL → Lógica"
     },
     "yt_banner": {
       "titulo":    "Órganon",
@@ -82,7 +82,7 @@
     "ig_reel_cover": {
       "titulo":    "Texto → Lógica",
       "subtitulo": "Órganon",
-      "copy":      "Demo en vivo"
+      "copy":      "ST ejecuta la fórmula"
     },
     "x_header": {
       "titulo":    "Órganon",

@@ -3,7 +3,8 @@
   "nombre_producto": "Pinakothḗke",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Catálogos del saber personal",
-  "url": "pinakotheke.stevenvallejo.dev",
+  "url": "https://www.stevenvallejo.com/es",
+  "url_en": "https://www.stevenvallejo.com/en",
   "tono": "libresco, contemplativo, plural — tres frentes de conocimiento",
   "simbolo": "Π",
 
@@ -91,6 +92,54 @@
     "contra_cover": {
       "titulo":    "Pinakothḗke",
       "copy":      "Catálogos del saber personal"
+    }
+  },
+
+  "locales": {
+    "en": {
+      "tagline": "Catalogs of personal knowledge",
+      "url": "https://www.stevenvallejo.com/en",
+      "textos": {
+        "linkedin_post": {
+          "titulo":    "Pinakothḗke",
+          "subtitulo": "Catalogs of personal knowledge",
+          "copy":      "Philosophy · Science · Engineering"
+        },
+        "linkedin_banner": {
+          "titulo":    "Pinakothḗke",
+          "copy":      "A gallery of ideas. Three fronts. One archive."
+        },
+        "ig_post": {
+          "titulo":    "Π",
+          "subtitulo": "Pinakothḗke",
+          "copy":      "Catalogs of personal knowledge"
+        },
+        "ig_story": {
+          "titulo":    "Pinakothḗke",
+          "copy":      "New catalog ↓"
+        },
+        "x_post": {
+          "titulo":    "Pinakothḗke",
+          "copy":      "Catalogs of personal knowledge"
+        },
+        "yt_thumbnail": {
+          "titulo":    "Pinakothḗke",
+          "copy":      "Watch"
+        },
+        "yt_banner": {
+          "titulo":    "Pinakothḗke",
+          "subtitulo": "Philosophy · Science · Engineering"
+        },
+        "og_general": {
+          "titulo":    "Pinakothḗke",
+          "subtitulo": "Catalogs of personal knowledge",
+          "copy":      "Philosophy · Science · Engineering"
+        },
+        "contra_cover": {
+          "titulo":    "Pinakothḗke",
+          "copy":      "Catalogs of personal knowledge"
+        }
+      }
     }
   }
 }

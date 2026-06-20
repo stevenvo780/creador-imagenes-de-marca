@@ -2,193 +2,149 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=1050, height=600, initial-scale=1">
+<title>Eikon - Business Card</title>
 <style>
   :root {
-    --bg: #0b1417;
-    --primario: #0b1417;
-    --acento: #43b5a6;
-    --acento-2: #8d7cc0;
-    --acento-3: #A3E4D7;
-    --texto: #e8e0d4;
-    --texto-muted: #8fa3a8;
-    --surface: #131e22;
-    --grad-hero: linear-gradient(135deg, #43b5a6 0%, #8d7cc0 60%, #4a3a80 100%);
-    --grad-bg: radial-gradient(ellipse at 20% 50%, #131e22 0%, #0b1417 60%);
-    --grad-text: var(--grad-hero);
-    --font-titulo: "Playfair Display", Georgia, "Times New Roman", serif;
-    --font-cuerpo: "Inter", "DejaVu Sans", Arial, system-ui, sans-serif;
-    --font-simbolo: var(--font-titulo);
-    --orb-opacity: 0.15;
-    --noise-opacity: 0.07;
+    --bg: #0b1417; --texto: #e8e0d4; --primario: #0b1417;
+    --acento: #43b5a6; --acento-2: #8d7cc0;
+    --font-titulo: 'Inter', sans-serif; --font-cuerpo: 'Inter', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1050px; height: 600px; overflow: hidden; }
+
+  /* ── FRONT (v1_front) ── */
+  body[data-variant="v1_front"] {
+    background: #0b1417;
+    font-family: var(--font-cuerpo); color: var(--texto);
+    display: grid; grid-template-columns: 340px 1fr; align-items: center;
+    padding: 0;
+  }
+  body[data-variant="v1_front"] .left-col {
+    background: linear-gradient(180deg, rgba(67, 181, 166, 0.1) 0%, transparent 100%);
+    display: flex; align-items: center; justify-content: center;
+    padding: 50px 30px; height: 100%;
+  }
+  body[data-variant="v1_front"] .left-col svg { width: 180px; height: 180px; }
+  body[data-variant="v1_front"] .right-col {
+    padding: 50px 40px;
+    display: flex; flex-direction: column; justify-content: center; gap: 18px;
+  }
+  body[data-variant="v1_front"] .logo-text {
+    font-family: var(--font-titulo); font-size: 44px; font-weight: 700;
+    line-height: 1.1; color: #e8e0d4;
+  }
+  body[data-variant="v1_front"] .subtitle {
+    font-size: 16px; font-weight: 500; color: #a3c4c0;
+    letter-spacing: 0.03em;
+  }
+  body[data-variant="v1_front"] .accent-line {
+    width: 48px; height: 2px; border-radius: 1px;
+    background: linear-gradient(90deg, var(--acento), var(--acento-2));
+  }
+  body[data-variant="v1_front"] .copy {
+    font-size: 14px; font-weight: 400; color: #b5c4c0;
+    line-height: 1.55; max-width: 340px;
+  }
+  body[data-variant="v1_front"] .back-layout { display: none; }
+
+  /* ── BACK (v2_back) ── */
+  body[data-variant="v2_back"] {
+    background: #f4f1ea; color: #0b1417;
+    font-family: var(--font-cuerpo);
+    display: flex; align-items: center; justify-content: center;
+    padding: 40px 60px;
+  }
+  body[data-variant="v2_back"] .front-layout { display: none; }
+  body[data-variant="v2_back"] .back-layout {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; gap: 40px;
+  }
+  body[data-variant="v2_back"] .back-left {
+    display: flex; align-items: center; gap: 20px;
+  }
+  body[data-variant="v2_back"] .back-left svg { width: 70px; height: 70px; }
+  body[data-variant="v2_back"] .back-left svg * { stroke: #0b1417; }
+  body[data-variant="v2_back"] .back-left svg circle { fill: #0b1417; }
+  body[data-variant="v2_back"] .back-info {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  body[data-variant="v2_back"] .back-name {
+    font-family: var(--font-titulo); font-size: 18px; font-weight: 700;
+    color: #0b1417; letter-spacing: 0.02em;
+  }
+  body[data-variant="v2_back"] .back-tag {
+    font-size: 13px; font-weight: 500; color: #1a2a25;
+    letter-spacing: 0.03em;
+  }
+  body[data-variant="v2_back"] .back-url {
+    font-size: 16px; font-weight: 600; color: #0d5c4a;
+    text-align: right; letter-spacing: 0.02em;
+  }
+  body[data-variant="v2_back"] .accent-line {
+    width: 1px; height: 60px; border-radius: 1px;
+    background: linear-gradient(180deg, var(--acento), var(--acento-2));
+    margin: 0 30px;
   }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 1050px; height: 600px; }
-  body {
-    position: relative;
-    overflow: hidden;
-    color: var(--texto);
-    background: var(--bg);
-    font-family: var(--font-cuerpo);
-  }
-  .bg { position: absolute; inset: 0; background: var(--grad-bg); }
-  .noise {
-    position: absolute;
-    inset: 0;
-    opacity: var(--noise-opacity);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
-    background-size: 260px 260px;
-    mix-blend-mode: soft-light;
-  }
-  .orb {
-    position: absolute;
-    border-radius: 999px;
-    filter: blur(100px);
-    opacity: var(--orb-opacity);
-    pointer-events: none;
-  }
-  .orb-1 { width: 500px; height: 500px; top: -210px; right: -120px; background: var(--acento); }
-  .orb-2 { width: 420px; height: 420px; left: -110px; bottom: -210px; background: var(--acento-2); opacity: calc(var(--orb-opacity) * .86); }
-  .corner {
-    position: absolute;
-    z-index: 1;
-    width: 24px;
-    height: 24px;
-    opacity: 0.5;
-    border-color: var(--acento);
-  }
-  .corner-tl { top: 32px; left: 32px; border-top: 1px solid; border-left: 1px solid; }
-  .corner-tr { top: 32px; right: 32px; border-top: 1px solid; border-right: 1px solid; }
-  .corner-bl { left: 32px; bottom: 32px; border-bottom: 1px solid; border-left: 1px solid; }
-  .corner-br { right: 32px; bottom: 32px; border-bottom: 1px solid; border-right: 1px solid; }
-  .layout {
-    position: relative;
-    z-index: 2;
-    display: grid;
-    width: 100%;
-    height: 100%;
-    grid-template-columns: 255px 1px minmax(0, 560px);
-    align-items: center;
-    column-gap: 60px;
-    padding: 60px 80px;
-  }
-  .left {
-    display: flex;
-    min-width: 0;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
-  .simbolo {
-    width: 210px;
-    text-align: center;
-    font-family: var(--font-simbolo);
-    font-size: 160px;
-    font-weight: 900;
-    line-height: 1;
-    background: var(--grad-text);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .logo-text {
-    max-width: 250px;
-    color: var(--texto-muted);
-    font-family: var(--font-cuerpo);
-    font-size: 15px;
-    font-weight: 700;
-    line-height: 1.2;
-    letter-spacing: 0.08em;
-    text-align: center;
-    text-transform: uppercase;
-  }
-  .divider {
-    width: 1px;
-    height: 160px;
-    background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--texto) 14%, transparent), transparent);
-  }
-  .right {
-    display: flex;
-    min-width: 0;
-    max-width: 560px;
-    flex-direction: column;
-    gap: 14px;
-  }
-  .nombre {
-    max-height: 124px;
-    font-family: var(--font-titulo);
-    font-size: 58px;
-    font-weight: 900;
-    line-height: 1.04;
-    letter-spacing: 0;
-    background: var(--grad-text);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .accent-line {
-    width: 36px;
-    height: 2px;
-    border-radius: 2px;
-    background: var(--grad-hero);
-  }
-  .cargo {
-    max-height: 52px;
-    color: var(--texto-muted);
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 1.4;
-    letter-spacing: 0;
-  }
-  .contacto {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-top: 4px;
-  }
-  .url {
-    max-height: 22px;
-    color: var(--acento);
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 1.3;
-    letter-spacing: 0;
-  }
-  .contact-item {
-    max-height: 44px;
-    color: var(--texto);
-    font-size: 16px;
-    font-weight: 300;
-    line-height: 1.35;
-    letter-spacing: 0;
-    opacity: 0.86;
-  }
+  .contract-fields { display: none !important; }
 </style>
 </head>
 <body>
-  <div class="bg"></div>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="noise"></div>
-  <div class="corner corner-tl"></div>
-  <div class="corner corner-tr"></div>
-  <div class="corner corner-bl"></div>
-  <div class="corner corner-br"></div>
-  <main class="layout">
-    <section class="left">
-      <span class="simbolo" data-logo-simbolo data-fit data-fit-min="82"></span>
-      <span class="logo-text" data-logo-texto data-fit data-fit-min="10"></span>
-    </section>
-    <div class="divider"></div>
-    <section class="right">
-      <h1 class="nombre" data-titulo data-fit data-fit-min="34"></h1>
-      <div class="accent-line"></div>
-      <p class="cargo" data-subtitulo data-fit data-fit-min="13"></p>
-      <div class="contacto">
-        <span class="url" data-url data-fit data-fit-min="11"></span>
-        <span class="contact-item" data-copy data-fit data-fit-min="11"></span>
+  <!-- FRONT layout -->
+  <div class="front-layout left-col">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#43b5a6"/><stop offset="100%" stop-color="#8d7cc0"/>
+        </linearGradient>
+      </defs>
+      <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke="url(#bcGrad)" stroke-width="2.5"/>
+      <line x1="50" y1="5" x2="50" y2="95" stroke="url(#bcGrad)" stroke-width="1" opacity="0.5"/>
+      <line x1="7" y1="25" x2="93" y2="75" stroke="url(#bcGrad)" stroke-width="1" opacity="0.5"/>
+      <line x1="93" y1="25" x2="7" y2="75" stroke="url(#bcGrad)" stroke-width="1" opacity="0.5"/>
+      <circle cx="50" cy="50" r="3" fill="#43b5a6"/>
+      <circle cx="50" cy="5" r="2.5" fill="#43b5a6"/>
+      <circle cx="93" cy="25" r="2.5" fill="#8d7cc0"/>
+      <circle cx="93" cy="75" r="2.5" fill="#8d7cc0"/>
+      <circle cx="50" cy="95" r="2.5" fill="#43b5a6"/>
+      <circle cx="7" cy="75" r="2.5" fill="#8d7cc0"/>
+      <circle cx="7" cy="25" r="2.5" fill="#8d7cc0"/>
+    </svg>
+  </div>
+  <div class="front-layout right-col">
+    <h1 class="logo-text" data-logo-texto data-fit data-fit-min="24">Kósmos</h1>
+    <div class="accent-line"></div>
+    <p class="subtitle" data-subtitulo data-fit data-fit-min="10">Simulación del orden natural · Pinakothḗke</p>
+    <p class="copy" data-copy data-fit data-fit-min="10">Catálogo educativo de sistemas complejos, emergencia y filosofía de la ciencia</p>
+  </div>
+
+  <!-- BACK layout -->
+  <div class="back-layout">
+    <div class="back-left">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke="#0b1417" stroke-width="2.5"/>
+        <line x1="50" y1="5" x2="50" y2="95" stroke="#0b1417" stroke-width="1" opacity="0.4"/>
+        <line x1="7" y1="25" x2="93" y2="75" stroke="#0b1417" stroke-width="1" opacity="0.4"/>
+        <line x1="93" y1="25" x2="7" y2="75" stroke="#0b1417" stroke-width="1" opacity="0.4"/>
+        <circle cx="50" cy="50" r="3" fill="#0b1417"/>
+        <circle cx="50" cy="5" r="2" fill="#0b1417"/><circle cx="93" cy="25" r="2" fill="#0b1417"/>
+        <circle cx="93" cy="75" r="2" fill="#0b1417"/><circle cx="50" cy="95" r="2" fill="#0b1417"/>
+        <circle cx="7" cy="75" r="2" fill="#0b1417"/><circle cx="7" cy="25" r="2" fill="#0b1417"/>
+      </svg>
+      <div class="back-info">
+        <span class="back-name" data-logo-texto>Kósmos</span>
+        <span class="back-tag" data-subtitulo>Simulación del orden natural</span>
       </div>
-    </section>
-  </main>
+    </div>
+    <div class="accent-line"></div>
+    <div class="back-url" data-url data-fit data-fit-min="10">kosmos.stevenvallejo.com</div>
+  </div>
+
+  <div class="contract-fields" aria-hidden="true">
+    <span data-titulo></span><span data-subtitulo></span><span data-copy></span>
+    <span data-logo-simbolo></span><span data-logo-texto></span>
+    <span data-numero></span><span data-etiqueta></span><span data-url></span>
+  </div>
 </body>
 </html>

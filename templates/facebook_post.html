@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200, height=628, initial-scale=1">
+<title>Eikon - Facebook Post</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primario: #0b1417;
+    --acento: #43b5a6;
+    --acento-2: #8d7cc0;
+    --texto: #e8e0d4;
+    --bg: #0b1417;
+    --gradient-hero: linear-gradient(135deg, var(--acento), var(--acento-2));
+    --font-titulo: 'Playfair Display', Georgia, serif;
+    --font-cuerpo: 'Inter', Arial, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 628px; overflow: hidden; position: relative; }
+  body {
+    background: var(--bg); color: var(--texto);
+    font-family: var(--font-cuerpo);
+    display: flex; align-items: center; justify-content: center;
+    padding: 44px;
+  }
+
+  /* Capas de fondo decorativas */
+  .bg-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(128,128,128,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(128,128,128,0.05) 1px, transparent 1px);
+    background-size: 55px 55px;
+    pointer-events: none; z-index: 1;
+  }
+  .bg-glow-1 {
+    position: absolute; top: -10%; left: -10%; width: 50%; height: 50%;
+    background: radial-gradient(circle, var(--acento) 0%, transparent 70%);
+    opacity: 0.18; filter: blur(65px); pointer-events: none; z-index: 1;
+  }
+  .bg-glow-2 {
+    position: absolute; bottom: -10%; right: -10%; width: 50%; height: 50%;
+    background: radial-gradient(circle, var(--acento-2) 0%, transparent 70%);
+    opacity: 0.15; filter: blur(65px); pointer-events: none; z-index: 1;
+  }
+
+  /* Marcadores del layout */
+  .layout-marker {
+    position: absolute; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.15em; opacity: 0.2; color: var(--texto);
+    pointer-events: none;
+  }
+  .marker-tl { top: 16px; left: 16px; }
+  .marker-tr { top: 16px; right: 16px; }
+  .marker-bl { bottom: 16px; left: 16px; }
+  .marker-br { bottom: 16px; right: 16px; }
+
+  [data-subtitulo]:empty, [data-cargo]:empty, [data-etiqueta]:empty, [data-autor]:empty {
+    display: none !important;
+  }
+
+  /* Contenedor principal */
+  .container {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column; justify-content: space-between;
+    position: relative; z-index: 10;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.01);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 44px 50px;
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.2), 0 15px 40px rgba(0,0,0,0.3);
+  }
+
+  /* HEADER */
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 18px;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .symbol {
+    font-size: 34px; line-height: 1; font-weight: 800;
+    background: var(--gradient-hero);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .wordmark { font-family: var(--font-titulo); font-size: 21px; font-weight: 700; letter-spacing: -0.01em; }
+
+  .etiqueta {
+    padding: 6px 14px; border: 1px solid var(--acento); border-radius: 999px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--acento); background: rgba(var(--acento), 0.04);
+  }
+
+  /* BODY */
+  .body {
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+    gap: 14px; padding: 24px 0;
+  }
+
+  .subtitulo {
+    font-size: 14px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.2em; color: var(--acento-2);
+  }
+
+  .titulo {
+    font-family: var(--font-titulo); font-size: 58px; line-height: 1.1;
+    font-weight: 700; letter-spacing: -0.02em; color: var(--texto);
+  }
+
+  .copy {
+    font-size: 21px; line-height: 1.45; opacity: 0.85; max-width: 950px;
+    font-weight: 400; color: var(--texto);
+  }
+
+  /* FOOTER */
+  .footer {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 18px;
+  }
+
+  .autor-cargo { font-weight: 700; font-size: 15px; }
+  .autor-cargo [data-cargo] { font-weight: 400; opacity: 0.6; font-size: 14px; }
+
+  .url {
+    font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 600;
+    color: var(--acento); display: flex; align-items: center; gap: 6px;
+  }
+  .url::before { content: "→"; font-family: sans-serif; }
+
+  /* ================= VARIANTES FACEBOOK ================= */
+
+  /* v1_tesis: Editorial / Tesis */
+  body[data-variant="v1_tesis"] {
+    background: var(--primario);
+  }
+  body[data-variant="v1_tesis"] .body {
+    align-items: center;
+    text-align: center;
+  }
+  body[data-variant="v1_tesis"] .titulo {
+    font-size: 56px;
+    font-weight: 700;
+    padding-bottom: 16px;
+    display: inline-block;
+    position: relative;
+  }
+  body[data-variant="v1_tesis"] .titulo::after {
+    content: ""; position: absolute; left: 50%; bottom: 0; width: 100px; height: 4px;
+    transform: translateX(-50%);
+    background: var(--acento);
+    border-radius: 2px;
+  }
+  body[data-variant="v1_tesis"] .copy {
+    font-size: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* v2_promocion: Promoción Destacada (Gradient Background) */
+  body[data-variant="v2_promocion"] {
+    background: var(--gradient-hero);
+  }
+  body[data-variant="v2_promocion"] .bg-grid {
+    background-image:
+      linear-gradient(rgba(11,20,23,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(11,20,23,0.05) 1px, transparent 1px);
+  }
+  body[data-variant="v2_promocion"] .container {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    color: var(--primario);
+    box-shadow: inset 0 0 25px rgba(255, 255, 255, 0.15);
+  }
+  body[data-variant="v2_promocion"] .layout-marker { color: var(--primario); opacity: 0.6; }
+  body[data-variant="v2_promocion"] .header { border-color: rgba(11, 20, 23, 0.15); }
+  body[data-variant="v2_promocion"] .footer { border-color: rgba(11, 20, 23, 0.15); }
+  body[data-variant="v2_promocion"] .symbol { background: var(--primario); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  body[data-variant="v2_promocion"] .wordmark { color: var(--primario); }
+  body[data-variant="v2_promocion"] .titulo { color: var(--primario); font-size: 58px; }
+  body[data-variant="v2_promocion"] .copy { color: var(--primario); opacity: 0.9; }
+  body[data-variant="v2_promocion"] .subtitulo { color: var(--acento-2); }
+  body[data-variant="v2_promocion"] .etiqueta { border-color: var(--primario); color: var(--primario); background: transparent; }
+  body[data-variant="v2_promocion"] .url { color: var(--primario); }
+
+  /* v3_evento: Evento / Corporativo Formal */
+  body[data-variant="v3_evento"] {
+    background: #101a23;
+  }
+  body[data-variant="v3_evento"] .container {
+    border-left: 12px solid var(--acento-2);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  body[data-variant="v3_evento"] .titulo {
+    font-size: 52px;
+    font-weight: 700;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(to right, var(--texto), var(--acento));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  body[data-variant="v3_evento"] .copy {
+    font-size: 18px;
+  }
+
+  /* v4_cita: Cita Editorial (Light Background) */
+  body[data-variant="v4_cita"] {
+    background: #f5f1ed;
+  }
+  body[data-variant="v4_cita"] .bg-grid {
+    background-image:
+      linear-gradient(rgba(11,20,23,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(11,20,23,0.04) 1px, transparent 1px);
+  }
+  body[data-variant="v4_cita"] .bg-glow-1,
+  body[data-variant="v4_cita"] .bg-glow-2 {
+    opacity: 0.04;
+  }
+  body[data-variant="v4_cita"] .container {
+    background: rgba(255,255,255,0.7);
+    border-color: rgba(11, 20, 23, 0.1);
+    color: var(--primario);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+  }
+  body[data-variant="v4_cita"] .layout-marker { color: var(--primario); opacity: 0.4; }
+  body[data-variant="v4_cita"] .header { border-color: rgba(11, 20, 23, 0.1); }
+  body[data-variant="v4_cita"] .footer { border-color: rgba(11, 20, 23, 0.1); }
+  body[data-variant="v4_cita"] .wordmark { color: var(--primario); }
+  body[data-variant="v4_cita"] .titulo {
+    color: var(--primario); font-family: var(--font-titulo); font-style: italic; font-weight: 500; font-size: 52px;
+  }
+  body[data-variant="v4_cita"] .titulo::before {
+    content: """; font-family: var(--font-titulo); font-size: 140px; line-height: 0.1;
+    color: var(--acento); opacity: 0.25; display: block; margin-bottom: -20px; margin-left: -5px;
+  }
+  body[data-variant="v4_cita"] .copy { color: var(--primario); opacity: 0.85; font-family: var(--font-titulo); font-style: italic; font-size: 24px; }
+  body[data-variant="v4_cita"] .subtitulo { color: var(--acento-2); }
+  body[data-variant="v4_cita"] .etiqueta { border-color: var(--primario); color: var(--primario); background: transparent; }
+  body[data-variant="v4_cita"] .url { color: var(--acento-2); }
+
+  .contract-fields {
+    position: absolute; left: -9999px; width: 1px; height: 1px;
+    overflow: hidden; opacity: 0; pointer-events: none;
+  }
+</style>
+</head>
+<body data-variant="v1_tesis">
+  <!-- Capas de fondo -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+
+  <!-- Marcadores de layout -->
+  <div class="layout-marker marker-tl">FACEBOOK</div>
+  <div class="layout-marker marker-tr">1200x628</div>
+  <div class="layout-marker marker-bl">EIKON</div>
+  <div class="layout-marker marker-br">v1_tesis</div>
+
+  <!-- Contenedor principal -->
+  <div class="container">
+    <!-- HEADER -->
+    <div class="header">
+      <div class="brand">
+        <span class="symbol" data-logo-simbolo>⚡</span>
+        <span class="wordmark" data-logo-texto>BRAND</span>
+      </div>
+      <span class="etiqueta" data-etiqueta data-fit data-fit-min="10"></span>
+    </div>
+
+    <!-- BODY -->
+    <div class="body">
+      <span class="subtitulo" data-subtitulo data-fit data-fit-min="10"></span>
+      <h1 class="titulo" data-titulo data-fit data-fit-min="28">Título Principal</h1>
+      <p class="copy" data-copy data-fit data-fit-min="13">Texto descriptivo</p>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <span class="autor-cargo">
+        <span data-autor></span> · <span data-cargo></span>
+      </span>
+      <span class="url" data-url></span>
+    </div>
+  </div>
+
+  <!-- Campos de inyección de datos (ocultos) -->
+  <div class="contract-fields" aria-hidden="true">
+    <span data-titulo></span>
+    <span data-subtitulo></span>
+    <span data-copy></span>
+    <span data-logo-simbolo></span>
+    <span data-logo-texto></span>
+    <span data-numero></span>
+    <span data-etiqueta></span>
+    <span data-autor></span>
+    <span data-cargo></span>
+    <span data-url></span>
+    <span data-acento></span>
+    <span data-acento-2></span>
+  </div>
+</body>
+</html>

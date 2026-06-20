@@ -2,8 +2,9 @@
   "slug": "steven-vallejo-informatico",
   "nombre_producto": "Steven Vallejo · Informático",
   "nombre_corporativo": "Steven Vallejo",
-  "tagline": "Software architecture, AI systems, and the craft of clean code",
-  "url": "stevenvallejo.dev",
+  "tagline": "Arquitectura de software, sistemas de IA y oficio técnico",
+  "url": "https://informatico.stevenvallejo.com",
+  "url_en": "https://informatico.stevenvallejo.com",
   "tono": "técnico, preciso, pragmático",
   "simbolo": "lemniscata (∞)",
 
@@ -11,8 +12,8 @@
     "bg":           "#0b1417",
     "primario":     "#0b1417",
     "acento":       "#43b5a6",
-    "acento_2":     "#1a9c8c",
-    "acento_3":     "#e0a85e",
+    "acento_2":     "#e0a85e",
+    "acento_3":     "#1a9c8c",
     "texto":        "#e8e0d4",
     "texto_muted":  "#8fa3a8",
     "surface":      "#152028"
@@ -31,39 +32,39 @@
 
   "textos": {
     "linkedin_post": {
-      "titulo":    "Steven Vallejo · Software Architect",
-      "subtitulo": "Software Architecture · AI Systems · Technical Writing",
-      "copy":      "Translating complex systems into structured clarity."
+      "titulo":    "Steven Vallejo · Informático",
+      "subtitulo": "Arquitectura de software · Sistemas de IA · Backend",
+      "copy":      "Traduzco sistemas complejos en software claro, mantenible y operable."
     },
     "linkedin_banner": {
       "titulo":    "Steven Vallejo",
-      "copy":      "Building at the intersection of systems, intelligence, and craft."
+      "copy":      "Backend, IA aplicada y arquitectura pragmática."
     },
     "ig_post": {
       "titulo":    "∞",
       "subtitulo": "Steven Vallejo · Informático",
-      "copy":      "Software architecture and AI systems"
+      "copy":      "Arquitectura de software y sistemas de IA"
     },
     "ig_story": {
       "titulo":    "Steven\nVallejo",
-      "copy":      "Tech ↓"
+      "copy":      "Tecnología ↓"
     },
     "x_post": {
       "titulo":    "Steven Vallejo",
-      "copy":      "Software architecture, AI systems, and the craft of clean code"
+      "copy":      "Arquitectura de software, sistemas de IA y oficio técnico"
     },
     "yt_thumbnail": {
       "titulo":    "Steven Vallejo",
-      "copy":      "Watch"
+      "copy":      "Ver"
     },
     "yt_banner": {
       "titulo":    "Steven Vallejo",
-      "subtitulo": "Software · AI · Engineering"
+      "subtitulo": "Software · IA · Ingeniería"
     },
     "og_general": {
-      "titulo":    "Steven Vallejo · Software Architect",
-      "subtitulo": "Software Architecture · AI Systems",
-      "copy":      "Translating complex systems into structured clarity."
+      "titulo":    "Steven Vallejo · Informático",
+      "subtitulo": "Arquitectura de software · Sistemas de IA",
+      "copy":      "Traduzco sistemas complejos en software claro, mantenible y operable."
     },
     "whatsapp_perfil": {
       "titulo":    "SV",
@@ -71,7 +72,55 @@
     },
     "contra_cover": {
       "titulo":    "Steven Vallejo",
-      "copy":      "Software Architecture & AI Systems"
+      "copy":      "Arquitectura de software y sistemas de IA"
+    }
+  },
+
+  "locales": {
+    "en": {
+      "tagline": "Software architecture, AI systems, and the craft of clean code",
+      "url": "https://informatico.stevenvallejo.com",
+      "textos": {
+        "linkedin_post": {
+          "titulo":    "Steven Vallejo · Software Architect",
+          "subtitulo": "Software Architecture · AI Systems · Backend",
+          "copy":      "Translating complex systems into clear, maintainable, operable software."
+        },
+        "linkedin_banner": {
+          "titulo":    "Steven Vallejo",
+          "copy":      "Backend, applied AI, and pragmatic architecture."
+        },
+        "ig_post": {
+          "titulo":    "∞",
+          "subtitulo": "Steven Vallejo · Computer Scientist",
+          "copy":      "Software architecture and AI systems"
+        },
+        "ig_story": {
+          "titulo":    "Steven\nVallejo",
+          "copy":      "Tech ↓"
+        },
+        "x_post": {
+          "titulo":    "Steven Vallejo",
+          "copy":      "Software architecture, AI systems, and the craft of clean code"
+        },
+        "yt_thumbnail": {
+          "titulo":    "Steven Vallejo",
+          "copy":      "Watch"
+        },
+        "yt_banner": {
+          "titulo":    "Steven Vallejo",
+          "subtitulo": "Software · AI · Engineering"
+        },
+        "og_general": {
+          "titulo":    "Steven Vallejo · Software Architect",
+          "subtitulo": "Software Architecture · AI Systems",
+          "copy":      "Translating complex systems into clear, maintainable, operable software."
+        },
+        "contra_cover": {
+          "titulo":    "Steven Vallejo",
+          "copy":      "Software Architecture & AI Systems"
+        }
+      }
     }
   }
 }

@@ -3,10 +3,10 @@
   "nombre_producto": "Áporía",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Plataforma editorial CMS full-stack (Next.js 16 + Neon/Postgres + Firebase Auth): publica papers, archiva investigación y corre experimentos colectivos con visualización en tiempo real. Panel /studio para CRUD editorial con auth real.",
-  "url": "",
+  "url": "https://aporia.stevenvallejo.com",
   "tono": "investigador, paradójico, fronterizo",
   "simbolo": "∞",
-  "frente": "informatica",
+  "frente": "ciencias",
 
   "paleta": {
     "bg":           "#0b1417",

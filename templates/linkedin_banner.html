@@ -2,192 +2,174 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=1584, height=396, initial-scale=1">
+<title>Eikon - LinkedIn Banner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
+    --bg: #0b1417; --texto: #e8e0d4; --primario: #0b1417;
+    --acento: #43b5a6; --acento-2: #8d7cc0;
+    --font-titulo: 'Inter', sans-serif; --font-cuerpo: 'Inter', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1584px; height: 396px; overflow: hidden; }
+  body {
+    background: radial-gradient(ellipse at 15% 50%, #152028 0%, #0b1417 55%);
+    color: var(--texto); font-family: var(--font-cuerpo);
+    display: flex; align-items: center; padding: 50px 70px;
+    position: relative;
+  }
+  /* ── VARIANTS ── */
+  /* v1: left-right institucional + franja lateral; AA texto/fondo 14.24:1 */
+  body[data-variant="v1_institucional"] {
     --bg: #0b1417;
-    --primario: #0b1417;
-    --acento: #43b5a6;
-    --acento-2: #8d7cc0;
-    --acento-3: #A3E4D7;
-    --texto: #e8e0d4;
-    --texto-muted: #8fa3a8;
-    --surface: #131e22;
-    --grad-hero: linear-gradient(135deg, #43b5a6 0%, #8d7cc0 60%, #4a3a80 100%);
-    --grad-bg: radial-gradient(ellipse at 15% 50%, #131e22 0%, #0b1417 55%);
-    --grad-text: var(--grad-hero);
-    --font-titulo: "Playfair Display", Georgia, "Times New Roman", serif;
-    --font-cuerpo: "Inter", "DejaVu Sans", Arial, system-ui, sans-serif;
-    --font-simbolo: var(--font-titulo);
-    --orb-opacity: 0.14;
-    --noise-opacity: 0.05;
+    background: linear-gradient(90deg, rgba(67,181,166,0.08), transparent 28%), #0b1417;
+  }
+  body[data-variant="v1_institucional"]::before {
+    content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 18px;
+    background: #43b5a6;
   }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 1584px; height: 396px; }
-  body {
-    position: relative;
-    overflow: hidden;
-    color: var(--texto);
-    background: var(--bg);
-    font-family: var(--font-cuerpo);
+  /* v2: composicion invertida, content left/logo right; AA texto/fondo 14.24:1 */
+  body[data-variant="v2_producto"] {
+    flex-direction: row-reverse;
+    background:
+      radial-gradient(ellipse at 12% 72%, rgba(141,124,192,0.22) 0%, rgba(141,124,192,0) 46%),
+      radial-gradient(ellipse at 92% 36%, rgba(67,181,166,0.2) 0%, rgba(67,181,166,0) 38%),
+      #0b1417;
   }
-  .bg { position: absolute; inset: 0; background: var(--grad-bg); }
-  .noise {
-    position: absolute;
-    inset: 0;
-    opacity: var(--noise-opacity);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.76' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
-    background-size: 260px 260px;
-    mix-blend-mode: soft-light;
+
+  /* v3: columna centrada + grid sutil; AA texto/fondo 14.24:1 */
+  body[data-variant="v3_evento"] {
+    flex-direction: column; justify-content: center; gap: 18px; text-align: center; padding: 34px 90px;
+    background:
+      repeating-linear-gradient(90deg, rgba(232,224,212,0.045) 0 1px, transparent 1px 64px),
+      repeating-linear-gradient(0deg, rgba(232,224,212,0.035) 0 1px, transparent 1px 64px),
+      radial-gradient(ellipse at 50% 50%, rgba(141,124,192,0.18) 0%, rgba(141,124,192,0) 62%),
+      #0b1417;
   }
-  .orb {
-    position: absolute;
-    border-radius: 999px;
-    filter: blur(100px);
-    opacity: var(--orb-opacity);
-    pointer-events: none;
+
+  /* ── Bottom accent bar ── */
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--acento), var(--acento-2));
+    opacity: 0.6;
+    z-index: 2;
   }
-  .orb-1 { width: 650px; height: 650px; top: -260px; right: 218px; background: var(--acento); }
-  .orb-2 { width: 500px; height: 500px; left: 96px; bottom: -230px; background: var(--acento-2); }
-  .band-right {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 800px;
-    height: 100%;
-    background: linear-gradient(270deg, color-mix(in srgb, var(--acento) 5%, transparent) 0%, transparent 100%);
+  body[data-variant="v2_producto"] .bottom-bar {
+    top: 0; bottom: auto; height: 10px; opacity: 1;
+    background: #43b5a6;
   }
-  .divider {
-    position: absolute;
-    top: 48px;
-    bottom: 48px;
-    left: 40%;
-    width: 1px;
-    background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--texto) 10%, transparent), transparent);
-  }
-  .accent-bottom {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 3px;
-    background: var(--grad-hero);
-    opacity: 0.5;
-  }
-  .deco-svg {
-    position: absolute;
-    top: 50%;
-    right: 58px;
-    width: 500px;
-    height: 340px;
-    transform: translateY(-50%);
-    opacity: 0.06;
-  }
-  .layout {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    width: 100%;
-    height: 100%;
-    grid-template-columns: 40% minmax(0, 50%);
-    align-items: center;
-    gap: 8%;
-    padding: 0 80px;
-  }
+  body[data-variant="v3_evento"] .bottom-bar { height: 5px; opacity: 0.9; }
+
+  /* ── Logo block (left 36%) ── */
   .logo-block {
-    display: flex;
-    min-width: 0;
-    flex-direction: column;
-    gap: 8px;
+    flex-shrink: 0; width: 360px;
+    display: flex; align-items: center; gap: 24px;
+    padding-right: 40px; border-right: 1px solid rgba(232,224,212,0.12);
+    z-index: 1;
   }
-  .logo-simbolo {
-    width: 140px;
-    font-family: var(--font-simbolo);
-    font-size: 72px;
-    font-weight: 900;
-    line-height: 1;
-    background: var(--grad-text);
-    -webkit-background-clip: text;
+  .logo-block svg { width: 78px; height: 78px; }
+  .logo-block svg * { stroke: url(#liGrad); }
+  body[data-variant="v3_evento"] .logo-block svg * { stroke: #c4b8e8; }
+  body[data-variant="v2_producto"] .logo-block {
+    width: 390px; justify-content: flex-end; padding-right: 0; padding-left: 44px;
+    border-right: 0; border-left: 1px solid rgba(232,224,212,0.14);
+  }
+  body[data-variant="v2_producto"] .logo-block svg { width: 94px; height: 94px; }
+  body[data-variant="v3_evento"] .logo-block {
+    width: auto; padding: 0; border-right: 0;
+    flex-direction: column; gap: 10px; justify-content: center;
+  }
+  body[data-variant="v3_evento"] .logo-block svg { width: 64px; height: 64px; }
+  .logo-brand { font-size: 18px; font-weight: 700; letter-spacing: 0.03em; color: var(--texto); }
+  .logo-tag {
+    font-size: 12px; font-weight: 500; color: #8fa3a8; letter-spacing: 0.04em;
+    text-transform: uppercase; margin-top: 2px;
+  }
+
+  /* ── Content block (right 60%) ── */
+  .content-block {
+    flex: 1; padding-left: 50px; display: flex; flex-direction: column; gap: 14px;
+    z-index: 1;
+  }
+  body[data-variant="v2_producto"] .content-block {
+    padding-left: 0; padding-right: 56px; align-items: flex-start; text-align: left;
+  }
+  body[data-variant="v3_evento"] .content-block {
+    flex: 0 1 auto; padding-left: 0; align-items: center; text-align: center; gap: 12px;
+  }
+  .accent-line { width: 56px; height: 3px; border-radius: 2px;
+    background: linear-gradient(90deg, var(--acento), var(--acento-2)); }
+  .headline {
+    font-family: var(--font-titulo); font-size: 44px; font-weight: 700;
+    line-height: 1.15; color: var(--texto); max-width: 700px;
+  }
+  body[data-variant="v3_evento"] .headline {
+    background: linear-gradient(135deg, #c4b8e8, #a3e4d7);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text;
-    -webkit-text-fill-color: transparent;
   }
-  .logo-texto {
-    max-width: 360px;
-    color: var(--texto-muted);
-    font-size: 15px;
-    font-weight: 700;
-    line-height: 1.25;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-  .text-block {
-    display: flex;
-    min-width: 0;
+  body[data-variant="v2_producto"] .headline {
+    color: #e8e0d4; text-shadow: 0 5px 22px rgba(67,181,166,0.28);
     max-width: 760px;
-    flex-direction: column;
-    gap: 12px;
   }
-  .accent-line {
-    width: 48px;
-    height: 3px;
-    border-radius: 2px;
-    background: var(--grad-hero);
+  body[data-variant="v3_evento"] .headline {
+    max-width: 900px; font-size: 46px;
   }
-  .titulo {
-    max-height: 118px;
-    font-family: var(--font-titulo);
-    font-size: 56px;
-    font-weight: 900;
-    line-height: 1.04;
-    letter-spacing: 0;
-    background: var(--grad-text);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+  .credibility {
+    font-size: 16px; font-weight: 500; color: #a3c4c0; letter-spacing: 0.02em;
+    display: flex; align-items: center; gap: 12px;
   }
-  .copy {
-    max-height: 60px;
-    color: var(--texto);
-    font-size: 22px;
-    font-weight: 300;
-    line-height: 1.34;
-    letter-spacing: 0;
-    opacity: 0.9;
+  body[data-variant="v3_evento"] .credibility { justify-content: center; }
+  .divider-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--acento); opacity: 0.6; }
+  .url-cta {
+    font-size: 14px; font-weight: 600; color: var(--acento);
+    letter-spacing: 0.03em; margin-top: 4px;
   }
-  .url {
-    max-height: 20px;
-    color: var(--texto-muted);
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 1.3;
-    letter-spacing: 0;
-  }
+  .contract-fields { display: none !important; }
 </style>
 </head>
 <body>
-  <div class="bg"></div>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="band-right"></div>
-  <div class="divider"></div>
-  <div class="accent-bottom"></div>
-  <svg class="deco-svg" viewBox="0 0 500 340" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <circle cx="350" cy="170" r="198" stroke="white" stroke-width="1"/>
-    <circle cx="200" cy="100" r="120" stroke="white" stroke-width=".5"/>
-    <path d="M50 170 Q200 60 350 170 Q450 240 480 320" stroke="white" stroke-width="1"/>
-  </svg>
-  <div class="noise"></div>
-  <main class="layout">
-    <section class="logo-block">
-      <span class="logo-simbolo" data-logo-simbolo data-fit data-fit-min="38"></span>
-      <span class="logo-texto" data-logo-texto data-fit data-fit-min="11"></span>
-    </section>
-    <section class="text-block">
-      <div class="accent-line"></div>
-      <h1 class="titulo" data-titulo data-fit data-fit-min="34"></h1>
-      <p class="copy" data-copy data-fit data-fit-min="15"></p>
-      <span class="url" data-url data-fit data-fit-min="11"></span>
-    </section>
-  </main>
+  <div class="bottom-bar"></div>
+  <div class="logo-block">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="liGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#43b5a6"/><stop offset="100%" stop-color="#8d7cc0"/>
+        </linearGradient>
+      </defs>
+      <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke-width="2.8"/>
+      <line x1="50" y1="5" x2="50" y2="95" stroke-width="1" opacity="0.45"/>
+      <line x1="7" y1="25" x2="93" y2="75" stroke-width="1" opacity="0.45"/>
+      <line x1="93" y1="25" x2="7" y2="75" stroke-width="1" opacity="0.45"/>
+      <circle cx="50" cy="50" r="3.5"/>
+      <circle cx="50" cy="5" r="2.5"/><circle cx="93" cy="25" r="2.5"/>
+      <circle cx="93" cy="75" r="2.5"/><circle cx="50" cy="95" r="2.5"/>
+      <circle cx="7" cy="75" r="2.5"/><circle cx="7" cy="25" r="2.5"/>
+    </svg>
+    <div>
+      <div class="logo-brand" data-logo-texto data-fit data-fit-min="12">Marca</div>
+      <div class="logo-tag" data-subtitulo data-fit data-fit-min="8">Tagline</div>
+    </div>
+  </div>
+  <div class="content-block">
+    <div class="accent-line"></div>
+    <h1 class="headline" data-titulo data-fit data-fit-min="28">Headline con propuesta de valor</h1>
+    <div class="credibility">
+      <span><!-- 16 repos · 22 simulaciones --></span>
+      <span class="divider-dot"></span>
+      <span data-copy data-fit data-fit-min="10">Copy breve de credibilidad</span>
+    </div>
+    <div class="url-cta" data-url data-fit data-fit-min="10">kosmos.stevenvallejo.com →</div>
+  </div>
+  <div class="contract-fields" aria-hidden="true">
+    <span data-titulo></span><span data-subtitulo></span><span data-copy></span>
+    <span data-logo-simbolo></span><span data-logo-texto></span>
+    <span data-numero></span><span data-etiqueta></span>
+    <span data-autor></span><span data-cargo></span><span data-url></span>
+    <span data-acento></span><span data-acento-2></span>
+  </div>
 </body>
 </html>

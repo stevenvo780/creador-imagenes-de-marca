@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080, height=1080, initial-scale=1">
+<title>Eikon - Instagram Post</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primario: #0b1417;
+    --acento: #43b5a6;
+    --acento-2: #8d7cc0;
+    --texto: #e8e0d4;
+    --bg: #0b1417;
+    --gradient-hero: linear-gradient(135deg, var(--acento), var(--acento-2));
+    --font-titulo: 'Playfair Display', Georgia, serif;
+    --font-cuerpo: 'Inter', Arial, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1080px; overflow: hidden; position: relative; }
+  body {
+    background: var(--bg); color: var(--texto);
+    font-family: var(--font-cuerpo);
+    display: flex; align-items: center; justify-content: center;
+    padding: 60px;
+  }
+
+  /* Capas de fondo decorativas */
+  .bg-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(128,128,128,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(128,128,128,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none; z-index: 1;
+  }
+  .bg-glow-1 {
+    position: absolute; top: -10%; left: -10%; width: 60%; height: 60%;
+    background: radial-gradient(circle, var(--acento) 0%, transparent 70%);
+    opacity: 0.18; filter: blur(80px); pointer-events: none; z-index: 1;
+  }
+  .bg-glow-2 {
+    position: absolute; bottom: -10%; right: -10%; width: 60%; height: 60%;
+    background: radial-gradient(circle, var(--acento-2) 0%, transparent 70%);
+    opacity: 0.15; filter: blur(80px); pointer-events: none; z-index: 1;
+  }
+
+  /* Estructura del contenedor */
+  .container {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    position: relative; z-index: 10;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.01);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 20px;
+    padding: 60px;
+    box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.3), 0 20px 50px rgba(0,0,0,0.4);
+    overflow: hidden;
+  }
+
+  /* Detalles técnicos del layout para densidad visual */
+  .layout-marker {
+    position: absolute; font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.2em; opacity: 0.25; color: var(--texto);
+    pointer-events: none;
+  }
+  .marker-tl { top: 20px; left: 20px; }
+  .marker-tr { top: 20px; right: 20px; }
+  .marker-bl { bottom: 20px; left: 20px; }
+  .marker-br { bottom: 20px; right: 20px; }
+
+  /* Elementos ocultos por defecto si están vacíos */
+  [data-numero]:empty, [data-subtitulo]:empty, [data-cargo]:empty, [data-etiqueta]:empty, [data-autor]:empty {
+    display: none !important;
+  }
+
+  /* HEADER */
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 24px;
+    z-index: 5;
+  }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .symbol {
+    font-size: 40px; line-height: 1; font-weight: 800;
+    background: var(--gradient-hero);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .wordmark { font-family: var(--font-titulo); font-size: 24px; font-weight: 700; letter-spacing: -0.01em; }
+
+  .etiqueta {
+    padding: 8px 18px; border: 1px solid var(--acento); border-radius: 999px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em;
+    color: var(--acento); background: rgba(var(--acento), 0.05);
+  }
+
+  /* BODY */
+  .body {
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+    position: relative; padding: 40px 0; z-index: 4;
+  }
+
+  .content-wrapper {
+    display: flex; flex-direction: column; gap: 20px; max-width: 900px;
+    position: relative; z-index: 5;
+  }
+
+  .subtitulo {
+    font-size: 16px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.25em; color: var(--acento-2);
+  }
+
+  .titulo {
+    font-family: var(--font-titulo); font-size: 88px; line-height: 1.05;
+    font-weight: 700; letter-spacing: -0.03em;
+  }
+
+  .copy {
+    font-size: 26px; line-height: 1.45; opacity: 0.85; max-width: 820px;
+    font-weight: 400; color: var(--texto);
+  }
+
+  /* Número Gigante para v3_dato */
+  .dato-wrapper {
+    position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+    z-index: 2; pointer-events: none;
+  }
+  .numero {
+    font-family: var(--font-titulo); font-size: 320px; font-weight: 800;
+    line-height: 0.8; letter-spacing: -0.05em; opacity: 0.18;
+    background: var(--gradient-hero);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  /* FOOTER */
+  .footer {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 24px; z-index: 5;
+  }
+  .autor-info { display: flex; flex-direction: column; gap: 4px; }
+  .autor { font-weight: 700; font-size: 20px; }
+  .cargo { font-size: 14px; opacity: 0.6; letter-spacing: 0.05em; text-transform: uppercase; }
+  .url {
+    font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 600;
+    color: var(--acento); display: flex; align-items: center; gap: 6px;
+  }
+  .url::before { content: "→"; font-family: sans-serif; }
+
+  /* ================= VARIANTES CSS ================= */
+
+  /* v1_tesis: Tesis Editorial Contundente */
+  body[data-variant="v1_tesis"] {
+    background: var(--primario);
+  }
+  body[data-variant="v1_tesis"] .content-wrapper {
+    padding-left: 36px;
+    position: relative;
+  }
+  body[data-variant="v1_tesis"] .content-wrapper::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 10px;
+    background: var(--gradient-hero);
+    border-radius: 999px;
+  }
+  body[data-variant="v1_tesis"] .titulo {
+    font-size: 88px;
+    font-weight: 800;
+  }
+
+  /* v2_diferenciador: Comparativa / Grid */
+  body[data-variant="v2_diferenciador"] {
+    background: linear-gradient(160deg, var(--primario) 0%, var(--acento-2) 250%);
+  }
+  body[data-variant="v2_diferenciador"] .container {
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+  body[data-variant="v2_diferenciador"] .copy {
+    border-top: 1px dashed rgba(255,255,255,0.2);
+    padding-top: 20px; margin-top: 10px;
+  }
+
+  /* v3_dato: Infografía / Número Masivo */
+  body[data-variant="v3_dato"] {
+    background: var(--bg);
+  }
+  body[data-variant="v3_dato"] .dato-wrapper {
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+  body[data-variant="v3_dato"] .numero {
+    font-size: 200px;
+    opacity: 1;
+    display: inline-block;
+    position: relative;
+  }
+  body[data-variant="v3_dato"] .numero::after {
+    content: attr(data-numero);
+    position: absolute;
+    font-size: 550px;
+    font-weight: 900;
+    opacity: 0.05;
+    top: 50%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    pointer-events: none;
+    z-index: -1;
+  }
+  body[data-variant="v3_dato"] .content-wrapper {
+    max-width: 650px;
+    z-index: 2;
+  }
+
+  /* v4_cita: Tarjeta Editorial de Cita (Light/Contrastada) */
+  body[data-variant="v4_cita"] {
+    background: #f5f1ed;
+  }
+  body[data-variant="v4_cita"] .bg-grid {
+    background-image:
+      linear-gradient(rgba(11,20,23,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(11,20,23,0.04) 1px, transparent 1px);
+  }
+  body[data-variant="v4_cita"] .bg-glow-1,
+  body[data-variant="v4_cita"] .bg-glow-2 {
+    opacity: 0.05;
+  }
+  body[data-variant="v4_cita"] .container {
+    background: rgba(255,255,255,0.75);
+    border-color: rgba(11, 20, 23, 0.08);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.05);
+    color: var(--primario);
+  }
+  body[data-variant="v4_cita"] .layout-marker { color: var(--primario); opacity: 0.4; }
+  body[data-variant="v4_cita"] .header { border-color: rgba(11, 20, 23, 0.1); }
+  body[data-variant="v4_cita"] .footer { border-color: rgba(11, 20, 23, 0.1); }
+  body[data-variant="v4_cita"] .titulo {
+    font-family: var(--font-titulo); font-style: italic; font-size: 72px; font-weight: 500;
+  }
+  body[data-variant="v4_cita"] .content-wrapper::before {
+    content: """; font-family: var(--font-titulo); font-size: 240px; line-height: 0.1;
+    color: var(--acento-2); opacity: 0.15; margin-bottom: -10px; margin-left: -15px;
+    display: block;
+  }
+  body[data-variant="v4_cita"] .subtitulo { color: var(--acento); }
+  body[data-variant="v4_cita"] .copy { color: var(--primario); opacity: 0.9; font-family: var(--font-titulo); font-size: 32px; font-style: italic; }
+  body[data-variant="v4_cita"] .wordmark { color: var(--primario); }
+  body[data-variant="v4_cita"] .etiqueta { border-color: var(--primario); color: var(--primario); background: transparent; }
+  body[data-variant="v4_cita"] .url { color: var(--acento-2); }
+
+  /* v5_cta: Call to Action de Alta Densidad */
+  body[data-variant="v5_cta"] {
+    background: var(--primario);
+  }
+  body[data-variant="v5_cta"] .body {
+    align-items: center; text-align: center;
+  }
+  body[data-variant="v5_cta"] .content-wrapper {
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 20px;
+    padding: 50px 40px;
+    max-width: 800px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  }
+  body[data-variant="v5_cta"] .titulo {
+    font-size: 76px;
+    font-weight: 800;
+    background: var(--gradient-hero);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  body[data-variant="v5_cta"] .content-wrapper::after {
+    content: "Saber más";
+    display: inline-block;
+    margin-top: 30px;
+    padding: 16px 40px;
+    font-family: var(--font-cuerpo);
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--texto);
+    background: transparent;
+    border: 2px solid var(--acento);
+    outline: 2px solid var(--acento-2);
+    outline-offset: 4px;
+    border-radius: 50px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  body[data-variant="v5_cta"] .container:hover .content-wrapper::after {
+    background: var(--gradient-hero);
+    color: var(--primario);
+    border-color: transparent;
+    outline: 2px solid var(--acento);
+    outline-offset: 6px;
+    box-shadow: 0 0 25px rgba(67, 181, 166, 0.4);
+    transform: scale(1.05);
+  }
+
+  /* v6_case: Estudio de caso / Estructurado */
+  body[data-variant="v6_case"] {
+    background: #101a23;
+  }
+  body[data-variant="v6_case"] .container {
+    border-top: 6px solid var(--acento);
+  }
+
+  /* v7_testimonial: Testimonial */
+  body[data-variant="v7_testimonial"] {
+    background: linear-gradient(180deg, var(--bg) 0%, var(--primario) 100%);
+  }
+  body[data-variant="v7_testimonial"] .content-wrapper {
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 30px;
+  }
+
+  /* v8_promocion: Gradiente Hero Brillante */
+  body[data-variant="v8_promocion"] {
+    background: var(--gradient-hero);
+  }
+  body[data-variant="v8_promocion"] .bg-grid {
+    background-image:
+      linear-gradient(rgba(11,20,23,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(11,20,23,0.06) 1px, transparent 1px);
+  }
+  body[data-variant="v8_promocion"] .container {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(11, 20, 23, 0.15);
+    color: var(--primario);
+    box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.2);
+  }
+  body[data-variant="v8_promocion"] .layout-marker { color: var(--primario); opacity: 0.6; }
+  body[data-variant="v8_promocion"] .header { border-color: rgba(11, 20, 23, 0.15); }
+  body[data-variant="v8_promocion"] .footer { border-color: rgba(11, 20, 23, 0.15); }
+  body[data-variant="v8_promocion"] .symbol { background: var(--primario); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  body[data-variant="v8_promocion"] .wordmark { color: var(--primario); }
+  body[data-variant="v8_promocion"] .titulo { color: var(--primario); }
+  body[data-variant="v8_promocion"] .copy { color: var(--primario); opacity: 0.9; font-weight: 500; }
+  body[data-variant="v8_promocion"] .etiqueta { border-color: var(--primario); color: var(--primario); background: transparent; }
+  body[data-variant="v8_promocion"] .url { color: var(--primario); }
+  body[data-variant="v8_promocion"] .url::before { content: "●"; font-size: 8px; margin-right: 6px; }
+
+  /* Ocultar campos de contrato */
+  .contract-fields {
+    position: absolute; left: -9999px; width: 1px; height: 1px;
+    overflow: hidden; opacity: 0; pointer-events: none;
+  }
+</style>
+</head>
+<body data-variant="v1_tesis">
+  <!-- Capas de fondo (decorativas) -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+
+  <!-- Marcadores de layout (debug visual) -->
+  <div class="layout-marker marker-tl">INSTAGRAM</div>
+  <div class="layout-marker marker-tr">1080x1080</div>
+  <div class="layout-marker marker-bl">EIKON</div>
+  <div class="layout-marker marker-br">v1_tesis</div>
+
+  <!-- Contenedor principal -->
+  <div class="container">
+    <!-- HEADER -->
+    <div class="header">
+      <div class="brand">
+        <span class="symbol" data-logo-simbolo>⚡</span>
+        <span class="wordmark" data-logo-texto>BRAND</span>
+      </div>
+      <span class="etiqueta" data-etiqueta data-fit data-fit-min="10"></span>
+    </div>
+
+    <!-- BODY -->
+    <div class="body">
+      <div class="content-wrapper">
+        <span class="subtitulo" data-subtitulo data-fit data-fit-min="12"></span>
+        <h1 class="titulo" data-titulo data-fit data-fit-min="32">Título Principal</h1>
+        <p class="copy" data-copy data-fit data-fit-min="14">Texto descriptivo</p>
+      </div>
+      <div class="dato-wrapper">
+        <span class="numero" data-numero data-fit data-fit-min="32"></span>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div class="autor-info">
+        <span class="autor" data-autor></span>
+        <span class="cargo" data-cargo></span>
+      </div>
+      <span class="url" data-url></span>
+    </div>
+  </div>
+
+  <!-- Campos de inyección de datos (ocultos) -->
+  <div class="contract-fields" aria-hidden="true">
+    <span data-titulo></span>
+    <span data-subtitulo></span>
+    <span data-copy></span>
+    <span data-logo-simbolo></span>
+    <span data-logo-texto></span>
+    <span data-numero></span>
+    <span data-etiqueta></span>
+    <span data-autor></span>
+    <span data-cargo></span>
+    <span data-url></span>
+    <span data-acento></span>
+    <span data-acento-2></span>
+  </div>
+</body>
+</html>
