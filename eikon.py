@@ -159,6 +159,9 @@ def _build_taxonomia(is_prizma: bool) -> dict[str, list[TypeSpec]]:
                 TypeSpec("og_general", 1200, 630, (
                     VariantSpec("v1_docs", "Docs"), VariantSpec("v2_enterprise_blog", "Blog"), VariantSpec("v3_tool", "Tool")
                 )),
+                TypeSpec("og_product", 1200, 630, (
+                    VariantSpec("v1_product", "Product"), VariantSpec("v2_product", "Product"), VariantSpec("v3_product", "Product")
+                )),
             ],
             "stationery": [
                 TypeSpec("letterhead", 2480, 3508, (
@@ -952,6 +955,10 @@ Ejemplos:
   python eikon.py --all
   python eikon.py --marca prizma-iris --solo logos
   python eikon.py --marca pinakotheke-kosmos --skip-contraste
+  python eikon.py --marca pinakotheke-kosmos --web-icons
+  # Solo web-icons (sin re-renderizar Playwright): usa web_icons.py directamente
+  python web_icons.py --marca pinakotheke-kosmos
+  python web_icons.py --all
         """,
     )
     parser.add_argument("--marca", type=str, help="Slug de la marca (ej. pinakotheke-kosmos)")
@@ -968,6 +975,8 @@ Ejemplos:
                         help="Limpia output/<marca>/ antes de renderizar (opt-in, no implícito)")
     parser.add_argument("--fail-on-layout", action="store_true",
                         help="Devuelve exit code 1 si algún asset tiene layout_status=fail")
+    parser.add_argument("--web-icons", action="store_true",
+                        help="Genera el set web-icons estándar (favicon.ico multi-res, PWA, OG) tras el render Playwright")
     args = parser.parse_args()
 
     if not args.marca and not args.all and not args.only_marcas:
@@ -1027,6 +1036,24 @@ Ejemplos:
         if args.fail_on_layout and totals.get("layout_fails", 0) > 0:
             print(f"  ✗ --fail-on-layout: {totals['layout_fails']} assets con layout_status=fail")
             return 1
+
+        # Generación del set web-icons estándar (Pillow, sin Playwright)
+        if args.web_icons and not args.dry_run:
+            print("\n→ Generando web-icons estándar (favicon, PWA, OG)…")
+            try:
+                from web_icons import generate_web_icons, load_brand, verify_web_icons, print_verification
+                for slug in marcas_a_procesar:
+                    brand = load_brand(slug)
+                    if brand is None:
+                        continue
+                    wi_results = generate_web_icons(slug, brand, dry_run=False)
+                    ok_count = sum(1 for ok, _ in wi_results.values() if ok)
+                    print(f"  ✓ {slug}: {ok_count}/{len(wi_results)} web-icons")
+                    v = verify_web_icons(slug)
+                    print_verification(slug, v)
+            except Exception as e_wi:
+                print(f"  ⚠ Error en web-icons: {e_wi}", file=sys.stderr)
+                traceback.print_exc()
 
         return 0 if totals["errors"] == 0 else 1
 
