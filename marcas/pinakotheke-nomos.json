@@ -6,73 +6,68 @@
   "url": "https://nomos.stevenvallejo.com",
   "tono": "riguroso, legal, técnico",
   "simbolo": "§",
-  "frente": "informatica",
-
+  "frente": "ingenieria",
   "paleta": {
-    "bg":           "#0b1417",
-    "primario":     "#0b1417",
-    "acento":       "#43b5a6",
-    "acento_2":     "#2a7a70",
-    "acento_3":     "#A3E4D7",
-    "texto":        "#e8e0d4",
-    "texto_muted":  "#8fa3a8",
-    "surface":      "#131e22"
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_2": "#2a7a70",
+    "acento_3": "#A3E4D7",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #2a7a70 0%, #43b5a6 60%, #A3E4D7 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 65% 35%, #131e22 0%, #0b1417 70%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 65% 35%, #131e22 0%, #0b1417 70%)",
   "tipografia": {
     "titulos": "Inter",
-    "cuerpo":  "JetBrains Mono"
+    "cuerpo": "JetBrains Mono"
   },
-
   "logo_texto": "Nómos",
   "logo_simbolo": "§",
-
   "textos": {
     "linkedin_post": {
-      "titulo":    "Nómos",
+      "titulo": "Nómos",
       "subtitulo": "Scraping legal CO/RD · Pinakothḗke",
-      "copy":      "Scraping con reglas, datos con ética."
+      "copy": "Scraping con reglas, datos con ética."
     },
     "linkedin_banner": {
-      "titulo":    "Nómos",
-      "copy":      "Extracción de datos conforme a la ley. Colombia y Rep. Dominicana."
+      "titulo": "Nómos",
+      "copy": "Extracción de datos conforme a la ley. Colombia y Rep. Dominicana."
     },
     "ig_post": {
-      "titulo":    "§",
+      "titulo": "§",
       "subtitulo": "Nómos",
-      "copy":      "Scraping con reglas, datos con ética"
+      "copy": "Scraping con reglas, datos con ética"
     },
     "ig_story": {
-      "titulo":    "Nómos",
-      "copy":      "Nueva fuente ↓"
+      "titulo": "Nómos",
+      "copy": "Senado RD ↓"
     },
     "x_post": {
-      "titulo":    "Nómos",
-      "copy":      "Scraping con reglas, datos con ética"
+      "titulo": "Nómos",
+      "copy": "Scraping con reglas, datos con ética"
     },
     "yt_thumbnail": {
-      "titulo":    "Nómos",
-      "copy":      "Ver"
+      "titulo": "Nómos",
+      "copy": "Scraping con reglas"
     },
     "yt_banner": {
-      "titulo":    "Nómos",
+      "titulo": "Nómos",
       "subtitulo": "Scraping legal CO/RD · Pinakothḗke"
     },
     "og_general": {
-      "titulo":    "Nómos",
+      "titulo": "Nómos",
       "subtitulo": "Scraping legal CO/RD · Pinakothḗke",
-      "copy":      "Scraping con reglas, datos con ética."
+      "copy": "Scraping con reglas, datos con ética."
     },
     "whatsapp_perfil": {
-      "titulo":    "§",
-      "copy":      "Nómos"
+      "titulo": "§",
+      "copy": "Nómos"
     },
     "contra_cover": {
-      "titulo":    "Nómos",
-      "copy":      "Scraping legal CO/RD · Pinakothḗke"
+      "titulo": "Nómos",
+      "copy": "Scraping legal CO/RD · Pinakothḗke"
     }
   }
 }

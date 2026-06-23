@@ -7,132 +7,127 @@
   "tono": "artesanal, pragmático, OSS",
   "simbolo": "⚙",
   "frente": "informatica",
-
   "paleta": {
-    "bg":           "#0b1417",
-    "primario":     "#0b1417",
-    "acento":       "#43b5a6",
-    "acento_2":     "#2a7a70",
-    "acento_3":     "#A3E4D7",
-    "texto":        "#e8e0d4",
-    "texto_muted":  "#8fa3a8",
-    "surface":      "#131e22"
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_2": "#2a7a70",
+    "acento_3": "#A3E4D7",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #43b5a6 0%, #2a7a70 60%, #1a4a45 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 25% 55%, #131e22 0%, #0b1417 70%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 25% 55%, #131e22 0%, #0b1417 70%)",
   "tipografia": {
     "titulos": "Inter",
-    "cuerpo":  "JetBrains Mono"
+    "cuerpo": "JetBrains Mono"
   },
-
   "logo_texto": "Téchne",
   "logo_simbolo": "⚙",
-
   "textos": {
     "linkedin_post": {
-      "titulo":    "8 devtools OSS",
+      "titulo": "8 devtools OSS",
       "subtitulo": "Téchne · Pinakothḗke",
-      "copy":      "Terminal distribuida, monitor de sistema, vault de logs, CLI de automatización: herramientas que construí para mi propio flujo y publiqué como OSS."
+      "copy": "Terminal distribuida, monitor de sistema, vault de logs, CLI de automatización: herramientas que construí para mi propio flujo y publiqué como OSS."
     },
     "linkedin_banner": {
-      "titulo":    "Téchne — Dev tools OSS",
-      "copy":      "Ultimate Terminal · Mission Center Web · clawbar · kratos-jarvis · vaultlog · y más."
+      "titulo": "Téchne — Dev tools OSS",
+      "copy": "Ultimate Terminal · Mission Center Web · clawbar · kratos-jarvis · vaultlog · y más."
     },
     "ig_post": {
-      "titulo":    "⚙",
+      "titulo": "⚙",
       "subtitulo": "Téchne",
-      "copy":      "8 herramientas open source para el developer moderno. Sin magia: código real, problemas reales."
+      "copy": "8 herramientas open source para el developer moderno. Sin magia: código real, problemas reales."
     },
     "ig_story": {
-      "titulo":    "Téchne OSS",
-      "copy":      "Nueva herramienta ↓ techne.stevenvallejo.com"
+      "titulo": "Téchne OSS",
+      "copy": "clawbar ↓"
     },
     "x_post": {
-      "titulo":    "Téchne",
-      "copy":      "8 devtools OSS: terminal remota, monitor web, log vault, jarvis local. Código en GitHub."
+      "titulo": "Téchne",
+      "copy": "8 devtools OSS: terminal remota, monitor web, log vault, jarvis local. Código en GitHub."
     },
     "yt_thumbnail": {
-      "titulo":    "Cómo construí mi terminal remota",
-      "copy":      "Ver"
+      "titulo": "Cómo construí mi terminal remota",
+      "copy": "8 devtools OSS"
     },
     "yt_banner": {
-      "titulo":    "Téchne — Dev tools OSS",
+      "titulo": "Téchne — Dev tools OSS",
       "subtitulo": "Ultimate Terminal · clawbar · vaultlog · Pinakothḗke"
     },
     "og_general": {
-      "titulo":    "Téchne",
+      "titulo": "Téchne",
       "subtitulo": "Dev tools OSS · Pinakothḗke",
-      "copy":      "8 herramientas open source que amplifican al artesano del software. techne.stevenvallejo.com"
+      "copy": "8 herramientas open source que amplifican al artesano del software. techne.stevenvallejo.com"
     },
     "whatsapp_perfil": {
-      "titulo":    "⚙",
-      "copy":      "Téchne"
+      "titulo": "⚙",
+      "copy": "Téchne"
     },
     "contra_cover": {
-      "titulo":    "Téchne",
-      "copy":      "Dev tools OSS · 8 herramientas · Pinakothḗke"
+      "titulo": "Téchne",
+      "copy": "Dev tools OSS · 8 herramientas · Pinakothḗke"
     },
     "ig_reel_cover": {
-      "titulo":    "⚙ Téchne",
+      "titulo": "⚙ Téchne",
       "subtitulo": "Dev tools OSS",
-      "copy":      "Una terminal en la nube, un monitor de sistema en el browser, un vault de logs. OSS. Gratis."
+      "copy": "Una terminal en la nube, un monitor de sistema en el browser, un vault de logs. OSS. Gratis."
     },
     "ig_carousel": {
-      "titulo":    "Téchne",
+      "titulo": "Téchne",
       "subtitulo": "8 herramientas que uso cada día",
-      "copy":      "Desliza → Ultimate Terminal · Mission Center Web · clawbar · kratos-jarvis · vaultlog"
+      "copy": "Desliza → Ultimate Terminal · Mission Center Web · clawbar · kratos-jarvis · vaultlog"
     },
     "x_header": {
-      "titulo":    "Téchne — Dev tools OSS",
-      "copy":      "Herramientas que amplifican al artesano · Pinakothḗke"
+      "titulo": "Téchne — Dev tools OSS",
+      "copy": "Herramientas que amplifican al artesano · Pinakothḗke"
     },
     "fb_cover": {
-      "titulo":    "Téchne",
+      "titulo": "Téchne",
       "subtitulo": "Dev tools open source",
-      "copy":      "8 herramientas construidas para resolver problemas reales del día a día como developer."
+      "copy": "8 herramientas construidas para resolver problemas reales del día a día como developer."
     },
     "tiktok_cover": {
-      "titulo":    "⚙ Téchne OSS",
-      "copy":      "Herramientas que construí y uso"
+      "titulo": "⚙ Téchne OSS",
+      "copy": "Herramientas que construí y uso"
     },
     "web_hero": {
-      "titulo":    "Herramientas que amplifican al artesano",
+      "titulo": "Herramientas que amplifican al artesano",
       "subtitulo": "8 devtools open source · Téchne · Pinakothḗke",
-      "copy":      "Terminal distribuida por WebSocket, monitor de sistema en el browser, CLI de automatización, vault de logs auditables. Construidas para flujos de desarrollo reales."
+      "copy": "Terminal distribuida por WebSocket, monitor de sistema en el browser, CLI de automatización, vault de logs auditables. Construidas para flujos de desarrollo reales."
     },
     "web_hero_mobile": {
-      "titulo":    "Téchne",
+      "titulo": "Téchne",
       "subtitulo": "8 devtools OSS",
-      "copy":      "Herramientas que amplifican al artesano del software."
+      "copy": "Herramientas que amplifican al artesano del software."
     },
     "email_header": {
-      "titulo":    "Téchne — Dev tools OSS",
-      "copy":      "Novedades de herramientas open source · Pinakothḗke"
+      "titulo": "Téchne — Dev tools OSS",
+      "copy": "Novedades de herramientas open source · Pinakothḗke"
     },
     "banner_ad": {
-      "titulo":    "Téchne OSS",
-      "copy":      "8 devtools gratis · techne.stevenvallejo.com"
+      "titulo": "Téchne OSS",
+      "copy": "8 devtools gratis · techne.stevenvallejo.com"
     },
     "business_card": {
-      "titulo":    "Téchne",
+      "titulo": "Téchne",
       "subtitulo": "Dev tools open source",
-      "copy":      "techne.stevenvallejo.com"
+      "copy": "techne.stevenvallejo.com"
     },
     "poster_a4": {
-      "titulo":    "Téchne",
+      "titulo": "Téchne",
       "subtitulo": "Herramientas que amplifican al artesano",
-      "copy":      "8 devtools OSS: Ultimate Terminal · Mission Center Web · clawbar · kratos-jarvis · vaultlog. Open source. Sin fricción. techne.stevenvallejo.com"
+      "copy": "8 devtools OSS: Ultimate Terminal · Mission Center Web · clawbar · kratos-jarvis · vaultlog. Open source. Sin fricción. techne.stevenvallejo.com"
     },
     "sticker": {
-      "titulo":    "⚙",
-      "copy":      "Téchne OSS"
+      "titulo": "⚙",
+      "copy": "Téchne OSS"
     },
     "og_product": {
-      "titulo":    "Téchne — 8 devtools OSS",
+      "titulo": "Téchne — 8 devtools OSS",
       "subtitulo": "Pinakothḗke · Ingeniería",
-      "copy":      "Terminal remota distribuida, monitor de sistema web, log vault, CLI de automatización y más. Código abierto, sin lock-in."
+      "copy": "Terminal remota distribuida, monitor de sistema web, log vault, CLI de automatización y más. Código abierto, sin lock-in."
     }
   }
 }
