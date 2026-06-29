@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import Depends, FastAPI, HTTPException, Response
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -175,10 +176,30 @@ def create_app(
     app.include_router(gallery_router)
     app.include_router(downloads_router)
 
-    # ── SPA (same-origin), montado al final como fallback estático ────────
+    # ── SPA (same-origin): assets estáticos + fallback a index.html ──────
+    # Sin fallback, recargar/entrar directo a una ruta de cliente (/gallery,
+    # /brands, …) daría 404. El catch-all sirve index.html para que React Router
+    # tome el control; las rutas reales de API/auth (registradas antes) ganan.
     frontend_dist = REPO_ROOT / "frontend" / "dist"
     frontend_dist.mkdir(parents=True, exist_ok=True)
-    app.mount("/", StaticFiles(directory=str(frontend_dist), html=True), name="spa")
+    assets_dir = frontend_dist / "assets"
+    if assets_dir.is_dir():
+        app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="spa-assets")
+    index_html = frontend_dist / "index.html"
+
+    @app.get("/{full_path:path}")
+    async def spa_fallback(full_path: str) -> Response:
+        # Rutas de API/auth inexistentes -> 404 JSON, no HTML.
+        if full_path.startswith(("api/", "auth/", "static/", "assets/", "health")):
+            raise HTTPException(status_code=404, detail="not found")
+        # Servir un archivo real del build si existe (p.ej. favicon), si no, el SPA.
+        if full_path:
+            candidate = (frontend_dist / full_path).resolve()
+            if candidate.is_file() and frontend_dist.resolve() in candidate.parents:
+                return FileResponse(str(candidate))
+        if index_html.is_file():
+            return FileResponse(str(index_html))
+        raise HTTPException(status_code=404, detail="SPA build ausente; corré 'npm run build' en frontend/")
 
     return app
 

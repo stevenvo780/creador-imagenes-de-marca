@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import sys
+import warnings
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -62,28 +63,28 @@ def get_settings() -> Settings:
     # Detectar si pytest está siendo ejecutado
     is_pytest_execution = "pytest" in sys.modules or any("pytest" in arg for arg in sys.argv)
 
-    # Validar que jwt_secret no sea el valor por defecto inseguro de desarrollo
-    if settings.jwt_secret == _DEV_JWT_SECRET:
-        # En pytest, solo tolerar el dev default si es REALMENTE la primera vez
-        # (conftest.py no ha ejecutado aún). Pero conftest setea EIKON_WEBAPP_SECRET,
-        # así que si el env var no está seteado, sabremos que conftest aún no corrió.
-        # Si conftest ya corrió, la env var estaría seteada a un valor seguro.
-        if is_pytest_execution and os.environ.get("EIKON_WEBAPP_SECRET") is None:
-            # Conftest.py aún no ha ejecutado (env var no está seteada).
-            # Tolerar el dev default por ahora; conftest lo arreglará.
-            pass
-        else:
-            # Producción, o pytest con env var NO seteada (conftest ejecutó pero algo falló)
-            raise ValueError(
-                "EIKON_WEBAPP_SECRET env var not set or is the development default. "
-                "Set EIKON_WEBAPP_SECRET to a secure random value (>= 32 chars) before deployment."
-            )
+    # El secreto de desarrollo solo es FATAL en producción. En dev/local/pytest se
+    # tolera (con aviso) para no bloquear `uvicorn webapp.app:app` recién clonado.
+    env = os.environ.get("EIKON_ENV", os.environ.get("ENVIRONMENT", "")).lower()
+    is_production = env in ("prod", "production")
 
-    # Validar que jwt_secret sea lo suficientemente largo para HS256
-    if len(settings.jwt_secret) < 32:
+    if settings.jwt_secret == _DEV_JWT_SECRET:
+        if is_production:
+            raise ValueError(
+                "EIKON_WEBAPP_SECRET no seteado (o es el default de desarrollo). "
+                "Definí un valor aleatorio seguro (>= 32 chars) antes de desplegar a producción."
+            )
+        if not is_pytest_execution:
+            warnings.warn(
+                "Usando jwt_secret de DESARROLLO inseguro. Definí EIKON_WEBAPP_SECRET "
+                "(>= 32 chars) antes de producción.",
+                stacklevel=2,
+            )
+    elif len(settings.jwt_secret) < 32:
+        # Si proveés un secreto propio, debe ser fuerte para HS256.
         raise ValueError(
-            f"EIKON_WEBAPP_SECRET must be at least 32 characters for HS256 security. "
-            f"Got {len(settings.jwt_secret)} characters."
+            f"EIKON_WEBAPP_SECRET debe tener al menos 32 caracteres para HS256. "
+            f"Tiene {len(settings.jwt_secret)}."
         )
 
     return settings
