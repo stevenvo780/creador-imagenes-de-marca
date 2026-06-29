@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eikon"
+version = "0.1.0"
+description = "Eikon — motor CSS/HTML → PNG para assets de marca"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Proprietary" }
+dependencies = [
+  "playwright>=1.40",
+  "Pillow>=10.0",
+  "numpy>=1.24",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.4",
+  "pytest-cov>=4.1",
+]
+webapp = [
+  "fastapi>=0.110",
+  "uvicorn[standard]>=0.27",
+  "pydantic>=2.0",
+  "httpx>=0.26",
+]
+
+[project.scripts]
+eikon = "eikon:main"
+
+[tool.setuptools]
+py-modules = ["eikon", "contrast_validator", "gallery", "web_icons", "variations"]
+include-package-data = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra -q --strict-markers"
+markers = [
+  "slow: checks que pueden tardar o invocar suites completas",
+  "integration: requieren assets reales en output/ o integración con el filesystem",
+]

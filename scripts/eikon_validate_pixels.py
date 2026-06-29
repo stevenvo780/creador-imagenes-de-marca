@@ -76,6 +76,15 @@ DEFAULT_MIN_BYTES = 1024
 # favicons que sólo cambian paleta pero no layout, etc.).
 DEFAULT_ALLOW_IDENTICAL_TYPES: Tuple[str, ...] = ()
 
+# Favicons se renderizan/exportan a tamaños físicos estándar (32/180/512)
+# aunque la taxonomía base declare 512px @3x (=1536). No es un error de
+# pixel: la variante codifica el tamaño esperado.
+FAVICON_VARIANT_SIZES: Dict[str, Tuple[int, int]] = {
+    "v1_32": (32, 32),
+    "v2_180": (180, 180),
+    "v3_512": (512, 512),
+}
+
 # Margen para el muestreo de bordes (px en cada lado).
 BORDER_SAMPLE = 16
 
@@ -177,6 +186,21 @@ def _load_image(path: Path) -> Image.Image:
     im = Image.open(path)
     im.load()  # fuerza decode
     return im
+
+
+def _normalize_known_dim_exceptions(result: Dict[str, Any]) -> None:
+    """Elimina falsos positivos conocidos de dimensiones por tipo/variante."""
+    if result.get("type") != "favicon":
+        return
+    variant = str(result.get("variant") or "")
+    expected = FAVICON_VARIANT_SIZES.get(variant)
+    actual = result.get("actual") or {}
+    if not expected or (actual.get("width"), actual.get("height")) != expected:
+        return
+    before = list(result.get("issues") or [])
+    result["issues"] = [i for i in before if not str(i).startswith("dim_mismatch")]
+    result.setdefault("checks", {})["dim_match"] = True
+    result.setdefault("checks", {})["dim_match_exception"] = "favicon_physical_size"
 
 
 # =============================================================================
@@ -368,6 +392,7 @@ def validate_marca(
         result["type"] = entry.get("type")
         result["variant"] = entry.get("variant")
         result["manifest_status"] = entry.get("status")
+        _normalize_known_dim_exceptions(result)
         asset_results.append(result)
 
     identicals = find_identical_variants(asset_results, allow_identical_types)

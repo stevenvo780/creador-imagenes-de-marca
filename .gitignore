@@ -15,8 +15,14 @@ covers_branded/
 # Cache de render
 output/**/.cache.json
 
+# Webapp local state/secrets
+data/webapp/
+.env
+.env.*
+
 # Python cache
 __pycache__/
+.pytest_cache/
 *.pyc
 *.pyo
 

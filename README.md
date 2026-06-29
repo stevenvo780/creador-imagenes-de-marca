@@ -17,6 +17,18 @@ Pinakotheke (Cloud Atlas) y Prizma Enterprise.
 5. **CLI robusto** — flags `--marca`, `--all`, `--only-marcas`, `--clean`,
    `--dry-run`, `--resume`, `--skip-contraste`, `--parallel`.
 
+## Estructura actual
+
+- `eikon.py`: shim/entrypoint retrocompatible (`python3 eikon.py ...`).
+- `eikon_core/`: motor modular por responsabilidad: taxonomía, mapping,
+  layout, render, manifests, CLI.
+- `taxonomy.json`: taxonomía v1 serializable; se valida con
+  `scripts/eikon_validate_taxonomy.py`.
+- `variations.py`: planner determinístico para batches/variaciones.
+- `webapp/`: MVP FastAPI opcional multi-tenant con JWT cookie, SQLite local
+  y jobs Eikon.
+- `audit/`: metodología, plantilla y reportes de auditoría.
+
 ## Uso rápido
 
 ```bash
