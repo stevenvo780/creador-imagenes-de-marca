@@ -14,6 +14,39 @@ from .templates import resolve_template
 from .types import TypeSpec, VariantSpec
 
 
+def _extract_data_attrs_from_combination(
+    combination_params: dict[str, str] | None,
+) -> dict[str, str]:
+    """Extract data attributes from combination params.
+
+    Maps combination parameter axes to HTML data attributes.
+
+    Args:
+        combination_params: Combination parameters dict
+
+    Returns:
+        Dict of data-* attributes to set on document
+    """
+    data_attrs_to_inject = {}
+    if combination_params:
+        # Map combination param axes to data attributes
+        if "layout" in combination_params:
+            data_attrs_to_inject["data-layout"] = combination_params["layout"]
+        if "background_treatment" in combination_params:
+            data_attrs_to_inject["data-bg-treatment"] = combination_params[
+                "background_treatment"
+            ]
+        if "isotype_style" in combination_params:
+            data_attrs_to_inject["data-isotype-style"] = combination_params[
+                "isotype_style"
+            ]
+        if "accent_placement" in combination_params:
+            data_attrs_to_inject["data-accent-placement"] = combination_params[
+                "accent_placement"
+            ]
+    return data_attrs_to_inject
+
+
 async def _wait_for_fonts_and_stabilize(page: Any) -> None:
     """Wait for fonts to load and stabilize layout before screenshot.
 
@@ -112,6 +145,7 @@ async def render_asset(
     marca: dict[str, Any],
     cache: dict[str, str],
     dry_run: bool = False,
+    combination_params: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     """Renderiza un asset individual. Retorna metadata para el manifest."""
     template_path = resolve_template(tipo_spec.name, cfg.TEMPLATES_DIR)
@@ -124,7 +158,12 @@ async def render_asset(
             "warnings": ["template not found"],
         }
 
-    vars_dict = map_marca_to_vars(marca, tipo_spec.name, variant_name=variant_spec.name)
+    vars_dict = map_marca_to_vars(
+        marca,
+        tipo_spec.name,
+        variant_name=variant_spec.name,
+        combination_params=combination_params,
+    )
     input_hash = compute_hash(
         marca, categoria, tipo_spec.name, variant_spec.name, template_path, vars_dict
     )
@@ -158,8 +197,14 @@ async def render_asset(
     context = None
     page = None
     try:
+        # Extract and prepare data attributes from combination params
+        data_attrs_to_inject = _extract_data_attrs_from_combination(combination_params)
+
         injection = injection_script(
-            vars_dict, variant_name=variant_spec.name, template_name=tipo_spec.name
+            vars_dict,
+            variant_name=variant_spec.name,
+            template_name=tipo_spec.name,
+            data_attrs=data_attrs_to_inject if data_attrs_to_inject else None,
         )
         scale_factor = tipo_spec.get_device_scale_factor(categoria)
 

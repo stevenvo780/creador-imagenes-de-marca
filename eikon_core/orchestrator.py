@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import time
 from pathlib import Path
+from typing import Any
 
 from . import constants as cfg
 from .brand import brand_family, load_json
 from .cache import load_cache, save_cache
+from .combinatorial import AxesConfig
 from .manifest import post_validate_assets, write_manifest
 from .playwright_lazy import _get_playwright
 from .render import render_asset
@@ -163,3 +165,59 @@ async def run_generator(  # noqa: C901
             "layout_fails": total_layout_fail,
         },
     }
+
+
+async def render_combination(
+    browser: Any,
+    marca_slug: str,
+    combination: Any,
+    asset_type: str,
+    marca: dict[str, Any],
+    axes_config: AxesConfig,
+    cache: dict[str, str] | None = None,
+    dry_run: bool = False,
+) -> dict[str, Any]:
+    """Renderiza un asset con parámetros de combinación especificada.
+
+    Args:
+        browser: Playwright browser instance
+        marca_slug: Slug de la marca
+        combination: Combination object with params dict
+        asset_type: Tipo de asset (ej. "logo_symbol_color")
+        marca: Dict con datos de la marca
+        axes_config: AxesConfig para validación
+        cache: Optional cache dict
+        dry_run: Si True, no renderiza realmente
+
+    Returns:
+        Asset metadata dict
+    """
+    from .types import TypeSpec, VariantSpec
+
+    # Validate combination params
+    axes_config.validate_combination(combination.params)
+
+    # Create fake type/variant specs
+    tipo_spec = TypeSpec(
+        name=asset_type,
+        width=512,
+        height=512,
+        variants=(),
+    )
+    variant_spec = VariantSpec(
+        name=f"combo_{combination.idx:03d}",
+        label=f"Combination {combination.idx}",
+    )
+
+    # Render with combination params
+    return await render_asset(
+        browser,
+        marca_slug,
+        "logos",
+        tipo_spec,
+        variant_spec,
+        marca,
+        cache or {},
+        dry_run=dry_run,
+        combination_params=combination.params,
+    )

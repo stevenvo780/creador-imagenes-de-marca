@@ -1,0 +1,277 @@
+{
+  "axes": {
+    "palette_scheme": {
+      "label": "Color scheme for palette",
+      "type": "enum",
+      "options": {
+        "brand": {
+          "description": "Full brand palette (default)",
+          "overrides": {}
+        },
+        "mono": {
+          "description": "Monochrome: texto/bg inverted, no acento",
+          "overrides": {
+            "acento": "var(--texto)",
+            "acento_2": "var(--texto)",
+            "bg": "var(--texto)"
+          }
+        },
+        "light": {
+          "description": "Light mode: inverted bg/texto",
+          "overrides": {
+            "bg": "var(--texto)",
+            "texto": "var(--primario)"
+          }
+        },
+        "dark": {
+          "description": "Dark mode: primario as bg",
+          "overrides": {
+            "bg": "var(--primario)"
+          }
+        },
+        "accent_bg": {
+          "description": "Acento as background",
+          "overrides": {
+            "bg": "var(--acento)",
+            "texto": "var(--primario)"
+          }
+        },
+        "gradient": {
+          "description": "Gradient background (hero gradient)",
+          "overrides": {
+            "bg": "var(--grad-hero)"
+          }
+        }
+      }
+    },
+    "typography_pairing": {
+      "label": "Font pairing selection",
+      "type": "enum",
+      "options": {
+        "brand_default": {
+          "description": "Default brand typography",
+          "overrides": {}
+        },
+        "sans_serif": {
+          "description": "Modern sans-serif (Inter/System)",
+          "overrides": {
+            "font_titulo": "Inter",
+            "font_cuerpo": "Inter"
+          }
+        },
+        "serif_modern": {
+          "description": "Serif title with sans body",
+          "overrides": {
+            "font_titulo": "Playfair Display",
+            "font_cuerpo": "Inter"
+          }
+        },
+        "display": {
+          "description": "Display typefaces",
+          "overrides": {
+            "font_titulo": "Playfair Display",
+            "font_cuerpo": "Playfair Display"
+          }
+        },
+        "geometric_sans": {
+          "description": "Geometric grotesque title (Space Grotesk) with sans body",
+          "overrides": {
+            "font_titulo": "Space Grotesk",
+            "font_cuerpo": "Inter"
+          }
+        }
+      }
+    },
+    "layout": {
+      "label": "Logo layout variant",
+      "type": "enum",
+      "options": {
+        "symbol_only": {
+          "description": "Symbol/mark only (no text)",
+          "data_attrs": {
+            "data-layout": "symbol_only"
+          }
+        },
+        "wordmark_only": {
+          "description": "Text wordmark only",
+          "data_attrs": {
+            "data-layout": "wordmark_only"
+          }
+        },
+        "lockup_horizontal": {
+          "description": "Horizontal lockup (symbol + text side by side)",
+          "data_attrs": {
+            "data-layout": "lockup_horizontal"
+          }
+        },
+        "lockup_vertical": {
+          "description": "Vertical lockup (symbol above text)",
+          "data_attrs": {
+            "data-layout": "lockup_vertical"
+          }
+        }
+      }
+    },
+    "background_treatment": {
+      "label": "Background style",
+      "type": "enum",
+      "options": {
+        "solid": {
+          "description": "Solid color background",
+          "overrides": {
+            "bg": "var(--primario)"
+          }
+        },
+        "gradient": {
+          "description": "Gradient background",
+          "overrides": {
+            "bg": "var(--grad-bg)"
+          }
+        },
+        "geometric": {
+          "description": "Geometric pattern",
+          "data_attrs": {
+            "data-bg-treatment": "geometric"
+          }
+        },
+        "grid": {
+          "description": "Grid pattern overlay",
+          "data_attrs": {
+            "data-bg-treatment": "grid"
+          }
+        },
+        "orb": {
+          "description": "Radial orb effect",
+          "data_attrs": {
+            "data-bg-treatment": "orb"
+          }
+        },
+        "texture": {
+          "description": "Subtle texture",
+          "data_attrs": {
+            "data-bg-treatment": "texture"
+          }
+        }
+      }
+    },
+    "density_scale": {
+      "label": "Spacing and sizing scale",
+      "type": "enum",
+      "options": {
+        "compact": {
+          "description": "Compact: 85% scale",
+          "overrides": {
+            "font_size_scale": "0.85",
+            "space_scale": "0.85"
+          }
+        },
+        "normal": {
+          "description": "Normal: 100% scale (default)",
+          "overrides": {
+            "font_size_scale": "1",
+            "space_scale": "1"
+          }
+        },
+        "spacious": {
+          "description": "Spacious: 115% scale",
+          "overrides": {
+            "font_size_scale": "1.15",
+            "space_scale": "1.15"
+          }
+        }
+      }
+    },
+    "corner_shape": {
+      "label": "Border radius style",
+      "type": "enum",
+      "options": {
+        "sharp": {
+          "description": "Sharp corners (0px)",
+          "overrides": {
+            "corner_radius": "0"
+          }
+        },
+        "rounded": {
+          "description": "Rounded corners (14px)",
+          "overrides": {
+            "corner_radius": "14px"
+          }
+        },
+        "pill": {
+          "description": "Pill-shaped (999px)",
+          "overrides": {
+            "corner_radius": "999px"
+          }
+        }
+      }
+    },
+    "isotype_style": {
+      "label": "Icon/mark styling",
+      "type": "enum",
+      "options": {
+        "none": {
+          "description": "No additional styling (preserve current look)",
+          "data_attrs": {}
+        },
+        "lettermark": {
+          "description": "Single letter mark variant",
+          "data_attrs": {
+            "data-isotype-style": "lettermark"
+          }
+        },
+        "geometric": {
+          "description": "Geometric abstract form",
+          "data_attrs": {
+            "data-isotype-style": "geometric"
+          }
+        },
+        "abstract": {
+          "description": "Abstract organic form",
+          "data_attrs": {
+            "data-isotype-style": "abstract"
+          }
+        },
+        "enclosure": {
+          "description": "Mark enclosed in shape",
+          "data_attrs": {
+            "data-isotype-style": "enclosure"
+          }
+        }
+      }
+    },
+    "accent_placement": {
+      "label": "Accent color placement",
+      "type": "enum",
+      "options": {
+        "none": {
+          "description": "No accent placement (default)",
+          "data_attrs": {}
+        },
+        "underline": {
+          "description": "Underline accent bar",
+          "data_attrs": {
+            "data-accent-placement": "underline"
+          }
+        },
+        "corner": {
+          "description": "Corner accent marker",
+          "data_attrs": {
+            "data-accent-placement": "corner"
+          }
+        },
+        "sidebar": {
+          "description": "Sidebar accent stripe",
+          "data_attrs": {
+            "data-accent-placement": "sidebar"
+          }
+        },
+        "dot": {
+          "description": "Dot accent element",
+          "data_attrs": {
+            "data-accent-placement": "dot"
+          }
+        }
+      }
+    }
+  }
+}

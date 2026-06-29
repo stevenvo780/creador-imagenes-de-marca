@@ -1,0 +1,65 @@
+{
+  "_comment": "Familias empaquetadas como woff2 en templates/fonts/ y declaradas via @font-face en templates/eikon-system.css. El render usa los archivos locales (file://), no Google Fonts; los enlaces se conservan solo como referencia.",
+  "bundled_fonts": {
+    "Inter": ["fonts/Inter-400.woff2", "fonts/Inter-700.woff2"],
+    "Playfair Display": ["fonts/PlayfairDisplay-400.woff2", "fonts/PlayfairDisplay-700.woff2", "fonts/PlayfairDisplay-900.woff2"],
+    "Space Grotesk": ["fonts/SpaceGrotesk-500.woff2", "fonts/SpaceGrotesk-700.woff2"]
+  },
+  "pairings": [
+    {
+      "id": "brand_default",
+      "label": "Brand Default",
+      "description": "Default brand typography (varies by brand)",
+      "title_family": "Playfair Display",
+      "body_family": "Inter",
+      "title_weights": [400, 700, 900],
+      "body_weights": [400, 700],
+      "use_local_fonts": true,
+      "google_fonts_link": "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;700&display=swap"
+    },
+    {
+      "id": "sans_serif",
+      "label": "Modern Sans",
+      "description": "Clean, contemporary sans-serif pairing",
+      "title_family": "Inter",
+      "body_family": "Inter",
+      "title_weights": [400, 700],
+      "body_weights": [400, 700],
+      "use_local_fonts": true,
+      "google_fonts_link": "https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+    },
+    {
+      "id": "serif_modern",
+      "label": "Serif + Sans",
+      "description": "Elegant serif titles with clean sans body",
+      "title_family": "Playfair Display",
+      "body_family": "Inter",
+      "title_weights": [700, 900],
+      "body_weights": [400, 700],
+      "use_local_fonts": true,
+      "google_fonts_link": "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;700&display=swap"
+    },
+    {
+      "id": "display",
+      "label": "Display",
+      "description": "Bold display typography for headlines",
+      "title_family": "Playfair Display",
+      "body_family": "Playfair Display",
+      "title_weights": [900],
+      "body_weights": [400, 700],
+      "use_local_fonts": true,
+      "google_fonts_link": "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap"
+    },
+    {
+      "id": "geometric_sans",
+      "label": "Geometric Grotesque",
+      "description": "Geometric grotesque title (Space Grotesk) with clean sans body",
+      "title_family": "Space Grotesk",
+      "body_family": "Inter",
+      "title_weights": [500, 700],
+      "body_weights": [400, 700],
+      "use_local_fonts": true,
+      "google_fonts_link": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;700&display=swap"
+    }
+  ]
+}
