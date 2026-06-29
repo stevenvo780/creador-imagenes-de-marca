@@ -1,0 +1,57 @@
+name: eikon-gates
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements*.txt', 'pyproject.toml', 'webapp/requirements-webapp.txt') }}
+
+      - name: Install runtime deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+          pip install -r webapp/requirements-webapp.txt
+
+      - name: Gate 4 — py_compile
+        run: make py-compile
+
+      - name: Gate 1 — Historic tests
+        run: make test
+
+      - name: Gate 2 — Variations
+        run: make test-variations
+
+      - name: Gate 2b — Taxonomy
+        run: make test-taxonomy
+
+      - name: Gate 6 — Webapp core
+        run: make test-webapp
+
+      - name: Pytest bridge
+        run: |
+          python -m pytest tests/test_runner_bridge.py -v --tb=short
+
+      - name: Gate — Taxonomy validator
+        run: |
+          python scripts/eikon_validate_taxonomy.py
+
+      - name: Gate — Ironman (informational)
+        run: |
+          python scripts/eikon_ironman.py --only-issues || true

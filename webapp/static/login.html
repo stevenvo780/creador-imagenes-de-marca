@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Eikon Web — Login</title>
+  <link rel="stylesheet" href="/static/theme.css">
+  <script src="https://unpkg.com/htmx.org@1.9.12" defer></script>
+</head>
+<body>
+  <main>
+    <h1>Eikon Web</h1>
+    <div class="card">
+      <h2>Iniciar sesión</h2>
+      <form hx-post="/auth/login" hx-trigger="submit" hx-ext="json-enc" hx-target="#out" hx-swap="innerHTML">
+        <label>Email <input name="email" type="email" required></label>
+        <label>Password <input name="password" type="password" required></label>
+        <button type="submit">Entrar</button>
+      </form>
+      <div id="out"></div>
+    </div>
+    <div class="card">
+      <h2>Registrarse</h2>
+      <form hx-post="/auth/register" hx-trigger="submit" hx-ext="json-enc" hx-target="#out2" hx-swap="innerHTML">
+        <label>Tenant slug <input name="tenant_slug" required></label>
+        <label>Tenant name <input name="tenant_name" required></label>
+        <label>Email <input name="email" type="email" required></label>
+        <label>Password <input name="password" type="password" required minlength="8"></label>
+        <button type="submit">Crear cuenta</button>
+      </form>
+      <div id="out2"></div>
+    </div>
+    <p><a href="/dashboard">Ir al dashboard →</a></p>
+  </main>
+  <script>
+    document.addEventListener('htmx:configRequest', (e) => {
+      try {
+        const fd = Object.fromEntries(new FormData(e.detail.target));
+        e.detail.parameters = fd;
+        e.detail.headers['Content-Type'] = 'application/json';
+      } catch (_) {}
+    });
+  </script>
+</body>
+</html>

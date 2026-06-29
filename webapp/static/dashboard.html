@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Eikon Web — Dashboard</title>
+  <link rel="stylesheet" href="/static/theme.css">
+  <script src="https://unpkg.com/htmx.org@1.9.12" defer></script>
+</head>
+<body>
+  <main>
+    <h1>Dashboard</h1>
+    <div class="card">
+      <h2>Crear job</h2>
+      <form hx-post="/api/v1/jobs" hx-trigger="submit" hx-ext="json-enc" hx-target="#job-out" hx-swap="innerHTML">
+        <label>Marca <input name="marca_slug" placeholder="prizma-iris" required></label>
+        <label>Categoría <input name="category" placeholder="logos"></label>
+        <label>Dry-run
+          <select name="dry_run">
+            <option value="true">true</option>
+            <option value="false">false</option>
+          </select>
+        </label>
+        <button type="submit">Encolar job</button>
+      </form>
+      <div id="job-out"></div>
+    </div>
+
+    <div class="card">
+      <h2>Jobs recientes</h2>
+      <div hx-get="/api/v1/jobs" hx-trigger="load delay:200ms" hx-target="#jobs-list">cargando…</div>
+      <div id="jobs-list"></div>
+    </div>
+
+    <p><a href="/login">← Salir (limpia cookie local)</a></p>
+  </main>
+  <script>
+    document.addEventListener('htmx:configRequest', (e) => {
+      try {
+        const fd = Object.fromEntries(new FormData(e.detail.target));
+        if ('dry_run' in fd) fd.dry_run = fd.dry_run === 'true';
+        e.detail.parameters = fd;
+        e.detail.headers['Content-Type'] = 'application/json';
+      } catch (_) {}
+    });
+  </script>
+</body>
+</html>

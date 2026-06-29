@@ -4,6 +4,7 @@ import asyncio
 from typing import Any
 
 from fastapi import BackgroundTasks, Cookie, Depends, FastAPI, HTTPException, Response
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -133,6 +134,44 @@ def create_app() -> FastAPI:
         if marca_slug:
             validate_slug(marca_slug)
         return {"items": list_assets(settings.sqlite_path, user["tenant_id"], marca_slug)}
+
+    # ---- HTML UI (HTMX) ----
+    @app.get("/", response_class=HTMLResponse)
+    async def root() -> FileResponse:
+        return FileResponse(settings.data_root.parent.parent / "webapp" / "static" / "login.html")
+
+    @app.get("/login", response_class=HTMLResponse)
+    async def login_page() -> FileResponse:
+        return FileResponse(settings.data_root.parent.parent / "webapp" / "static" / "login.html")
+
+    @app.get("/dashboard", response_class=HTMLResponse)
+    async def dashboard_page() -> FileResponse:
+        return FileResponse(settings.data_root.parent.parent / "webapp" / "static" / "dashboard.html")
+
+    @app.get("/partials/jobs", response_class=HTMLResponse)
+    async def jobs_partial(user: dict[str, Any] = Depends(current_user)) -> HTMLResponse:
+        rows = list_jobs(settings.sqlite_path, user["tenant_id"], limit=20)
+        if not rows:
+            body = "<p><em>Sin jobs todavía.</em></p>"
+        else:
+            items = []
+            for row in rows:
+                items.append(
+                    f"<tr><td>{row['id']}</td><td>{row['marca_slug']}</td>"
+                    f"<td>{row.get('category') or '—'}</td>"
+                    f"<td>{'✓' if row['dry_run'] else '✗'}</td>"
+                    f"<td><b>{row['status']}</b></td>"
+                    f"<td>{row['created_at']}</td></tr>"
+                )
+            body = (
+                "<table><thead><tr>"
+                "<th>id</th><th>marca</th><th>cat</th>"
+                "<th>dry</th><th>status</th><th>created</th>"
+                "</tr></thead><tbody>"
+                + "\n".join(items)
+                + "</tbody></table>"
+            )
+        return HTMLResponse(body)
 
     return app
 
