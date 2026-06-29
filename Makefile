@@ -1,7 +1,8 @@
 SHELL := /bin/bash
 PY ?= python3
+VENV := .venv/bin
 
-.PHONY: help install install-dev webapp-install test test-variations test-taxonomy test-webapp qa py-compile run-validate run-pixels run-taxonomy run-ironman run-ironman-strict run-metrics run-count run-all-checks clean
+.PHONY: help install install-dev webapp-install test test-variations test-taxonomy test-webapp qa py-compile run-validate run-pixels run-taxonomy run-ironman run-ironman-strict run-metrics run-count run-all-checks clean lint format format-check typecheck cov
 
 help: ## lista targets disponibles
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
@@ -80,3 +81,18 @@ run-all-checks: py-compile test test-variations test-taxonomy test-webapp run-ta
 clean: ## limpia caches Python/test; no toca output/ ni venvs
 	rm -rf .pytest_cache __pycache__ */__pycache__ */*/__pycache__
 	find . -name '*.pyc' -delete
+
+lint: ## linting con ruff
+	$(VENV)/ruff check .
+
+format: ## formatea código con ruff
+	$(VENV)/ruff format .
+
+format-check: ## verifica formato sin modificar
+	$(VENV)/ruff format --check .
+
+typecheck: ## type-check con mypy sobre eikon_core + webapp
+	$(VENV)/mypy eikon_core webapp
+
+cov: ## corre pytest con coverage report
+	$(VENV)/pytest --cov --cov-report=term-missing tests/ webapp/tests/

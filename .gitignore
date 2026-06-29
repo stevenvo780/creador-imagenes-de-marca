@@ -29,3 +29,10 @@ __pycache__/
 # Archivos de sistema
 .DS_Store
 Thumbs.db
+
+# Canonical venv
+.venv/
+.coverage
+.ruff_cache/
+htmlcov/
+.mypy_cache/
