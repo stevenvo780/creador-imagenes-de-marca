@@ -16,9 +16,9 @@ from pathlib import Path
 from typing import Any, Sequence
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_TAXONOMY = ROOT / "taxonomy.json"
+DEFAULT_TAXONOMY = ROOT / "config" / "taxonomy.json"
 DEFAULT_TEMPLATES = ROOT / "templates"
-DEFAULT_LAYOUTS = ROOT / "layouts.json"
+DEFAULT_LAYOUTS = ROOT / "config" / "layouts.json"
 
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))

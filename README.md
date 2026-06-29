@@ -145,21 +145,25 @@ output/
 
 ## Documentación
 
-- [`MASTER-TAXONOMIA.md`](MASTER-TAXONOMIA.md) — spec de categorías, tipos, variantes.
-- [`BRIEF-AGENCIA.md`](BRIEF-AGENCIA.md) — brief creativo (subconjunto editorial para Eikón; fuente amplia en `Yo/`).
-- [`INSTRUCCIONES-EIKON.md`](INSTRUCCIONES-EIKON.md) — guía operativa actual.
+- [`docs/MASTER-TAXONOMIA.md`](docs/MASTER-TAXONOMIA.md) — spec de categorías, tipos, variantes.
+- [`docs/INSTRUCCIONES-EIKON.md`](docs/INSTRUCCIONES-EIKON.md) — guía operativa actual.
+- [`docs/CHANGELOG.md`](docs/CHANGELOG.md) — historial del motor (v1.0, v1.1, v1.2).
+- [`docs/ESTADO-ENTREGA-2026-06-20.md`](docs/ESTADO-ENTREGA-2026-06-20.md) — estado tras corrida general (snapshot histórico).
 - [`docs/OUTPUT-NO-VERSIONADOS.md`](docs/OUTPUT-NO-VERSIONADOS.md) — política de output git-ignored.
-- [`docs/QA-CHECKLIST.md`](docs/QA-CHECKLIST.md) — checklist de QA mecánico + visual.
-- [`CHANGELOG.md`](CHANGELOG.md) — historial del motor (v1.0, v1.1, v1.2).
-- [`ESTADO-ENTREGA.md`](ESTADO-ENTREGA.md) — estado operativo tras corrida general.
-- `INSTRUCCIONES-GENERADOR-V2.md` — LEGACY, apunta al nuevo.
+- [`docs/QA-CHECKLIST.md`](docs/QA-CHECKLIST.md) — checklist mecánico + visual.
+- [`docs/QA-GATES.md`](docs/QA-GATES.md) — gates automatizados.
+- [`docs/legacy/`](docs/legacy/) — documentos históricos (brief original, instrucciones del generador legacy).
 
 ## Notas
 
-- `_legacy/` contiene scripts históricos (`generar_agencia.py`,
-  `generar_agencia_v2.py`, `render.py`, etc.). **NO USAR** — son de v0.x.
-- El motor `eikon.py` reemplaza `generar_agencia_v2.py`.
-- `agora-*` se filtra automáticamente: no se renderiza.
+- El motor `eikon.py` reemplaza `generar_agencia_v2.py` (legacy).
+- `--all` renderiza solo las 6 marcas core (`pinakotheke-kosmos`, `prizma-iris`,
+  `steven-vallejo-filosofo`, `agora`, `pinakotheke`, `prizma`).
+  Usar `--all-marcas` para renderizar las 38 marcas registradas (incluye demos).
+- Las 32 marcas no-core en `marcas/` quedan registradas como demos para
+  validar la taxonomía, pero no se renderizan por defecto.
+- `agora-*` se renderiza solo si la marca es `agora` exacto; las demás variantes
+  (`agora-st`, `agora-elenxos`, `agora-autologic`) son demos no incluidos.
 - Las variantes por tipo están definidas en `_build_taxonomia()` dentro
   de `eikon.py`; los alias legacy (linkedin_header → linkedin_banner) se
   resuelven vía `_TEMPLATE_ALIASES`.

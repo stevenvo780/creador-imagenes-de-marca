@@ -52,14 +52,14 @@ def test_real_taxonomy_validates() -> None:
     from scripts.eikon_validate_taxonomy import validate_taxonomy_file
 
     report = validate_taxonomy_file(
-        ROOT / "taxonomy.json",
+        ROOT / "config" / "taxonomy.json",
         ROOT / "templates",
-        ROOT / "layouts.json",
+        ROOT / "config" / "layouts.json",
         cross_check=True,
     )
     summary = report.summary()
     check("taxonomy real: 0 fails", summary["fail"] == 0, str(summary))
-    check("taxonomy real: familias presentes", (ROOT / "taxonomy.json").is_file())
+    check("taxonomy real: familias presentes", (ROOT / "config" / "taxonomy.json").is_file())
 
 
 def test_schema_rejects_missing_family() -> None:
@@ -149,11 +149,11 @@ def test_taxonomy_parity_helpers() -> None:
 
     check(
         "cloud_atlas parity",
-        serial(_from_taxonomy_json(ROOT / "taxonomy.json", False)) == serial(_legacy_python_taxonomia(False)),
+        serial(_from_taxonomy_json(ROOT / "config" / "taxonomy.json", False)) == serial(_legacy_python_taxonomia(False)),
     )
     check(
         "prizma parity",
-        serial(_from_taxonomy_json(ROOT / "taxonomy.json", True)) == serial(_legacy_python_taxonomia(True)),
+        serial(_from_taxonomy_json(ROOT / "config" / "taxonomy.json", True)) == serial(_legacy_python_taxonomia(True)),
     )
 
 

@@ -28,51 +28,64 @@
   </aside>
 
   <section class="auth-form">
-    <div class="wrap">
+    <div class="wrap" data-form-root>
       <div class="segmented" role="tablist" aria-label="Modo auth">
         <button type="button" id="tab-login" aria-selected="true" data-tab="login">Entrar</button>
         <button type="button" id="tab-register" aria-selected="false" data-tab="register">Crear cuenta</button>
       </div>
 
+      <div id="auth-banner" class="auth-banner" role="alert" aria-live="assertive" hidden></div>
+
       <form id="form-login"
-            hx-post="/auth/login"
-            hx-swap="none"
-            hx-on::after-request="if(event.detail.xhr.status<400){window.location='/dashboard'}"
-            novalidate>
+            action="/auth/login"
+            method="post"
+            novalidate
+            autocomplete="on">
         <label class="field">
           <span class="field-label"><span>Email<span class="req">*</span></span><span class="hint">trabajo o personal</span></span>
-          <input type="email" name="email" required autocomplete="email" placeholder="tunombre@empresa.com" />
+          <input type="email" name="email" required autocomplete="email" placeholder="tunombre@empresa.com" data-error-target="email" />
+          <span class="field-help" data-error-for="email" hidden></span>
         </label>
         <label class="field">
           <span class="field-label"><span>Contraseña<span class="req">*</span></span><span class="hint">mínimo 8</span></span>
-          <input type="password" name="password" required minlength="8" autocomplete="current-password" placeholder="••••••••" />
+          <input type="password" name="password" required minlength="8" autocomplete="current-password" placeholder="••••••••" data-error-target="password" />
+          <span class="field-help" data-error-for="password" hidden></span>
         </label>
-        <button type="submit" class="btn primary block">Entrar</button>
+        <button type="submit" class="btn primary block" data-submit-btn>
+          <span class="btn-label">Entrar</span>
+          <span class="btn-spinner" hidden><span class="spinner"></span></span>
+        </button>
         <p class="alt">¿No tienes cuenta? <a href="#" id="switch-register" class="linklike">Crea una</a></p>
       </form>
 
       <form id="form-register" hidden
-            hx-post="/auth/register"
-            hx-swap="none"
-            hx-on::after-request="if(event.detail.xhr.status<400){window.location='/dashboard'}">
+            action="/auth/register"
+            method="post"
+            novalidate>
         <label class="field">
           <span class="field-label">Slug del tenant<span class="req">*</span></span>
-          <input name="tenant_slug" required minlength="2" maxlength="80" pattern="[a-z0-9][a-z0-9_-]{1,80}" placeholder="mi-organizacion" />
-          <span class="field-help">Visible en URLs y reportes; sin espacios.</span>
+          <input name="tenant_slug" required minlength="2" maxlength="80" pattern="[a-z0-9][a-z0-9_-]{1,80}" placeholder="mi-organizacion" data-error-target="tenant_slug" />
+          <span class="field-help" data-error-for="tenant_slug" hidden></span>
         </label>
         <label class="field">
           <span class="field-label">Nombre del tenant<span class="req">*</span></span>
-          <input name="tenant_name" required minlength="2" maxlength="120" placeholder="Mi Organización" />
+          <input name="tenant_name" required minlength="2" maxlength="120" placeholder="Mi Organización" data-error-target="tenant_name" />
+          <span class="field-help" data-error-for="tenant_name" hidden></span>
         </label>
         <label class="field">
           <span class="field-label">Email<span class="req">*</span></span>
-          <input type="email" name="email" required autocomplete="email" placeholder="tunombre@empresa.com" />
+          <input type="email" name="email" required autocomplete="email" placeholder="tunombre@empresa.com" data-error-target="email" />
+          <span class="field-help" data-error-for="email" hidden></span>
         </label>
         <label class="field">
           <span class="field-label">Contraseña<span class="req">*</span></span>
-          <input type="password" name="password" required minlength="8" autocomplete="new-password" placeholder="••••••••" />
+          <input type="password" name="password" required minlength="8" autocomplete="new-password" placeholder="••••••••" data-error-target="password" />
+          <span class="field-help" data-error-for="password" hidden></span>
         </label>
-        <button type="submit" class="btn primary block">Crear cuenta</button>
+        <button type="submit" class="btn primary block" data-submit-btn>
+          <span class="btn-label">Crear cuenta</span>
+          <span class="btn-spinner" hidden><span class="spinner"></span></span>
+        </button>
         <p class="alt">¿Ya tienes cuenta? <a href="#" id="switch-login" class="linklike">Entrar</a></p>
       </form>
     </div>
@@ -81,18 +94,151 @@
 
 <script>
 (function() {
+  var root = document.querySelector('[data-form-root]');
+  var banner = document.getElementById('auth-banner');
+  var login = document.getElementById('form-login');
+  var register = document.getElementById('form-register');
+
   function show(which) {
-    var login = document.getElementById('form-login');
-    var register = document.getElementById('form-register');
     login.hidden = which !== 'login';
     register.hidden = which !== 'register';
     document.getElementById('tab-login').setAttribute('aria-selected', String(which === 'login'));
     document.getElementById('tab-register').setAttribute('aria-selected', String(which === 'register'));
+    clearAllErrors();
   }
+
   document.getElementById('tab-login').addEventListener('click', function() { show('login'); });
   document.getElementById('tab-register').addEventListener('click', function() { show('register'); });
   document.getElementById('switch-register').addEventListener('click', function(e) { e.preventDefault(); show('register'); });
   document.getElementById('switch-login').addEventListener('click', function(e) { e.preventDefault(); show('login'); });
+
+  function clearAllErrors() {
+    banner.hidden = true;
+    banner.textContent = '';
+    banner.className = 'auth-banner';
+    [login, register].forEach(function(form) {
+      form.querySelectorAll('.field').forEach(function(field) { field.classList.remove('has-error'); });
+      form.querySelectorAll('[data-error-for]').forEach(function(help) { help.hidden = true; help.textContent = ''; });
+    });
+  }
+
+  function setFieldError(form, name, msg) {
+    var field = form.querySelector('[data-error-target="' + name + '"]');
+    if (!field) return;
+    field.closest('.field').classList.add('has-error');
+    var help = form.querySelector('[data-error-for="' + name + '"]');
+    if (help) { help.textContent = msg; help.hidden = false; }
+  }
+
+  function showBanner(kind, msg) {
+    banner.className = 'auth-banner ' + (kind || 'danger');
+    banner.textContent = msg;
+    banner.hidden = false;
+  }
+
+  async function submitForm(form) {
+    var btn = form.querySelector('[data-submit-btn]');
+    var label = btn.querySelector('.btn-label');
+    var spinner = btn.querySelector('.btn-spinner');
+    var original = label.textContent;
+
+    clearAllErrors();
+
+    // Validación HTML5 manual
+    var firstInvalid = null;
+    form.querySelectorAll('input').forEach(function(input) {
+      if (!input.checkValidity()) {
+        input.closest('.field').classList.add('has-error');
+        var help = form.querySelector('[data-error-for="' + input.name + '"]');
+        if (help) {
+          help.textContent = input.validationMessage || 'Valor inválido';
+          help.hidden = false;
+        }
+        if (!firstInvalid) firstInvalid = input;
+      }
+    });
+    if (firstInvalid) {
+      firstInvalid.focus();
+      return;
+    }
+
+    // Loading state
+    btn.disabled = true;
+    label.textContent = btn.dataset.labelBusy || (original === 'Entrar' ? 'Entrando…' : 'Creando…');
+    spinner.hidden = false;
+
+    var fd = new FormData(form);
+    var payload = {};
+    fd.forEach(function(v, k) { payload[k] = v; });
+
+    try {
+      var r = await fetch(form.action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(payload),
+      });
+      var data = null;
+      try { data = await r.json(); } catch (_) {}
+
+      if (r.ok) {
+        // Spinner persistente + redirect (se ve la transición)
+        var next = (new URLSearchParams(location.search)).get('next') || '/dashboard';
+        location.href = next;
+        return;
+      }
+
+      // 400/422 → detalle por campo; 401 → banner general.
+      if (r.status === 401) {
+        showBanner('danger', (data && data.detail) || 'Credenciales inválidas.');
+      } else if (r.status === 422 && data && Array.isArray(data.detail)) {
+        data.detail.forEach(function(err) {
+          var name = err.loc && err.loc[err.loc.length - 1];
+          if (name) setFieldError(form, name, err.msg || 'Valor inválido');
+        });
+        showBanner('danger', 'Revisa los campos marcados.');
+      } else if (r.status === 400 && data && data.detail) {
+        showBanner('danger', String(data.detail));
+      } else {
+        showBanner('danger', 'Error ' + r.status + ': ' + ((data && data.detail) || 'intenta de nuevo'));
+      }
+      // Foco al primer campo con error
+      var firstError = form.querySelector('.field.has-error input');
+      if (firstError) firstError.focus();
+    } catch (err) {
+      showBanner('danger', 'Sin conexión con el servidor.');
+    } finally {
+      btn.disabled = false;
+      label.textContent = original;
+      spinner.hidden = true;
+    }
+  }
+
+  login.addEventListener('submit', function(e) { e.preventDefault(); submitForm(login); });
+  register.addEventListener('submit', function(e) { e.preventDefault(); submitForm(register); });
+
+  // Limpia error del campo cuando el usuario empieza a escribir.
+  root.addEventListener('input', function(e) {
+    var t = e.target;
+    if (t.matches && t.matches('input[name]')) {
+      var field = t.closest('.field');
+      if (field && field.classList.contains('has-error')) {
+        field.classList.remove('has-error');
+        var help = field.parentElement.querySelector('[data-error-for="' + t.name + '"]');
+        if (help) help.hidden = true;
+      }
+      if (!banner.hidden) banner.hidden = true;
+    }
+  });
+
+  // Enter dentro de cualquier input dispara submit del form visible.
+  root.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && e.target.matches('input')) {
+      e.preventDefault();
+      var visible = login.hidden ? register : login;
+      visible.requestSubmit();
+    }
+  });
 })();
 </script>
 {% endblock %}

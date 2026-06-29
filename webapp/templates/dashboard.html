@@ -43,8 +43,11 @@
           </select>
         </label>
       </div>
-      <div style="display:flex; gap: var(--space-3); align-items: center; margin-top: var(--space-3);">
-        <button class="btn primary" type="submit"><span class="spinner" hidden></span> Encolar job</button>
+      <div style="display:flex; gap: var(--space-3); align-items: center; margin-top: var(--space-3); flex-wrap: wrap;">
+        <button class="btn primary" type="submit" data-submit-btn>
+          <span class="btn-label">Encolar job</span>
+          <span class="btn-spinner" hidden><span class="spinner"></span></span>
+        </button>
         <span class="meta">El job se ejecuta en background y aparece abajo al completarse.</span>
       </div>
     </form>
@@ -52,26 +55,22 @@
 
   <aside class="card">
     <h2>Estado</h2>
-    <div class="split" style="grid-template-columns: 1fr 1fr; gap: var(--space-4);">
-      <div>
-        <div class="meta">Brand assets</div>
-        <div style="font-size: 28px; font-weight: 700; color: var(--fg-0);">1,302</div>
-        <div class="meta">PNGs renderizados</div>
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-num">1,302</div>
+        <div class="kpi-label">PNGs</div>
       </div>
-      <div>
-        <div class="meta">Marcas activas</div>
-        <div style="font-size: 28px; font-weight: 700; color: var(--fg-0);">34</div>
-        <div class="meta">2 familias</div>
+      <div class="kpi">
+        <div class="kpi-num">34</div>
+        <div class="kpi-label">Marcas</div>
       </div>
-      <div>
-        <div class="meta">Tests</div>
-        <div style="font-size: 28px; font-weight: 700; color: var(--ok);">276<span style="font-size:14px;color:var(--fg-3)">/0 ✗</span></div>
-        <div class="meta">167 motor + 83 variations + 26 webapp+taxon.</div>
+      <div class="kpi">
+        <div class="kpi-num ok">276<span class="kpi-sub">/0</span></div>
+        <div class="kpi-label">Tests</div>
       </div>
-      <div>
-        <div class="meta">Engine</div>
-        <div style="font-size: 28px; font-weight: 700; color: var(--fg-0);">v1.2</div>
-        <div class="meta">Playwright + Pillow</div>
+      <div class="kpi">
+        <div class="kpi-num accent">v1.2</div>
+        <div class="kpi-label">Engine</div>
       </div>
     </div>
     <p style="margin-top: var(--space-4);"><a class="linklike" href="/jobs">Ver historial completo →</a></p>
@@ -90,5 +89,27 @@
 
 <script>
 function refreshJobs() { htmx.trigger('#jobs-table', 'refresh'); }
+
+// Spinner inline en el botón del dashboard
+document.body.addEventListener('htmx:beforeRequest', function(evt) {
+  var btn = evt.detail.elt.querySelector('[data-submit-btn]');
+  if (btn) {
+    var label = btn.querySelector('.btn-label');
+    var spinner = btn.querySelector('.btn-spinner');
+    if (label) label.textContent = 'Encolando…';
+    if (spinner) spinner.hidden = false;
+    btn.disabled = true;
+  }
+});
+document.body.addEventListener('htmx:afterRequest', function(evt) {
+  var btn = evt.detail.elt.querySelector('[data-submit-btn]');
+  if (btn) {
+    var label = btn.querySelector('.btn-label');
+    var spinner = btn.querySelector('.btn-spinner');
+    if (label) label.textContent = 'Encolar job';
+    if (spinner) spinner.hidden = true;
+    btn.disabled = false;
+  }
+});
 </script>
 {% endblock %}

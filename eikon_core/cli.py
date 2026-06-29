@@ -28,7 +28,8 @@ Ejemplos:
         """,
     )
     parser.add_argument("--marca", type=str, help="Slug de la marca (ej. pinakotheke-kosmos)")
-    parser.add_argument("--all", action="store_true", help="Procesa todas las marcas EXCEPTO agora-*")
+    parser.add_argument("--all", action="store_true", help="Procesa el set CORE de marcas (ver CORE_MARCAS en eikon_core.constants)")
+    parser.add_argument("--all-marcas", action="store_true", help="Procesa TODAS las marcas registradas (incluye demos no core)")
     parser.add_argument("--only-marcas", type=str, help="Lista separada por comas de slugs a procesar")
     parser.add_argument("--solo", type=str, help="Filtra categoría (ej. logos, cards)")
     parser.add_argument("--dry-run", action="store_true", help="Enumera assets sin renderizar ni escribir PNGs")
@@ -49,13 +50,18 @@ Ejemplos:
         print("⚠ --parallel > 1 no soportado aún. Limitando a 1 worker.", file=sys.stderr)
 
     marcas_a_procesar: list[str] = []
-    if args.all:
+    if args.all or args.all_marcas:
         if not cfg.MARCAS_DIR.exists():
             print("✗ Directorio marcas/ no existe", file=sys.stderr)
             return 1
+        # --all = CORE_MARCAS; --all-marcas = todo
+        cores = set(cfg.CORE_MARCAS) if hasattr(cfg, "CORE_MARCAS") else set()
         for f in cfg.MARCAS_DIR.glob("*.json"):
-            if not f.stem.startswith("agora-"):
-                marcas_a_procesar.append(f.stem)
+            slug = f.stem
+            if args.all_marcas:
+                marcas_a_procesar.append(slug)
+            elif slug in cores:
+                marcas_a_procesar.append(slug)
     elif args.only_marcas:
         marcas_a_procesar = [s.strip() for s in args.only_marcas.split(",") if s.strip()]
     else:

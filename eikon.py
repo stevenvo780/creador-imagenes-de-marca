@@ -18,6 +18,7 @@ from eikon_core.constants import (
     FONT_TIMEOUT_MS,
     DEFAULT_LOCALE,
     MIN_PNG_BYTES,
+    CORE_MARCAS,
 )
 from eikon_core.types import TypeSpec, VariantSpec
 from eikon_core.text import TEXT_LIMITS, shorten_text, apply_text_limits

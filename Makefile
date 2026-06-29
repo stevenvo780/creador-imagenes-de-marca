@@ -42,7 +42,7 @@ py-compile: ## compila Python activo para detectar errores de sintaxis
 	  eikon_core/orchestrator.py eikon_core/cli.py \
 	  webapp/__init__.py webapp/config.py webapp/security.py webapp/storage.py webapp/app.py \
 	  webapp/services/__init__.py webapp/services/eikon_runner.py webapp/routers/__init__.py \
-	  scripts/eikon_aggregate_wcag.py scripts/eikon_count.py scripts/eikon_quality_metrics.py \
+	  scripts/eikon_aggregate_wcag.py scripts/eikon_count.py \
 	  scripts/eikon_ironman.py scripts/eikon_validate_layout.py scripts/eikon_validate_pixels.py \
 	  scripts/eikon_validate_taxonomy.py \
 	  tests/test_eikon_checks.py tests/test_variations.py tests/test_taxonomy.py tests/test_runner_bridge.py \
@@ -63,13 +63,19 @@ run-ironman: ## resume layout/pixels/WCAG sin fallar por deuda visual conocida
 run-ironman-strict: ## release gate visual estricto (falla si queda deuda)
 	$(PY) scripts/eikon_ironman.py --only-issues --fail-on-thresholds
 
-run-metrics: ## extrae metricas perceptuales de output/
-	$(PY) scripts/eikon_quality_metrics.py
-
 run-count: ## regenera _STATUS.md desde output/
 	$(PY) scripts/eikon_count.py
 
-run-all-checks: py-compile test test-variations test-taxonomy run-taxonomy run-validate run-pixels run-ironman run-metrics run-count ## suite local completa
+run-aggregate-wcag: ## agrega WCAG por marca en output/_contraste-report.json
+	$(PY) scripts/eikon_aggregate_wcag.py
+
+run-render-core: ## re-renderiza las 6 marcas core (--all usa CORE_MARCAS)
+	$(PY) eikon.py --all --skip-contraste
+
+run-render-all: ## re-renderiza TODAS las 38 marcas (incluye demos)
+	$(PY) eikon.py --all-marcas --skip-contraste
+
+run-all-checks: py-compile test test-variations test-taxonomy test-webapp run-taxonomy run-validate run-pixels run-ironman run-count run-aggregate-wcag ## suite local completa
 
 clean: ## limpia caches Python/test; no toca output/ ni venvs
 	rm -rf .pytest_cache __pycache__ */__pycache__ */*/__pycache__

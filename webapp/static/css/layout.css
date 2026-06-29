@@ -21,10 +21,15 @@
   gap: var(--space-4);
   padding: var(--space-3) var(--space-5);
   background: rgba(11, 20, 23, 0.85);
-  backdrop-filter: saturate(180%) blur(10px);
-  -webkit-backdrop-filter: saturate(180%) blur(10px);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
   border-bottom: 1px solid var(--line);
   position: sticky; top: 0; z-index: 50;
+  animation: topbar-in 320ms ease-out both;
+}
+@keyframes topbar-in {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
 }
 .brand {
   display: inline-flex; align-items: center; gap: var(--space-2);
@@ -35,7 +40,9 @@
   background: linear-gradient(135deg, var(--brand) 0%, var(--accent) 100%);
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12), 0 2px 6px rgba(0,0,0,0.4);
   display: grid; place-items: center; color: var(--bg-0); font-weight: 900;
+  transition: transform var(--t);
 }
+.brand:hover .brand-mark { transform: rotate(-8deg) scale(1.06); }
 .brand-name { letter-spacing: -0.02em; }
 .brand-sub { color: var(--fg-2); font-weight: 500; font-size: 12px; padding-left: var(--space-2); border-left: 1px solid var(--line); }
 
@@ -87,16 +94,40 @@ main.full {
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
-  transition: border-color var(--t);
+  transition: border-color var(--t), transform var(--t), box-shadow var(--t);
 }
 .card.elev { box-shadow: var(--shadow); }
 .card.flat { background: var(--bg-1); padding: var(--space-4); border-radius: var(--radius); }
 .card h2 { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-4); }
 .card .meta { color: var(--fg-2); font-size: 13px; }
+.card:hover { border-color: var(--line-strong); }
+.card.elev:hover { transform: translateY(-1px); box-shadow: var(--shadow-lg); }
 
 .split {
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: var(--space-5);
 }
+
+/* KPI cards (Estado) */
+.kpi-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3);
+}
+.kpi {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 14px 12px;
+  transition: border-color var(--t), background var(--t);
+}
+.kpi:hover { border-color: var(--line-strong); background: var(--bg-3); }
+.kpi-num {
+  font-size: 24px; font-weight: 700; color: var(--fg-0);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.kpi-num.ok { color: var(--ok); }
+.kpi-num.accent { color: var(--accent); }
+.kpi-sub { font-size: 12px; color: var(--fg-3); font-weight: 500; margin-left: 2px; }
+.kpi-label { color: var(--fg-2); font-size: 12px; margin-top: 2px; }
 
 @media (max-width: 880px) {
   .split { grid-template-columns: 1fr; }

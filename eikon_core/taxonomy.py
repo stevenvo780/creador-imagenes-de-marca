@@ -10,7 +10,7 @@ from . import constants as cfg
 from .types import TypeSpec, VariantSpec
 from .validation import validate_taxonomy
 
-TAXONOMY_JSON_PATH = cfg.ROOT / "taxonomy.json"
+TAXONOMY_JSON_PATH = cfg.ROOT / "config" / "taxonomy.json"
 _FALLBACK_WARNED = False
 
 
@@ -187,7 +187,7 @@ def taxonomy_to_json_dict() -> dict[str, Any]:
         "engine_compat": cfg.ENGINE_VERSION,
         "generated_from": {
             "legacy": "eikon_core.taxonomy._legacy_python_taxonomia",
-            "layouts_file": "layouts.json",
+            "layouts_file": "config/layouts.json",
             "master_spec": "MASTER-TAXONOMIA.md",
         },
         "protected_templates": ["ad_leaderboard.html", "letterhead.html", "stat_card.html"],

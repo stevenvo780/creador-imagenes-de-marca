@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import BackgroundTasks, Cookie, Depends, FastAPI, HTTPException, Query, Request, Response
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -100,7 +100,8 @@ def create_app() -> FastAPI:
         return {"user": {"email": user["email"], "role": user["role"]}, "tenant": {"slug": user["tenant_slug"]}}
 
     @app.post("/auth/logout", status_code=204)
-    async def logout(response: Response) -> Response:
+    async def logout() -> Response:
+        response = Response(status_code=204)
         response.delete_cookie(settings.cookie_name)
         return response
 
@@ -159,6 +160,15 @@ def create_app() -> FastAPI:
 
     @app.get("/login", response_class=Response)
     async def login_page(request: Request) -> Response:
+        # Si ya hay sesión, redirige al dashboard.
+        cookie = request.cookies.get(settings.cookie_name)
+        if cookie:
+            try:
+                payload = decode_jwt(cookie, settings.jwt_secret)
+                if get_user(settings.sqlite_path, int(payload.get("sub", 0))) is not None:
+                    return RedirectResponse("/dashboard", status_code=303)
+            except ValueError:
+                pass
         return render(request, "login.html", show_chrome=False)
 
     @app.get("/dashboard", response_class=Response)
