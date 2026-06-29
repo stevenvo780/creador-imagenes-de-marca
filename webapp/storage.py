@@ -531,22 +531,37 @@ def update_batch_status(
     batch_id: int,
     status: str,
     counts: dict[str, Any] | None = None,
+    *,
+    tenant_id: int | None = None,
 ) -> None:
-    """Actualiza el status (y opcionalmente counts) de un batch."""
+    """Actualiza el status (y opcionalmente counts) de un batch.
+
+    Si tenant_id se proporciona, valida que el batch pertenece al tenant.
+    Recomendado: siempre pasar tenant_id cuando se llama desde un endpoint de API.
+    """
     now = int(time.time())
-    fields = ["status = ?"]
-    values: list[Any] = [status]
-    if status == "running":
-        fields.append("started_at = ?")
-        values.append(now)
-    if status in {"completed", "failed", "cancelled"}:
-        fields.append("finished_at = ?")
-        values.append(now)
-    if counts is not None:
-        fields.append("counts_json = ?")
-        values.append(json.dumps(counts, sort_keys=True))
-    values.append(batch_id)
     with connect(db_path) as con:
+        # Validar pertenencia al tenant si se proporciona
+        if tenant_id is not None:
+            row = con.execute(
+                "SELECT id FROM batches WHERE id = ? AND tenant_id = ?",
+                (batch_id, tenant_id),
+            ).fetchone()
+            if row is None:
+                raise KeyError(f"batch {batch_id} no pertenece al tenant {tenant_id}")
+
+        fields = ["status = ?"]
+        values: list[Any] = [status]
+        if status == "running":
+            fields.append("started_at = ?")
+            values.append(now)
+        if status in {"completed", "failed", "cancelled"}:
+            fields.append("finished_at = ?")
+            values.append(now)
+        if counts is not None:
+            fields.append("counts_json = ?")
+            values.append(json.dumps(counts, sort_keys=True))
+        values.append(batch_id)
         con.execute(f"UPDATE batches SET {', '.join(fields)} WHERE id = ?", values)
 
 
