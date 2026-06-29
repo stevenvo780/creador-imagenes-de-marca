@@ -36,3 +36,7 @@ Thumbs.db
 .ruff_cache/
 htmlcov/
 .mypy_cache/
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+*.tsbuildinfo

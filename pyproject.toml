@@ -49,6 +49,7 @@ max-complexity = 12
 "tests/*" = ["F841", "B011", "RUF001", "RUF003"]  # '×' (combinatoria N×M) intencional en tests
 "scripts/*" = []
 "webapp/app.py" = ["B008", "C901"]
+"webapp/api/*" = ["B008"]  # FastAPI usa Depends(...) en defaults de parámetros
 "webapp/tests/*" = ["E402"]
 
 [tool.ruff.format]
@@ -85,7 +86,7 @@ fail_under = 46
 # ratchet target: 80
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests", "webapp/tests"]
 addopts = "-ra -q --strict-markers --strict-config"
 markers = [
   "slow: checks que pueden tardar o invocar suites completas",
