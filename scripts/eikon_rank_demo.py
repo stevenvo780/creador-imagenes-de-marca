@@ -85,7 +85,8 @@ async def _render_combinations(
     print(f"\n→ Rendered {len(rendered_variations)}/{len(plan)} variations successfully")
 
     # Copy PNGs to demo directory
-    source_dir = cfg.OUTPUT_DIR / marca_slug / "banners" / "ad_leaderboard"
+    # render_combination escribe siempre bajo categoria "logos" (idx por combo)
+    source_dir = cfg.OUTPUT_DIR / marca_slug / "logos" / "ad_leaderboard"
     if source_dir.exists():
         for combo in plan:
             src = source_dir / f"combo_{combo.idx:03d}.png"
@@ -196,10 +197,10 @@ async def render_20_variations() -> dict:
 
     # Available axes
     axes_available = {
-        "palette_scheme": ["brand", "mono", "light"],
-        "background_treatment": ["solid", "gradient"],
-        "corner_shape": ["sharp", "rounded"],
-    }
+        "palette_scheme": ["brand", "mono", "light", "dark", "accent_bg", "gradient"],
+        "background_treatment": ["solid", "gradient", "geometric", "grid"],
+        "corner_shape": ["sharp", "rounded", "pill"],
+    }  # 6x4x3 = 72 param-sets unicos -> count=20 produce 20 distintas sin duplicar
 
     # Plan combinations
     plan = plan_combinations(spec, axes_available)
