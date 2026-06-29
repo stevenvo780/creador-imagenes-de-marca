@@ -1,17 +1,56 @@
 from __future__ import annotations
 
 import contextlib
+from base64 import b64encode
 from pathlib import Path
 from typing import Any
 
 from . import constants as cfg
 from .cache import compute_hash
 from .errors import EikonScreenshotError
-from .injection import injection_script
+from .injection import injection_script, injection_script_with_isotype
+from .isotype import IsotypeParams, generate_isotype
 from .layout import LAYOUT_INSPECTION_JS, aggregate_layout_status
 from .mapping import map_marca_to_vars
 from .templates import resolve_template
 from .types import TypeSpec, VariantSpec
+
+
+def _build_isotype_data_uri(
+    style: str,
+    seed_hex: str,
+    marca: dict[str, Any],
+    vars_dict: dict[str, str],
+) -> str | None:
+    """Genera el SVG procedural del isótipo y lo devuelve como data URI base64.
+
+    Devuelve None para ``style == "none"`` (o vacío), para que el render use el
+    mark por defecto del template. Determinístico: el seed deriva del input_hash.
+    """
+    if not style or style == "none":
+        return None
+    try:
+        initials = str(
+            marca.get("logo_texto")
+            or marca.get("nombre_producto")
+            or marca.get("nombre_corporativo")
+            or "E"
+        ).strip()
+        params = IsotypeParams(
+            seed=int(seed_hex[:8], 16),
+            style=style,
+            brand_initials=(initials[:2] or "E"),
+            brand_symbol=str(marca.get("logo_simbolo") or marca.get("simbolo") or "◆"),
+            primary_color=vars_dict.get("primario") or vars_dict.get("acento") or "#43b5a6",
+            accent_color=vars_dict.get("acento") or "#e0a85e",
+            bg_color=vars_dict.get("bg") or "#0f1f1d",
+        )
+        svg = generate_isotype(params)
+        if not svg.strip():
+            return None
+        return "data:image/svg+xml;base64," + b64encode(svg.encode("utf-8")).decode("ascii")
+    except Exception:
+        return None
 
 
 def _extract_data_attrs_from_combination(
@@ -206,12 +245,26 @@ async def render_asset(
         # Extract and prepare data attributes from combination params
         data_attrs_to_inject = _extract_data_attrs_from_combination(combination_params)
 
-        injection = injection_script(
-            vars_dict,
-            variant_name=variant_spec.name,
-            template_name=tipo_spec.name,
-            data_attrs=data_attrs_to_inject if data_attrs_to_inject else None,
-        )
+        # Si la combinación pide un isótipo procedural, generarlo e inyectar el SVG
+        # real en el contenedor [data-isotype-container] del template (en vez del
+        # mark por defecto). No-op para templates sin ese contenedor.
+        isotype_style = (combination_params or {}).get("isotype_style", "none")
+        isotype_uri = _build_isotype_data_uri(isotype_style, input_hash, marca, vars_dict)
+        if isotype_uri:
+            injection = injection_script_with_isotype(
+                vars_dict,
+                isotype_svg=isotype_uri,
+                variant_name=variant_spec.name,
+                template_name=tipo_spec.name,
+                data_attrs=data_attrs_to_inject if data_attrs_to_inject else None,
+            )
+        else:
+            injection = injection_script(
+                vars_dict,
+                variant_name=variant_spec.name,
+                template_name=tipo_spec.name,
+                data_attrs=data_attrs_to_inject if data_attrs_to_inject else None,
+            )
         scale_factor = tipo_spec.get_device_scale_factor(categoria)
 
         context = await browser.new_context(

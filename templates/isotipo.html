@@ -20,7 +20,7 @@
   body[data-variant="v2_mono"]  { --bg: #f4f1ea; }
   body[data-variant="v3_inverse"] { --bg: #0b1417; }
 
-  .symbol-wrap { width: 500px; height: 500px; }
+  .symbol-wrap { width: 500px; height: 500px; position: relative; }
   .symbol-wrap svg { width: 100%; height: 100%; }
 
   body[data-variant="v1_color"] .symbol-wrap svg * { stroke: url(#isoGrad); }
@@ -34,14 +34,18 @@
   body[data-isotype-style]:not([data-isotype-style="none"]) .symbol-wrap .default-mark { display: none; }
 
   .symbol-wrap .isotype-mark {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .symbol-wrap .isotype-mark img,
   .symbol-wrap .isotype-mark svg {
     width: 100%;
     height: 100%;
+    object-fit: contain;
   }
 </style>
 </head>

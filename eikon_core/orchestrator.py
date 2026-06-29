@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import time
 from pathlib import Path
 from typing import Any
@@ -167,6 +168,25 @@ async def run_generator(  # noqa: C901
     }
 
 
+@functools.lru_cache(maxsize=1)
+def _asset_dimensions() -> dict[str, tuple[int, int]]:
+    """Mapa {nombre_tipo: (width, height)} desde la taxonomía (fuente de verdad
+    de tamaños). Evita renderizar toda combinación a un 512x512 fijo y equivocado
+    (que recortaba isotipos/banners/social)."""
+    dims: dict[str, tuple[int, int]] = {}
+    for tax in (CLOUD_ATLAS_TAXONOMIA, PRIZMA_TAXONOMIA):
+        groups = tax.values() if isinstance(tax, dict) else tax
+        for group in groups:
+            specs = group if isinstance(group, list | tuple) else [group]
+            for s in specs:
+                name = getattr(s, "name", None)
+                width = getattr(s, "width", None)
+                height = getattr(s, "height", None)
+                if name and width and height:
+                    dims[name] = (int(width), int(height))
+    return dims
+
+
 async def render_combination(
     browser: Any,
     marca_slug: str,
@@ -201,11 +221,12 @@ async def render_combination(
     # Validate combination params
     axes_config.validate_combination(combination.params)
 
-    # Create fake type/variant specs
+    # Tamaño real del asset desde la taxonomía (no un 512x512 fijo que recorta).
+    width, height = _asset_dimensions().get(asset_type, (512, 512))
     tipo_spec = TypeSpec(
         name=asset_type,
-        width=512,
-        height=512,
+        width=width,
+        height=height,
         variants=(),
     )
     variant_spec = VariantSpec(
