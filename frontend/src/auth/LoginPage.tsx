@@ -3,6 +3,7 @@
  */
 import { type FormEvent, useState } from "react";
 import { ApiError } from "../api/client";
+import { slugify } from "../utils/format";
 import type { Session } from "./useSession";
 
 interface Props {
@@ -18,8 +19,7 @@ export function LoginPage({ session }: Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Campos extra de registro
-  const [tenantSlug, setTenantSlug] = useState("");
+  // Campo extra de registro: el "identificador" (slug) se deriva del nombre.
   const [tenantName, setTenantName] = useState("");
 
   async function handleSubmit(e: FormEvent) {
@@ -30,9 +30,10 @@ export function LoginPage({ session }: Props) {
       if (mode === "login") {
         await session.login(email, password);
       } else {
+        const derivedSlug = slugify(tenantName) || `cuenta-${Date.now()}`;
         await session.register({
-          tenant_slug: tenantSlug,
-          tenant_name: tenantName,
+          tenant_slug: derivedSlug,
+          tenant_name: tenantName.trim(),
           email,
           password,
         });
@@ -88,7 +89,7 @@ export function LoginPage({ session }: Props) {
               marginTop: "var(--space-1)",
             }}
           >
-            Generador de assets de marca
+            Crea la identidad visual de tu marca
           </p>
         </div>
 
@@ -150,51 +151,33 @@ export function LoginPage({ session }: Props) {
               marginBottom: "-2px",
             }}
           >
-            Registrar tenant
+            Crear cuenta
           </button>
         </div>
 
         {/* Formulario */}
         <form onSubmit={handleSubmit} noValidate>
           {mode === "register" && (
-            <>
-              <div style={{ marginBottom: "var(--space-4)" }}>
-                <label htmlFor="tenant-slug" style={labelStyle}>
-                  Slug del tenant
-                </label>
-                <input
-                  id="tenant-slug"
-                  type="text"
-                  required
-                  minLength={2}
-                  maxLength={80}
-                  value={tenantSlug}
-                  onChange={(e) => setTenantSlug(e.target.value)}
-                  placeholder="mi-empresa"
-                  style={inputStyle}
-                  aria-describedby="tenant-slug-hint"
-                />
-                <p id="tenant-slug-hint" style={hintStyle}>
-                  Identificador único, solo letras, números y guiones.
-                </p>
-              </div>
-              <div style={{ marginBottom: "var(--space-4)" }}>
-                <label htmlFor="tenant-name" style={labelStyle}>
-                  Nombre del tenant
-                </label>
-                <input
-                  id="tenant-name"
-                  type="text"
-                  required
-                  minLength={2}
-                  maxLength={120}
-                  value={tenantName}
-                  onChange={(e) => setTenantName(e.target.value)}
-                  placeholder="Mi Empresa S.A."
-                  style={inputStyle}
-                />
-              </div>
-            </>
+            <div style={{ marginBottom: "var(--space-4)" }}>
+              <label htmlFor="tenant-name" style={labelStyle}>
+                Nombre de tu negocio o marca
+              </label>
+              <input
+                id="tenant-name"
+                type="text"
+                required
+                minLength={2}
+                maxLength={120}
+                value={tenantName}
+                onChange={(e) => setTenantName(e.target.value)}
+                placeholder="Ej.: Café del Centro"
+                style={inputStyle}
+                aria-describedby="tenant-name-hint"
+              />
+              <p id="tenant-name-hint" style={hintStyle}>
+                Así se llamará tu cuenta. Podés crear varias marcas dentro de ella.
+              </p>
+            </div>
           )}
 
           <div style={{ marginBottom: "var(--space-4)" }}>

@@ -29,10 +29,12 @@ export function useWizardState() {
     currentStep: "brand",
     formData: {
       brandId: "",
-      assetTypes: ["isotipo"],
-      fixed: {},
+      // Default: símbolo + logo con símbolo (más útil que solo isotipo)
+      assetTypes: ["isotipo", "logo_symbol_color"],
+      // isotype_style arranca en "lettermark" (excluir "none" por defecto)
+      fixed: { isotype_style: "lettermark" },
       permuted: [],
-      count: 20,
+      count: 16,
       seedSalt: "",
     },
     error: "",
@@ -85,10 +87,10 @@ export function useWizardState() {
       currentStep: "brand",
       formData: {
         brandId: "",
-        assetTypes: ["isotipo"],
-        fixed: {},
+        assetTypes: ["isotipo", "logo_symbol_color"],
+        fixed: { isotype_style: "lettermark" },
         permuted: [],
-        count: 20,
+        count: 16,
         seedSalt: "",
       },
       error: "",

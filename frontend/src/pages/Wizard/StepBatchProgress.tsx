@@ -1,13 +1,36 @@
 /**
- * Resultado: muestra progreso del batch encolado.
- * Hace polling a GET /api/v1/batches/{id} cada 2s.
+ * Pantalla de progreso: muestra el estado de la generación en curso.
+ * Polling a GET /api/v1/batches/{id} cada 2 segundos.
  */
 import { useEffect, useState } from "react";
-import { batches, type Batch, ApiError } from "../../api/client";
+import { batches, type Batch, type BatchStatus, ApiError } from "../../api/client";
+import { Button, Spinner } from "../../components";
+import { formatDateTime } from "../../utils/format";
 
 interface StepBatchProgressProps {
   batchId: number;
   onCreateAnother: () => void;
+}
+
+const STATUS_LABEL: Record<BatchStatus, string> = {
+  pending:   "En cola…",
+  running:   "Generando…",
+  completed: "Listas",
+  failed:    "Error",
+  cancelled: "Cancelada",
+};
+
+const STATUS_COLOR: Record<BatchStatus, string> = {
+  pending:   "var(--slate-500)",
+  running:   "var(--teal-600)",
+  completed: "#16a34a",
+  failed:    "var(--error)",
+  cancelled: "var(--slate-500)",
+};
+
+/** Estados terminales: ya no se sigue consultando el progreso. */
+function isTerminal(status: BatchStatus): boolean {
+  return status === "completed" || status === "failed" || status === "cancelled";
 }
 
 export function StepBatchProgress({
@@ -26,342 +49,328 @@ export function StepBatchProgress({
         if (!cancelled) {
           setBatch(b);
           setLoading(false);
-          // Si aún está pending o running, sigue polleando
-          if (b.status !== "done" && b.status !== "error") {
+          if (!isTerminal(b.status)) {
             setTimeout(poll, 2000);
           }
         }
       } catch (err) {
         if (!cancelled) {
           setError(
-            err instanceof ApiError ? err.detail : "Error al obtener estado del batch.",
+            err instanceof ApiError
+              ? err.detail
+              : "No se pudo obtener el estado de la generación.",
           );
           setLoading(false);
         }
       }
     };
-
     poll();
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [batchId]);
+
+  // ── Cargando inicial ─────────────────────────────────────────────────────────
 
   if (loading) {
     return (
-      <section style={{ display: "grid", gap: "var(--space-4)" }}>
-        <div>
-          <h2
-            style={{
-              margin: "0 0 var(--space-3)",
-              fontSize: "var(--font-size-xl)",
-              fontWeight: 700,
-              color: "var(--color-text)",
-            }}
-          >
-            Batch encolado
-          </h2>
-          <p
-            style={{
-              margin: "0",
-              fontSize: "var(--font-size-sm)",
-              color: "var(--color-text-muted)",
-            }}
-            aria-live="polite"
-          >
-            Iniciando procesamiento…
-          </p>
-        </div>
+      <section
+        style={{
+          display: "grid",
+          gap: "var(--space-6)",
+          textAlign: "center",
+          padding: "var(--space-10) var(--space-6)",
+        }}
+      >
+        <Spinner size="lg" />
+        <p
+          style={{
+            margin: 0,
+            fontFamily: "var(--font-display)",
+            fontSize: "var(--font-size-xl)",
+            fontWeight: 700,
+            color: "var(--ink)",
+          }}
+          aria-live="polite"
+        >
+          Iniciando generación…
+        </p>
+        <p style={{ margin: 0, fontSize: "var(--font-size-sm)", color: "var(--slate-500)" }}>
+          Esto puede tomar unos segundos.
+        </p>
       </section>
     );
   }
+
+  // ── Error de red ─────────────────────────────────────────────────────────────
 
   if (error) {
     return (
-      <section style={{ display: "grid", gap: "var(--space-4)" }}>
+      <section style={{ display: "grid", gap: "var(--space-5)" }}>
         <h2
           style={{
             margin: 0,
-            fontSize: "var(--font-size-xl)",
+            fontFamily: "var(--font-display)",
+            fontSize: "var(--font-size-2xl)",
             fontWeight: 700,
-            color: "var(--color-error)",
+            color: "var(--error)",
           }}
         >
-          Error
+          Algo salió mal
         </h2>
         <p
+          role="alert"
           style={{
             margin: 0,
             fontSize: "var(--font-size-sm)",
-            color: "var(--color-error)",
-            background: "var(--color-error-bg)",
-            padding: "var(--space-3)",
+            color: "var(--error)",
+            background: "var(--error-bg)",
+            padding: "var(--space-3) var(--space-4)",
             borderRadius: "var(--radius-md)",
-            border: "1px solid var(--color-error)",
+            border: "1px solid var(--error)",
           }}
-          role="alert"
         >
           {error}
         </p>
-        <button
-          onClick={onCreateAnother}
-          style={{
-            padding: "var(--space-2) var(--space-4)",
-            background: "var(--color-primary)",
-            color: "#fff",
-            border: "none",
-            borderRadius: "var(--radius-md)",
-            fontWeight: 600,
-            cursor: "pointer",
-          }}
-        >
-          Crear otro batch
-        </button>
+        <Button variant="secondary" onClick={onCreateAnother}>
+          Volver al inicio
+        </Button>
       </section>
     );
   }
 
-  if (!batch) {
-    return null;
-  }
+  if (!batch) return null;
 
-  const statusColor = {
-    pending: "var(--color-text-muted)",
-    running: "var(--color-primary)",
-    done: "#22c55e",
-    error: "var(--color-error)",
-  }[batch.status];
-
-  const statusLabel = {
-    pending: "En espera",
-    running: "Procesando",
-    done: "Completado",
-    error: "Error",
-  }[batch.status];
-
-  const isComplete = batch.status === "done" || batch.status === "error";
+  const isComplete = isTerminal(batch.status);
+  const isError = batch.status === "failed" || batch.status === "cancelled";
+  const statusColor = STATUS_COLOR[batch.status] ?? "var(--slate-500)";
+  const statusLabel = STATUS_LABEL[batch.status] ?? batch.status;
+  const counts = batch.counts as Record<string, number> | undefined;
 
   return (
-    <section style={{ display: "grid", gap: "var(--space-4)" }}>
+    <section style={{ display: "grid", gap: "var(--space-6)" }}>
+
+      {/* Encabezado */}
       <div>
         <h2
           style={{
-            margin: "0 0 var(--space-3)",
-            fontSize: "var(--font-size-xl)",
+            margin: "0 0 var(--space-2)",
+            fontFamily: "var(--font-display)",
+            fontSize: "var(--font-size-2xl)",
             fontWeight: 700,
-            color: "var(--color-text)",
+            color: "var(--ink)",
           }}
         >
-          Batch #{batch.id} encolado
+          {batch.status === "completed"
+            ? "¡Tus variaciones están listas!"
+            : isError
+              ? "No pudimos terminar"
+              : "Generando tus variaciones…"}
         </h2>
-        <p
-          style={{
-            margin: 0,
-            fontSize: "var(--font-size-sm)",
-            color: "var(--color-text-muted)",
-          }}
-        >
-          Creado: {new Date(batch.created_at || "").toLocaleString()}
+        <p style={{ margin: 0, fontSize: "var(--font-size-sm)", color: "var(--slate-500)" }}>
+          {batch.status === "completed"
+            ? "El proceso terminó correctamente."
+            : isError
+              ? "El proceso se detuvo antes de terminar."
+              : "Estamos trabajando en ello. Esto puede tardar un momento."}
         </p>
       </div>
 
+      {/* Tarjeta de estado */}
       <div
         style={{
-          background: "var(--color-surface)",
-          border: "1px solid var(--color-border)",
-          borderRadius: "var(--radius-md)",
-          padding: "var(--space-4)",
+          background: "var(--white)",
+          border: "1px solid var(--line)",
+          borderRadius: "var(--radius-lg)",
+          padding: "var(--space-5) var(--space-6)",
           display: "grid",
-          gap: "var(--space-3)",
+          gap: "var(--space-4)",
+          boxShadow: "var(--shadow-sm)",
         }}
       >
-        <div>
-          <p
+
+        {/* Indicador de estado */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "var(--space-3)",
+          }}
+        >
+          {(batch.status === "pending" || batch.status === "running") && (
+            <Spinner size="sm" />
+          )}
+          {batch.status === "completed" && (
+            <span
+              style={{
+                width: "24px",
+                height: "24px",
+                borderRadius: "50%",
+                background: "#16a34a",
+                color: "#fff",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "var(--font-size-sm)",
+                fontWeight: 700,
+                flexShrink: 0,
+              }}
+              aria-hidden="true"
+            >
+              ✓
+            </span>
+          )}
+          {isError && (
+            <span
+              style={{
+                width: "24px",
+                height: "24px",
+                borderRadius: "50%",
+                background: "var(--error)",
+                color: "#fff",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "var(--font-size-sm)",
+                fontWeight: 700,
+                flexShrink: 0,
+              }}
+              aria-hidden="true"
+            >
+              ✕
+            </span>
+          )}
+          <span
             style={{
-              margin: "0 0 var(--space-2)",
-              fontSize: "var(--font-size-sm)",
-              fontWeight: 600,
-              color: "var(--color-text)",
-            }}
-          >
-            Estado
-          </p>
-          <div
-            style={{
-              display: "inline-block",
-              padding: "var(--space-2) var(--space-3)",
-              background: "var(--color-bg)",
-              border: `2px solid ${statusColor}`,
-              borderRadius: "var(--radius-md)",
-              fontSize: "var(--font-size-sm)",
-              fontWeight: 600,
+              fontFamily: "var(--font-display)",
+              fontSize: "var(--font-size-lg)",
+              fontWeight: 700,
               color: statusColor,
             }}
+            aria-live="polite"
           >
             {statusLabel}
-          </div>
+          </span>
         </div>
 
+        {/* Barra de progreso animada (solo cuando está corriendo) */}
         {batch.status === "running" && (
           <div>
-            <p
-              style={{
-                margin: "0 0 var(--space-2)",
-                fontSize: "var(--font-size-sm)",
-                fontWeight: 600,
-                color: "var(--color-text)",
-              }}
-            >
-              Progreso
-            </p>
             <div
               style={{
-                background: "var(--color-bg)",
-                borderRadius: "var(--radius-sm)",
+                height: "6px",
+                background: "var(--mist)",
+                borderRadius: "var(--radius-pill)",
                 overflow: "hidden",
               }}
             >
               <div
                 style={{
-                  height: "8px",
-                  background: "var(--color-primary)",
-                  animation: "pulse 1.5s ease-in-out infinite",
+                  height: "100%",
+                  background:
+                    "linear-gradient(90deg, var(--teal-600), var(--teal))",
+                  borderRadius: "var(--radius-pill)",
+                  animation: "eikon-pulse 1.5s ease-in-out infinite",
+                  width: "100%",
                 }}
               />
             </div>
-            <style>{`
-              @keyframes pulse {
-                0%, 100% { opacity: 0.6; }
-                50% { opacity: 1; }
-              }
-            `}</style>
-            {batch.counts && typeof batch.counts === "object" && (
+            {counts && (
               <p
                 style={{
                   margin: "var(--space-2) 0 0",
-                  fontSize: "var(--font-size-sm)",
-                  color: "var(--color-text-muted)",
+                  fontSize: "var(--font-size-xs)",
+                  color: "var(--slate-500)",
                 }}
+                aria-live="polite"
               >
-                Renderizado: {(batch.counts as Record<string, number>).rendered || 0}, Rankeado:{" "}
-                {(batch.counts as Record<string, number>).ranked || 0}
+                {counts.rendered ?? 0} generadas · {counts.ranked ?? 0} evaluadas
               </p>
             )}
           </div>
         )}
 
-        {batch.status === "done" && (
+        {/* Resultado exitoso */}
+        {batch.status === "completed" && (
           <div
             style={{
-              background: "rgba(34,197,94,0.08)",
-              padding: "var(--space-3)",
+              background: "rgba(22, 163, 74, 0.08)",
+              padding: "var(--space-3) var(--space-4)",
               borderRadius: "var(--radius-md)",
-              borderLeft: "4px solid #22c55e",
+              borderLeft: "4px solid #16a34a",
             }}
           >
-            <p
-              style={{
-                margin: 0,
-                fontSize: "var(--font-size-sm)",
-                color: "#166534",
-                fontWeight: 600,
-              }}
-            >
-              Generación completada exitosamente.
+            <p style={{ margin: 0, fontSize: "var(--font-size-sm)", color: "#166534", fontWeight: 600 }}>
+              Generación completada
             </p>
-            {batch.counts && typeof batch.counts === "object" && (
-              <p
-                style={{
-                  margin: "var(--space-1) 0 0",
-                  fontSize: "var(--font-size-sm)",
-                  color: "#166534",
-                }}
-              >
-                Total: {(batch.counts as Record<string, number>).rendered || 0} variaciones
+            {counts && (
+              <p style={{ margin: "var(--space-1) 0 0", fontSize: "var(--font-size-sm)", color: "#166534" }}>
+                {counts.rendered ?? 0} variaciones creadas
               </p>
             )}
           </div>
         )}
 
-        {batch.status === "error" && (
+        {/* Resultado con error */}
+        {isError && (
           <div
             style={{
-              background: "var(--color-error-bg)",
-              padding: "var(--space-3)",
+              background: "var(--error-bg)",
+              padding: "var(--space-3) var(--space-4)",
               borderRadius: "var(--radius-md)",
-              borderLeft: "4px solid var(--color-error)",
+              borderLeft: "4px solid var(--error)",
             }}
           >
-            <p
-              style={{
-                margin: 0,
-                fontSize: "var(--font-size-sm)",
-                color: "var(--color-error)",
-                fontWeight: 600,
-              }}
-            >
-              Hubo un error durante el procesamiento.
+            <p style={{ margin: 0, fontSize: "var(--font-size-sm)", color: "var(--error)", fontWeight: 600 }}>
+              Hubo un error durante la generación.
+            </p>
+            <p style={{ margin: "var(--space-1) 0 0", fontSize: "var(--font-size-sm)", color: "var(--error)" }}>
+              Intenta de nuevo con una configuración distinta.
             </p>
           </div>
         )}
 
+        {/* Fechas */}
         {batch.finished_at && (
-          <p
-            style={{
-              margin: 0,
-              fontSize: "var(--font-size-xs)",
-              color: "var(--color-text-muted)",
-            }}
-          >
-            Finalizado: {new Date(batch.finished_at).toLocaleString()}
+          <p style={{ margin: 0, fontSize: "var(--font-size-xs)", color: "var(--slate-500)" }}>
+            Finalizado: {formatDateTime(batch.finished_at)}
           </p>
         )}
       </div>
 
+      {/* Acciones cuando termina */}
       {isComplete && (
-        <div style={{ display: "grid", gap: "var(--space-2)", gridTemplateColumns: "1fr 1fr" }}>
-          <button
-            onClick={() => window.location.href = `/gallery?batch=${batch.id}`}
-            style={{
-              padding: "var(--space-3) var(--space-4)",
-              background: "var(--color-primary)",
-              color: "#fff",
-              border: "none",
-              borderRadius: "var(--radius-md)",
-              fontWeight: 600,
-              cursor: "pointer",
-            }}
-          >
-            Ver resultados
-          </button>
-          <button
-            onClick={onCreateAnother}
-            style={{
-              padding: "var(--space-3) var(--space-4)",
-              background: "var(--color-surface)",
-              border: "1.5px solid var(--color-border)",
-              borderRadius: "var(--radius-md)",
-              fontWeight: 600,
-              cursor: "pointer",
-              color: "var(--color-text)",
-            }}
-          >
-            Crear otro batch
-          </button>
+        <div
+          style={{
+            display: "grid",
+            gap: "var(--space-3)",
+            gridTemplateColumns: batch.status === "completed" ? "2fr 1fr" : "1fr",
+          }}
+        >
+          {batch.status === "completed" && (
+            <Button
+              variant="primary"
+              onClick={() => { window.location.href = `/gallery?batch=${batch.id}`; }}
+            >
+              Ver mis variaciones →
+            </Button>
+          )}
+          <Button variant="secondary" onClick={onCreateAnother}>
+            Generar de nuevo
+          </Button>
         </div>
       )}
 
+      {/* Mensaje de espera */}
       {batch.status === "running" && (
         <p
           style={{
             margin: 0,
             fontSize: "var(--font-size-xs)",
-            color: "var(--color-text-muted)",
+            color: "var(--slate-500)",
             textAlign: "center",
           }}
           aria-live="polite"
         >
-          Actualizando…
+          Actualizando automáticamente…
         </p>
       )}
     </section>

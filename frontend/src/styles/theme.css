@@ -1,0 +1,262 @@
+/* ============================================================
+   Eikón — Design System: Cloud Atlas
+   Paleta: teal + dorado, cálida y confiable.
+   Tipografía: Space Grotesk (display) + Inter (cuerpo)
+   ============================================================ */
+
+/* ── Fuentes locales (sin CDN en runtime) ─────────────────── */
+
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/fonts/SpaceGrotesk-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/fonts/SpaceGrotesk-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Tokens Cloud Atlas (:root) ─────────────────────────────── */
+
+:root {
+  /* === Paleta Cloud Atlas === */
+  --ink:        #0E1B1A;
+  --teal:       #2FA89A;
+  --teal-600:   #1F8276;
+  --gold:       #E0A85E;
+  --gold-dark:  #b07a2a;   /* dorado oscuro — 4.7:1 sobre blanco (AA) */
+  --paper:      #FBFAF7;
+  --mist:       #EAF1EF;
+  --line:       #DCE5E2;
+  --slate-500:  #5B6B68;
+  --slate-700:  #33403D;
+  --white:      #ffffff;
+  --error:      #c0392b;   /* 5.6:1 sobre blanco — AA ✓ */
+  --error-bg:   #fdecea;
+
+  /* === Alias semánticos (también usados por pages/) === */
+  --color-primary:        var(--teal-600);
+  --color-primary-muted:  var(--teal);
+  --color-accent:         var(--gold-dark);
+  --color-bg:             var(--paper);
+  --color-surface:        var(--white);
+  --color-border:         var(--line);
+  --color-text:           var(--ink);
+  --color-text-muted:     var(--slate-500);
+  --color-error:          var(--error);
+  --color-error-bg:       var(--error-bg);
+
+  /* === Tipografía === */
+  --font-display: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --font-body:    'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:    'Roboto Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+
+  /* aliases para pages/ */
+  --font-sans: var(--font-body);
+
+  --font-size-xs:   0.75rem;    /* 12px */
+  --font-size-sm:   0.875rem;   /* 14px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-lg:   1.125rem;   /* 18px */
+  --font-size-xl:   1.25rem;    /* 20px */
+  --font-size-2xl:  1.5rem;     /* 24px */
+  --font-size-3xl:  1.875rem;   /* 30px */
+
+  /* === Espaciado (escala 4px) === */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* === Bordes === */
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-xl:  16px;
+  --radius-pill: 999px;
+
+  /* === Sombras === */
+  --shadow-sm: 0 1px 3px rgba(14, 27, 26, 0.06), 0 1px 2px rgba(14, 27, 26, 0.04);
+  --shadow-md: 0 4px 16px rgba(14, 27, 26, 0.08), 0 2px 6px rgba(14, 27, 26, 0.05);
+  --shadow-lg: 0 10px 40px rgba(14, 27, 26, 0.12), 0 4px 12px rgba(14, 27, 26, 0.07);
+
+  /* === Transiciones === */
+  --transition-fast:   100ms ease;
+  --transition-normal: 180ms ease;
+
+  /* === Layout === */
+  --content-max:  1200px;
+  --nav-height:   60px;
+}
+
+/* ── Reset + base ─────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  tab-size: 4;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Links */
+a {
+  color: var(--teal-600);
+  text-decoration: underline;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+/* Headings — Space Grotesk */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--ink);
+  margin: 0 0 var(--space-4);
+}
+
+/* Reset para listas de navegación */
+ul, ol {
+  margin: 0;
+  padding: 0;
+}
+
+/* Imágenes responsivas */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Botones: reset base */
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* ── Foco visible — WCAG AA para navegación por teclado ───── */
+
+:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Accesibilidad — clase sr-only ──────────────────────────── */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ── Animaciones ────────────────────────────────────────────── */
+
+@keyframes eikon-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes eikon-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.45; }
+}
+
+@keyframes eikon-fadein {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Reducción de movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Utilidades básicas ─────────────────────────────────────── */
+
+.eikon-container {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+}
+
+/* ── Barra superior responsive ──────────────────────────────── */
+/* En pantallas chicas, el nav (Marcas · Crear · Galería) debe seguir
+   visible sin desbordar; ocultamos el chip de cuenta y ajustamos gaps. */
+@media (max-width: 560px) {
+  .eikon-appbar-inner {
+    gap: var(--space-2) !important;
+    padding-inline: var(--space-3) !important;
+  }
+  .eikon-appbar-tenant {
+    display: none !important;
+  }
+  .eikon-appbar-nav ul {
+    gap: 0 !important;
+  }
+  .eikon-appbar-nav a {
+    padding-inline: var(--space-2) !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .eikon-appbar-nav a {
+    padding-inline: 6px !important;
+    font-size: var(--font-size-xs) !important;
+  }
+}

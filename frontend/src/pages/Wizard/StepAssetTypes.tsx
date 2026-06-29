@@ -1,232 +1,184 @@
 /**
- * Paso 2: Seleccionar tipos de asset.
- * Presets: isotipo, isotipo+logo, custom.
+ * Paso 2: Elegir qué formatos generar.
+ * Opciones en lenguaje humano, sin jerga técnica.
  */
 import { WizardFormData } from "./useWizardState";
+import { assetTypeLabel } from "./terms";
 
 interface StepAssetTypesProps {
   formData: WizardFormData;
   onUpdate: (update: Partial<WizardFormData>) => void;
 }
 
-const PRESETS = [
+interface FormatPreset {
+  id: string;
+  label: string;
+  description: string;
+  assets: string[];
+}
+
+const PRESETS: FormatPreset[] = [
   {
-    id: "isotipo",
-    label: "Isotipo",
-    description: "Solo isotipo (símbolo sin texto)",
-    assets: ["isotipo"],
-  },
-  {
-    id: "isotipo-logo",
-    label: "Isotipo + Logo",
-    description: "Símbolo y logo con texto",
+    id: "symbol-and-logo",
+    label: "Símbolo y logo",
+    description: "El símbolo de tu marca junto al nombre. El resultado más completo.",
     assets: ["isotipo", "logo_symbol_color"],
   },
   {
-    id: "custom",
-    label: "Personalizado",
-    description: "Especifica tipos separados por coma",
-    assets: [],
+    id: "symbol-only",
+    label: "Solo símbolo",
+    description: "Únicamente el ícono gráfico, sin texto. Ideal para avatares y favicons.",
+    assets: ["isotipo"],
   },
 ];
 
-export function StepAssetTypes({
-  formData,
-  onUpdate,
-}: StepAssetTypesProps) {
+export function StepAssetTypes({ formData, onUpdate }: StepAssetTypesProps) {
+  const currentKey = formData.assetTypes.join(",");
+
   const selectedPreset =
-    formData.assetTypes.join(",") === "isotipo"
-      ? "isotipo"
-      : formData.assetTypes.join(",") === "isotipo,logo_symbol_color"
-        ? "isotipo-logo"
+    currentKey === "isotipo,logo_symbol_color"
+      ? "symbol-and-logo"
+      : currentKey === "isotipo"
+        ? "symbol-only"
         : "custom";
 
-  const handlePresetChange = (presetId: string) => {
-    if (presetId === "custom") {
-      // No cambiar assetTypes, dejar que edite manualmente
-      return;
-    }
-    const preset = PRESETS.find((p) => p.id === presetId);
-    if (preset) {
-      onUpdate({ assetTypes: preset.assets });
-    }
-  };
-
-  const handleCustomChange = (value: string) => {
-    const types = value
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
-    onUpdate({ assetTypes: types.length > 0 ? types : ["isotipo"] });
+  const handlePresetSelect = (preset: FormatPreset) => {
+    onUpdate({ assetTypes: preset.assets });
   };
 
   return (
-    <section style={{ display: "grid", gap: "var(--space-4)" }}>
+    <section style={{ display: "grid", gap: "var(--space-6)" }}>
+
+      {/* Encabezado */}
       <div>
-        <h3
+        <h2
           style={{
-            margin: "0 0 var(--space-3)",
-            fontSize: "var(--font-size-base)",
-            fontWeight: 600,
-            color: "var(--color-text)",
+            margin: "0 0 var(--space-2)",
+            fontFamily: "var(--font-display)",
+            fontSize: "var(--font-size-2xl)",
+            fontWeight: 700,
+            color: "var(--ink)",
           }}
         >
-          Paso 2: Tipos de asset
-        </h3>
+          ¿Qué quieres generar?
+        </h2>
         <p
           style={{
-            margin: "0 0 var(--space-3)",
-            fontSize: "var(--font-size-sm)",
-            color: "var(--color-text-muted)",
+            margin: 0,
+            fontSize: "var(--font-size-base)",
+            color: "var(--slate-500)",
+            lineHeight: 1.6,
           }}
         >
-          Elige qué formatos de archivo generar.
+          Elige los formatos de identidad visual que quieres crear.
         </p>
       </div>
 
-      <fieldset
-        style={{
-          border: "none",
-          padding: 0,
-          margin: 0,
-          display: "grid",
-          gap: "var(--space-3)",
-        }}
-      >
-        <legend
-          style={{
-            fontSize: "var(--font-size-sm)",
-            fontWeight: 500,
-            color: "var(--color-text)",
-            marginBottom: "var(--space-2)",
-          }}
-        >
-          Presets
-        </legend>
+      {/* Opciones */}
+      <fieldset style={{ border: "none", padding: 0, margin: 0 }}>
+        <legend className="sr-only">Formatos a generar</legend>
 
-        {PRESETS.slice(0, 2).map((preset) => (
-          <label
-            key={preset.id}
-            style={{
-              display: "flex",
-              alignItems: "flex-start",
-              gap: "var(--space-3)",
-              padding: "var(--space-2) var(--space-3)",
-              border: "1.5px solid var(--color-border)",
-              borderRadius: "var(--radius-sm)",
-              cursor: "pointer",
-              background:
-                selectedPreset === preset.id
-                  ? "rgba(26,122,110,0.04)"
-                  : "transparent",
-              transition: "background-color 0.2s",
-            }}
-          >
-            <input
-              type="radio"
-              name="asset-preset"
-              value={preset.id}
-              checked={selectedPreset === preset.id}
-              onChange={() => handlePresetChange(preset.id)}
-              style={{ marginTop: "2px", cursor: "pointer" }}
-            />
-            <div style={{ flex: 1 }}>
-              <div
+        <div style={{ display: "grid", gap: "var(--space-3)" }}>
+          {PRESETS.map((preset) => {
+            const isSelected = selectedPreset === preset.id;
+            return (
+              <label
+                key={preset.id}
                 style={{
-                  fontSize: "var(--font-size-sm)",
-                  fontWeight: 500,
-                  color: "var(--color-text)",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "var(--space-4)",
+                  padding: "var(--space-4) var(--space-5)",
+                  border: isSelected
+                    ? "2px solid var(--teal-600)"
+                    : "1.5px solid var(--line)",
+                  borderRadius: "var(--radius-lg)",
+                  cursor: "pointer",
+                  background: isSelected ? "var(--mist)" : "var(--white)",
+                  transition:
+                    "border-color var(--transition-fast), background var(--transition-fast)",
                 }}
               >
-                {preset.label}
-              </div>
-              <div
-                style={{
-                  marginTop: "2px",
-                  fontSize: "var(--font-size-sm)",
-                  color: "var(--color-text-muted)",
-                }}
-              >
-                {preset.description}
-              </div>
-            </div>
-          </label>
-        ))}
+                <input
+                  type="radio"
+                  name="format-preset"
+                  value={preset.id}
+                  checked={isSelected}
+                  onChange={() => handlePresetSelect(preset)}
+                  style={{
+                    marginTop: "3px",
+                    accentColor: "var(--teal-600)",
+                    cursor: "pointer",
+                    flexShrink: 0,
+                  }}
+                />
+                <div style={{ flex: 1 }}>
+                  <div
+                    style={{
+                      fontSize: "var(--font-size-base)",
+                      fontWeight: 700,
+                      color: isSelected ? "var(--teal-600)" : "var(--ink)",
+                      marginBottom: "var(--space-1)",
+                    }}
+                  >
+                    {preset.label}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "var(--font-size-sm)",
+                      color: "var(--slate-500)",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {preset.description}
+                  </div>
+                  {/* Detalle de los formatos incluidos */}
+                  <div
+                    style={{
+                      marginTop: "var(--space-2)",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: "var(--space-2)",
+                    }}
+                  >
+                    {preset.assets.map((a) => (
+                      <span
+                        key={a}
+                        style={{
+                          display: "inline-block",
+                          padding: "2px var(--space-2)",
+                          background: isSelected
+                            ? "rgba(47, 168, 154, 0.15)"
+                            : "var(--mist)",
+                          borderRadius: "var(--radius-sm)",
+                          fontSize: "var(--font-size-xs)",
+                          color: isSelected ? "var(--teal-600)" : "var(--slate-500)",
+                          fontWeight: 500,
+                        }}
+                      >
+                        {assetTypeLabel(a)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </label>
+            );
+          })}
+        </div>
       </fieldset>
 
-      {selectedPreset === "custom" && (
-        <div>
-          <label
-            htmlFor="asset-types-custom"
-            style={{
-              display: "block",
-              marginBottom: "var(--space-2)",
-              fontSize: "var(--font-size-sm)",
-              fontWeight: 500,
-              color: "var(--color-text)",
-            }}
-          >
-            Tipos customizados (separados por coma)
-          </label>
-          <input
-            id="asset-types-custom"
-            type="text"
-            value={formData.assetTypes.join(", ")}
-            onChange={(e) => handleCustomChange(e.target.value)}
-            placeholder="ej: isotipo, logo_symbol_color, stat_card"
-            style={{
-              display: "block",
-              width: "100%",
-              padding: "var(--space-2) var(--space-3)",
-              border: "1.5px solid var(--color-border)",
-              borderRadius: "var(--radius-sm)",
-              fontSize: "var(--font-size-sm)",
-              color: "var(--color-text)",
-              background: "var(--color-bg)",
-              boxSizing: "border-box",
-            }}
-          />
-        </div>
-      )}
-
+      {/* Formatos seleccionados — resumen */}
       <div
         style={{
-          background: "var(--color-surface)",
-          border: "1px solid var(--color-border)",
+          padding: "var(--space-3) var(--space-4)",
+          background: "var(--mist)",
           borderRadius: "var(--radius-md)",
-          padding: "var(--space-4)",
+          fontSize: "var(--font-size-sm)",
+          color: "var(--slate-700)",
         }}
       >
-        <p
-          style={{
-            margin: "0 0 var(--space-2)",
-            fontSize: "var(--font-size-sm)",
-            color: "var(--color-text-muted)",
-          }}
-        >
-          <strong>Seleccionados:</strong>
-        </p>
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "var(--space-2)",
-          }}
-        >
-          {formData.assetTypes.map((type) => (
-            <code
-              key={type}
-              style={{
-                background: "var(--color-bg)",
-                padding: "var(--space-1) var(--space-2)",
-                borderRadius: "var(--radius-sm)",
-                fontSize: "var(--font-size-sm)",
-              }}
-            >
-              {type}
-            </code>
-          ))}
-        </div>
+        <strong>Vas a generar:</strong>{" "}
+        {formData.assetTypes.map((t) => assetTypeLabel(t)).join(" · ")}
       </div>
     </section>
   );

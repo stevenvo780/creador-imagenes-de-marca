@@ -1,15 +1,39 @@
 /**
- * Paso 3: Configurar ejes (FIXED vs PERMUTE).
- * Para cada eje, elegir entre fijar a un valor o permitir que varíe.
+ * Paso 3: Elegir el estilo de las variaciones.
+ * Para cada opción de diseño: fijar un valor o "que varíe".
+ * Todo en español humano; sin términos técnicos crudos.
  */
 import { useEffect, useState } from "react";
-import { wizard, type Axis, ApiError } from "../../api/client";
+import { wizard, type Axis, type AxisOption, ApiError } from "../../api/client";
+import { Spinner } from "../../components";
 import { WizardFormData } from "./useWizardState";
+import {
+  axisLabel,
+  optionLabel,
+  optionDescription,
+  AXIS_DESCRIPTIONS,
+  ISOTYPE_STYLE_SKIP_DEFAULT,
+  ISOTYPE_STYLE_FIRST_REAL,
+} from "./terms";
 
 interface StepConfigureAxesProps {
   formData: WizardFormData;
   onUpdate: (update: Partial<WizardFormData>) => void;
   onError: (error: string) => void;
+}
+
+/** Filtra las opciones de "isotype_style" para ocultar "none" al usuario. */
+function visibleOptions(axis: Axis): AxisOption[] {
+  if (axis.name === "isotype_style") {
+    return axis.options.filter((o) => o.name !== ISOTYPE_STYLE_SKIP_DEFAULT);
+  }
+  return axis.options;
+}
+
+/** Primer valor visible para un eje (respeta filtro de "none"). */
+function firstVisibleOption(axis: Axis): string {
+  if (axis.name === "isotype_style") return ISOTYPE_STYLE_FIRST_REAL;
+  return axis.options[0]?.name ?? "";
 }
 
 export function StepConfigureAxes({
@@ -35,32 +59,27 @@ export function StepConfigureAxes({
           onError(
             err instanceof ApiError
               ? err.detail
-              : "Error al cargar ejes.",
+              : "No se pudieron cargar las opciones de diseño.",
           );
           setLoading(false);
         }
       });
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [onError]);
 
-  const handleTogglePermute = (axisName: string) => {
+  const handleToggleVary = (axisName: string, axis: Axis) => {
     const isPermuted = formData.permuted.includes(axisName);
     if (isPermuted) {
-      // Pasar a FIXED con primer valor
-      const axis = axes.find((a) => a.name === axisName);
-      if (axis && axis.options.length > 0) {
-        onUpdate({
-          permuted: formData.permuted.filter((n) => n !== axisName),
-          fixed: {
-            ...formData.fixed,
-            [axisName]: axis.options[0].name,
-          },
-        });
-      }
+      // Pasar a FIJO con el primer valor visible
+      onUpdate({
+        permuted: formData.permuted.filter((n) => n !== axisName),
+        fixed: {
+          ...formData.fixed,
+          [axisName]: firstVisibleOption(axis),
+        },
+      });
     } else {
-      // Pasar a PERMUTE, remover de fixed
+      // Pasar a VARÍA: quitar de fixed
       const newFixed = { ...formData.fixed };
       delete newFixed[axisName];
       onUpdate({
@@ -72,195 +91,240 @@ export function StepConfigureAxes({
 
   const handleFixedChange = (axisName: string, value: string) => {
     onUpdate({
-      fixed: {
-        ...formData.fixed,
-        [axisName]: value,
-      },
+      fixed: { ...formData.fixed, [axisName]: value },
     });
   };
 
   if (loading) {
     return (
-      <section style={{ display: "grid", gap: "var(--space-4)" }}>
+      <section style={{ display: "grid", gap: "var(--space-6)" }}>
         <div>
-          <h3
+          <h2
             style={{
-              margin: "0 0 var(--space-3)",
-              fontSize: "var(--font-size-base)",
-              fontWeight: 600,
-              color: "var(--color-text)",
+              margin: "0 0 var(--space-2)",
+              fontFamily: "var(--font-display)",
+              fontSize: "var(--font-size-2xl)",
+              fontWeight: 700,
+              color: "var(--ink)",
             }}
           >
-            Paso 3: Configurar ejes
-          </h3>
+            Elige el estilo
+          </h2>
         </div>
-        <p
+        <div
           style={{
-            color: "var(--color-text-muted)",
+            display: "flex",
+            alignItems: "center",
+            gap: "var(--space-3)",
+            color: "var(--slate-500)",
             fontSize: "var(--font-size-sm)",
           }}
           aria-live="polite"
         >
-          Cargando ejes…
-        </p>
+          <Spinner size="sm" />
+          Cargando opciones de diseño…
+        </div>
       </section>
     );
   }
 
+  // Conteo de opciones fijas y variables para el resumen
+  const fixedCount = Object.keys(formData.fixed).length;
+  const varyCount = formData.permuted.length;
+
   return (
-    <section style={{ display: "grid", gap: "var(--space-4)" }}>
+    <section style={{ display: "grid", gap: "var(--space-6)" }}>
+
+      {/* Encabezado */}
       <div>
-        <h3
+        <h2
           style={{
-            margin: "0 0 var(--space-3)",
-            fontSize: "var(--font-size-base)",
-            fontWeight: 600,
-            color: "var(--color-text)",
+            margin: "0 0 var(--space-2)",
+            fontFamily: "var(--font-display)",
+            fontSize: "var(--font-size-2xl)",
+            fontWeight: 700,
+            color: "var(--ink)",
           }}
         >
-          Paso 3: Configurar ejes
-        </h3>
+          Elige el estilo
+        </h2>
         <p
           style={{
-            margin: "0",
-            fontSize: "var(--font-size-sm)",
-            color: "var(--color-text-muted)",
+            margin: 0,
+            fontSize: "var(--font-size-base)",
+            color: "var(--slate-500)",
+            lineHeight: 1.6,
           }}
         >
-          Para cada eje: elige un valor fijo o permite que varíe en las
-          generaciones.
+          Para cada opción, fija un valor o deja que varíe entre las
+          generaciones. Más variaciones = más diversidad.
         </p>
       </div>
 
+      {/* Lista de ejes */}
       <div style={{ display: "grid", gap: "var(--space-4)" }}>
         {axes.map((axis) => {
           const isPermuted = formData.permuted.includes(axis.name);
           const fixedValue = formData.fixed[axis.name];
+          const opts = visibleOptions(axis);
+          const humanLabel = axisLabel(axis.name, axis.label);
+          const description = AXIS_DESCRIPTIONS[axis.name] ?? null;
 
           return (
             <fieldset
               key={axis.name}
               style={{
-                border: "1.5px solid var(--color-border)",
-                borderRadius: "var(--radius-md)",
-                padding: "var(--space-4)",
+                border: isPermuted
+                  ? "1.5px solid var(--teal)"
+                  : "1.5px solid var(--line)",
+                borderRadius: "var(--radius-lg)",
+                padding: "var(--space-4) var(--space-5)",
                 margin: 0,
                 display: "grid",
                 gap: "var(--space-3)",
+                background: isPermuted ? "var(--mist)" : "var(--white)",
+                transition: "border-color var(--transition-fast), background var(--transition-fast)",
               }}
             >
+              {/* Cabecera del eje */}
               <div
                 style={{
                   display: "flex",
-                  alignItems: "center",
+                  alignItems: "flex-start",
                   justifyContent: "space-between",
-                  gap: "var(--space-3)",
+                  gap: "var(--space-4)",
                 }}
               >
-                <div>
+                <div style={{ flex: 1 }}>
                   <legend
                     style={{
-                      fontSize: "var(--font-size-sm)",
-                      fontWeight: 600,
-                      color: "var(--color-text)",
+                      fontSize: "var(--font-size-base)",
+                      fontWeight: 700,
+                      color: "var(--ink)",
+                      padding: 0,
+                      float: "none",
                     }}
                   >
-                    {axis.label}
+                    {humanLabel}
                   </legend>
-                  <p
-                    style={{
-                      margin: "var(--space-1) 0 0",
-                      fontSize: "var(--font-size-xs)",
-                      color: "var(--color-text-muted)",
-                    }}
-                  >
-                    {axis.options.length} opciones disponibles
-                  </p>
+                  {description && (
+                    <p
+                      style={{
+                        margin: "var(--space-1) 0 0",
+                        fontSize: "var(--font-size-xs)",
+                        color: "var(--slate-500)",
+                      }}
+                    >
+                      {description}
+                    </p>
+                  )}
                 </div>
 
+                {/* Toggle: fijo / que varíe */}
                 <label
                   style={{
                     display: "flex",
                     alignItems: "center",
                     gap: "var(--space-2)",
-                    fontSize: "var(--font-size-sm)",
-                    fontWeight: 500,
                     cursor: "pointer",
-                    whiteSpace: "nowrap",
+                    flexShrink: 0,
                   }}
                 >
                   <input
                     type="checkbox"
                     checked={isPermuted}
-                    onChange={() => handleTogglePermute(axis.name)}
-                    title="Marcar para permitir que este eje varíe"
+                    onChange={() => handleToggleVary(axis.name, axis)}
+                    style={{ accentColor: "var(--teal-600)", cursor: "pointer" }}
+                    aria-label={`${humanLabel}: que varíe entre generaciones`}
                   />
-                  Permutar
+                  <span
+                    style={{
+                      fontSize: "var(--font-size-sm)",
+                      fontWeight: 600,
+                      color: isPermuted ? "var(--teal-600)" : "var(--slate-500)",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    Que varíe
+                  </span>
                 </label>
               </div>
 
+              {/* Valor fijo o indicador de variación */}
               {isPermuted ? (
                 <div
                   style={{
-                    background: "rgba(26,122,110,0.04)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "var(--space-2)",
                     padding: "var(--space-2) var(--space-3)",
-                    borderRadius: "var(--radius-sm)",
+                    background: "rgba(47, 168, 154, 0.12)",
+                    borderRadius: "var(--radius-md)",
                     fontSize: "var(--font-size-sm)",
-                    color: "var(--color-text-muted)",
+                    color: "var(--teal-600)",
+                    fontWeight: 500,
                   }}
                 >
-                  Todas las opciones ({axis.options.length}) serán generadas.
+                  <span aria-hidden="true">↕</span>
+                  Este valor va a variar entre las generaciones
+                  <span
+                    style={{
+                      marginLeft: "auto",
+                      fontSize: "var(--font-size-xs)",
+                      color: "var(--slate-500)",
+                      fontWeight: 400,
+                    }}
+                  >
+                    {opts.length} opciones
+                  </span>
                 </div>
               ) : (
-                <div>
+                <div style={{ display: "grid", gap: "var(--space-2)" }}>
                   <label
                     htmlFor={`axis-${axis.name}`}
                     style={{
-                      display: "block",
-                      marginBottom: "var(--space-2)",
                       fontSize: "var(--font-size-sm)",
                       fontWeight: 500,
-                      color: "var(--color-text)",
+                      color: "var(--slate-700)",
                     }}
                   >
-                    Valor fijo
+                    Valor elegido
                   </label>
                   <select
                     id={`axis-${axis.name}`}
                     value={fixedValue || ""}
-                    onChange={(e) =>
-                      handleFixedChange(axis.name, e.target.value)
-                    }
+                    onChange={(e) => handleFixedChange(axis.name, e.target.value)}
                     style={{
                       display: "block",
                       width: "100%",
                       padding: "var(--space-2) var(--space-3)",
-                      border: "1.5px solid var(--color-border)",
-                      borderRadius: "var(--radius-sm)",
+                      border: "1.5px solid var(--line)",
+                      borderRadius: "var(--radius-md)",
                       fontSize: "var(--font-size-sm)",
-                      color: "var(--color-text)",
-                      background: "var(--color-bg)",
+                      color: "var(--ink)",
+                      background: "var(--paper)",
                       boxSizing: "border-box",
+                      cursor: "pointer",
                     }}
                   >
-                    <option value="">— Seleccionar opción —</option>
-                    {axis.options.map((opt) => (
+                    <option value="">— Elige una opción —</option>
+                    {opts.map((opt) => (
                       <option key={opt.name} value={opt.name}>
-                        {opt.label}
+                        {optionLabel(axis.name, opt.name, opt.label)}
                       </option>
                     ))}
                   </select>
 
-                  {fixedValue && (
+                  {/* Descripción de la opción seleccionada (en español) */}
+                  {fixedValue && optionDescription(axis.name, fixedValue) && (
                     <p
                       style={{
-                        margin: "var(--space-2) 0 0",
+                        margin: 0,
                         fontSize: "var(--font-size-xs)",
-                        color: "var(--color-text-muted)",
+                        color: "var(--slate-500)",
                       }}
                     >
-                      {axis.options.find((o) => o.name === fixedValue)
-                        ?.description || ""}
+                      {optionDescription(axis.name, fixedValue)}
                     </p>
                   )}
                 </div>
@@ -270,54 +334,34 @@ export function StepConfigureAxes({
         })}
       </div>
 
-      <div
-        style={{
-          background: "var(--color-surface)",
-          border: "1px solid var(--color-border)",
-          borderRadius: "var(--radius-md)",
-          padding: "var(--space-4)",
-        }}
-      >
-        <p
+      {/* Resumen compacto */}
+      {(fixedCount > 0 || varyCount > 0) && (
+        <div
           style={{
-            margin: "0 0 var(--space-2)",
+            padding: "var(--space-3) var(--space-4)",
+            background: "var(--mist)",
+            borderRadius: "var(--radius-md)",
+            display: "flex",
+            gap: "var(--space-6)",
             fontSize: "var(--font-size-sm)",
-            fontWeight: 600,
-            color: "var(--color-text)",
+            color: "var(--slate-700)",
+            flexWrap: "wrap",
           }}
         >
-          Resumen de configuración
-        </p>
-
-        {Object.keys(formData.fixed).length > 0 && (
-          <div style={{ marginBottom: "var(--space-2)" }}>
-            <p
-              style={{
-                margin: "var(--space-1) 0",
-                fontSize: "var(--font-size-sm)",
-                color: "var(--color-text-muted)",
-              }}
-            >
-              <strong>Fijos:</strong>{" "}
-              {Object.entries(formData.fixed)
-                .map(([k, v]) => `${k}=${v}`)
-                .join(", ")}
-            </p>
-          </div>
-        )}
-
-        {formData.permuted.length > 0 && (
-          <p
-            style={{
-              margin: "var(--space-1) 0",
-              fontSize: "var(--font-size-sm)",
-              color: "var(--color-text-muted)",
-            }}
-          >
-            <strong>Permutados:</strong> {formData.permuted.join(", ")}
-          </p>
-        )}
-      </div>
+          {fixedCount > 0 && (
+            <span>
+              <strong>{fixedCount}</strong>{" "}
+              {fixedCount === 1 ? "opción fija" : "opciones fijas"}
+            </span>
+          )}
+          {varyCount > 0 && (
+            <span style={{ color: "var(--teal-600)" }}>
+              <strong>{varyCount}</strong>{" "}
+              {varyCount === 1 ? "opción varía" : "opciones varían"}
+            </span>
+          )}
+        </div>
+      )}
     </section>
   );
 }

@@ -31,7 +31,8 @@ export interface Brand {
   logo_text: string;
   logo_symbol: string;
   texts: Record<string, unknown>;
-  created_at: string | null;
+  /** Timestamp Unix en segundos (o ISO si el backend cambia). */
+  created_at: number | string | null;
 }
 
 export interface BrandCreate {
@@ -75,16 +76,27 @@ export interface BatchCreate {
   seed_salt?: string;
 }
 
+/**
+ * Estados reales que emite el backend (webapp/storage + worker).
+ * Nota: el backend usa "completed"/"failed"/"cancelled" (no "done"/"error").
+ */
+export type BatchStatus =
+  | "pending"
+  | "running"
+  | "completed"
+  | "failed"
+  | "cancelled";
+
 export interface Batch {
   id: number;
   tenant_id: number;
   brand_id: number;
   spec: Record<string, unknown>;
-  status: "pending" | "running" | "done" | "error";
+  status: BatchStatus;
   counts: Record<string, unknown>;
-  created_at: string | null;
-  started_at: string | null;
-  finished_at: string | null;
+  created_at: number | string | null;
+  started_at: number | string | null;
+  finished_at: number | string | null;
 }
 
 export interface Variation {
@@ -99,7 +111,7 @@ export interface Variation {
   wcag: Record<string, unknown> | null;
   layout_status: string | null;
   selected: boolean;
-  created_at: string | null;
+  created_at: number | string | null;
   file_url: string;
 }
 

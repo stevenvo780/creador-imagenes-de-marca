@@ -1,28 +1,46 @@
 /**
- * Página de brands: lista + creación rápida de brands del tenant.
+ * Marcas — punto de partida del flujo Eikón.
+ *
+ * Lista las marcas de la cuenta como tarjetas con cariño y permite crear una
+ * nueva con solo un nombre (el identificador técnico se deriva solo). Desde
+ * cada tarjeta se puede generar variaciones o eliminar la marca.
+ *
+ * Lenguaje 100% humano: nada de "brand", "slug", "tenant".
  */
-import { type FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { brands as brandsApi, type Brand, ApiError } from "../api/client";
+import { Button, EmptyState, Modal, SkeletonCard } from "../components";
+import { formatDate, slugify } from "../utils/format";
 
 export function BrandsPage() {
+  const navigate = useNavigate();
+
   const [items, setItems] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   // Formulario de creación
   const [showForm, setShowForm] = useState(false);
-  const [slug, setSlug] = useState("");
   const [name, setName] = useState("");
+  const [logoText, setLogoText] = useState("");
   const [busy, setBusy] = useState(false);
   const [formError, setFormError] = useState("");
 
+  // Confirmación de borrado
+  const [toDelete, setToDelete] = useState<Brand | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
   async function load() {
     setLoading(true);
+    setError("");
     try {
       const res = await brandsApi.list();
       setItems(res.items);
     } catch (err) {
-      setError(err instanceof ApiError ? err.detail : "Error al cargar brands.");
+      setError(
+        err instanceof ApiError ? err.detail : "No pudimos cargar tus marcas.",
+      );
     } finally {
       setLoading(false);
     }
@@ -32,52 +50,95 @@ export function BrandsPage() {
     void load();
   }, []);
 
+  const derivedSlug = useMemo(() => slugify(name), [name]);
+
   async function handleCreate(e: FormEvent) {
     e.preventDefault();
     setFormError("");
+    if (!name.trim()) {
+      setFormError("Escribí un nombre para tu marca.");
+      return;
+    }
     setBusy(true);
     try {
-      const brand = await brandsApi.create({ slug, name });
+      const brand = await brandsApi.create({
+        slug: derivedSlug || `marca-${Date.now()}`,
+        name: name.trim(),
+        logo_text: logoText.trim() || name.trim(),
+      });
       setItems((prev) => [brand, ...prev]);
-      setSlug("");
       setName("");
+      setLogoText("");
       setShowForm(false);
     } catch (err) {
-      setFormError(err instanceof ApiError ? err.detail : "Error al crear.");
+      setFormError(
+        err instanceof ApiError ? err.detail : "No pudimos crear la marca.",
+      );
     } finally {
       setBusy(false);
     }
   }
 
-  async function handleDelete(id: number) {
-    if (!confirm("¿Eliminar este brand?")) return;
+  async function confirmDelete() {
+    if (!toDelete) return;
+    setDeleting(true);
     try {
-      await brandsApi.delete(id);
-      setItems((prev) => prev.filter((b) => b.id !== id));
+      await brandsApi.delete(toDelete.id);
+      setItems((prev) => prev.filter((b) => b.id !== toDelete.id));
+      setToDelete(null);
     } catch (err) {
-      alert(err instanceof ApiError ? err.detail : "Error al eliminar.");
+      setFormError(
+        err instanceof ApiError ? err.detail : "No pudimos eliminar la marca.",
+      );
+    } finally {
+      setDeleting(false);
     }
   }
 
   return (
     <section>
+      {/* Cabecera */}
       <div
         style={{
           display: "flex",
-          alignItems: "center",
+          alignItems: "flex-end",
           justifyContent: "space-between",
+          gap: "var(--space-4)",
+          flexWrap: "wrap",
           marginBottom: "var(--space-6)",
         }}
       >
-        <h2 style={{ margin: 0, fontSize: "var(--font-size-xl)", fontWeight: 700 }}>
-          Brands
-        </h2>
-        <button
-          onClick={() => setShowForm((v) => !v)}
-          style={primaryButtonStyle}
+        <div>
+          <h1
+            style={{
+              margin: "0 0 var(--space-1)",
+              fontFamily: "var(--font-display)",
+              fontSize: "var(--font-size-2xl)",
+              color: "var(--ink)",
+            }}
+          >
+            Tus marcas
+          </h1>
+          <p
+            style={{
+              margin: 0,
+              fontSize: "var(--font-size-sm)",
+              color: "var(--slate-500)",
+            }}
+          >
+            Cada marca es el punto de partida para generar su identidad visual.
+          </p>
+        </div>
+
+        <Button
+          variant={showForm ? "secondary" : "primary"}
+          onClick={() => {
+            setShowForm((v) => !v);
+            setFormError("");
+          }}
         >
-          {showForm ? "Cancelar" : "+ Nuevo brand"}
-        </button>
+          {showForm ? "Cancelar" : "+ Nueva marca"}
+        </Button>
       </div>
 
       {/* Formulario de creación */}
@@ -85,49 +146,51 @@ export function BrandsPage() {
         <form
           onSubmit={handleCreate}
           style={{
-            background: "var(--color-surface)",
-            border: "1px solid var(--color-border)",
-            borderRadius: "var(--radius-md)",
-            padding: "var(--space-4)",
-            marginBottom: "var(--space-6)",
+            background: "var(--white)",
+            border: "1px solid var(--line)",
+            borderRadius: "var(--radius-lg)",
+            padding: "var(--space-6)",
+            marginBottom: "var(--space-8)",
             display: "grid",
-            gap: "var(--space-3)",
+            gap: "var(--space-4)",
+            boxShadow: "var(--shadow-sm)",
           }}
-          aria-label="Crear brand"
+          aria-label="Crear una marca nueva"
         >
-          <div style={{ display: "grid", gap: "var(--space-3)", gridTemplateColumns: "1fr 1fr" }}>
-            <div>
-              <label htmlFor="brand-slug" style={labelStyle}>
-                Slug
-              </label>
-              <input
-                id="brand-slug"
-                type="text"
-                required
-                minLength={2}
-                maxLength={80}
-                value={slug}
-                onChange={(e) => setSlug(e.target.value)}
-                placeholder="mi-marca"
-                style={inputStyle}
-              />
-            </div>
-            <div>
-              <label htmlFor="brand-name" style={labelStyle}>
-                Nombre
-              </label>
-              <input
-                id="brand-name"
-                type="text"
-                required
-                minLength={1}
-                maxLength={120}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Mi Marca"
-                style={inputStyle}
-              />
-            </div>
+          <div>
+            <label htmlFor="brand-name" style={labelStyle}>
+              Nombre de la marca
+            </label>
+            <input
+              id="brand-name"
+              type="text"
+              required
+              minLength={1}
+              maxLength={120}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Ej.: Café del Centro"
+              style={inputStyle}
+              autoFocus
+            />
+          </div>
+
+          <div>
+            <label htmlFor="brand-logo-text" style={labelStyle}>
+              Texto del logo{" "}
+              <span style={{ color: "var(--slate-500)", fontWeight: 400 }}>
+                (opcional)
+              </span>
+            </label>
+            <input
+              id="brand-logo-text"
+              type="text"
+              maxLength={120}
+              value={logoText}
+              onChange={(e) => setLogoText(e.target.value)}
+              placeholder="Lo que se lee en el logo. Por defecto, el nombre."
+              style={inputStyle}
+            />
           </div>
 
           <div aria-live="assertive" aria-atomic="true">
@@ -138,139 +201,273 @@ export function BrandsPage() {
             )}
           </div>
 
-          <button type="submit" disabled={busy} style={primaryButtonStyle} aria-busy={busy}>
-            {busy ? "Creando…" : "Crear brand"}
-          </button>
+          <div style={{ display: "flex", gap: "var(--space-3)" }}>
+            <Button type="submit" variant="primary" busy={busy}>
+              {busy ? "Creando…" : "Crear marca"}
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                setShowForm(false);
+                setFormError("");
+              }}
+              disabled={busy}
+            >
+              Cancelar
+            </Button>
+          </div>
         </form>
       )}
 
-      {/* Estado de carga y error */}
+      {/* Cargando */}
       {loading && (
-        <p style={{ color: "var(--color-text-muted)" }} aria-live="polite">
-          Cargando…
-        </p>
+        <div
+          role="status"
+          aria-label="Cargando tus marcas"
+          aria-busy="true"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+            gap: "var(--space-5)",
+          }}
+        >
+          {Array.from({ length: 3 }, (_, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </div>
       )}
+
+      {/* Error de carga */}
       {!loading && error && (
         <p style={errorStyle} role="alert">
           {error}
         </p>
       )}
 
-      {/* Tabla de brands */}
-      {!loading && !error && (
-        <div style={{ overflowX: "auto" }}>
-          {items.length === 0 ? (
-            <p style={{ color: "var(--color-text-muted)" }}>
-              No hay brands aún. Crea el primero con el botón superior.
+      {/* Vacío */}
+      {!loading && !error && items.length === 0 && !showForm && (
+        <EmptyState
+          title="Todavía no tenés marcas"
+          description="Creá tu primera marca para empezar a generar su identidad visual."
+          icon="🏷️"
+          action={
+            <Button variant="primary" onClick={() => setShowForm(true)}>
+              + Crear mi primera marca
+            </Button>
+          }
+        />
+      )}
+
+      {/* Grid de marcas */}
+      {!loading && !error && items.length > 0 && (
+        <ul
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+            gap: "var(--space-5)",
+            listStyle: "none",
+            margin: 0,
+            padding: 0,
+          }}
+          aria-label="Lista de tus marcas"
+        >
+          {items.map((b) => (
+            <li key={b.id}>
+              <BrandCard
+                brand={b}
+                onGenerate={() => navigate("/batch")}
+                onDelete={() => setToDelete(b)}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {/* Confirmación de borrado */}
+      {toDelete && (
+        <Modal
+          open
+          onClose={() => (deleting ? undefined : setToDelete(null))}
+          title="Eliminar marca"
+        >
+          <div style={{ display: "grid", gap: "var(--space-5)" }}>
+            <p style={{ margin: 0, color: "var(--slate-700)", lineHeight: 1.6 }}>
+              ¿Seguro que querés eliminar{" "}
+              <strong style={{ color: "var(--ink)" }}>{toDelete.name}</strong>?
+              Esta acción no se puede deshacer.
             </p>
-          ) : (
-            <table
-              style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                fontSize: "var(--font-size-sm)",
-              }}
-              aria-label="Lista de brands"
-            >
-              <thead>
-                <tr
-                  style={{
-                    borderBottom: "2px solid var(--color-border)",
-                    textAlign: "left",
-                    color: "var(--color-text-muted)",
-                  }}
-                >
-                  <th style={{ padding: "var(--space-2) var(--space-3)" }}>ID</th>
-                  <th style={{ padding: "var(--space-2) var(--space-3)" }}>Slug</th>
-                  <th style={{ padding: "var(--space-2) var(--space-3)" }}>Nombre</th>
-                  <th style={{ padding: "var(--space-2) var(--space-3)" }}>Creado</th>
-                  <th style={{ padding: "var(--space-2) var(--space-3)" }}>
-                    <span className="sr-only">Acciones</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((b) => (
-                  <tr
-                    key={b.id}
-                    style={{ borderBottom: "1px solid var(--color-border)" }}
-                  >
-                    <td style={{ padding: "var(--space-2) var(--space-3)", color: "var(--color-text-muted)" }}>
-                      {b.id}
-                    </td>
-                    <td style={{ padding: "var(--space-2) var(--space-3)", fontFamily: "monospace" }}>
-                      {b.slug}
-                    </td>
-                    <td style={{ padding: "var(--space-2) var(--space-3)", fontWeight: 500 }}>
-                      {b.name}
-                    </td>
-                    <td style={{ padding: "var(--space-2) var(--space-3)", color: "var(--color-text-muted)" }}>
-                      {b.created_at ? new Date(b.created_at).toLocaleDateString("es") : "—"}
-                    </td>
-                    <td style={{ padding: "var(--space-2) var(--space-3)" }}>
-                      <button
-                        onClick={() => handleDelete(b.id)}
-                        style={{
-                          background: "none",
-                          border: "1px solid var(--color-error)",
-                          color: "var(--color-error)",
-                          borderRadius: "var(--radius-sm)",
-                          padding: "2px var(--space-2)",
-                          cursor: "pointer",
-                          fontSize: "var(--font-size-xs)",
-                        }}
-                        aria-label={`Eliminar brand ${b.name}`}
-                      >
-                        Eliminar
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
+            <div style={{ display: "flex", gap: "var(--space-3)", justifyContent: "flex-end" }}>
+              <Button
+                variant="secondary"
+                onClick={() => setToDelete(null)}
+                disabled={deleting}
+              >
+                Cancelar
+              </Button>
+              <Button
+                variant="primary"
+                busy={deleting}
+                onClick={() => void confirmDelete()}
+                style={{ background: "var(--error)" }}
+              >
+                {deleting ? "Eliminando…" : "Sí, eliminar"}
+              </Button>
+            </div>
+          </div>
+        </Modal>
       )}
     </section>
   );
 }
 
+// ── Tarjeta de marca ────────────────────────────────────────────────────────────
+
+function BrandCard({
+  brand,
+  onGenerate,
+  onDelete,
+}: {
+  brand: Brand;
+  onGenerate: () => void;
+  onDelete: () => void;
+}) {
+  const initial = (brand.logo_symbol || brand.name || "?").trim().charAt(0).toUpperCase();
+
+  return (
+    <article
+      style={{
+        background: "var(--white)",
+        border: "1px solid var(--line)",
+        borderRadius: "var(--radius-lg)",
+        boxShadow: "var(--shadow-sm)",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        animation: "eikon-fadein 220ms ease both",
+      }}
+    >
+      {/* Encabezado con monograma */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "var(--space-4)",
+          padding: "var(--space-5)",
+          background: "var(--mist)",
+          borderBottom: "1px solid var(--line)",
+        }}
+      >
+        <span
+          aria-hidden="true"
+          style={{
+            width: 48,
+            height: 48,
+            flexShrink: 0,
+            borderRadius: "var(--radius-md)",
+            background: "var(--teal-600)",
+            color: "#fff",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontFamily: "var(--font-display)",
+            fontWeight: 700,
+            fontSize: "var(--font-size-xl)",
+          }}
+        >
+          {initial}
+        </span>
+        <div style={{ minWidth: 0 }}>
+          <h2
+            style={{
+              margin: 0,
+              fontFamily: "var(--font-display)",
+              fontSize: "var(--font-size-lg)",
+              color: "var(--ink)",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {brand.name}
+          </h2>
+          <p
+            style={{
+              margin: "2px 0 0",
+              fontSize: "var(--font-size-xs)",
+              color: "var(--slate-500)",
+            }}
+          >
+            Creada el {formatDate(brand.created_at)}
+          </p>
+        </div>
+      </div>
+
+      {/* Acciones */}
+      <div
+        style={{
+          padding: "var(--space-4) var(--space-5)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "var(--space-3)",
+          marginTop: "auto",
+        }}
+      >
+        <Button variant="primary" size="sm" onClick={onGenerate}>
+          Generar variaciones
+        </Button>
+        <button
+          type="button"
+          onClick={onDelete}
+          aria-label={`Eliminar la marca ${brand.name}`}
+          style={{
+            background: "none",
+            border: "none",
+            color: "var(--slate-500)",
+            fontSize: "var(--font-size-sm)",
+            cursor: "pointer",
+            padding: "var(--space-1) var(--space-2)",
+            borderRadius: "var(--radius-sm)",
+            textDecoration: "underline",
+          }}
+        >
+          Eliminar
+        </button>
+      </div>
+    </article>
+  );
+}
+
+// ── Estilos compartidos ─────────────────────────────────────────────────────────
+
 const labelStyle: React.CSSProperties = {
   display: "block",
   marginBottom: "var(--space-1)",
   fontSize: "var(--font-size-sm)",
-  fontWeight: 500,
-  color: "var(--color-text)",
+  fontWeight: 600,
+  color: "var(--ink)",
 };
 
 const inputStyle: React.CSSProperties = {
   display: "block",
   width: "100%",
-  padding: "var(--space-2) var(--space-3)",
-  border: "1.5px solid var(--color-border)",
-  borderRadius: "var(--radius-sm)",
-  fontSize: "var(--font-size-base)",
-  color: "var(--color-text)",
-  background: "var(--color-bg)",
-  boxSizing: "border-box",
-};
-
-const primaryButtonStyle: React.CSSProperties = {
-  padding: "var(--space-2) var(--space-4)",
-  background: "var(--color-primary)",
-  color: "#fff",
-  border: "none",
+  padding: "var(--space-3) var(--space-4)",
+  border: "1.5px solid var(--line)",
   borderRadius: "var(--radius-md)",
-  fontWeight: 600,
-  cursor: "pointer",
-  fontSize: "var(--font-size-sm)",
+  fontSize: "var(--font-size-base)",
+  color: "var(--ink)",
+  background: "var(--paper)",
+  boxSizing: "border-box",
+  fontFamily: "var(--font-body)",
 };
 
 const errorStyle: React.CSSProperties = {
-  color: "var(--color-error)",
+  color: "var(--error)",
   fontSize: "var(--font-size-sm)",
   padding: "var(--space-2) var(--space-3)",
-  background: "var(--color-error-bg)",
+  background: "var(--error-bg)",
   borderRadius: "var(--radius-sm)",
-  border: "1px solid var(--color-error)",
+  border: "1px solid var(--error)",
+  margin: 0,
 };
