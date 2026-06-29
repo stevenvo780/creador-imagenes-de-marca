@@ -1,0 +1,94 @@
+{% extends "_layout.html" %}
+{% set _active = 'dashboard' %}
+{% block title %}Dashboard · Eikon{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div>
+    <h1>Hola, {{ user.email.split('@')[0] if user else 'equipo' }}</h1>
+    <p class="lead">Lanza renders para cualquier marca, monitorea jobs en vivo y revisa los assets generados.</p>
+  </div>
+  <div class="right">
+    <span class="pill info"><span class="dot"></span>Tenant {{ user.tenant_slug if user else '—' }}</span>
+    <a class="btn secondary size-sm" href="/jobs">Ver todos los jobs</a>
+  </div>
+</section>
+
+<div class="grid" style="grid-template-columns: minmax(0,2fr) minmax(0,1fr); gap: var(--space-5);">
+  <article class="card elev">
+    <h2>Encolar nuevo job</h2>
+    <form hx-post="/api/v1/jobs"
+          hx-swap="none"
+          hx-on::after-request="window.__eikonToast && window.__eikonToast('Job creado (#'+event.detail.xhr.responseText.replace(/.*\"job_id\":(\\d+).*/,'$1')+')', event.detail.xhr.status<400?'ok':'danger'); refreshJobs();">
+      <div class="grid" style="grid-template-columns: 1.4fr 1fr 0.6fr; gap: var(--space-4);">
+        <label class="field">
+          <span class="field-label">Marca slug</span>
+          <input name="marca_slug" required placeholder="prizma-iris" />
+        </label>
+        <label class="field">
+          <span class="field-label">Categoría <span class="hint">opcional</span></span>
+          <select name="category">
+            <option value="">— todas —</option>
+            <option value="logos">logos</option>
+            <option value="banners">banners</option>
+            <option value="cards">cards</option>
+            <option value="og">og</option>
+            <option value="stationery">stationery</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="field-label">Modo</span>
+          <select name="dry_run">
+            <option value="true">Dry-run</option>
+            <option value="false">Real</option>
+          </select>
+        </label>
+      </div>
+      <div style="display:flex; gap: var(--space-3); align-items: center; margin-top: var(--space-3);">
+        <button class="btn primary" type="submit"><span class="spinner" hidden></span> Encolar job</button>
+        <span class="meta">El job se ejecuta en background y aparece abajo al completarse.</span>
+      </div>
+    </form>
+  </article>
+
+  <aside class="card">
+    <h2>Estado</h2>
+    <div class="split" style="grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+      <div>
+        <div class="meta">Brand assets</div>
+        <div style="font-size: 28px; font-weight: 700; color: var(--fg-0);">1,302</div>
+        <div class="meta">PNGs renderizados</div>
+      </div>
+      <div>
+        <div class="meta">Marcas activas</div>
+        <div style="font-size: 28px; font-weight: 700; color: var(--fg-0);">34</div>
+        <div class="meta">2 familias</div>
+      </div>
+      <div>
+        <div class="meta">Tests</div>
+        <div style="font-size: 28px; font-weight: 700; color: var(--ok);">276<span style="font-size:14px;color:var(--fg-3)">/0 ✗</span></div>
+        <div class="meta">167 motor + 83 variations + 26 webapp+taxon.</div>
+      </div>
+      <div>
+        <div class="meta">Engine</div>
+        <div style="font-size: 28px; font-weight: 700; color: var(--fg-0);">v1.2</div>
+        <div class="meta">Playwright + Pillow</div>
+      </div>
+    </div>
+    <p style="margin-top: var(--space-4);"><a class="linklike" href="/jobs">Ver historial completo →</a></p>
+  </aside>
+</div>
+
+<article class="card" style="margin-top: var(--space-5);">
+  <h2>Jobs recientes
+    <span class="meta">auto-refresca cada 5s · <a class="linklike" href="#" onclick="refreshJobs();return false;">refrescar</a></span>
+  </h2>
+  <div id="jobs-table"
+       hx-get="/partials/jobs-table"
+       hx-trigger="load delay:200ms, every 5s"
+       hx-swap="innerHTML">cargando…</div>
+</article>
+
+<script>
+function refreshJobs() { htmx.trigger('#jobs-table', 'refresh'); }
+</script>
+{% endblock %}

@@ -1,16 +1,24 @@
 from __future__ import annotations
 
 import asyncio
+import json
+from pathlib import Path
 from typing import Any
 
-from fastapi import BackgroundTasks, Cookie, Depends, FastAPI, HTTPException, Response
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi import BackgroundTasks, Cookie, Depends, FastAPI, HTTPException, Query, Request, Response
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from webapp.config import get_settings
 from webapp.security import create_jwt, decode_jwt
-from webapp.services.eikon_runner import parse_result_summary, run_job_subprocess, validate_category, validate_slug
+from webapp.services.eikon_runner import (
+    parse_result_summary,
+    run_job_subprocess,
+    safe_relative_path,
+    validate_category,
+    validate_slug,
+)
 from webapp.storage import (
     authenticate_user,
     create_job,
@@ -21,8 +29,12 @@ from webapp.storage import (
     list_assets,
     list_jobs,
 )
+from webapp.ui import render
 
 settings = get_settings()
+WEBAPP_DIR = Path(__file__).resolve().parent
+REPO_ROOT = WEBAPP_DIR.parent
+OUTPUT_ROOT = REPO_ROOT / "output"
 
 
 class RegisterRequest(BaseModel):
@@ -48,7 +60,8 @@ def create_app() -> FastAPI:
     app = FastAPI(title="Eikon Web MVP", version="0.1.0")
     settings.data_root.mkdir(parents=True, exist_ok=True)
     init_db(settings.sqlite_path)
-    app.mount("/static", StaticFiles(directory=str(settings.data_root.parent.parent / "webapp" / "static")), name="static")
+
+    app.mount("/static", StaticFiles(directory=str(WEBAPP_DIR / "static")), name="static")
 
     async def current_user(token: str | None = Cookie(default=None, alias=settings.cookie_name)) -> dict[str, Any]:
         if not token:
@@ -74,14 +87,7 @@ def create_app() -> FastAPI:
         except Exception as e:
             raise HTTPException(status_code=400, detail=str(e)) from e
         token = create_jwt({"sub": user["user_id"], "tenant_id": user["tenant_id"]}, settings.jwt_secret, settings.jwt_ttl_seconds)
-        response.set_cookie(
-            settings.cookie_name,
-            token,
-            httponly=True,
-            secure=settings.cookie_secure,
-            samesite="lax",
-            max_age=settings.jwt_ttl_seconds,
-        )
+        response.set_cookie(settings.cookie_name, token, httponly=True, secure=settings.cookie_secure, samesite="lax", max_age=settings.jwt_ttl_seconds)
         return {"user": {"email": user["email"], "role": user["role"]}, "tenant": {"slug": user["tenant_slug"]}}
 
     @app.post("/auth/login")
@@ -135,34 +141,88 @@ def create_app() -> FastAPI:
             validate_slug(marca_slug)
         return {"items": list_assets(settings.sqlite_path, user["tenant_id"], marca_slug)}
 
-    # ---- HTML UI (HTMX) ----
-    @app.get("/", response_class=HTMLResponse)
-    async def root() -> FileResponse:
-        return FileResponse(settings.data_root.parent.parent / "webapp" / "static" / "login.html")
+    @app.get("/api/v1/assets/file")
+    async def assets_file(path: str = Query(...), user: dict[str, Any] = Depends(current_user)) -> Response:
+        # Static read access scoped to the repo's output/ directory.
+        try:
+            absolute = safe_relative_path(OUTPUT_ROOT, OUTPUT_ROOT / path)
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e)) from e
+        if not absolute.is_file():
+            raise HTTPException(status_code=404, detail="not found")
+        return FileResponse(str(absolute))
 
-    @app.get("/login", response_class=HTMLResponse)
-    async def login_page() -> FileResponse:
-        return FileResponse(settings.data_root.parent.parent / "webapp" / "static" / "login.html")
+    # ---- HTML UI (server-side render) ----
+    @app.get("/", response_class=Response)
+    async def root() -> Response:
+        return render_template("login")
 
-    @app.get("/dashboard", response_class=HTMLResponse)
-    async def dashboard_page() -> FileResponse:
-        return FileResponse(settings.data_root.parent.parent / "webapp" / "static" / "dashboard.html")
+    @app.get("/login", response_class=Response)
+    async def login_page(request: Request) -> Response:
+        return render(request, "login.html", show_chrome=False)
 
-    @app.get("/partials/jobs", response_class=HTMLResponse)
-    async def jobs_partial(user: dict[str, Any] = Depends(current_user)) -> HTMLResponse:
+    @app.get("/dashboard", response_class=Response)
+    async def dashboard(request: Request, user: dict[str, Any] = Depends(current_user)) -> Response:
+        return render(request, "dashboard.html", user=user, active="dashboard")
+
+    @app.get("/jobs", response_class=Response)
+    async def jobs_view(request: Request, user: dict[str, Any] = Depends(current_user)) -> Response:
+        rows = list_jobs(settings.sqlite_path, user["tenant_id"], limit=200)
+        return render(request, "jobs.html", user=user, active="jobs", jobs=rows)
+
+    @app.get("/jobs/{job_id}", response_class=Response)
+    async def jobs_detail(job_id: int, request: Request, user: dict[str, Any] = Depends(current_user)) -> Response:
+        job = get_job(settings.sqlite_path, user["tenant_id"], job_id)
+        if job is None:
+            raise HTTPException(status_code=404, detail="job not found")
+        params = json.loads(job.get("params_json") or "{}")
+        result_summary = parse_result_summary(job.get("result_summary"))
+        return render(
+            request,
+            "job_detail.html",
+            user=user,
+            active="jobs",
+            job=job,
+            params=params,
+            result_summary=result_summary,
+        )
+
+    @app.get("/assets", response_class=Response)
+    async def assets_view(
+        request: Request,
+        marca_slug: str | None = None,
+        user: dict[str, Any] = Depends(current_user),
+    ) -> Response:
+        if marca_slug:
+            try:
+                validate_slug(marca_slug)
+            except ValueError as e:
+                raise HTTPException(status_code=400, detail=str(e)) from e
+        items = list_assets(settings.sqlite_path, user["tenant_id"], marca_slug, limit=240)
+        return render(
+            request,
+            "assets.html",
+            user=user,
+            active="assets",
+            assets=items,
+            marca_slug=marca_slug,
+        )
+
+    @app.get("/partials/jobs", response_class=Response)
+    async def jobs_partial_legacy(user: dict[str, Any] = Depends(current_user)) -> Response:
+        # Compatibilidad con versiones anteriores (tabla HTML simple).
         rows = list_jobs(settings.sqlite_path, user["tenant_id"], limit=20)
         if not rows:
             body = "<p><em>Sin jobs todavía.</em></p>"
         else:
-            items = []
-            for row in rows:
-                items.append(
-                    f"<tr><td>{row['id']}</td><td>{row['marca_slug']}</td>"
-                    f"<td>{row.get('category') or '—'}</td>"
-                    f"<td>{'✓' if row['dry_run'] else '✗'}</td>"
-                    f"<td><b>{row['status']}</b></td>"
-                    f"<td>{row['created_at']}</td></tr>"
-                )
+            items = [
+                f"<tr><td>{r['id']}</td><td>{r['marca_slug']}</td>"
+                f"<td>{r.get('category') or '—'}</td>"
+                f"<td>{'✓' if r['dry_run'] else '✗'}</td>"
+                f"<td>{r['status']}</td>"
+                f"<td>{r['created_at']}</td></tr>"
+                for r in rows
+            ]
             body = (
                 "<table><thead><tr>"
                 "<th>id</th><th>marca</th><th>cat</th>"
@@ -171,9 +231,22 @@ def create_app() -> FastAPI:
                 + "\n".join(items)
                 + "</tbody></table>"
             )
-        return HTMLResponse(body)
+        return Response(body, media_type="text/html")
+
+    @app.get("/partials/jobs-table", response_class=Response)
+    async def jobs_table_partial(request: Request, user: dict[str, Any] = Depends(current_user)) -> Response:
+        rows = list_jobs(settings.sqlite_path, user["tenant_id"], limit=20)
+        return render(request, "jobs_table.html", user=user, jobs=rows)
 
     return app
+
+
+def render_template(name: str) -> Response:
+    """Compatibilidad: servir login.html si llega aquí por error."""
+    target = WEBAPP_DIR / "templates" / name
+    if not target.is_file():
+        target = WEBAPP_DIR / "templates" / "login.html"
+    return FileResponse(str(target))
 
 
 app = create_app()

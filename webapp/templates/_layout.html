@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{% block title %}Eikon Web{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/tokens.css" />
+<link rel="stylesheet" href="/static/css/layout.css" />
+<link rel="stylesheet" href="/static/css/components.css" />
+<script src="/static/vendor/htmx/htmx.min.js" defer></script>
+<meta name="color-scheme" content="dark" />
+<meta name="robots" content="noindex" />
+</head>
+<body>
+<a class="skip" href="#main">Saltar al contenido</a>
+
+{% if show_chrome %}
+<header class="topbar" role="banner">
+  <a class="brand" href="/dashboard" aria-label="Eikon home">
+    <span class="brand-mark">E</span>
+    <span class="brand-name">Eikon</span>
+    <span class="brand-sub">Brand assets pipeline</span>
+  </a>
+  <nav class="nav" aria-label="Principal">
+    <a href="/dashboard" {% if active=='dashboard' %}aria-current="page"{% endif %}>Dashboard</a>
+    <a href="/jobs" {% if active=='jobs' %}aria-current="page"{% endif %}>Jobs</a>
+    <a href="/assets" {% if active=='assets' %}aria-current="page"{% endif %}>Assets</a>
+    <a href="http://{{ request.headers.get('host') }}/health" target="_blank" rel="noopener">Health</a>
+  </nav>
+  {% if user %}
+  <div style="display:flex; gap:var(--space-2); align-items:center;">
+    <span class="user-chip">
+      <span class="avatar">{{ user.email[:1]|upper }}</span>
+      <span>{{ user.email.split('@')[0] }}</span>
+      <span class="pill muted" style="border:0">{{ user.role }}</span>
+    </span>
+    <button class="btn ghost size-sm" hx-post="/auth/logout" hx-swap="none" hx-headers='{"X-Logout":"1"}'>Salir</button>
+  </div>
+  {% endif %}
+</header>
+{% endif %}
+
+<main id="main" tabindex="-1"{% if not show_chrome %} class="full"{% endif %}>
+  <div hx-on::after-request.window="if(event.detail.pathInfo && event.detail.pathInfo.responsePath && event.detail.xhr.status >= 400){ window.__eikonToast && window.__eikonToast('Error ' + event.detail.xhr.status, 'danger'); }"></div>
+  {% block content %}{% endblock %}
+</main>
+
+{% if show_chrome %}
+<footer class="foot">
+  Eikon &middot; <code>eikon-v1.2</code> &middot;
+  <a href="/health" target="_blank" rel="noopener">/health</a> &middot;
+  <a href="https://pinakotheke.local" rel="noopener">Pinakothéke</a>
+</footer>
+{% endif %}
+
+<div class="toasts" id="toasts" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+window.__eikonToast = function(message, kind) {
+  var host = document.getElementById('toasts');
+  if (!host) return;
+  var el = document.createElement('div');
+  el.className = 'toast ' + (kind || 'info');
+  el.innerHTML = '<span class="dot"></span><div>' + message + '</div>';
+  host.appendChild(el);
+  setTimeout(function() {
+    el.style.transition = 'opacity 200ms ease';
+    el.style.opacity = '0';
+    setTimeout(function() { el.remove(); }, 220);
+  }, 4200);
+};
+
+// Hint HTMX to send JSON when target form has JSON-ish inputs.
+document.addEventListener('htmx:configRequest', function(e) {
+  try {
+    var el = e.detail.target;
+    if (!el || el.tagName !== 'FORM') return;
+    var fd = new FormData(el);
+    var obj = {};
+    fd.forEach(function(v, k) {
+      if (k in obj) {
+        if (!Array.isArray(obj[k])) obj[k] = [obj[k]];
+        obj[k].push(v);
+      } else {
+        obj[k] = v;
+      }
+    });
+    e.detail.parameters = obj;
+    e.detail.headers['Content-Type'] = 'application/json';
+  } catch (_) {}
+});
+
+// Show top-bar logout via XHR + redirect (no navigation needed).
+document.body && document.body.addEventListener('htmx:afterRequest', function(evt) {
+  try {
+    if (evt.detail.pathInfo && evt.detail.pathInfo.requestPath === '/auth/logout') {
+      window.location.href = '/login';
+    }
+  } catch (_) {}
+});
+</script>
+</body>
+</html>

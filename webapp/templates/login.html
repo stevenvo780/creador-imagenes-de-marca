@@ -1,0 +1,98 @@
+{% extends "_layout.html" %}
+{% block title %}Iniciar sesión · Eikon{% endblock %}
+{% block content %}
+<div class="auth-shell">
+  <aside class="auth-hero">
+    <div>
+      <a class="brand" href="/" aria-label="Eikon">
+        <span class="brand-mark">E</span>
+        <span class="brand-name">Eikon</span>
+      </a>
+      <h1 style="margin-top:var(--space-6);">El motor de assets de marca</h1>
+      <p style="margin-top:var(--space-3);">
+        Genera <strong>PNG hi-res</strong> con validación WCAG AA, layout-fit
+        y consistencia visual entre logos, banners, cards y OG.
+      </p>
+      <ul style="margin-top:var(--space-5);">
+        <li>Multi-tenant con cookies <code>HttpOnly</code></li>
+        <li>Worker aislado con <code>subprocess</code> (nunca <code>shell=True</code>)</li>
+        <li>JWT HS256 firmado por tenant</li>
+        <li>Job runner en background con timeout configurable</li>
+      </ul>
+    </div>
+    <div class="pill-list">
+      <span class="pill ok"><span class="dot"></span>API + UI</span>
+      <span class="pill info"><span class="dot"></span>v0.1.0</span>
+      <span class="pill muted"><span class="dot"></span>eikon-v1.2</span>
+    </div>
+  </aside>
+
+  <section class="auth-form">
+    <div class="wrap">
+      <div class="segmented" role="tablist" aria-label="Modo auth">
+        <button type="button" id="tab-login" aria-selected="true" data-tab="login">Entrar</button>
+        <button type="button" id="tab-register" aria-selected="false" data-tab="register">Crear cuenta</button>
+      </div>
+
+      <form id="form-login"
+            hx-post="/auth/login"
+            hx-swap="none"
+            hx-on::after-request="if(event.detail.xhr.status<400){window.location='/dashboard'}"
+            novalidate>
+        <label class="field">
+          <span class="field-label"><span>Email<span class="req">*</span></span><span class="hint">trabajo o personal</span></span>
+          <input type="email" name="email" required autocomplete="email" placeholder="tunombre@empresa.com" />
+        </label>
+        <label class="field">
+          <span class="field-label"><span>Contraseña<span class="req">*</span></span><span class="hint">mínimo 8</span></span>
+          <input type="password" name="password" required minlength="8" autocomplete="current-password" placeholder="••••••••" />
+        </label>
+        <button type="submit" class="btn primary block">Entrar</button>
+        <p class="alt">¿No tienes cuenta? <a href="#" id="switch-register" class="linklike">Crea una</a></p>
+      </form>
+
+      <form id="form-register" hidden
+            hx-post="/auth/register"
+            hx-swap="none"
+            hx-on::after-request="if(event.detail.xhr.status<400){window.location='/dashboard'}">
+        <label class="field">
+          <span class="field-label">Slug del tenant<span class="req">*</span></span>
+          <input name="tenant_slug" required minlength="2" maxlength="80" pattern="[a-z0-9][a-z0-9_-]{1,80}" placeholder="mi-organizacion" />
+          <span class="field-help">Visible en URLs y reportes; sin espacios.</span>
+        </label>
+        <label class="field">
+          <span class="field-label">Nombre del tenant<span class="req">*</span></span>
+          <input name="tenant_name" required minlength="2" maxlength="120" placeholder="Mi Organización" />
+        </label>
+        <label class="field">
+          <span class="field-label">Email<span class="req">*</span></span>
+          <input type="email" name="email" required autocomplete="email" placeholder="tunombre@empresa.com" />
+        </label>
+        <label class="field">
+          <span class="field-label">Contraseña<span class="req">*</span></span>
+          <input type="password" name="password" required minlength="8" autocomplete="new-password" placeholder="••••••••" />
+        </label>
+        <button type="submit" class="btn primary block">Crear cuenta</button>
+        <p class="alt">¿Ya tienes cuenta? <a href="#" id="switch-login" class="linklike">Entrar</a></p>
+      </form>
+    </div>
+  </section>
+</div>
+
+<script>
+(function() {
+  function show(which) {
+    var login = document.getElementById('form-login');
+    var register = document.getElementById('form-register');
+    login.hidden = which !== 'login';
+    register.hidden = which !== 'register';
+    document.getElementById('tab-login').setAttribute('aria-selected', String(which === 'login'));
+    document.getElementById('tab-register').setAttribute('aria-selected', String(which === 'register'));
+  }
+  document.getElementById('tab-login').addEventListener('click', function() { show('login'); });
+  document.getElementById('tab-register').addEventListener('click', function() { show('register'); });
+  document.getElementById('switch-register').addEventListener('click', function(e) { e.preventDefault(); show('register'); });
+  document.getElementById('switch-login').addEventListener('click', function(e) { e.preventDefault(); show('login'); });
+})();
+</script>
+{% endblock %}

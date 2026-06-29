@@ -1,0 +1,120 @@
+/* App shell layout: top bar + main + optional side nav. Mobile-first. */
+
+.skip {
+  position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden;
+}
+.skip:focus {
+  left: var(--space-3); top: var(--space-3); width: auto; height: auto;
+  background: var(--bg-2); color: var(--fg-0); padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm); box-shadow: var(--shadow); z-index: 999;
+}
+
+.shell {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-5);
+  background: rgba(11, 20, 23, 0.85);
+  backdrop-filter: saturate(180%) blur(10px);
+  -webkit-backdrop-filter: saturate(180%) blur(10px);
+  border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; z-index: 50;
+}
+.brand {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  color: var(--fg-0); font-weight: 700;
+}
+.brand-mark {
+  width: 26px; height: 26px; border-radius: 7px;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--accent) 100%);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12), 0 2px 6px rgba(0,0,0,0.4);
+  display: grid; place-items: center; color: var(--bg-0); font-weight: 900;
+}
+.brand-name { letter-spacing: -0.02em; }
+.brand-sub { color: var(--fg-2); font-weight: 500; font-size: 12px; padding-left: var(--space-2); border-left: 1px solid var(--line); }
+
+.nav { display: flex; gap: var(--space-1); margin-left: auto; }
+.nav a {
+  color: var(--fg-2); padding: 8px 12px; border-radius: var(--radius-sm);
+  font-weight: 500;
+}
+.nav a[aria-current="page"] { background: var(--bg-2); color: var(--fg-0); }
+.nav a:hover { background: var(--bg-2); color: var(--fg-0); }
+
+.user-chip {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: 6px 10px 6px 6px; border-radius: 999px;
+  background: var(--bg-2); color: var(--fg-1); border: 1px solid var(--line);
+}
+.user-chip .avatar {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--accent); color: var(--bg-0);
+  display: grid; place-items: center; font-weight: 800; font-size: 12px;
+}
+
+main {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-5) var(--space-7);
+}
+main.full {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.page-head {
+  display: flex; align-items: end; justify-content: space-between;
+  gap: var(--space-4); margin-bottom: var(--space-6);
+}
+.page-head .lead { color: var(--fg-2); margin-top: var(--space-2); max-width: 60ch; }
+.page-head h1 { font-size: 32px; }
+.page-head .right { display: flex; align-items: center; gap: var(--space-3); color: var(--fg-2); }
+
+.grid {
+  display: grid; gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.card {
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  transition: border-color var(--t);
+}
+.card.elev { box-shadow: var(--shadow); }
+.card.flat { background: var(--bg-1); padding: var(--space-4); border-radius: var(--radius); }
+.card h2 { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-4); }
+.card .meta { color: var(--fg-2); font-size: 13px; }
+
+.split {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: var(--space-5);
+}
+
+@media (max-width: 880px) {
+  .split { grid-template-columns: 1fr; }
+  .topbar { padding: var(--space-3); gap: var(--space-2); flex-wrap: wrap; }
+  .nav { width: 100%; order: 3; }
+  main { padding: var(--space-5) var(--space-4); }
+  .page-head { flex-direction: column; align-items: flex-start; }
+}
+
+.empty {
+  padding: var(--space-7) var(--space-5);
+  text-align: center; color: var(--fg-2);
+  background: var(--bg-1); border: 1px dashed var(--line); border-radius: var(--radius-lg);
+}
+.empty strong { display: block; color: var(--fg-0); margin-bottom: var(--space-2); }
+
+footer.foot {
+  border-top: 1px solid var(--line); padding: var(--space-5);
+  color: var(--fg-3); text-align: center; font-size: 13px;
+}
+footer.foot a { color: var(--fg-2); }

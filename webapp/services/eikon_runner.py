@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from webapp.config import REPO_ROOT, Settings
-from webapp.storage import get_job, update_job_status
+from webapp.storage import add_asset, get_job, update_job_status
 
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9_-]{1,80}$")
 CATEGORY_RE = re.compile(r"^[a-z][a-z0-9_]{1,40}$")
@@ -78,8 +78,56 @@ async def run_job_subprocess(db_path: Path, settings: Settings, tenant_id: int, 
         "stderr_tail": stderr.decode("utf-8", errors="replace")[-4000:],
         "cmd": cmd,
     }
+    if proc.returncode == 0:
+        _index_assets(db_path, tenant_id, job_id, job["marca_slug"], REPO_ROOT / "output" / job["marca_slug"])
     update_job_status(db_path, job_id, "completed" if proc.returncode == 0 else "failed", result)
     return result
+
+
+def _index_assets(db_path: Path, tenant_id: int, job_id: int, marca_slug: str, marca_dir: Path) -> int:
+    """Lee _manifest.json del run real y persiste filas en assets para la galería."""
+    manifest_path = marca_dir / "_manifest.json"
+    if not manifest_path.is_file():
+        return 0
+    try:
+        data = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return 0
+    count = 0
+    for entry in data.get("assets") or []:
+        if not isinstance(entry, dict):
+            continue
+        rel = entry.get("path")
+        if not isinstance(rel, str):
+            continue
+        # `rel` viene relativo a `marca_dir`. Lo prefijamos con `marca_slug`
+        # para que la galería pueda resolverlo bajo `output/`.
+        output_path = f"{marca_slug}/{rel}"
+        png = marca_dir / rel
+        size = None
+        if png.is_file():
+            try:
+                size = png.stat().st_size
+            except OSError:
+                size = None
+        try:
+            add_asset(
+                db_path,
+                tenant_id=tenant_id,
+                job_id=job_id,
+                marca_slug=marca_slug,
+                category=str(entry.get("category") or ""),
+                type_name=str(entry.get("type") or ""),
+                variant=str(entry.get("variant") or ""),
+                output_path=output_path,
+                size_bytes=size,
+                hash=entry.get("input_hash"),
+                layout_status=entry.get("layout_status"),
+            )
+            count += 1
+        except Exception:
+            continue
+    return count
 
 
 def parse_result_summary(raw: str | None) -> dict[str, Any]:
