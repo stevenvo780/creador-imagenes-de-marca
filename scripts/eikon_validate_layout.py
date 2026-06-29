@@ -34,15 +34,15 @@ Exit codes:
     1 — con `--fail-on-errors`: hay al menos un issue
     2 — error de E/S (output dir inexistente)
 """
+
 from __future__ import annotations
 
 import argparse
 import json
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
-
 
 # Estado que se considera "pass". Cualquier otro valor es un issue.
 LAYOUT_STATUS_PASS = "pass"
@@ -70,6 +70,7 @@ def _classify_warning(warning: Any) -> str:
     """
     try:
         from eikon import classify_layout_warning  # type: ignore
+
         return classify_layout_warning(warning)
     except Exception:
         # Fallback mínimo: si el motor no está disponible, asumimos
@@ -81,8 +82,13 @@ def _classify_warning(warning: Any) -> str:
         wtype = str(warning.get("type", "")).strip()
         if not wtype:
             return "info"
-        known = {"empty_required_text", "off_viewport",
-                 "overflow_x", "overflow_y", "inspection_error"}
+        known = {
+            "empty_required_text",
+            "off_viewport",
+            "overflow_x",
+            "overflow_y",
+            "inspection_error",
+        }
         if wtype in known:
             return "fail" if wtype in {"empty_required_text", "off_viewport"} else "warn"
         return "info"
@@ -133,12 +139,14 @@ def _asset_issues(asset: dict[str, Any]) -> list[dict[str, str]]:
     # 1. layout_status != "pass" → issue de status
     layout_status = asset.get(ASSET_LAYOUT_STATUS_KEY)
     if layout_status is not None and str(layout_status).strip() != LAYOUT_STATUS_PASS:
-        issues.append({
-            "severity": str(layout_status).strip(),  # "warn" o "fail"
-            "field": ASSET_LAYOUT_STATUS_KEY,
-            "type": "",
-            "detail": f"layout_status={layout_status}",
-        })
+        issues.append(
+            {
+                "severity": str(layout_status).strip(),  # "warn" o "fail"
+                "field": ASSET_LAYOUT_STATUS_KEY,
+                "type": "",
+                "detail": f"layout_status={layout_status}",
+            }
+        )
 
     # 2. layout_warnings con severidad fail/warn → issues
     warnings = asset.get(ASSET_LAYOUT_WARNINGS_KEY) or []
@@ -161,12 +169,14 @@ def _asset_issues(asset: dict[str, Any]) -> list[dict[str, str]]:
                 wtype = str(w).strip()
             if not wtype and not detail:
                 continue
-            issues.append({
-                "severity": sev,
-                "field": ASSET_LAYOUT_WARNINGS_KEY,
-                "type": wtype,
-                "detail": detail,
-            })
+            issues.append(
+                {
+                    "severity": sev,
+                    "field": ASSET_LAYOUT_WARNINGS_KEY,
+                    "type": wtype,
+                    "detail": detail,
+                }
+            )
 
     return issues
 
@@ -177,12 +187,14 @@ def _brand_issues(manifest: dict[str, Any]) -> list[dict[str, str]]:
 
     brand_status = manifest.get(BRAND_LAYOUT_STATUS_KEY)
     if brand_status is not None and str(brand_status).strip() != LAYOUT_STATUS_PASS:
-        issues.append({
-            "severity": str(brand_status).strip(),
-            "field": f"brand.{BRAND_LAYOUT_STATUS_KEY}",
-            "type": "",
-            "detail": f"brand.layout_status={brand_status}",
-        })
+        issues.append(
+            {
+                "severity": str(brand_status).strip(),
+                "field": f"brand.{BRAND_LAYOUT_STATUS_KEY}",
+                "type": "",
+                "detail": f"brand.layout_status={brand_status}",
+            }
+        )
 
     brand_warnings = manifest.get(BRAND_LAYOUT_WARNINGS_KEY) or []
     if isinstance(brand_warnings, list):
@@ -203,12 +215,14 @@ def _brand_issues(manifest: dict[str, Any]) -> list[dict[str, str]]:
                 wtype = str(w).strip()
             if not wtype and not detail:
                 continue
-            issues.append({
-                "severity": sev,
-                "field": f"brand.{BRAND_LAYOUT_WARNINGS_KEY}",
-                "type": wtype,
-                "detail": detail,
-            })
+            issues.append(
+                {
+                    "severity": sev,
+                    "field": f"brand.{BRAND_LAYOUT_WARNINGS_KEY}",
+                    "type": wtype,
+                    "detail": detail,
+                }
+            )
 
     return issues
 
@@ -235,22 +249,23 @@ def scan_brand(brand_dir: Path) -> dict[str, Any]:
                     continue
                 assets_with_issues += 1
                 # Mantener referencia al manifest original para fidelidad
-                asset_issue_rows.append({
-                    "asset_path": str(asset.get("path", "")),
-                    "category": str(asset.get("category", "")),
-                    "type": str(asset.get("type", "")),
-                    "variant": str(asset.get("variant", "")),
-                    "layout_status": (
-                        str(asset.get(ASSET_LAYOUT_STATUS_KEY))
-                        if asset.get(ASSET_LAYOUT_STATUS_KEY) is not None
-                        else ""
-                    ),
-                    "layout_warnings": [
-                        w for w in (asset.get(ASSET_LAYOUT_WARNINGS_KEY) or [])
-                        if w is not None
-                    ],
-                    "issues": issues,
-                })
+                asset_issue_rows.append(
+                    {
+                        "asset_path": str(asset.get("path", "")),
+                        "category": str(asset.get("category", "")),
+                        "type": str(asset.get("type", "")),
+                        "variant": str(asset.get("variant", "")),
+                        "layout_status": (
+                            str(asset.get(ASSET_LAYOUT_STATUS_KEY))
+                            if asset.get(ASSET_LAYOUT_STATUS_KEY) is not None
+                            else ""
+                        ),
+                        "layout_warnings": [
+                            w for w in (asset.get(ASSET_LAYOUT_WARNINGS_KEY) or []) if w is not None
+                        ],
+                        "issues": issues,
+                    }
+                )
 
     return {
         "marca": brand_dir.name,
@@ -271,12 +286,11 @@ def scan_layout(output_dir: Path) -> dict[str, Any]:
     assets_total_scanned = sum(r["assets_total"] for r in brand_reports)
     assets_with_issues = sum(r["assets_with_issues"] for r in brand_reports)
     brands_with_issues = sum(
-        1 for r in brand_reports
-        if r["assets_with_issues"] > 0 or r["brand_issues"]
+        1 for r in brand_reports if r["assets_with_issues"] > 0 or r["brand_issues"]
     )
 
     return {
-        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "output_dir": str(output_dir.resolve()),
         "summary": {
             "brands_total": len(brand_reports),
@@ -310,7 +324,7 @@ def layout_issues_by_brand(output_dir: Path) -> dict[str, int]:
 # Renderers
 # ---------------------------------------------------------------------------
 def _truncate(s: str, n: int) -> str:
-    return s if len(s) <= n else "…" + s[-(n - 1):]
+    return s if len(s) <= n else "…" + s[-(n - 1) :]
 
 
 def render_table(report: dict[str, Any], *, only_issues: bool = False) -> str:
@@ -330,12 +344,8 @@ def render_table(report: dict[str, Any], *, only_issues: bool = False) -> str:
     if summary["assets_with_issues"] == 0 and summary["brands_with_issues"] == 0:
         lines.append("✓ Sin issues de layout detectados.")
         if not only_issues:
-            scanned = [
-                r["marca"] for r in report["brands"] if r["manifest_present"]
-            ]
-            missing = [
-                r["marca"] for r in report["brands"] if not r["manifest_present"]
-            ]
+            scanned = [r["marca"] for r in report["brands"] if r["manifest_present"]]
+            missing = [r["marca"] for r in report["brands"] if not r["manifest_present"]]
             if scanned:
                 lines.append("")
                 lines.append(f"Marcas escaneadas ({len(scanned)}):")
@@ -355,42 +365,45 @@ def render_table(report: dict[str, Any], *, only_issues: bool = False) -> str:
     for brand in report["brands"]:
         for ai in brand["asset_issues"]:
             # Un row por cada warning con severidad fail/warn
-            warn_rows = [i for i in ai["issues"]
-                         if i["field"] == ASSET_LAYOUT_WARNINGS_KEY]
+            warn_rows = [i for i in ai["issues"] if i["field"] == ASSET_LAYOUT_WARNINGS_KEY]
             # Si el asset tiene layout_status issue pero ningún warning
             # concreto, igual emitimos una fila.
-            status_rows = [i for i in ai["issues"]
-                           if i["field"] == ASSET_LAYOUT_STATUS_KEY]
+            status_rows = [i for i in ai["issues"] if i["field"] == ASSET_LAYOUT_STATUS_KEY]
             if not warn_rows and not status_rows:
                 continue
             if not warn_rows:
                 warn_rows = [{"severity": "", "type": "", "detail": ""}]
             for wr in warn_rows:
-                rows.append((
-                    brand["marca"],
-                    wr.get("severity", "") or status_rows[0]["severity"] if status_rows
-                    else (wr.get("severity", "") or "—"),
-                    _truncate(ai["asset_path"], 44),
-                    ai["category"] or "—",
-                    ai["type"] or "—",
-                    ai["variant"] or "—",
-                    ai["layout_status"] or "—",
-                    wr.get("type", "") or "—",
-                    _truncate(wr.get("detail", "") or "—", 50),
-                ))
+                rows.append(
+                    (
+                        brand["marca"],
+                        wr.get("severity", "") or status_rows[0]["severity"]
+                        if status_rows
+                        else (wr.get("severity", "") or "—"),
+                        _truncate(ai["asset_path"], 44),
+                        ai["category"] or "—",
+                        ai["type"] or "—",
+                        ai["variant"] or "—",
+                        ai["layout_status"] or "—",
+                        wr.get("type", "") or "—",
+                        _truncate(wr.get("detail", "") or "—", 50),
+                    )
+                )
         # Issues de marca (top-level)
         for bi in brand["brand_issues"]:
-            rows.append((
-                brand["marca"],
-                bi.get("severity", "—"),
-                "<brand-level>",
-                "—",
-                "—",
-                "—",
-                "—",
-                bi.get("type", "") or "—",
-                _truncate(bi.get("detail", "") or "—", 50),
-            ))
+            rows.append(
+                (
+                    brand["marca"],
+                    bi.get("severity", "—"),
+                    "<brand-level>",
+                    "—",
+                    "—",
+                    "—",
+                    "—",
+                    bi.get("type", "") or "—",
+                    _truncate(bi.get("detail", "") or "—", 50),
+                )
+            )
 
     if not only_issues:
         # Tabla resumen por marca
@@ -399,15 +412,16 @@ def render_table(report: dict[str, Any], *, only_issues: bool = False) -> str:
         body_data = []
         for r in report["brands"]:
             estado = "fail" if (r["assets_with_issues"] or r["brand_issues"]) else "ok"
-            body_data.append((
-                r["marca"],
-                str(r["assets_total"]),
-                str(r["assets_with_issues"]),
-                estado,
-            ))
+            body_data.append(
+                (
+                    r["marca"],
+                    str(r["assets_total"]),
+                    str(r["assets_with_issues"]),
+                    estado,
+                )
+            )
         widths = [
-            max(len(brand_headers[i]),
-                max((len(row[i]) for row in body_data), default=0))
+            max(len(brand_headers[i]), max((len(row[i]) for row in body_data), default=0))
             for i in range(4)
         ]
         if not body_data:
@@ -420,8 +434,9 @@ def render_table(report: dict[str, Any], *, only_issues: bool = False) -> str:
         lines.append("")
 
     # Tabla detallada de issues
-    widths = [max(len(headers[i]), max((len(r[i]) for r in rows), default=0))
-              for i in range(len(headers))]
+    widths = [
+        max(len(headers[i]), max((len(r[i]) for r in rows), default=0)) for i in range(len(headers))
+    ]
     sep = "  "
     lines.append("Issues detectados:")
     lines.append(sep.join(headers[i].ljust(widths[i]) for i in range(len(headers))))
@@ -488,8 +503,7 @@ def main() -> int:
         print(render_table(report, only_issues=args.only_issues))
 
     has_issues = (
-        report["summary"]["assets_with_issues"] > 0
-        or report["summary"]["brands_with_issues"] > 0
+        report["summary"]["assets_with_issues"] > 0 or report["summary"]["brands_with_issues"] > 0
     )
     if args.fail_on_errors and has_issues:
         return 1

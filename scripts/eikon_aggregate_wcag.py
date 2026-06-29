@@ -19,15 +19,15 @@ Exit codes:
     1 — no se encontraron reportes por marca
     2 — error de E/S inesperado
 """
+
 from __future__ import annotations
 
 import argparse
 import json
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
-
 
 # Tamaño razonable para un reporte "vacío" pero válido
 EMPTY_REPORT_PLACEHOLDER = "<empty>"
@@ -109,27 +109,31 @@ def build_aggregate(output_dir: Path) -> dict[str, Any] | None:
         if real_fails > 0:
             brands_with_failures += 1
 
-        per_brand_rows.append({
-            "marca": slug,
-            "assets": assets,
-            "aa_pass": aa_pass,
-            "aa_fail": aa_fail,
-            "no_foreground": no_fg,
-            "aaa_pass": aaa_pass,
-            "aaa_fail": aaa_fail,
-            "timestamp": ts,
-        })
+        per_brand_rows.append(
+            {
+                "marca": slug,
+                "assets": assets,
+                "aa_pass": aa_pass,
+                "aa_fail": aa_fail,
+                "no_foreground": no_fg,
+                "aaa_pass": aaa_pass,
+                "aaa_fail": aaa_fail,
+                "timestamp": ts,
+            }
+        )
 
         for fail in data.get("failing_assets_aa", []) or []:
-            failing_assets.append({
-                "marca": slug,
-                "img": fail.get("img"),
-                "contrast_ratio": fail.get("contrast_ratio"),
-                "bg_color": fail.get("bg_color"),
-                "text_color": fail.get("text_color"),
-                "issue": fail.get("issue"),
-                "no_foreground": bool(fail.get("no_foreground", False)),
-            })
+            failing_assets.append(
+                {
+                    "marca": slug,
+                    "img": fail.get("img"),
+                    "contrast_ratio": fail.get("contrast_ratio"),
+                    "bg_color": fail.get("bg_color"),
+                    "text_color": fail.get("text_color"),
+                    "issue": fail.get("issue"),
+                    "no_foreground": bool(fail.get("no_foreground", False)),
+                }
+            )
 
         total_assets += assets
         total_aa_pass += aa_pass
@@ -139,7 +143,7 @@ def build_aggregate(output_dir: Path) -> dict[str, Any] | None:
         total_aaa_fail += aaa_fail
 
     aggregate = {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "config": {
             "source": "per-brand _contraste-report.json",
             "output_dir": str(output_dir),

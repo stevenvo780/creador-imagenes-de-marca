@@ -36,7 +36,9 @@ def safe_relative_path(root: Path, candidate: Path) -> Path:
     return candidate
 
 
-def build_eikon_command(marca_slug: str, category: str | None = None, *, dry_run: bool = True) -> list[str]:
+def build_eikon_command(
+    marca_slug: str, category: str | None = None, *, dry_run: bool = True
+) -> list[str]:
     slug = validate_slug(marca_slug)
     cat = validate_category(category)
     cmd = ["python3", str(REPO_ROOT / "eikon.py"), "--marca", slug, "--skip-contraste"]
@@ -47,7 +49,9 @@ def build_eikon_command(marca_slug: str, category: str | None = None, *, dry_run
     return cmd
 
 
-async def run_job_subprocess(db_path: Path, settings: Settings, tenant_id: int, job_id: int) -> dict[str, Any]:
+async def run_job_subprocess(
+    db_path: Path, settings: Settings, tenant_id: int, job_id: int
+) -> dict[str, Any]:
     job = get_job(db_path, tenant_id, job_id)
     if job is None:
         raise KeyError(f"job no existe o no pertenece al tenant: {job_id}")
@@ -60,12 +64,14 @@ async def run_job_subprocess(db_path: Path, settings: Settings, tenant_id: int, 
         stderr=asyncio.subprocess.PIPE,
     )
     try:
-        stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=settings.job_timeout_seconds)
-    except asyncio.TimeoutError:
+        stdout, stderr = await asyncio.wait_for(
+            proc.communicate(), timeout=settings.job_timeout_seconds
+        )
+    except TimeoutError:
         proc.terminate()
         try:
             await asyncio.wait_for(proc.wait(), timeout=5)
-        except asyncio.TimeoutError:
+        except TimeoutError:
             proc.kill()
             await proc.wait()
         result = {"returncode": -1, "error": "timeout"}
@@ -79,12 +85,16 @@ async def run_job_subprocess(db_path: Path, settings: Settings, tenant_id: int, 
         "cmd": cmd,
     }
     if proc.returncode == 0:
-        _index_assets(db_path, tenant_id, job_id, job["marca_slug"], REPO_ROOT / "output" / job["marca_slug"])
+        _index_assets(
+            db_path, tenant_id, job_id, job["marca_slug"], REPO_ROOT / "output" / job["marca_slug"]
+        )
     update_job_status(db_path, job_id, "completed" if proc.returncode == 0 else "failed", result)
     return result
 
 
-def _index_assets(db_path: Path, tenant_id: int, job_id: int, marca_slug: str, marca_dir: Path) -> int:
+def _index_assets(
+    db_path: Path, tenant_id: int, job_id: int, marca_slug: str, marca_dir: Path
+) -> int:
     """Lee _manifest.json del run real y persiste filas en assets para la galería."""
     manifest_path = marca_dir / "_manifest.json"
     if not manifest_path.is_file():

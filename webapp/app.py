@@ -5,7 +5,16 @@ import json
 from pathlib import Path
 from typing import Any
 
-from fastapi import BackgroundTasks, Cookie, Depends, FastAPI, HTTPException, Query, Request, Response
+from fastapi import (
+    BackgroundTasks,
+    Cookie,
+    Depends,
+    FastAPI,
+    HTTPException,
+    Query,
+    Request,
+    Response,
+)
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -63,7 +72,9 @@ def create_app() -> FastAPI:
 
     app.mount("/static", StaticFiles(directory=str(WEBAPP_DIR / "static")), name="static")
 
-    async def current_user(token: str | None = Cookie(default=None, alias=settings.cookie_name)) -> dict[str, Any]:
+    async def current_user(
+        token: str | None = Cookie(default=None, alias=settings.cookie_name),
+    ) -> dict[str, Any]:
         if not token:
             raise HTTPException(status_code=401, detail="not authenticated")
         try:
@@ -83,21 +94,55 @@ def create_app() -> FastAPI:
     async def register(payload: RegisterRequest, response: Response) -> dict[str, Any]:
         try:
             tenant_slug = validate_slug(payload.tenant_slug)
-            user = create_tenant_user(settings.sqlite_path, tenant_slug, payload.tenant_name, payload.email, payload.password)
+            user = create_tenant_user(
+                settings.sqlite_path,
+                tenant_slug,
+                payload.tenant_name,
+                payload.email,
+                payload.password,
+            )
         except Exception as e:
             raise HTTPException(status_code=400, detail=str(e)) from e
-        token = create_jwt({"sub": user["user_id"], "tenant_id": user["tenant_id"]}, settings.jwt_secret, settings.jwt_ttl_seconds)
-        response.set_cookie(settings.cookie_name, token, httponly=True, secure=settings.cookie_secure, samesite="lax", max_age=settings.jwt_ttl_seconds)
-        return {"user": {"email": user["email"], "role": user["role"]}, "tenant": {"slug": user["tenant_slug"]}}
+        token = create_jwt(
+            {"sub": user["user_id"], "tenant_id": user["tenant_id"]},
+            settings.jwt_secret,
+            settings.jwt_ttl_seconds,
+        )
+        response.set_cookie(
+            settings.cookie_name,
+            token,
+            httponly=True,
+            secure=settings.cookie_secure,
+            samesite="lax",
+            max_age=settings.jwt_ttl_seconds,
+        )
+        return {
+            "user": {"email": user["email"], "role": user["role"]},
+            "tenant": {"slug": user["tenant_slug"]},
+        }
 
     @app.post("/auth/login")
     async def login(payload: LoginRequest, response: Response) -> dict[str, Any]:
         user = authenticate_user(settings.sqlite_path, payload.email, payload.password)
         if user is None:
             raise HTTPException(status_code=401, detail="invalid credentials")
-        token = create_jwt({"sub": user["user_id"], "tenant_id": user["tenant_id"]}, settings.jwt_secret, settings.jwt_ttl_seconds)
-        response.set_cookie(settings.cookie_name, token, httponly=True, secure=settings.cookie_secure, samesite="lax", max_age=settings.jwt_ttl_seconds)
-        return {"user": {"email": user["email"], "role": user["role"]}, "tenant": {"slug": user["tenant_slug"]}}
+        token = create_jwt(
+            {"sub": user["user_id"], "tenant_id": user["tenant_id"]},
+            settings.jwt_secret,
+            settings.jwt_ttl_seconds,
+        )
+        response.set_cookie(
+            settings.cookie_name,
+            token,
+            httponly=True,
+            secure=settings.cookie_secure,
+            samesite="lax",
+            max_age=settings.jwt_ttl_seconds,
+        )
+        return {
+            "user": {"email": user["email"], "role": user["role"]},
+            "tenant": {"slug": user["tenant_slug"]},
+        }
 
     @app.post("/auth/logout", status_code=204)
     async def logout() -> Response:
@@ -107,18 +152,34 @@ def create_app() -> FastAPI:
 
     @app.get("/auth/me")
     async def me(user: dict[str, Any] = Depends(current_user)) -> dict[str, Any]:
-        return {"user": {"id": user["user_id"], "email": user["email"], "role": user["role"]}, "tenant": {"id": user["tenant_id"], "slug": user["tenant_slug"]}}
+        return {
+            "user": {"id": user["user_id"], "email": user["email"], "role": user["role"]},
+            "tenant": {"id": user["tenant_id"], "slug": user["tenant_slug"]},
+        }
 
     @app.post("/api/v1/jobs", status_code=202)
-    async def create_job_endpoint(payload: JobCreate, bg: BackgroundTasks, user: dict[str, Any] = Depends(current_user)) -> dict[str, Any]:
+    async def create_job_endpoint(
+        payload: JobCreate, bg: BackgroundTasks, user: dict[str, Any] = Depends(current_user)
+    ) -> dict[str, Any]:
         try:
             slug = validate_slug(payload.marca_slug)
             category = validate_category(payload.category)
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e)) from e
-        job = create_job(settings.sqlite_path, user["tenant_id"], user["user_id"], slug, category, payload.dry_run, payload.params)
+        job = create_job(
+            settings.sqlite_path,
+            user["tenant_id"],
+            user["user_id"],
+            slug,
+            category,
+            payload.dry_run,
+            payload.params,
+        )
         if not payload.dry_run:
-            bg.add_task(asyncio.run, run_job_subprocess(settings.sqlite_path, settings, user["tenant_id"], job["id"]))
+            bg.add_task(
+                asyncio.run,
+                run_job_subprocess(settings.sqlite_path, settings, user["tenant_id"], job["id"]),
+            )
         return {"job_id": job["id"], "status": job["status"], "dry_run": bool(job["dry_run"])}
 
     @app.get("/api/v1/jobs")
@@ -129,7 +190,9 @@ def create_app() -> FastAPI:
         return {"items": rows}
 
     @app.get("/api/v1/jobs/{job_id}")
-    async def job_detail(job_id: int, user: dict[str, Any] = Depends(current_user)) -> dict[str, Any]:
+    async def job_detail(
+        job_id: int, user: dict[str, Any] = Depends(current_user)
+    ) -> dict[str, Any]:
         row = get_job(settings.sqlite_path, user["tenant_id"], job_id)
         if row is None:
             raise HTTPException(status_code=404, detail="job not found")
@@ -137,13 +200,17 @@ def create_app() -> FastAPI:
         return {"job": row}
 
     @app.get("/api/v1/assets")
-    async def assets(marca_slug: str | None = None, user: dict[str, Any] = Depends(current_user)) -> dict[str, Any]:
+    async def assets(
+        marca_slug: str | None = None, user: dict[str, Any] = Depends(current_user)
+    ) -> dict[str, Any]:
         if marca_slug:
             validate_slug(marca_slug)
         return {"items": list_assets(settings.sqlite_path, user["tenant_id"], marca_slug)}
 
     @app.get("/api/v1/assets/file")
-    async def assets_file(path: str = Query(...), user: dict[str, Any] = Depends(current_user)) -> Response:
+    async def assets_file(
+        path: str = Query(...), user: dict[str, Any] = Depends(current_user)
+    ) -> Response:
         # Static read access scoped to the repo's output/ directory.
         try:
             absolute = safe_relative_path(OUTPUT_ROOT, OUTPUT_ROOT / path)
@@ -181,7 +248,9 @@ def create_app() -> FastAPI:
         return render(request, "jobs.html", user=user, active="jobs", jobs=rows)
 
     @app.get("/jobs/{job_id}", response_class=Response)
-    async def jobs_detail(job_id: int, request: Request, user: dict[str, Any] = Depends(current_user)) -> Response:
+    async def jobs_detail(
+        job_id: int, request: Request, user: dict[str, Any] = Depends(current_user)
+    ) -> Response:
         job = get_job(settings.sqlite_path, user["tenant_id"], job_id)
         if job is None:
             raise HTTPException(status_code=404, detail="job not found")
@@ -237,14 +306,14 @@ def create_app() -> FastAPI:
                 "<table><thead><tr>"
                 "<th>id</th><th>marca</th><th>cat</th>"
                 "<th>dry</th><th>status</th><th>created</th>"
-                "</tr></thead><tbody>"
-                + "\n".join(items)
-                + "</tbody></table>"
+                "</tr></thead><tbody>" + "\n".join(items) + "</tbody></table>"
             )
         return Response(body, media_type="text/html")
 
     @app.get("/partials/jobs-table", response_class=Response)
-    async def jobs_table_partial(request: Request, user: dict[str, Any] = Depends(current_user)) -> Response:
+    async def jobs_table_partial(
+        request: Request, user: dict[str, Any] = Depends(current_user)
+    ) -> Response:
         rows = list_jobs(settings.sqlite_path, user["tenant_id"], limit=20)
         return render(request, "jobs_table.html", user=user, jobs=rows)
 

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import time
 from pathlib import Path
-from typing import Optional
 
 from . import constants as cfg
 from .brand import brand_family, load_json
@@ -15,7 +14,7 @@ from .taxonomy import CLOUD_ATLAS_TAXONOMIA, PRIZMA_TAXONOMIA
 
 async def run_generator(
     marcas_a_procesar: list[str],
-    filtro_categoria: Optional[str] = None,
+    filtro_categoria: str | None = None,
     dry_run: bool = False,
     use_cache: bool = False,
     max_parallel: int = 1,
@@ -107,7 +106,9 @@ async def run_generator(
 
                 remarkeados = post_validate_assets(asset_metas, marca_slug)
                 if remarkeados > 0:
-                    print(f"     ⟳ Post-validación: {remarkeados} assets re-marcados como generated (PNG existe)")
+                    print(
+                        f"     ⟳ Post-validación: {remarkeados} assets re-marcados como generated (PNG existe)"
+                    )
                     gen = sum(1 for a in asset_metas if a["status"] == "generated")
                     skip = sum(1 for a in asset_metas if a["status"] == "cached")
                     err = sum(1 for a in asset_metas if a["status"] == "error")

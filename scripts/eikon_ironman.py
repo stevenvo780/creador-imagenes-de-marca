@@ -24,15 +24,16 @@ Exit codes:
     1 — con `--fail-on-thresholds`: algún threshold fue superado.
     2 — error de E/S/configuración (p.ej. output dir inexistente).
 """
+
 from __future__ import annotations
 
 import argparse
 import json
 import sys
-from datetime import datetime, timezone
+from collections.abc import Iterable, Sequence
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Iterable, Sequence
-
+from typing import Any
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
@@ -42,7 +43,6 @@ if str(SCRIPT_DIR) not in sys.path:
 from eikon_aggregate_wcag import build_aggregate  # noqa: E402
 from eikon_validate_layout import scan_layout  # noqa: E402
 
-
 DEFAULT_MANIFEST = "_manifest.json"
 DEFAULT_PIXEL_REPORT = "_pixel-report.json"
 DEFAULT_MIN_BYTES = 1024
@@ -50,7 +50,7 @@ DEFAULT_FG_DENSITY_MIN = 0.005
 
 
 def _utc_now() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+    return datetime.now(UTC).isoformat(timespec="seconds")
 
 
 def _safe_int(value: Any, default: int = 0) -> int:
@@ -119,13 +119,15 @@ def _pixel_row_from_report(
                 continue
             issues = asset.get("issues") or []
             if issues:
-                issue_assets.append({
-                    "path": asset.get("path"),
-                    "category": asset.get("category"),
-                    "type": asset.get("type"),
-                    "variant": asset.get("variant"),
-                    "issues": issues,
-                })
+                issue_assets.append(
+                    {
+                        "path": asset.get("path"),
+                        "category": asset.get("category"),
+                        "type": asset.get("type"),
+                        "variant": asset.get("variant"),
+                        "issues": issues,
+                    }
+                )
 
     identical = report.get("identical_variants") or []
     if not isinstance(identical, list):
@@ -165,8 +167,8 @@ def scan_pixels(
     validate_marca = None
     if refresh:
         try:
-            from eikon_validate_pixels import validate_marca as _validate_marca  # noqa: E402
-        except Exception as e:  # noqa: BLE001 - diagnosticar dependencia Pillow, etc.
+            from eikon_validate_pixels import validate_marca as _validate_marca
+        except Exception as e:
             return {
                 "refresh": True,
                 "refresh_error": f"No se pudo importar eikon_validate_pixels: {type(e).__name__}: {e}",
@@ -205,21 +207,25 @@ def scan_pixels(
                 )
             except FileNotFoundError as e:
                 reports_missing += 1
-                rows.append(_pixel_row_from_report(
-                    brand_dir,
-                    None,
-                    source="computed",
-                    error=str(e),
-                ))
+                rows.append(
+                    _pixel_row_from_report(
+                        brand_dir,
+                        None,
+                        source="computed",
+                        error=str(e),
+                    )
+                )
                 continue
             except (OSError, json.JSONDecodeError, ValueError) as e:
                 reports_invalid += 1
-                rows.append(_pixel_row_from_report(
-                    brand_dir,
-                    None,
-                    source="computed",
-                    error=f"{type(e).__name__}: {e}",
-                ))
+                rows.append(
+                    _pixel_row_from_report(
+                        brand_dir,
+                        None,
+                        source="computed",
+                        error=f"{type(e).__name__}: {e}",
+                    )
+                )
                 continue
             rows.append(_pixel_row_from_report(brand_dir, report, source="computed"))
             continue
@@ -227,23 +233,27 @@ def scan_pixels(
         report_path = brand_dir / DEFAULT_PIXEL_REPORT
         if not report_path.is_file():
             reports_missing += 1
-            rows.append(_pixel_row_from_report(
-                brand_dir,
-                None,
-                source="disk",
-                error=f"missing {report_path}",
-            ))
+            rows.append(
+                _pixel_row_from_report(
+                    brand_dir,
+                    None,
+                    source="disk",
+                    error=f"missing {report_path}",
+                )
+            )
             continue
 
         report, error = _load_json(report_path)
         if error:
             reports_invalid += 1
-            rows.append(_pixel_row_from_report(
-                brand_dir,
-                None,
-                source="disk",
-                error=error,
-            ))
+            rows.append(
+                _pixel_row_from_report(
+                    brand_dir,
+                    None,
+                    source="disk",
+                    error=error,
+                )
+            )
             continue
         rows.append(_pixel_row_from_report(brand_dir, report, source="disk"))
 
@@ -263,7 +273,8 @@ def scan_pixels(
         "warnings": total_warnings,
         "identical_variant_pairs": total_identical,
         "brands_with_errors": sum(
-            1 for r in rows
+            1
+            for r in rows
             if r["errors"] > 0 or r["identical_variant_pairs"] > 0 or r["report_error"]
         ),
         "brands_with_warnings": sum(1 for r in rows if r["warnings"] > 0),
@@ -274,13 +285,10 @@ def scan_pixels(
 def summarize_layout(layout_report: dict[str, Any]) -> dict[str, Any]:
     rows = layout_report.get("brands") or []
     manifests_missing = sum(
-        1 for row in rows
-        if isinstance(row, dict) and not row.get("manifest_present")
+        1 for row in rows if isinstance(row, dict) and not row.get("manifest_present")
     )
     brand_level_issues = sum(
-        len(row.get("brand_issues") or [])
-        for row in rows
-        if isinstance(row, dict)
+        len(row.get("brand_issues") or []) for row in rows if isinstance(row, dict)
     )
     summary = dict(layout_report.get("summary") or {})
     summary["manifests_missing"] = manifests_missing
@@ -309,9 +317,7 @@ def summarize_wcag(
 
     per_brand = aggregate.get("per_brand") or []
     report_names = {
-        str(row.get("marca"))
-        for row in per_brand
-        if isinstance(row, dict) and row.get("marca")
+        str(row.get("marca")) for row in per_brand if isinstance(row, dict) and row.get("marca")
     }
     aa_fail = _safe_int((aggregate.get("wcag_aa") or {}).get("fail"))
     no_fg = _safe_int((aggregate.get("wcag_aa") or {}).get("no_foreground"))
@@ -400,23 +406,27 @@ def build_brand_rows(
         wr = wcag_by_brand.get(marca)
         aa_fail = _safe_int((wr or {}).get("aa_fail"))
         no_fg = _safe_int((wr or {}).get("no_foreground"))
-        rows.append({
-            "marca": marca,
-            "layout_manifest_present": bool(lr and lr.get("manifest_present")),
-            "layout_assets": _safe_int((lr or {}).get("assets_total")),
-            "layout_assets_with_issues": _safe_int((lr or {}).get("assets_with_issues")),
-            "layout_brand_issues": len((lr or {}).get("brand_issues") or []),
-            "pixel_report_present": bool(pr and pr.get("report_present")),
-            "pixel_report_valid": bool(pr and pr.get("report_valid")),
-            "pixel_errors": _safe_int((pr or {}).get("errors")),
-            "pixel_warnings": _safe_int((pr or {}).get("warnings")),
-            "pixel_identical_variant_pairs": _safe_int((pr or {}).get("identical_variant_pairs")),
-            "wcag_report_present": wr is not None,
-            "wcag_aa_fail": aa_fail,
-            "wcag_aa_real_fail": max(0, aa_fail - no_fg),
-            "wcag_no_foreground": no_fg,
-            "status": _brand_status(lr, pr, wr),
-        })
+        rows.append(
+            {
+                "marca": marca,
+                "layout_manifest_present": bool(lr and lr.get("manifest_present")),
+                "layout_assets": _safe_int((lr or {}).get("assets_total")),
+                "layout_assets_with_issues": _safe_int((lr or {}).get("assets_with_issues")),
+                "layout_brand_issues": len((lr or {}).get("brand_issues") or []),
+                "pixel_report_present": bool(pr and pr.get("report_present")),
+                "pixel_report_valid": bool(pr and pr.get("report_valid")),
+                "pixel_errors": _safe_int((pr or {}).get("errors")),
+                "pixel_warnings": _safe_int((pr or {}).get("warnings")),
+                "pixel_identical_variant_pairs": _safe_int(
+                    (pr or {}).get("identical_variant_pairs")
+                ),
+                "wcag_report_present": wr is not None,
+                "wcag_aa_fail": aa_fail,
+                "wcag_aa_real_fail": max(0, aa_fail - no_fg),
+                "wcag_no_foreground": no_fg,
+                "status": _brand_status(lr, pr, wr),
+            }
+        )
     return rows
 
 
@@ -497,10 +507,7 @@ def build_ironman_report(args: argparse.Namespace) -> dict[str, Any]:
         "summary": {
             "brands_total": len(brand_names),
             "layout": summarize_layout(layout_report),
-            "pixels": {
-                k: v for k, v in pixels.items()
-                if k not in {"brands"}
-            },
+            "pixels": {k: v for k, v in pixels.items() if k not in {"brands"}},
             "wcag": wcag,
         },
         "brands": build_brand_rows(layout_report, pixels, wcag, brand_names),
@@ -563,9 +570,7 @@ def render_table(report: dict[str, Any], *, only_issues: bool = False) -> str:
         lines.append("")
         lines.append("Thresholds superados:")
         for breach in report["threshold_breaches"]:
-            lines.append(
-                f"  · {breach['metric']}: {breach['value']} > {breach['max']}"
-            )
+            lines.append(f"  · {breach['metric']}: {breach['value']} > {breach['max']}")
 
     rows = [r for r in report["brands"] if not only_issues or _row_has_issue(r)]
     if not rows:
@@ -590,22 +595,21 @@ def render_table(report: dict[str, Any], *, only_issues: bool = False) -> str:
             missing.append("pixel")
         if not row["wcag_report_present"]:
             missing.append("wcag")
-        table_rows.append((
-            str(row["marca"]),
-            f"{row['layout_assets_with_issues']}/{row['layout_assets']}",
-            f"{row['pixel_errors']}/{row['pixel_warnings']}/{row['pixel_identical_variant_pairs']}",
-            f"{row['wcag_aa_real_fail']}/{row['wcag_no_foreground']}",
-            ",".join(missing) if missing else "—",
-            str(row["status"]),
-        ))
+        table_rows.append(
+            (
+                str(row["marca"]),
+                f"{row['layout_assets_with_issues']}/{row['layout_assets']}",
+                f"{row['pixel_errors']}/{row['pixel_warnings']}/{row['pixel_identical_variant_pairs']}",
+                f"{row['wcag_aa_real_fail']}/{row['wcag_no_foreground']}",
+                ",".join(missing) if missing else "—",
+                str(row["status"]),
+            )
+        )
 
-    widths = [
-        max(len(headers[i]), max(len(r[i]) for r in table_rows))
-        for i in range(len(headers))
-    ]
+    widths = [max(len(headers[i]), max(len(r[i]) for r in table_rows)) for i in range(len(headers))]
     sep = "  "
     lines.append("")
-    lines.append("Resumen por marca" + (" (sólo issues)" if only_issues else "" ) + ":")
+    lines.append("Resumen por marca" + (" (sólo issues)" if only_issues else "") + ":")
     lines.append(sep.join(headers[i].ljust(widths[i]) for i in range(len(headers))))
     lines.append(sep.join("-" * widths[i] for i in range(len(headers))))
     for row in table_rows:
@@ -676,8 +680,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         type=float,
         default=DEFAULT_FG_DENSITY_MIN,
         help=(
-            "Con --refresh-pixels, densidad mínima foreground "
-            f"(default: {DEFAULT_FG_DENSITY_MIN})."
+            f"Con --refresh-pixels, densidad mínima foreground (default: {DEFAULT_FG_DENSITY_MIN})."
         ),
     )
 

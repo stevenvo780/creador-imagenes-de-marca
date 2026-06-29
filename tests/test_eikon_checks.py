@@ -21,10 +21,9 @@ Valida:
 
 from __future__ import annotations
 
+import json
 import sys
 import tempfile
-import json
-import os
 from pathlib import Path
 
 # Añadir eikon/ al path para importar contrast_validator y eikon
@@ -55,7 +54,7 @@ def section(title: str) -> None:
 def test_template_resolution() -> None:
     section("1. Template resolution")
 
-    from eikon import resolve_template, TEMPLATES_DIR
+    from eikon import TEMPLATES_DIR, resolve_template
 
     found = resolve_template("lockup_horizontal", TEMPLATES_DIR)
     check(
@@ -155,6 +154,7 @@ def test_foreground_detection() -> None:
 
     try:
         import numpy as np
+
         from contrast_validator import ContrastValidator
     except ImportError as e:
         check("numpy disponible", False, str(e))
@@ -183,7 +183,7 @@ def test_foreground_detection() -> None:
     fg_rgb, diag = v._detect_foreground_robust(img, bg_rgb)
     check(
         "foreground detectado correctamente (multi-región)",
-        fg_rgb is not None and "ok" in diag.lower() or "detectado" in diag.lower(),
+        (fg_rgb is not None and "ok" in diag.lower()) or "detectado" in diag.lower(),
         f"fg={fg_rgb} diag={diag}",
     )
     if fg_rgb is not None:
@@ -225,9 +225,7 @@ def test_srgb_linear() -> None:
 
     lin = v._srgb_to_linear(10)
     expected = (10 / 255.0) / 12.92
-    check(
-        "sRGB(10) usa rama lineal", abs(lin - expected) < 0.0001, f"={lin:.6f} vs {expected:.6f}"
-    )
+    check("sRGB(10) usa rama lineal", abs(lin - expected) < 0.0001, f"={lin:.6f} vs {expected:.6f}")
 
     lin128 = v._srgb_to_linear(128)
     check(
@@ -243,8 +241,9 @@ def test_srgb_linear() -> None:
 def test_cache_hash_stable() -> None:
     section("5. Cache hash stable")
 
-    from eikon import compute_hash, TEMPLATES_DIR
     import tempfile
+
+    from eikon import TEMPLATES_DIR, compute_hash
 
     marca = {
         "slug": "test-marca",
@@ -298,16 +297,37 @@ def test_cache_hash_stable() -> None:
 def test_manifest_basic() -> None:
     section("6. Manifest write/read básico")
 
-    from eikon import write_manifest, OUTPUT_DIR
+    from eikon import OUTPUT_DIR, write_manifest
 
     marca_slug = "__test_manifest_tmp__"
     assets = [
-        {"category": "logos", "type": "lockup", "variant": "v1_color",
-         "width": 1200, "height": 400, "status": "generated", "warnings": []},
-        {"category": "logos", "type": "lockup", "variant": "v2_mono",
-         "width": 1200, "height": 400, "status": "cached", "warnings": []},
-        {"category": "cards", "type": "business", "variant": "v1_front",
-         "width": 1050, "height": 600, "status": "error", "warnings": ["timeout"]},
+        {
+            "category": "logos",
+            "type": "lockup",
+            "variant": "v1_color",
+            "width": 1200,
+            "height": 400,
+            "status": "generated",
+            "warnings": [],
+        },
+        {
+            "category": "logos",
+            "type": "lockup",
+            "variant": "v2_mono",
+            "width": 1200,
+            "height": 400,
+            "status": "cached",
+            "warnings": [],
+        },
+        {
+            "category": "cards",
+            "type": "business",
+            "variant": "v1_front",
+            "width": 1050,
+            "height": 600,
+            "status": "error",
+            "warnings": ["timeout"],
+        },
     ]
 
     try:
@@ -325,6 +345,7 @@ def test_manifest_basic() -> None:
     finally:
         # Limpiar
         import shutil
+
         tmp_dir = OUTPUT_DIR / marca_slug
         if tmp_dir.exists():
             shutil.rmtree(tmp_dir)
@@ -336,8 +357,7 @@ def test_manifest_basic() -> None:
 def test_dry_run_no_outputs() -> None:
     section("7. Dry-run no escribe outputs")
 
-    from eikon import render_asset, TEMPLATES_DIR, OUTPUT_DIR
-    from eikon import TypeSpec, VariantSpec
+    from eikon import OUTPUT_DIR, TypeSpec, VariantSpec
 
     # Verificar que dry_run=True no crea archivos PNG
     # Este test verifica el flujo lógico sin necesitar Playwright real.
@@ -358,8 +378,9 @@ def test_dry_run_no_outputs() -> None:
     # Simulamos la verificación: dry_run sin Playwright no debería ser posible aquí.
     # En su lugar, verificamos que la función existe y acepta dry_run.
 
-    check("render_asset acepta dry_run=True", True,
-          "verificado por firma de función — test sintético")
+    check(
+        "render_asset acepta dry_run=True", True, "verificado por firma de función — test sintético"
+    )
 
     # Verificar que el output dir no tiene el dir de prueba
     test_dir = OUTPUT_DIR / "__dryrun_test__"
@@ -374,6 +395,7 @@ def test_contrast_configurable_thresholds() -> None:
 
     try:
         import numpy as np
+
         from contrast_validator import ContrastValidator
     except ImportError as e:
         check("numpy disponible", False, str(e))
@@ -435,7 +457,7 @@ def test_contrast_configurable_thresholds() -> None:
 def test_text_limits() -> None:
     section("9. Text limits: truncado seguro")
 
-    from eikon import shorten_text, apply_text_limits
+    from eikon import apply_text_limits, shorten_text
 
     # shorten_text básico
     check("texto corto sin cambios", shorten_text("Hola", 100) == "Hola")
@@ -444,17 +466,17 @@ def test_text_limits() -> None:
 
     # Truncado en límite de palabra
     result = shorten_text("Este es un texto muy largo que debe truncarse", 20)
-    check("truncado en palabra", len(result) <= 23 and result.endswith("…"),
-          f"result={result}")
+    check("truncado en palabra", len(result) <= 23 and result.endswith("…"), f"result={result}")
 
     # Truncado en punto (el punto debe estar a pos >= max(40, 55% del límite))
     # límite 80, 55% = 44, max(40,44)=44. Punto en pos 46 → debe truncar ahí.
     result2 = shorten_text(
         "Introducción al pensamiento complejo en sistemas abiertos. Segunda parte del estudio sobre emergencia y autoorganización con aplicaciones prácticas en biología computacional y redes neuronales artificiales.",
-        80
+        80,
     )
-    check("truncado en punto (pos >= 44)", "." not in result2 and "…" in result2,
-          f"result={result2}")
+    check(
+        "truncado en punto (pos >= 44)", "." not in result2 and "…" in result2, f"result={result2}"
+    )
 
     # apply_text_limits
     vars_dict = {
@@ -464,14 +486,26 @@ def test_text_limits() -> None:
         "url": "https://ejemplo.com/pagina/muy/larga",
     }
     result = apply_text_limits("business_card", vars_dict)
-    check("título truncado a 38 chars", len(result["titulo"]) <= 41,
-          f"titulo={result['titulo']} (len={len(result['titulo'])})")
-    check("subtítulo truncado a 44 chars", len(result["subtitulo"]) <= 47,
-          f"subtitulo={result['subtitulo']} (len={len(result['subtitulo'])})")
-    check("copy truncado a 62 chars", len(result["copy"]) <= 65,
-          f"copy={result['copy']} (len={len(result['copy'])})")
-    check("url truncada a 36 chars", len(result["url"]) <= 39,
-          f"url={result['url']} (len={len(result['url'])})")
+    check(
+        "título truncado a 38 chars",
+        len(result["titulo"]) <= 41,
+        f"titulo={result['titulo']} (len={len(result['titulo'])})",
+    )
+    check(
+        "subtítulo truncado a 44 chars",
+        len(result["subtitulo"]) <= 47,
+        f"subtitulo={result['subtitulo']} (len={len(result['subtitulo'])})",
+    )
+    check(
+        "copy truncado a 62 chars",
+        len(result["copy"]) <= 65,
+        f"copy={result['copy']} (len={len(result['copy'])})",
+    )
+    check(
+        "url truncada a 36 chars",
+        len(result["url"]) <= 39,
+        f"url={result['url']} (len={len(result['url'])})",
+    )
 
 
 # =============================================================================
@@ -494,6 +528,7 @@ def test_contrast_per_brand_report() -> None:
         try:
             import numpy as np
             from PIL import Image
+
             h, w = 100, 200
             img_array = np.full((h, w, 3), [11, 20, 23], dtype=np.uint8)
             img_array[20:80, 20:180] = [232, 224, 212]
@@ -506,8 +541,11 @@ def test_contrast_per_brand_report() -> None:
         # Validar solo la marca
         validator = ContrastValidator(output_dir)
         results = validator.validate_all(marca_slug="test-brand")
-        check("validate_all con marca_slug retorna resultados", len(results) > 0,
-              f"results={len(results)}")
+        check(
+            "validate_all con marca_slug retorna resultados",
+            len(results) > 0,
+            f"results={len(results)}",
+        )
 
         # Escribir reporte per-brand
         report_path = marca_dir / "_contraste-report.json"
@@ -516,13 +554,15 @@ def test_contrast_per_brand_report() -> None:
 
         data = json.loads(report_path.read_text())
         check("reporte tiene timestamp", "timestamp" in data)
-        check("reporte tiene total_assets", data.get("total_assets", 0) > 0,
-              f"total={data.get('total_assets')}")
+        check(
+            "reporte tiene total_assets",
+            data.get("total_assets", 0) > 0,
+            f"total={data.get('total_assets')}",
+        )
 
         # Verificar que NO se creó reporte global
         global_report = output_dir / "_contraste-report.json"
-        check("reporte global NO creado cuando se pide por marca",
-              not global_report.exists())
+        check("reporte global NO creado cuando se pide por marca", not global_report.exists())
 
 
 # =============================================================================
@@ -531,7 +571,7 @@ def test_contrast_per_brand_report() -> None:
 def test_post_validate_remarks_error() -> None:
     section("11. Post-validación: re-marca error espurio si PNG existe")
 
-    from eikon import post_validate_assets, OUTPUT_DIR, MIN_PNG_BYTES
+    from eikon import post_validate_assets
 
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp = Path(tmpdir)
@@ -566,22 +606,30 @@ def test_post_validate_remarks_error() -> None:
 
         # Monkey-patch OUTPUT_DIR temporalmente
         import eikon
+
         original_output_dir = eikon.OUTPUT_DIR
         eikon.OUTPUT_DIR = tmp / "output"
 
         try:
             remarkeados = post_validate_assets(asset_metas, marca_slug)
-            check("1 asset re-marcado como generated", remarkeados == 1,
-                  f"remarkeados={remarkeados}")
-            check("v1_color ahora es 'generated'",
-                  asset_metas[0]["status"] == "generated",
-                  f"status={asset_metas[0]['status']}")
-            check("v1_color tiene warning de post-validación",
-                  any("post-validated" in w for w in asset_metas[0]["warnings"]),
-                  f"warnings={asset_metas[0]['warnings']}")
-            check("v2_mono sigue como 'error' (PNG no existe)",
-                  asset_metas[1]["status"] == "error",
-                  f"status={asset_metas[1]['status']}")
+            check(
+                "1 asset re-marcado como generated", remarkeados == 1, f"remarkeados={remarkeados}"
+            )
+            check(
+                "v1_color ahora es 'generated'",
+                asset_metas[0]["status"] == "generated",
+                f"status={asset_metas[0]['status']}",
+            )
+            check(
+                "v1_color tiene warning de post-validación",
+                any("post-validated" in w for w in asset_metas[0]["warnings"]),
+                f"warnings={asset_metas[0]['warnings']}",
+            )
+            check(
+                "v2_mono sigue como 'error' (PNG no existe)",
+                asset_metas[1]["status"] == "error",
+                f"status={asset_metas[1]['status']}",
+            )
         finally:
             eikon.OUTPUT_DIR = original_output_dir
 
@@ -593,9 +641,9 @@ def test_classify_layout_warning() -> None:
     section("12. Layout warning: classify_layout_warning (pura)")
 
     from eikon import (
-        classify_layout_warning,
-        LAYOUT_WARNING_SEVERITY,
         LAYOUT_SELECTORS,
+        LAYOUT_WARNING_SEVERITY,
+        classify_layout_warning,
     )
 
     # Severidades por tipo conocido
@@ -692,19 +740,25 @@ def test_aggregate_layout_status() -> None:
     # Mix warn + fail → fail (fail domina)
     check(
         "warn + fail → fail (fail domina)",
-        aggregate_layout_status([
-            {"type": "overflow_x"},
-            {"type": "empty_required_text"},
-        ]) == "fail",
+        aggregate_layout_status(
+            [
+                {"type": "overflow_x"},
+                {"type": "empty_required_text"},
+            ]
+        )
+        == "fail",
     )
 
     # Múltiples warns → warn
     check(
         "dos warnings → warn",
-        aggregate_layout_status([
-            {"type": "overflow_x"},
-            {"type": "overflow_y"},
-        ]) == "warn",
+        aggregate_layout_status(
+            [
+                {"type": "overflow_x"},
+                {"type": "overflow_y"},
+            ]
+        )
+        == "warn",
     )
 
     # Verifica que es pura: misma entrada → misma salida
@@ -716,8 +770,7 @@ def test_aggregate_layout_status() -> None:
     # La lista de entrada NO se muta (idempotente en side effects)
     before = list(warnings)
     aggregate_layout_status(warnings)
-    check("pureza: no muta la entrada", warnings == before,
-          f"antes={before} después={warnings}")
+    check("pureza: no muta la entrada", warnings == before, f"antes={before} después={warnings}")
 
 
 # =============================================================================
@@ -737,13 +790,11 @@ def test_layout_inspection_js_present() -> None:
     # El JS exporta las verificaciones pedidas por el brief
     check(
         "JS inspecciona scrollWidth/scrollHeight",
-        "scrollWidth" in LAYOUT_INSPECTION_JS
-        and "scrollHeight" in LAYOUT_INSPECTION_JS,
+        "scrollWidth" in LAYOUT_INSPECTION_JS and "scrollHeight" in LAYOUT_INSPECTION_JS,
     )
     check(
         "JS inspecciona clientWidth/clientHeight",
-        "clientWidth" in LAYOUT_INSPECTION_JS
-        and "clientHeight" in LAYOUT_INSPECTION_JS,
+        "clientWidth" in LAYOUT_INSPECTION_JS and "clientHeight" in LAYOUT_INSPECTION_JS,
     )
     check(
         "JS detecta rect fuera de viewport",
@@ -774,14 +825,14 @@ def test_eikon_validate_layout() -> None:
     # Importar el módulo desde scripts/. Es stdlib + eikon (sin playwright).
     sys.path.insert(0, str(_EIKON_DIR / "scripts"))
     from eikon_validate_layout import (  # type: ignore[import-not-found]
-        scan_layout,
-        scan_brand,
-        layout_issues_by_brand,
-        render_table,
-        render_json,
         _asset_issues,
-        _classify_warning,
         _brand_issues,
+        _classify_warning,
+        layout_issues_by_brand,
+        render_json,
+        render_table,
+        scan_brand,
+        scan_layout,
     )
 
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -791,39 +842,90 @@ def test_eikon_validate_layout() -> None:
 
         # Marca limpia: 2 assets pass, sin warnings → 0 issues
         (out / "clean-brand").mkdir()
-        (out / "clean-brand" / "_manifest.json").write_text(json.dumps({
-            "marca": "clean-brand", "total_assets": 2, "assets": [
-                {"path": "logos/v1.png", "category": "logos", "type": "lockup",
-                 "variant": "v1", "layout_status": "pass", "layout_warnings": []},
-                {"path": "logos/v2.png", "category": "logos", "type": "lockup",
-                 "variant": "v2", "layout_status": "pass", "layout_warnings": []},
-            ]
-        }))
+        (out / "clean-brand" / "_manifest.json").write_text(
+            json.dumps(
+                {
+                    "marca": "clean-brand",
+                    "total_assets": 2,
+                    "assets": [
+                        {
+                            "path": "logos/v1.png",
+                            "category": "logos",
+                            "type": "lockup",
+                            "variant": "v1",
+                            "layout_status": "pass",
+                            "layout_warnings": [],
+                        },
+                        {
+                            "path": "logos/v2.png",
+                            "category": "logos",
+                            "type": "lockup",
+                            "variant": "v2",
+                            "layout_status": "pass",
+                            "layout_warnings": [],
+                        },
+                    ],
+                }
+            )
+        )
 
         # Marca con 1 fail + 2 warnings, 1 pass
         (out / "dirty-brand").mkdir()
-        (out / "dirty-brand" / "_manifest.json").write_text(json.dumps({
-            "marca": "dirty-brand", "total_assets": 2, "assets": [
-                {"path": "logos/v1.png", "category": "logos", "type": "lockup",
-                 "variant": "v1", "layout_status": "pass", "layout_warnings": []},
-                {"path": "logos/v2.png", "category": "logos", "type": "lockup",
-                 "variant": "v2", "layout_status": "fail", "layout_warnings": [
-                     {"type": "empty_required_text", "detail": "selector .headline vacío"},
-                     {"type": "overflow_x", "detail": "scrollWidth > clientWidth"},
-                 ]},
-            ]
-        }))
+        (out / "dirty-brand" / "_manifest.json").write_text(
+            json.dumps(
+                {
+                    "marca": "dirty-brand",
+                    "total_assets": 2,
+                    "assets": [
+                        {
+                            "path": "logos/v1.png",
+                            "category": "logos",
+                            "type": "lockup",
+                            "variant": "v1",
+                            "layout_status": "pass",
+                            "layout_warnings": [],
+                        },
+                        {
+                            "path": "logos/v2.png",
+                            "category": "logos",
+                            "type": "lockup",
+                            "variant": "v2",
+                            "layout_status": "fail",
+                            "layout_warnings": [
+                                {
+                                    "type": "empty_required_text",
+                                    "detail": "selector .headline vacío",
+                                },
+                                {"type": "overflow_x", "detail": "scrollWidth > clientWidth"},
+                            ],
+                        },
+                    ],
+                }
+            )
+        )
 
         # Marca con sólo info warnings → debe contar como pass
         (out / "info-only").mkdir()
-        (out / "info-only" / "_manifest.json").write_text(json.dumps({
-            "marca": "info-only", "total_assets": 1, "assets": [
-                {"path": "logos/v1.png", "category": "logos", "type": "lockup",
-                 "variant": "v1", "layout_status": "pass", "layout_warnings": [
-                     {"type": "unknown_thing", "detail": "no debe contar"},
-                 ]},
-            ]
-        }))
+        (out / "info-only" / "_manifest.json").write_text(
+            json.dumps(
+                {
+                    "marca": "info-only",
+                    "total_assets": 1,
+                    "assets": [
+                        {
+                            "path": "logos/v1.png",
+                            "category": "logos",
+                            "type": "lockup",
+                            "variant": "v1",
+                            "layout_status": "pass",
+                            "layout_warnings": [
+                                {"type": "unknown_thing", "detail": "no debe contar"},
+                            ],
+                        },
+                    ],
+                }
+            )
+        )
 
         # Marca sin manifest
         (out / "no-manifest").mkdir()
@@ -848,184 +950,266 @@ def test_eikon_validate_layout() -> None:
 
         # ── 15.2 _asset_issues filtra por severidad ──
         asset_pass = {
-            "layout_status": "pass", "layout_warnings": [],
-            "path": "logos/v1.png", "category": "logos", "type": "lockup",
+            "layout_status": "pass",
+            "layout_warnings": [],
+            "path": "logos/v1.png",
+            "category": "logos",
+            "type": "lockup",
         }
         asset_info_only = {
-            "layout_status": "pass", "layout_warnings": [{"type": "unknown"}],
-            "path": "logos/v1.png", "category": "logos", "type": "lockup",
+            "layout_status": "pass",
+            "layout_warnings": [{"type": "unknown"}],
+            "path": "logos/v1.png",
+            "category": "logos",
+            "type": "lockup",
         }
         asset_fail = {
-            "layout_status": "fail", "layout_warnings": [
+            "layout_status": "fail",
+            "layout_warnings": [
                 {"type": "empty_required_text", "detail": "x"},
             ],
-            "path": "logos/v2.png", "category": "logos", "type": "lockup",
+            "path": "logos/v2.png",
+            "category": "logos",
+            "type": "lockup",
         }
         asset_warn = {
-            "layout_status": "warn", "layout_warnings": [
+            "layout_status": "warn",
+            "layout_warnings": [
                 {"type": "overflow_y", "detail": "y"},
             ],
-            "path": "logos/v3.png", "category": "logos", "type": "lockup",
+            "path": "logos/v3.png",
+            "category": "logos",
+            "type": "lockup",
         }
-        check("asset pass → 0 issues", _asset_issues(asset_pass) == [],
-              f"got {_asset_issues(asset_pass)}")
-        check("asset info-only → 0 issues", _asset_issues(asset_info_only) == [],
-              f"got {_asset_issues(asset_info_only)}")
-        check("asset fail con warning → 2 issues (status+warning)",
-              len(_asset_issues(asset_fail)) == 2,
-              f"got {_asset_issues(asset_fail)}")
-        check("asset warn → 2 issues (status+warning)",
-              len(_asset_issues(asset_warn)) == 2,
-              f"got {_asset_issues(asset_warn)}")
+        check(
+            "asset pass → 0 issues",
+            _asset_issues(asset_pass) == [],
+            f"got {_asset_issues(asset_pass)}",
+        )
+        check(
+            "asset info-only → 0 issues",
+            _asset_issues(asset_info_only) == [],
+            f"got {_asset_issues(asset_info_only)}",
+        )
+        check(
+            "asset fail con warning → 2 issues (status+warning)",
+            len(_asset_issues(asset_fail)) == 2,
+            f"got {_asset_issues(asset_fail)}",
+        )
+        check(
+            "asset warn → 2 issues (status+warning)",
+            len(_asset_issues(asset_warn)) == 2,
+            f"got {_asset_issues(asset_warn)}",
+        )
 
         # ── 15.3 _brand_issues detecta layout_status/warnings top-level ──
-        brand_issues_fail = _brand_issues({
-            "layout_status": "fail",
-            "layout_warnings": [{"type": "inspection_error", "detail": "x"}],
-        })
-        check("brand fail → 2 issues",
-              len(brand_issues_fail) == 2,
-              f"got {brand_issues_fail}")
-        check("brand pass sin warnings → 0 issues",
-              _brand_issues({"layout_status": "pass", "layout_warnings": []}) == [])
+        brand_issues_fail = _brand_issues(
+            {
+                "layout_status": "fail",
+                "layout_warnings": [{"type": "inspection_error", "detail": "x"}],
+            }
+        )
+        check("brand fail → 2 issues", len(brand_issues_fail) == 2, f"got {brand_issues_fail}")
+        check(
+            "brand pass sin warnings → 0 issues",
+            _brand_issues({"layout_status": "pass", "layout_warnings": []}) == [],
+        )
 
         # ── 15.4 scan_brand reporta correctamente ──
         scan_clean = scan_brand(out / "clean-brand")
-        check("clean-brand: 2 assets, 0 con issues",
-              scan_clean["assets_total"] == 2 and scan_clean["assets_with_issues"] == 0,
-              f"got {scan_clean}")
+        check(
+            "clean-brand: 2 assets, 0 con issues",
+            scan_clean["assets_total"] == 2 and scan_clean["assets_with_issues"] == 0,
+            f"got {scan_clean}",
+        )
 
         scan_dirty = scan_brand(out / "dirty-brand")
-        check("dirty-brand: 2 assets, 1 con issues",
-              scan_dirty["assets_total"] == 2 and scan_dirty["assets_with_issues"] == 1,
-              f"got {scan_dirty}")
+        check(
+            "dirty-brand: 2 assets, 1 con issues",
+            scan_dirty["assets_total"] == 2 and scan_dirty["assets_with_issues"] == 1,
+            f"got {scan_dirty}",
+        )
         # Issues del asset dirty: 1 status + 2 warnings = 3
         dirty_asset_issues = scan_dirty["asset_issues"][0]["issues"]
-        check("dirty-brand asset: 3 issues (1 status + 2 warnings)",
-              len(dirty_asset_issues) == 3,
-              f"got {dirty_asset_issues}")
+        check(
+            "dirty-brand asset: 3 issues (1 status + 2 warnings)",
+            len(dirty_asset_issues) == 3,
+            f"got {dirty_asset_issues}",
+        )
         types = {i["type"] for i in dirty_asset_issues}
-        check("dirty-brand issues contienen empty_required_text y overflow_x",
-              {"empty_required_text", "overflow_x"}.issubset(types),
-              f"got types={types}")
+        check(
+            "dirty-brand issues contienen empty_required_text y overflow_x",
+            {"empty_required_text", "overflow_x"}.issubset(types),
+            f"got types={types}",
+        )
 
         scan_no_manifest = scan_brand(out / "no-manifest")
-        check("no-manifest: manifest_present=False, 0 issues",
-              not scan_no_manifest["manifest_present"]
-              and scan_no_manifest["assets_with_issues"] == 0,
-              f"got {scan_no_manifest}")
+        check(
+            "no-manifest: manifest_present=False, 0 issues",
+            not scan_no_manifest["manifest_present"]
+            and scan_no_manifest["assets_with_issues"] == 0,
+            f"got {scan_no_manifest}",
+        )
 
         # ── 15.5 scan_layout agrega todo ──
         report = scan_layout(out)
-        check("scan_layout: 4 marcas totales",
-              report["summary"]["brands_total"] == 4,
-              f"got {report['summary']}")
-        check("scan_layout: 5 assets escaneados",
-              report["summary"]["assets_total_scanned"] == 5,
-              f"got {report['summary']}")
-        check("scan_layout: 2 marcas con issues (dirty + no aplica, info-only=clean)",
-              report["summary"]["brands_with_issues"] == 1,
-              f"got {report['summary']}")
-        check("scan_layout: 1 asset con issues",
-              report["summary"]["assets_with_issues"] == 1,
-              f"got {report['summary']}")
+        check(
+            "scan_layout: 4 marcas totales",
+            report["summary"]["brands_total"] == 4,
+            f"got {report['summary']}",
+        )
+        check(
+            "scan_layout: 5 assets escaneados",
+            report["summary"]["assets_total_scanned"] == 5,
+            f"got {report['summary']}",
+        )
+        check(
+            "scan_layout: 2 marcas con issues (dirty + no aplica, info-only=clean)",
+            report["summary"]["brands_with_issues"] == 1,
+            f"got {report['summary']}",
+        )
+        check(
+            "scan_layout: 1 asset con issues",
+            report["summary"]["assets_with_issues"] == 1,
+            f"got {report['summary']}",
+        )
 
         # ── 15.6 layout_issues_by_brand: helper para eikon_count ──
         m = layout_issues_by_brand(out)
-        check("layout_issues_by_brand: clean-brand=0",
-              m.get("clean-brand") == 0, f"got {m}")
-        check("layout_issues_by_brand: dirty-brand=1",
-              m.get("dirty-brand") == 1, f"got {m}")
-        check("layout_issues_by_brand: info-only=0 (info no cuenta)",
-              m.get("info-only") == 0, f"got {m}")
-        check("layout_issues_by_brand: no-manifest ausente o 0",
-              m.get("no-manifest", 0) == 0, f"got {m}")
+        check("layout_issues_by_brand: clean-brand=0", m.get("clean-brand") == 0, f"got {m}")
+        check("layout_issues_by_brand: dirty-brand=1", m.get("dirty-brand") == 1, f"got {m}")
+        check(
+            "layout_issues_by_brand: info-only=0 (info no cuenta)",
+            m.get("info-only") == 0,
+            f"got {m}",
+        )
+        check(
+            "layout_issues_by_brand: no-manifest ausente o 0",
+            m.get("no-manifest", 0) == 0,
+            f"got {m}",
+        )
 
         # ── 15.7 render_table incluye filas esperadas ──
         table = render_table(report)
-        check("render_table: incluye 'Issues detectados:'",
-              "Issues detectados:" in table,
-              f"primera línea: {table.splitlines()[0]}")
-        check("render_table: incluye 'dirty-brand'",
-              "dirty-brand" in table)
-        check("render_table: incluye 'empty_required_text'",
-              "empty_required_text" in table)
-        check("render_table: NO incluye 'clean-brand' en issues (sólo en resumen)",
-              table.count("clean-brand") >= 1,  # aparece en resumen
-              f"count={table.count('clean-brand')}")
-        check("render_table: --only-issues omite resumen",
-              "Resumen por marca:" not in render_table(report, only_issues=True),
-              )
+        check(
+            "render_table: incluye 'Issues detectados:'",
+            "Issues detectados:" in table,
+            f"primera línea: {table.splitlines()[0]}",
+        )
+        check("render_table: incluye 'dirty-brand'", "dirty-brand" in table)
+        check("render_table: incluye 'empty_required_text'", "empty_required_text" in table)
+        check(
+            "render_table: NO incluye 'clean-brand' en issues (sólo en resumen)",
+            table.count("clean-brand") >= 1,  # aparece en resumen
+            f"count={table.count('clean-brand')}",
+        )
+        check(
+            "render_table: --only-issues omite resumen",
+            "Resumen por marca:" not in render_table(report, only_issues=True),
+        )
 
         # ── 15.8 render_json produce JSON parseable con schema esperado ──
         rendered = render_json(report)
         parsed = json.loads(rendered)
-        check("render_json: keys canónicos",
-              set(parsed.keys()) == {"generated_at", "output_dir", "summary", "brands"},
-              f"got {set(parsed.keys())}")
-        check("render_json: summary tiene claves esperadas",
-              set(parsed["summary"].keys()) ==
-              {"brands_total", "brands_with_issues",
-               "assets_total_scanned", "assets_with_issues"},
-              f"got {set(parsed['summary'].keys())}")
+        check(
+            "render_json: keys canónicos",
+            set(parsed.keys()) == {"generated_at", "output_dir", "summary", "brands"},
+            f"got {set(parsed.keys())}",
+        )
+        check(
+            "render_json: summary tiene claves esperadas",
+            set(parsed["summary"].keys())
+            == {"brands_total", "brands_with_issues", "assets_total_scanned", "assets_with_issues"},
+            f"got {set(parsed['summary'].keys())}",
+        )
 
         # ── 15.9 CLI: --fail-on-errors → exit 1 cuando hay issues ──
         import subprocess
+
         script = _EIKON_DIR / "scripts" / "eikon_validate_layout.py"
 
         r = subprocess.run(
             ["python3", str(script), "--output-dir", str(out), "--fail-on-errors"],
-            capture_output=True, text=True,
+            capture_output=True,
+            text=True,
         )
-        check("CLI --fail-on-errors con issues → exit 1",
-              r.returncode == 1, f"exit={r.returncode} stderr={r.stderr}")
+        check(
+            "CLI --fail-on-errors con issues → exit 1",
+            r.returncode == 1,
+            f"exit={r.returncode} stderr={r.stderr}",
+        )
 
         r = subprocess.run(
             ["python3", str(script), "--output-dir", str(out)],
-            capture_output=True, text=True,
+            capture_output=True,
+            text=True,
         )
-        check("CLI sin --fail-on-errors → exit 0 (incluso con issues)",
-              r.returncode == 0, f"exit={r.returncode} stderr={r.stderr}")
+        check(
+            "CLI sin --fail-on-errors → exit 0 (incluso con issues)",
+            r.returncode == 0,
+            f"exit={r.returncode} stderr={r.stderr}",
+        )
 
         r = subprocess.run(
             ["python3", str(script), "--output-dir", str(out), "--json"],
-            capture_output=True, text=True,
+            capture_output=True,
+            text=True,
         )
-        check("CLI --json → exit 0 + JSON parseable",
-              r.returncode == 0 and isinstance(json.loads(r.stdout), dict),
-              f"exit={r.returncode}")
+        check(
+            "CLI --json → exit 0 + JSON parseable",
+            r.returncode == 0 and isinstance(json.loads(r.stdout), dict),
+            f"exit={r.returncode}",
+        )
 
         # Caso limpio: --fail-on-errors → exit 0
         clean_out = tmp / "clean"
         clean_out.mkdir()
         (clean_out / "ok-brand").mkdir()
-        (clean_out / "ok-brand" / "_manifest.json").write_text(json.dumps({
-            "marca": "ok-brand", "total_assets": 1, "assets": [
-                {"path": "logos/v1.png", "layout_status": "pass", "layout_warnings": []},
-            ]
-        }))
+        (clean_out / "ok-brand" / "_manifest.json").write_text(
+            json.dumps(
+                {
+                    "marca": "ok-brand",
+                    "total_assets": 1,
+                    "assets": [
+                        {"path": "logos/v1.png", "layout_status": "pass", "layout_warnings": []},
+                    ],
+                }
+            )
+        )
         r = subprocess.run(
             ["python3", str(script), "--output-dir", str(clean_out), "--fail-on-errors"],
-            capture_output=True, text=True,
+            capture_output=True,
+            text=True,
         )
-        check("CLI --fail-on-errors sin issues → exit 0",
-              r.returncode == 0, f"exit={r.returncode} stderr={r.stderr}")
+        check(
+            "CLI --fail-on-errors sin issues → exit 0",
+            r.returncode == 0,
+            f"exit={r.returncode} stderr={r.stderr}",
+        )
 
         # ── 15.10 Forward-compat: manifest sin campos de layout → 0 issues ──
         legacy = tmp / "legacy"
         legacy.mkdir()
         (legacy / "old-brand").mkdir()
-        (legacy / "old-brand" / "_manifest.json").write_text(json.dumps({
-            "marca": "old-brand", "total_assets": 2, "assets": [
-                {"path": "logos/v1.png", "status": "generated", "warnings": []},
-                {"path": "logos/v2.png", "status": "generated", "warnings": []},
-            ]
-        }))
+        (legacy / "old-brand" / "_manifest.json").write_text(
+            json.dumps(
+                {
+                    "marca": "old-brand",
+                    "total_assets": 2,
+                    "assets": [
+                        {"path": "logos/v1.png", "status": "generated", "warnings": []},
+                        {"path": "logos/v2.png", "status": "generated", "warnings": []},
+                    ],
+                }
+            )
+        )
         legacy_report = scan_layout(legacy)
-        check("forward-compat: manifest sin layout_status/warnings → 0 issues",
-              legacy_report["summary"]["assets_with_issues"] == 0
-              and legacy_report["summary"]["brands_with_issues"] == 0,
-              f"got {legacy_report['summary']}")
+        check(
+            "forward-compat: manifest sin layout_status/warnings → 0 issues",
+            legacy_report["summary"]["assets_with_issues"] == 0
+            and legacy_report["summary"]["brands_with_issues"] == 0,
+            f"got {legacy_report['summary']}",
+        )
 
         # ── 15.11 Manifest corrupto no rompe el scan ──
         broken = tmp / "broken"
@@ -1034,18 +1218,25 @@ def test_eikon_validate_layout() -> None:
         (broken / "bad-brand" / "_manifest.json").write_text("{not json")
         # No debe crashear
         broken_report = scan_layout(broken)
-        check("manifest corrupto: marca listada pero con 0 assets",
-              broken_report["summary"]["brands_total"] == 1
-              and broken_report["summary"]["assets_with_issues"] == 0,
-              f"got {broken_report['summary']}")
+        check(
+            "manifest corrupto: marca listada pero con 0 assets",
+            broken_report["summary"]["brands_total"] == 1
+            and broken_report["summary"]["assets_with_issues"] == 0,
+            f"got {broken_report['summary']}",
+        )
 
 
 # =============================================================================
 # 16. VALIDADOR PIXEL LIGERO (scripts/eikon_validate_pixels.py) — Fase 6
 # =============================================================================
-def _make_noisy_png(path: Path, w: int = 600, h: int = 400,
-                    bg=(11, 20, 23), fg=(232, 224, 212),
-                    fg_rect: tuple = (50, 50, 550, 350)) -> int:
+def _make_noisy_png(
+    path: Path,
+    w: int = 600,
+    h: int = 400,
+    bg=(11, 20, 23),
+    fg=(232, 224, 212),
+    fg_rect: tuple = (50, 50, 550, 350),
+) -> int:
     """
     Genera un PNG sintético 'realista': fondo oscuro + rectángulo claro
     central. Devuelve el tamaño en bytes (>= min_bytes default).
@@ -1072,12 +1263,12 @@ def test_eikon_validate_pixels() -> None:
 
     sys.path.insert(0, str(_EIKON_DIR / "scripts"))
     from eikon_validate_pixels import (  # type: ignore[import-not-found]
-        validate_asset,
-        find_identical_variants,
-        validate_marca,
-        _sample_border_color,
-        _foreground_density,
         FG_DIFF_THRESHOLD,
+        _foreground_density,
+        _sample_border_color,
+        find_identical_variants,
+        validate_asset,
+        validate_marca,
     )
 
     # ── 16.1 validate_asset: PNG válido pasa los 4 checks ──
@@ -1149,8 +1340,7 @@ def test_eikon_validate_pixels() -> None:
             any(i.startswith("dim_mismatch:") for i in r["issues"]),
             f"={r['issues']}",
         )
-        check("dim_mismatch → checks.dim_match=False",
-              r["checks"]["dim_match"] is False)
+        check("dim_mismatch → checks.dim_match=False", r["checks"]["dim_match"] is False)
 
         # low_fg_density: imagen plana sin contenido detectable
         flat = td / "flat.png"
@@ -1171,29 +1361,49 @@ def test_eikon_validate_pixels() -> None:
         )
 
     # ── 16.3 find_identical_variants: detecta pares idénticos ──
-    a1 = {"category": "logos", "type": "lockup", "variant": "v1",
-          "actual": {"md5": "aaa111", "size_bytes": 100}}
-    a2 = {"category": "logos", "type": "lockup", "variant": "v2",
-          "actual": {"md5": "aaa111", "size_bytes": 100}}  # idéntico
-    a3 = {"category": "logos", "type": "lockup", "variant": "v3",
-          "actual": {"md5": "bbb222", "size_bytes": 100}}  # distinto
-    a4 = {"category": "logos", "type": "favicon", "variant": "v1",
-          "actual": {"md5": "ccc333", "size_bytes": 100}}
-    a5 = {"category": "logos", "type": "favicon", "variant": "v2",
-          "actual": {"md5": "ccc333", "size_bytes": 100}}  # idéntico
+    a1 = {
+        "category": "logos",
+        "type": "lockup",
+        "variant": "v1",
+        "actual": {"md5": "aaa111", "size_bytes": 100},
+    }
+    a2 = {
+        "category": "logos",
+        "type": "lockup",
+        "variant": "v2",
+        "actual": {"md5": "aaa111", "size_bytes": 100},
+    }  # idéntico
+    a3 = {
+        "category": "logos",
+        "type": "lockup",
+        "variant": "v3",
+        "actual": {"md5": "bbb222", "size_bytes": 100},
+    }  # distinto
+    a4 = {
+        "category": "logos",
+        "type": "favicon",
+        "variant": "v1",
+        "actual": {"md5": "ccc333", "size_bytes": 100},
+    }
+    a5 = {
+        "category": "logos",
+        "type": "favicon",
+        "variant": "v2",
+        "actual": {"md5": "ccc333", "size_bytes": 100},
+    }  # idéntico
 
     res = find_identical_variants([a1, a2, a3, a4, a5], allow_identical_types=())
-    check("identical: detecta 2 grupos (lockup + favicon)",
-          len(res) == 2, f"got {len(res)}: {res}")
+    check("identical: detecta 2 grupos (lockup + favicon)", len(res) == 2, f"got {len(res)}: {res}")
     types_in_res = {x["type"] for x in res}
-    check("identical: lockup y favicon presentes",
-          types_in_res == {"lockup", "favicon"}, f"got {types_in_res}")
+    check(
+        "identical: lockup y favicon presentes",
+        types_in_res == {"lockup", "favicon"},
+        f"got {types_in_res}",
+    )
 
     # Variante única por grupo: no se reporta
-    only_one = [{"category": "logos", "type": "x", "variant": "v1",
-                 "actual": {"md5": "z"}}]
-    check("identical: 1 variante por grupo → 0 reports",
-          find_identical_variants(only_one) == [])
+    only_one = [{"category": "logos", "type": "x", "variant": "v1", "actual": {"md5": "z"}}]
+    check("identical: 1 variante por grupo → 0 reports", find_identical_variants(only_one) == [])
 
     # ── 16.4 allow_identical_types excluye favicon ──
     res_allowed = find_identical_variants(
@@ -1221,43 +1431,55 @@ def test_eikon_validate_pixels() -> None:
         td = Path(td)
         marca = td / "test-marca"
         (marca / "logos" / "lockup_horizontal").mkdir(parents=True)
-        _make_noisy_png(marca / "logos" / "lockup_horizontal" / "v1_color.png",
-                        600, 400)
-        _make_noisy_png(marca / "logos" / "lockup_horizontal" / "v2_mono.png",
-                        600, 400)
+        _make_noisy_png(marca / "logos" / "lockup_horizontal" / "v1_color.png", 600, 400)
+        _make_noisy_png(marca / "logos" / "lockup_horizontal" / "v2_mono.png", 600, 400)
         # escribir manifest
-        (marca / "_manifest.json").write_text(json.dumps({
-            "marca": "test-marca",
-            "engine_version": "test",
-            "total_assets": 2,
-            "assets": [
-                {"path": "logos/lockup_horizontal/v1_color.png",
-                 "category": "logos", "type": "lockup_horizontal",
-                 "variant": "v1_color", "width": 600, "height": 400,
-                 "status": "generated"},
-                {"path": "logos/lockup_horizontal/v2_mono.png",
-                 "category": "logos", "type": "lockup_horizontal",
-                 "variant": "v2_mono", "width": 600, "height": 400,
-                 "status": "generated"},
-            ],
-        }))
+        (marca / "_manifest.json").write_text(
+            json.dumps(
+                {
+                    "marca": "test-marca",
+                    "engine_version": "test",
+                    "total_assets": 2,
+                    "assets": [
+                        {
+                            "path": "logos/lockup_horizontal/v1_color.png",
+                            "category": "logos",
+                            "type": "lockup_horizontal",
+                            "variant": "v1_color",
+                            "width": 600,
+                            "height": 400,
+                            "status": "generated",
+                        },
+                        {
+                            "path": "logos/lockup_horizontal/v2_mono.png",
+                            "category": "logos",
+                            "type": "lockup_horizontal",
+                            "variant": "v2_mono",
+                            "width": 600,
+                            "height": 400,
+                            "status": "generated",
+                        },
+                    ],
+                }
+            )
+        )
 
         rep = validate_marca(marca)
         check("validate_marca: marca correcta", rep["marca"] == "test-marca")
-        check("validate_marca: 2 assets procesados",
-              rep["totals"]["assets_in_manifest"] == 2,
-              f"={rep['totals']}")
-        check("validate_marca: 0 errors",
-              rep["totals"]["errors"] == 0,
-              f"={rep['totals']}")
-        check("validate_marca: thresholds reportados",
-              "min_bytes" in rep["thresholds"]
-              and "fg_density_min" in rep["thresholds"],
-              f"={rep['thresholds']}")
+        check(
+            "validate_marca: 2 assets procesados",
+            rep["totals"]["assets_in_manifest"] == 2,
+            f"={rep['totals']}",
+        )
+        check("validate_marca: 0 errors", rep["totals"]["errors"] == 0, f"={rep['totals']}")
+        check(
+            "validate_marca: thresholds reportados",
+            "min_bytes" in rep["thresholds"] and "fg_density_min" in rep["thresholds"],
+            f"={rep['thresholds']}",
+        )
         check(
             "validate_marca: cada asset tiene category/type/variant",
-            all(a.get("category") and a.get("type") and a.get("variant")
-                for a in rep["assets"]),
+            all(a.get("category") and a.get("type") and a.get("variant") for a in rep["assets"]),
         )
 
     # ── 16.6 validate_marca: detecta identical + error real ──
@@ -1270,30 +1492,51 @@ def test_eikon_validate_pixels() -> None:
         _make_noisy_png(marca / "logos" / "lockup" / "v2.png", 600, 400)
         # v3 con dim incorrecta
         from PIL import Image
-        Image.new("RGB", (300, 200), (10, 20, 30)).save(
-            marca / "logos" / "lockup" / "v3.png"
+
+        Image.new("RGB", (300, 200), (10, 20, 30)).save(marca / "logos" / "lockup" / "v3.png")
+        (marca / "_manifest.json").write_text(
+            json.dumps(
+                {
+                    "marca": "dup",
+                    "engine_version": "t",
+                    "total_assets": 3,
+                    "assets": [
+                        {
+                            "path": "logos/lockup/v1.png",
+                            "category": "logos",
+                            "type": "lockup",
+                            "variant": "v1",
+                            "width": 600,
+                            "height": 400,
+                        },
+                        {
+                            "path": "logos/lockup/v2.png",
+                            "category": "logos",
+                            "type": "lockup",
+                            "variant": "v2",
+                            "width": 600,
+                            "height": 400,
+                        },
+                        {
+                            "path": "logos/lockup/v3.png",
+                            "category": "logos",
+                            "type": "lockup",
+                            "variant": "v3",
+                            "width": 600,
+                            "height": 400,
+                        },  # declared 600x400, real 300x200
+                    ],
+                }
+            )
         )
-        (marca / "_manifest.json").write_text(json.dumps({
-            "marca": "dup", "engine_version": "t", "total_assets": 3,
-            "assets": [
-                {"path": "logos/lockup/v1.png", "category": "logos",
-                 "type": "lockup", "variant": "v1",
-                 "width": 600, "height": 400},
-                {"path": "logos/lockup/v2.png", "category": "logos",
-                 "type": "lockup", "variant": "v2",
-                 "width": 600, "height": 400},
-                {"path": "logos/lockup/v3.png", "category": "logos",
-                 "type": "lockup", "variant": "v3",
-                 "width": 600, "height": 400},  # declared 600x400, real 300x200
-            ],
-        }))
 
         rep = validate_marca(marca)
-        check("dup: errors >= 1 (dim_mismatch)",
-              rep["totals"]["errors"] >= 1, f"={rep['totals']}")
-        check("dup: identical_variant_pairs >= 1",
-              rep["totals"]["identical_variant_pairs"] >= 1,
-              f"={rep['totals']}")
+        check("dup: errors >= 1 (dim_mismatch)", rep["totals"]["errors"] >= 1, f"={rep['totals']}")
+        check(
+            "dup: identical_variant_pairs >= 1",
+            rep["totals"]["identical_variant_pairs"] >= 1,
+            f"={rep['totals']}",
+        )
         check(
             "dup: identical_variants incluye lockup con v1+v2",
             any(
@@ -1310,33 +1553,55 @@ def test_eikon_validate_pixels() -> None:
         (marca / "logos" / "lockup").mkdir(parents=True)
         _make_noisy_png(marca / "logos" / "lockup" / "v1.png", 600, 400)
         _make_noisy_png(marca / "logos" / "lockup" / "v2.png", 600, 400)
-        (marca / "_manifest.json").write_text(json.dumps({
-            "marca": "ok", "engine_version": "t", "total_assets": 2,
-            "assets": [
-                {"path": "logos/lockup/v1.png", "category": "logos",
-                 "type": "lockup", "variant": "v1", "width": 600, "height": 400},
-                {"path": "logos/lockup/v2.png", "category": "logos",
-                 "type": "lockup", "variant": "v2", "width": 600, "height": 400},
-            ],
-        }))
+        (marca / "_manifest.json").write_text(
+            json.dumps(
+                {
+                    "marca": "ok",
+                    "engine_version": "t",
+                    "total_assets": 2,
+                    "assets": [
+                        {
+                            "path": "logos/lockup/v1.png",
+                            "category": "logos",
+                            "type": "lockup",
+                            "variant": "v1",
+                            "width": 600,
+                            "height": 400,
+                        },
+                        {
+                            "path": "logos/lockup/v2.png",
+                            "category": "logos",
+                            "type": "lockup",
+                            "variant": "v2",
+                            "width": 600,
+                            "height": 400,
+                        },
+                    ],
+                }
+            )
+        )
 
         rep_no_allow = validate_marca(marca)
-        check("sin allow: identical_variant_pairs >= 1",
-              rep_no_allow["totals"]["identical_variant_pairs"] >= 1)
+        check(
+            "sin allow: identical_variant_pairs >= 1",
+            rep_no_allow["totals"]["identical_variant_pairs"] >= 1,
+        )
 
         rep_allow = validate_marca(marca, allow_identical_types=("lockup",))
-        check("con allow='lockup': identical_variant_pairs == 0",
-              rep_allow["totals"]["identical_variant_pairs"] == 0)
+        check(
+            "con allow='lockup': identical_variant_pairs == 0",
+            rep_allow["totals"]["identical_variant_pairs"] == 0,
+        )
 
     # ── 16.8 _sample_border_color / _foreground_density unit ──
     try:
         from PIL import Image
+
         im = Image.new("RGB", (400, 300), (10, 20, 30))
         bg = _sample_border_color(im)
         check(
             "_sample_border_color: color cercano a (10,20,30)",
-            bg is not None
-            and all(abs(bg[i] - (10, 20, 30)[i]) <= 1 for i in range(3)),
+            bg is not None and all(abs(bg[i] - (10, 20, 30)[i]) <= 1 for i in range(3)),
             f"bg={bg}",
         )
         density = _foreground_density(im, bg)
@@ -1348,6 +1613,7 @@ def test_eikon_validate_pixels() -> None:
 
         # imagen con rect central: density >> 0
         from PIL import ImageDraw
+
         im2 = Image.new("RGB", (400, 300), (10, 20, 30))
         ImageDraw.Draw(im2).rectangle((100, 100, 300, 200), fill=(232, 224, 212))
         d2 = _foreground_density(im2, bg)
@@ -1358,8 +1624,7 @@ def test_eikon_validate_pixels() -> None:
         )
         check(
             "FG_DIFF_THRESHOLD razonable",
-            isinstance(FG_DIFF_THRESHOLD, int)
-            and 10 <= FG_DIFF_THRESHOLD <= 100,
+            isinstance(FG_DIFF_THRESHOLD, int) and 10 <= FG_DIFF_THRESHOLD <= 100,
             f"={FG_DIFF_THRESHOLD}",
         )
     except ImportError:
@@ -1367,6 +1632,7 @@ def test_eikon_validate_pixels() -> None:
 
     # ── 16.9 CLI: --marca + --fail-on-errors ──
     import subprocess
+
     script = _EIKON_DIR / "scripts" / "eikon_validate_pixels.py"
 
     # Caso OK: exit 0
@@ -1375,27 +1641,44 @@ def test_eikon_validate_pixels() -> None:
         marca = td / "ok-cli"
         (marca / "logos" / "x").mkdir(parents=True)
         _make_noisy_png(marca / "logos" / "x" / "v1.png", 600, 400)
-        (marca / "_manifest.json").write_text(json.dumps({
-            "marca": "ok-cli", "engine_version": "t", "total_assets": 1,
-            "assets": [
-                {"path": "logos/x/v1.png", "category": "logos",
-                 "type": "x", "variant": "v1", "width": 600, "height": 400},
-            ],
-        }))
-        r = subprocess.run(
-            ["python3", str(script), "--marca", "ok-cli",
-             "--output-dir", str(td), "--quiet"],
-            capture_output=True, text=True,
+        (marca / "_manifest.json").write_text(
+            json.dumps(
+                {
+                    "marca": "ok-cli",
+                    "engine_version": "t",
+                    "total_assets": 1,
+                    "assets": [
+                        {
+                            "path": "logos/x/v1.png",
+                            "category": "logos",
+                            "type": "x",
+                            "variant": "v1",
+                            "width": 600,
+                            "height": 400,
+                        },
+                    ],
+                }
+            )
         )
-        check("CLI --marca caso OK → exit 0",
-              r.returncode == 0, f"exit={r.returncode} stderr={r.stderr[:200]}")
+        r = subprocess.run(
+            ["python3", str(script), "--marca", "ok-cli", "--output-dir", str(td), "--quiet"],
+            capture_output=True,
+            text=True,
+        )
+        check(
+            "CLI --marca caso OK → exit 0",
+            r.returncode == 0,
+            f"exit={r.returncode} stderr={r.stderr[:200]}",
+        )
         # _pixel-report.json escrito por marca
         report_path = marca / "_pixel-report.json"
         check("CLI: _pixel-report.json escrito", report_path.exists())
         data = json.loads(report_path.read_text())
-        check("CLI: JSON tiene marca+totals+assets",
-              {"marca", "totals", "assets"}.issubset(data.keys()),
-              f"keys={list(data.keys())}")
+        check(
+            "CLI: JSON tiene marca+totals+assets",
+            {"marca", "totals", "assets"}.issubset(data.keys()),
+            f"keys={list(data.keys())}",
+        )
 
     # Caso con errors: --fail-on-errors → exit 1
     with tempfile.TemporaryDirectory() as td:
@@ -1403,33 +1686,57 @@ def test_eikon_validate_pixels() -> None:
         marca = td / "bad-cli"
         (marca / "logos" / "x").mkdir(parents=True)
         from PIL import Image
-        Image.new("RGB", (300, 200), (10, 20, 30)).save(
-            marca / "logos" / "x" / "v1.png"
+
+        Image.new("RGB", (300, 200), (10, 20, 30)).save(marca / "logos" / "x" / "v1.png")
+        (marca / "_manifest.json").write_text(
+            json.dumps(
+                {
+                    "marca": "bad-cli",
+                    "engine_version": "t",
+                    "total_assets": 1,
+                    "assets": [
+                        {
+                            "path": "logos/x/v1.png",
+                            "category": "logos",
+                            "type": "x",
+                            "variant": "v1",
+                            "width": 600,
+                            "height": 400,
+                        },  # mismatch
+                    ],
+                }
+            )
         )
-        (marca / "_manifest.json").write_text(json.dumps({
-            "marca": "bad-cli", "engine_version": "t", "total_assets": 1,
-            "assets": [
-                {"path": "logos/x/v1.png", "category": "logos",
-                 "type": "x", "variant": "v1",
-                 "width": 600, "height": 400},  # mismatch
-            ],
-        }))
         r = subprocess.run(
-            ["python3", str(script), "--marca", "bad-cli",
-             "--output-dir", str(td), "--fail-on-errors"],
-            capture_output=True, text=True,
+            [
+                "python3",
+                str(script),
+                "--marca",
+                "bad-cli",
+                "--output-dir",
+                str(td),
+                "--fail-on-errors",
+            ],
+            capture_output=True,
+            text=True,
         )
-        check("CLI --fail-on-errors con dim_mismatch → exit 1",
-              r.returncode == 1, f"exit={r.returncode} stderr={r.stderr[:200]}")
+        check(
+            "CLI --fail-on-errors con dim_mismatch → exit 1",
+            r.returncode == 1,
+            f"exit={r.returncode} stderr={r.stderr[:200]}",
+        )
 
         # Sin --fail-on-errors → exit 0 (warnings/errors no fatales)
         r2 = subprocess.run(
-            ["python3", str(script), "--marca", "bad-cli",
-             "--output-dir", str(td)],
-            capture_output=True, text=True,
+            ["python3", str(script), "--marca", "bad-cli", "--output-dir", str(td)],
+            capture_output=True,
+            text=True,
         )
-        check("CLI sin --fail-on-errors → exit 0 incluso con errors",
-              r2.returncode == 0, f"exit={r2.returncode}")
+        check(
+            "CLI sin --fail-on-errors → exit 0 incluso con errors",
+            r2.returncode == 0,
+            f"exit={r2.returncode}",
+        )
 
     # ── 16.10 CLI: --all discovery y --json único ──
     with tempfile.TemporaryDirectory() as td:
@@ -1440,17 +1747,33 @@ def test_eikon_validate_pixels() -> None:
             (md / "logos" / "lockup").mkdir(parents=True)
             _make_noisy_png(md / "logos" / "lockup" / "v1.png", 600, 400)
             _make_noisy_png(md / "logos" / "lockup" / "v2.png", 600, 400)
-            (md / "_manifest.json").write_text(json.dumps({
-                "marca": slug, "engine_version": "t", "total_assets": 2,
-                "assets": [
-                    {"path": "logos/lockup/v1.png", "category": "logos",
-                     "type": "lockup", "variant": "v1",
-                     "width": 600, "height": 400},
-                    {"path": "logos/lockup/v2.png", "category": "logos",
-                     "type": "lockup", "variant": "v2",
-                     "width": 600, "height": 400},
-                ],
-            }))
+            (md / "_manifest.json").write_text(
+                json.dumps(
+                    {
+                        "marca": slug,
+                        "engine_version": "t",
+                        "total_assets": 2,
+                        "assets": [
+                            {
+                                "path": "logos/lockup/v1.png",
+                                "category": "logos",
+                                "type": "lockup",
+                                "variant": "v1",
+                                "width": 600,
+                                "height": 400,
+                            },
+                            {
+                                "path": "logos/lockup/v2.png",
+                                "category": "logos",
+                                "type": "lockup",
+                                "variant": "v2",
+                                "width": 600,
+                                "height": 400,
+                            },
+                        ],
+                    }
+                )
+            )
         # marca "huérfana" sin manifest: no debe procesarse
         (td / "no-manifest").mkdir()
         # marca "oculta" (empieza con _): no debe procesarse
@@ -1458,39 +1781,47 @@ def test_eikon_validate_pixels() -> None:
 
         r = subprocess.run(
             ["python3", str(script), "--all", "--output-dir", str(td), "--quiet"],
-            capture_output=True, text=True,
+            capture_output=True,
+            text=True,
         )
-        check("CLI --all: exit 0", r.returncode == 0,
-              f"exit={r.returncode} stderr={r.stderr[:200]}")
-        check("CLI --all: procesó 2 marcas (brand-a, brand-b)",
-              (td / "brand-a" / "_pixel-report.json").exists()
-              and (td / "brand-b" / "_pixel-report.json").exists())
-        check("CLI --all: NO procesó marca sin manifest",
-              not (td / "no-manifest" / "_pixel-report.json").exists()
-              if (td / "no-manifest").exists() else True)
-        check("CLI --all: NO procesó marca que empieza con _",
-              not list((td / "_hidden").glob("_pixel-report.json")))
+        check(
+            "CLI --all: exit 0", r.returncode == 0, f"exit={r.returncode} stderr={r.stderr[:200]}"
+        )
+        check(
+            "CLI --all: procesó 2 marcas (brand-a, brand-b)",
+            (td / "brand-a" / "_pixel-report.json").exists()
+            and (td / "brand-b" / "_pixel-report.json").exists(),
+        )
+        check(
+            "CLI --all: NO procesó marca sin manifest",
+            not (td / "no-manifest" / "_pixel-report.json").exists()
+            if (td / "no-manifest").exists()
+            else True,
+        )
+        check(
+            "CLI --all: NO procesó marca que empieza con _",
+            not list((td / "_hidden").glob("_pixel-report.json")),
+        )
 
     # ── 16.11 CLI: marca inexistente → exit 2 ──
     with tempfile.TemporaryDirectory() as td:
         r = subprocess.run(
             ["python3", str(script), "--marca", "ghost", "--output-dir", str(td)],
-            capture_output=True, text=True,
+            capture_output=True,
+            text=True,
         )
-        check("CLI --marca ghost → exit 2 (E/S)",
-              r.returncode == 2, f"exit={r.returncode}")
+        check("CLI --marca ghost → exit 2 (E/S)", r.returncode == 2, f"exit={r.returncode}")
 
     # ── 16.12 CLI: marca sin manifest → exit 2 ──
     with tempfile.TemporaryDirectory() as td:
         td = Path(td)
         (td / "no-manifest-here").mkdir()
         r = subprocess.run(
-            ["python3", str(script), "--marca", "no-manifest-here",
-             "--output-dir", str(td)],
-            capture_output=True, text=True,
+            ["python3", str(script), "--marca", "no-manifest-here", "--output-dir", str(td)],
+            capture_output=True,
+            text=True,
         )
-        check("CLI --marca sin manifest → exit 2",
-              r.returncode == 2, f"exit={r.returncode}")
+        check("CLI --marca sin manifest → exit 2", r.returncode == 2, f"exit={r.returncode}")
 
 
 # =============================================================================

@@ -26,8 +26,15 @@ def map_marca_to_vars(
     }
 
     tipografia = marca.get("tipografia", {}) if isinstance(marca.get("tipografia"), dict) else {}
-    logo_simbolo = str(marca.get("logo_simbolo") or marca.get("simbolo") or ("⚡" if family == "prizma" else "∞")).strip()
-    logo_texto = str(marca.get("logo_texto") or marca.get("nombre_producto") or marca.get("nombre_corporativo") or "").strip()
+    logo_simbolo = str(
+        marca.get("logo_simbolo") or marca.get("simbolo") or ("⚡" if family == "prizma" else "∞")
+    ).strip()
+    logo_texto = str(
+        marca.get("logo_texto")
+        or marca.get("nombre_producto")
+        or marca.get("nombre_corporativo")
+        or ""
+    ).strip()
 
     textos = marca.get("textos", {}).get(tipo, {})
     if isinstance(textos, list):

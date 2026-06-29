@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
-from typing import Optional
 
 _TEMPLATE_ALIASES: dict[str, tuple[str, ...]] = {
     "linkedin_header": ("linkedin_banner",),
@@ -12,7 +11,7 @@ _TEMPLATE_ALIASES: dict[str, tuple[str, ...]] = {
 }
 
 
-def resolve_template(type_spec_name: str, templates_dir: Path) -> Optional[Path]:
+def resolve_template(type_spec_name: str, templates_dir: Path) -> Path | None:
     """Encuentra el archivo de plantilla HTML para un tipo de asset."""
     exact = templates_dir / f"{type_spec_name}.html"
     if exact.exists():

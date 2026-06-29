@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Tests stdlib del core webapp sin levantar servidor."""
+
 from __future__ import annotations
 
+import sys
 import tempfile
 from pathlib import Path
-import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -65,7 +66,11 @@ def test_storage_tenant_isolation() -> None:
         init_db(db)
         u1 = create_tenant_user(db, "tenant-a", "Tenant A", "a@example.com", "password-seguro")
         u2 = create_tenant_user(db, "tenant-b", "Tenant B", "b@example.com", "password-seguro")
-        check("auth tenant-a", authenticate_user(db, "a@example.com", "password-seguro")["tenant_id"] == u1["tenant_id"])
+        check(
+            "auth tenant-a",
+            authenticate_user(db, "a@example.com", "password-seguro")["tenant_id"]
+            == u1["tenant_id"],
+        )
         job = create_job(db, u1["tenant_id"], u1["user_id"], "pinakotheke-kosmos", "logos", True)
         check("job queued", job["status"] == "queued")
         check("job visible same tenant", get_job(db, u1["tenant_id"], job["id"]) is not None)
@@ -74,7 +79,16 @@ def test_storage_tenant_isolation() -> None:
         update_job_status(db, job["id"], "completed", {"ok": True})
         jobs = list_jobs(db, u1["tenant_id"])
         check("list_jobs tenant-a = 1", len(jobs) == 1)
-        add_asset(db, u1["tenant_id"], job["id"], "pinakotheke-kosmos", "logos", "wordmark", "v1_dark", "logos/wordmark/v1_dark.png")
+        add_asset(
+            db,
+            u1["tenant_id"],
+            job["id"],
+            "pinakotheke-kosmos",
+            "logos",
+            "wordmark",
+            "v1_dark",
+            "logos/wordmark/v1_dark.png",
+        )
         check("asset visible same tenant", len(list_assets(db, u1["tenant_id"])) == 1)
         check("asset invisible other tenant", len(list_assets(db, u2["tenant_id"])) == 0)
 
@@ -89,7 +103,11 @@ def test_runner_guards() -> None:
     else:
         check("path traversal slug rechazado", False)
     cmd = build_eikon_command("pinakotheke-kosmos", "logos", dry_run=True)
-    check("cmd no usa shell", isinstance(cmd, list) and "--dry-run" in cmd and "--solo" in cmd, str(cmd))
+    check(
+        "cmd no usa shell",
+        isinstance(cmd, list) and "--dry-run" in cmd and "--solo" in cmd,
+        str(cmd),
+    )
     root = Path(tempfile.mkdtemp()).resolve()
     inside = root / "output" / "asset.png"
     inside.parent.mkdir()

@@ -40,17 +40,23 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
-from typing import Any, Literal, Mapping, Sequence
-
+from typing import Any, Literal
 
 __version__ = "variations-v0.1-scaffolding"
 
 
 # Categorías canónicas del motor Eikon. STABLE — usar para validación.
-STANDARD_CATEGORIES: frozenset[str] = frozenset({
-    "logos", "cards", "og", "stationery", "banners",
-})
+STANDARD_CATEGORIES: frozenset[str] = frozenset(
+    {
+        "logos",
+        "cards",
+        "og",
+        "stationery",
+        "banners",
+    }
+)
 
 # Tamaño máximo de plan por defecto (safety cap para Fase 6).
 DEFAULT_MAX_COUNT: int = 200
@@ -64,6 +70,7 @@ ExpansionStrategy = Literal["seeded", "round_robin", "cartesian"]
 # =============================================================================
 # SEED DETERMINISTA (función pura, stdlib-only)
 # =============================================================================
+
 
 def _stable_int(*parts: str, digest_bytes: int = 8) -> int:
     """SHA-256 → uint64. Estable entre procesos y plataformas.
@@ -108,13 +115,19 @@ def deterministic_seed(
         ``int`` en ``[0, 2**64)``.
     """
     return _stable_int(
-        str(marca), str(category), str(type), str(variant), str(int(idx)), str(salt),
+        str(marca),
+        str(category),
+        str(type),
+        str(variant),
+        str(int(idx)),
+        str(salt),
     )
 
 
 # =============================================================================
 # DATACLASSES
 # =============================================================================
+
 
 @dataclass(frozen=True)
 class VariationRequest:
@@ -124,6 +137,7 @@ class VariationRequest:
     no mutados por el caller. ``__hash__`` se desactiva explícitamente abajo
     (los ``dict`` no son hashables).
     """
+
     marca: str
     category: str
     type: str
@@ -147,9 +161,7 @@ class VariationRequest:
             "strategy": self.strategy,
             "seed_salt": self.seed_salt,
             "locale": self.locale,
-            "palette_override": (
-                dict(self.palette_override) if self.palette_override else None
-            ),
+            "palette_override": (dict(self.palette_override) if self.palette_override else None),
             "max_count": self.max_count,
             "notes": self.notes,
         }
@@ -167,6 +179,7 @@ class Variation:
     ``params`` se almacena como ``tuple[tuple[str, str], ...]`` (ordenado) para
     garantizar hashabilidad. ``params_dict()`` expone la vista mutable-friendly.
     """
+
     idx: int
     seed: int
     params: tuple[tuple[str, str], ...]
@@ -195,6 +208,7 @@ class Variation:
 @dataclass(frozen=True)
 class VariationPlan:
     """Plan completo de ``N`` variaciones. Inmutable; igualdad por contenido."""
+
     request: VariationRequest
     variations: tuple[Variation, ...]
     strategy_used: ExpansionStrategy
@@ -228,10 +242,12 @@ class VariationPlan:
         """Serializa a JSONL (una variación por línea). Vacío → string vacío."""
         if not self.variations:
             return ""
-        return "\n".join(
-            json.dumps(v.as_dict(), ensure_ascii=False, sort_keys=True)
-            for v in self.variations
-        ) + "\n"
+        return (
+            "\n".join(
+                json.dumps(v.as_dict(), ensure_ascii=False, sort_keys=True) for v in self.variations
+            )
+            + "\n"
+        )
 
 
 # VariationPlan no es hashable (contiene VariationRequest con dicts).
@@ -242,6 +258,7 @@ VariationPlan.__hash__ = None  # type: ignore[assignment]
 # VALIDACIÓN
 # =============================================================================
 
+
 def validate_request(req: VariationRequest) -> None:
     """Valida un ``VariationRequest``. Lanza ``ValueError`` si hay problemas.
 
@@ -249,17 +266,11 @@ def validate_request(req: VariationRequest) -> None:
     que el caller (CLI, UI) pueda mostrar feedback accionable.
     """
     if not isinstance(req.marca, str) or not req.marca.strip():
-        raise ValueError(
-            f"VariationRequest.marca debe ser str no-vacío, got {req.marca!r}"
-        )
+        raise ValueError(f"VariationRequest.marca debe ser str no-vacío, got {req.marca!r}")
     if not isinstance(req.category, str) or not req.category.strip():
-        raise ValueError(
-            f"VariationRequest.category debe ser str no-vacío, got {req.category!r}"
-        )
+        raise ValueError(f"VariationRequest.category debe ser str no-vacío, got {req.category!r}")
     if not isinstance(req.type, str) or not req.type.strip():
-        raise ValueError(
-            f"VariationRequest.type debe ser str no-vacío, got {req.type!r}"
-        )
+        raise ValueError(f"VariationRequest.type debe ser str no-vacío, got {req.type!r}")
     if req.category not in STANDARD_CATEGORIES:
         raise ValueError(
             f"VariationRequest.category={req.category!r} no está en "
@@ -267,17 +278,11 @@ def validate_request(req: VariationRequest) -> None:
         )
     # bool es subclase de int → excluir explícitamente.
     if isinstance(req.count, bool) or not isinstance(req.count, int):
-        raise ValueError(
-            f"VariationRequest.count debe ser int, got {type(req.count).__name__}"
-        )
+        raise ValueError(f"VariationRequest.count debe ser int, got {type(req.count).__name__}")
     if req.count < 1:
-        raise ValueError(
-            f"VariationRequest.count debe ser >= 1, got {req.count!r}"
-        )
+        raise ValueError(f"VariationRequest.count debe ser >= 1, got {req.count!r}")
     if req.count > req.max_count:
-        raise ValueError(
-            f"VariationRequest.count={req.count} excede max_count={req.max_count}"
-        )
+        raise ValueError(f"VariationRequest.count={req.count} excede max_count={req.max_count}")
     if req.strategy not in ("seeded", "round_robin", "cartesian"):
         raise ValueError(
             f"VariationRequest.strategy desconocida: {req.strategy!r} "
@@ -285,23 +290,18 @@ def validate_request(req: VariationRequest) -> None:
         )
     for axis, options in req.base_variants.items():
         if not isinstance(axis, str) or not axis:
-            raise ValueError(
-                f"axis name debe ser str no-vacío, got {axis!r}"
-            )
+            raise ValueError(f"axis name debe ser str no-vacío, got {axis!r}")
         if not options:
-            raise ValueError(
-                f"axis {axis!r} debe tener al menos 1 opción (got 0)"
-            )
+            raise ValueError(f"axis {axis!r} debe tener al menos 1 opción (got 0)")
         for opt in options:
             if not isinstance(opt, str) or not opt:
-                raise ValueError(
-                    f"axis {axis!r} tiene opción inválida: {opt!r}"
-                )
+                raise ValueError(f"axis {axis!r} tiene opción inválida: {opt!r}")
 
 
 # =============================================================================
 # EXPANSIÓN (combinatoria determinista)
 # =============================================================================
+
 
 def _cartesian(axes: Mapping[str, Sequence[str]]) -> list[dict[str, str]]:
     """Producto cartesiano de los ejes. Orden estable (ejes ordenados alfabéticamente).
@@ -354,8 +354,12 @@ def _build_plan(req: VariationRequest) -> VariationPlan:
 
     if req.strategy == "seeded":
         request_seed = deterministic_seed(
-            marca=req.marca, category=req.category, type=req.type,
-            variant="__request__", idx=0, salt=req.seed_salt,
+            marca=req.marca,
+            category=req.category,
+            type=req.type,
+            variant="__request__",
+            idx=0,
+            salt=req.seed_salt,
         )
         ranked = sorted(combos, key=lambda c: _rank_key(c, request_seed))
         # Offset desfasado por request_seed → distintos salts reordenan.
@@ -373,18 +377,24 @@ def _build_plan(req: VariationRequest) -> VariationPlan:
     for i, params in enumerate(ordered):
         variant = _variant_str_of(params)
         seed = deterministic_seed(
-            marca=req.marca, category=req.category, type=req.type,
-            variant=variant, idx=i, salt=req.seed_salt,
-        )
-        variations.append(Variation(
-            idx=i,
-            seed=seed,
-            params=tuple(sorted(params.items())),
+            marca=req.marca,
             category=req.category,
             type=req.type,
-            marca=req.marca,
-            variant_str=variant,
-        ))
+            variant=variant,
+            idx=i,
+            salt=req.seed_salt,
+        )
+        variations.append(
+            Variation(
+                idx=i,
+                seed=seed,
+                params=tuple(sorted(params.items())),
+                category=req.category,
+                type=req.type,
+                marca=req.marca,
+                variant_str=variant,
+            )
+        )
 
     return VariationPlan(
         request=req,
@@ -396,6 +406,7 @@ def _build_plan(req: VariationRequest) -> VariationPlan:
 # =============================================================================
 # API PÚBLICA
 # =============================================================================
+
 
 def expand_variations(
     count: int,
@@ -474,14 +485,14 @@ def plan_from_request(req: VariationRequest) -> VariationPlan:
 
 
 __all__ = [
-    "__version__",
     "DEFAULT_LOCALE",
     "DEFAULT_MAX_COUNT",
-    "ExpansionStrategy",
     "STANDARD_CATEGORIES",
+    "ExpansionStrategy",
     "Variation",
     "VariationPlan",
     "VariationRequest",
+    "__version__",
     "deterministic_seed",
     "expand_variations",
     "plan_from_request",

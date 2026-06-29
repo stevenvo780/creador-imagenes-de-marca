@@ -1,4 +1,5 @@
 """Server-rendered Jinja2 templates for the webapp UI."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -23,6 +24,7 @@ def _fmt_dt(value: int | float | None) -> str:
     if not value:
         return "—"
     import datetime as _dt
+
     return _dt.datetime.fromtimestamp(int(value)).strftime("%Y-%m-%d %H:%M:%S")
 
 
@@ -49,7 +51,9 @@ def _pills(value: str | None) -> str:
         "failed": "danger",
         "cancelled": "muted",
     }
-    return f'<span class="pill {m.get(value, "muted")}"><span class="dot"></span>{value or "—"}</span>'
+    return (
+        f'<span class="pill {m.get(value, "muted")}"><span class="dot"></span>{value or "—"}</span>'
+    )
 
 
 env.filters["dt"] = _fmt_dt
@@ -62,8 +66,15 @@ def render_template(name: str, **context: Any) -> str:
     return template.render(**context)
 
 
-def render(request: Request, name: str, *, user: Any | None = None, active: str = "",
-            show_chrome: bool = True, **context: Any) -> HTMLResponse:
+def render(
+    request: Request,
+    name: str,
+    *,
+    user: Any | None = None,
+    active: str = "",
+    show_chrome: bool = True,
+    **context: Any,
+) -> HTMLResponse:
     context.setdefault("request", request)
     context.setdefault("static_base", "/static")
     context.setdefault("user", user)

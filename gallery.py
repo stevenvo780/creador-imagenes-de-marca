@@ -20,10 +20,10 @@ import io
 import json
 import sys
 from pathlib import Path
-from typing import Any, Optional
 
 try:
     from PIL import Image
+
     HAS_PIL = True
 except ImportError:
     HAS_PIL = False
@@ -184,7 +184,7 @@ def make_thumbnail(png_path: Path) -> str:
         return ""
 
 
-def load_manifest(marca_slug: str) -> Optional[dict]:
+def load_manifest(marca_slug: str) -> dict | None:
     """Carga _manifest.json si existe."""
     manifest_path = OUTPUT_DIR / marca_slug / "_manifest.json"
     if manifest_path.exists():
@@ -243,6 +243,7 @@ def build_gallery(marca_slug: str) -> str:
             # Intentar leer dimensiones reales
             try:
                 from PIL import Image
+
                 with Image.open(png) as img:
                     asset["width"] = img.width
                     asset["height"] = img.height
@@ -277,7 +278,7 @@ def build_gallery(marca_slug: str) -> str:
 
             cards += f"""
         <div class="card">
-          <a href="{a['path']}" target="_blank">
+          <a href="{a["path"]}" target="_blank">
             <img src="{thumb}" alt="{display_name}" loading="lazy">
             <div class="card-info">
               <div class="card-name">{display_name}</div>
@@ -295,6 +296,7 @@ def build_gallery(marca_slug: str) -> str:
   </div>"""
 
     from datetime import datetime
+
     return GALLERY_TEMPLATE.format(
         marca=marca_slug,
         generated_at=generated_at,
@@ -321,7 +323,9 @@ def build_aggregated_gallery(marca_slugs: list[str]) -> str:
         if not manifest:
             continue
 
-        all_categories_html += f'<h2 style="color:#43b5a6;margin-top:32px;font-size:1.3rem;">{slug}</h2>\n'
+        all_categories_html += (
+            f'<h2 style="color:#43b5a6;margin-top:32px;font-size:1.3rem;">{slug}</h2>\n'
+        )
 
         assets_by_cat: dict[str, list[dict]] = {}
         for asset in manifest.get("assets", []):
@@ -349,7 +353,7 @@ def build_aggregated_gallery(marca_slugs: list[str]) -> str:
                 badge_class = f" {status}" if status in ("cached", "error") else ""
                 cards += f"""
         <div class="card">
-          <a href="{slug}/{a['path']}" target="_blank">
+          <a href="{slug}/{a["path"]}" target="_blank">
             <img src="{thumb}" alt="{display_name}" loading="lazy">
             <div class="card-info">
               <div class="card-name">{display_name}</div>
@@ -366,6 +370,7 @@ def build_aggregated_gallery(marca_slugs: list[str]) -> str:
   </div>"""
 
     from datetime import datetime
+
     return GALLERY_TEMPLATE.format(
         marca="TODAS LAS MARCAS (agregado)",
         generated_at="",
@@ -382,10 +387,18 @@ def build_aggregated_gallery(marca_slugs: list[str]) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Galería HTML de assets de marca")
     parser.add_argument("marca", nargs="?", help="Slug de la marca (ej. pinakotheke-kosmos)")
-    parser.add_argument("--all-marcas", "--all", action="store_true", dest="all_marcas",
-                        help="Genera galerías para todas las marcas")
-    parser.add_argument("--aggregated", action="store_true",
-                        help="Genera una galería agregada (todas las marcas en un solo HTML)")
+    parser.add_argument(
+        "--all-marcas",
+        "--all",
+        action="store_true",
+        dest="all_marcas",
+        help="Genera galerías para todas las marcas",
+    )
+    parser.add_argument(
+        "--aggregated",
+        action="store_true",
+        help="Genera una galería agregada (todas las marcas en un solo HTML)",
+    )
     parser.add_argument("--output", type=str, help="Ruta del archivo HTML de salida")
     args = parser.parse_args()
 
@@ -396,7 +409,8 @@ def main() -> int:
 
     if args.all_marcas:
         marca_dirs = sorted(
-            d.name for d in OUTPUT_DIR.iterdir()
+            d.name
+            for d in OUTPUT_DIR.iterdir()
             if d.is_dir() and not d.name.startswith("_") and not d.name.startswith(".")
         )
         if not marca_dirs:

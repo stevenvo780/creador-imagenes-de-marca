@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Tests stdlib para taxonomy.json v1 y su validador."""
+
 from __future__ import annotations
 
 import json
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
-import sys
 
 ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
@@ -129,7 +130,17 @@ def test_cli_exit_codes() -> None:
         layouts = tmp / "layouts.json"
         layouts.write_text('{"layouts": []}', encoding="utf-8")
         run = subprocess.run(
-            ["python3", str(script), "--taxonomy", str(bad), "--templates", str(templates), "--layouts", str(layouts), "--no-eikon-cross-check"],
+            [
+                "python3",
+                str(script),
+                "--taxonomy",
+                str(bad),
+                "--templates",
+                str(templates),
+                "--layouts",
+                str(layouts),
+                "--no-eikon-cross-check",
+            ],
             cwd=ROOT,
             capture_output=True,
             text=True,
@@ -149,11 +160,13 @@ def test_taxonomy_parity_helpers() -> None:
 
     check(
         "cloud_atlas parity",
-        serial(_from_taxonomy_json(ROOT / "config" / "taxonomy.json", False)) == serial(_legacy_python_taxonomia(False)),
+        serial(_from_taxonomy_json(ROOT / "config" / "taxonomy.json", False))
+        == serial(_legacy_python_taxonomia(False)),
     )
     check(
         "prizma parity",
-        serial(_from_taxonomy_json(ROOT / "config" / "taxonomy.json", True)) == serial(_legacy_python_taxonomia(True)),
+        serial(_from_taxonomy_json(ROOT / "config" / "taxonomy.json", True))
+        == serial(_legacy_python_taxonomia(True)),
     )
 
 

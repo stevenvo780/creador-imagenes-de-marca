@@ -57,7 +57,9 @@ def decode_jwt(token: str, secret: str) -> dict[str, Any]:
     except ValueError as e:
         raise ValueError("token JWT malformado") from e
     signing_input = f"{header_b64}.{payload_b64}"
-    expected = hmac.new(secret.encode("utf-8"), signing_input.encode("ascii"), hashlib.sha256).digest()
+    expected = hmac.new(
+        secret.encode("utf-8"), signing_input.encode("ascii"), hashlib.sha256
+    ).digest()
     actual = _unb64url(sig_b64)
     if not hmac.compare_digest(actual, expected):
         raise ValueError("firma JWT inválida")

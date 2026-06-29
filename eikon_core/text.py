@@ -1,22 +1,22 @@
 from __future__ import annotations
 
 TEXT_LIMITS: dict[str, dict[str, int]] = {
-    "business_card":     {"titulo": 38, "subtitulo": 44, "copy": 62, "url": 36},
-    "og_general":        {"titulo": 58, "subtitulo": 56, "copy": 132, "url": 42},
-    "stat_card":         {"titulo": 48, "copy": 86, "url": 34},
-    "ad_leaderboard":    {"titulo": 26, "copy": 58, "url": 32},
-    "ad_rectangle":      {"titulo": 26, "copy": 58, "url": 32},
-    "letterhead":        {"titulo": 68, "subtitulo": 62, "copy": 190, "url": 42},
+    "business_card": {"titulo": 38, "subtitulo": 44, "copy": 62, "url": 36},
+    "og_general": {"titulo": 58, "subtitulo": 56, "copy": 132, "url": 42},
+    "stat_card": {"titulo": 48, "copy": 86, "url": 34},
+    "ad_leaderboard": {"titulo": 26, "copy": 58, "url": 32},
+    "ad_rectangle": {"titulo": 26, "copy": 58, "url": 32},
+    "letterhead": {"titulo": 68, "subtitulo": 62, "copy": 190, "url": 42},
     "lockup_horizontal": {"titulo": 42, "subtitulo": 58},
-    "lockup_vertical":   {"titulo": 42, "subtitulo": 58},
-    "wordmark":          {"titulo": 42, "subtitulo": 70},
-    "isotipo":           {"titulo": 28},
-    "watermark":         {"titulo": 42},
-    "favicon":           {"titulo": 20},
-    "linkedin_header":   {"titulo": 62, "subtitulo": 44, "copy": 90, "url": 42},
-    "twitter_header":    {"titulo": 52, "copy": 72, "url": 42},
-    "youtube_header":    {"titulo": 64, "copy": 100, "url": 42},
-    "web_hero_desktop":  {"titulo": 56, "copy": 92, "url": 42},
+    "lockup_vertical": {"titulo": 42, "subtitulo": 58},
+    "wordmark": {"titulo": 42, "subtitulo": 70},
+    "isotipo": {"titulo": 28},
+    "watermark": {"titulo": 42},
+    "favicon": {"titulo": 20},
+    "linkedin_header": {"titulo": 62, "subtitulo": 44, "copy": 90, "url": 42},
+    "twitter_header": {"titulo": 52, "copy": 72, "url": 42},
+    "youtube_header": {"titulo": 64, "copy": 100, "url": 42},
+    "web_hero_desktop": {"titulo": 56, "copy": 92, "url": 42},
 }
 
 

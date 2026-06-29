@@ -3,6 +3,7 @@
 El runner historico `tests/test_eikon_checks.py` sigue siendo la fuente de
 verdad. Este archivo solo permite que `pytest` y CI lo ejecuten como gate.
 """
+
 from __future__ import annotations
 
 import subprocess

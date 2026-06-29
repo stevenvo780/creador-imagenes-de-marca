@@ -40,7 +40,9 @@ def validate_taxonomy(data: Any) -> None:
             raise ValueError(f"taxonomy.families[{family_name!r}] debe ser dict")
         categories = family.get("categories")
         if not isinstance(categories, dict) or not categories:
-            raise ValueError(f"taxonomy.families[{family_name!r}].categories debe ser dict no-vacío")
+            raise ValueError(
+                f"taxonomy.families[{family_name!r}].categories debe ser dict no-vacío"
+            )
         for category_name, category in categories.items():
             if category_name not in CANONICAL_CATEGORIES:
                 raise ValueError(f"categoría no canónica en {family_name!r}: {category_name!r}")
@@ -66,9 +68,13 @@ def validate_taxonomy(data: Any) -> None:
                 for key in ("width", "height"):
                     value = type_entry.get(key)
                     if not isinstance(value, int) or not (min_dim <= value <= max_dim):
-                        raise ValueError(f"{where}.{key} fuera de rango [{min_dim},{max_dim}]: {value!r}")
+                        raise ValueError(
+                            f"{where}.{key} fuera de rango [{min_dim},{max_dim}]: {value!r}"
+                        )
                 template = type_entry.get("template")
-                if template is not None and (not isinstance(template, str) or not template.endswith(".html")):
+                if template is not None and (
+                    not isinstance(template, str) or not template.endswith(".html")
+                ):
                     raise ValueError(f"{where}.template debe ser *.html o null: {template!r}")
                 variants = type_entry.get("variants")
                 if not isinstance(variants, list) or not variants:
@@ -85,7 +91,9 @@ def validate_taxonomy(data: Any) -> None:
                     if not isinstance(vid, str) or not vid:
                         raise ValueError(f"{vwhere}.id debe ser string no-vacío")
                     if vid in seen_variants:
-                        raise ValueError(f"variant duplicada en {family_name}/{category_name}/{name}: {vid!r}")
+                        raise ValueError(
+                            f"variant duplicada en {family_name}/{category_name}/{name}: {vid!r}"
+                        )
                     seen_variants.add(vid)
                     if not _VARIANT_RE.match(vid):
                         raise ValueError(f"{vwhere}.id no cumple convención vN_slug: {vid!r}")

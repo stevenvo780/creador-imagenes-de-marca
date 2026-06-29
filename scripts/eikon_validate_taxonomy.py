@@ -5,15 +5,17 @@ No modifica archivos. Verifica estructura, templates existentes y paridad con
 la taxonomía legacy en Python. Los warnings documentan drift con layouts.json;
 solo fallan con --strict.
 """
+
 from __future__ import annotations
 
 import argparse
 import json
 import sys
+from collections.abc import Sequence
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_TAXONOMY = ROOT / "config" / "taxonomy.json"
@@ -47,11 +49,15 @@ class Report:
         return s["fail"] > 0 or (strict and s["warn"] > 0)
 
     def to_json(self) -> str:
-        return json.dumps({
-            "generated_at": datetime.now(timezone.utc).isoformat(),
-            "summary": self.summary(),
-            "issues": self.issues,
-        }, indent=2, ensure_ascii=False)
+        return json.dumps(
+            {
+                "generated_at": datetime.now(UTC).isoformat(),
+                "summary": self.summary(),
+                "issues": self.issues,
+            },
+            indent=2,
+            ensure_ascii=False,
+        )
 
     def to_table(self) -> str:
         summary = self.summary()
@@ -65,7 +71,9 @@ class Report:
         lines.append("")
         for issue in self.issues:
             where = f" [{issue['where']}]" if issue.get("where") else ""
-            lines.append(f"[{issue['severity'].upper():4}] {issue['code']}: {issue['message']}{where}")
+            lines.append(
+                f"[{issue['severity'].upper():4}] {issue['code']}: {issue['message']}{where}"
+            )
         return "\n".join(lines)
 
 
@@ -87,6 +95,7 @@ def load_json(path: Path, report: Report) -> dict[str, Any] | None:
 def validate_content(data: dict[str, Any], templates_dir: Path, report: Report) -> None:
     try:
         from eikon_core.validation import validate_taxonomy
+
         validate_taxonomy(data)
     except Exception as e:
         report.add("fail", "S001", str(e), "taxonomy.json")
@@ -108,14 +117,17 @@ def validate_content(data: dict[str, Any], templates_dir: Path, report: Report) 
                     if not path.is_file():
                         report.add("fail", "T002", f"template no existe: {template}", where)
                     if template in protected or type_entry.get("protected"):
-                        report.add("info", "T003", f"template protegido/read-only: {template}", where)
+                        report.add(
+                            "info", "T003", f"template protegido/read-only: {template}", where
+                        )
 
 
-def _spec_map(types_by_category: dict[str, list[Any]]) -> dict[str, list[tuple[str, int, int, tuple[str, ...]]]]:
+def _spec_map(
+    types_by_category: dict[str, list[Any]],
+) -> dict[str, list[tuple[str, int, int, tuple[str, ...]]]]:
     return {
         category: [
-            (t.name, t.width, t.height, tuple(v.name for v in t.variants))
-            for t in type_specs
+            (t.name, t.width, t.height, tuple(v.name for v in t.variants)) for t in type_specs
         ]
         for category, type_specs in types_by_category.items()
     }
@@ -123,9 +135,11 @@ def _spec_map(types_by_category: dict[str, list[Any]]) -> dict[str, list[tuple[s
 
 def cross_check_legacy(taxonomy_path: Path, report: Report) -> None:
     try:
-        from eikon_core.taxonomy import _legacy_python_taxonomia, _from_taxonomy_json
+        from eikon_core.taxonomy import _from_taxonomy_json, _legacy_python_taxonomia
     except Exception as e:
-        report.add("warn", "X001", f"no se pudo importar eikon_core.taxonomy: {type(e).__name__}: {e}")
+        report.add(
+            "warn", "X001", f"no se pudo importar eikon_core.taxonomy: {type(e).__name__}: {e}"
+        )
         return
 
     for is_prizma, family in ((False, "cloud_atlas"), (True, "prizma")):
@@ -133,13 +147,17 @@ def cross_check_legacy(taxonomy_path: Path, report: Report) -> None:
             legacy = _spec_map(_legacy_python_taxonomia(is_prizma))
             current = _spec_map(_from_taxonomy_json(taxonomy_path, is_prizma))
         except Exception as e:
-            report.add("fail", "X002", f"no se pudo cargar taxonomía {family}: {type(e).__name__}: {e}")
+            report.add(
+                "fail", "X002", f"no se pudo cargar taxonomía {family}: {type(e).__name__}: {e}"
+            )
             continue
         if legacy != current:
             report.add("warn", "X003", "taxonomy.json difiere de _legacy_python_taxonomia", family)
 
 
-def cross_check_layouts(data: dict[str, Any], layouts_path: Path, templates_dir: Path, report: Report) -> None:
+def cross_check_layouts(
+    data: dict[str, Any], layouts_path: Path, templates_dir: Path, report: Report
+) -> None:
     if not layouts_path.is_file():
         report.add("info", "L000", f"layouts.json ausente: {layouts_path}")
         return
@@ -170,12 +188,22 @@ def cross_check_layouts(data: dict[str, Any], layouts_path: Path, templates_dir:
         template = layout.get("template")
         where = f"layouts[{idx}]"
         if isinstance(template, str) and not (templates_dir / template).is_file():
-            report.add("warn", "L010", f"template referenciado por layouts.json no existe: {template}", where)
+            report.add(
+                "warn",
+                "L010",
+                f"template referenciado por layouts.json no existe: {template}",
+                where,
+            )
         if isinstance(lid, str) and lid in type_dims:
             expected = type_dims[lid]
             actual = (int(layout.get("ancho", 0)), int(layout.get("alto", 0)))
             if expected != actual:
-                report.add("warn", "L011", f"dims layouts {actual[0]}x{actual[1]} != taxonomy {expected[0]}x{expected[1]}", where)
+                report.add(
+                    "warn",
+                    "L011",
+                    f"dims layouts {actual[0]}x{actual[1]} != taxonomy {expected[0]}x{expected[1]}",
+                    where,
+                )
 
 
 def validate_taxonomy_file(

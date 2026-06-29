@@ -19,13 +19,13 @@ from __future__ import annotations
 
 import argparse
 import json
-from pathlib import Path
-from typing import Any, Optional
 from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 try:
-    from PIL import Image
     import numpy as np
+    from PIL import Image
 except ImportError:
     raise ImportError("Se requieren Pillow y numpy. Instala con: pip install Pillow numpy")
 
@@ -36,8 +36,9 @@ class ContrastValidator:
     WCAG_AA_THRESHOLD = 4.5  # Ratio mínimo para texto normal
     WCAG_AAA_THRESHOLD = 7.0  # Ratio mínimo para texto grande
 
-    def __init__(self, output_dir: Path, min_fg_ratio: float = 0.005,
-                 lum_diff_threshold: float = 0.10):
+    def __init__(
+        self, output_dir: Path, min_fg_ratio: float = 0.005, lum_diff_threshold: float = 0.10
+    ):
         """
         Args:
             output_dir: Ruta a output/ del generador.
@@ -60,7 +61,7 @@ class ContrastValidator:
     def _hex_to_rgb(self, hex_color: str) -> tuple[int, int, int]:
         """Convierte hex a RGB."""
         hex_color = hex_color.lstrip("#")
-        return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+        return tuple(int(hex_color[i : i + 2], 16) for i in (0, 2, 4))
 
     @staticmethod
     def _srgb_to_linear(channel: int) -> float:
@@ -84,7 +85,9 @@ class ContrastValidator:
         b_lin = self._srgb_to_linear(b)
         return 0.2126 * r_lin + 0.7152 * g_lin + 0.0722 * b_lin
 
-    def _calculate_contrast_ratio(self, rgb1: tuple[int, int, int], rgb2: tuple[int, int, int]) -> float:
+    def _calculate_contrast_ratio(
+        self, rgb1: tuple[int, int, int], rgb2: tuple[int, int, int]
+    ) -> float:
         """
         Calcula ratio de contraste WCAG.
         (L1 + 0.05) / (L2 + 0.05) donde L1 >= L2
@@ -107,7 +110,9 @@ class ContrastValidator:
         else:
             return (128, 128, 128)
 
-    def _sample_background_median(self, img_array: np.ndarray, margin_px: int = 40) -> tuple[int, int, int]:
+    def _sample_background_median(
+        self, img_array: np.ndarray, margin_px: int = 40
+    ) -> tuple[int, int, int]:
         """
         Extrae el color de fondo desde los bordes de la imagen usando la mediana.
         Muestrea los 4 bordes (top, bottom, left, right) — más robusto que solo esquinas,
@@ -119,17 +124,17 @@ class ContrastValidator:
             m = 5
 
         regions = [
-            img_array[:m, :],            # top edge
-            img_array[-m:, :],           # bottom edge
-            img_array[:, :m],            # left edge
-            img_array[:, -m:],           # right edge
+            img_array[:m, :],  # top edge
+            img_array[-m:, :],  # bottom edge
+            img_array[:, :m],  # left edge
+            img_array[:, -m:],  # right edge
         ]
         all_pixels = np.concatenate([r.reshape(-1, img_array.shape[-1]) for r in regions], axis=0)
         return self._extract_rgb(all_pixels)
 
     def _detect_fg_in_region(
         self, img_array: np.ndarray, bg_rgb: tuple[int, int, int]
-    ) -> tuple[Optional[tuple[int, int, int]], str]:
+    ) -> tuple[tuple[int, int, int] | None, str]:
         """
         Detecta foreground en una región de píxeles.
         Retorna (fg_rgb | None, diagnostic).
@@ -161,9 +166,8 @@ class ContrastValidator:
         return fg_rgb, "ok"
 
     def _detect_foreground_robust(
-        self, img_array: np.ndarray, bg_rgb: tuple[int, int, int],
-        sample_fraction: float = 0.5
-    ) -> tuple[Optional[tuple[int, int, int]], str]:
+        self, img_array: np.ndarray, bg_rgb: tuple[int, int, int], sample_fraction: float = 0.5
+    ) -> tuple[tuple[int, int, int] | None, str]:
         """
         Detecta foreground con estrategia multi-región (Fase 4 mejorada):
 
@@ -192,10 +196,18 @@ class ContrastValidator:
         mid_y, mid_x = h // 2, w // 2
         q_size_y, q_size_x = int(h * 0.30), int(w * 0.30)
         quadrants = [
-            img_array[max(0, mid_y - q_size_y):mid_y, max(0, mid_x - q_size_x):mid_x],  # top-left
-            img_array[max(0, mid_y - q_size_y):mid_y, mid_x:min(w, mid_x + q_size_x)],   # top-right
-            img_array[mid_y:min(h, mid_y + q_size_y), max(0, mid_x - q_size_x):mid_x],   # bottom-left
-            img_array[mid_y:min(h, mid_y + q_size_y), mid_x:min(w, mid_x + q_size_x)],   # bottom-right
+            img_array[
+                max(0, mid_y - q_size_y) : mid_y, max(0, mid_x - q_size_x) : mid_x
+            ],  # top-left
+            img_array[
+                max(0, mid_y - q_size_y) : mid_y, mid_x : min(w, mid_x + q_size_x)
+            ],  # top-right
+            img_array[
+                mid_y : min(h, mid_y + q_size_y), max(0, mid_x - q_size_x) : mid_x
+            ],  # bottom-left
+            img_array[
+                mid_y : min(h, mid_y + q_size_y), mid_x : min(w, mid_x + q_size_x)
+            ],  # bottom-right
         ]
 
         for i, quad in enumerate(quadrants):
@@ -243,7 +255,11 @@ class ContrastValidator:
             # Excluir assets decorativos del check de contraste
             if self._is_decorative_only(img_path):
                 return {
-                    "img": str(img_path.relative_to(self.output_dir) if self.output_dir in img_path.parents else img_path),
+                    "img": str(
+                        img_path.relative_to(self.output_dir)
+                        if self.output_dir in img_path.parents
+                        else img_path
+                    ),
                     "decorative": True,
                     "wcag_aa": True,
                     "wcag_aaa": True,
@@ -269,7 +285,11 @@ class ContrastValidator:
             fg_rgb, fg_diag = self._detect_foreground_robust(img_array, bg_rgb)
 
             if fg_rgb is None:
-                rel_path = img_path.relative_to(self.output_dir) if self.output_dir in img_path.parents else img_path
+                rel_path = (
+                    img_path.relative_to(self.output_dir)
+                    if self.output_dir in img_path.parents
+                    else img_path
+                )
                 return {
                     "img": str(rel_path),
                     "bg_color": self._rgb_to_hex(bg_rgb),
@@ -294,7 +314,11 @@ class ContrastValidator:
             elif not wcag_aaa:
                 issue = f"Ratio {contrast_ratio:.2f} >= 4.5 (WCAG AA OK, pero < 7.0 para AAA)"
 
-            rel_path = img_path.relative_to(self.output_dir) if self.output_dir in img_path.parents else img_path
+            rel_path = (
+                img_path.relative_to(self.output_dir)
+                if self.output_dir in img_path.parents
+                else img_path
+            )
 
             return {
                 "img": str(rel_path),
@@ -308,14 +332,18 @@ class ContrastValidator:
 
         except Exception as e:
             return {
-                "img": str(img_path.relative_to(self.output_dir) if self.output_dir in img_path.parents else img_path),
+                "img": str(
+                    img_path.relative_to(self.output_dir)
+                    if self.output_dir in img_path.parents
+                    else img_path
+                ),
                 "error": f"No se pudo procesar: {e}",
                 "wcag_aa": False,
                 "wcag_aaa": False,
                 "issue": str(e),
             }
 
-    def validate_all(self, marca_slug: Optional[str] = None) -> list[dict[str, Any]]:
+    def validate_all(self, marca_slug: str | None = None) -> list[dict[str, Any]]:
         """
         Valida PNGs en output/ (recursivo) o solo en output/<marca_slug>/ si se especifica.
         Omite archivos que comienzan con _ (ej: _contraste-report.json).
@@ -342,12 +370,18 @@ class ContrastValidator:
             return self.results
 
         scope_label = f"output/{marca_slug}" if marca_slug else "output/"
-        print(f"ℹ Validando {len(png_files)} PNG en {scope_label} (min_fg_ratio={self.min_fg_ratio}, lum_diff={self.LUM_DIFF_THRESHOLD})...")
+        print(
+            f"ℹ Validando {len(png_files)} PNG en {scope_label} (min_fg_ratio={self.min_fg_ratio}, lum_diff={self.LUM_DIFF_THRESHOLD})..."
+        )
 
         for png_path in png_files:
             if png_path.name.startswith("_"):
                 continue
-            rel_name = str(png_path.relative_to(self.output_dir) if self.output_dir in png_path.parents else png_path)
+            rel_name = str(
+                png_path.relative_to(self.output_dir)
+                if self.output_dir in png_path.parents
+                else png_path
+            )
             decorative_tokens = ("watermark", "isotipo", "favicon", "logo_symbol")
             if any(token in rel_name for token in decorative_tokens):
                 print(f"  - {rel_name}: omitido (decorativo/símbolo solo)")
@@ -421,8 +455,10 @@ class ContrastValidator:
 
         report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False))
         print(f"✓ Reporte guardado: {report_path}")
-        print(f"  WCAG AA: {len(passes_aa)}/{len(self.results)} PASS"
-              f"{' (' + str(no_fg_count) + ' sin foreground)' if no_fg_count else ''}")
+        print(
+            f"  WCAG AA: {len(passes_aa)}/{len(self.results)} PASS"
+            f"{' (' + str(no_fg_count) + ' sin foreground)' if no_fg_count else ''}"
+        )
         if failures_aa:
             non_fg_fails = len(failures_aa) - no_fg_count
             if non_fg_fails > 0:
@@ -431,14 +467,30 @@ class ContrastValidator:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Validador WCAG AA para PNGs de marca")
-    parser.add_argument("output_dir", nargs="?", default=None,
-                        help="Ruta al directorio output o a output/<marca>/ (default: ./output)")
-    parser.add_argument("--marca", type=str, default=None,
-                        help="Slug de marca para auditar solo output/<marca>/ (ej. pinakotheke-kosmos)")
-    parser.add_argument("--min-fg-ratio", type=float, default=0.005,
-                        help="Fracción mínima de píxeles foreground (default: 0.005 = 0.5%%)")
-    parser.add_argument("--lum-diff", type=float, default=0.10,
-                        help="Diferencia mínima de luminancia WCAG para foreground (default: 0.10)")
+    parser.add_argument(
+        "output_dir",
+        nargs="?",
+        default=None,
+        help="Ruta al directorio output o a output/<marca>/ (default: ./output)",
+    )
+    parser.add_argument(
+        "--marca",
+        type=str,
+        default=None,
+        help="Slug de marca para auditar solo output/<marca>/ (ej. pinakotheke-kosmos)",
+    )
+    parser.add_argument(
+        "--min-fg-ratio",
+        type=float,
+        default=0.005,
+        help="Fracción mínima de píxeles foreground (default: 0.005 = 0.5%%)",
+    )
+    parser.add_argument(
+        "--lum-diff",
+        type=float,
+        default=0.10,
+        help="Diferencia mínima de luminancia WCAG para foreground (default: 0.10)",
+    )
     args = parser.parse_args()
 
     # Determinar output_dir base y si el positional es una carpeta de marca

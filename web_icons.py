@@ -32,10 +32,8 @@ from __future__ import annotations
 
 import argparse
 import json
-import math
 import sys
 from pathlib import Path
-from typing import Optional
 
 try:
     from PIL import Image, ImageDraw, ImageFont
@@ -61,7 +59,7 @@ OG_SIZE = (1200, 630)
 MASKABLE_PADDING_RATIO = 0.10
 
 
-def load_brand(slug: str) -> Optional[dict]:
+def load_brand(slug: str) -> dict | None:
     path = MARCAS_DIR / f"{slug}.json"
     if not path.exists():
         print(f"  ERROR: {path} no existe", file=sys.stderr)
@@ -89,7 +87,7 @@ def hex_to_rgba(hex_color: str, alpha: int = 255) -> tuple[int, int, int, int]:
     return (r, g, b, alpha)
 
 
-def find_source_icon(marca_slug: str, brand: dict) -> Optional[Image.Image]:
+def find_source_icon(marca_slug: str, brand: dict) -> Image.Image | None:
     """
     Busca la mejor fuente para el isotipo: RGBA (transparente) si existe, si no RGB.
     Retorna imagen RGBA 512px ya reescalada o None.
@@ -98,10 +96,10 @@ def find_source_icon(marca_slug: str, brand: dict) -> Optional[Image.Image]:
 
     # Preferencia: RGBA transparente con símbolo para resize limpio
     candidates = [
-        base / "v1_32_alpha.png",   # RGBA — símbolo con fondo transparente
-        base / "v3_512.png",        # RGB — símbolo en fondo de marca
-        base / "v1_32.png",         # RGB — símbolo en fondo de marca
-        base / "v2_180.png",        # RGB — variante redondeada
+        base / "v1_32_alpha.png",  # RGBA — símbolo con fondo transparente
+        base / "v3_512.png",  # RGB — símbolo en fondo de marca
+        base / "v1_32.png",  # RGB — símbolo en fondo de marca
+        base / "v2_180.png",  # RGB — variante redondeada
     ]
 
     for cand in candidates:
@@ -116,7 +114,10 @@ def find_source_icon(marca_slug: str, brand: dict) -> Optional[Image.Image]:
             except Exception as e:
                 print(f"    WARN: No se pudo cargar {cand}: {e}", file=sys.stderr)
 
-    print(f"  WARN: No se encontró fuente favicon para {marca_slug}. Generando placeholder.", file=sys.stderr)
+    print(
+        f"  WARN: No se encontró fuente favicon para {marca_slug}. Generando placeholder.",
+        file=sys.stderr,
+    )
     return None
 
 
@@ -142,6 +143,7 @@ def make_transparent(img: Image.Image, brand: dict) -> Image.Image:
 
     # Flood-fill desde las 4 esquinas
     from collections import deque
+
     visited = set()
     queue: deque = deque()
     corners = [(0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1)]
@@ -164,18 +166,28 @@ def make_transparent(img: Image.Image, brand: dict) -> Image.Image:
     return img
 
 
-def find_source_og(marca_slug: str, brand: dict) -> Optional[Image.Image]:
+def find_source_og(marca_slug: str, brand: dict) -> Image.Image | None:
     """Busca la mejor fuente para og-image: 1200x630."""
     family = "prizma" if "prizma" in marca_slug else "cloud_atlas"
     base = OUTPUT_DIR / marca_slug / "og" / "og_general"
 
     # Prizma: v1_docs o v2_enterprise_blog; Cloud Atlas: v1_website
     if family == "prizma":
-        candidates = ["v1_docs.png", "v2_enterprise_blog.png", "v3_tool.png",
-                      "v1_website.png", "v1_articulo.png"]
+        candidates = [
+            "v1_docs.png",
+            "v2_enterprise_blog.png",
+            "v3_tool.png",
+            "v1_website.png",
+            "v1_articulo.png",
+        ]
     else:
-        candidates = ["v1_website.png", "v1_articulo.png", "v2_articulo.png",
-                      "v1_docs.png", "v3_feature.png"]
+        candidates = [
+            "v1_website.png",
+            "v1_articulo.png",
+            "v2_articulo.png",
+            "v1_docs.png",
+            "v3_feature.png",
+        ]
 
     for name in candidates:
         p = base / name
@@ -193,7 +205,10 @@ def find_source_og(marca_slug: str, brand: dict) -> Optional[Image.Image]:
             except Exception:
                 pass
 
-    print(f"  WARN: No se encontró fuente og-image para {marca_slug}. Generando placeholder.", file=sys.stderr)
+    print(
+        f"  WARN: No se encontró fuente og-image para {marca_slug}. Generando placeholder.",
+        file=sys.stderr,
+    )
     return None
 
 
@@ -343,9 +358,15 @@ def generate_web_icons(marca_slug: str, brand: dict, dry_run: bool = False) -> d
     if dry_run:
         print(f"  [DRY-RUN] {marca_slug} → {out_dir}")
         for name in [
-            "favicon.ico", "favicon-16.png", "favicon-32.png",
-            "apple-touch-icon.png", "icon-192.png", "icon-512.png",
-            "icon-512-maskable.png", "og-image.png", "icon.svg",
+            "favicon.ico",
+            "favicon-16.png",
+            "favicon-32.png",
+            "apple-touch-icon.png",
+            "icon-192.png",
+            "icon-512.png",
+            "icon-512-maskable.png",
+            "og-image.png",
+            "icon.svg",
         ]:
             results[name] = (True, 0)
         return results
@@ -509,11 +530,13 @@ def verify_web_icons(marca_slug: str) -> dict:
                         ico_sizes = set()
                         try:
                             import struct
+
                             raw = p.read_bytes()
                             count = struct.unpack_from("<H", raw, 4)[0]
                             for i in range(count):
                                 off = 6 + i * 16
-                                w = raw[off]; h = raw[off + 1]
+                                w = raw[off]
+                                h = raw[off + 1]
                                 w = 256 if w == 0 else w
                                 h = 256 if h == 0 else h
                                 ico_sizes.add((w, h))
@@ -522,7 +545,7 @@ def verify_web_icons(marca_slug: str) -> dict:
                         entry["ico_sizes"] = sorted(ico_sizes)
                         entry["size_ok"] = len(ico_sizes) >= 2
                     if "size" in spec:
-                        entry["size_ok"] = (img.size == spec["size"])
+                        entry["size_ok"] = img.size == spec["size"]
                     else:
                         entry["size_ok"] = True
                 except Exception as e:
@@ -575,7 +598,9 @@ Ejemplos:
         """,
     )
     parser.add_argument("--marca", type=str, help="Slug de la marca")
-    parser.add_argument("--all", action="store_true", help="Procesa todas las marcas (excl. agora-*)")
+    parser.add_argument(
+        "--all", action="store_true", help="Procesa todas las marcas (excl. agora-*)"
+    )
     parser.add_argument("--only-marcas", type=str, help="Lista separada por comas de slugs")
     parser.add_argument("--dry-run", action="store_true", help="Simula sin escribir archivos")
     parser.add_argument("--verify-only", action="store_true", help="Solo verifica sin generar")
@@ -619,7 +644,9 @@ Ejemplos:
             results = generate_web_icons(slug, brand, dry_run=args.dry_run)
             ok_count = sum(1 for ok, _ in results.values() if ok)
             err_count = sum(1 for ok, _ in results.values() if not ok)
-            print(f"  Generados: {ok_count}/{len(results)}" + (" [DRY-RUN]" if args.dry_run else ""))
+            print(
+                f"  Generados: {ok_count}/{len(results)}" + (" [DRY-RUN]" if args.dry_run else "")
+            )
             if err_count:
                 print(f"  Errores:   {err_count}")
             for fname, (ok, sz) in results.items():
@@ -637,10 +664,11 @@ Ejemplos:
         except Exception as e:
             print(f"  ERROR: {e}", file=sys.stderr)
             import traceback
+
             traceback.print_exc()
             total_err += 1
 
-    print(f"\n{'='*50}")
+    print(f"\n{'=' * 50}")
     print(f"Total: {total_ok} OK, {total_err} errores")
     return 0 if total_err == 0 else 1
 

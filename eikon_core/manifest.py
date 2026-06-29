@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -26,7 +26,7 @@ def write_manifest(marca_slug: str, assets: list[dict[str, Any]]) -> Path:
     """Escribe _manifest.json con metadata de todos los assets de una marca."""
     manifest_path = cfg.OUTPUT_DIR / marca_slug / "_manifest.json"
     manifest = {
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": datetime.now(UTC).isoformat(),
         "engine_version": cfg.ENGINE_VERSION,
         "marca": marca_slug,
         "total_assets": len(assets),

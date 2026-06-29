@@ -33,9 +33,13 @@ async def render_asset(
         }
 
     vars_dict = map_marca_to_vars(marca, tipo_spec.name, variant_name=variant_spec.name)
-    input_hash = compute_hash(marca, categoria, tipo_spec.name, variant_spec.name, template_path, vars_dict)
+    input_hash = compute_hash(
+        marca, categoria, tipo_spec.name, variant_spec.name, template_path, vars_dict
+    )
     cache_key = f"{categoria}/{tipo_spec.name}/{variant_spec.name}"
-    output_path = cfg.OUTPUT_DIR / marca_slug / categoria / tipo_spec.name / f"{variant_spec.name}.png"
+    output_path = (
+        cfg.OUTPUT_DIR / marca_slug / categoria / tipo_spec.name / f"{variant_spec.name}.png"
+    )
 
     asset_meta = {
         "path": str(output_path.relative_to(cfg.OUTPUT_DIR / marca_slug)),
@@ -62,7 +66,9 @@ async def render_asset(
     context = None
     page = None
     try:
-        injection = injection_script(vars_dict, variant_name=variant_spec.name, template_name=tipo_spec.name)
+        injection = injection_script(
+            vars_dict, variant_name=variant_spec.name, template_name=tipo_spec.name
+        )
         scale_factor = tipo_spec.get_device_scale_factor(categoria)
 
         context = await browser.new_context(
@@ -88,11 +94,15 @@ async def render_asset(
 
         try:
             layout_result = await page.evaluate(LAYOUT_INSPECTION_JS)
-            raw_warnings = layout_result.get("warnings", []) if isinstance(layout_result, dict) else []
+            raw_warnings = (
+                layout_result.get("warnings", []) if isinstance(layout_result, dict) else []
+            )
             asset_meta["layout_warnings"] = list(raw_warnings)
             asset_meta["layout_status"] = aggregate_layout_status(raw_warnings)
         except Exception as layout_err:
-            asset_meta["layout_warnings"] = [{"type": "inspection_error", "detail": str(layout_err)}]
+            asset_meta["layout_warnings"] = [
+                {"type": "inspection_error", "detail": str(layout_err)}
+            ]
             asset_meta["layout_status"] = aggregate_layout_status(asset_meta["layout_warnings"])
 
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -101,7 +111,9 @@ async def render_asset(
         last_error = None
         for attempt in range(2):
             try:
-                await page.screenshot(path=str(output_path), type="png", full_page=False, omit_background=False)
+                await page.screenshot(
+                    path=str(output_path), type="png", full_page=False, omit_background=False
+                )
                 screenshot_taken = True
                 break
             except Exception as screenshot_err:

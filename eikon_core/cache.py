@@ -22,15 +22,19 @@ def compute_hash(
     except Exception:
         template_content = ""
 
-    payload = json.dumps({
-        "engine": cfg.ENGINE_VERSION,
-        "marca_slug": str(marca.get("slug", "")),
-        "category": categoria,
-        "type": type_name,
-        "variant": variant_name,
-        "vars": vars_dict,
-        "template": template_content,
-    }, sort_keys=True, ensure_ascii=False)
+    payload = json.dumps(
+        {
+            "engine": cfg.ENGINE_VERSION,
+            "marca_slug": str(marca.get("slug", "")),
+            "category": categoria,
+            "type": type_name,
+            "variant": variant_name,
+            "vars": vars_dict,
+            "template": template_content,
+        },
+        sort_keys=True,
+        ensure_ascii=False,
+    )
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:16]
 
 
