@@ -82,8 +82,8 @@ def _legacy_python_taxonomia(is_prizma: bool) -> dict[str, list[TypeSpec]]:
     if is_prizma:
         return {
             "logos": logos,
-            "cards": cards_common
-            + [
+            "cards": [
+                *cards_common,
                 TypeSpec(
                     "stat_card",
                     1080,
@@ -194,8 +194,8 @@ def _legacy_python_taxonomia(is_prizma: bool) -> dict[str, list[TypeSpec]]:
                 ),
             ),
         ],
-        "cards": cards_common
-        + [
+        "cards": [
+            *cards_common,
             TypeSpec(
                 "stat_card",
                 1080,

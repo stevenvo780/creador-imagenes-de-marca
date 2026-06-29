@@ -66,10 +66,10 @@ def test_storage_tenant_isolation() -> None:
         init_db(db)
         u1 = create_tenant_user(db, "tenant-a", "Tenant A", "a@example.com", "password-seguro")
         u2 = create_tenant_user(db, "tenant-b", "Tenant B", "b@example.com", "password-seguro")
+        auth_user = authenticate_user(db, "a@example.com", "password-seguro")
         check(
             "auth tenant-a",
-            authenticate_user(db, "a@example.com", "password-seguro")["tenant_id"]
-            == u1["tenant_id"],
+            auth_user is not None and auth_user["tenant_id"] == u1["tenant_id"],
         )
         job = create_job(db, u1["tenant_id"], u1["user_id"], "pinakotheke-kosmos", "logos", True)
         check("job queued", job["status"] == "queued")

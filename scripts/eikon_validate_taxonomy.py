@@ -155,7 +155,7 @@ def cross_check_legacy(taxonomy_path: Path, report: Report) -> None:
             report.add("warn", "X003", "taxonomy.json difiere de _legacy_python_taxonomia", family)
 
 
-def cross_check_layouts(
+def cross_check_layouts(  # noqa: C901  # validación cruzada taxonomía/layouts con muchas ramas
     data: dict[str, Any], layouts_path: Path, templates_dir: Path, report: Report
 ) -> None:
     if not layouts_path.is_file():

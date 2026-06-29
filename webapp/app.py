@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import asyncio
 import json
 from pathlib import Path
 from typing import Any
@@ -177,8 +176,11 @@ def create_app() -> FastAPI:
         )
         if not payload.dry_run:
             bg.add_task(
-                asyncio.run,
-                run_job_subprocess(settings.sqlite_path, settings, user["tenant_id"], job["id"]),
+                run_job_subprocess,
+                settings.sqlite_path,
+                settings,
+                user["tenant_id"],
+                job["id"],
             )
         return {"job_id": job["id"], "status": job["status"], "dry_run": bool(job["dry_run"])}
 

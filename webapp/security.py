@@ -6,7 +6,7 @@ import hmac
 import json
 import os
 import time
-from typing import Any
+from typing import Any, cast
 
 
 def _b64url(data: bytes) -> str:
@@ -70,4 +70,4 @@ def decode_jwt(token: str, secret: str) -> dict[str, Any]:
     exp = int(payload.get("exp", 0))
     if exp < int(time.time()):
         raise ValueError("JWT expirado")
-    return payload
+    return cast(dict[str, Any], payload)

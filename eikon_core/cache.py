@@ -42,7 +42,9 @@ def load_cache(marca_slug: str) -> dict[str, str]:
     cache_path = cfg.OUTPUT_DIR / marca_slug / ".cache.json"
     if cache_path.exists():
         try:
-            return json.loads(cache_path.read_text())
+            data = json.loads(cache_path.read_text())
+            if isinstance(data, dict):
+                return data
         except Exception:
             pass
     return {}

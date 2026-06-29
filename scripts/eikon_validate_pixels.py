@@ -128,18 +128,15 @@ def _sample_border_color(im: Image.Image) -> tuple[int, int, int] | None:
         except Exception:
             return None
 
-    samples: list[tuple[int, int, int]] = []
     stride_x = max(1, min(BORDER_STRIDE, w // 2))
     stride_y = max(1, min(BORDER_STRIDE, h // 2))
 
     # bordes superior e inferior (fila completa)
-    for y in (0, h - 1):
-        for x in range(0, w, stride_x):
-            samples.append(im.getpixel((x, y)))
+    samples = [im.getpixel((x, y)) for y in (0, h - 1) for x in range(0, w, stride_x)]
     # bordes laterales (sin contar las esquinas ya tomadas)
-    for x in (0, w - 1):
-        for y in range(stride_y, h - stride_y, stride_y):
-            samples.append(im.getpixel((x, y)))
+    samples.extend(
+        im.getpixel((x, y)) for x in (0, w - 1) for y in range(stride_y, h - stride_y, stride_y)
+    )
 
     if not samples:
         return None
@@ -300,7 +297,7 @@ def validate_asset(
 # =============================================================================
 
 
-def find_identical_variants(
+def find_identical_variants(  # noqa: C901  # comparación pixel con muchas ramas
     asset_results: Sequence[dict[str, Any]],
     allow_identical_types: Iterable[str] = (),
 ) -> list[dict[str, Any]]:
@@ -477,7 +474,7 @@ def _print_summary_stdout(reports: list[dict[str, Any]]) -> None:
     print(f"{'TOTAL':<32} {total_a:>7} {total_e:>7} {total_w:>6} {total_i:>10}")
 
 
-def main(argv: Sequence[str] | None = None) -> int:
+def main(argv: Sequence[str] | None = None) -> int:  # noqa: C901  # dispatch de CLI
     parser = argparse.ArgumentParser(
         description="Validador pixel ligero para Eikon (Pillow-only).",
     )

@@ -26,8 +26,8 @@ from typing import Any
 try:
     import numpy as np
     from PIL import Image
-except ImportError:
-    raise ImportError("Se requieren Pillow y numpy. Instala con: pip install Pillow numpy")
+except ImportError as err:
+    raise ImportError("Se requieren Pillow y numpy. Instala con: pip install Pillow numpy") from err
 
 
 class ContrastValidator:
@@ -61,7 +61,10 @@ class ContrastValidator:
     def _hex_to_rgb(self, hex_color: str) -> tuple[int, int, int]:
         """Convierte hex a RGB."""
         hex_color = hex_color.lstrip("#")
-        return tuple(int(hex_color[i : i + 2], 16) for i in (0, 2, 4))
+        r = int(hex_color[0:2], 16)
+        g = int(hex_color[2:4], 16)
+        b = int(hex_color[4:6], 16)
+        return (r, g, b)
 
     @staticmethod
     def _srgb_to_linear(channel: int) -> float:
@@ -106,7 +109,10 @@ class ContrastValidator:
             v = int(np.median(pixels))
             return (v, v, v)
         elif pixels.shape[-1] >= 3:
-            return tuple(int(np.median(pixels[..., i])) for i in range(3))
+            r = int(np.median(pixels[..., 0]))
+            g = int(np.median(pixels[..., 1]))
+            b = int(np.median(pixels[..., 2]))
+            return (r, g, b)
         else:
             return (128, 128, 128)
 
@@ -266,15 +272,17 @@ class ContrastValidator:
                     "issue": "Asset decorativo (excluido de validación de texto)",
                 }
 
-            img = Image.open(img_path)
+            img_obj: Image.Image = Image.open(img_path)
 
             # Convierte a RGB si es necesario
-            if img.mode == "RGBA":
-                bg = Image.new("RGB", img.size, (255, 255, 255))
-                bg.paste(img, mask=img.split()[3] if len(img.split()) > 3 else None)
-                img = bg
-            elif img.mode != "RGB":
-                img = img.convert("RGB")
+            if img_obj.mode == "RGBA":
+                bg = Image.new("RGB", img_obj.size, (255, 255, 255))
+                bg.paste(img_obj, mask=img_obj.split()[3] if len(img_obj.split()) > 3 else None)
+                img_obj = bg
+            elif img_obj.mode != "RGB":
+                img_obj = img_obj.convert("RGB")
+
+            img = img_obj
 
             img_array = np.array(img)
 
@@ -371,7 +379,7 @@ class ContrastValidator:
 
         scope_label = f"output/{marca_slug}" if marca_slug else "output/"
         print(
-            f"ℹ Validando {len(png_files)} PNG en {scope_label} (min_fg_ratio={self.min_fg_ratio}, lum_diff={self.LUM_DIFF_THRESHOLD})..."
+            f"ℹ Validando {len(png_files)} PNG en {scope_label} (min_fg_ratio={self.min_fg_ratio}, lum_diff={self.LUM_DIFF_THRESHOLD})..."  # noqa: RUF001 (info symbol is intentional brand character)
         )
 
         for png_path in png_files:

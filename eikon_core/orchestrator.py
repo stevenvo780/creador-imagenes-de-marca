@@ -12,7 +12,7 @@ from .render import render_asset
 from .taxonomy import CLOUD_ATLAS_TAXONOMIA, PRIZMA_TAXONOMIA
 
 
-async def run_generator(
+async def run_generator(  # noqa: C901
     marcas_a_procesar: list[str],
     filtro_categoria: str | None = None,
     dry_run: bool = False,

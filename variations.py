@@ -259,7 +259,7 @@ VariationPlan.__hash__ = None  # type: ignore[assignment]
 # =============================================================================
 
 
-def validate_request(req: VariationRequest) -> None:
+def validate_request(req: VariationRequest) -> None:  # noqa: C901  # validación con muchas ramas, cubierta por tests
     """Valida un ``VariationRequest``. Lanza ``ValueError`` si hay problemas.
 
     El mensaje de error incluye el campo concreto y el valor recibido para

@@ -349,13 +349,11 @@ def render_table(report: dict[str, Any], *, only_issues: bool = False) -> str:
             if scanned:
                 lines.append("")
                 lines.append(f"Marcas escaneadas ({len(scanned)}):")
-                for m in scanned:
-                    lines.append(f"  · {m}")
+                lines.extend(f"  · {m}" for m in scanned)
             if missing:
                 lines.append("")
                 lines.append(f"Marcas sin _manifest.json ({len(missing)}):")
-                for m in missing:
-                    lines.append(f"  · {m}")
+                lines.extend(f"  · {m}" for m in missing)
         return "\n".join(lines)
 
     # Tabla de issues por asset (compacta)
@@ -373,37 +371,37 @@ def render_table(report: dict[str, Any], *, only_issues: bool = False) -> str:
                 continue
             if not warn_rows:
                 warn_rows = [{"severity": "", "type": "", "detail": ""}]
-            for wr in warn_rows:
-                rows.append(
-                    (
-                        brand["marca"],
-                        wr.get("severity", "") or status_rows[0]["severity"]
-                        if status_rows
-                        else (wr.get("severity", "") or "—"),
-                        _truncate(ai["asset_path"], 44),
-                        ai["category"] or "—",
-                        ai["type"] or "—",
-                        ai["variant"] or "—",
-                        ai["layout_status"] or "—",
-                        wr.get("type", "") or "—",
-                        _truncate(wr.get("detail", "") or "—", 50),
-                    )
-                )
-        # Issues de marca (top-level)
-        for bi in brand["brand_issues"]:
-            rows.append(
+            rows.extend(
                 (
                     brand["marca"],
-                    bi.get("severity", "—"),
-                    "<brand-level>",
-                    "—",
-                    "—",
-                    "—",
-                    "—",
-                    bi.get("type", "") or "—",
-                    _truncate(bi.get("detail", "") or "—", 50),
+                    wr.get("severity", "") or status_rows[0]["severity"]
+                    if status_rows
+                    else (wr.get("severity", "") or "—"),
+                    _truncate(ai["asset_path"], 44),
+                    ai["category"] or "—",
+                    ai["type"] or "—",
+                    ai["variant"] or "—",
+                    ai["layout_status"] or "—",
+                    wr.get("type", "") or "—",
+                    _truncate(wr.get("detail", "") or "—", 50),
                 )
+                for wr in warn_rows
             )
+        # Issues de marca (top-level)
+        rows.extend(
+            (
+                brand["marca"],
+                bi.get("severity", "—"),
+                "<brand-level>",
+                "—",
+                "—",
+                "—",
+                "—",
+                bi.get("type", "") or "—",
+                _truncate(bi.get("detail", "") or "—", 50),
+            )
+            for bi in brand["brand_issues"]
+        )
 
     if not only_issues:
         # Tabla resumen por marca
@@ -429,8 +427,7 @@ def render_table(report: dict[str, Any], *, only_issues: bool = False) -> str:
         sep = "  "
         lines.append(sep.join(brand_headers[i].ljust(widths[i]) for i in range(4)))
         lines.append(sep.join("-" * widths[i] for i in range(4)))
-        for row in body_data:
-            lines.append(sep.join(row[i].ljust(widths[i]) for i in range(4)))
+        lines.extend(sep.join(row[i].ljust(widths[i]) for i in range(4)) for row in body_data)
         lines.append("")
 
     # Tabla detallada de issues
@@ -441,8 +438,7 @@ def render_table(report: dict[str, Any], *, only_issues: bool = False) -> str:
     lines.append("Issues detectados:")
     lines.append(sep.join(headers[i].ljust(widths[i]) for i in range(len(headers))))
     lines.append(sep.join("-" * widths[i] for i in range(len(headers))))
-    for r in rows:
-        lines.append(sep.join(r[i].ljust(widths[i]) for i in range(len(headers))))
+    lines.extend(sep.join(r[i].ljust(widths[i]) for i in range(len(headers))) for r in rows)
 
     return "\n".join(lines)
 

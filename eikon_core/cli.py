@@ -10,7 +10,7 @@ from . import constants as cfg
 from .orchestrator import run_generator
 
 
-def main() -> int:
+def main() -> int:  # noqa: C901
     parser = argparse.ArgumentParser(
         description="Motor EIKON: Generador Canónico de Assets de Marca",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -56,7 +56,7 @@ Ejemplos:
         "--parallel",
         type=int,
         default=1,
-        help="Número de workers paralelos (actualmente limitado a 1)",
+        help="Número de workers paralelos (aceptado por compat, pero rendering siempre serializado a 1)",
     )
     parser.add_argument(
         "--skip-contraste", action="store_true", help="Omite validación WCAG al final"
@@ -80,7 +80,11 @@ Ejemplos:
         return 1
 
     if args.parallel > 1:
-        print("⚠ --parallel > 1 no soportado aún. Limitando a 1 worker.", file=sys.stderr)
+        print(
+            f"⚠ --parallel {args.parallel}: Rendering ejecutado en serie (1 worker). "
+            f"Paralelización aún no implementada.",
+            file=sys.stderr,
+        )
 
     marcas_a_procesar: list[str] = []
     if args.all or args.all_marcas:

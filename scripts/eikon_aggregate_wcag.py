@@ -103,7 +103,6 @@ def build_aggregate(output_dir: Path) -> dict[str, Any] | None:
         aaa_pass = int(safe_get(data, "wcag_aaa", "pass", default=0))
         aaa_fail = int(safe_get(data, "wcag_aaa", "fail", default=0))
         ts = str(data.get("timestamp", ""))
-        summary = str(data.get("summary", ""))
 
         real_fails = aa_fail - no_fg
         if real_fails > 0:
@@ -122,18 +121,18 @@ def build_aggregate(output_dir: Path) -> dict[str, Any] | None:
             }
         )
 
-        for fail in data.get("failing_assets_aa", []) or []:
-            failing_assets.append(
-                {
-                    "marca": slug,
-                    "img": fail.get("img"),
-                    "contrast_ratio": fail.get("contrast_ratio"),
-                    "bg_color": fail.get("bg_color"),
-                    "text_color": fail.get("text_color"),
-                    "issue": fail.get("issue"),
-                    "no_foreground": bool(fail.get("no_foreground", False)),
-                }
-            )
+        failing_assets.extend(
+            {
+                "marca": slug,
+                "img": fail.get("img"),
+                "contrast_ratio": fail.get("contrast_ratio"),
+                "bg_color": fail.get("bg_color"),
+                "text_color": fail.get("text_color"),
+                "issue": fail.get("issue"),
+                "no_foreground": bool(fail.get("no_foreground", False)),
+            }
+            for fail in (data.get("failing_assets_aa", []) or [])
+        )
 
         total_assets += assets
         total_aa_pass += aa_pass
@@ -196,7 +195,7 @@ def print_table(per_brand_rows: list[dict[str, Any]], totals: dict[str, int]) ->
         str(totals["aaa_fail"]),
     )
 
-    all_rows = body_rows + [total_row]
+    all_rows = [*body_rows, total_row]
     widths = [max(len(headers[i]), max(len(r[i]) for r in all_rows)) for i in range(len(headers))]
     sep = "  "
     print(sep.join(headers[i].ljust(widths[i]) for i in range(len(headers))))

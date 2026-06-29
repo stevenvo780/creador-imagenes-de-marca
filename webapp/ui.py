@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from fastapi import Request
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -51,9 +51,8 @@ def _pills(value: str | None) -> str:
         "failed": "danger",
         "cancelled": "muted",
     }
-    return (
-        f'<span class="pill {m.get(value, "muted")}"><span class="dot"></span>{value or "—"}</span>'
-    )
+    status_class = m.get(value or "", "muted")
+    return f'<span class="pill {status_class}"><span class="dot"></span>{value or "—"}</span>'
 
 
 env.filters["dt"] = _fmt_dt
@@ -63,7 +62,7 @@ env.filters["status_pill"] = _pills
 
 def render_template(name: str, **context: Any) -> str:
     template = env.get_template(name)
-    return template.render(**context)
+    return cast(str, template.render(**context))
 
 
 def render(

@@ -604,11 +604,11 @@ def test_post_validate_remarks_error() -> None:
             },
         ]
 
-        # Monkey-patch OUTPUT_DIR temporalmente
-        import eikon
+        # Monkey-patch OUTPUT_DIR temporalmente via eikon_core.constants
+        from eikon_core import constants
 
-        original_output_dir = eikon.OUTPUT_DIR
-        eikon.OUTPUT_DIR = tmp / "output"
+        original_output_dir = constants.OUTPUT_DIR
+        constants.OUTPUT_DIR = tmp / "output"
 
         try:
             remarkeados = post_validate_assets(asset_metas, marca_slug)
@@ -631,7 +631,7 @@ def test_post_validate_remarks_error() -> None:
                 f"status={asset_metas[1]['status']}",
             )
         finally:
-            eikon.OUTPUT_DIR = original_output_dir
+            constants.OUTPUT_DIR = original_output_dir
 
 
 # =============================================================================

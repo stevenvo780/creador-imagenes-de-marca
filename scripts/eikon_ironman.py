@@ -569,8 +569,10 @@ def render_table(report: dict[str, Any], *, only_issues: bool = False) -> str:
     if report["threshold_breaches"]:
         lines.append("")
         lines.append("Thresholds superados:")
-        for breach in report["threshold_breaches"]:
-            lines.append(f"  · {breach['metric']}: {breach['value']} > {breach['max']}")
+        lines.extend(
+            f"  · {breach['metric']}: {breach['value']} > {breach['max']}"
+            for breach in report["threshold_breaches"]
+        )
 
     rows = [r for r in report["brands"] if not only_issues or _row_has_issue(r)]
     if not rows:
@@ -612,8 +614,9 @@ def render_table(report: dict[str, Any], *, only_issues: bool = False) -> str:
     lines.append("Resumen por marca" + (" (sólo issues)" if only_issues else "") + ":")
     lines.append(sep.join(headers[i].ljust(widths[i]) for i in range(len(headers))))
     lines.append(sep.join("-" * widths[i] for i in range(len(headers))))
-    for row in table_rows:
-        lines.append(sep.join(row[i].ljust(widths[i]) for i in range(len(headers))))
+    lines.extend(
+        sep.join(row[i].ljust(widths[i]) for i in range(len(headers))) for row in table_rows
+    )
     return "\n".join(lines)
 
 

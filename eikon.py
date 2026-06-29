@@ -50,19 +50,6 @@ from eikon_core.text import TEXT_LIMITS, apply_text_limits, shorten_text
 from eikon_core.types import TypeSpec, VariantSpec
 from eikon_core.validation import validate_taxonomy
 
-
-class _EikonModule(type(sys.modules[__name__])):
-    @property
-    def OUTPUT_DIR(self):  # type: ignore[override]
-        return _constants.OUTPUT_DIR
-
-    @OUTPUT_DIR.setter
-    def OUTPUT_DIR(self, value):  # type: ignore[override]
-        _constants.OUTPUT_DIR = value
-
-
-sys.modules[__name__].__class__ = _EikonModule
-
 __all__ = [
     "CLOUD_ATLAS_TAXONOMIA",
     "DEFAULT_LOCALE",
@@ -73,7 +60,7 @@ __all__ = [
     "LAYOUT_WARNING_SEVERITY",
     "MARCAS_DIR",
     "MIN_PNG_BYTES",
-    "OUTPUT_DIR",
+    "OUTPUT_DIR",  # noqa: F822  # Accessible via __getattr__
     "PRIZMA_TAXONOMIA",
     "ROOT",
     "TAXONOMY_JSON_PATH",
@@ -109,6 +96,26 @@ __all__ = [
     "validate_taxonomy",
     "write_manifest",
 ]
+
+# OUTPUT_DIR forwarding: accessed through __getattr__, synchronized with constants.
+# This replaces the previous metaclass implementation for cleaner architecture.
+
+
+def __getattr__(name: str):  # type: ignore[no-untyped-def]
+    """Module-level attribute access for OUTPUT_DIR."""
+    if name == "OUTPUT_DIR":
+        return _constants.OUTPUT_DIR
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
+
+def __dir__():  # type: ignore[no-untyped-def]
+    """Include OUTPUT_DIR in module directory."""
+    import types
+
+    items = list(types.ModuleType.__dir__(sys.modules[__name__]))
+    if "OUTPUT_DIR" not in items:
+        items.append("OUTPUT_DIR")
+    return items
 
 
 if __name__ == "__main__":

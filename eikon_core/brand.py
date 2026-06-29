@@ -8,7 +8,9 @@ from typing import Any
 
 def load_json(path: Path) -> dict[str, Any]:
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(path.read_text(encoding="utf-8"))
+        assert isinstance(data, dict), f"Expected dict, got {type(data).__name__}"
+        return data
     except Exception as e:
         print(f"✗ Error cargando {path}: {e}", file=sys.stderr)
         raise

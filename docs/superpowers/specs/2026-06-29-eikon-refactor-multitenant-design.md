@@ -50,6 +50,9 @@ El motor semi-determinístico actual debe seguir haciendo **todo lo que ya hace*
 | 2 | Jobs pesados | **Worker async in-process + SSE** | Cola en SQLite, sin infra extra, suficiente para batches de 50; interfaz lista para migrar a cola real. |
 | 3 | Combinatoria | **Paramétrico + isotipos SVG procedurales** | Logos de verdad, no wordmark-en-caja; ataca el "aún es pobre". |
 | 4 | Cadencia | **Autónomo hasta el final** | Una aprobación; ejecución por fases + 3 auditorías al cierre. |
+| 5 | Marcas legacy (38 JSON) | **Al tenant del owner + fixtures de dev** | Son marcas reales/empresariales (Prizma/Agora) → NO públicas. Seed al tenant owner; siguen como fixtures de test. Starter templates públicos se crean genéricos aparte. |
+
+**Principio datos-vs-config (núcleo del "no quemar"):** (a) *Datos de usuario* (marcas: paleta/tipografía/textos/logo/símbolo, assets generados, batches, selecciones) → **DB + storage por-tenant**, nada quemado, aislado por `tenant_id`. (b) *Capacidad del motor* (taxonomía de tipos, layouts/tamaños, plantillas HTML/CSS, catálogo de ejes combinatorios, heurísticas de ranking) → **config versionada en el repo** (es el producto, no data de usuario), declarativa y data-driven (se elimina el pattern-matching `family=="prizma"`). (c) *Rutas/secretos* → **env/config** (des-quemado en Fase 0-B: DI de `OUTPUT_DIR`, etc.).
 
 Stack adicional: **Vite + React + TypeScript** (SPA, build estático servido por FastAPI). Almacenamiento: interfaz `StorageBackend` con impl `LocalStorage` (carpeta) ahora, `GCSStorage` después.
 
@@ -84,7 +87,7 @@ Stack adicional: **Vite + React + TypeScript** (SPA, build estático servido por
 - Routers en `webapp/api/`: `auth`, `brands` (CRUD per-tenant), `wizard` (catálogo de ejes/opciones), `batches` (crear batch N, estado), `assets`/`gallery` (listar/seleccionar), `downloads` (single + ZIP).
 - `webapp/jobs/worker.py`: cola SQLite + worker async in-process + **SSE** de progreso; `max_concurrent_jobs`, cancelación, reemplaza `bg.add_task(asyncio.run)`.
 - `webapp/storage/`: `base.py` (Protocol `StorageBackend`), `local.py` (carpeta tenant-scoped), `gcs.py` (stub futuro).
-- **DB (migración aditiva):** `brands(id, tenant_id, slug, name, palette_json, typography_json, logo_text, logo_symbol, texts_json, created_at)`, `brand_assets`/`variations(id, batch_id, brand_id, axis_params_json, seed, score, output_path, wcag_json, layout_status, selected)`, `batches(id, tenant_id, brand_id, spec_json, status, counts_json, ...)`. Aislamiento por `tenant_id` en toda consulta (tests de aislamiento obligatorios).
+- **DB (migración aditiva):** `brands(id, tenant_id, slug, name, palette_json, typography_json, logo_text, logo_symbol, texts_json, created_at)`, `brand_assets`/`variations(id, batch_id, brand_id, axis_params_json, seed, score, output_path, wcag_json, layout_status, selected)`, `batches(id, tenant_id, brand_id, spec_json, status, counts_json, ...)`. Aislamiento por `tenant_id` en toda consulta (tests de aislamiento obligatorios). **Migración de marcas legacy:** un seed idempotente convierte los 38 `marcas/*.json` en filas `brands` del **tenant del owner** (no públicas); los JSON quedan además como fixtures de test del motor. Brand CRUD valida que el `tenant_id` del solicitante sea dueño.
 - Seguridad: exigir `EIKON_WEBAPP_SECRET` en prod, rate-limit básico en auth, validación de slugs/paths (ya existe `safe_relative_path`).
 
 ### 4.4 Frontend (React SPA)

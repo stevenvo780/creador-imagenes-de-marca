@@ -174,7 +174,7 @@ def make_thumbnail(png_path: Path) -> str:
             bg = Image.new("RGBA", img.size, (11, 20, 23, 255))
             img = Image.alpha_composite(bg, img)
         img = img.convert("RGB")
-        img.thumbnail(THUMB_SIZE, Image.LANCZOS)
+        img.thumbnail(THUMB_SIZE, Image.Resampling.LANCZOS)
         buf = io.BytesIO()
         img.save(buf, format="JPEG", quality=JPEG_QUALITY)
         b64 = base64.b64encode(buf.getvalue()).decode("ascii")
@@ -268,11 +268,8 @@ def build_gallery(marca_slug: str) -> str:
             thumb = make_thumbnail(png_path) if HAS_PIL else ""
             name = a.get("type", a.get("variant", ""))
             variant = a.get("variant", "")
-            if variant and variant != name:
-                display_name = f"{name} · {variant}"
-            else:
-                display_name = name
-            dims = f"{a.get('width', 0)}×{a.get('height', 0)}" if a.get("width", 0) > 0 else ""
+            display_name = f"{name} · {variant}" if variant and variant != name else name
+            dims = f"{a.get('width', 0)}×{a.get('height', 0)}" if a.get("width", 0) > 0 else ""  # noqa: RUF001 (multiplication sign is intentional dimension separator)
             status = a.get("status", "unknown")
             badge_class = f" {status}" if status in ("cached", "error") else ""
 
@@ -348,7 +345,7 @@ def build_aggregated_gallery(marca_slugs: list[str]) -> str:
                 name = a.get("type", a.get("variant", ""))
                 variant = a.get("variant", "")
                 display_name = f"{name} · {variant}" if variant and variant != name else name
-                dims = f"{a.get('width', 0)}×{a.get('height', 0)}" if a.get("width", 0) > 0 else ""
+                dims = f"{a.get('width', 0)}×{a.get('height', 0)}" if a.get("width", 0) > 0 else ""  # noqa: RUF001 (multiplication sign is intentional dimension separator)
                 status = a.get("status", "unknown")
                 badge_class = f" {status}" if status in ("cached", "error") else ""
                 cards += f"""
@@ -436,10 +433,7 @@ def main() -> int:
     else:
         slug = args.marca
         html = build_gallery(slug)
-        if args.output:
-            out_path = Path(args.output)
-        else:
-            out_path = OUTPUT_DIR / f"_gallery_{slug}.html"
+        out_path = Path(args.output) if args.output else OUTPUT_DIR / f"_gallery_{slug}.html"
         out_path.write_text(html, encoding="utf-8")
         print(f"✓ Galería guardada: {out_path}")
         return 0
