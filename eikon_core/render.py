@@ -33,17 +33,11 @@ def _extract_data_attrs_from_combination(
         if "layout" in combination_params:
             data_attrs_to_inject["data-layout"] = combination_params["layout"]
         if "background_treatment" in combination_params:
-            data_attrs_to_inject["data-bg-treatment"] = combination_params[
-                "background_treatment"
-            ]
+            data_attrs_to_inject["data-bg-treatment"] = combination_params["background_treatment"]
         if "isotype_style" in combination_params:
-            data_attrs_to_inject["data-isotype-style"] = combination_params[
-                "isotype_style"
-            ]
+            data_attrs_to_inject["data-isotype-style"] = combination_params["isotype_style"]
         if "accent_placement" in combination_params:
-            data_attrs_to_inject["data-accent-placement"] = combination_params[
-                "accent_placement"
-            ]
+            data_attrs_to_inject["data-accent-placement"] = combination_params["accent_placement"]
     return data_attrs_to_inject
 
 
@@ -146,8 +140,15 @@ async def render_asset(
     cache: dict[str, str],
     dry_run: bool = False,
     combination_params: dict[str, str] | None = None,
+    batch_subdir: str | None = None,
 ) -> dict[str, Any]:
-    """Renderiza un asset individual. Retorna metadata para el manifest."""
+    """Renderiza un asset individual. Retorna metadata para el manifest.
+
+    Args:
+        batch_subdir: Subdirectorio opcional (tipicamente str(batch_id)) entre
+            tipo_spec.name y el nombre de archivo. Garantiza que dos batches
+            distintos sobre el mismo brand+asset_type no compartan rutas de PNG.
+    """
     template_path = resolve_template(tipo_spec.name, cfg.TEMPLATES_DIR)
     if template_path is None:
         return {
@@ -168,8 +169,13 @@ async def render_asset(
         marca, categoria, tipo_spec.name, variant_spec.name, template_path, vars_dict
     )
     cache_key = f"{categoria}/{tipo_spec.name}/{variant_spec.name}"
+    # Cuando se proporciona batch_subdir, el PNG queda en
+    # .../categoria/tipo/batch_subdir/variant.png, aislando batches distintos.
+    _type_dir = cfg.OUTPUT_DIR / marca_slug / categoria / tipo_spec.name
     output_path = (
-        cfg.OUTPUT_DIR / marca_slug / categoria / tipo_spec.name / f"{variant_spec.name}.png"
+        _type_dir / batch_subdir / f"{variant_spec.name}.png"
+        if batch_subdir
+        else _type_dir / f"{variant_spec.name}.png"
     )
 
     asset_meta = {

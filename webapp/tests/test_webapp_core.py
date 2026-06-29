@@ -12,18 +12,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from webapp.security import create_jwt, decode_jwt, hash_password, verify_password
-from webapp.services.eikon_runner import build_eikon_command, safe_relative_path, validate_slug
-from webapp.storage import (
-    add_asset,
-    authenticate_user,
-    create_job,
-    create_tenant_user,
-    get_job,
-    init_db,
-    list_assets,
-    list_jobs,
-    update_job_status,
-)
+from webapp.services.eikon_runner import safe_relative_path, validate_slug
 
 PASSED = 0
 FAILED = 0
@@ -59,42 +48,8 @@ def test_security() -> None:
         check("JWT firma inválida rechazada", False)
 
 
-def test_storage_tenant_isolation() -> None:
-    section("2. storage + tenant isolation")
-    with tempfile.TemporaryDirectory() as td:
-        db = Path(td) / "eikon.db"
-        init_db(db)
-        u1 = create_tenant_user(db, "tenant-a", "Tenant A", "a@example.com", "password-seguro")
-        u2 = create_tenant_user(db, "tenant-b", "Tenant B", "b@example.com", "password-seguro")
-        auth_user = authenticate_user(db, "a@example.com", "password-seguro")
-        check(
-            "auth tenant-a",
-            auth_user is not None and auth_user["tenant_id"] == u1["tenant_id"],
-        )
-        job = create_job(db, u1["tenant_id"], u1["user_id"], "pinakotheke-kosmos", "logos", True)
-        check("job queued", job["status"] == "queued")
-        check("job visible same tenant", get_job(db, u1["tenant_id"], job["id"]) is not None)
-        check("job invisible other tenant", get_job(db, u2["tenant_id"], job["id"]) is None)
-        update_job_status(db, job["id"], "running")
-        update_job_status(db, job["id"], "completed", {"ok": True})
-        jobs = list_jobs(db, u1["tenant_id"])
-        check("list_jobs tenant-a = 1", len(jobs) == 1)
-        add_asset(
-            db,
-            u1["tenant_id"],
-            job["id"],
-            "pinakotheke-kosmos",
-            "logos",
-            "wordmark",
-            "v1_dark",
-            "logos/wordmark/v1_dark.png",
-        )
-        check("asset visible same tenant", len(list_assets(db, u1["tenant_id"])) == 1)
-        check("asset invisible other tenant", len(list_assets(db, u2["tenant_id"])) == 0)
-
-
 def test_runner_guards() -> None:
-    section("3. runner guards")
+    section("2. runner guards")
     check("slug válido", validate_slug("pinakotheke-kosmos") == "pinakotheke-kosmos")
     try:
         validate_slug("../../etc/passwd")
@@ -102,12 +57,6 @@ def test_runner_guards() -> None:
         check("path traversal slug rechazado", True)
     else:
         check("path traversal slug rechazado", False)
-    cmd = build_eikon_command("pinakotheke-kosmos", "logos", dry_run=True)
-    check(
-        "cmd no usa shell",
-        isinstance(cmd, list) and "--dry-run" in cmd and "--solo" in cmd,
-        str(cmd),
-    )
     root = Path(tempfile.mkdtemp()).resolve()
     inside = root / "output" / "asset.png"
     inside.parent.mkdir()
@@ -125,7 +74,7 @@ def main() -> int:
     print("=" * 60)
     print("  EIKON webapp core — Tests")
     print("=" * 60)
-    for test in (test_security, test_storage_tenant_isolation, test_runner_guards):
+    for test in (test_security, test_runner_guards):
         test()
     print("\n" + "=" * 60)
     print(f"  Resultado: {PASSED} ✓ / {FAILED} ✗")

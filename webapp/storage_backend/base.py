@@ -44,6 +44,25 @@ class StorageBackend(Protocol):
         """
         ...
 
+    def full_path(self, tenant_id: int, relative_path: str) -> str:
+        """Resuelve la ruta absoluta validada del archivo, sin requerir que exista.
+
+        Es el resolutor de rutas autoritativo del seam: aplica scope por tenant y
+        validación anti path-traversal. Útil para que el worker ubique el directorio
+        donde escribir/rankear y para servir archivos vía streaming.
+
+        Args:
+            tenant_id: ID del tenant
+            relative_path: ruta relativa dentro de la carpeta del tenant
+
+        Returns:
+            Ruta absoluta (string) dentro del scope del tenant
+
+        Raises:
+            ValueError: si relative_path contiene path traversal
+        """
+        ...
+
     def url_for(self, tenant_id: int, relative_path: str) -> str:
         """Devuelve URL (local o CDN) para servir el archivo.
 

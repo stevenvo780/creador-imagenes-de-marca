@@ -164,9 +164,7 @@ def test_worker_end_to_end(
         batch_id = int(batch["id"])
 
         # Arrancar worker
-        worker = WorkerPool(
-            db_path, max_concurrent_jobs=2, axes_config_path=axes_config_path
-        )
+        worker = WorkerPool(db_path, max_concurrent_jobs=2, axes_config_path=axes_config_path)
         set_worker(worker)
         await worker.start()
 
@@ -256,9 +254,7 @@ def test_worker_cancellation(
         batch = await enqueue_batch(db_path, tenant_id, brand_id, spec, 5)
         batch_id = int(batch["id"])
 
-        worker = WorkerPool(
-            db_path, max_concurrent_jobs=1, axes_config_path=axes_config_path
-        )
+        worker = WorkerPool(db_path, max_concurrent_jobs=1, axes_config_path=axes_config_path)
         set_worker(worker)
         await worker.start()
 
@@ -312,9 +308,7 @@ def test_job_events_stream(
         batch = await enqueue_batch(db_path, tenant_id, brand_id, spec, 1)
         batch_id = int(batch["id"])
 
-        worker = WorkerPool(
-            db_path, max_concurrent_jobs=1, axes_config_path=axes_config_path
-        )
+        worker = WorkerPool(db_path, max_concurrent_jobs=1, axes_config_path=axes_config_path)
         set_worker(worker)
         await worker.start()
 
@@ -398,9 +392,7 @@ def test_worker_tenant_isolation(
         batch_a = await enqueue_batch(db_path, tenant_id, brand_id, spec_a, 1)
         batch_a_id = int(batch_a["id"])
 
-        worker = WorkerPool(
-            db_path, max_concurrent_jobs=1, axes_config_path=axes_config_path
-        )
+        worker = WorkerPool(db_path, max_concurrent_jobs=1, axes_config_path=axes_config_path)
         set_worker(worker)
         await worker.start()
 
@@ -432,3 +424,83 @@ def test_worker_tenant_isolation(
             set_worker(None)
 
     asyncio.run(_run())
+
+
+# ── Test: batch_id path isolation (regresion) ────────────────────────────────
+
+
+def test_batch_path_isolation_distinct_dirs() -> None:
+    """Dos batches distintos sobre el mismo brand+asset_type usan directorios
+    distintos: un batch posterior no puede sobreescribir los PNGs del anterior.
+
+    Regresion para: 'Render filenames omit batch_id' (data-integrity/major).
+    """
+    from webapp.jobs.worker import _make_png_dir
+
+    marca_slug = "test-marca"
+    asset_type = "logo_symbol_color"
+    batch_a = 101
+    batch_b = 202
+
+    dir_a = _make_png_dir(marca_slug, asset_type, batch_a)
+    dir_b = _make_png_dir(marca_slug, asset_type, batch_b)
+
+    # Los directorios deben ser distintos
+    assert dir_a != dir_b, "Dos batches no deben compartir directorio de PNGs"
+
+    # Cada directorio debe incluir su batch_id como componente de ruta
+    assert str(batch_a) in dir_a.parts, (
+        f"batch_id {batch_a} no aparece en las partes de dir_a: {dir_a}"
+    )
+    assert str(batch_b) in dir_b.parts, (
+        f"batch_id {batch_b} no aparece en las partes de dir_b: {dir_b}"
+    )
+
+    # Los PNGs de combo_001 tienen rutas absolutas distintas
+    png_a = dir_a / "combo_001.png"
+    png_b = dir_b / "combo_001.png"
+    assert png_a != png_b, "combo_001.png de batch A y B no deben compartir ruta"
+
+
+def test_batch_path_isolation_no_overwrite(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Simula escritura de dos batches consecutivos sobre la misma marca y
+    asset_type: los PNGs del batch 1 no son sobreescritos cuando el batch 2
+    escribe archivos con el mismo nombre de combo.
+
+    Regresion para: 'Render filenames omit batch_id' (data-integrity/major).
+    """
+    import webapp.jobs.worker as worker_mod
+    from webapp.jobs.worker import _make_png_dir
+
+    # Redirigir OUTPUT_DIR a tmp_path para no tocar el filesystem real
+    monkeypatch.setattr(worker_mod, "OUTPUT_DIR", tmp_path)
+
+    marca_slug = "prizma-iris"
+    asset_type = "isotipo"
+    batch_1 = 5
+    batch_2 = 6
+
+    dir_1 = _make_png_dir(marca_slug, asset_type, batch_1)
+    dir_2 = _make_png_dir(marca_slug, asset_type, batch_2)
+
+    dir_1.mkdir(parents=True)
+    dir_2.mkdir(parents=True)
+
+    # Batch 1 escribe combo_001.png
+    png_1 = dir_1 / "combo_001.png"
+    png_1.write_bytes(b"BATCH1_PNG_DATA")
+
+    # Batch 2 escribe combo_001.png (misma posicion relativa, distinto batch)
+    png_2 = dir_2 / "combo_001.png"
+    png_2.write_bytes(b"BATCH2_PNG_DATA")
+
+    # El PNG de batch 1 debe existir y no haber sido sobreescrito
+    assert png_1.exists(), "PNG de batch 1 desaparecio"
+    assert png_1.read_bytes() == b"BATCH1_PNG_DATA", (
+        f"PNG de batch 1 fue sobreescrito: {png_1.read_bytes()!r}"
+    )
+    assert png_2.read_bytes() == b"BATCH2_PNG_DATA"
+
+    # Los archivos son distintos paths
+    assert png_1 != png_2, "Ambos batches apuntan al mismo archivo"
+    assert png_1.resolve() != png_2.resolve(), "Ambos batches resuelven al mismo path absoluto"

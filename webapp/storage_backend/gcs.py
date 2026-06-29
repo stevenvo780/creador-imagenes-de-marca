@@ -34,6 +34,14 @@ class GCSStorage:
         """
         raise NotImplementedError("GCS no disponible en esta fase")
 
+    def full_path(self, tenant_id: int, relative_path: str) -> str:
+        """Resuelve la ruta/URI absoluta de un objeto en GCS.
+
+        Raises:
+            NotImplementedError: no implementado en esta fase
+        """
+        raise NotImplementedError("GCS no disponible en esta fase")
+
     def open(self, tenant_id: int, relative_path: str) -> bytes:
         """Lee contenido de GCS.
 

@@ -114,9 +114,7 @@ def _dhash_distance(hash1: str, hash2: str) -> int:
         return 64
 
 
-def _signal_wcag_contrast(
-    png_path: Path, min_ratio_threshold: float = 4.5
-) -> RankingSignal:
+def _signal_wcag_contrast(png_path: Path, min_ratio_threshold: float = 4.5) -> RankingSignal:
     """Score WCAG AA contrast (hard floor: 4.5:1).
 
     Imports contrast_validator locally to avoid circular deps.
@@ -306,11 +304,111 @@ def _signal_foreground_balance(png_path: Path) -> RankingSignal:
         )
 
 
+def _pick_best_or_fallback(
+    candidates: list[VariationScore],
+    selected: list[VariationScore],
+    dedup_distance_threshold: int,
+) -> VariationScore:
+    """Elige el primer candidato que NO sea perceptual-duplicado de ``selected``
+    (preserva el orden best-first de entrada). Si todos lo son, retorna el
+    mejor por ``(final_score, -idx)`` para honrar la garantía de variedad."""
+    for cand in candidates:
+        is_dup = False
+        for s in selected:
+            if _dhash_distance(cand.dhash, s.dhash) < dedup_distance_threshold:
+                is_dup = True
+                break
+        if not is_dup:
+            return cand
+    return max(candidates, key=lambda s: (s.final_score, -s.idx))
+
+
+def _mark_covered(
+    score: VariationScore, permuted_axes: dict[str, list[str]]
+) -> dict[str, set[str]]:
+    """Devuelve el dict ``{axis: set(valores cubiertos)}`` después de añadir
+    ``score`` como representante. Una variación puede cubrir múltiples ejes si
+    sus ``params`` contienen sus valores."""
+    covered: dict[str, set[str]] = {}
+    for ax in permuted_axes:
+        val = score.params.get(ax)
+        if val is not None:
+            covered[ax] = {val}
+    return covered
+
+
+def _dedup_preserve_axis_variety(
+    scores: list[VariationScore],
+    permuted_axes: dict[str, list[str]],
+    dedup_distance_threshold: int,
+) -> list[VariationScore]:
+    """Dedup preservando al menos un representante por valor en cada eje permutado.
+
+    Caso de uso (bug crítico reportado): el usuario pide permutar
+    ``palette_scheme ∈ {brand, mono, light, dark}`` con ``count=4``. El isotype
+    procedural (``isotype.py``) genera SVG en Python y no ve los cambios de CSS
+    vars del template HTML, así que las 4 PNGs resultantes son visualmente
+    idénticas. La deduplicación estándar por ``dHash < threshold`` colapsa las
+    4 a 1, rompiendo la promesa del usuario.
+
+    Esta función preserva la variedad declarada por el usuario: para cada eje
+    en ``permuted_axes`` garantiza al menos una variación por valor declarado,
+    incluso si las distancias dHash son < threshold. Si un candidato no es
+    perceptual-duplicado de los ya seleccionados, se prefiere; en caso
+    contrario se toma el mejor igual para honrar la garantía.
+
+    Estrategia:
+      1. Iterar ejes en orden declarado por el usuario.
+      2. Para cada eje, iterar valores en orden declarado.
+      3. Para cada (eje, valor) aún no cubierto, elegir el mejor score con ese
+         valor que NO sea dedup-duplicado; si todos lo son, tomar el mejor de
+         todas formas (preserva la promesa).
+      4. Cuando una variación se selecciona, marcar TODOS los ejes permutados
+         cuyos valores estén en sus ``params`` como cubiertos (una sola
+         variación puede cubrir múltiples garantías si sus params intersectan
+         varios ejes permutados).
+
+    Args:
+        scores: Lista de VariationScore ya ordenada por ``(-final_score, idx)``.
+        permuted_axes: Mapeo ``axis_name -> [valores pedidos por el usuario]``.
+            El orden de inserción se respeta al iterar.
+        dedup_distance_threshold: Umbral perceptual para considerar "demasiado
+            similar" dos variaciones.
+
+    Returns:
+        Lista deduplicada con al menos un representante por valor declarado
+        en cada eje permutado presente en los params de las variaciones.
+    """
+    if not scores or not permuted_axes:
+        return list(scores)
+
+    selected: list[VariationScore] = []
+    covered: dict[str, set[str]] = {axis: set() for axis in permuted_axes}
+
+    for axis_name, axis_values in permuted_axes.items():
+        for axis_val in axis_values:
+            if axis_val in covered[axis_name]:
+                continue
+
+            candidates = [s for s in scores if s.params.get(axis_name) == axis_val]
+            if not candidates:
+                continue
+
+            picked = _pick_best_or_fallback(candidates, selected, dedup_distance_threshold)
+            selected.append(picked)
+            # Una variación puede cubrir varios ejes a la vez → evita duplicados
+            for ax, vals in _mark_covered(picked, permuted_axes).items():
+                covered[ax].update(vals)
+
+    return selected
+
+
 def rank(
     variations: list[dict[str, Any]],
     png_dir: Path,
     top_n: int = 8,
     dedup_distance_threshold: int = 20,
+    permuted_axes: dict[str, list[str]] | None = None,
 ) -> list[VariationScore]:
     """Rank and deduplicate variations.
 
@@ -319,6 +417,12 @@ def rank(
         png_dir: Directory containing PNG files
         top_n: Number of top variations to return
         dedup_distance_threshold: dHash distance threshold for "near-identical" (0-64)
+        permuted_axes: Optional dict ``{axis_name: [valores pedidos]}``. Si las
+            variaciones efectivamente llevan alguno de esos ejes en ``params``,
+            la deduplicación garantiza al menos un representante por valor
+            declarado (resuelve el caso de ``palette_scheme`` cuando el isotype
+            procedural no refleja cambios de CSS). Si ``None`` o si ningún eje
+            permutado aparece en las variaciones, se aplica el dedup estándar.
 
     Returns:
         Sorted list of top-N VariationScore objects (highest score first)
@@ -375,24 +479,30 @@ def rank(
     # Sort by score (descending)
     scores.sort(key=lambda s: (-s.final_score, s.idx))
 
-    # Dedup: if top scores have very similar dHashes, keep only the best
-    deduplicated: list[VariationScore] = []
-    for score in scores:
-        # Check if too similar to any already-selected score
-        is_duplicate = False
-        for selected in deduplicated:
-            dist = _dhash_distance(score.dhash, selected.dhash)
-            if dist < dedup_distance_threshold:
-                is_duplicate = True
+    # Decidir ruta de dedup según permuted_axes
+    permuted = permuted_axes or {}
+    has_relevant_axis = any(axis in s.params for s in scores for axis in permuted)
+
+    if permuted and has_relevant_axis:
+        deduplicated = _dedup_preserve_axis_variety(scores, permuted, dedup_distance_threshold)
+    else:
+        # Dedup estándar por dHash (comportamiento legacy)
+        deduplicated = []
+        for score in scores:
+            is_duplicate = False
+            for selected in deduplicated:
+                dist = _dhash_distance(score.dhash, selected.dhash)
+                if dist < dedup_distance_threshold:
+                    is_duplicate = True
+                    break
+
+            if not is_duplicate:
+                deduplicated.append(score)
+
+            if len(deduplicated) >= top_n:
                 break
 
-        if not is_duplicate:
-            deduplicated.append(score)
-
-        if len(deduplicated) >= top_n:
-            break
-
-    return deduplicated
+    return deduplicated[:top_n]
 
 
 __all__ = [

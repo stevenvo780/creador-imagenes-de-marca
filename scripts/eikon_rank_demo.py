@@ -46,9 +46,7 @@ async def _render_combinations(
 
     rendered_variations = []
     async with apw() as pw:
-        browser = await pw.chromium.launch(
-            headless=True, args=["--disable-dev-shm-usage"]
-        )
+        browser = await pw.chromium.launch(headless=True, args=["--disable-dev-shm-usage"])
         try:
             for combo in plan:
                 try:
@@ -64,15 +62,17 @@ async def _render_combinations(
                     )
 
                     if result["status"] == "generated":
-                        rendered_variations.append({
-                            "idx": combo.idx,
-                            "seed": combo.seed,
-                            "params": combo.params,
-                            "marca": marca_slug,
-                            "asset_type": "ad_leaderboard",
-                            "layout_warnings": result.get("layout_warnings", []),
-                            "status": "generated",
-                        })
+                        rendered_variations.append(
+                            {
+                                "idx": combo.idx,
+                                "seed": combo.seed,
+                                "params": combo.params,
+                                "marca": marca_slug,
+                                "asset_type": "ad_leaderboard",
+                                "layout_warnings": result.get("layout_warnings", []),
+                                "status": "generated",
+                            }
+                        )
                         print(f"  ✓ combo_{combo.idx:03d} rendered")
                     else:
                         print(f"  ✗ combo_{combo.idx:03d} failed: {result.get('status')}")
@@ -115,24 +115,20 @@ def _verify_and_save_results(
             if dist < threshold:
                 all_distinct = False
             print(
-                f"  combo_{score1.idx:03d} ↔ combo_{score2.idx:03d}: "
-                f"{dist}/64 bits {is_distinct}"
+                f"  combo_{score1.idx:03d} ↔ combo_{score2.idx:03d}: {dist}/64 bits {is_distinct}"
             )
 
     # Verify WCAG AA compliance
     wcag_passes = 0
     print("\n→ WCAG AA compliance check (top-8):")
     for scored in ranked:
-        wcag_signal = next(
-            (s for s in scored.signals if s.name == "wcag_contrast"), None
-        )
+        wcag_signal = next((s for s in scored.signals if s.name == "wcag_contrast"), None)
         if wcag_signal and wcag_signal.value >= 0.9:
             wcag_passes += 1
             print(f"  ✓ combo_{scored.idx:03d}: {wcag_signal.reason}")
         else:
             print(
-                f"  ✗ combo_{scored.idx:03d}: "
-                f"{wcag_signal.reason if wcag_signal else 'no signal'}"
+                f"  ✗ combo_{scored.idx:03d}: {wcag_signal.reason if wcag_signal else 'no signal'}"
             )
 
     # Save manifest
@@ -220,18 +216,25 @@ async def render_20_variations() -> dict:
 
     # Rank variations
     print("\n→ Ranking variations...")
+    # permuted_axes garantiza al menos 1 variación por valor permutado, evitando
+    # que el dedup por dHash colapse los combos idénticos del isotype procedural
+    # (ej. palette_scheme cambia solo CSS y no píxeles del SVG generado en Python).
+    demo_permuted_axes = {
+        axis_name: axes_available[axis_name]
+        for axis_name in spec.permuted
+        if axis_name in axes_available
+    }
     ranked = rank(
         rendered_variations,
         png_dir=output_dir,
         top_n=8,
         dedup_distance_threshold=20,
+        permuted_axes=demo_permuted_axes or None,
     )
 
     print("\n→ Top-8 variations (after deduplication):")
     for i, scored in enumerate(ranked, 1):
-        wcag_signal = next(
-            (s for s in scored.signals if s.name == "wcag_contrast"), None
-        )
+        wcag_signal = next((s for s in scored.signals if s.name == "wcag_contrast"), None)
         wcag_status = "✓ AA" if wcag_signal and wcag_signal.value >= 0.9 else "✗ FAIL"
         print(
             f"  [{i}] combo_{scored.idx:03d}: "

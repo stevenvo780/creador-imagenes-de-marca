@@ -37,6 +37,7 @@ from webapp.storage import (
     list_variations,
     update_batch_status,
 )
+from webapp.storage_backend import LocalStorage, StorageBackend
 
 logger = logging.getLogger(__name__)
 
@@ -122,9 +123,7 @@ async def job_events(batch_id: int) -> AsyncGenerator[str, None]:
 
     # Obtener tenant_id del batch para scoping en queries subsecuentes
     with connect(db_path) as con:
-        row = con.execute(
-            "SELECT tenant_id FROM batches WHERE id = ?", (batch_id,)
-        ).fetchone()
+        row = con.execute("SELECT tenant_id FROM batches WHERE id = ?", (batch_id,)).fetchone()
     if row is None:
         payload = json.dumps(
             {
@@ -233,9 +232,13 @@ def _axes_config_to_dict(axes_config: AxesConfig) -> dict[str, list[str]]:
     return {name: axis.option_names() for name, axis in axes_config.axes.items()}
 
 
-def _make_png_dir(marca_slug: str, asset_type: str) -> Path:
-    """Devuelve el directorio donde render_combination escribe los PNG."""
-    return OUTPUT_DIR / marca_slug / "logos" / asset_type
+def _make_png_dir(marca_slug: str, asset_type: str, batch_id: int) -> Path:
+    """Devuelve el directorio donde render_combination escribe los PNG.
+
+    Incluye batch_id como subdirectorio: dos batches sobre el mismo brand+asset_type
+    escriben en rutas distintas, evitando sobreescrituras silenciosas.
+    """
+    return OUTPUT_DIR / marca_slug / "logos" / asset_type / str(batch_id)
 
 
 class WorkerPool:
@@ -254,6 +257,7 @@ class WorkerPool:
         db_path: Path,
         max_concurrent_jobs: int = 4,
         axes_config_path: Path | None = None,
+        storage: StorageBackend | None = None,
     ) -> None:
         self.db_path = db_path
         self.max_concurrent = max_concurrent_jobs
@@ -262,6 +266,9 @@ class WorkerPool:
         self._pending_batches: dict[int, dict[str, Any]] = {}
         self._active_tasks: set[asyncio.Task[Any]] = set()
         self._axes_config_path = axes_config_path
+        # Seam de almacenamiento multi-tenant: autoridad única de escritura/lectura
+        # de assets renderizados, aislados bajo output/tenants/<tenant_id>/...
+        self.storage: StorageBackend = storage or LocalStorage(base_dir=OUTPUT_DIR)
         self._poll_task: asyncio.Task[Any] | None = None
         self._worker_task: asyncio.Task[Any] | None = None
 
@@ -402,9 +409,7 @@ class WorkerPool:
         """Carga batch, spec, brand y devuelve (tenant_id, brand_id, spec, marca)."""
         try:
             with connect(db_path) as con:
-                row = con.execute(
-                    "SELECT * FROM batches WHERE id = ?", (batch_id,)
-                ).fetchone()
+                row = con.execute("SELECT * FROM batches WHERE id = ?", (batch_id,)).fetchone()
             if row is None:
                 logger.error("Batch %d no encontrado", batch_id)
                 return None
@@ -457,9 +462,7 @@ class WorkerPool:
 
         return tenant_id, brand_id, spec, marca
 
-    def _load_axes_config(
-        self, batch_id: int, db_path: Path, tenant_id: int
-    ) -> AxesConfig | None:
+    def _load_axes_config(self, batch_id: int, db_path: Path, tenant_id: int) -> AxesConfig | None:
         """Carga AxesConfig desde disco. None si falla (ya marca failed)."""
         try:
             if self._axes_config_path is not None:
@@ -488,7 +491,7 @@ class WorkerPool:
         apw, _ = _get_playwright()
         browser = None
         rendered: list[dict[str, Any]] = []
-        png_dir: Path = _make_png_dir(marca_slug, asset_type)
+        png_dir: Path = _make_png_dir(marca_slug, asset_type, batch_id)
 
         try:
             async with apw() as pw:
@@ -507,30 +510,55 @@ class WorkerPool:
                         return None
 
                     meta = await render_combination(
-                        browser, marca_slug, combination, asset_type, marca, axes_config,
-                        cache=None, dry_run=False,
+                        browser,
+                        marca_slug,
+                        combination,
+                        asset_type,
+                        marca,
+                        axes_config,
+                        cache=None,
+                        dry_run=False,
+                        batch_id=batch_id,
                     )
 
                     if meta.get("status") == "error":
                         warnings = meta.get("warnings", [])
-                        raise RuntimeError(
-                            f"Render falló para combo {combination.idx}: {warnings}"
-                        )
+                        raise RuntimeError(f"Render falló para combo {combination.idx}: {warnings}")
 
-                    rendered.append({
-                        "idx": combination.idx,
-                        "seed": combination.seed,
-                        "params": dict(combination.params),
-                        "marca": marca_slug,
-                        "asset_type": asset_type,
-                        "layout_warnings": meta.get("layout_warnings", []),
-                    })
+                    rendered.append(
+                        {
+                            "idx": combination.idx,
+                            "seed": combination.seed,
+                            "params": dict(combination.params),
+                            "marca": marca_slug,
+                            "asset_type": asset_type,
+                            "layout_warnings": meta.get("layout_warnings", []),
+                        }
+                    )
                     self._pending_batches[batch_id]["rendered"] = len(rendered)
 
                 if not rendered:
                     raise RuntimeError("Ninguna combinación se renderizó exitosamente")
 
-                ranked: list[VariationScore] = rank(rendered, png_dir, top_n=len(rendered))
+                # Construir permuted_axes a partir de spec.permuted + axes_config
+                # para que el ranking GARANTICE al menos 1 variación por valor
+                # declarado, incluso cuando los PNGs son visualmente idénticos
+                # (caso isotype procedural: ``palette_scheme`` cambia solo CSS
+                # vars y no los píxeles del SVG generado en Python → dHash distance
+                # < threshold → dedup estándar colapsa el batch a 1).
+                axes_dict = _axes_config_to_dict(axes_config)
+                batch_permuted_axes = {
+                    axis_name: axes_dict[axis_name]
+                    for axis_name in spec.permuted
+                    if axis_name in axes_dict
+                }
+
+                ranked: list[VariationScore] = rank(
+                    rendered,
+                    png_dir,
+                    top_n=len(rendered),
+                    permuted_axes=batch_permuted_axes or None,
+                )
                 self._pending_batches[batch_id]["ranked"] = len(ranked)
                 return ranked
 
@@ -561,6 +589,16 @@ class WorkerPool:
                     # quepa siempre. El seed es metadata de reproducibilidad (el render
                     # usa params, no este valor), así que el enmascarado es seguro.
                     seed_storable = int(vs.seed) & 0x7FFF_FFFF_FFFF_FFFF
+                    # Persistir el PNG a través del seam: lo copia bajo
+                    # output/tenants/<tenant_id>/... (aislamiento real) y devuelve
+                    # la ruta absoluta que se guarda para servirlo en downloads.
+                    # Incluye batch_id en la clave para no colisionar entre batches.
+                    relative_path = (
+                        f"{vs.marca}/logos/{vs.asset_type}/{batch_id}/combo_{vs.idx:03d}.png"
+                    )
+                    stored_path = self.storage.save(
+                        tenant_id, relative_path, Path(vs.png_path).read_bytes()
+                    )
                     con.execute(
                         """INSERT INTO variations
                            (batch_id, tenant_id, brand_id, axis_params_json, seed,
@@ -568,22 +606,31 @@ class WorkerPool:
                             created_at)
                            VALUES (?, ?, ?, ?, ?, ?, ?, NULL, NULL, 0, ?)""",
                         (
-                            batch_id, tenant_id, brand_id,
+                            batch_id,
+                            tenant_id,
+                            brand_id,
                             json.dumps(vs.params, sort_keys=True),
-                            seed_storable, vs.final_score, str(vs.png_path), now,
+                            seed_storable,
+                            vs.final_score,
+                            stored_path,
+                            now,
                         ),
                     )
 
             rendered_count = self._pending_batches.get(batch_id, {}).get("rendered", 0)
             update_batch_status(
-                db_path, batch_id, "completed",
+                db_path,
+                batch_id,
+                "completed",
                 counts={"rendered": int(rendered_count), "ranked": len(ranked)},
                 tenant_id=tenant_id,
             )
             self._pending_batches[batch_id]["status"] = "completed"
             logger.info(
                 "Batch %d completado: %s renderizados, %d rankeados",
-                batch_id, rendered_count, len(ranked),
+                batch_id,
+                rendered_count,
+                len(ranked),
             )
         except Exception as exc:
             logger.exception("Error al persistir variaciones batch %d: %s", batch_id, exc)
@@ -598,9 +645,7 @@ class WorkerPool:
         """Verifica si el batch fue cancelado desde la API."""
         try:
             with connect(db_path) as con:
-                row = con.execute(
-                    "SELECT status FROM batches WHERE id = ?", (batch_id,)
-                ).fetchone()
+                row = con.execute("SELECT status FROM batches WHERE id = ?", (batch_id,)).fetchone()
             return row is not None and str(row["status"]) == "cancelled"
         except Exception:
             return False

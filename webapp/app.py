@@ -36,6 +36,7 @@ from webapp.storage import (
     create_tenant_user,
     init_db,
 )
+from webapp.storage_backend import LocalStorage
 
 WEBAPP_DIR = Path(__file__).resolve().parent
 REPO_ROOT = WEBAPP_DIR.parent
@@ -81,6 +82,9 @@ def create_app(
     output_root = output_root or OUTPUT_DIR
     axes_config_path = axes_config_path or (REPO_ROOT / "config" / "axes.json")
     axes_config = load_axes_config(axes_config_path)
+    # Seam de almacenamiento multi-tenant compartido por el worker (escritura) y
+    # el router de descargas (lectura). Se inyecta vía app.state y al WorkerPool.
+    storage = LocalStorage(base_dir=output_root)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
@@ -89,6 +93,7 @@ def create_app(
             settings.sqlite_path,
             max_concurrent_jobs=settings.max_concurrent_jobs,
             axes_config_path=axes_config_path,
+            storage=storage,
         )
         set_worker(worker)
         await worker.start()
@@ -107,6 +112,7 @@ def create_app(
     # Config por-app accesible desde las dependencias (webapp/api/deps.py).
     app.state.settings = settings
     app.state.output_root = output_root
+    app.state.storage = storage
     app.state.axes_config = axes_config
     app.state.axes_config_path = axes_config_path
     app.state.worker = None
@@ -177,4 +183,24 @@ def create_app(
     return app
 
 
-app = create_app()
+# Crear app a nivel de módulo para ASGI servers (production).
+# En pytest, conftest.py setea env vars, pero puede no estar cargado aún si pytest
+# recorre los archivos de test antes de cargar conftest.py (timing issue clásico).
+# Por eso, usamos try-except: en pytest, permitir una app dummy.
+# En producción sin env vars, el error de seguridad se propagará correctamente.
+try:
+    app = create_app()
+except ValueError:
+    # En pytest, esto ocurre porque conftest aún no ha ejecutado.
+    # Permitir una app dummy que será reemplazada cuando los tests creen apps con Settings válidos.
+    # En producción, este error DEBE propagarse.
+    import sys
+    if "pytest" in sys.modules or any("pytest" in arg for arg in sys.argv):
+        # pytest mode: crear una app dummy con Settings seguro
+        _dummy_settings = Settings(
+            jwt_secret="dummy-test-" + "x" * 30,  # 43 chars, >= 32
+        )
+        app = create_app(_dummy_settings)
+    else:
+        # Producción: propagar el error
+        raise

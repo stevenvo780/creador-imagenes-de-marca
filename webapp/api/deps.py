@@ -16,6 +16,7 @@ from eikon_core.combinatorial import AxesConfig
 from webapp.config import Settings
 from webapp.security import decode_jwt
 from webapp.storage import get_user
+from webapp.storage_backend import StorageBackend
 
 
 def get_settings(request: Request) -> Settings:
@@ -26,6 +27,11 @@ def get_settings(request: Request) -> Settings:
 def get_output_root(request: Request) -> Path:
     """Raíz del árbol de salida donde el worker escribe los PNG renderizados."""
     return cast(Path, request.app.state.output_root)
+
+
+def get_storage(request: Request) -> StorageBackend:
+    """Seam de almacenamiento multi-tenant (lectura/empaquetado de assets)."""
+    return cast(StorageBackend, request.app.state.storage)
 
 
 def get_axes_config(request: Request) -> AxesConfig:

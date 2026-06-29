@@ -176,8 +176,9 @@ async def render_combination(
     axes_config: AxesConfig,
     cache: dict[str, str] | None = None,
     dry_run: bool = False,
+    batch_id: int | None = None,
 ) -> dict[str, Any]:
-    """Renderiza un asset con parámetros de combinación especificada.
+    """Renderiza un asset con parametros de combinacion especificada.
 
     Args:
         browser: Playwright browser instance
@@ -185,9 +186,12 @@ async def render_combination(
         combination: Combination object with params dict
         asset_type: Tipo de asset (ej. "logo_symbol_color")
         marca: Dict con datos de la marca
-        axes_config: AxesConfig para validación
+        axes_config: AxesConfig para validacion
         cache: Optional cache dict
         dry_run: Si True, no renderiza realmente
+        batch_id: ID del batch. Cuando se proporciona, el PNG se escribe en
+            .../asset_type/<batch_id>/combo_NNN.png, evitando que batches
+            distintos sobre el mismo brand+asset_type se sobreescriban.
 
     Returns:
         Asset metadata dict
@@ -209,7 +213,7 @@ async def render_combination(
         label=f"Combination {combination.idx}",
     )
 
-    # Render with combination params
+    # batch_subdir aisla PNGs por batch_id, evitando sobreescrituras entre batches.
     return await render_asset(
         browser,
         marca_slug,
@@ -220,4 +224,5 @@ async def render_combination(
         cache or {},
         dry_run=dry_run,
         combination_params=combination.params,
+        batch_subdir=str(batch_id) if batch_id is not None else None,
     )

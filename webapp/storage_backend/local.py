@@ -90,6 +90,21 @@ class LocalStorage:
         full_path.write_bytes(content)
         return str(full_path)
 
+    def full_path(self, tenant_id: int, relative_path: str) -> str:
+        """Devuelve la ruta absoluta validada (anti path-traversal) sin exigir que exista.
+
+        Args:
+            tenant_id: ID del tenant
+            relative_path: ruta relativa (ej: "marcas/prizma/logo.png")
+
+        Returns:
+            Ruta absoluta dentro del scope del tenant
+
+        Raises:
+            ValueError: si relative_path es inseguro
+        """
+        return str(self._get_full_path(tenant_id, relative_path))
+
     def open(self, tenant_id: int, relative_path: str) -> bytes:
         """Lee contenido de un archivo.
 
