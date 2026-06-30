@@ -110,13 +110,19 @@ def downloads_zip(
     request: Request,
     user: dict[str, Any] = Depends(current_user),
 ) -> Response:
-    """Empaca los PNG de varias variaciones del tenant en un único ZIP."""
+    """Empaca los PNG de varias variaciones del tenant en un único ZIP.
+
+    IDs duplicados en la lista se deduplicán (manteniendo el primer orden).
+    """
     settings = get_settings(request)
     storage = get_storage(request)
     tenant_id = user["tenant_id"]
 
+    # Deduplicar IDs preservando el orden de aparición.
+    unique_ids: list[int] = list(dict.fromkeys(payload.ids))
+
     keys: list[str] = []
-    for var_id in payload.ids:
+    for var_id in unique_ids:
         var = get_variation(settings.sqlite_path, tenant_id, var_id)
         if var is None:
             raise HTTPException(status_code=404, detail=f"variation {var_id} not found")

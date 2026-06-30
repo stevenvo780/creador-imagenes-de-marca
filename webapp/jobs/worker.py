@@ -13,12 +13,13 @@ import contextlib
 import json
 import logging
 import time
-from collections.abc import AsyncGenerator
+from collections.abc import AsyncGenerator, Callable
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict
 from pathlib import Path
-from typing import Any
+from typing import Any, TypeVar
 
-from eikon_core.brand import load_json
+from eikon_core.brand import brand_family, load_json
 from eikon_core.combinatorial import (
     AxesConfig,
     CombinationSpec,
@@ -29,6 +30,7 @@ from eikon_core.combinatorial.ranking import VariationScore, rank
 from eikon_core.constants import MARCAS_DIR, OUTPUT_DIR
 from eikon_core.orchestrator import render_combination
 from eikon_core.playwright_lazy import _get_playwright
+from eikon_core.taxonomy import get_category_for_asset_type
 from webapp.storage import (
     connect,
     create_batch,
@@ -42,6 +44,13 @@ from webapp.storage_backend import LocalStorage, StorageBackend
 logger = logging.getLogger(__name__)
 
 _worker_pool: WorkerPool | None = None
+T = TypeVar("T")
+
+QUEUE_GET_TIMEOUT_SECONDS = 1.0
+DEFAULT_JOB_TIMEOUT_SECONDS = 5 * 60
+DEFAULT_RENDER_TIMEOUT_SECONDS = 5 * 60
+DEFAULT_DB_TIMEOUT_SECONDS = 30
+BROWSER_CLOSE_TIMEOUT_SECONDS = 10
 
 
 def get_worker() -> WorkerPool | None:
@@ -94,7 +103,9 @@ async def enqueue_batch(
 
     pool = get_worker()
     if pool is not None:
-        await pool.queue.put(batch["id"])
+        batch_id = int(batch["id"])
+        pool._mark_batch_queued(batch_id)
+        await pool.queue.put(batch_id)
 
     return dict(batch)
 
@@ -121,10 +132,12 @@ async def job_events(batch_id: int) -> AsyncGenerator[str, None]:
 
     db_path = worker.db_path
 
-    # Obtener tenant_id del batch para scoping en queries subsecuentes
-    with connect(db_path) as con:
-        row = con.execute("SELECT tenant_id FROM batches WHERE id = ?", (batch_id,)).fetchone()
-    if row is None:
+    # Obtener tenant_id del batch para scoping en queries subsecuentes.
+    tenant_id = await worker._run_db_operation(
+        "load job event tenant",
+        lambda: _get_batch_tenant_id(db_path, batch_id),
+    )
+    if tenant_id is None:
         payload = json.dumps(
             {
                 "type": "error",
@@ -135,7 +148,6 @@ async def job_events(batch_id: int) -> AsyncGenerator[str, None]:
         )
         yield f"data: {payload}\n\n"
         return
-    tenant_id = int(row["tenant_id"])
 
     t0 = time.time()
     yield f"data: {json.dumps({'type': 'started', 'batch_id': batch_id, 'timestamp': t0})}\n\n"
@@ -144,7 +156,10 @@ async def job_events(batch_id: int) -> AsyncGenerator[str, None]:
     last_ranked = -1
 
     while worker.running:
-        batch = get_batch(db_path, tenant_id, batch_id)
+        batch = await worker._run_db_operation(
+            "load job event batch",
+            lambda: get_batch(db_path, tenant_id, batch_id),
+        )
         if batch is None:
             payload = json.dumps(
                 {
@@ -178,7 +193,10 @@ async def job_events(batch_id: int) -> AsyncGenerator[str, None]:
             last_ranked = ranked
 
         if status == "completed":
-            variations = list_variations(db_path, tenant_id, batch_id=batch_id)
+            variations = await worker._run_db_operation(
+                "load job event variations",
+                lambda: list_variations(db_path, tenant_id, batch_id=batch_id),
+            )
             payload = json.dumps(
                 {
                     "type": "completed",
@@ -232,13 +250,36 @@ def _axes_config_to_dict(axes_config: AxesConfig) -> dict[str, list[str]]:
     return {name: axis.option_names() for name, axis in axes_config.axes.items()}
 
 
-def _make_png_dir(marca_slug: str, asset_type: str, batch_id: int) -> Path:
+def _make_png_dir(marca_slug: str, category: str, asset_type: str, batch_id: int) -> Path:
     """Devuelve el directorio donde render_combination escribe los PNG.
 
-    Incluye batch_id como subdirectorio: dos batches sobre el mismo brand+asset_type
-    escriben en rutas distintas, evitando sobreescrituras silenciosas.
+    La categoría debe coincidir con la que ``render_asset`` deriva del asset_type
+    (ej. banners, cards, og, stationery), no un "logos" fijo: si no coinciden, el
+    ranking busca los PNG en la carpeta equivocada y el batch completa con 0
+    variaciones. Incluye batch_id como subdirectorio: dos batches sobre el mismo
+    brand+asset_type escriben en rutas distintas, evitando sobreescrituras.
     """
-    return OUTPUT_DIR / marca_slug / "logos" / asset_type / str(batch_id)
+    return OUTPUT_DIR / marca_slug / category / asset_type / str(batch_id)
+
+
+def _category_for(asset_type: str, marca: dict[str, Any]) -> str:
+    """Deriva la categoría real del asset_type igual que ``render_combination``.
+
+    Mantener esta lógica en sync con eikon_core.orchestrator.render_combination
+    garantiza que el directorio donde el ranking lee los PNG sea el mismo donde
+    render_asset los escribió.
+    """
+    is_prizma = "prizma" in brand_family(marca)
+    return get_category_for_asset_type(asset_type, is_prizma) or "logos"
+
+
+def _get_batch_tenant_id(db_path: Path, batch_id: int) -> int | None:
+    """Devuelve tenant_id de un batch, o None si no existe."""
+    with connect(db_path) as con:
+        row = con.execute("SELECT tenant_id FROM batches WHERE id = ?", (batch_id,)).fetchone()
+    if row is None:
+        return None
+    return int(row["tenant_id"])
 
 
 class WorkerPool:
@@ -260,11 +301,16 @@ class WorkerPool:
         storage: StorageBackend | None = None,
     ) -> None:
         self.db_path = db_path
-        self.max_concurrent = max_concurrent_jobs
+        self.max_concurrent = max(1, int(max_concurrent_jobs))
         self.queue: asyncio.Queue[int] = asyncio.Queue()
         self.running = False
         self._pending_batches: dict[int, dict[str, Any]] = {}
         self._active_tasks: set[asyncio.Task[Any]] = set()
+        self._job_slots = asyncio.Semaphore(self.max_concurrent)
+        self._db_executor: ThreadPoolExecutor | None = None
+        self.job_timeout_seconds = DEFAULT_JOB_TIMEOUT_SECONDS
+        self.render_timeout_seconds = DEFAULT_RENDER_TIMEOUT_SECONDS
+        self.db_timeout_seconds = DEFAULT_DB_TIMEOUT_SECONDS
         self._axes_config_path = axes_config_path
         # Seam de almacenamiento multi-tenant: autoridad única de escritura/lectura
         # de assets renderizados, aislados bajo output/tenants/<tenant_id>/...
@@ -278,6 +324,7 @@ class WorkerPool:
             logger.warning("WorkerPool ya está corriendo")
             return
         self.running = True
+        self._job_slots = asyncio.Semaphore(self.max_concurrent)
         loop = asyncio.get_running_loop()
         self._poll_task = loop.create_task(self._poll_loop(), name="eikon-poll")
         self._worker_task = loop.create_task(self._worker_loop(), name="eikon-worker")
@@ -308,6 +355,10 @@ class WorkerPool:
                     logger.error("Error en tarea pendiente durante stop: %s", result)
             self._active_tasks.clear()
 
+        if self._db_executor is not None:
+            self._db_executor.shutdown(wait=True, cancel_futures=True)
+            self._db_executor = None
+
         self._pending_batches.clear()
         logger.info("WorkerPool detenido")
 
@@ -315,19 +366,13 @@ class WorkerPool:
         """Escanea periódicamente la DB por batches en estado 'pending'."""
         while self.running:
             try:
-                with connect(self.db_path) as con:
-                    rows = con.execute(
-                        "SELECT id FROM batches WHERE status = 'pending' ORDER BY id ASC LIMIT ?",
-                        (self.max_concurrent * 2,),
-                    ).fetchall()
-                for row in rows:
-                    batch_id = int(row["id"])
+                batch_ids = await self._run_db_operation(
+                    "poll pending batches",
+                    self._load_pending_batch_ids,
+                )
+                for batch_id in batch_ids:
                     if batch_id not in self._pending_batches:
-                        self._pending_batches[batch_id] = {
-                            "rendered": 0,
-                            "ranked": 0,
-                            "status": "queued",
-                        }
+                        self._mark_batch_queued(batch_id)
                         await self.queue.put(batch_id)
             except Exception as exc:
                 logger.exception("Error en poll_loop: %s", exc)
@@ -337,28 +382,122 @@ class WorkerPool:
         """Consume batch IDs de la cola y los procesa concurrentemente."""
         while self.running:
             try:
-                batch_id = await asyncio.wait_for(self.queue.get(), timeout=1.0)
+                batch_id = await asyncio.wait_for(
+                    self.queue.get(), timeout=QUEUE_GET_TIMEOUT_SECONDS
+                )
             except TimeoutError:
                 continue
+            except asyncio.CancelledError:
+                break
 
             if not self.running:
                 self.queue.task_done()
                 break
 
-            # Limitar concurrencia: si ya hay suficientes activos, esperar
-            while self.running and len(self._active_tasks) >= self.max_concurrent:
-                await asyncio.sleep(0.2)
-
-            if not self.running:
-                self.queue.task_done()
-                break
-
+            self._mark_batch_queued(batch_id)
             task = asyncio.create_task(
-                self._process_batch(batch_id), name=f"eikon-batch-{batch_id}"
+                self._run_queued_batch(batch_id), name=f"eikon-batch-{batch_id}"
             )
             self._active_tasks.add(task)
-            task.add_done_callback(lambda t: self._active_tasks.discard(t))
-            task.add_done_callback(lambda t: self.queue.task_done())
+            task.add_done_callback(self._on_batch_task_done)
+
+    def _load_pending_batch_ids(self) -> list[int]:
+        """Carga IDs pending en orden FIFO desde SQLite."""
+        with connect(self.db_path) as con:
+            rows = con.execute(
+                "SELECT id FROM batches WHERE status = 'pending' ORDER BY id ASC LIMIT ?",
+                (self.max_concurrent * 2,),
+            ).fetchall()
+        return [int(row["id"]) for row in rows]
+
+    def _mark_batch_queued(self, batch_id: int) -> None:
+        """Inicializa el estado en vivo usado por SSE/progreso."""
+        self._pending_batches.setdefault(
+            batch_id,
+            {
+                "rendered": 0,
+                "ranked": 0,
+                "status": "queued",
+            },
+        )
+
+    async def _run_queued_batch(self, batch_id: int) -> None:
+        """Ejecuta un batch tomando un slot del semáforo y libera queue.task_done."""
+        try:
+            async with self._job_slots:
+                if not self.running:
+                    return
+                self._mark_batch_queued(batch_id)
+                self._pending_batches[batch_id]["status"] = "running"
+                await self._process_batch_with_timeout(batch_id)
+        finally:
+            self.queue.task_done()
+
+    def _on_batch_task_done(self, task: asyncio.Task[Any]) -> None:
+        """Quita tareas completadas del set de tracking y registra fallos inesperados."""
+        self._active_tasks.discard(task)
+        with contextlib.suppress(asyncio.CancelledError):
+            exc = task.exception()
+            if exc is not None:
+                logger.error("Tarea de batch terminó con error inesperado: %s", exc)
+
+    async def _process_batch_with_timeout(self, batch_id: int) -> None:
+        """Aplica timeout total por batch y deja la DB en estado terminal ante cuelgues."""
+        try:
+            await asyncio.wait_for(
+                self._process_batch(batch_id),
+                timeout=self.job_timeout_seconds,
+            )
+        except TimeoutError:
+            logger.error(
+                "Timeout procesando batch %d tras %.1fs",
+                batch_id,
+                self.job_timeout_seconds,
+            )
+            await self._mark_batch_failed(batch_id)
+            self._pending_batches.pop(batch_id, None)
+        except asyncio.CancelledError:
+            raise
+        except Exception as exc:
+            logger.exception("Error inesperado procesando batch %d: %s", batch_id, exc)
+            await self._mark_batch_failed(batch_id)
+            self._pending_batches.pop(batch_id, None)
+
+    async def _run_db_operation(self, name: str, operation: Callable[[], T]) -> T:
+        """Ejecuta una operación de DB/IO síncrona sin bloquear el event loop."""
+        loop = asyncio.get_running_loop()
+        executor = self._ensure_db_executor()
+        try:
+            return await asyncio.wait_for(
+                loop.run_in_executor(executor, operation),
+                timeout=self.db_timeout_seconds,
+            )
+        except TimeoutError as exc:
+            raise TimeoutError(
+                f"Timeout en operación DB '{name}' tras {self.db_timeout_seconds:.1f}s"
+            ) from exc
+
+    def _ensure_db_executor(self) -> ThreadPoolExecutor:
+        """Crea el executor propio para DB/IO si aún no existe."""
+        if self._db_executor is None:
+            self._db_executor = ThreadPoolExecutor(
+                max_workers=max(2, self.max_concurrent + 2),
+                thread_name_prefix="eikon-db",
+            )
+        return self._db_executor
+
+    async def _mark_batch_failed(self, batch_id: int, tenant_id: int | None = None) -> None:
+        """Marca un batch como failed sin bloquear el event loop."""
+        with contextlib.suppress(Exception):
+            await self._run_db_operation(
+                "mark batch failed",
+                lambda: update_batch_status(
+                    self.db_path,
+                    batch_id,
+                    "failed",
+                    tenant_id=tenant_id,
+                ),
+            )
 
     async def _process_batch(self, batch_id: int) -> None:
         """Procesa un batch completo: planifica, renderiza, rankea, persiste.
@@ -369,12 +508,18 @@ class WorkerPool:
         """
         db_path = self.db_path
 
-        loaded = self._load_batch_context(batch_id, db_path)
+        loaded = await self._run_db_operation(
+            "load batch context",
+            lambda: self._load_batch_context(batch_id, db_path),
+        )
         if loaded is None:
             return
         tenant_id, brand_id, spec, marca = loaded
 
-        axes_config = self._load_axes_config(batch_id, db_path, tenant_id)
+        axes_config = await self._run_db_operation(
+            "load axes config",
+            lambda: self._load_axes_config(batch_id, db_path, tenant_id),
+        )
         if axes_config is None:
             return
 
@@ -383,23 +528,38 @@ class WorkerPool:
             plan = plan_combinations(spec, axes_dict)
         except Exception as exc:
             logger.exception("Error al planificar combinaciones batch %d: %s", batch_id, exc)
-            update_batch_status(db_path, batch_id, "failed", tenant_id=tenant_id)
+            await self._mark_batch_failed(batch_id, tenant_id)
             return
 
         asset_type = spec.asset_types[0] if spec.asset_types else "logo"
         marca_slug = spec.brand
+        # Categoría real del asset (banners/cards/og/stationery/logos), derivada
+        # igual que render_combination para que ranking y storage apunten al
+        # mismo directorio donde render_asset escribió los PNG.
+        category = _category_for(asset_type, marca)
 
-        if self._is_cancelled(db_path, batch_id):
+        if await self._is_cancelled_async(db_path, batch_id):
             logger.info("Batch %d cancelado antes de renderizar", batch_id)
             return
 
         ranked = await self._render_and_rank(
-            batch_id, db_path, tenant_id, spec, plan, marca, marca_slug, asset_type, axes_config
+            batch_id,
+            db_path,
+            tenant_id,
+            spec,
+            plan,
+            marca,
+            marca_slug,
+            category,
+            asset_type,
+            axes_config,
         )
         if ranked is None:
             return  # Error ya manejado en _render_and_rank
 
-        self._persist_variations(batch_id, db_path, tenant_id, brand_id, ranked)
+        await self._persist_variations(
+            batch_id, db_path, tenant_id, brand_id, category, ranked
+        )
 
     # ── Helpers de _process_batch (extraídos para reducir complejidad) ─────
 
@@ -462,7 +622,9 @@ class WorkerPool:
 
         return tenant_id, brand_id, spec, marca
 
-    def _load_axes_config(self, batch_id: int, db_path: Path, tenant_id: int) -> AxesConfig | None:
+    def _load_axes_config(
+        self, batch_id: int, db_path: Path, tenant_id: int
+    ) -> AxesConfig | None:
         """Carga AxesConfig desde disco. None si falla (ya marca failed)."""
         try:
             if self._axes_config_path is not None:
@@ -484,24 +646,28 @@ class WorkerPool:
         plan: Any,  # CombinationPlan
         marca: dict[str, Any],
         marca_slug: str,
+        category: str,
         asset_type: str,
         axes_config: AxesConfig,
     ) -> list[VariationScore] | None:
         """Renderiza combinaciones vía Playwright y las rankea. None si falla."""
         apw, _ = _get_playwright()
-        browser = None
+        browser: Any | None = None
         rendered: list[dict[str, Any]] = []
-        png_dir: Path = _make_png_dir(marca_slug, asset_type, batch_id)
+        png_dir: Path = _make_png_dir(marca_slug, category, asset_type, batch_id)
 
         try:
             async with apw() as pw:
-                browser = await pw.chromium.launch(
-                    headless=True,
-                    args=["--disable-dev-shm-usage", "--disable-setuid-sandbox"],
+                browser = await asyncio.wait_for(
+                    pw.chromium.launch(
+                        headless=True,
+                        args=["--disable-dev-shm-usage", "--disable-setuid-sandbox"],
+                    ),
+                    timeout=self.render_timeout_seconds,
                 )
 
                 for combination in plan.combinations:
-                    if self._is_cancelled(db_path, batch_id):
+                    if await self._is_cancelled_async(db_path, batch_id):
                         logger.info(
                             "Batch %d cancelado durante renderizado (combo %d)",
                             batch_id,
@@ -509,21 +675,26 @@ class WorkerPool:
                         )
                         return None
 
-                    meta = await render_combination(
-                        browser,
-                        marca_slug,
-                        combination,
-                        asset_type,
-                        marca,
-                        axes_config,
-                        cache=None,
-                        dry_run=False,
-                        batch_id=batch_id,
+                    meta = await asyncio.wait_for(
+                        render_combination(
+                            browser,
+                            marca_slug,
+                            combination,
+                            asset_type,
+                            marca,
+                            axes_config,
+                            cache=None,
+                            dry_run=False,
+                            batch_id=batch_id,
+                        ),
+                        timeout=self.render_timeout_seconds,
                     )
 
                     if meta.get("status") == "error":
                         warnings = meta.get("warnings", [])
-                        raise RuntimeError(f"Render falló para combo {combination.idx}: {warnings}")
+                        raise RuntimeError(
+                            f"Render falló para combo {combination.idx}: {warnings}"
+                        )
 
                     rendered.append(
                         {
@@ -564,68 +735,42 @@ class WorkerPool:
 
         except Exception as exc:
             logger.exception("Error en fase de renderizado batch %d: %s", batch_id, exc)
-            update_batch_status(db_path, batch_id, "failed", tenant_id=tenant_id)
+            await self._mark_batch_failed(batch_id, tenant_id)
             self._pending_batches.pop(batch_id, None)
             return None
         finally:
             if browser is not None:
-                await browser.close()
+                with contextlib.suppress(Exception):
+                    await asyncio.wait_for(
+                        browser.close(),
+                        timeout=BROWSER_CLOSE_TIMEOUT_SECONDS,
+                    )
 
-    def _persist_variations(
+    async def _persist_variations(
         self,
         batch_id: int,
         db_path: Path,
         tenant_id: int,
         brand_id: int,
+        category: str,
         ranked: list[VariationScore],
     ) -> None:
         """Persiste variaciones rankeadas en DB. Atómico: all-or-nothing."""
+        rendered_count = int(self._pending_batches.get(batch_id, {}).get("rendered", 0))
         try:
-            now = int(time.time())
-            with connect(db_path) as con:
-                for vs in ranked:
-                    # deterministic_seed devuelve uint64 [0, 2**64); SQLite INTEGER es
-                    # int64 con signo (máx 2**63-1). Enmascaramos a 63 bits para que
-                    # quepa siempre. El seed es metadata de reproducibilidad (el render
-                    # usa params, no este valor), así que el enmascarado es seguro.
-                    seed_storable = int(vs.seed) & 0x7FFF_FFFF_FFFF_FFFF
-                    # Persistir el PNG a través del seam: lo copia bajo
-                    # output/tenants/<tenant_id>/... (aislamiento real) y devuelve
-                    # la ruta absoluta que se guarda para servirlo en downloads.
-                    # Incluye batch_id en la clave para no colisionar entre batches.
-                    relative_path = (
-                        f"{vs.marca}/logos/{vs.asset_type}/{batch_id}/combo_{vs.idx:03d}.png"
-                    )
-                    stored_path = self.storage.save(
-                        tenant_id, relative_path, Path(vs.png_path).read_bytes()
-                    )
-                    con.execute(
-                        """INSERT INTO variations
-                           (batch_id, tenant_id, brand_id, axis_params_json, seed,
-                            score, output_path, wcag_json, layout_status, selected,
-                            created_at)
-                           VALUES (?, ?, ?, ?, ?, ?, ?, NULL, NULL, 0, ?)""",
-                        (
-                            batch_id,
-                            tenant_id,
-                            brand_id,
-                            json.dumps(vs.params, sort_keys=True),
-                            seed_storable,
-                            vs.final_score,
-                            stored_path,
-                            now,
-                        ),
-                    )
-
-            rendered_count = self._pending_batches.get(batch_id, {}).get("rendered", 0)
-            update_batch_status(
-                db_path,
-                batch_id,
-                "completed",
-                counts={"rendered": int(rendered_count), "ranked": len(ranked)},
-                tenant_id=tenant_id,
+            await self._run_db_operation(
+                "persist variations",
+                lambda: self._write_variations(
+                    batch_id,
+                    db_path,
+                    tenant_id,
+                    brand_id,
+                    category,
+                    ranked,
+                    rendered_count,
+                ),
             )
-            self._pending_batches[batch_id]["status"] = "completed"
+            self._pending_batches.setdefault(batch_id, {})["status"] = "completed"
             logger.info(
                 "Batch %d completado: %s renderizados, %d rankeados",
                 batch_id,
@@ -634,11 +779,76 @@ class WorkerPool:
             )
         except Exception as exc:
             logger.exception("Error al persistir variaciones batch %d: %s", batch_id, exc)
-            with contextlib.suppress(Exception):
-                update_batch_status(db_path, batch_id, "failed", tenant_id=tenant_id)
-            self._pending_batches[batch_id]["status"] = "failed"
+            await self._mark_batch_failed(batch_id, tenant_id)
+            self._pending_batches.setdefault(batch_id, {})["status"] = "failed"
         finally:
             self._pending_batches.pop(batch_id, None)
+
+    def _write_variations(
+        self,
+        batch_id: int,
+        db_path: Path,
+        tenant_id: int,
+        brand_id: int,
+        category: str,
+        ranked: list[VariationScore],
+        rendered_count: int,
+    ) -> None:
+        """Escribe variaciones y status final dentro de una operación síncrona acotada."""
+        now = int(time.time())
+        with connect(db_path) as con:
+            for vs in ranked:
+                # deterministic_seed devuelve uint64 [0, 2**64); SQLite INTEGER es
+                # int64 con signo (máx 2**63-1). Enmascaramos a 63 bits para que
+                # quepa siempre. El seed es metadata de reproducibilidad (el render
+                # usa params, no este valor), así que el enmascarado es seguro.
+                seed_storable = int(vs.seed) & 0x7FFF_FFFF_FFFF_FFFF
+                # Persistir el PNG a través del seam: lo copia bajo
+                # output/tenants/<tenant_id>/... (aislamiento real) y devuelve
+                # la ruta absoluta que se guarda para servirlo en downloads.
+                # Incluye batch_id en la clave para no colisionar entre batches.
+                relative_path = (
+                    f"{vs.marca}/{category}/{vs.asset_type}/{batch_id}/combo_{vs.idx:03d}.png"
+                )
+                stored_path = self.storage.save(
+                    tenant_id, relative_path, Path(vs.png_path).read_bytes()
+                )
+                con.execute(
+                    """INSERT INTO variations
+                       (batch_id, tenant_id, brand_id, axis_params_json, seed,
+                        score, output_path, wcag_json, layout_status, selected,
+                        created_at)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, NULL, NULL, 0, ?)""",
+                    (
+                        batch_id,
+                        tenant_id,
+                        brand_id,
+                        json.dumps(vs.params, sort_keys=True),
+                        seed_storable,
+                        vs.final_score,
+                        stored_path,
+                        now,
+                    ),
+                )
+
+        update_batch_status(
+            db_path,
+            batch_id,
+            "completed",
+            counts={"rendered": rendered_count, "ranked": len(ranked)},
+            tenant_id=tenant_id,
+        )
+
+    async def _is_cancelled_async(self, db_path: Path, batch_id: int) -> bool:
+        """Verifica cancelación sin bloquear el event loop."""
+        try:
+            return await self._run_db_operation(
+                "check batch cancellation",
+                lambda: self._is_cancelled(db_path, batch_id),
+            )
+        except Exception as exc:
+            logger.warning("No se pudo verificar cancelación batch %d: %s", batch_id, exc)
+            return False
 
     @staticmethod
     def _is_cancelled(db_path: Path, batch_id: int) -> bool:

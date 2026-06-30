@@ -24,7 +24,6 @@ def brand_to_dict(row: dict[str, Any]) -> dict[str, Any]:
     """Serializa una fila de brands a JSON con los *_json ya parseados."""
     return {
         "id": row["id"],
-        "tenant_id": row["tenant_id"],
         "slug": row["slug"],
         "name": row["name"],
         "palette": _loads(row.get("palette_json"), {}),
@@ -37,10 +36,12 @@ def brand_to_dict(row: dict[str, Any]) -> dict[str, Any]:
 
 
 def batch_to_dict(row: dict[str, Any]) -> dict[str, Any]:
-    """Serializa una fila de batches a JSON con spec/counts parseados."""
+    """Serializa una fila de batches a JSON con spec/counts parseados.
+
+    No expone tenant_id (dato interno de multi-tenancy).
+    """
     return {
         "id": row["id"],
-        "tenant_id": row["tenant_id"],
         "brand_id": row["brand_id"],
         "spec": _loads(row.get("spec_json"), {}),
         "status": row["status"],
@@ -52,17 +53,18 @@ def batch_to_dict(row: dict[str, Any]) -> dict[str, Any]:
 
 
 def variation_to_dict(row: dict[str, Any]) -> dict[str, Any]:
-    """Serializa una fila de variations a JSON, con file_url de descarga."""
+    """Serializa una fila de variations a JSON, con file_url de descarga.
+
+    No expone output_path (ruta absoluta del servidor) ni tenant_id (dato interno).
+    """
     var_id = row["id"]
     return {
         "id": var_id,
         "batch_id": row.get("batch_id"),
-        "tenant_id": row["tenant_id"],
         "brand_id": row["brand_id"],
         "axis_params": _loads(row.get("axis_params_json"), {}),
         "seed": row.get("seed"),
         "score": row.get("score"),
-        "output_path": row.get("output_path"),
         "wcag": _loads(row.get("wcag_json"), None),
         "layout_status": row.get("layout_status"),
         "selected": bool(row.get("selected", 0)),

@@ -7,6 +7,7 @@ persiste variaciones. Todo scoped por tenant.
 
 from __future__ import annotations
 
+import json
 import re
 from typing import Any
 
@@ -14,7 +15,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import StreamingResponse
 
 from eikon_core.combinatorial import CombinationSpec, plan_combinations
-from eikon_core.constants import TEMPLATES_DIR
+from eikon_core.constants import ROOT
 from webapp.jobs import enqueue_batch, get_worker, job_events
 from webapp.storage import get_batch, get_brand, list_variations
 
@@ -26,15 +27,36 @@ router = APIRouter(prefix="/api/v1/batches", tags=["batches"])
 
 _ASSET_TYPE_RE = re.compile(r"^[a-z0-9][a-z0-9_]{1,60}$")
 
+# Tipos de asset válidos derivados de config/taxonomy.json (fuente de verdad del motor).
+# Se cargan una sola vez al importar; si el archivo no existe, se usa un set vacío
+# y la validación posterior rechazará todos los tipos.
+def _load_valid_asset_types() -> frozenset[str]:
+    taxonomy_path = ROOT / "config" / "taxonomy.json"
+    try:
+        data = json.loads(taxonomy_path.read_text(encoding="utf-8"))
+        types: set[str] = set()
+        for family in data.get("families", {}).values():
+            for category in family.get("categories", {}).values():
+                for t in category.get("types", []):
+                    name = t.get("name")
+                    if name:
+                        types.add(name)
+        return frozenset(types)
+    except (OSError, json.JSONDecodeError, AttributeError):
+        return frozenset()
+
+
+_VALID_ASSET_TYPES: frozenset[str] = _load_valid_asset_types()
+
 
 def _validate_asset_types(asset_types: list[str]) -> list[str]:
-    """Valida que cada asset_type sea un template existente (sin traversal)."""
+    """Valida que cada asset_type sea un tipo registrado en taxonomy.json."""
     if not asset_types:
         return ["isotipo"]
     for name in asset_types:
         if not _ASSET_TYPE_RE.match(name):
             raise HTTPException(status_code=422, detail=f"asset_type inválido: {name!r}")
-        if not (TEMPLATES_DIR / f"{name}.html").is_file():
+        if _VALID_ASSET_TYPES and name not in _VALID_ASSET_TYPES:
             raise HTTPException(status_code=422, detail=f"asset_type desconocido: {name!r}")
     return asset_types
 
@@ -124,14 +146,21 @@ def batch_variations_endpoint(
     request: Request,
     user: dict[str, Any] = Depends(current_user),
 ) -> dict[str, Any]:
-    """Lista las variaciones rankeadas de un batch (mayor score primero)."""
+    """Lista las variaciones rankeadas de un batch (mayor score primero).
+
+    Devuelve tanto "variations" (clave canónica) como "items" (alias legacy).
+    """
     settings = get_settings(request)
     tenant_id = user["tenant_id"]
     if get_batch(settings.sqlite_path, tenant_id, batch_id) is None:
         raise HTTPException(status_code=404, detail="batch not found")
     rows = list_variations(settings.sqlite_path, tenant_id, batch_id=batch_id)
-    rows.sort(key=lambda r: (r.get("score") or 0.0), reverse=True)
-    return {"items": [variation_to_dict(r) for r in rows]}
+    # NULLs al final; score descendente para los que tienen valor.
+    rows.sort(
+        key=lambda r: (r.get("score") is None, -(r.get("score") or 0.0)),
+    )
+    serialized = [variation_to_dict(r) for r in rows]
+    return {"variations": serialized, "items": serialized}
 
 
 @router.get("/{batch_id}/events")

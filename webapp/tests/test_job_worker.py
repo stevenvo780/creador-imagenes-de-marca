@@ -6,6 +6,7 @@ import asyncio
 import json
 import time
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -312,7 +313,7 @@ def test_job_events_stream(
         set_worker(worker)
         await worker.start()
 
-        events: list[dict[str, object]] = []
+        events: list[dict[str, Any]] = []
 
         try:
             async for line in job_events(batch_id):
@@ -442,8 +443,8 @@ def test_batch_path_isolation_distinct_dirs() -> None:
     batch_a = 101
     batch_b = 202
 
-    dir_a = _make_png_dir(marca_slug, asset_type, batch_a)
-    dir_b = _make_png_dir(marca_slug, asset_type, batch_b)
+    dir_a = _make_png_dir(marca_slug, "logos", asset_type, batch_a)
+    dir_b = _make_png_dir(marca_slug, "logos", asset_type, batch_b)
 
     # Los directorios deben ser distintos
     assert dir_a != dir_b, "Dos batches no deben compartir directorio de PNGs"
@@ -480,8 +481,8 @@ def test_batch_path_isolation_no_overwrite(tmp_path: Path, monkeypatch: pytest.M
     batch_1 = 5
     batch_2 = 6
 
-    dir_1 = _make_png_dir(marca_slug, asset_type, batch_1)
-    dir_2 = _make_png_dir(marca_slug, asset_type, batch_2)
+    dir_1 = _make_png_dir(marca_slug, "logos", asset_type, batch_1)
+    dir_2 = _make_png_dir(marca_slug, "logos", asset_type, batch_2)
 
     dir_1.mkdir(parents=True)
     dir_2.mkdir(parents=True)
@@ -504,3 +505,94 @@ def test_batch_path_isolation_no_overwrite(tmp_path: Path, monkeypatch: pytest.M
     # Los archivos son distintos paths
     assert png_1 != png_2, "Ambos batches apuntan al mismo archivo"
     assert png_1.resolve() != png_2.resolve(), "Ambos batches resuelven al mismo path absoluto"
+
+
+# ── Test: Concurrencia sin cuelgue (edge case bajo carga) ───────────────────
+
+
+async def _poll_batch_completion(
+    db_path: Path, tenant_id: int, batch_ids: list[int], deadline: float
+) -> bool:
+    """Espera hasta que todos los batches alcanzan estado terminal."""
+    while time.time() < deadline:
+        all_done = True
+        for batch_id in batch_ids:
+            row = get_batch(db_path, tenant_id, batch_id)
+            if row is None or str(row.get("status", "")) not in {
+                "completed",
+                "failed",
+                "cancelled",
+            }:
+                all_done = False
+                break
+        if all_done:
+            return True
+        await asyncio.sleep(0.3)
+    return False
+
+
+def test_worker_concurrent_batch_load_no_hang(
+    db_path: Path,
+    tenant_and_brand: tuple[int, int],
+    axes_config_path: Path,
+    axes_config: AxesConfig,
+) -> None:
+    """Encola 3-4 batches pequeños casi simultáneamente.
+    Verifica que:
+      (a) Todos los batches completan sin deadlock.
+      (b) El worker no se cuelga bajo carga concurrente.
+      (c) No hay timeout inesperado.
+
+    Regresion para: 'Server hangs under concurrent batch load' (stability/critical).
+    """
+    tenant_id, brand_id = tenant_and_brand
+
+    # Specs pequeños (count=1 cada uno) para que sean rápidos
+    specs = [
+        CombinationSpec(
+            brand="pinakotheke-kosmos",
+            asset_types=["isotipo"],
+            permuted=["palette_scheme"],
+            count=1,
+            seed_salt=f"concurrent-test-{i}",
+        )
+        for i in range(1, 5)
+    ]
+
+    async def _run() -> None:
+        worker = WorkerPool(db_path, max_concurrent_jobs=2, axes_config_path=axes_config_path)
+        set_worker(worker)
+        await worker.start()
+
+        try:
+            # Enqueuer los 4 batches rápidamente
+            batch_ids = []
+            for spec in specs:
+                batch = await enqueue_batch(db_path, tenant_id, brand_id, spec, 1)
+                batch_ids.append(int(batch["id"]))
+
+            deadline = time.time() + 40
+
+            # Esperar a que todos los batches terminen
+            all_completed = await _poll_batch_completion(db_path, tenant_id, batch_ids, deadline)
+
+            # Assertions
+            assert all_completed, "No todos los batches completaron en el tiempo límite"
+
+            # Todos en estado terminal
+            for batch_id in batch_ids:
+                row = get_batch(db_path, tenant_id, batch_id)
+                assert row is not None, f"Batch {batch_id} desapareció"
+                status = str(row.get("status", ""))
+                assert status in {"completed", "failed", "cancelled"}, (
+                    f"Batch {batch_id} en estado {status}"
+                )
+                if status == "completed":
+                    variations = list_variations(db_path, tenant_id, batch_id=batch_id)
+                    assert len(variations) >= 1
+
+        finally:
+            await worker.stop()
+            set_worker(None)
+
+    asyncio.run(_run())

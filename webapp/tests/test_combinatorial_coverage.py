@@ -897,6 +897,7 @@ def test_worker_renders_and_passes_permuted_axes_to_rank(
             plan=plan,
             marca=marca,
             marca_slug="x",
+            category="logos",
             asset_type="isotipo",
             axes_config=axes_cfg,
         )
@@ -1002,6 +1003,7 @@ def test_worker_passes_none_permuted_axes_when_spec_empty(
             plan=plan,
             marca={"slug": "x"},
             marca_slug="x",
+            category="logos",
             asset_type="logo",
             axes_config=axes_cfg,
         )
