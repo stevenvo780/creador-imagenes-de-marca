@@ -8,14 +8,26 @@
   /*
    * logo_symbol_color — tile de logo combinatorio.
    * NO pertenece a la taxonomía golden: existe para demostrar variedad en los ejes
-   * palette_scheme x background_treatment x corner_shape x typography_pairing.
-   * Tokens (--bg, --texto, --acento, --primario, --corner-radius, --font-titulo) y
-   * data-bg-treatment son inyectados por eikon_core/injection.py en tiempo de render.
+   * palette_scheme x background_treatment x corner_shape x density_scale x typography_pairing.
+   *
+   * Tokens inyectados por eikon_core/injection.py en tiempo de render:
+   *   CSS vars: --bg, --texto, --acento, --primario, --corner-radius,
+   *             --font-titulo, --font-size-scale, --space-scale
+   *   data-attrs: data-bg-treatment (activa overlay de patrón en .eik-card::before)
+   *
    * Clases con prefijo eik- para no colisionar con selectores de eikon-system.css.
+   *
+   * VARIEDAD VISUAL:
+   *   background_treatment → ::before overlay (geometric/grid/orb/texture) o fondo
+   *                          directo (solid/gradient) sobre .eik-card
+   *   corner_shape         → border-radius: var(--corner-radius) en .eik-card y
+   *                          .eik-accent; el canvas externo (#2a2f33) revela las esquinas
+   *   density_scale        → calc(base * var(--font-size-scale)) en tipografía,
+   *                          calc(base * var(--space-scale)) en gap y padding
    */
   :root {
     /* Lienzo exterior fijo: contrasta con la tarjeta en cualquier paleta, de modo que
-       el corner_radius revele las esquinas (sharp vs rounded => píxeles distintos). */
+       el corner_radius revele las esquinas (sharp vs rounded vs pill = píxeles distintos). */
     --eik-canvas: #2a2f33;
   }
 
@@ -32,6 +44,9 @@
     background: var(--eik-canvas);
   }
 
+  /* ---- Tarjeta principal ---- */
+  /* position: relative ancla el ::before de overlay de patrón.
+     gap y padding usan --space-scale para que density_scale mueva píxeles. */
   .eik-card {
     position: relative;
     width: 432px;
@@ -40,39 +55,116 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 22px;
+    gap: calc(22px * var(--space-scale, 1));
+    padding: calc(28px * var(--space-scale, 1));
     overflow: hidden;
-    /* solid: color plano de fondo (palette_scheme controla --bg). */
+    /* Fondo base: cualquier background_treatment que no sobrescriba usa este color. */
     background: var(--bg, #0b1417);
-    /* corner_shape controla el radio (sharp=0, rounded=14px, pill=999px). */
+    /* corner_shape: sharp=0 | rounded=14px | pill=999px — el canvas externo lo revela. */
     border-radius: var(--corner-radius, 0);
   }
 
-  /* background_treatment: solid vs gradient.
-     El gradiente mezcla --bg -> --acento -> --primario, garantizando que difiera del
-     plano en TODAS las paletas (incluso mono, donde --acento se vuelve claro pero
-     --primario permanece oscuro). */
-  body[data-bg-treatment="solid"] .eik-card {
-    background: var(--bg, #0b1417);
-  }
-  body[data-bg-treatment="gradient"] .eik-card {
-    background: linear-gradient(135deg,
-      var(--bg, #0b1417) 0%,
-      var(--acento, #43b5a6) 55%,
-      var(--primario, #0b1417) 100%);
+  /* ---- Overlay de fondo (background_treatment) vía ::before ----
+   * Visible SOBRE el --bg del .eik-card, debajo del contenido.
+   * overflow:hidden + border-radius:inherit en .eik-card clip el overlay al radio de esquina.
+   */
+  .eik-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    z-index: 0;
+    /* Por defecto (sin data-bg-treatment): el ::before es invisible */
+    background: none;
   }
 
+  /* Contenido siempre encima del overlay */
+  .eik-symbol,
+  .eik-wordmark,
+  .eik-accent {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---- background_treatment: solid ----
+   * Fondo plano con --bg; el ::before permanece invisible (display:none para evitar
+   * que el elemento vacío afecte el render en navegadores con blend-mode activo). */
+  body[data-bg-treatment="solid"] .eik-card::before {
+    display: none;
+  }
+
+  /* ---- background_treatment: gradient ----
+   * Lineal bg → acento → primario. Difiere del sólido en TODAS las paletas
+   * porque --acento introduce un color intermedio. */
+  body[data-bg-treatment="gradient"] .eik-card {
+    background: linear-gradient(
+      135deg,
+      var(--bg, #0b1417) 0%,
+      var(--acento, #43b5a6) 52%,
+      var(--primario, #0b1417) 100%
+    );
+  }
+  body[data-bg-treatment="gradient"] .eik-card::before {
+    display: none;
+  }
+
+  /* ---- background_treatment: geometric ----
+   * Rayas diagonales a 45° sobre el --bg. Periodicidad 32 px. */
+  body[data-bg-treatment="geometric"] .eik-card::before {
+    background: repeating-linear-gradient(
+      45deg,
+      transparent 0,
+      transparent 14px,
+      rgba(255, 255, 255, 0.09) 14px,
+      rgba(255, 255, 255, 0.09) 28px
+    );
+  }
+
+  /* ---- background_treatment: grid ----
+   * Cuadrícula de líneas finas 44×44 px. Distinto de geometric por la dirección. */
+  body[data-bg-treatment="grid"] .eik-card::before {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+
+  /* ---- background_treatment: orb ----
+   * Destello radial del color de acento desde el centro hacia los bordes.
+   * Hace el centro del card notablemente más claro que el borde. */
+  body[data-bg-treatment="orb"] .eik-card::before {
+    background: radial-gradient(
+      circle at 50% 42%,
+      rgba(67, 181, 166, 0.40) 0%,
+      rgba(67, 181, 166, 0.10) 38%,
+      transparent 65%
+    );
+  }
+
+  /* ---- background_treatment: texture ----
+   * Ruido fractal SVG en tile de 200×200 px.
+   * mix-blend-mode: overlay mezcla el ruido con el --bg sin blanquear el negro. */
+  body[data-bg-treatment="texture"] .eik-card::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    mix-blend-mode: overlay;
+  }
+
+  /* ---- Tipografía + density_scale ----
+   * font-size usa calc(base * --font-size-scale): compact=0.85 / normal=1 / spacious=1.15.
+   * La diferencia en el símbolo grande (196 px) es de ±29 px → claramente visible. */
   .eik-symbol {
     font-family: var(--font-titulo, "Playfair Display"), Georgia, serif;
     font-weight: 700;
-    font-size: 196px;
+    font-size: calc(196px * var(--font-size-scale, 1));
     line-height: 1;
     color: var(--texto, #e8e0d4);
   }
   .eik-wordmark {
     font-family: var(--font-titulo, "Playfair Display"), Georgia, serif;
     font-weight: 700;
-    font-size: 46px;
+    font-size: calc(46px * var(--font-size-scale, 1));
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--texto, #e8e0d4);
@@ -82,12 +174,15 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  /* Marca de acento: distingue mono (acento == fondo, se funde) de light (acento de
-     marca visible). Usa --acento inyectado. */
+
+  /* ---- Barra de acento ----
+   * Ancho y altura escalan con --space-scale (density_scale).
+   * border-radius responde a corner_shape: sharp=cuadrado / rounded=cápsulas redondeadas /
+   * pill=óvalo completo. Para barras finas, rounded y pill dan visual distinto al sharp. */
   .eik-accent {
-    width: 64px;
-    height: 10px;
-    border-radius: 999px;
+    width: calc(64px * var(--space-scale, 1));
+    height: calc(10px * var(--space-scale, 1));
+    border-radius: var(--corner-radius, 999px);
     background: var(--acento, #43b5a6);
   }
 </style>

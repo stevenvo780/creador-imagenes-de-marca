@@ -1,10 +1,14 @@
 """Ranking and deduplication for variation scoring.
 
-Scores variations by:
-1. WCAG AA contrast (floor: 4.5:1 min, hard requirement)
-2. Layout status/warnings (penalize fail/warn)
-3. Perceptual diversity (dHash to detect near-identical, reward diverse)
-4. Aesthetic heuristic (balanced foreground coverage)
+Scores variations by (deterministic, no randomness):
+1. Placeholder penalty (HARD: isotype_style='none' → 0.0, else 1.0) [35%]
+2. Visual richness (complexity/density: penalize 3-dot placeholders) [25%]
+3. WCAG AA contrast (floor: 4.5:1 min, baseline requirement) [20%]
+4. Layout status/warnings (penalize fail/warn) [15%]
+5. Perceptual diversity (dHash to detect near-identical, reward diverse) [5%]
+
+Key fix: 'none' (placeholder 3 dots) is penalized before contrast is measured.
+Contrast becomes a floor (must pass AA), not the dominant signal.
 
 Returns top-N variations with scores and reasons, deterministically.
 No new dependencies: reuses Pillow + numpy (already required).
@@ -153,7 +157,7 @@ def _signal_wcag_contrast(png_path: Path, min_ratio_threshold: float = 4.5) -> R
 
     return RankingSignal(
         name="wcag_contrast",
-        weight=0.40,  # 40% weight: hard requirement
+        weight=0.20,  # 20% weight: baseline requirement (floor, not dominant)
         value=value,
         reason=reason,
     )
@@ -184,7 +188,7 @@ def _signal_layout_status(layout_warnings: list[dict[str, Any]]) -> RankingSigna
 
     return RankingSignal(
         name="layout_status",
-        weight=0.25,  # 25% weight: structural integrity
+        weight=0.15,  # 15% weight: structural integrity
         value=value,
         reason=reason,
     )
@@ -221,7 +225,7 @@ def _signal_perceptual_diversity(
 
     return RankingSignal(
         name="perceptual_diversity",
-        weight=0.20,  # 20% weight: variety in the top-N
+        weight=0.05,  # 5% weight: variety in the top-N (minor influence)
         value=value,
         reason=reason,
     )
@@ -299,6 +303,116 @@ def _signal_foreground_balance(png_path: Path) -> RankingSignal:
         return RankingSignal(
             name="foreground_balance",
             weight=0.15,
+            value=0.5,  # Neutral on error
+            reason=reason,
+        )
+
+
+def _signal_placeholder_penalty(params: dict[str, str]) -> RankingSignal:
+    """Penalize placeholder isotopes (isotype_style='none') heavily.
+
+    Placeholder 'none' (3 black dots) is NOT a real brand mark. It should NEVER
+    rank above lettermark/geometric/abstract/enclosure.
+
+    Args:
+        params: Variation params dict with optional 'isotype_style' key
+
+    Returns:
+        Signal: 0.0 if isotype_style=='none', 1.0 otherwise
+    """
+    isotype_style = params.get("isotype_style", "").lower()
+
+    if isotype_style == "none":
+        value = 0.0
+        reason = "Placeholder (3 dots, not a real mark)"
+    else:
+        value = 1.0
+        reason = f"Real mark style: '{isotype_style}'" if isotype_style else "No isotype (assumed real)"
+
+    return RankingSignal(
+        name="placeholder_penalty",
+        weight=0.35,  # 35% weight: HARD requirement
+        value=value,
+        reason=reason,
+    )
+
+
+def _signal_visual_richness(png_path: Path) -> RankingSignal:
+    """Score visual complexity/richness of the mark.
+
+    Measures foreground density and edge complexity to reward marks with
+    visual structure (geometric patterns, letter forms, etc.) and penalize
+    sparse/trivial content (3 dots).
+
+    Uses:
+    - Foreground coverage (px/total)
+    - Edge complexity (gradient variance across image)
+
+    Args:
+        png_path: Path to PNG image
+
+    Returns:
+        Signal favoring visually rich, complex marks
+    """
+    try:
+        img = Image.open(png_path)
+
+        # Compute foreground coverage
+        if img.mode == "RGBA":
+            alpha = np.array(img.split()[3])
+            fg_pixels = np.sum(alpha > 128)
+            total_pixels = alpha.size
+            fg_coverage = float(fg_pixels / total_pixels) if total_pixels > 0 else 0.0
+        else:
+            img_rgb = img.convert("RGB")
+            img_array = np.array(img_rgb)
+            # Use color variance as proxy for content
+            gray = np.mean(img_array, axis=2)
+            fg_coverage = float(np.std(gray) / 255.0)  # Normalized
+
+        # Compute edge complexity: variance of Sobel-like gradients
+        # (without scipy.ndimage, compute manually with numpy)
+        gray_img = np.array(img.convert("L"))
+
+        h, w = gray_img.shape
+        if h > 2 and w > 2:
+            # Simple gradient: compare pixels horizontally and vertically
+            dx = gray_img[:, :-1].astype(np.float32) - gray_img[:, 1:].astype(np.float32)
+            dy = gray_img[:-1, :].astype(np.float32) - gray_img[1:, :].astype(np.float32)
+            gradient_magnitude = np.sqrt(dx[:-1, :] ** 2 + dy[:, :-1] ** 2)
+            edge_complexity = float(np.std(gradient_magnitude) / 255.0)  # Normalized
+        else:
+            edge_complexity = 0.0
+
+        # Combine: reward moderate foreground + high edge complexity
+        # - Very sparse (fg < 5%) → low score
+        # - Moderate (5-40%) with high edges → high score
+        # - Saturated (> 80%) → penalize (background missing)
+        if fg_coverage < 0.05:
+            # Placeholder-like (3 dots)
+            value = 0.1 + edge_complexity * 0.2
+        elif fg_coverage > 0.80:
+            # Too saturated
+            value = 0.3 + edge_complexity * 0.2
+        else:
+            # Good range: reward based on edge complexity
+            value = min(1.0, 0.4 + fg_coverage * 0.3 + edge_complexity * 0.3)
+
+        reason = (
+            f"Richness: coverage={fg_coverage:.1%}, edge_complexity={edge_complexity:.2f} → {value:.2f}"
+        )
+        return RankingSignal(
+            name="visual_richness",
+            weight=0.25,  # 25% weight: structural complexity
+            value=value,
+            reason=reason,
+        )
+
+    except Exception as e:
+        reason = f"Visual richness analysis error: {str(e)[:40]}"
+        return RankingSignal(
+            name="visual_richness",
+            weight=0.25,
             value=0.5,  # Neutral on error
             reason=reason,
         )
@@ -448,12 +562,13 @@ def rank(
         if not png_path.exists():
             continue
 
-        # Collect signals
+        # Collect signals (new: placeholder_penalty and visual_richness first)
         signals = [
+            _signal_placeholder_penalty(var.get("params", {})),
+            _signal_visual_richness(png_path),
             _signal_wcag_contrast(png_path),
             _signal_layout_status(var.get("layout_warnings", [])),
             _signal_perceptual_diversity(png_path, png_hashes, dedup_distance_threshold),
-            _signal_foreground_balance(png_path),
         ]
 
         # Weighted average
@@ -502,6 +617,9 @@ def rank(
             if len(deduplicated) >= top_n:
                 break
 
+    # Re-sort deduplicated results by score (highest first)
+    # This ensures that even after axis-variety dedup, the final order is by quality
+    deduplicated.sort(key=lambda s: (-s.final_score, s.idx))
     return deduplicated[:top_n]
 
 

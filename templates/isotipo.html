@@ -20,6 +20,34 @@
   body[data-variant="v2_mono"]  { --bg: #f4f1ea; }
   body[data-variant="v3_inverse"] { --bg: #0b1417; }
 
+  /* Tratamientos de fondo combinatorios (eje background_treatment).
+     Solo se activan cuando data-bg-treatment está presente, lo que únicamente
+     ocurre en renders combinatorios; el render de taxonomía nunca setea ese
+     atributo, por lo que estas reglas son inertes ahí (sin regresión). Cada
+     valor produce un fondo pixel-distinto y determinista (CSS puro). */
+  body[data-bg-treatment="solid"] { background-image: none; }
+  body[data-bg-treatment="gradient"] {
+    background-image: linear-gradient(135deg, var(--bg) 0%, var(--acento) 120%);
+  }
+  body[data-bg-treatment="geometric"] {
+    background-image: repeating-linear-gradient(45deg,
+      transparent 0 28px, rgba(255, 255, 255, 0.07) 28px 56px);
+  }
+  body[data-bg-treatment="grid"] {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  body[data-bg-treatment="orb"] {
+    background-image: radial-gradient(circle at 50% 42%,
+      var(--acento) 0%, transparent 55%);
+  }
+  body[data-bg-treatment="texture"] {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1.5px, transparent 1.5px);
+    background-size: 14px 14px;
+  }
+
   .symbol-wrap { width: 500px; height: 500px; position: relative; }
   .symbol-wrap svg { width: 100%; height: 100%; }
 
