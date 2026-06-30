@@ -36,6 +36,50 @@ def _path_from_points(points: list[tuple[float, float]], close: bool = True) -> 
     return d + (" Z" if close else "")
 
 
+def _normalize_points(
+    points: list[tuple[float, float]], target_size: float, padding_ratio: float = 0.15
+) -> list[tuple[float, float]]:
+    """Normaliza puntos para ocupar ~(1-2*padding_ratio)*target_size centrado.
+
+    Calcula bounding box, aplica escala uniforme y traslación para centrar
+    la forma en el viewBox ocupando ~70% (con padding ~15% a cada lado).
+    """
+    if not points:
+        return points
+
+    xs = [p[0] for p in points]
+    ys = [p[1] for p in points]
+
+    min_x, max_x = min(xs), max(xs)
+    min_y, max_y = min(ys), max(ys)
+
+    width = max_x - min_x
+    height = max_y - min_y
+
+    # Degenerada: retornar sin cambios
+    if width < 1e-6 or height < 1e-6:
+        return points
+
+    # Escala uniforme para ocupar ~70% del target_size
+    target_content = target_size * (1 - 2 * padding_ratio)
+    scale = min(target_content / width, target_content / height)
+
+    # Centro de la forma original y del viewBox
+    cx_old = (min_x + max_x) / 2
+    cy_old = (min_y + max_y) / 2
+    cx_new = target_size / 2
+    cy_new = target_size / 2
+
+    # Transformar: centrar en origen, escalar, traslacionar
+    result = []
+    for x, y in points:
+        x_new = (x - cx_old) * scale + cx_new
+        y_new = (y - cy_old) * scale + cy_new
+        result.append((x_new, y_new))
+
+    return result
+
+
 # ── 1. Sierpinski Triángulo ──────────────────────────────────────────────────
 def gen_sierpinski_triangulo(p: IsotypeParams) -> str:
     """Triángulo de Sierpinski: recursión de triángulos (depth 4-5)."""
@@ -174,6 +218,9 @@ def gen_dragon(p: IsotypeParams) -> str:
         else:
             angle -= math.pi / 2
 
+    # Normalizar puntos para ocupar ~70% del viewBox centrado
+    pts = _normalize_points(pts, p.size)
+
     d = _path_from_points(pts, close=False)
     return _wrap(p, [create_svg_path(d, fill="none", stroke=p.accent_color, stroke_width=p.size * 0.02)])
 
@@ -237,7 +284,11 @@ def gen_gosper(p: IsotypeParams) -> str:
         elif cmd == "-":
             angle -= math.pi / 3
 
-    d = _path_from_points(pts[:min(len(pts), 200)], close=False)
+    # Limitar y normalizar puntos para ocupar ~70% del viewBox centrado
+    pts = pts[:min(len(pts), 200)]
+    pts = _normalize_points(pts, p.size)
+
+    d = _path_from_points(pts, close=False)
     return _wrap(p, [create_svg_path(d, fill="none", stroke=p.accent_color, stroke_width=p.size * 0.018)])
 
 
