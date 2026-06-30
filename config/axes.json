@@ -1,15 +1,15 @@
 {
   "axes": {
     "palette_scheme": {
-      "label": "Color scheme for palette",
+      "label": "Paleta de color",
       "type": "enum",
       "options": {
         "brand": {
-          "description": "Full brand palette (default)",
+          "description": "Paleta completa de la marca (por defecto)",
           "overrides": {}
         },
         "mono": {
-          "description": "Monochrome: texto/bg inverted, no acento",
+          "description": "Monocromo: texto/fondo invertidos, sin acento",
           "overrides": {
             "acento": "var(--texto)",
             "acento_2": "var(--texto)",
@@ -17,27 +17,27 @@
           }
         },
         "light": {
-          "description": "Light mode: inverted bg/texto",
+          "description": "Modo claro: fondo/texto invertidos",
           "overrides": {
             "bg": "var(--texto)",
             "texto": "var(--primario)"
           }
         },
         "dark": {
-          "description": "Dark mode: primario as bg",
+          "description": "Modo oscuro: primario como fondo",
           "overrides": {
             "bg": "var(--primario)"
           }
         },
         "accent_bg": {
-          "description": "Acento as background",
+          "description": "Acento como fondo",
           "overrides": {
             "bg": "var(--acento)",
             "texto": "var(--primario)"
           }
         },
         "gradient": {
-          "description": "Gradient background (hero gradient)",
+          "description": "Fondo degradado (gradiente hero)",
           "overrides": {
             "bg": "var(--grad-hero)"
           }
@@ -45,36 +45,36 @@
       }
     },
     "typography_pairing": {
-      "label": "Font pairing selection",
+      "label": "Tipografía",
       "type": "enum",
       "options": {
         "brand_default": {
-          "description": "Default brand typography",
+          "description": "Tipografía por defecto de la marca",
           "overrides": {}
         },
         "sans_serif": {
-          "description": "Modern sans-serif (Inter/System)",
+          "description": "Sans-serif moderno (Inter/System)",
           "overrides": {
             "font_titulo": "Inter",
             "font_cuerpo": "Inter"
           }
         },
         "serif_modern": {
-          "description": "Serif title with sans body",
+          "description": "Título serif con cuerpo sans",
           "overrides": {
             "font_titulo": "Playfair Display",
             "font_cuerpo": "Inter"
           }
         },
         "display": {
-          "description": "Display typefaces",
+          "description": "Tipografías display",
           "overrides": {
             "font_titulo": "Playfair Display",
             "font_cuerpo": "Playfair Display"
           }
         },
         "geometric_sans": {
-          "description": "Geometric grotesque title (Space Grotesk) with sans body",
+          "description": "Título grotesco geométrico (Space Grotesk) con cuerpo sans",
           "overrides": {
             "font_titulo": "Space Grotesk",
             "font_cuerpo": "Inter"
@@ -83,29 +83,29 @@
       }
     },
     "layout": {
-      "label": "Logo layout variant",
+      "label": "Composición",
       "type": "enum",
       "options": {
         "symbol_only": {
-          "description": "Symbol/mark only (no text)",
+          "description": "Solo símbolo (sin texto)",
           "data_attrs": {
             "data-layout": "symbol_only"
           }
         },
         "wordmark_only": {
-          "description": "Text wordmark only",
+          "description": "Solo texto (wordmark)",
           "data_attrs": {
             "data-layout": "wordmark_only"
           }
         },
         "lockup_horizontal": {
-          "description": "Horizontal lockup (symbol + text side by side)",
+          "description": "Bloque horizontal (símbolo + texto lado a lado)",
           "data_attrs": {
             "data-layout": "lockup_horizontal"
           }
         },
         "lockup_vertical": {
-          "description": "Vertical lockup (symbol above text)",
+          "description": "Bloque vertical (símbolo arriba del texto)",
           "data_attrs": {
             "data-layout": "lockup_vertical"
           }
@@ -113,41 +113,41 @@
       }
     },
     "background_treatment": {
-      "label": "Background style",
+      "label": "Fondo",
       "type": "enum",
       "options": {
         "solid": {
-          "description": "Solid color background",
+          "description": "Fondo de color sólido",
           "overrides": {
             "bg": "var(--primario)"
           }
         },
         "gradient": {
-          "description": "Gradient background",
+          "description": "Fondo degradado",
           "overrides": {
             "bg": "var(--grad-bg)"
           }
         },
         "geometric": {
-          "description": "Geometric pattern",
+          "description": "Patrón geométrico",
           "data_attrs": {
             "data-bg-treatment": "geometric"
           }
         },
         "grid": {
-          "description": "Grid pattern overlay",
+          "description": "Superposición de cuadrícula",
           "data_attrs": {
             "data-bg-treatment": "grid"
           }
         },
         "orb": {
-          "description": "Radial orb effect",
+          "description": "Efecto de orbe radial",
           "data_attrs": {
             "data-bg-treatment": "orb"
           }
         },
         "texture": {
-          "description": "Subtle texture",
+          "description": "Textura sutil",
           "data_attrs": {
             "data-bg-treatment": "texture"
           }
@@ -155,25 +155,25 @@
       }
     },
     "density_scale": {
-      "label": "Spacing and sizing scale",
+      "label": "Espaciado",
       "type": "enum",
       "options": {
         "compact": {
-          "description": "Compact: 85% scale",
+          "description": "Compacto: escala 85%",
           "overrides": {
             "font_size_scale": "0.85",
             "space_scale": "0.85"
           }
         },
         "normal": {
-          "description": "Normal: 100% scale (default)",
+          "description": "Normal: escala 100% (por defecto)",
           "overrides": {
             "font_size_scale": "1",
             "space_scale": "1"
           }
         },
         "spacious": {
-          "description": "Spacious: 115% scale",
+          "description": "Amplio: escala 115%",
           "overrides": {
             "font_size_scale": "1.15",
             "space_scale": "1.15"
@@ -182,23 +182,23 @@
       }
     },
     "corner_shape": {
-      "label": "Border radius style",
+      "label": "Esquinas",
       "type": "enum",
       "options": {
         "sharp": {
-          "description": "Sharp corners (0px)",
+          "description": "Esquinas rectas (0px)",
           "overrides": {
             "corner_radius": "0"
           }
         },
         "rounded": {
-          "description": "Rounded corners (14px)",
+          "description": "Esquinas redondeadas (14px)",
           "overrides": {
             "corner_radius": "14px"
           }
         },
         "pill": {
-          "description": "Pill-shaped (999px)",
+          "description": "Forma de píldora (999px)",
           "overrides": {
             "corner_radius": "999px"
           }
@@ -206,33 +206,33 @@
       }
     },
     "isotype_style": {
-      "label": "Icon/mark styling",
+      "label": "Estilo de símbolo",
       "type": "enum",
       "options": {
         "none": {
-          "description": "No additional styling (preserve current look)",
+          "description": "Sin estilo adicional (preservar apariencia actual)",
           "data_attrs": {}
         },
         "lettermark": {
-          "description": "Single letter mark variant",
+          "description": "Variante de monograma (una letra)",
           "data_attrs": {
             "data-isotype-style": "lettermark"
           }
         },
         "geometric": {
-          "description": "Geometric abstract form",
+          "description": "Forma geométrica abstracta",
           "data_attrs": {
             "data-isotype-style": "geometric"
           }
         },
         "abstract": {
-          "description": "Abstract organic form",
+          "description": "Forma orgánica abstracta",
           "data_attrs": {
             "data-isotype-style": "abstract"
           }
         },
         "enclosure": {
-          "description": "Mark enclosed in shape",
+          "description": "Marca encerrada en una forma",
           "data_attrs": {
             "data-isotype-style": "enclosure"
           }
@@ -240,33 +240,33 @@
       }
     },
     "accent_placement": {
-      "label": "Accent color placement",
+      "label": "Acento",
       "type": "enum",
       "options": {
         "none": {
-          "description": "No accent placement (default)",
+          "description": "Sin acento (por defecto)",
           "data_attrs": {}
         },
         "underline": {
-          "description": "Underline accent bar",
+          "description": "Barra de acento subrayada",
           "data_attrs": {
             "data-accent-placement": "underline"
           }
         },
         "corner": {
-          "description": "Corner accent marker",
+          "description": "Marcador de acento en esquina",
           "data_attrs": {
             "data-accent-placement": "corner"
           }
         },
         "sidebar": {
-          "description": "Sidebar accent stripe",
+          "description": "Franja de acento lateral",
           "data_attrs": {
             "data-accent-placement": "sidebar"
           }
         },
         "dot": {
-          "description": "Dot accent element",
+          "description": "Elemento de acento en punto",
           "data_attrs": {
             "data-accent-placement": "dot"
           }
