@@ -327,11 +327,15 @@ async def upload_variation(
             # DB-agnóstico (SQLite last_insert_rowid / Postgres currval del seq).
             var_id = get_last_insert_id(db, con, "variations")
 
-        # Actualiza counts del batch (recibidas)
+        # Actualiza counts del batch (recibidas). `expected` se deriva del count
+        # del spec si no estaba seteado (el create valida count<=combos distintos,
+        # así que el plan produce exactamente `count` combos).
         counts_dict = json.loads(batch.get("counts_json", "{}"))
         received = counts_dict.get("received", 0) + (0 if existing else 1)
-        expected = counts_dict.get("expected", 0)
+        spec_json = json.loads(batch.get("spec_json", "{}"))
+        expected = counts_dict.get("expected") or int(spec_json.get("count", 1) or 1)
         counts_dict["received"] = received
+        counts_dict["expected"] = expected
 
         con.execute(
             "UPDATE batches SET counts_json = ? WHERE id = ?",

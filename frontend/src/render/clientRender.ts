@@ -257,8 +257,19 @@ async function renderAndUploadCombination(
     const paddedIdx = String(combination.idx).padStart(3, "0");
     formData.append("image", pngBlob, `combo_${paddedIdx}.png`);
 
-    // Subir
-    await clientRender.upload(batchId, formData);
+    // Subir con reintentos (robustez ante fallos transitorios de red).
+    let lastErr: unknown = null;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        await clientRender.upload(batchId, formData);
+        lastErr = null;
+        break;
+      } catch (e) {
+        lastErr = e;
+        await new Promise((r) => setTimeout(r, 400 * (attempt + 1)));
+      }
+    }
+    if (lastErr) throw lastErr;
 
     return { success: true };
   } catch (e) {
