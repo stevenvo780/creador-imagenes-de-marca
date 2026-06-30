@@ -131,6 +131,26 @@ class GCSStorage:
         blob_name = self._blob_name(tenant_id, relative_path)
         return f"gs://{self.bucket_name}/{blob_name}"
 
+    def relative_key(self, tenant_id: int, stored_path: str) -> str:
+        """Invierte ``save()``: de la URI ``gs://`` persistida a la clave relativa.
+
+        ``save()`` devuelve ``gs://<bucket>/tenants/<tenant_id>/<relative>``; aquí
+        quitamos ese prefijo para reabrir/empacar el objeto por el seam.  Esto es
+        lo que arregla servir imágenes en producción (antes el router hacía
+        path-math de filesystem sobre una URI gs:// → 400 "invalid path").
+
+        Raises:
+            ValueError: si stored_path no pertenece al scope del tenant.
+        """
+        prefix = f"gs://{self.bucket_name}/tenants/{tenant_id}/"
+        if not stored_path.startswith(prefix):
+            raise ValueError(
+                f"stored_path fuera del scope del tenant {tenant_id}: {stored_path}"
+            )
+        rel = stored_path[len(prefix):]
+        self._validate_relative_path(rel)
+        return rel
+
     def url_for(self, tenant_id: int, relative_path: str) -> str:
         """Devuelve la URL HTTPS pública del objeto.
 

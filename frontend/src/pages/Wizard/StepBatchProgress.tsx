@@ -10,6 +10,8 @@ import { formatDateTime } from "../../utils/format";
 interface StepBatchProgressProps {
   batchId: number;
   onCreateAnother: () => void;
+  /** Si true, el render ocurre en el navegador del usuario (sin polling al worker). */
+  clientRender?: boolean;
 }
 
 const STATUS_LABEL: Record<BatchStatus, string> = {
@@ -36,13 +38,56 @@ function isTerminal(status: BatchStatus): boolean {
 export function StepBatchProgress({
   batchId,
   onCreateAnother,
+  clientRender = false,
 }: StepBatchProgressProps) {
   const [batch, setBatch] = useState<Batch | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [clientProgress, setClientProgress] = useState<{ done: number; total: number } | null>(
+    null,
+  );
 
   useEffect(() => {
     let cancelled = false;
+
+    // ── Render en el NAVEGADOR del usuario (sin CPU de servidor) ──────────────
+    if (clientRender) {
+      (async () => {
+        try {
+          const { renderBatchClientSide } = await import("../../render");
+          if (!cancelled) setLoading(false);
+          const res = await renderBatchClientSide(batchId, (done, total) => {
+            if (!cancelled) setClientProgress({ done, total });
+          });
+          if (cancelled) return;
+          if (res.uploaded === 0) {
+            setError("No se pudo generar ninguna imagen en tu navegador. Intentá de nuevo.");
+            return;
+          }
+          // El render lo hizo el navegador: mostramos 'completada' directo (el
+          // estado server del batch es informativo y ya tiene las imágenes).
+          setBatch({
+            id: batchId,
+            status: "completed",
+            counts: { rendered: res.uploaded, ranked: res.uploaded },
+          } as unknown as Batch);
+        } catch (err) {
+          if (!cancelled) {
+            setError(
+              err instanceof ApiError
+                ? err.detail
+                : "Hubo un problema al generar las imágenes en tu navegador.",
+            );
+            setLoading(false);
+          }
+        }
+      })();
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    // ── Camino server-side: polling al worker ────────────────────────────────
     const poll = async () => {
       try {
         const b = await batches.get(batchId);
@@ -66,7 +111,7 @@ export function StepBatchProgress({
     };
     poll();
     return () => { cancelled = true; };
-  }, [batchId]);
+  }, [batchId, clientRender]);
 
   // ── Cargando inicial ─────────────────────────────────────────────────────────
 
@@ -133,6 +178,60 @@ export function StepBatchProgress({
         <Button variant="secondary" onClick={onCreateAnother}>
           Volver al inicio
         </Button>
+      </section>
+    );
+  }
+
+  // Render en el navegador en curso (client-mode): progreso local en vivo.
+  if (clientRender && !batch) {
+    const done = clientProgress?.done ?? 0;
+    const total = clientProgress?.total ?? 0;
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+    return (
+      <section
+        style={{
+          display: "grid",
+          gap: "var(--space-6)",
+          textAlign: "center",
+          padding: "var(--space-10) var(--space-6)",
+        }}
+      >
+        <Spinner size="lg" />
+        <p
+          style={{
+            margin: 0,
+            fontFamily: "var(--font-display)",
+            fontSize: "var(--font-size-xl)",
+            fontWeight: 700,
+            color: "var(--ink)",
+          }}
+          aria-live="polite"
+        >
+          Generando en tu navegador…
+        </p>
+        <p style={{ margin: 0, fontSize: "var(--font-size-sm)", color: "var(--slate-500)" }}>
+          {total > 0 ? done + " de " + total + " listas" : "Preparando…"}
+        </p>
+        <div
+          style={{
+            height: 8,
+            background: "var(--line)",
+            borderRadius: 999,
+            overflow: "hidden",
+            maxWidth: 360,
+            width: "100%",
+            margin: "0 auto",
+          }}
+        >
+          <div
+            style={{
+              height: "100%",
+              width: pct + "%",
+              background: "var(--teal-600)",
+              transition: "width 0.2s",
+            }}
+          />
+        </div>
       </section>
     );
   }

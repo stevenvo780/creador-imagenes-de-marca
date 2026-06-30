@@ -475,9 +475,13 @@ def list_variations(
     tenant_id: int,
     brand_id: int | None = None,
     batch_id: int | None = None,
-    limit: int = 200,
+    limit: int = 2000,
 ) -> list[dict[str, Any]]:
-    """Lista variaciones del tenant, filtrable por brand_id y/o batch_id."""
+    """Lista variaciones del tenant, filtrable por brand_id y/o batch_id.
+
+    Tope alto (2000) para que la galería muestre TODA la variedad generada
+    (antes 200 ocultaba lo nuevo); el orden final (calidad/recientes) lo aplica
+    el router de galería sobre el conjunto."""
     sql = "SELECT * FROM variations WHERE tenant_id = ?"
     params: list[Any] = [tenant_id]
     if brand_id is not None:

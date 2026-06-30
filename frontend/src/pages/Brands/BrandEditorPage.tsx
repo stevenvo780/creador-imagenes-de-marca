@@ -18,17 +18,20 @@ import { brands as brandsApi, type Brand, ApiError } from '../../api/client';
 import { Button, ColorPicker } from '../../components';
 import { es } from '../../i18n/es';
 
-const PALETTE_KEYS = ['fondo', 'texto', 'primario', 'acento', 'acento2'] as const;
+// Claves canónicas de paleta que entiende el backend (VALID_PALETTE_KEYS).
+// Antes el editor usaba 'fondo'/'acento2' → el backend respondía 422 y nunca se
+// podía guardar la marca ni leer sus colores reales.
+const PALETTE_KEYS = ['bg', 'texto', 'primario', 'acento', 'acento_2'] as const;
 type PaletteKey = (typeof PALETTE_KEYS)[number];
 
 type Palette = Record<PaletteKey, string>;
 
 const PALETTE_DEFAULTS: Palette = {
-  fondo: '#FFFFFF',
+  bg: '#FFFFFF',
   texto: '#0E1B1A',
   primario: '#1F8276',
   acento: '#E0A85E',
-  acento2: '#B07A2A',
+  acento_2: '#B07A2A',
 };
 
 function isHexColor(value: unknown): value is string {
@@ -38,11 +41,11 @@ function isHexColor(value: unknown): value is string {
 function readPalette(brand: Brand): Palette {
   const source = (brand.palette ?? {}) as Record<string, unknown>;
   return {
-    fondo: isHexColor(source.fondo) ? source.fondo.toUpperCase() : PALETTE_DEFAULTS.fondo,
+    bg: isHexColor(source.bg) ? source.bg.toUpperCase() : PALETTE_DEFAULTS.bg,
     texto: isHexColor(source.texto) ? source.texto.toUpperCase() : PALETTE_DEFAULTS.texto,
     primario: isHexColor(source.primario) ? source.primario.toUpperCase() : PALETTE_DEFAULTS.primario,
     acento: isHexColor(source.acento) ? source.acento.toUpperCase() : PALETTE_DEFAULTS.acento,
-    acento2: isHexColor(source.acento2) ? source.acento2.toUpperCase() : PALETTE_DEFAULTS.acento2,
+    acento_2: isHexColor(source.acento_2) ? source.acento_2.toUpperCase() : PALETTE_DEFAULTS.acento_2,
   };
 }
 

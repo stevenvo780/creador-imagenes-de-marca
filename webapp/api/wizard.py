@@ -25,7 +25,7 @@ router = APIRouter(prefix="/api/v1/wizard", tags=["wizard"])
 _FAMILY_META: dict[str, dict[str, str]] = {
     "logos": {
         "label": "Logos",
-        "description": "Identificador principal de la marca: isotipo, lockup y wordmark",
+        "description": "Identificador principal de la marca: símbolo, logo y nombre",
     },
     "banners": {
         "label": "Banners",
@@ -36,8 +36,8 @@ _FAMILY_META: dict[str, dict[str, str]] = {
         "description": "Formatos cuadrados y rectangulares para posts e impresión",
     },
     "og": {
-        "label": "OG / Meta",
-        "description": "Imagen de previsualización al compartir el enlace en redes",
+        "label": "Vista previa de enlace",
+        "description": "Imagen que aparece al compartir el enlace en redes y chats",
     },
     "stationery": {
         "label": "Papelería",
@@ -62,12 +62,12 @@ _TYPE_META: dict[str, dict[str, str]] = {
         "description": "Símbolo arriba y nombre debajo",
     },
     "wordmark": {
-        "label": "Wordmark (solo nombre)",
+        "label": "Logo de texto (solo el nombre)",
         "description": "El nombre de la marca como elemento tipográfico",
     },
     "favicon": {
-        "label": "Favicon",
-        "description": "Versión mínima del ícono para pestaña de navegador",
+        "label": "Ícono de pestaña",
+        "description": "Versión mínima del ícono para la pestaña del navegador",
     },
     "watermark": {
         "label": "Marca de agua",
@@ -87,16 +87,16 @@ _TYPE_META: dict[str, dict[str, str]] = {
         "description": "Imagen de cabecera del canal de YouTube (2560x1440 px)",
     },
     "web_hero_desktop": {
-        "label": "Hero web",
-        "description": "Imagen de cabecera para sitio web escritorio (1920x600 px)",
+        "label": "Cabecera de sitio web",
+        "description": "Imagen principal para la cabecera de un sitio web en escritorio (1920x600 px)",
     },
     "ad_leaderboard": {
-        "label": "Anuncio horizontal (leaderboard)",
-        "description": "Banner publicitario estándar IAB (728x90 px)",
+        "label": "Anuncio horizontal",
+        "description": "Banner publicitario horizontal de tamaño estándar (728x90 px)",
     },
     "ad_rectangle": {
-        "label": "Anuncio rectangular (medium rectangle)",
-        "description": "Banner publicitario mediano IAB (300x250 px)",
+        "label": "Anuncio rectangular",
+        "description": "Banner publicitario rectangular mediano (300x250 px)",
     },
     # Cards
     "business_card": {
@@ -109,12 +109,12 @@ _TYPE_META: dict[str, dict[str, str]] = {
     },
     # OG
     "og_general": {
-        "label": "Imagen OG / Meta",
+        "label": "Vista previa al compartir",
         "description": "Imagen que aparece al compartir el enlace en redes (1200x630 px)",
     },
     "og_product": {
-        "label": "OG de producto",
-        "description": "Imagen de previsualización específica de un producto (1200x630 px)",
+        "label": "Vista previa de producto",
+        "description": "Imagen de previsualización específica de un producto al compartir (1200x630 px)",
     },
     # Stationery
     "letterhead": {

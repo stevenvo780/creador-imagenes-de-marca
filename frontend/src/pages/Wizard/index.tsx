@@ -14,6 +14,10 @@ import { StepCountAndSeed } from "./StepCountAndSeed";
 import { StepReview } from "./StepReview";
 import { StepBatchProgress } from "./StepBatchProgress";
 
+// El render ocurre en el navegador del usuario (sin CPU de servidor GCP). El
+// camino server-side sigue disponible poniendo esto en false (fallback).
+const CLIENT_RENDER = true;
+
 async function getBrandById(id: number): Promise<Brand | null> {
   try {
     const res = await fetch(`/api/v1/brands/${id}`, {
@@ -60,6 +64,8 @@ export function WizardFlow() {
         permuted: wizard.formData.permuted,
         count: wizard.formData.count,
         seed_salt: wizard.formData.seedSalt,
+        // El render ocurre en el navegador del usuario (sin CPU de servidor).
+        render_mode: CLIENT_RENDER ? "client" : "server",
       });
       wizard.setBatchId(batch.id);
     } catch (err) {
@@ -79,6 +85,7 @@ export function WizardFlow() {
       <StepBatchProgress
         batchId={wizard.batchId}
         onCreateAnother={() => wizard.resetWizard()}
+        clientRender={CLIENT_RENDER}
       />
     );
   }

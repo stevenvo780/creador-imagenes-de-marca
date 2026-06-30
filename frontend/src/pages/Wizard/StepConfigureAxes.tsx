@@ -15,6 +15,7 @@ import {
   ISOTYPE_STYLE_SKIP_DEFAULT,
   ISOTYPE_STYLE_FIRST_REAL,
 } from "./terms";
+import { ISOTYPE_CATEGORIES } from "../../i18n/isotypeStyles.generated";
 
 interface StepConfigureAxesProps {
   formData: WizardFormData;
@@ -315,11 +316,25 @@ export function StepConfigureAxes({
                     }}
                   >
                     <option value="">— Elige una opción —</option>
-                    {opts.map((opt) => (
-                      <option key={opt.name} value={opt.name}>
-                        {optionLabel(axis.name, opt.name, opt.label)}
-                      </option>
-                    ))}
+                    {axis.name === "isotype_style"
+                      ? ISOTYPE_CATEGORIES.map((grp) => {
+                          const groupOpts = opts.filter((o) => grp.styles.includes(o.name));
+                          if (groupOpts.length === 0) return null;
+                          return (
+                            <optgroup key={grp.category} label={grp.category}>
+                              {groupOpts.map((opt) => (
+                                <option key={opt.name} value={opt.name}>
+                                  {optionLabel(axis.name, opt.name, opt.label)}
+                                </option>
+                              ))}
+                            </optgroup>
+                          );
+                        })
+                      : opts.map((opt) => (
+                          <option key={opt.name} value={opt.name}>
+                            {optionLabel(axis.name, opt.name, opt.label)}
+                          </option>
+                        ))}
                   </select>
 
                   {/* Descripción de la opción seleccionada (en español) */}

@@ -126,11 +126,18 @@ gcloud run deploy "$SERVICE" \
   --allow-unauthenticated \
   --memory 2Gi \
   --cpu 2 \
+  --no-cpu-throttling \
+  --cpu-boost \
   --timeout 600s \
   --concurrency 4 \
   --min-instances 1 \
   --set-env-vars "$ENV_VARS" \
   "${SECRET_FLAGS[@]}"
+
+# NOTA COSTO: --no-cpu-throttling + --min-instances 1 mantienen el worker de
+# background con CPU (necesario para renderizar) y el servicio caliente (sin
+# cold-start 503), PERO facturan CPU continuamente. Tras una demo/seed, para
+# bajar costo: `gcloud run services update eikon --cpu-throttling --min-instances 0`.
 
 # ── Resultado ─────────────────────────────────────────────────────────────────
 echo ""

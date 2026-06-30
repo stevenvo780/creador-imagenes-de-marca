@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
@@ -93,6 +93,9 @@ class BatchCreate(BaseModel):
     permuted: list[str] = Field(default_factory=list)
     count: int = Field(default=4, ge=1, le=64)
     seed_salt: str = Field(default="", max_length=80)
+    # "server": render con Chromium en el servidor (histórico).
+    # "client": el navegador del usuario renderiza y sube los PNG (sin CPU GCP).
+    render_mode: Literal["server", "client"] = Field(default="server")
 
     @model_validator(mode="after")
     def check_axis_overlap(self) -> BatchCreate:

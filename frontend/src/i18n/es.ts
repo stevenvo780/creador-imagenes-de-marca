@@ -2,11 +2,11 @@
 
 export const es = {
   palette_keys: {
-    fondo: "Fondo",
+    bg: "Fondo",
     texto: "Texto",
     primario: "Primario",
     acento: "Acento",
-    acento2: "Acento 2",
+    acento_2: "Acento 2",
   },
   brand_editor: {
     title: "Editar marca",

@@ -71,8 +71,17 @@ async def enqueue_batch(
     brand_id: int,
     spec: CombinationSpec,
     count: int,
+    render_mode: str = "server",
 ) -> dict[str, Any]:
     """Crea un batch de renderizado combinatorio en la DB y lo encola.
+
+    render_mode:
+      - "server" (default): se inserta 'pending' y se encola → lo renderiza el
+        WorkerPool con Chromium (camino histórico).
+      - "client": se inserta 'running' y NO se encola → el worker (que solo
+        reclama 'pending') lo ignora; el render lo hace el navegador del usuario
+        y los PNG llegan por POST .../variations/upload, que marca 'completed'.
+        Así el cómputo sale de GCP sin tocar el render loop server-side.
 
     Args:
         db_url: URL de BD (SQLite o Postgres)
@@ -94,19 +103,23 @@ async def enqueue_batch(
     )
     spec_serializable.validate()
 
+    is_client = render_mode == "client"
     batch = create_batch(
         db_url,
         tenant_id,
         brand_id,
         spec=asdict(spec_serializable),
-        status="pending",
+        status="running" if is_client else "pending",
     )
 
-    pool = get_worker()
-    if pool is not None:
-        batch_id = int(batch["id"])
-        pool._mark_batch_queued(batch_id)
-        await pool.queue.put(batch_id)
+    # Solo el camino server-side se encola al WorkerPool. En client-mode el
+    # navegador renderiza y sube los PNG; el worker no debe tocarlo.
+    if not is_client:
+        pool = get_worker()
+        if pool is not None:
+            batch_id = int(batch["id"])
+            pool._mark_batch_queued(batch_id)
+            await pool.queue.put(batch_id)
 
     return dict(batch)
 

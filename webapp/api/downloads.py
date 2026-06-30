@@ -31,9 +31,11 @@ def _seam_key(storage: StorageBackend, tenant_id: int, output_path: str | None) 
     """
     if not output_path:
         raise HTTPException(status_code=404, detail="variation has no file")
-    tenant_root = Path(storage.full_path(tenant_id, "."))
+    # Delegamos la derivación de la clave al backend: cada uno sabe invertir su
+    # propio save() (LocalStorage → path absoluto; GCSStorage → URI gs://). Hacer
+    # path-math de filesystem aquí rompía GCS en prod (URI gs:// → 400).
     try:
-        return str(Path(output_path).resolve().relative_to(tenant_root))
+        return storage.relative_key(tenant_id, output_path)
     except ValueError as e:
         raise HTTPException(status_code=400, detail="invalid path") from e
 

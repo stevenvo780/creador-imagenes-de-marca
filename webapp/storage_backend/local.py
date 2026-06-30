@@ -105,6 +105,23 @@ class LocalStorage:
         """
         return str(self._get_full_path(tenant_id, relative_path))
 
+    def relative_key(self, tenant_id: int, stored_path: str) -> str:
+        """Invierte ``save()``: del path absoluto persistido a la clave relativa.
+
+        ``save()`` devuelve la ruta absoluta local; aquí la convertimos de vuelta
+        a la clave relativa del tenant para poder reabrir/empacar el archivo.
+
+        Raises:
+            ValueError: si stored_path cae fuera del scope del tenant.
+        """
+        tenant_dir = self._get_tenant_dir(tenant_id).resolve()
+        try:
+            return str(Path(stored_path).resolve().relative_to(tenant_dir))
+        except ValueError as err:
+            raise ValueError(
+                f"stored_path fuera del scope del tenant {tenant_id}: {stored_path}"
+            ) from err
+
     def open(self, tenant_id: int, relative_path: str) -> bytes:
         """Lee contenido de un archivo.
 

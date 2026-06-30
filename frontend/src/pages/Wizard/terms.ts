@@ -2,6 +2,7 @@
  * Mapa de términos técnicos → español humano para el wizard.
  * Nunca mostrar claves técnicas crudas al usuario.
  */
+import { ISOTYPE_LABELS } from "../../i18n/isotypeStyles.generated";
 
 // ── Nombres de ejes ────────────────────────────────────────────────────────────
 
@@ -32,12 +33,11 @@ export const AXIS_DESCRIPTIONS: Record<string, string> = {
 // ── Opciones por eje ───────────────────────────────────────────────────────────
 
 export const OPTION_LABELS: Record<string, Record<string, string>> = {
+  // Etiquetas claras de los 100+ algoritmos (autogeneradas desde el catálogo)
+  // + "Sin símbolo". Las generadas cubren los built-in y los nuevos por igual.
   isotype_style: {
-    none:        "Sin símbolo",
-    lettermark:  "Monograma",
-    geometric:   "Geométrico",
-    abstract:    "Abstracto",
-    enclosure:   "Emblema",
+    none: "Sin símbolo",
+    ...ISOTYPE_LABELS,
   },
   palette_scheme: {
     brand:       "De tu marca",

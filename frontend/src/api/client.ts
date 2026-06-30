@@ -89,6 +89,8 @@ export interface BatchCreate {
   permuted?: string[];
   count?: number;
   seed_salt?: string;
+  /** "client": el navegador renderiza y sube los PNG (sin CPU de servidor). */
+  render_mode?: "server" | "client";
 }
 
 /**
@@ -146,6 +148,23 @@ export class ApiError extends Error {
 
 // ── Fetch base ───────────────────────────────────────────────────────────────
 
+/**
+ * Mensaje claro en español por código de estado, usado cuando el backend no
+ * envía un `detail` legible (p. ej. 503 de cold-start con body vacío, donde en
+ * HTTP/2 `res.statusText` también viene vacío → antes el error quedaba invisible).
+ */
+function friendlyError(status: number): string {
+  if (status === 401) return "Correo o contraseña incorrectos.";
+  if (status === 403) return "No tenés permiso para esta acción.";
+  if (status === 404) return "No encontramos lo que buscabas.";
+  if (status === 409) return "Ya existe un elemento con esos datos.";
+  if (status === 422) return "Revisá los datos: hay algún campo inválido.";
+  if (status === 429) return "Demasiados intentos. Esperá un momento y reintentá.";
+  if (status >= 500)
+    return "El servidor está iniciando o saturado. Esperá unos segundos y reintentá.";
+  return `Ocurrió un error (${status}). Intentá de nuevo.`;
+}
+
 async function request<T>(
   method: string,
   path: string,
@@ -159,11 +178,24 @@ async function request<T>(
   if (body !== undefined) {
     init.body = JSON.stringify(body);
   }
-  const res = await fetch(path, init);
+  let res: Response;
+  try {
+    res = await fetch(path, init);
+  } catch {
+    // fetch rechaza ante problemas de red / conexión cortada (no por status HTTP).
+    throw new ApiError(
+      0,
+      "No pudimos conectar con el servidor. Revisá tu conexión y reintentá.",
+    );
+  }
   if (res.status === 204) return undefined as unknown as T;
-  const json = await res.json().catch(() => ({ detail: res.statusText }));
+  const json = await res.json().catch(() => null);
   if (!res.ok) {
-    throw new ApiError(res.status, json?.detail ?? String(json));
+    const detail =
+      json && typeof json === "object" && typeof json.detail === "string" && json.detail
+        ? json.detail
+        : friendlyError(res.status);
+    throw new ApiError(res.status, detail);
   }
   return json as T;
 }
@@ -278,5 +310,48 @@ export const downloads = {
       throw new ApiError(res.status, json?.detail ?? "zip error");
     }
     return res.blob();
+  },
+};
+
+// ── Client-side Render ────────────────────────────────────────────────────────
+
+/**
+ * Render-spec devuelto por GET /api/v1/batches/{batchId}/plan
+ */
+export interface RenderSpec {
+  batch_id: number;
+  asset_type: string;
+  category: string;
+  template_name: string;
+  viewport: { w: number; h: number };
+  device_scale_factor: number;
+  combinations: RenderCombination[];
+}
+
+export interface RenderCombination {
+  idx: number;
+  params: Record<string, unknown>;
+  vars: Record<string, string>;
+  data_attrs: Record<string, string>;
+  isotype_data_uri: string;
+  texts: Record<string, string>;
+}
+
+export const clientRender = {
+  /** GET /api/v1/batches/{batchId}/plan */
+  plan: (batchId: number) => get<RenderSpec>(`/api/v1/batches/${batchId}/plan`),
+
+  /** POST /api/v1/batches/{batchId}/variations/upload (multipart form) */
+  upload: async (batchId: number, formData: FormData): Promise<{ combo_idx: number; success: boolean }> => {
+    const res = await fetch(`/api/v1/batches/${batchId}/variations/upload`, {
+      method: "POST",
+      credentials: "include",
+      body: formData,
+    });
+    if (!res.ok) {
+      const json = await res.json().catch(() => ({ detail: res.statusText }));
+      throw new ApiError(res.status, json?.detail ?? "upload error");
+    }
+    return res.json();
   },
 };

@@ -117,7 +117,9 @@ async def create_batch_endpoint(
     except ValueError as e:
         raise HTTPException(status_code=422, detail=str(e)) from e
 
-    batch = await enqueue_batch(db, tenant_id, payload.brand_id, spec, payload.count)
+    batch = await enqueue_batch(
+        db, tenant_id, payload.brand_id, spec, payload.count, render_mode=payload.render_mode
+    )
 
     # El worker rastrea el progreso de cada batch en _pending_batches; el poll_loop
     # lo siembra al descubrir batches 'pending'. Como enqueue_batch ya encoló el

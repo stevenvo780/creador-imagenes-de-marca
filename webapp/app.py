@@ -23,6 +23,7 @@ from eikon_core.constants import OUTPUT_DIR
 from webapp.api import (
     batches_router,
     brands_router,
+    client_render_router,
     downloads_router,
     gallery_router,
     wizard_router,
@@ -119,6 +120,14 @@ def create_app(
     app.state.axes_config_path = axes_config_path
     app.state.worker = None
 
+    # OJO con el orden: Starlette resuelve mounts por prefijo en orden de registro.
+    # El más específico (/static/fonts) debe ir ANTES que /static, si no /static
+    # captura /static/fonts/* y las fuentes dan 404.
+    app.mount(
+        "/static/fonts",
+        StaticFiles(directory=str(REPO_ROOT / "templates" / "fonts")),
+        name="fonts",
+    )
     app.mount("/static", StaticFiles(directory=str(WEBAPP_DIR / "static")), name="static")
 
     # ── Health ────────────────────────────────────────────────────────────
@@ -150,7 +159,7 @@ def create_app(
     async def login(payload: LoginRequest, response: Response) -> dict[str, Any]:
         user = authenticate_user(settings.db_url, payload.email, payload.password)
         if user is None:
-            raise HTTPException(status_code=401, detail="invalid credentials")
+            raise HTTPException(status_code=401, detail="Correo o contraseña incorrectos.")
         _set_auth_cookie(response, settings, user)
         return {
             "user": {"email": user["email"], "role": user["role"]},
@@ -174,6 +183,7 @@ def create_app(
     app.include_router(brands_router)
     app.include_router(wizard_router)
     app.include_router(batches_router)
+    app.include_router(client_render_router)
     app.include_router(gallery_router)
     app.include_router(downloads_router)
 

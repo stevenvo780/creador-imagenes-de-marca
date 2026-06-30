@@ -63,6 +63,26 @@ class StorageBackend(Protocol):
         """
         ...
 
+    def relative_key(self, tenant_id: int, stored_path: str) -> str:
+        """Invierte ``save()``: del valor persistido (path abs o URI) a la clave relativa.
+
+        ``save()`` devuelve un identificador opaco (ruta absoluta local o URI
+        ``gs://``).  Este método lo convierte de vuelta a la clave relativa del
+        tenant que entienden ``open``/``zip_many``.  Cada backend conoce el formato
+        que produce su propio ``save``.
+
+        Args:
+            tenant_id: ID del tenant
+            stored_path: valor devuelto antes por ``save`` (persistido como output_path)
+
+        Returns:
+            Ruta relativa dentro del scope del tenant
+
+        Raises:
+            ValueError: si stored_path cae fuera del scope del tenant
+        """
+        ...
+
     def url_for(self, tenant_id: int, relative_path: str) -> str:
         """Devuelve URL (local o CDN) para servir el archivo.
 
