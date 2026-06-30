@@ -40,9 +40,9 @@ def _gallery_items(
     """Lista variaciones del tenant con filtros opcionales y ordenamiento server-side."""
     settings = get_settings(request)
     tenant_id = user["tenant_id"]
-    if brand_id is not None and get_brand(settings.sqlite_path, tenant_id, brand_id) is None:
+    if brand_id is not None and get_brand(settings.db_url, tenant_id, brand_id) is None:
         raise HTTPException(status_code=404, detail="brand not found")
-    rows = list_variations(settings.sqlite_path, tenant_id, brand_id=brand_id, batch_id=batch_id)
+    rows = list_variations(settings.db_url, tenant_id, brand_id=brand_id, batch_id=batch_id)
     rows = _sort_rows(rows, order)
     return {"items": [variation_to_dict(r) for r in rows]}
 
@@ -86,7 +86,7 @@ def gallery_select(
     settings = get_settings(request)
     try:
         select_variation(
-            settings.sqlite_path, user["tenant_id"], payload.variation_id, payload.selected
+            settings.db_url, user["tenant_id"], payload.variation_id, payload.selected
         )
     except KeyError as e:
         raise HTTPException(status_code=404, detail="variation not found") from e

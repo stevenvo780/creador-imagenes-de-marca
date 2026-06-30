@@ -53,7 +53,7 @@ async def current_user(request: Request) -> dict[str, Any]:
         payload = decode_jwt(token, settings.jwt_secret)
     except ValueError as e:
         raise HTTPException(status_code=401, detail=str(e)) from e
-    user = get_user(settings.sqlite_path, int(payload.get("sub", 0)))
+    user = get_user(settings.db_url, int(payload.get("sub", 0)))
     if user is None:
         raise HTTPException(status_code=401, detail="user not found")
     return user

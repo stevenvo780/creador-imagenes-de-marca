@@ -891,7 +891,7 @@ def test_worker_renders_and_passes_permuted_axes_to_rank(
     async def _drive() -> list[VariationScore] | None:
         return await pool._render_and_rank(
             batch_id=1,
-            db_path=tmp_path / "dummy.db",
+            db_url=str(tmp_path / "dummy.db"),
             tenant_id=1,
             spec=spec,
             plan=plan,
@@ -997,7 +997,7 @@ def test_worker_passes_none_permuted_axes_when_spec_empty(
     async def _drive() -> None:
         await pool._render_and_rank(
             batch_id=1,
-            db_path=tmp_path / "dummy.db",
+            db_url=str(tmp_path / "dummy.db"),
             tenant_id=1,
             spec=spec,
             plan=plan,

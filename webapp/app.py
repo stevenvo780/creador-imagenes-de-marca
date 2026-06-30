@@ -37,7 +37,7 @@ from webapp.storage import (
     create_tenant_user,
     init_db,
 )
-from webapp.storage_backend import LocalStorage
+from webapp.storage_backend import get_storage
 
 WEBAPP_DIR = Path(__file__).resolve().parent
 REPO_ROOT = WEBAPP_DIR.parent
@@ -85,13 +85,14 @@ def create_app(
     axes_config = load_axes_config(axes_config_path)
     # Seam de almacenamiento multi-tenant compartido por el worker (escritura) y
     # el router de descargas (lectura). Se inyecta vía app.state y al WorkerPool.
-    storage = LocalStorage(base_dir=output_root)
+    # Selección: GCS_BUCKET en env → GCSStorage; si no → LocalStorage.
+    storage = get_storage(base_dir=output_root)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         # Arranca el pool de workers que procesa batches 'pending' (poll loop).
         worker = WorkerPool(
-            settings.sqlite_path,
+            settings.db_url,
             max_concurrent_jobs=settings.max_concurrent_jobs,
             axes_config_path=axes_config_path,
             storage=storage,
@@ -108,7 +109,7 @@ def create_app(
 
     app = FastAPI(title="Eikon API", version="1.0.0", lifespan=lifespan)
     settings.data_root.mkdir(parents=True, exist_ok=True)
-    init_db(settings.sqlite_path)
+    init_db(settings.db_url)
 
     # Config por-app accesible desde las dependencias (webapp/api/deps.py).
     app.state.settings = settings
@@ -131,7 +132,7 @@ def create_app(
         try:
             tenant_slug = validate_slug(payload.tenant_slug)
             user = create_tenant_user(
-                settings.sqlite_path,
+                settings.db_url,
                 tenant_slug,
                 payload.tenant_name,
                 payload.email,
@@ -147,7 +148,7 @@ def create_app(
 
     @app.post("/auth/login")
     async def login(payload: LoginRequest, response: Response) -> dict[str, Any]:
-        user = authenticate_user(settings.sqlite_path, payload.email, payload.password)
+        user = authenticate_user(settings.db_url, payload.email, payload.password)
         if user is None:
             raise HTTPException(status_code=401, detail="invalid credentials")
         _set_auth_cookie(response, settings, user)

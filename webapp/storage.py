@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 import json
-import sqlite3
 import time
+from collections.abc import Generator
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
+from . import db
 from .security import hash_password, verify_password
 
+# Schema heredado (para compatibilidad con tests que lo importan)
 SCHEMA = """
 PRAGMA journal_mode=WAL;
 PRAGMA foreign_keys=ON;
@@ -70,40 +73,38 @@ CREATE INDEX IF NOT EXISTS idx_variations_batch ON variations(batch_id);
 """
 
 
-def connect(db_path: Path) -> sqlite3.Connection:
-    db_path.parent.mkdir(parents=True, exist_ok=True)
-    con = sqlite3.connect(db_path)
-    con.row_factory = sqlite3.Row
-    con.execute("PRAGMA foreign_keys=ON")
-    con.execute("PRAGMA busy_timeout=5000")
-    return con
+@contextmanager
+def connect(db_url: str | None | Path) -> Generator[db.DualConnection, None, None]:
+    """Context manager para conexiones a la BD (SQLite o Postgres)."""
+    with db.connect(db_url) as con:
+        yield con
 
 
-def init_db(db_path: Path) -> None:
-    with connect(db_path) as con:
-        con.executescript(SCHEMA)
+def init_db(db_url: str | None | Path) -> None:
+    """Inicializa el schema de la BD."""
+    db.init_db(db_url)
 
 
-def row_to_dict(row: sqlite3.Row | None) -> dict[str, Any] | None:
-    return dict(row) if row is not None else None
+def row_to_dict(row: dict[str, Any] | None) -> dict[str, Any] | None:
+    return row
 
 
 def create_tenant_user(
-    db_path: Path, tenant_slug: str, tenant_name: str, email: str, password: str
+    db_url: str | None | Path, tenant_slug: str, tenant_name: str, email: str, password: str
 ) -> dict[str, Any]:
     now = int(time.time())
-    with connect(db_path) as con:
+    with connect(db_url) as con:
         con.execute("BEGIN")
         con.execute(
             "INSERT INTO tenants(slug, name, created_at) VALUES (?, ?, ?)",
             (tenant_slug, tenant_name, now),
         )
-        tenant_id = int(con.execute("SELECT last_insert_rowid()").fetchone()[0])
+        tenant_id = db.get_last_insert_id(db_url, con, "tenants")
         con.execute(
             "INSERT INTO users(tenant_id, email, password_hash, role, created_at) VALUES (?, ?, ?, 'owner', ?)",
             (tenant_id, email.lower(), hash_password(password), now),
         )
-        user_id = int(con.execute("SELECT last_insert_rowid()").fetchone()[0])
+        user_id = db.get_last_insert_id(db_url, con, "users")
         con.commit()
     return {
         "tenant_id": tenant_id,
@@ -114,8 +115,8 @@ def create_tenant_user(
     }
 
 
-def authenticate_user(db_path: Path, email: str, password: str) -> dict[str, Any] | None:
-    with connect(db_path) as con:
+def authenticate_user(db_url: str | None | Path, email: str, password: str) -> dict[str, Any] | None:
+    with connect(db_url) as con:
         row = con.execute(
             "SELECT users.*, tenants.slug AS tenant_slug FROM users JOIN tenants ON tenants.id = users.tenant_id WHERE users.email = ?",
             (email.lower(),),
@@ -131,8 +132,8 @@ def authenticate_user(db_path: Path, email: str, password: str) -> dict[str, Any
     }
 
 
-def get_user(db_path: Path, user_id: int) -> dict[str, Any] | None:
-    with connect(db_path) as con:
+def get_user(db_url: str | None | Path, user_id: int) -> dict[str, Any] | None:
+    with connect(db_url) as con:
         row = con.execute(
             "SELECT users.id AS user_id, users.tenant_id, users.email, users.role, tenants.slug AS tenant_slug "
             "FROM users JOIN tenants ON tenants.id = users.tenant_id WHERE users.id = ?",
@@ -146,23 +147,24 @@ def get_user(db_path: Path, user_id: int) -> dict[str, Any] | None:
 # ---------------------------------------------------------------------------
 
 
-def get_tenant_by_slug(db_path: Path, slug: str) -> dict[str, Any] | None:
+def get_tenant_by_slug(db_url: str | None | Path, slug: str) -> dict[str, Any] | None:
     """Devuelve el tenant por slug, o None si no existe."""
-    with connect(db_path) as con:
+    with connect(db_url) as con:
         row = con.execute("SELECT * FROM tenants WHERE slug = ?", (slug,)).fetchone()
     return row_to_dict(row)
 
 
-def create_tenant(db_path: Path, slug: str, name: str) -> dict[str, Any]:
+def create_tenant(db_url: str | None | Path, slug: str, name: str) -> dict[str, Any]:
     """Crea un tenant sin usuario asociado. Falla si el slug ya existe."""
     now = int(time.time())
-    with connect(db_path) as con:
+    with connect(db_url) as con:
         con.execute(
             "INSERT INTO tenants(slug, name, created_at) VALUES (?, ?, ?)",
             (slug, name, now),
         )
-        tenant_id = int(con.execute("SELECT last_insert_rowid()").fetchone()[0])
+        tenant_id = db.get_last_insert_id(db_url, con, "tenants")
         row = con.execute("SELECT * FROM tenants WHERE id = ?", (tenant_id,)).fetchone()
+        assert row is not None
     return dict(row)
 
 
@@ -172,7 +174,7 @@ def create_tenant(db_path: Path, slug: str, name: str) -> dict[str, Any]:
 
 
 def create_brand(
-    db_path: Path,
+    db_url: str | None | Path,
     tenant_id: int,
     slug: str,
     name: str,
@@ -184,7 +186,7 @@ def create_brand(
 ) -> dict[str, Any]:
     """Crea un brand para el tenant. Falla si el slug ya existe en ese tenant."""
     now = int(time.time())
-    with connect(db_path) as con:
+    with connect(db_url) as con:
         con.execute(
             """INSERT INTO brands
                (tenant_id, slug, name, palette_json, typography_json,
@@ -202,13 +204,14 @@ def create_brand(
                 now,
             ),
         )
-        brand_id = int(con.execute("SELECT last_insert_rowid()").fetchone()[0])
+        brand_id = db.get_last_insert_id(db_url, con, "brands")
         row = con.execute("SELECT * FROM brands WHERE id = ?", (brand_id,)).fetchone()
+        assert row is not None
     return dict(row)
 
 
 def upsert_brand(
-    db_path: Path,
+    db_url: str | None | Path,
     tenant_id: int,
     slug: str,
     name: str,
@@ -220,7 +223,7 @@ def upsert_brand(
 ) -> dict[str, Any]:
     """Inserta o actualiza un brand por (tenant_id, slug). Idempotente."""
     now = int(time.time())
-    with connect(db_path) as con:
+    with connect(db_url) as con:
         con.execute(
             """INSERT INTO brands
                (tenant_id, slug, name, palette_json, typography_json,
@@ -248,38 +251,39 @@ def upsert_brand(
         row = con.execute(
             "SELECT * FROM brands WHERE tenant_id = ? AND slug = ?", (tenant_id, slug)
         ).fetchone()
+        assert row is not None
     return dict(row)
 
 
-def get_brand(db_path: Path, tenant_id: int, brand_id: int) -> dict[str, Any] | None:
+def get_brand(db_url: str | None | Path, tenant_id: int, brand_id: int) -> dict[str, Any] | None:
     """Devuelve un brand por id, scoped al tenant. None si no pertenece al tenant."""
-    with connect(db_path) as con:
+    with connect(db_url) as con:
         row = con.execute(
             "SELECT * FROM brands WHERE tenant_id = ? AND id = ?", (tenant_id, brand_id)
         ).fetchone()
     return row_to_dict(row)
 
 
-def get_brand_by_slug(db_path: Path, tenant_id: int, slug: str) -> dict[str, Any] | None:
+def get_brand_by_slug(db_url: str | None | Path, tenant_id: int, slug: str) -> dict[str, Any] | None:
     """Devuelve un brand por slug dentro del tenant."""
-    with connect(db_path) as con:
+    with connect(db_url) as con:
         row = con.execute(
             "SELECT * FROM brands WHERE tenant_id = ? AND slug = ?", (tenant_id, slug)
         ).fetchone()
     return row_to_dict(row)
 
 
-def list_brands(db_path: Path, tenant_id: int) -> list[dict[str, Any]]:
+def list_brands(db_url: str | None | Path, tenant_id: int) -> list[dict[str, Any]]:
     """Lista todos los brands del tenant, ordenados por id desc."""
-    with connect(db_path) as con:
-        rows = con.execute(
+    with connect(db_url) as con:
+        rows: list[dict[str, Any]] = con.execute(
             "SELECT * FROM brands WHERE tenant_id = ? ORDER BY id ASC", (tenant_id,)
         ).fetchall()
-    return [dict(r) for r in rows]
+    return rows
 
 
 def update_brand(
-    db_path: Path,
+    db_url: str | None | Path,
     tenant_id: int,
     brand_id: int,
     **fields: Any,
@@ -292,7 +296,7 @@ def update_brand(
     update_fields = {k: v for k, v in fields.items() if k in allowed}
     if not update_fields:
         raise ValueError("sin campos válidos para actualizar")
-    with connect(db_path) as con:
+    with connect(db_url) as con:
         # Verificar pertenencia
         row = con.execute(
             "SELECT id FROM brands WHERE tenant_id = ? AND id = ?", (tenant_id, brand_id)
@@ -303,12 +307,13 @@ def update_brand(
         values = [*list(update_fields.values()), brand_id]
         con.execute(f"UPDATE brands SET {set_clause} WHERE id = ?", values)
         updated = con.execute("SELECT * FROM brands WHERE id = ?", (brand_id,)).fetchone()
+        assert updated is not None
     return dict(updated)
 
 
-def delete_brand(db_path: Path, tenant_id: int, brand_id: int) -> None:
+def delete_brand(db_url: str | None | Path, tenant_id: int, brand_id: int) -> None:
     """Elimina un brand validando pertenencia al tenant."""
-    with connect(db_path) as con:
+    with connect(db_url) as con:
         row = con.execute(
             "SELECT id FROM brands WHERE tenant_id = ? AND id = ?", (tenant_id, brand_id)
         ).fetchone()
@@ -323,7 +328,7 @@ def delete_brand(db_path: Path, tenant_id: int, brand_id: int) -> None:
 
 
 def create_batch(
-    db_path: Path,
+    db_url: str | None | Path,
     tenant_id: int,
     brand_id: int,
     spec: dict[str, Any] | None = None,
@@ -331,23 +336,24 @@ def create_batch(
 ) -> dict[str, Any]:
     """Crea un batch para un brand del tenant. Valida pertenencia del brand."""
     # Verificar que el brand pertenece al tenant
-    brand = get_brand(db_path, tenant_id, brand_id)
+    brand = get_brand(db_url, tenant_id, brand_id)
     if brand is None:
         raise KeyError(f"brand {brand_id} no pertenece al tenant {tenant_id}")
     now = int(time.time())
-    with connect(db_path) as con:
+    with connect(db_url) as con:
         con.execute(
             "INSERT INTO batches(tenant_id, brand_id, spec_json, status, counts_json, created_at) VALUES (?, ?, ?, ?, '{}', ?)",
             (tenant_id, brand_id, json.dumps(spec or {}, sort_keys=True), status, now),
         )
-        batch_id = int(con.execute("SELECT last_insert_rowid()").fetchone()[0])
+        batch_id = db.get_last_insert_id(db_url, con, "batches")
         row = con.execute("SELECT * FROM batches WHERE id = ?", (batch_id,)).fetchone()
+        assert row is not None
     return dict(row)
 
 
-def get_batch(db_path: Path, tenant_id: int, batch_id: int) -> dict[str, Any] | None:
+def get_batch(db_url: str | None | Path, tenant_id: int, batch_id: int) -> dict[str, Any] | None:
     """Devuelve un batch scoped al tenant."""
-    with connect(db_path) as con:
+    with connect(db_url) as con:
         row = con.execute(
             "SELECT * FROM batches WHERE tenant_id = ? AND id = ?", (tenant_id, batch_id)
         ).fetchone()
@@ -355,7 +361,7 @@ def get_batch(db_path: Path, tenant_id: int, batch_id: int) -> dict[str, Any] | 
 
 
 def list_batches(
-    db_path: Path, tenant_id: int, brand_id: int | None = None
+    db_url: str | None | Path, tenant_id: int, brand_id: int | None = None
 ) -> list[dict[str, Any]]:
     """Lista batches del tenant, opcionalmente filtrado por brand_id."""
     sql = "SELECT * FROM batches WHERE tenant_id = ?"
@@ -364,13 +370,13 @@ def list_batches(
         sql += " AND brand_id = ?"
         params.append(brand_id)
     sql += " ORDER BY id DESC"
-    with connect(db_path) as con:
-        rows = con.execute(sql, params).fetchall()
-    return [dict(r) for r in rows]
+    with connect(db_url) as con:
+        rows: list[dict[str, Any]] = con.execute(sql, params).fetchall()
+    return rows
 
 
 def update_batch_status(
-    db_path: Path,
+    db_url: str | None | Path,
     batch_id: int,
     status: str,
     counts: dict[str, Any] | None = None,
@@ -383,7 +389,7 @@ def update_batch_status(
     Recomendado: siempre pasar tenant_id cuando se llama desde un endpoint de API.
     """
     now = int(time.time())
-    with connect(db_path) as con:
+    with connect(db_url) as con:
         # Validar pertenencia al tenant si se proporciona
         if tenant_id is not None:
             row = con.execute(
@@ -414,7 +420,7 @@ def update_batch_status(
 
 
 def create_variation(
-    db_path: Path,
+    db_url: str | None | Path,
     tenant_id: int,
     brand_id: int,
     batch_id: int | None = None,
@@ -426,11 +432,11 @@ def create_variation(
     layout_status: str | None = None,
 ) -> dict[str, Any]:
     """Crea una variación para un brand del tenant. Valida pertenencia del brand."""
-    brand = get_brand(db_path, tenant_id, brand_id)
+    brand = get_brand(db_url, tenant_id, brand_id)
     if brand is None:
         raise KeyError(f"brand {brand_id} no pertenece al tenant {tenant_id}")
     now = int(time.time())
-    with connect(db_path) as con:
+    with connect(db_url) as con:
         con.execute(
             """INSERT INTO variations
                (batch_id, tenant_id, brand_id, axis_params_json, seed, score,
@@ -449,14 +455,15 @@ def create_variation(
                 now,
             ),
         )
-        var_id = int(con.execute("SELECT last_insert_rowid()").fetchone()[0])
+        var_id = db.get_last_insert_id(db_url, con, "variations")
         row = con.execute("SELECT * FROM variations WHERE id = ?", (var_id,)).fetchone()
+        assert row is not None
     return dict(row)
 
 
-def get_variation(db_path: Path, tenant_id: int, variation_id: int) -> dict[str, Any] | None:
+def get_variation(db_url: str | None | Path, tenant_id: int, variation_id: int) -> dict[str, Any] | None:
     """Devuelve una variación scoped al tenant."""
-    with connect(db_path) as con:
+    with connect(db_url) as con:
         row = con.execute(
             "SELECT * FROM variations WHERE tenant_id = ? AND id = ?", (tenant_id, variation_id)
         ).fetchone()
@@ -464,7 +471,7 @@ def get_variation(db_path: Path, tenant_id: int, variation_id: int) -> dict[str,
 
 
 def list_variations(
-    db_path: Path,
+    db_url: str | None | Path,
     tenant_id: int,
     brand_id: int | None = None,
     batch_id: int | None = None,
@@ -481,16 +488,16 @@ def list_variations(
         params.append(batch_id)
     sql += " ORDER BY id DESC LIMIT ?"
     params.append(limit)
-    with connect(db_path) as con:
-        rows = con.execute(sql, params).fetchall()
-    return [dict(r) for r in rows]
+    with connect(db_url) as con:
+        rows: list[dict[str, Any]] = con.execute(sql, params).fetchall()
+    return rows
 
 
 def select_variation(
-    db_path: Path, tenant_id: int, variation_id: int, selected: bool = True
+    db_url: str | None | Path, tenant_id: int, variation_id: int, selected: bool = True
 ) -> None:
     """Marca/desmarca una variación como seleccionada. Valida pertenencia al tenant."""
-    with connect(db_path) as con:
+    with connect(db_url) as con:
         row = con.execute(
             "SELECT id FROM variations WHERE tenant_id = ? AND id = ?",
             (tenant_id, variation_id),

@@ -63,7 +63,7 @@ def variation_file(
     settings = get_settings(request)
     storage = get_storage(request)
     tenant_id = user["tenant_id"]
-    var = get_variation(settings.sqlite_path, tenant_id, variation_id)
+    var = get_variation(settings.db_url, tenant_id, variation_id)
     if var is None:
         raise HTTPException(status_code=404, detail="variation not found")
     key = _seam_key(storage, tenant_id, var.get("output_path"))
@@ -91,12 +91,12 @@ def downloads_batch_zip(
     storage = get_storage(request)
     tenant_id = user["tenant_id"]
 
-    if get_batch(settings.sqlite_path, tenant_id, batch_id) is None:
+    if get_batch(settings.db_url, tenant_id, batch_id) is None:
         raise HTTPException(status_code=404, detail="batch not found")
 
     keys = [
         _seam_key(storage, tenant_id, var.get("output_path"))
-        for var in list_variations(settings.sqlite_path, tenant_id, batch_id=batch_id)
+        for var in list_variations(settings.db_url, tenant_id, batch_id=batch_id)
     ]
     if not keys:
         raise HTTPException(status_code=404, detail="batch has no files")
@@ -123,7 +123,7 @@ def downloads_zip(
 
     keys: list[str] = []
     for var_id in unique_ids:
-        var = get_variation(settings.sqlite_path, tenant_id, var_id)
+        var = get_variation(settings.db_url, tenant_id, var_id)
         if var is None:
             raise HTTPException(status_code=404, detail=f"variation {var_id} not found")
         keys.append(_seam_key(storage, tenant_id, var.get("output_path")))

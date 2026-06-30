@@ -35,7 +35,7 @@ def list_brands_endpoint(
 ) -> dict[str, Any]:
     """Lista los brands del tenant autenticado."""
     settings = get_settings(request)
-    rows = list_brands(settings.sqlite_path, user["tenant_id"])
+    rows = list_brands(settings.db_url, user["tenant_id"])
     return {"items": [brand_to_dict(r) for r in rows]}
 
 
@@ -58,7 +58,7 @@ def create_brand_endpoint(
         )
     try:
         row = create_brand(
-            settings.sqlite_path,
+            settings.db_url,
             user["tenant_id"],
             slug,
             payload.name,
@@ -84,7 +84,7 @@ def get_brand_endpoint(
 ) -> dict[str, Any]:
     """Devuelve un brand por id, scoped al tenant. 404 si no pertenece."""
     settings = get_settings(request)
-    row = get_brand(settings.sqlite_path, user["tenant_id"], brand_id)
+    row = get_brand(settings.db_url, user["tenant_id"], brand_id)
     if row is None:
         raise HTTPException(status_code=404, detail="brand not found")
     return brand_to_dict(row)
@@ -121,7 +121,7 @@ def update_brand_endpoint(
             ),
         )
     try:
-        row = update_brand(settings.sqlite_path, user["tenant_id"], brand_id, **fields)
+        row = update_brand(settings.db_url, user["tenant_id"], brand_id, **fields)
     except KeyError as e:
         raise HTTPException(status_code=404, detail="brand not found") from e
     except ValueError as e:
@@ -140,12 +140,12 @@ def delete_brand_endpoint(
     tenant_id = user["tenant_id"]
 
     # Leer el slug antes de borrar para poder limpiar el árbol de salida.
-    brand_row = get_brand(settings.sqlite_path, tenant_id, brand_id)
+    brand_row = get_brand(settings.db_url, tenant_id, brand_id)
     if brand_row is None:
         raise HTTPException(status_code=404, detail="brand not found")
 
     try:
-        delete_brand(settings.sqlite_path, tenant_id, brand_id)
+        delete_brand(settings.db_url, tenant_id, brand_id)
     except KeyError as e:
         raise HTTPException(status_code=404, detail="brand not found") from e
 

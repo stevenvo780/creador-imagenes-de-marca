@@ -79,7 +79,7 @@ async def create_batch_endpoint(
     devolviendo 422 ante entradas inválidas en vez de fallar de forma asíncrona.
     """
     settings = get_settings(request)
-    db = settings.sqlite_path
+    db = settings.db_url
     tenant_id = user["tenant_id"]
 
     brand = get_brand(db, tenant_id, payload.brand_id)
@@ -142,7 +142,7 @@ def get_batch_endpoint(
 ) -> dict[str, Any]:
     """Devuelve el status (y counts) de un batch del tenant."""
     settings = get_settings(request)
-    row = get_batch(settings.sqlite_path, user["tenant_id"], batch_id)
+    row = get_batch(settings.db_url, user["tenant_id"], batch_id)
     if row is None:
         raise HTTPException(status_code=404, detail="batch not found")
     return batch_to_dict(row)
@@ -160,9 +160,9 @@ def batch_variations_endpoint(
     """
     settings = get_settings(request)
     tenant_id = user["tenant_id"]
-    if get_batch(settings.sqlite_path, tenant_id, batch_id) is None:
+    if get_batch(settings.db_url, tenant_id, batch_id) is None:
         raise HTTPException(status_code=404, detail="batch not found")
-    rows = list_variations(settings.sqlite_path, tenant_id, batch_id=batch_id)
+    rows = list_variations(settings.db_url, tenant_id, batch_id=batch_id)
     # NULLs al final; score descendente para los que tienen valor.
     rows.sort(
         key=lambda r: (r.get("score") is None, -(r.get("score") or 0.0)),
@@ -180,7 +180,7 @@ async def batch_events_endpoint(
     """Stream SSE con el progreso del batch (started/progress/completed/error)."""
     settings = get_settings(request)
     # Scoping: solo el dueño del batch puede suscribirse a sus eventos.
-    if get_batch(settings.sqlite_path, user["tenant_id"], batch_id) is None:
+    if get_batch(settings.db_url, user["tenant_id"], batch_id) is None:
         raise HTTPException(status_code=404, detail="batch not found")
     return StreamingResponse(
         job_events(batch_id),

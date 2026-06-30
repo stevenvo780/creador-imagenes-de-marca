@@ -192,7 +192,7 @@ class TestMultitenantVariationStorage:
                    VALUES (NULL, ?, ?, '{}', 0, 1.0, 'test/file1.png', 0)""",
                 (t1["id"], b1["id"]),
             )
-            var_id = int(con.execute("SELECT last_insert_rowid()").fetchone()[0])
+            var_id = int(con.execute("SELECT last_insert_rowid() AS id").fetchone()["id"])
             con.commit()
 
         # Verificar que tenant 1 puede leer su variation
@@ -226,7 +226,7 @@ class TestMultitenantVariationStorage:
                    VALUES (NULL, ?, ?, '{}', 0, 1.0, ?, 0)""",
                 (t1["id"], b1["id"], relative_path),
             )
-            var1_id = int(con.execute("SELECT last_insert_rowid()").fetchone()[0])
+            var1_id = int(con.execute("SELECT last_insert_rowid() AS id").fetchone()["id"])
 
             con.execute(
                 """INSERT INTO variations
@@ -235,7 +235,7 @@ class TestMultitenantVariationStorage:
                    VALUES (NULL, ?, ?, '{}', 0, 1.0, ?, 0)""",
                 (t2["id"], b2["id"], relative_path),
             )
-            var2_id = int(con.execute("SELECT last_insert_rowid()").fetchone()[0])
+            var2_id = int(con.execute("SELECT last_insert_rowid() AS id").fetchone()["id"])
             con.commit()
 
         # En el filesystem, con tenant_id, apuntan a archivos diferentes

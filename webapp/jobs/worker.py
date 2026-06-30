@@ -66,7 +66,7 @@ def set_worker(worker: WorkerPool | None) -> None:
 
 
 async def enqueue_batch(
-    db_path: Path,
+    db_url: str | None | Path,
     tenant_id: int,
     brand_id: int,
     spec: CombinationSpec,
@@ -75,7 +75,7 @@ async def enqueue_batch(
     """Crea un batch de renderizado combinatorio en la DB y lo encola.
 
     Args:
-        db_path: Ruta al archivo SQLite
+        db_url: URL de BD (SQLite o Postgres)
         tenant_id: ID del tenant propietario
         brand_id: ID del brand (ya validado que pertenece al tenant)
         spec: CombinationSpec con brand, ejes a permutar, etc.
@@ -95,7 +95,7 @@ async def enqueue_batch(
     spec_serializable.validate()
 
     batch = create_batch(
-        db_path,
+        db_url,
         tenant_id,
         brand_id,
         spec=asdict(spec_serializable),
@@ -131,12 +131,12 @@ async def job_events(batch_id: int) -> AsyncGenerator[str, None]:
         yield f"data: {payload}\n\n"
         return
 
-    db_path = worker.db_path
+    db_url = worker.db_url
 
     # Obtener tenant_id del batch para scoping en queries subsecuentes.
     tenant_id = await worker._run_db_operation(
         "load job event tenant",
-        lambda: _get_batch_tenant_id(db_path, batch_id),
+        lambda: _get_batch_tenant_id(db_url, batch_id),
     )
     if tenant_id is None:
         payload = json.dumps(
@@ -159,7 +159,7 @@ async def job_events(batch_id: int) -> AsyncGenerator[str, None]:
     while worker.running:
         batch = await worker._run_db_operation(
             "load job event batch",
-            lambda: get_batch(db_path, tenant_id, batch_id),
+            lambda: get_batch(db_url, tenant_id, batch_id),
         )
         if batch is None:
             payload = json.dumps(
@@ -196,7 +196,7 @@ async def job_events(batch_id: int) -> AsyncGenerator[str, None]:
         if status == "completed":
             variations = await worker._run_db_operation(
                 "load job event variations",
-                lambda: list_variations(db_path, tenant_id, batch_id=batch_id),
+                lambda: list_variations(db_url, tenant_id, batch_id=batch_id),
             )
             payload = json.dumps(
                 {
@@ -274,9 +274,9 @@ def _category_for(asset_type: str, marca: dict[str, Any]) -> str:
     return get_category_for_asset_type(asset_type, is_prizma) or "logos"
 
 
-def _get_batch_tenant_id(db_path: Path, batch_id: int) -> int | None:
+def _get_batch_tenant_id(db_url: str | None | Path, batch_id: int) -> int | None:
     """Devuelve tenant_id de un batch, o None si no existe."""
-    with connect(db_path) as con:
+    with connect(db_url) as con:
         row = con.execute("SELECT tenant_id FROM batches WHERE id = ?", (batch_id,)).fetchone()
     if row is None:
         return None
@@ -288,7 +288,7 @@ class WorkerPool:
 
     Atributos:
         queue: asyncio.Queue[int] con batch IDs por procesar
-        db_path: Path al archivo SQLite compartido
+        db_url: URL de BD (SQLite o Postgres)
         max_concurrent: límite de trabajos simultáneos
         running: flag de control de ciclo de vida
         _pending_batches: dict[int, dict] con progreso en vivo (para SSE)
@@ -296,12 +296,12 @@ class WorkerPool:
 
     def __init__(
         self,
-        db_path: Path,
+        db_url: str | None | Path,
         max_concurrent_jobs: int = 4,
         axes_config_path: Path | None = None,
         storage: StorageBackend | None = None,
     ) -> None:
-        self.db_path = db_path
+        self.db_url = db_url
         self.max_concurrent = max(1, int(max_concurrent_jobs))
         self.queue: asyncio.Queue[int] = asyncio.Queue()
         self.running = False
@@ -404,7 +404,7 @@ class WorkerPool:
 
     def _load_pending_batch_ids(self) -> list[int]:
         """Carga IDs pending en orden FIFO desde SQLite."""
-        with connect(self.db_path) as con:
+        with connect(self.db_url) as con:
             rows = con.execute(
                 "SELECT id FROM batches WHERE status = 'pending' ORDER BY id ASC LIMIT ?",
                 (self.max_concurrent * 2,),
@@ -493,7 +493,7 @@ class WorkerPool:
             await self._run_db_operation(
                 "mark batch failed",
                 lambda: update_batch_status(
-                    self.db_path,
+                    self.db_url,
                     batch_id,
                     "failed",
                     tenant_id=tenant_id,
@@ -507,11 +507,11 @@ class WorkerPool:
         marca como 'failed' y no se escriben variaciones parciales.
         Soporta cancelación: verifica el status del batch entre renders.
         """
-        db_path = self.db_path
+        db_url = self.db_url
 
         loaded = await self._run_db_operation(
             "load batch context",
-            lambda: self._load_batch_context(batch_id, db_path),
+            lambda: self._load_batch_context(batch_id, db_url),
         )
         if loaded is None:
             return
@@ -519,7 +519,7 @@ class WorkerPool:
 
         axes_config = await self._run_db_operation(
             "load axes config",
-            lambda: self._load_axes_config(batch_id, db_path, tenant_id),
+            lambda: self._load_axes_config(batch_id, db_url, tenant_id),
         )
         if axes_config is None:
             return
@@ -543,7 +543,7 @@ class WorkerPool:
             # mismo directorio donde render_asset escribió los PNG.
             category = _category_for(asset_type, marca)
 
-            if await self._is_cancelled_async(db_path, batch_id):
+            if await self._is_cancelled_async(db_url, batch_id):
                 logger.info(
                     "Batch %d cancelado antes de renderizar asset_type %s",
                     batch_id,
@@ -565,7 +565,7 @@ class WorkerPool:
 
             ranked = await self._render_and_rank(
                 batch_id,
-                db_path,
+                db_url,
                 tenant_id,
                 spec_for_type,
                 plan,
@@ -586,20 +586,20 @@ class WorkerPool:
             self._pending_batches.setdefault(batch_id, {})["ranked"] = ranked_total
             ranked_by_category.append((category, ranked))
 
-        if await self._is_cancelled_async(db_path, batch_id):
+        if await self._is_cancelled_async(db_url, batch_id):
             logger.info("Batch %d cancelado antes de persistir variaciones", batch_id)
             return
 
-        await self._persist_variations(batch_id, db_path, tenant_id, brand_id, ranked_by_category)
+        await self._persist_variations(batch_id, db_url, tenant_id, brand_id, ranked_by_category)
 
     # ── Helpers de _process_batch (extraídos para reducir complejidad) ─────
 
     def _load_batch_context(
-        self, batch_id: int, db_path: Path
+        self, batch_id: int, db_url: str | None | Path
     ) -> tuple[int, int, CombinationSpec, dict[str, Any]] | None:
         """Carga batch, spec, brand y devuelve (tenant_id, brand_id, spec, marca)."""
         try:
-            with connect(db_path) as con:
+            with connect(db_url) as con:
                 row = con.execute("SELECT * FROM batches WHERE id = ?", (batch_id,)).fetchone()
             if row is None:
                 logger.error("Batch %d no encontrado", batch_id)
@@ -610,26 +610,26 @@ class WorkerPool:
         except Exception as exc:
             logger.exception("Error al cargar batch %d: %s", batch_id, exc)
             with contextlib.suppress(Exception):
-                update_batch_status(db_path, batch_id, "failed")
+                update_batch_status(db_url, batch_id, "failed")
             return None
 
-        update_batch_status(db_path, batch_id, "running", tenant_id=tenant_id)
+        update_batch_status(db_url, batch_id, "running", tenant_id=tenant_id)
 
         try:
             spec_dict = json.loads(str(batch_dict.get("spec_json", "{}")))
             spec = _spec_from_dict(spec_dict)
         except Exception as exc:
             logger.exception("Error al parsear spec del batch %d: %s", batch_id, exc)
-            update_batch_status(db_path, batch_id, "failed", tenant_id=tenant_id)
+            update_batch_status(db_url, batch_id, "failed", tenant_id=tenant_id)
             return None
 
         try:
-            brand_row = get_brand(db_path, tenant_id, brand_id)
+            brand_row = get_brand(db_url, tenant_id, brand_id)
             if brand_row is None:
                 raise KeyError(f"Brand {brand_id} no pertenece al tenant {tenant_id}")
         except Exception as exc:
             logger.exception("Error al cargar brand batch %d: %s", batch_id, exc)
-            update_batch_status(db_path, batch_id, "failed", tenant_id=tenant_id)
+            update_batch_status(db_url, batch_id, "failed", tenant_id=tenant_id)
             return None
 
         try:
@@ -648,12 +648,12 @@ class WorkerPool:
                 }
         except Exception as exc:
             logger.exception("Error al cargar JSON de marca batch %d: %s", batch_id, exc)
-            update_batch_status(db_path, batch_id, "failed", tenant_id=tenant_id)
+            update_batch_status(db_url, batch_id, "failed", tenant_id=tenant_id)
             return None
 
         return tenant_id, brand_id, spec, marca
 
-    def _load_axes_config(self, batch_id: int, db_path: Path, tenant_id: int) -> AxesConfig | None:
+    def _load_axes_config(self, batch_id: int, db_url: str | None | Path, tenant_id: int) -> AxesConfig | None:
         """Carga AxesConfig desde disco. None si falla (ya marca failed)."""
         try:
             if self._axes_config_path is not None:
@@ -663,13 +663,13 @@ class WorkerPool:
             return load_axes_config(ROOT / "config" / "axes.json")
         except Exception as exc:
             logger.exception("Error al cargar axes_config batch %d: %s", batch_id, exc)
-            update_batch_status(db_path, batch_id, "failed", tenant_id=tenant_id)
+            update_batch_status(db_url, batch_id, "failed", tenant_id=tenant_id)
             return None
 
     async def _render_and_rank(
         self,
         batch_id: int,
-        db_path: Path,
+        db_url: str | None | Path,
         tenant_id: int,
         spec: CombinationSpec,
         plan: Any,  # CombinationPlan
@@ -698,7 +698,7 @@ class WorkerPool:
                 )
 
                 for combination in plan.combinations:
-                    if await self._is_cancelled_async(db_path, batch_id):
+                    if await self._is_cancelled_async(db_url, batch_id):
                         logger.info(
                             "Batch %d cancelado durante renderizado (combo %d)",
                             batch_id,
@@ -782,7 +782,7 @@ class WorkerPool:
     async def _persist_variations(
         self,
         batch_id: int,
-        db_path: Path,
+        db_url: str | None | Path,
         tenant_id: int,
         brand_id: int,
         ranked_by_category: list[tuple[str, list[VariationScore]]],
@@ -795,7 +795,7 @@ class WorkerPool:
                 "persist variations",
                 lambda: self._write_variations(
                     batch_id,
-                    db_path,
+                    db_url,
                     tenant_id,
                     brand_id,
                     ranked_by_category,
@@ -820,7 +820,7 @@ class WorkerPool:
     def _write_variations(
         self,
         batch_id: int,
-        db_path: Path,
+        db_url: str | None | Path,
         tenant_id: int,
         brand_id: int,
         ranked_by_category: list[tuple[str, list[VariationScore]]],
@@ -829,7 +829,7 @@ class WorkerPool:
     ) -> None:
         """Escribe variaciones y status final dentro de una operación síncrona acotada."""
         now = int(time.time())
-        with connect(db_path) as con:
+        with connect(db_url) as con:
             for category, ranked in ranked_by_category:
                 for vs in ranked:
                     # deterministic_seed devuelve uint64 [0, 2**64); SQLite INTEGER es
@@ -883,22 +883,22 @@ class WorkerPool:
             if cursor.rowcount == 0:
                 raise KeyError(f"batch {batch_id} no pertenece al tenant {tenant_id}")
 
-    async def _is_cancelled_async(self, db_path: Path, batch_id: int) -> bool:
+    async def _is_cancelled_async(self, db_url: str | None | Path, batch_id: int) -> bool:
         """Verifica cancelación sin bloquear el event loop."""
         try:
             return await self._run_db_operation(
                 "check batch cancellation",
-                lambda: self._is_cancelled(db_path, batch_id),
+                lambda: self._is_cancelled(db_url, batch_id),
             )
         except Exception as exc:
             logger.warning("No se pudo verificar cancelación batch %d: %s", batch_id, exc)
             return False
 
     @staticmethod
-    def _is_cancelled(db_path: Path, batch_id: int) -> bool:
+    def _is_cancelled(db_url: str | None | Path, batch_id: int) -> bool:
         """Verifica si el batch fue cancelado desde la API."""
         try:
-            with connect(db_path) as con:
+            with connect(db_url) as con:
                 row = con.execute("SELECT status FROM batches WHERE id = ?", (batch_id,)).fetchone()
             return row is not None and str(row["status"]) == "cancelled"
         except Exception:

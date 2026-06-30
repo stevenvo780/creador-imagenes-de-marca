@@ -160,7 +160,7 @@ def wizard_brands(
 ) -> dict[str, Any]:
     """Brands del tenant disponibles como base de un batch."""
     settings = get_settings(request)
-    rows = list_brands(settings.sqlite_path, user["tenant_id"])
+    rows = list_brands(settings.db_url, user["tenant_id"])
     return {"items": [brand_to_dict(r) for r in rows]}
 
 

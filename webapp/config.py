@@ -38,16 +38,36 @@ def _get_job_timeout() -> int:
     return int(os.environ.get("EIKON_JOB_TIMEOUT", "600"))
 
 
+def _get_db_url() -> str | None:
+    """Lee DATABASE_URL del env.
+
+    Si está seteado y contiene "postgresql://", usa Postgres.
+    Si no, usa SQLite local (data/webapp/eikon.db).
+    """
+    db_url = os.environ.get("DATABASE_URL")
+    if db_url:
+        return db_url
+    # Default: SQLite local
+    return None
+
+
 @dataclass(frozen=True)
 class Settings:
     data_root: Path = DATA_ROOT
-    sqlite_path: Path = DATA_ROOT / "eikon.db"
+    sqlite_path: Path = DATA_ROOT / "eikon.db"  # Legacy, para compat
+    db_url: str | None = field(default_factory=_get_db_url)
     jwt_secret: str = field(default_factory=_get_jwt_secret)
     jwt_ttl_seconds: int = field(default_factory=_get_jwt_ttl)
     cookie_name: str = "eikon_jwt"
     cookie_secure: bool = field(default_factory=_get_cookie_secure)
     max_concurrent_jobs: int = field(default_factory=_get_max_concurrent_jobs)
     job_timeout_seconds: int = field(default_factory=_get_job_timeout)
+
+    def __post_init__(self) -> None:
+        """Si db_url es None pero sqlite_path está seteado, usa sqlite_path como db_url."""
+        # Dataclass frozen=True requiere object.__setattr__
+        if self.db_url is None and self.sqlite_path != DATA_ROOT / "eikon.db":
+            object.__setattr__(self, "db_url", str(self.sqlite_path))
 
 
 def get_settings() -> Settings:
