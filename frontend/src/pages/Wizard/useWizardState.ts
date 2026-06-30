@@ -29,8 +29,8 @@ export function useWizardState() {
     currentStep: "brand",
     formData: {
       brandId: "",
-      // Default: símbolo + logo con símbolo (más útil que solo isotipo)
-      assetTypes: ["isotipo", "logo_symbol_color"],
+      // Default: símbolo + logo horizontal (ambos válidos en taxonomy.json)
+      assetTypes: ["isotipo", "lockup_horizontal"],
       // isotype_style arranca en "lettermark" (excluir "none" por defecto)
       fixed: { isotype_style: "lettermark" },
       permuted: [],
@@ -87,7 +87,7 @@ export function useWizardState() {
       currentStep: "brand",
       formData: {
         brandId: "",
-        assetTypes: ["isotipo", "logo_symbol_color"],
+        assetTypes: ["isotipo", "lockup_horizontal"],
         fixed: { isotype_style: "lettermark" },
         permuted: [],
         count: 16,

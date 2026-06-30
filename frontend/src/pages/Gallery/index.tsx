@@ -3,8 +3,11 @@
  *
  * Muestra las variaciones generadas en un grid de "láminas enmarcadas".
  * Permite:
- *   - Filtrar por Marca y por Generación.
- *   - Ordenar por Calidad (mejores primero) o Más recientes.
+ *   - Filtrar por Marca, Generación y Familia de formato — los dos primeros
+ *     pasan como parámetros al backend (server-side); la familia se aplica
+ *     en cliente sobre el resultado ya ordenado.
+ *   - Ordenar por Calidad o Más recientes — enviado al backend como
+ *     order=calidad | order=recientes.
  *   - Selección múltiple + descarga en .zip desde la barra flotante.
  *   - Click en imagen → lightbox de detalle con descarga individual.
  *
@@ -12,9 +15,9 @@
  *   score      → Calidad (estrellas / "Recomendado")
  *   batch_id   → Generación
  *   brand_id   → Marca
- *   variation  → variación
+ *   category   → Familia (logos / banners / tarjetas / redes / papelería)
  */
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import {
@@ -23,19 +26,33 @@ import {
   gallery,
   ApiError,
   type Brand,
+  type GalleryOrder,
   type Variation,
 } from '../../api/client';
 import { Button, EmptyState, SkeletonCard } from '../../components';
-import { toMillis } from '../../utils/format';
 import { VariationCard } from './VariationCard';
 import { Lightbox } from './Lightbox';
 
-type SortKey = 'score_desc' | 'recent';
+// ── Constantes de dominio ─────────────────────────────────────────────────────
+
+type SortKey = GalleryOrder; // 'calidad' | 'recientes'
+
+/** Etiquetas en español para las familias de formato que devuelve el backend. */
+const CATEGORY_LABELS: Record<string, string> = {
+  logos: 'Logos',
+  banners: 'Banners',
+  cards: 'Tarjetas',
+  og: 'Redes / OG',
+  stationery: 'Papelería',
+};
+
+// ── Componente principal ──────────────────────────────────────────────────────
 
 export function GalleryPage() {
   // ── Datos ─────────────────────────────────────────────────────────────────
   const [items, setItems] = useState<Variation[]>([]);
   const [brandList, setBrandList] = useState<Brand[]>([]);
+  /** true durante la primera carga o cualquier refetch por cambio de filtro. */
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -45,12 +62,17 @@ export function GalleryPage() {
   const initialBatch = (() => {
     const raw = searchParams.get('batch');
     const n = raw === null ? NaN : Number(raw);
-    return Number.isFinite(n) && n > 0 ? n : '';
+    return Number.isFinite(n) && n > 0 ? n : ('' as const);
   })();
 
   const [filterBrand, setFilterBrand] = useState<number | ''>('');
   const [filterBatch, setFilterBatch] = useState<number | ''>(initialBatch);
-  const [sortBy, setSortBy] = useState<SortKey>('score_desc');
+  /**
+   * filterCategory es client-side: no lo pasamos al backend porque el endpoint
+   * no lo soporta; se aplica como .filter() sobre los items ya devueltos.
+   */
+  const [filterCategory, setFilterCategory] = useState<string>('');
+  const [sortBy, setSortBy] = useState<SortKey>('calidad');
 
   // ── Selección y ZIP ───────────────────────────────────────────────────────
   const [selected, setSelected] = useState<Set<number>>(new Set());
@@ -58,19 +80,40 @@ export function GalleryPage() {
 
   // ── Lightbox ──────────────────────────────────────────────────────────────
   const [lightboxId, setLightboxId] = useState<number | null>(null);
-
-  // Por variación: indica si está descargándose individualmente
   const [downloading, setDownloading] = useState<Set<number>>(new Set());
 
-  // ── Carga inicial (paralela) ───────────────────────────────────────────────
+  // ── Carga de marcas (una sola vez) ────────────────────────────────────────
   useEffect(() => {
     let cancelled = false;
+    brandsApi
+      .list()
+      .then((res) => {
+        if (!cancelled) setBrandList(res.items);
+      })
+      .catch(() => {
+        // Las marcas son opcionales para mostrar nombres; no bloqueamos si fallan.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-    Promise.all([gallery.list(), brandsApi.list()])
-      .then(([galleryRes, brandsRes]) => {
+  // ── Carga de variaciones (server-side: marca, generación y orden) ─────────
+  // Se re-ejecuta cada vez que cambia filterBrand, filterBatch o sortBy.
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError('');
+
+    gallery
+      .list({
+        brandId: filterBrand !== '' ? filterBrand : undefined,
+        batchId: filterBatch !== '' ? filterBatch : undefined,
+        order: sortBy,
+      })
+      .then((res) => {
         if (cancelled) return;
-        setItems(galleryRes.items);
-        setBrandList(brandsRes.items);
+        setItems(res.items);
       })
       .catch((err) => {
         if (cancelled) return;
@@ -87,15 +130,27 @@ export function GalleryPage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [filterBrand, filterBatch, sortBy]);
 
-  // ── Lotes únicos (para filtro "Generación") ───────────────────────────────
+  // ── Lotes únicos (para el filtro "Generación") ────────────────────────────
+  // Se derivan de los items actuales (ya filtrados por marca/batch en el backend).
   const batchIds = useMemo<number[]>(() => {
     const ids = new Set<number>();
     for (const v of items) {
       if (v.batch_id !== null) ids.add(v.batch_id);
     }
     return [...ids].sort((a, b) => b - a); // más reciente primero
+  }, [items]);
+
+  // ── Categorías disponibles (para el filtro "Familia") ────────────────────
+  const availableCategories = useMemo<string[]>(() => {
+    const cats = new Set<string>();
+    for (const v of items) {
+      if (v.category) cats.add(v.category);
+    }
+    // Orden canónico fijo para que el dropdown sea predecible
+    const ORDER = ['logos', 'banners', 'cards', 'og', 'stationery'];
+    return ORDER.filter((c) => cats.has(c));
   }, [items]);
 
   // ── Mapa id → nombre de marca ─────────────────────────────────────────────
@@ -105,36 +160,46 @@ export function GalleryPage() {
     return m;
   }, [brandList]);
 
-  // ── Filtrado + orden memoizado ────────────────────────────────────────────
+  // ── Filtrado client-side por familia ──────────────────────────────────────
+  // brand/batch/order ya vienen filtrados/ordenados del servidor;
+  // aquí sólo aplicamos el filtro de categoría adicional.
   const visibleItems = useMemo<Variation[]>(() => {
-    let result = items;
-
-    if (filterBrand !== '')
-      result = result.filter((v) => v.brand_id === filterBrand);
-
-    if (filterBatch !== '')
-      result = result.filter((v) => v.batch_id === filterBatch);
-
-    const sorted = [...result];
-
-    if (sortBy === 'score_desc') {
-      sorted.sort(
-        (a, b) => (b.score ?? -Infinity) - (a.score ?? -Infinity),
-      );
-    } else {
-      sorted.sort((a, b) => toMillis(b.created_at) - toMillis(a.created_at));
-    }
-
-    return sorted;
-  }, [items, filterBrand, filterBatch, sortBy]);
+    if (filterCategory === '') return items;
+    return items.filter((v) => v.category === filterCategory);
+  }, [items, filterCategory]);
 
   // ── Variación del lightbox ─────────────────────────────────────────────────
   const lightboxVariation = useMemo<Variation | null>(
-    () => (lightboxId !== null ? (items.find((v) => v.id === lightboxId) ?? null) : null),
+    () =>
+      lightboxId !== null ? (items.find((v) => v.id === lightboxId) ?? null) : null,
     [lightboxId, items],
   );
 
   // ── Handlers ──────────────────────────────────────────────────────────────
+
+  const handleBrandChange = useCallback((value: number | '') => {
+    setFilterBrand(value);
+    // Al cambiar marca, el batch activo puede no pertenecer a ella → se limpia.
+    setFilterBatch('');
+    setFilterCategory('');
+    setSelected(new Set());
+  }, []);
+
+  const handleBatchChange = useCallback((value: number | '') => {
+    setFilterBatch(value);
+    setFilterCategory('');
+    setSelected(new Set());
+  }, []);
+
+  const handleCategoryChange = useCallback((value: string) => {
+    setFilterCategory(value);
+    setSelected(new Set());
+  }, []);
+
+  const handleSortChange = useCallback((value: SortKey) => {
+    setSortBy(value);
+    setSelected(new Set());
+  }, []);
 
   const toggleSelect = useCallback((id: number) => {
     setSelected((prev) => {
@@ -172,13 +237,9 @@ export function GalleryPage() {
   const handleDownloadOne = useCallback(async (id: number) => {
     setDownloading((prev) => new Set(prev).add(id));
     try {
-      const res = await fetch(downloads.fileUrl(id), {
-        credentials: 'include',
-      });
+      const res = await fetch(downloads.fileUrl(id), { credentials: 'include' });
       if (!res.ok) {
-        const json = await res.json().catch(() => ({
-          detail: res.statusText,
-        }));
+        const json = await res.json().catch(() => ({ detail: res.statusText }));
         throw new ApiError(
           res.status,
           (json as { detail?: string })?.detail ?? 'Error al descargar.',
@@ -258,6 +319,8 @@ export function GalleryPage() {
   const allVisibleSelected =
     visibleItems.length > 0 && visibleItems.every((v) => selected.has(v.id));
 
+  const hasItems = items.length > 0;
+
   return (
     <>
       {/* Padding inferior para que la barra flotante no tape el último card */}
@@ -287,14 +350,11 @@ export function GalleryPage() {
             Galería
           </h1>
 
-          {items.length > 0 && (
+          {hasItems && (
             <span
               aria-live="polite"
               aria-atomic="true"
-              style={{
-                fontSize: 'var(--font-size-sm)',
-                color: 'var(--slate-500)',
-              }}
+              style={{ fontSize: 'var(--font-size-sm)', color: 'var(--slate-500)' }}
             >
               {visibleItems.length}{' '}
               {visibleItems.length === 1 ? 'variación' : 'variaciones'}
@@ -302,8 +362,8 @@ export function GalleryPage() {
           )}
         </div>
 
-        {/* Barra de controles */}
-        {items.length > 0 && (
+        {/* Barra de controles (visible cuando hay datos o filtros activos) */}
+        {(hasItems || filterBrand !== '' || filterBatch !== '') && (
           <div
             style={{
               display: 'flex',
@@ -318,32 +378,15 @@ export function GalleryPage() {
               boxShadow: 'var(--shadow-sm)',
             }}
           >
-            {/* Filtro: Marca */}
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 'var(--space-1)',
-              }}
-            >
-              <label
-                htmlFor="gallery-brand"
-                style={{
-                  fontSize: 'var(--font-size-xs)',
-                  fontWeight: 600,
-                  color: 'var(--slate-500)',
-                }}
-              >
-                Marca
-              </label>
+            {/* ── Filtro: Marca (server-side) ── */}
+            <FilterGroup id="gallery-brand" label="Marca">
               <select
                 id="gallery-brand"
                 value={filterBrand}
                 onChange={(e) =>
-                  setFilterBrand(
-                    e.target.value === '' ? '' : Number(e.target.value),
-                  )
+                  handleBrandChange(e.target.value === '' ? '' : Number(e.target.value))
                 }
+                aria-label="Filtrar por marca"
                 style={selectStyle}
               >
                 <option value="">Todas las marcas</option>
@@ -353,35 +396,20 @@ export function GalleryPage() {
                   </option>
                 ))}
               </select>
-            </div>
+            </FilterGroup>
 
-            {/* Filtro: Generación (solo si hay más de uno) */}
+            {/* ── Filtro: Generación (server-side, sólo si hay más de uno) ── */}
             {batchIds.length > 1 && (
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 'var(--space-1)',
-                }}
-              >
-                <label
-                  htmlFor="gallery-batch"
-                  style={{
-                    fontSize: 'var(--font-size-xs)',
-                    fontWeight: 600,
-                    color: 'var(--slate-500)',
-                  }}
-                >
-                  Generación
-                </label>
+              <FilterGroup id="gallery-batch" label="Generación">
                 <select
                   id="gallery-batch"
                   value={filterBatch}
                   onChange={(e) =>
-                    setFilterBatch(
+                    handleBatchChange(
                       e.target.value === '' ? '' : Number(e.target.value),
                     )
                   }
+                  aria-label="Filtrar por generación"
                   style={selectStyle}
                 >
                   <option value="">Todas las generaciones</option>
@@ -391,39 +419,44 @@ export function GalleryPage() {
                     </option>
                   ))}
                 </select>
-              </div>
+              </FilterGroup>
             )}
 
-            {/* Ordenar por */}
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 'var(--space-1)',
-              }}
-            >
-              <label
-                htmlFor="gallery-sort"
-                style={{
-                  fontSize: 'var(--font-size-xs)',
-                  fontWeight: 600,
-                  color: 'var(--slate-500)',
-                }}
-              >
-                Ordenar por
-              </label>
+            {/* ── Filtro: Familia / Formato (client-side sobre resultado del servidor) ── */}
+            {availableCategories.length > 1 && (
+              <FilterGroup id="gallery-category" label="Familia">
+                <select
+                  id="gallery-category"
+                  value={filterCategory}
+                  onChange={(e) => handleCategoryChange(e.target.value)}
+                  aria-label="Filtrar por familia de formato"
+                  style={selectStyle}
+                >
+                  <option value="">Todas las familias</option>
+                  {availableCategories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {CATEGORY_LABELS[cat] ?? cat}
+                    </option>
+                  ))}
+                </select>
+              </FilterGroup>
+            )}
+
+            {/* ── Ordenar por (server-side) ── */}
+            <FilterGroup id="gallery-sort" label="Ordenar por">
               <select
                 id="gallery-sort"
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as SortKey)}
+                onChange={(e) => handleSortChange(e.target.value as SortKey)}
+                aria-label="Ordenar variaciones"
                 style={selectStyle}
               >
-                <option value="score_desc">Calidad (mejores primero)</option>
-                <option value="recent">Más recientes</option>
+                <option value="calidad">Calidad (mejores primero)</option>
+                <option value="recientes">Más recientes</option>
               </select>
-            </div>
+            </FilterGroup>
 
-            {/* Seleccionar / Deseleccionar todo */}
+            {/* ── Seleccionar / Deseleccionar todo (visible) ── */}
             {visibleItems.length > 0 && (
               <button
                 type="button"
@@ -449,8 +482,40 @@ export function GalleryPage() {
           </div>
         )}
 
-        {/* Estado vacío global */}
-        {items.length === 0 && (
+        {/* ── Chips de filtros activos ── */}
+        {(filterBrand !== '' || filterBatch !== '' || filterCategory !== '') && (
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 'var(--space-2)',
+              marginBottom: 'var(--space-4)',
+            }}
+            aria-label="Filtros activos"
+          >
+            {filterBrand !== '' && (
+              <FilterChip
+                label={`Marca: ${brandMap.get(filterBrand as number) ?? `#${filterBrand as number}`}`}
+                onRemove={() => handleBrandChange('')}
+              />
+            )}
+            {filterBatch !== '' && (
+              <FilterChip
+                label={`Generación #${filterBatch as number}`}
+                onRemove={() => handleBatchChange('')}
+              />
+            )}
+            {filterCategory !== '' && (
+              <FilterChip
+                label={`Familia: ${CATEGORY_LABELS[filterCategory] ?? filterCategory}`}
+                onRemove={() => handleCategoryChange('')}
+              />
+            )}
+          </div>
+        )}
+
+        {/* ── Estado vacío global ── */}
+        {!hasItems && filterBrand === '' && filterBatch === '' && (
           <EmptyState
             title="Todavía no generaste nada"
             description="Creá tu primera marca y generá variaciones desde la sección Crear."
@@ -476,8 +541,8 @@ export function GalleryPage() {
           />
         )}
 
-        {/* Estado vacío por filtro */}
-        {items.length > 0 && visibleItems.length === 0 && (
+        {/* ── Estado vacío por filtro de servidor ── */}
+        {!hasItems && (filterBrand !== '' || filterBatch !== '') && (
           <EmptyState
             title="Sin resultados"
             description="Ninguna variación coincide con los filtros seleccionados. Probá con otras opciones."
@@ -485,7 +550,16 @@ export function GalleryPage() {
           />
         )}
 
-        {/* Grid de variaciones */}
+        {/* ── Estado vacío por filtro de familia (client-side) ── */}
+        {hasItems && visibleItems.length === 0 && (
+          <EmptyState
+            title="Sin resultados en esta familia"
+            description={`No hay variaciones de tipo "${CATEGORY_LABELS[filterCategory] ?? filterCategory}" con los filtros actuales.`}
+            icon="🔍"
+          />
+        )}
+
+        {/* ── Grid de variaciones ── */}
         {visibleItems.length > 0 && (
           <ul
             style={{
@@ -503,6 +577,7 @@ export function GalleryPage() {
                 <VariationCard
                   variation={v}
                   brandName={brandMap.get(v.brand_id)}
+                  categoryLabel={v.category ? (CATEGORY_LABELS[v.category] ?? v.category) : undefined}
                   isSelected={selected.has(v.id)}
                   onToggleSelect={() => toggleSelect(v.id)}
                   onOpenLightbox={() => setLightboxId(v.id)}
@@ -515,7 +590,7 @@ export function GalleryPage() {
         )}
       </section>
 
-      {/* Barra de acciones flotante (aparece cuando hay selección) */}
+      {/* ── Barra de acciones flotante (aparece cuando hay selección) ── */}
       {selected.size > 0 && (
         <div
           role="region"
@@ -546,9 +621,7 @@ export function GalleryPage() {
             }}
           >
             {selected.size}{' '}
-            {selected.size === 1
-              ? 'variación seleccionada'
-              : 'variaciones seleccionadas'}
+            {selected.size === 1 ? 'variación seleccionada' : 'variaciones seleccionadas'}
           </span>
 
           <Button
@@ -582,21 +655,107 @@ export function GalleryPage() {
         </div>
       )}
 
-      {/* Lightbox de detalle */}
+      {/* ── Lightbox de detalle ── */}
       <Lightbox
         variation={lightboxVariation}
         brandName={
           lightboxVariation ? brandMap.get(lightboxVariation.brand_id) : undefined
         }
+        categoryLabel={
+          lightboxVariation?.category
+            ? (CATEGORY_LABELS[lightboxVariation.category] ?? lightboxVariation.category)
+            : undefined
+        }
         onClose={() => setLightboxId(null)}
         onDownload={() =>
-          lightboxId !== null
-            ? handleDownloadOne(lightboxId)
-            : Promise.resolve()
+          lightboxId !== null ? handleDownloadOne(lightboxId) : Promise.resolve()
         }
         downloading={lightboxId !== null && downloading.has(lightboxId)}
       />
     </>
+  );
+}
+
+// ── Sub-componentes de UI ──────────────────────────────────────────────────────
+
+/**
+ * FilterGroup — envuelve un label + su control en un div flex column.
+ * Reutilizado por todos los filtros del toolbar.
+ */
+function FilterGroup({
+  id,
+  label,
+  children,
+}: {
+  id: string;
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
+      <label
+        htmlFor={id}
+        style={{
+          fontSize: 'var(--font-size-xs)',
+          fontWeight: 600,
+          color: 'var(--slate-500)',
+        }}
+      >
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
+/**
+ * FilterChip — pastilla removible que indica un filtro activo.
+ * Accesible: botón con aria-label descriptivo.
+ */
+function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
+  return (
+    <span
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 4,
+        padding: '2px 6px 2px 8px',
+        borderRadius: 'var(--radius-pill)',
+        fontSize: 'var(--font-size-xs)',
+        fontWeight: 600,
+        lineHeight: 1.5,
+        whiteSpace: 'nowrap',
+        background: 'var(--mist)',
+        color: 'var(--slate-700)',
+        border: '1px solid var(--line)',
+      }}
+    >
+      {label}
+      <button
+        type="button"
+        onClick={onRemove}
+        aria-label={`Quitar filtro: ${label}`}
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: 16,
+          height: 16,
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          color: 'var(--slate-500)',
+          fontSize: 10,
+          fontWeight: 700,
+          borderRadius: '50%',
+          padding: 0,
+          lineHeight: 1,
+          transition: 'color var(--transition-fast)',
+        }}
+      >
+        ✕
+      </button>
+    </span>
   );
 }
 

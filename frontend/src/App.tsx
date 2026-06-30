@@ -9,6 +9,7 @@ import './styles/theme.css';
 import { useSession }        from './auth/useSession';
 import { LoginPage }         from './auth/LoginPage';
 import { BrandsPage }        from './pages/BrandsPage';
+import { BrandEditorPage }   from './pages/Brands/BrandEditorPage';
 import { GalleryPage }       from './pages/GalleryPage';
 import { BatchWizardPage }   from './pages/BatchWizardPage';
 import { BatchProgressPage } from './pages/BatchProgressPage';
@@ -67,6 +68,7 @@ export default function App() {
         <Routes>
           <Route path="/"                 element={<Navigate to="/brands" replace />} />
           <Route path="/brands"           element={<BrandsPage />} />
+          <Route path="/brands/:brandId/edit" element={<BrandEditorPage />} />
           <Route path="/batch"            element={<BatchWizardPage />} />
           <Route path="/batch/:batchId"   element={<BatchProgressPage />} />
           <Route path="/gallery"          element={<GalleryPage />} />

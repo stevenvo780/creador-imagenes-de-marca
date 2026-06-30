@@ -29,6 +29,9 @@ export function BatchProgressPage() {
   const [progress, setProgress] = useState<ProgressData>({ rendered: 0, ranked: 0 });
   const [uiStatus, setUiStatus] = useState<UiStatus>("loading");
   const [error, setError] = useState("");
+  // Errores no fatales (p.ej. fallo al descargar una variación).
+  const [downloadError, setDownloadError] = useState("");
+  const [downloadingId, setDownloadingId] = useState<number | null>(null);
 
   // Cargar la generación inicial
   useEffect(() => {
@@ -145,6 +148,8 @@ export function BatchProgressPage() {
   }, [uiStatus, batchId, variations.length]);
 
   async function handleDownloadVariation(v: Variation) {
+    setDownloadingId(v.id);
+    setDownloadError("");
     try {
       const res = await fetch(downloads.fileUrl(v.id), { credentials: "include" });
       if (!res.ok) throw new ApiError(res.status, "No pudimos descargar la imagen.");
@@ -156,7 +161,13 @@ export function BatchProgressPage() {
       a.click();
       URL.revokeObjectURL(url);
     } catch (err) {
-      alert(err instanceof ApiError ? err.detail : "No pudimos descargar la imagen.");
+      setDownloadError(
+        err instanceof ApiError
+          ? err.detail
+          : "No pudimos descargar la imagen. Reintentá en unos segundos.",
+      );
+    } finally {
+      setDownloadingId(null);
     }
   }
 
@@ -288,6 +299,54 @@ export function BatchProgressPage() {
             ¡Listas! {variations.length}{" "}
             {variations.length === 1 ? "variación" : "variaciones"}
           </h1>
+
+          {/* Banner de error de descarga (no fatal) — aria-live para AT. */}
+          {downloadError && (
+            <div
+              role="alert"
+              aria-live="assertive"
+              aria-atomic="true"
+              style={{
+                marginBottom: "var(--space-5)",
+                padding: "var(--space-3) var(--space-4)",
+                background: "var(--error-bg)",
+                color: "var(--error)",
+                border: "1px solid var(--error)",
+                borderRadius: "var(--radius-md)",
+                fontSize: "var(--font-size-sm)",
+                display: "flex",
+                alignItems: "center",
+                gap: "var(--space-3)",
+              }}
+            >
+              <span aria-hidden="true" style={{ fontWeight: 700 }}>✕</span>
+              <span style={{ flex: 1 }}>{downloadError}</span>
+              <button
+                type="button"
+                onClick={() => setDownloadError("")}
+                aria-label="Cerrar aviso"
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  color: "inherit",
+                  cursor: "pointer",
+                  fontSize: "var(--font-size-base)",
+                  lineHeight: 1,
+                  minWidth: 44,
+                  minHeight: 44,
+                  padding: "var(--space-2)",
+                  borderRadius: "var(--radius-sm)",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                ✕
+              </button>
+            </div>
+          )}
+
           <ul
             style={{
               display: "grid",
@@ -341,23 +400,14 @@ export function BatchProgressPage() {
                   }}
                 >
                   <Stars score={v.score} />
-                  <button
-                    onClick={() => handleDownloadVariation(v)}
-                    style={{
-                      padding: "var(--space-1) var(--space-3)",
-                      background: "var(--teal-600)",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "var(--radius-md)",
-                      fontSize: "var(--font-size-xs)",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                      whiteSpace: "nowrap",
-                    }}
+                  <Button
+                    size="sm"
+                    onClick={() => void handleDownloadVariation(v)}
+                    busy={downloadingId === v.id}
                     aria-label={`Descargar variación ${v.id}`}
                   >
-                    ↓ Descargar
-                  </button>
+                    {downloadingId === v.id ? "Descargando…" : "Descargar"}
+                  </Button>
                 </div>
               </li>
             ))}

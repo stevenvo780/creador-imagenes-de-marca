@@ -1,6 +1,33 @@
 // Central i18n module for eikon backend axis labels + option descriptions
 
 export const es = {
+  palette_keys: {
+    fondo: "Fondo",
+    texto: "Texto",
+    primario: "Primario",
+    acento: "Acento",
+    acento2: "Acento 2",
+  },
+  brand_editor: {
+    title: "Editar marca",
+    subtitle: "Ajustá el nombre, el texto del logo y la paleta de colores.",
+    section_name: "Datos básicos",
+    section_palette: "Paleta de colores",
+    name_label: "Nombre de la marca",
+    name_hint: "Lo ven tus usuarios en todas las pantallas.",
+    logo_text_label: "Texto del logo",
+    logo_text_hint: "Lo que se lee dentro del logo. Si lo dejás vacío, usamos el nombre.",
+    palette_hint: "Tocá el cuadrado para abrir el selector, o escribí el valor en hexadecimal (por ejemplo #1F8276).",
+    save: "Guardar cambios",
+    saving: "Guardando…",
+    cancel: "Cancelar",
+    back: "Volver a mis marcas",
+    load_error: "No pudimos cargar la marca. Volvé a intentarlo.",
+    save_error_invalid: "Revisá los colores: tienen que ser valores hexadecimales válidos (#RRGGBB).",
+    save_error_generic: "No pudimos guardar los cambios. Intentá de nuevo.",
+    save_success: "Cambios guardados.",
+  },
+
   palette_scheme: {
     label: "Paleta de color",
     options: {
@@ -81,11 +108,11 @@ export const es = {
 } as const;
 
 export function tLabel(axisId: string): string {
-  const axis = (es as Record<string, { label: string }>)[axisId];
+  const axis = (es as unknown as Record<string, { label: string }>)[axisId];
   return axis?.label ?? axisId;
 }
 
 export function tOption(axisId: string, optionId: string): string {
-  const axis = (es as Record<string, { options: Record<string, string> }>)[axisId];
+  const axis = (es as unknown as Record<string, { options: Record<string, string> }>)[axisId];
   return axis?.options[optionId] ?? optionId;
 }

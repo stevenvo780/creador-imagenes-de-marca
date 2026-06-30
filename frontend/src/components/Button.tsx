@@ -42,11 +42,16 @@ const sizeStyles: Record<
     padding: 'var(--space-1) var(--space-3)',
     fontSize: 'var(--font-size-sm)',
     borderRadius: 'var(--radius-sm)',
+    // sm se usa en cards densas; aún así garantiza tap target mínimo AA
+    // (WCAG 2.5.5 — 24px) sin desbalancear layouts compactos.
+    minHeight: 32,
   },
   md: {
     padding: 'var(--space-2) var(--space-5)',
     fontSize: 'var(--font-size-base)',
     borderRadius: 'var(--radius-md)',
+    // Tap target mínimo recomendado (Apple HIG / WCAG 2.5.5 AAA) en mobile.
+    minHeight: 44,
   },
 };
 

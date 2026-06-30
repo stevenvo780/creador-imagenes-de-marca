@@ -8,7 +8,7 @@
  * Lenguaje 100% humano: nada de "brand", "slug", "tenant".
  */
 import { type FormEvent, useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { brands as brandsApi, type Brand, ApiError } from "../api/client";
 import { Button, EmptyState, Modal, SkeletonCard } from "../components";
 import { formatDate, slugify } from "../utils/format";
@@ -412,28 +412,79 @@ function BrandCard({
           justifyContent: "space-between",
           gap: "var(--space-3)",
           marginTop: "auto",
+          flexWrap: "wrap",
         }}
       >
         <Button variant="primary" size="sm" onClick={onGenerate}>
           Generar variaciones
         </Button>
-        <button
-          type="button"
-          onClick={onDelete}
-          aria-label={`Eliminar la marca ${brand.name}`}
+        <div
           style={{
-            background: "none",
-            border: "none",
-            color: "var(--slate-500)",
-            fontSize: "var(--font-size-sm)",
-            cursor: "pointer",
-            padding: "var(--space-1) var(--space-2)",
-            borderRadius: "var(--radius-sm)",
-            textDecoration: "underline",
+            display: "flex",
+            alignItems: "center",
+            gap: "var(--space-2)",
           }}
         >
-          Eliminar
-        </button>
+          <Link
+            to={`/brands/${brand.id}/edit`}
+            aria-label={`Personalizar la marca ${brand.name}`}
+            style={{
+              color: "var(--slate-500)",
+              fontSize: "var(--font-size-sm)",
+              textDecoration: "underline",
+              padding: "var(--space-2) var(--space-3)",
+              borderRadius: "var(--radius-sm)",
+              minHeight: 44,
+              minWidth: 44,
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "color var(--transition-fast), background var(--transition-fast)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = "var(--ink)";
+              e.currentTarget.style.background = "var(--mist)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = "var(--slate-500)";
+              e.currentTarget.style.background = "transparent";
+            }}
+          >
+            Personalizar
+          </Link>
+          <button
+            type="button"
+            onClick={onDelete}
+            aria-label={`Eliminar la marca ${brand.name}`}
+            style={{
+              background: "none",
+              border: "none",
+              color: "var(--slate-500)",
+              fontSize: "var(--font-size-sm)",
+              cursor: "pointer",
+              padding: "var(--space-2) var(--space-3)",
+              borderRadius: "var(--radius-sm)",
+              textDecoration: "underline",
+              minHeight: 44,
+              minWidth: 44,
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "color var(--transition-fast), background var(--transition-fast)",
+              fontFamily: "inherit",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = "var(--error)";
+              e.currentTarget.style.background = "var(--mist)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = "var(--slate-500)";
+              e.currentTarget.style.background = "transparent";
+            }}
+          >
+            Eliminar
+          </button>
+        </div>
       </div>
     </article>
   );

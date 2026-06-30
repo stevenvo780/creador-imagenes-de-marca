@@ -52,10 +52,32 @@ def batch_to_dict(row: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+_KNOWN_CATEGORIES: frozenset[str] = frozenset({"logos", "banners", "cards", "og", "stationery"})
+
+
+def _category_from_path(output_path: str | None) -> str | None:
+    """Extrae la categoría de la variación desde su output_path absoluto.
+
+    El path almacenado sigue la estructura:
+        .../tenants/{tenant_id}/{marca}/{category}/{asset_type}/{batch_id}/combo_NNN.png
+    La categoría ocupa la posición -4 desde el final de los segmentos del path.
+    Retorna None si output_path es nulo o el segmento no es una categoría conocida.
+    """
+    if not output_path:
+        return None
+    parts = output_path.replace("\\", "/").split("/")
+    # [-1]=combo_NNN.png, [-2]=batch_id, [-3]=asset_type, [-4]=category
+    if len(parts) < 4:
+        return None
+    candidate = parts[-4]
+    return candidate if candidate in _KNOWN_CATEGORIES else None
+
+
 def variation_to_dict(row: dict[str, Any]) -> dict[str, Any]:
     """Serializa una fila de variations a JSON, con file_url de descarga.
 
     No expone output_path (ruta absoluta del servidor) ni tenant_id (dato interno).
+    Expone category derivada del output_path: logos | banners | cards | og | stationery.
     """
     var_id = row["id"]
     return {
@@ -65,6 +87,7 @@ def variation_to_dict(row: dict[str, Any]) -> dict[str, Any]:
         "axis_params": _loads(row.get("axis_params_json"), {}),
         "seed": row.get("seed"),
         "score": row.get("score"),
+        "category": _category_from_path(row.get("output_path")),
         "wcag": _loads(row.get("wcag_json"), None),
         "layout_status": row.get("layout_status"),
         "selected": bool(row.get("selected", 0)),

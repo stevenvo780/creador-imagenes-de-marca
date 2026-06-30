@@ -17,6 +17,9 @@ export type { FieldProps } from './Field';
 export { Input }       from './Input';
 export type { InputProps } from './Input';
 
+export { ColorPicker } from './ColorPicker';
+export type { ColorPickerProps } from './ColorPicker';
+
 export { SelectField } from './SelectField';
 export type { SelectFieldProps } from './SelectField';
 

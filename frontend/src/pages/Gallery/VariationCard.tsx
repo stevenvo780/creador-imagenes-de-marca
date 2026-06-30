@@ -18,6 +18,8 @@ export interface VariationCardProps {
   variation: Variation;
   /** Nombre legible de la marca a la que pertenece. */
   brandName?: string;
+  /** Etiqueta de familia en español (ej. "Logos", "Banners", "Tarjetas"). */
+  categoryLabel?: string;
   isSelected: boolean;
   onToggleSelect: () => void;
   onOpenLightbox: () => void;
@@ -28,6 +30,7 @@ export interface VariationCardProps {
 export function VariationCard({
   variation,
   brandName,
+  categoryLabel,
   isSelected,
   onToggleSelect,
   onOpenLightbox,
@@ -176,6 +179,20 @@ export function VariationCard({
               }}
             >
               {brandName}
+            </span>
+          )}
+          {categoryLabel && (
+            <span
+              aria-label={`Familia: ${categoryLabel}`}
+              style={{
+                fontSize: 10,
+                color: 'var(--teal-600)',
+                fontWeight: 600,
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase',
+              }}
+            >
+              {categoryLabel}
             </span>
           )}
           <Stars score={variation.score} />

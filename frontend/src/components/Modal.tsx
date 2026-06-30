@@ -148,14 +148,31 @@ export function Modal({
               onClick={onClose}
               aria-label="Cerrar"
               style={{
-                background: 'none',
+                background: 'transparent',
                 border: 'none',
                 cursor: 'pointer',
                 color: 'var(--slate-500)',
                 fontSize: 'var(--font-size-xl)',
                 lineHeight: 1,
-                padding: 'var(--space-1)',
+                // Tap target mínimo 44×44 (WCAG 2.5.5) — el contenido (✕)
+                // queda centrado dentro del área interactiva.
+                minWidth: 44,
+                minHeight: 44,
+                padding: 'var(--space-2)',
                 borderRadius: 'var(--radius-sm)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition:
+                  'color var(--transition-fast), background var(--transition-fast)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = 'var(--ink)';
+                e.currentTarget.style.background = 'var(--mist)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'var(--slate-500)';
+                e.currentTarget.style.background = 'transparent';
               }}
             >
               ✕

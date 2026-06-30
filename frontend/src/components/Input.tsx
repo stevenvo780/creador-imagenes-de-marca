@@ -15,6 +15,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const computedStyle: React.CSSProperties = {
       display: 'block',
       width: '100%',
+      minHeight: 44,
       padding: 'var(--space-2) var(--space-3)',
       fontFamily: 'var(--font-body)',
       fontSize: 'var(--font-size-base)',

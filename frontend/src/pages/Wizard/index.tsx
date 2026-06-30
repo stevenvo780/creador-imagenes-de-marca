@@ -86,10 +86,13 @@ export function WizardFlow() {
   const stepIndex = WIZARD_STEPS.indexOf(wizard.currentStep);
   const isReviewStep = wizard.currentStep === "review";
 
-  // Validación por paso: solo el paso de marca requiere selección antes de avanzar
+  // Validación por paso:
+  // - "brand": requiere marca seleccionada
+  // - "assets": requiere al menos un tipo de formato seleccionado
   const canGoNext =
     stepIndex < WIZARD_STEPS.length - 1 &&
-    (wizard.currentStep !== "brand" || wizard.formData.brandId !== "");
+    (wizard.currentStep !== "brand" || wizard.formData.brandId !== "") &&
+    (wizard.currentStep !== "assets" || wizard.formData.assetTypes.length > 0);
 
   const stepsConfig = WIZARD_STEPS.map((id) => ({
     id,

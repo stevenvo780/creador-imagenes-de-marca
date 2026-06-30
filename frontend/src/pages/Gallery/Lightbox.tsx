@@ -15,6 +15,8 @@ import { formatDate } from '../../utils/format';
 export interface LightboxProps {
   variation: Variation | null;
   brandName?: string;
+  /** Etiqueta de familia en español (ej. "Logos", "Banners"). */
+  categoryLabel?: string;
   onClose: () => void;
   onDownload: () => Promise<void>;
   downloading?: boolean;
@@ -23,6 +25,7 @@ export interface LightboxProps {
 export function Lightbox({
   variation,
   brandName,
+  categoryLabel,
   onClose,
   onDownload,
   downloading = false,
@@ -91,6 +94,20 @@ export function Lightbox({
             }}
           >
             <Stars score={variation.score} />
+            {categoryLabel && (
+              <span
+                aria-label={`Familia: ${categoryLabel}`}
+                style={{
+                  fontSize: 'var(--font-size-xs)',
+                  color: 'var(--teal-600)',
+                  fontWeight: 600,
+                  letterSpacing: '0.04em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {categoryLabel}
+              </span>
+            )}
             {formattedDate && (
               <span
                 style={{

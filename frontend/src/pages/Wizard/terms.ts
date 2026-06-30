@@ -184,13 +184,30 @@ export const STEP_LABELS: Record<string, string> = {
 // ── Formatos (asset_types) ────────────────────────────────────────────────────
 
 export const ASSET_TYPE_LABELS: Record<string, string> = {
-  isotipo:            "Símbolo",
-  logo_symbol_color:  "Logo con símbolo",
-  stat_card:          "Tarjeta de estadística",
-  ad_leaderboard:     "Banner",
-  letterhead:         "Papel membretado",
+  // Logos
+  isotipo:              "Símbolo / Isotipo",
+  lockup_horizontal:    "Logo horizontal",
+  lockup_vertical:      "Logo vertical",
+  wordmark:             "Wordmark (solo nombre)",
+  favicon:              "Favicon",
+  watermark:            "Marca de agua",
+  // Banners
+  linkedin_header:      "Portada de LinkedIn",
+  twitter_header:       "Portada de X / Twitter",
+  youtube_header:       "Arte de canal YouTube",
+  web_hero_desktop:     "Hero web",
+  ad_leaderboard:       "Anuncio horizontal",
+  ad_rectangle:         "Anuncio rectangular",
+  // Tarjetas
+  business_card:        "Tarjeta de presentación",
+  stat_card:            "Tarjeta de estadística",
+  // OG / Meta
+  og_general:           "Imagen OG / Meta",
+  og_product:           "OG de producto",
+  // Papelería
+  letterhead:           "Papel membretado",
 };
 
 export function assetTypeLabel(key: string): string {
-  return ASSET_TYPE_LABELS[key] ?? key;
+  return ASSET_TYPE_LABELS[key] ?? key.replace(/_/g, " ");
 }

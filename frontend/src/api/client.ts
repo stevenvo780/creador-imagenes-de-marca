@@ -67,6 +67,21 @@ export interface Axis {
   options: AxisOption[];
 }
 
+export interface AssetTypeInfo {
+  name: string;
+  label: string;
+  description: string;
+  width?: number;
+  height?: number;
+}
+
+export interface AssetFamily {
+  id: string;
+  label: string;
+  description: string;
+  types: AssetTypeInfo[];
+}
+
 export interface BatchCreate {
   brand_id: number;
   asset_types?: string[];
@@ -108,6 +123,8 @@ export interface Variation {
   seed: string | null;
   score: number | null;
   output_path: string | null;
+  /** Familia de asset derivada del backend: logos | banners | cards | og | stationery */
+  category: string | null;
   wcag: Record<string, unknown> | null;
   layout_status: string | null;
   selected: boolean;
@@ -198,6 +215,7 @@ export const brands = {
 export const wizard = {
   axes: () => get<{ axes: Axis[] }>("/api/v1/wizard/axes"),
   brands: () => get<{ items: Brand[] }>("/api/v1/wizard/brands"),
+  assetTypes: () => get<{ families: AssetFamily[] }>("/api/v1/wizard/asset-types"),
 };
 
 // ── Batches ──────────────────────────────────────────────────────────────────
@@ -211,10 +229,29 @@ export const batches = {
 
 // ── Gallery ──────────────────────────────────────────────────────────────────
 
+export type GalleryOrder = "calidad" | "recientes";
+
+export interface GalleryListParams {
+  /** Filtrar por marca (server-side). */
+  brandId?: number;
+  /** Filtrar por generación / batch (server-side). */
+  batchId?: number;
+  /**
+   * Ordenamiento server-side:
+   *  - "calidad": score descendente, nulls al final.
+   *  - "recientes": created_at descendente.
+   */
+  order?: GalleryOrder;
+}
+
 export const gallery = {
-  list: (brandId?: number) => {
-    const qs = brandId !== undefined ? `?brand_id=${brandId}` : "";
-    return get<{ items: Variation[] }>(`/api/v1/gallery${qs}`);
+  list: (params: GalleryListParams = {}) => {
+    const qs = new URLSearchParams();
+    if (params.brandId !== undefined) qs.set("brand_id", String(params.brandId));
+    if (params.batchId !== undefined) qs.set("batch_id", String(params.batchId));
+    if (params.order) qs.set("order", params.order);
+    const query = qs.toString();
+    return get<{ items: Variation[] }>(`/api/v1/gallery${query ? `?${query}` : ""}`);
   },
   select: (variation_id: number, selected: boolean) =>
     post<{ variation_id: number; selected: boolean }>("/api/v1/gallery/select", {
