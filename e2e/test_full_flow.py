@@ -159,7 +159,7 @@ async def _create_brand(page: Page, slug: str, name: str) -> JsonMap:
             "typography_json": typography,
             "logo_text": name,
             "logo_symbol": "E",
-            "texts": {"logo_symbol_color": {"titulo": name, "subtitulo": "E2E render"}},
+            "texts": {"isotipo": {"titulo": name, "subtitulo": "E2E render"}},
         },
     )
     assert _entity_id(body, "brand_id") > 0
@@ -174,7 +174,7 @@ async def _create_batch(page: Page, brand_id: int) -> JsonMap:
         expected_status=202,
         payload={
             "brand_id": brand_id,
-            "asset_types": ["logo_symbol_color"],
+            "asset_types": ["isotipo"],
             "axis_params": {"permuted": ["palette_scheme"], "count": 3},
             "fixed": {"background_treatment": "solid", "corner_shape": "rounded"},
             "permuted": ["palette_scheme"],
@@ -286,7 +286,8 @@ async def test_end_to_end_full_flow(page: Page) -> None:
     )
     variations = _items(gallery_body)
     assert len(variations) >= 2, gallery_body
-    assert all(variation["output_path"] for variation in variations)
+    # La API no expone output_path (ruta absoluta del servidor); valida el file_url de descarga.
+    assert all(variation["file_url"] for variation in variations)
     assert all(variation["brand_id"] == brand_id for variation in variations)
 
     sibling_gallery = await _fetch_json(

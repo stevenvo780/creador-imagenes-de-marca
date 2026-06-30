@@ -84,6 +84,38 @@ class CombinationPlan:
         }
 
 
+def split_spec_by_asset_type(
+    spec: CombinationSpec,
+    *,
+    default_asset_type: str = "logo",
+) -> tuple[CombinationSpec, ...]:
+    """Split one batch spec into one CombinationSpec per asset type.
+
+    Counts are distributed evenly across requested asset types. If the requested
+    count is smaller than the number of asset types, each type still receives
+    one combination so every requested format is generated.
+    """
+    spec.validate()
+    asset_types = list(spec.asset_types) or [default_asset_type]
+    base_count = spec.count // len(asset_types)
+    remainder = spec.count % len(asset_types)
+
+    specs: list[CombinationSpec] = []
+    for idx, asset_type in enumerate(asset_types):
+        count = base_count + (1 if idx < remainder else 0)
+        specs.append(
+            CombinationSpec(
+                brand=spec.brand,
+                asset_types=[asset_type],
+                fixed=dict(spec.fixed),
+                permuted=list(spec.permuted),
+                count=max(1, count),
+                seed_salt=spec.seed_salt,
+            )
+        )
+    return tuple(specs)
+
+
 def _dedup_preserve_order(items: list[str]) -> list[str]:
     """Elimina duplicados preservando el orden de aparición."""
     seen: set[str] = set()

@@ -50,6 +50,13 @@ export function StepConfigureAxes({
       .axes()
       .then((res) => {
         if (!cancelled) {
+          // Publicar el recuento de opciones visibles por eje para que el
+          // paso de cantidad pueda calcular el máximo factible sin re-fetchar.
+          const counts: Record<string, number> = {};
+          res.axes.forEach((axis) => {
+            counts[axis.name] = visibleOptions(axis).length;
+          });
+          onUpdate({ axisOptionCounts: counts });
           setAxes(res.axes);
           setLoading(false);
         }

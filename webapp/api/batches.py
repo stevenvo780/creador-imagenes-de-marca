@@ -14,7 +14,11 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import StreamingResponse
 
-from eikon_core.combinatorial import CombinationSpec, plan_combinations
+from eikon_core.combinatorial import (
+    CombinationSpec,
+    plan_combinations,
+    split_spec_by_asset_type,
+)
 from eikon_core.constants import ROOT
 from webapp.jobs import enqueue_batch, get_worker, job_events
 from webapp.storage import get_batch, get_brand, list_variations
@@ -26,6 +30,7 @@ from .serializers import batch_to_dict, variation_to_dict
 router = APIRouter(prefix="/api/v1/batches", tags=["batches"])
 
 _ASSET_TYPE_RE = re.compile(r"^[a-z0-9][a-z0-9_]{1,60}$")
+
 
 # Tipos de asset válidos derivados de config/taxonomy.json (fuente de verdad del motor).
 # Se cargan una sola vez al importar; si el archivo no existe, se usa un set vacío
@@ -104,8 +109,11 @@ async def create_batch_endpoint(
     )
     axes_dict = {name: axis.option_names() for name, axis in cfg.axes.items()}
     try:
-        spec.validate()
-        plan_combinations(spec, axes_dict)
+        for spec_for_type in split_spec_by_asset_type(
+            spec,
+            default_asset_type="isotipo",
+        ):
+            plan_combinations(spec_for_type, axes_dict)
     except ValueError as e:
         raise HTTPException(status_code=422, detail=str(e)) from e
 

@@ -25,6 +25,7 @@ from eikon_core.combinatorial import (
     CombinationSpec,
     load_axes_config,
     plan_combinations,
+    split_spec_by_asset_type,
 )
 from eikon_core.combinatorial.ranking import VariationScore, rank
 from eikon_core.constants import MARCAS_DIR, OUTPUT_DIR
@@ -525,41 +526,71 @@ class WorkerPool:
 
         try:
             axes_dict = _axes_config_to_dict(axes_config)
-            plan = plan_combinations(spec, axes_dict)
         except Exception as exc:
-            logger.exception("Error al planificar combinaciones batch %d: %s", batch_id, exc)
+            logger.exception("Error al preparar axes batch %d: %s", batch_id, exc)
             await self._mark_batch_failed(batch_id, tenant_id)
             return
 
-        asset_type = spec.asset_types[0] if spec.asset_types else "logo"
         marca_slug = spec.brand
-        # Categoría real del asset (banners/cards/og/stationery/logos), derivada
-        # igual que render_combination para que ranking y storage apunten al
-        # mismo directorio donde render_asset escribió los PNG.
-        category = _category_for(asset_type, marca)
+        ranked_by_category: list[tuple[str, list[VariationScore]]] = []
+        rendered_total = 0
+        ranked_total = 0
+
+        for spec_for_type in split_spec_by_asset_type(spec):
+            asset_type = spec_for_type.asset_types[0]
+            # Categoría real del asset (banners/cards/og/stationery/logos), derivada
+            # igual que render_combination para que ranking y storage apunten al
+            # mismo directorio donde render_asset escribió los PNG.
+            category = _category_for(asset_type, marca)
+
+            if await self._is_cancelled_async(db_path, batch_id):
+                logger.info(
+                    "Batch %d cancelado antes de renderizar asset_type %s",
+                    batch_id,
+                    asset_type,
+                )
+                return
+
+            try:
+                plan = plan_combinations(spec_for_type, axes_dict)
+            except Exception as exc:
+                logger.exception(
+                    "Error al planificar combinaciones batch %d asset_type %s: %s",
+                    batch_id,
+                    asset_type,
+                    exc,
+                )
+                await self._mark_batch_failed(batch_id, tenant_id)
+                return
+
+            ranked = await self._render_and_rank(
+                batch_id,
+                db_path,
+                tenant_id,
+                spec_for_type,
+                plan,
+                marca,
+                marca_slug,
+                category,
+                asset_type,
+                axes_config,
+                progress_rendered_offset=rendered_total,
+                progress_ranked_offset=ranked_total,
+            )
+            if ranked is None:
+                return  # Error ya manejado en _render_and_rank
+
+            rendered_total += len(plan.combinations)
+            ranked_total += len(ranked)
+            self._pending_batches.setdefault(batch_id, {})["rendered"] = rendered_total
+            self._pending_batches.setdefault(batch_id, {})["ranked"] = ranked_total
+            ranked_by_category.append((category, ranked))
 
         if await self._is_cancelled_async(db_path, batch_id):
-            logger.info("Batch %d cancelado antes de renderizar", batch_id)
+            logger.info("Batch %d cancelado antes de persistir variaciones", batch_id)
             return
 
-        ranked = await self._render_and_rank(
-            batch_id,
-            db_path,
-            tenant_id,
-            spec,
-            plan,
-            marca,
-            marca_slug,
-            category,
-            asset_type,
-            axes_config,
-        )
-        if ranked is None:
-            return  # Error ya manejado en _render_and_rank
-
-        await self._persist_variations(
-            batch_id, db_path, tenant_id, brand_id, category, ranked
-        )
+        await self._persist_variations(batch_id, db_path, tenant_id, brand_id, ranked_by_category)
 
     # ── Helpers de _process_batch (extraídos para reducir complejidad) ─────
 
@@ -622,9 +653,7 @@ class WorkerPool:
 
         return tenant_id, brand_id, spec, marca
 
-    def _load_axes_config(
-        self, batch_id: int, db_path: Path, tenant_id: int
-    ) -> AxesConfig | None:
+    def _load_axes_config(self, batch_id: int, db_path: Path, tenant_id: int) -> AxesConfig | None:
         """Carga AxesConfig desde disco. None si falla (ya marca failed)."""
         try:
             if self._axes_config_path is not None:
@@ -649,6 +678,8 @@ class WorkerPool:
         category: str,
         asset_type: str,
         axes_config: AxesConfig,
+        progress_rendered_offset: int = 0,
+        progress_ranked_offset: int = 0,
     ) -> list[VariationScore] | None:
         """Renderiza combinaciones vía Playwright y las rankea. None si falla."""
         apw, _ = _get_playwright()
@@ -692,9 +723,7 @@ class WorkerPool:
 
                     if meta.get("status") == "error":
                         warnings = meta.get("warnings", [])
-                        raise RuntimeError(
-                            f"Render falló para combo {combination.idx}: {warnings}"
-                        )
+                        raise RuntimeError(f"Render falló para combo {combination.idx}: {warnings}")
 
                     rendered.append(
                         {
@@ -706,7 +735,9 @@ class WorkerPool:
                             "layout_warnings": meta.get("layout_warnings", []),
                         }
                     )
-                    self._pending_batches[batch_id]["rendered"] = len(rendered)
+                    self._pending_batches.setdefault(batch_id, {})["rendered"] = (
+                        progress_rendered_offset + len(rendered)
+                    )
 
                 if not rendered:
                     raise RuntimeError("Ninguna combinación se renderizó exitosamente")
@@ -730,7 +761,9 @@ class WorkerPool:
                     top_n=len(rendered),
                     permuted_axes=batch_permuted_axes or None,
                 )
-                self._pending_batches[batch_id]["ranked"] = len(ranked)
+                self._pending_batches.setdefault(batch_id, {})["ranked"] = (
+                    progress_ranked_offset + len(ranked)
+                )
                 return ranked
 
         except Exception as exc:
@@ -752,11 +785,11 @@ class WorkerPool:
         db_path: Path,
         tenant_id: int,
         brand_id: int,
-        category: str,
-        ranked: list[VariationScore],
+        ranked_by_category: list[tuple[str, list[VariationScore]]],
     ) -> None:
         """Persiste variaciones rankeadas en DB. Atómico: all-or-nothing."""
         rendered_count = int(self._pending_batches.get(batch_id, {}).get("rendered", 0))
+        ranked_count = sum(len(ranked) for _, ranked in ranked_by_category)
         try:
             await self._run_db_operation(
                 "persist variations",
@@ -765,9 +798,9 @@ class WorkerPool:
                     db_path,
                     tenant_id,
                     brand_id,
-                    category,
-                    ranked,
+                    ranked_by_category,
                     rendered_count,
+                    ranked_count,
                 ),
             )
             self._pending_batches.setdefault(batch_id, {})["status"] = "completed"
@@ -775,7 +808,7 @@ class WorkerPool:
                 "Batch %d completado: %s renderizados, %d rankeados",
                 batch_id,
                 rendered_count,
-                len(ranked),
+                ranked_count,
             )
         except Exception as exc:
             logger.exception("Error al persistir variaciones batch %d: %s", batch_id, exc)
@@ -790,54 +823,65 @@ class WorkerPool:
         db_path: Path,
         tenant_id: int,
         brand_id: int,
-        category: str,
-        ranked: list[VariationScore],
+        ranked_by_category: list[tuple[str, list[VariationScore]]],
         rendered_count: int,
+        ranked_count: int,
     ) -> None:
         """Escribe variaciones y status final dentro de una operación síncrona acotada."""
         now = int(time.time())
         with connect(db_path) as con:
-            for vs in ranked:
-                # deterministic_seed devuelve uint64 [0, 2**64); SQLite INTEGER es
-                # int64 con signo (máx 2**63-1). Enmascaramos a 63 bits para que
-                # quepa siempre. El seed es metadata de reproducibilidad (el render
-                # usa params, no este valor), así que el enmascarado es seguro.
-                seed_storable = int(vs.seed) & 0x7FFF_FFFF_FFFF_FFFF
-                # Persistir el PNG a través del seam: lo copia bajo
-                # output/tenants/<tenant_id>/... (aislamiento real) y devuelve
-                # la ruta absoluta que se guarda para servirlo en downloads.
-                # Incluye batch_id en la clave para no colisionar entre batches.
-                relative_path = (
-                    f"{vs.marca}/{category}/{vs.asset_type}/{batch_id}/combo_{vs.idx:03d}.png"
-                )
-                stored_path = self.storage.save(
-                    tenant_id, relative_path, Path(vs.png_path).read_bytes()
-                )
-                con.execute(
-                    """INSERT INTO variations
-                       (batch_id, tenant_id, brand_id, axis_params_json, seed,
-                        score, output_path, wcag_json, layout_status, selected,
-                        created_at)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, NULL, NULL, 0, ?)""",
-                    (
-                        batch_id,
-                        tenant_id,
-                        brand_id,
-                        json.dumps(vs.params, sort_keys=True),
-                        seed_storable,
-                        vs.final_score,
-                        stored_path,
-                        now,
-                    ),
-                )
+            for category, ranked in ranked_by_category:
+                for vs in ranked:
+                    # deterministic_seed devuelve uint64 [0, 2**64); SQLite INTEGER es
+                    # int64 con signo (máx 2**63-1). Enmascaramos a 63 bits para que
+                    # quepa siempre. El seed es metadata de reproducibilidad (el render
+                    # usa params, no este valor), así que el enmascarado es seguro.
+                    seed_storable = int(vs.seed) & 0x7FFF_FFFF_FFFF_FFFF
+                    # Persistir el PNG a través del seam: lo copia bajo
+                    # output/tenants/<tenant_id>/... (aislamiento real) y devuelve
+                    # la ruta absoluta que se guarda para servirlo en downloads.
+                    # Incluye batch_id en la clave para no colisionar entre batches.
+                    relative_path = (
+                        f"{vs.marca}/{category}/{vs.asset_type}/{batch_id}/combo_{vs.idx:03d}.png"
+                    )
+                    stored_path = self.storage.save(
+                        tenant_id, relative_path, Path(vs.png_path).read_bytes()
+                    )
+                    con.execute(
+                        """INSERT INTO variations
+                           (batch_id, tenant_id, brand_id, axis_params_json, seed,
+                            score, output_path, wcag_json, layout_status, selected,
+                            created_at)
+                           VALUES (?, ?, ?, ?, ?, ?, ?, NULL, NULL, 0, ?)""",
+                        (
+                            batch_id,
+                            tenant_id,
+                            brand_id,
+                            json.dumps(vs.params, sort_keys=True),
+                            seed_storable,
+                            vs.final_score,
+                            stored_path,
+                            now,
+                        ),
+                    )
 
-        update_batch_status(
-            db_path,
-            batch_id,
-            "completed",
-            counts={"rendered": rendered_count, "ranked": len(ranked)},
-            tenant_id=tenant_id,
-        )
+            cursor = con.execute(
+                """UPDATE batches
+                   SET status = ?, finished_at = ?, counts_json = ?
+                   WHERE id = ? AND tenant_id = ?""",
+                (
+                    "completed",
+                    now,
+                    json.dumps(
+                        {"rendered": rendered_count, "ranked": ranked_count},
+                        sort_keys=True,
+                    ),
+                    batch_id,
+                    tenant_id,
+                ),
+            )
+            if cursor.rowcount == 0:
+                raise KeyError(f"batch {batch_id} no pertenece al tenant {tenant_id}")
 
     async def _is_cancelled_async(self, db_path: Path, batch_id: int) -> bool:
         """Verifica cancelación sin bloquear el event loop."""

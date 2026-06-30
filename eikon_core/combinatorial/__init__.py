@@ -12,7 +12,7 @@ Core concepts:
 from __future__ import annotations
 
 from .axes import AxesConfig, load_axes_config, validate_axes_config
-from .planner import CombinationPlan, CombinationSpec, plan_combinations
+from .planner import CombinationPlan, CombinationSpec, plan_combinations, split_spec_by_asset_type
 
 __all__ = [
     "AxesConfig",
@@ -20,5 +20,6 @@ __all__ = [
     "CombinationSpec",
     "load_axes_config",
     "plan_combinations",
+    "split_spec_by_asset_type",
     "validate_axes_config",
 ]

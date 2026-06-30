@@ -9,6 +9,9 @@ export interface WizardFormData {
   assetTypes: string[];
   fixed: Record<string, string>; // eje_name → valor elegido
   permuted: string[]; // lista de ejes a permutar
+  /** Cantidad de opciones visibles por eje (cargado en StepConfigureAxes).
+   *  Se usa para calcular el máximo de combinaciones factibles. */
+  axisOptionCounts: Record<string, number>;
   count: number;
   seedSalt: string;
 }
@@ -34,6 +37,7 @@ export function useWizardState() {
       // isotype_style arranca en "lettermark" (excluir "none" por defecto)
       fixed: { isotype_style: "lettermark" },
       permuted: [],
+      axisOptionCounts: {},
       count: 16,
       seedSalt: "",
     },
@@ -90,6 +94,7 @@ export function useWizardState() {
         assetTypes: ["isotipo", "lockup_horizontal"],
         fixed: { isotype_style: "lettermark" },
         permuted: [],
+        axisOptionCounts: {},
         count: 16,
         seedSalt: "",
       },

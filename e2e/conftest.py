@@ -41,10 +41,21 @@ APP_SOURCE = REPO_ROOT / "webapp" / "app.py"
 TEMP_ROOT = Path(os.environ["EIKON_E2E_TEMP_ROOT"])
 
 source = APP_SOURCE.read_text(encoding="utf-8")
-sentinel = "\\napp = create_app()\\n"
-if sentinel not in source:
+# Neutralizamos cualquier creacion de app a nivel de modulo (puede estar dentro
+# de un try/except con indentacion), sustituyendola por `pass` para que el e2e
+# controle la instanciacion via module.create_app(...).
+_neutralized_lines = []
+_found_app = False
+for _line in source.splitlines():
+    if _line.strip().startswith("app = create_app("):
+        _indent = _line[: len(_line) - len(_line.lstrip())]
+        _neutralized_lines.append(_indent + "pass  # e2e: app global neutralizada")
+        _found_app = True
+    else:
+        _neutralized_lines.append(_line)
+if not _found_app:
     raise RuntimeError("No se encontro el app global esperado en webapp/app.py")
-source = source.replace(sentinel, "\\n")
+source = "\\n".join(_neutralized_lines)
 
 module = types.ModuleType("webapp_app_e2e_source")
 module.__file__ = str(APP_SOURCE)
