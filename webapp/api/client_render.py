@@ -101,14 +101,24 @@ async def get_batch_plan(
     if brand is None:
         raise HTTPException(status_code=404, detail="brand not found")
 
-    # Carga la marca desde marcas/{slug}.json
+    # Marca: si hay JSON legacy en marcas/{slug}.json lo usamos; si no (marcas
+    # creadas por API), construimos la marca desde la PALETA de la DB — igual que
+    # el worker. SIN esto, map_marca_to_vars caía a la paleta default donde
+    # primario==bg → los símbolos de línea salían invisibles (negros).
     brand_slug = brand.get("slug", "")
     marca_path = MARCAS_DIR / f"{brand_slug}.json"
-    try:
+    if marca_path.exists():
         marca = load_json(marca_path)
-    except (FileNotFoundError, OSError, json.JSONDecodeError) as e:
-        logger.warning(f"No se pudo cargar marca {brand_slug}: {e}")
-        marca = {}
+    else:
+        marca = {
+            "slug": str(brand.get("slug", "")),
+            "nombre_producto": str(brand.get("name", "")),
+            "paleta": json.loads(str(brand.get("palette_json", "{}"))),
+            "tipografia": json.loads(str(brand.get("typography_json", "{}"))),
+            "logo_texto": str(brand.get("logo_text", "")),
+            "logo_simbolo": str(brand.get("logo_symbol", "")),
+            "textos": json.loads(str(brand.get("texts_json", "{}"))),
+        }
 
     # Reconstruye el spec como CombinationSpec (para plan_combinations)
     combo_spec = CombinationSpec(
