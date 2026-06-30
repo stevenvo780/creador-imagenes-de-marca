@@ -12,7 +12,7 @@ from .combinatorial import AxesConfig
 from .manifest import post_validate_assets, write_manifest
 from .playwright_lazy import _get_playwright
 from .render import render_asset
-from .taxonomy import CLOUD_ATLAS_TAXONOMIA, PRIZMA_TAXONOMIA
+from .taxonomy import CLOUD_ATLAS_TAXONOMIA, PRIZMA_TAXONOMIA, get_category_for_asset_type
 
 
 async def run_generator(  # noqa: C901
@@ -234,11 +234,16 @@ async def render_combination(
         label=f"Combination {combination.idx}",
     )
 
+    # Derivar categoría real desde el asset_type buscándolo en la taxonomía.
+    # Si no se encuentra, usar "logos" como fallback (compatibilidad).
+    is_prizma = "prizma" in brand_family(marca)
+    categoria = get_category_for_asset_type(asset_type, is_prizma) or "logos"
+
     # batch_subdir aisla PNGs por batch_id, evitando sobreescrituras entre batches.
     return await render_asset(
         browser,
         marca_slug,
-        "logos",
+        categoria,
         tipo_spec,
         variant_spec,
         marca,

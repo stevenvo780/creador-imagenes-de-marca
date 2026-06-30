@@ -348,3 +348,23 @@ def _template_name_for_type(type_name: str) -> str:
 
 CLOUD_ATLAS_TAXONOMIA = _build_taxonomia(is_prizma=False)
 PRIZMA_TAXONOMIA = _build_taxonomia(is_prizma=True)
+
+
+def get_category_for_asset_type(asset_type: str, is_prizma: bool = False) -> str | None:
+    """Retorna la categoría (logos, banners, cards, og, stationery) para un asset_type.
+
+    Busca recursivamente en la taxonomía correspondiente (Cloud Atlas o Prizma).
+
+    Args:
+        asset_type: Nombre del tipo de asset (ej. "isotipo", "linkedin_header", "business_card")
+        is_prizma: Si True, busca en PRIZMA_TAXONOMIA; si False, en CLOUD_ATLAS_TAXONOMIA
+
+    Returns:
+        La categoría (str) o None si no se encuentra
+    """
+    taxonomia = PRIZMA_TAXONOMIA if is_prizma else CLOUD_ATLAS_TAXONOMIA
+    for categoria, type_specs in taxonomia.items():
+        for type_spec in type_specs:
+            if type_spec.name == asset_type:
+                return categoria
+    return None
