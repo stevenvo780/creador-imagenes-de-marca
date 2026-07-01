@@ -121,12 +121,17 @@ def create_app(
     app.state.worker = None
 
     # OJO con el orden: Starlette resuelve mounts por prefijo en orden de registro.
-    # El más específico (/static/fonts) debe ir ANTES que /static, si no /static
+    # El más específico (/static/fonts, /static/css) debe ir ANTES que /static, si no /static
     # captura /static/fonts/* y las fuentes dan 404.
     app.mount(
         "/static/fonts",
         StaticFiles(directory=str(REPO_ROOT / "templates" / "fonts")),
         name="fonts",
+    )
+    app.mount(
+        "/static/css",
+        StaticFiles(directory=str(REPO_ROOT / "templates")),
+        name="css",
     )
     app.mount("/static", StaticFiles(directory=str(WEBAPP_DIR / "static")), name="static")
 

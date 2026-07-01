@@ -110,13 +110,39 @@ async function fetchTemplateHtml(templateName: string): Promise<string> {
 }
 
 /**
+ * Fetchea y procesa el CSS del sistema (eikon-system.css).
+ * Reescribe rutas de fuentes para que resuelvan correctamente desde /static/fonts/.
+ */
+async function fetchSystemCss(): Promise<string> {
+  try {
+    const res = await fetch("/static/css/eikon-system.css", {
+      credentials: "include",
+    });
+    if (!res.ok) {
+      console.warn(
+        `Failed to fetch eikon-system.css: ${res.status}, continuando sin estilos externos`
+      );
+      return "";
+    }
+    let css = await res.text();
+    // Reescribir rutas relativas de fuentes: url("fonts/X") -> url("/static/fonts/X")
+    css = css.replace(/url\("fonts\//g, 'url("/static/fonts/');
+    return css;
+  } catch (e) {
+    console.warn("Error fetching eikon-system.css:", e);
+    return "";
+  }
+}
+
+/**
  * Monta la plantilla en un div oculto, aplica vars/data-attrs/isotipo/textos,
  * y retorna el nodo del contenedor.
  */
 function createAndMountContainer(
   templateHtml: string,
   combination: RenderCombination,
-  viewport: { w: number; h: number }
+  viewport: { w: number; h: number },
+  systemCss: string
 ): HTMLDivElement {
   // Crear contenedor oculto
   const container = document.createElement("div");
@@ -133,9 +159,8 @@ function createAndMountContainer(
 
   // Copiar el body al contenedor
   const bodyContent = doc.body;
-  container.appendChild(bodyContent);
 
-  // Aplicar vars como CSS custom properties
+  // Aplicar vars como CSS custom properties al root ANTES de copiar
   const styleElement = document.createElement("style");
   let styleContent = `:root {`;
 
@@ -147,12 +172,35 @@ function createAndMountContainer(
 
   styleContent += "\n}";
   styleElement.textContent = styleContent;
-  container.insertBefore(styleElement, container.firstChild);
 
-  // Setear data-attrs en el root del contenedor (body)
-  for (const [attr, value] of Object.entries(combination.data_attrs)) {
-    container.setAttribute(attr, value);
+  // Insertar el <style> en la cabeza del body parseado
+  const head = doc.head || doc.createElement("head");
+  if (!doc.head) {
+    bodyContent.parentNode?.insertBefore(head, bodyContent);
   }
+  head.appendChild(styleElement);
+
+  // Setear data-* attributes DIRECTAMENTE sobre el body de la plantilla (doc.body)
+  // Esto es crítico: los selectores CSS esperan body[data-variant="..."], etc.
+  for (const [attr, value] of Object.entries(combination.data_attrs)) {
+    // Convertir data-attr-name a dataset camelCase: data-bg-treatment -> bgTreatment
+    const attrKey = attr.replace("data-", "");
+    const parts = attrKey.split("-");
+    const camelKey = parts[0] + parts.slice(1).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join("");
+    (bodyContent.dataset as any)[camelKey] = value;
+    // También setear como attribute directo para ser explícito
+    bodyContent.setAttribute(attr, value);
+  }
+
+  // Inyectar el CSS del sistema (eikon-system.css) como <style> al inicio del contenedor
+  if (systemCss) {
+    const systemCssElement = document.createElement("style");
+    systemCssElement.textContent = systemCss;
+    container.insertBefore(systemCssElement, container.firstChild);
+  }
+
+  // Ahora copiar el body al contenedor
+  container.appendChild(bodyContent);
 
   // Inyectar isotipo como <img> en [data-isotype-container]
   const isotopeContainer = container.querySelector(
@@ -226,13 +274,14 @@ async function renderAndUploadCombination(
   combination: RenderCombination,
   viewport: { w: number; h: number },
   deviceScaleFactor: number,
-  assetType: string
+  assetType: string,
+  systemCss: string
 ): Promise<{ success: boolean; error?: string }> {
   let container: HTMLDivElement | null = null;
 
   try {
-    // Montar container
-    container = createAndMountContainer(templateHtml, combination, viewport);
+    // Montar container con el CSS del sistema
+    container = createAndMountContainer(templateHtml, combination, viewport, systemCss);
 
     // Esperar a que las fuentes estén listas
     await document.fonts.ready;
@@ -309,10 +358,13 @@ export async function renderBatchClientSide(
     // 2. Precargar fuentes
     await preloadFonts();
 
-    // 3. Fetch plantilla HTML una sola vez
+    // 3. Fetch CSS del sistema (eikon-system.css) una sola vez
+    const systemCss = await fetchSystemCss();
+
+    // 4. Fetch plantilla HTML una sola vez
     const templateHtml = await fetchTemplateHtml(spec.template_name);
 
-    // 4. Procesar combinaciones
+    // 5. Procesar combinaciones
     const total = spec.combinations.length;
     for (let i = 0; i < total; i++) {
       const combo = spec.combinations[i];
@@ -323,7 +375,8 @@ export async function renderBatchClientSide(
         combo,
         spec.viewport,
         spec.device_scale_factor,
-        spec.asset_type
+        spec.asset_type,
+        systemCss
       );
 
       if (result.success) {

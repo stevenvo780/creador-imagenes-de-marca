@@ -175,8 +175,8 @@ async def get_batch_plan(
         vars_dict = map_marca_to_vars(marca, asset_type)
         vars_dict = apply_combination_overrides(vars_dict, params)
 
-        # Data attrs a inyectar (layout, isotype_style, etc.)
-        data_attrs = _extract_data_attrs_from_combination(params)
+        # Data attrs a inyectar (layout, isotype_style, data-variant, etc.)
+        data_attrs = _extract_data_attrs_from_combination(params, asset_type)
 
         # SVG isotipo precomputado (server-side, determinístico)
         isotype_style = params.get("isotype_style", "orbital")

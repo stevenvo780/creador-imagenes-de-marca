@@ -16,6 +16,26 @@ from .templates import resolve_template
 from .types import TypeSpec, VariantSpec
 
 
+def _get_default_variant_for_asset_type(asset_type: str) -> str:
+    """Get the default variant for a given asset type.
+
+    Used when client-side rendering doesn't have variant planning.
+    Fallback logic: use v1_* pattern with sensible defaults per asset type.
+    """
+    # Map specific asset_types to their preferred default variant
+    defaults = {
+        "business_card": "v1_front",
+        "letterhead": "v1_corporate",
+        "stat_card": "v1_big_data",
+        "og_general": "v1_docs",
+        "og_product": "v1_product",
+        "linkedin_header": "v1_institucional",
+        "twitter_header": "v1_brand",
+    }
+    # Return mapped default or generic v1_* pattern
+    return defaults.get(asset_type, "v1_color")
+
+
 def _build_isotype_data_uri(
     style: str,
     seed_hex: str,
@@ -55,16 +75,19 @@ def _build_isotype_data_uri(
 
 def _extract_data_attrs_from_combination(
     combination_params: dict[str, str] | None,
+    asset_type: str = "",
 ) -> dict[str, str]:
     """Extract data attributes from combination params.
 
     Maps combination parameter axes to HTML data attributes.
+    Always includes data-variant (required for CSS selector matching in templates).
 
     Args:
         combination_params: Combination parameters dict
+        asset_type: Asset type for default variant selection
 
     Returns:
-        Dict of data-* attributes to set on document
+        Dict of data-* attributes to set on document body element
     """
     data_attrs_to_inject = {}
     if combination_params:
@@ -77,6 +100,14 @@ def _extract_data_attrs_from_combination(
             data_attrs_to_inject["data-isotype-style"] = combination_params["isotype_style"]
         if "accent_placement" in combination_params:
             data_attrs_to_inject["data-accent-placement"] = combination_params["accent_placement"]
+
+    # Always set data-variant (critical for CSS selector matching)
+    # If specified in params use it, otherwise derive from asset_type
+    if combination_params and "variant" in combination_params:
+        data_attrs_to_inject["data-variant"] = combination_params["variant"]
+    else:
+        data_attrs_to_inject["data-variant"] = _get_default_variant_for_asset_type(asset_type)
+
     return data_attrs_to_inject
 
 
@@ -243,7 +274,7 @@ async def render_asset(
     page = None
     try:
         # Extract and prepare data attributes from combination params
-        data_attrs_to_inject = _extract_data_attrs_from_combination(combination_params)
+        data_attrs_to_inject = _extract_data_attrs_from_combination(combination_params, tipo_spec.name)
 
         # Si la combinación pide un isótipo procedural, generarlo e inyectar el SVG
         # real en el contenedor [data-isotype-container] del template (en vez del
