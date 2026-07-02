@@ -78,7 +78,8 @@
   .v1-symbol {
     display: flex; align-items: center; justify-content: center;
   }
-  .v1-symbol::before { display: none; }
+  .v1-symbol::before { display: none !important; }
+  .v1-symbol::after { display: none !important; }
   .v1-symbol [data-isotype-container] { position: relative; z-index: 1; }
   .v1-symbol svg { width: 220px; height: 220px; }
   .v1-brand {
@@ -119,6 +120,8 @@
     align-items: center; justify-content: center;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   }
+  .v2-logo-panel::before { display: none !important; }
+  .v2-logo-panel::after { display: none !important; }
   .v2-logo-panel svg { width: 76px; height: 76px; }
   .v2-eyebrow {
     font-size: var(--type-xs); font-weight: 700; letter-spacing: var(--tracking-wide);
@@ -179,7 +182,8 @@
     position: absolute; bottom: var(--space-6); right: var(--space-6);
     width: 160px; height: 160px; display: flex; align-items: center; justify-content: center;
   }
-  .v3-logo-area::before { display: none; }
+  .v3-logo-area::before { display: none !important; }
+  .v3-logo-area::after { display: none !important; }
   .v3-logo-area [data-isotype-container] { position: relative; z-index: 1; }
   .v3-logo-area svg { width: 140px; height: 140px; }
   .v3-brand-tag { display: none; }

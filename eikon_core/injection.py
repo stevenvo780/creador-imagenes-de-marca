@@ -97,16 +97,18 @@ def injection_script_with_isotype(
     # Insertar antes del cierre de la IIFE
     insert_idx = len(lines) - 2  # Antes del último "})();"
 
-    isotype_injection = f"""  // Inyectar SVG isótipo generado
+    isotype_injection = f"""  // Inyectar SVG isótipo generado (en TODOS los contenedores;
+  // limpiar primero para reemplazar cualquier SVG placeholder del template
+  // — si no, el placeholder y el símbolo inyectado se superponen).
   document.body.dataset.isotypeUri = '{isotype_svg}';
-  const isotypeContainer = document.querySelector('[data-isotype-container]');
-  if (isotypeContainer) {{
+  document.querySelectorAll('[data-isotype-container]').forEach((isotypeContainer) => {{
+    isotypeContainer.innerHTML = '';
     const img = document.createElement('img');
     img.src = '{isotype_svg}';
     img.style.width = '100%';
     img.style.height = '100%';
     isotypeContainer.appendChild(img);
-  }}"""
+  }});"""
 
     lines.insert(insert_idx, isotype_injection)
     return "\n".join(lines)
