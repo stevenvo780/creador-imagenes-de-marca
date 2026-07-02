@@ -319,6 +319,12 @@ def delete_brand(db_url: str | None | Path, tenant_id: int, brand_id: int) -> No
         ).fetchone()
         if row is None:
             raise KeyError(f"brand {brand_id} no pertenece al tenant {tenant_id}")
+        # Cascada explícita: borra assets de la marca (variations + batches) antes
+        # del brand. El schema declara ON DELETE CASCADE, pero no dependemos de que
+        # el FK enforcement esté activo (SQLite lo tiene OFF por defecto) — así el
+        # borrado de marca SIEMPRE limpia sus assets (galería queda consistente).
+        con.execute("DELETE FROM variations WHERE brand_id = ?", (brand_id,))
+        con.execute("DELETE FROM batches WHERE brand_id = ?", (brand_id,))
         con.execute("DELETE FROM brands WHERE id = ?", (brand_id,))
 
 
