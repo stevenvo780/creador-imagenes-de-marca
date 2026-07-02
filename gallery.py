@@ -20,10 +20,10 @@ import io
 import json
 import sys
 from pathlib import Path
-from typing import Any, Optional
 
 try:
     from PIL import Image
+
     HAS_PIL = True
 except ImportError:
     HAS_PIL = False
@@ -174,7 +174,7 @@ def make_thumbnail(png_path: Path) -> str:
             bg = Image.new("RGBA", img.size, (11, 20, 23, 255))
             img = Image.alpha_composite(bg, img)
         img = img.convert("RGB")
-        img.thumbnail(THUMB_SIZE, Image.LANCZOS)
+        img.thumbnail(THUMB_SIZE, Image.Resampling.LANCZOS)
         buf = io.BytesIO()
         img.save(buf, format="JPEG", quality=JPEG_QUALITY)
         b64 = base64.b64encode(buf.getvalue()).decode("ascii")
@@ -184,7 +184,7 @@ def make_thumbnail(png_path: Path) -> str:
         return ""
 
 
-def load_manifest(marca_slug: str) -> Optional[dict]:
+def load_manifest(marca_slug: str) -> dict | None:
     """Carga _manifest.json si existe."""
     manifest_path = OUTPUT_DIR / marca_slug / "_manifest.json"
     if manifest_path.exists():
@@ -243,6 +243,7 @@ def build_gallery(marca_slug: str) -> str:
             # Intentar leer dimensiones reales
             try:
                 from PIL import Image
+
                 with Image.open(png) as img:
                     asset["width"] = img.width
                     asset["height"] = img.height
@@ -267,17 +268,14 @@ def build_gallery(marca_slug: str) -> str:
             thumb = make_thumbnail(png_path) if HAS_PIL else ""
             name = a.get("type", a.get("variant", ""))
             variant = a.get("variant", "")
-            if variant and variant != name:
-                display_name = f"{name} · {variant}"
-            else:
-                display_name = name
-            dims = f"{a.get('width', 0)}×{a.get('height', 0)}" if a.get("width", 0) > 0 else ""
+            display_name = f"{name} · {variant}" if variant and variant != name else name
+            dims = f"{a.get('width', 0)}×{a.get('height', 0)}" if a.get("width", 0) > 0 else ""  # noqa: RUF001 (multiplication sign is intentional dimension separator)
             status = a.get("status", "unknown")
             badge_class = f" {status}" if status in ("cached", "error") else ""
 
             cards += f"""
         <div class="card">
-          <a href="{a['path']}" target="_blank">
+          <a href="{a["path"]}" target="_blank">
             <img src="{thumb}" alt="{display_name}" loading="lazy">
             <div class="card-info">
               <div class="card-name">{display_name}</div>
@@ -295,6 +293,7 @@ def build_gallery(marca_slug: str) -> str:
   </div>"""
 
     from datetime import datetime
+
     return GALLERY_TEMPLATE.format(
         marca=marca_slug,
         generated_at=generated_at,
@@ -321,7 +320,9 @@ def build_aggregated_gallery(marca_slugs: list[str]) -> str:
         if not manifest:
             continue
 
-        all_categories_html += f'<h2 style="color:#43b5a6;margin-top:32px;font-size:1.3rem;">{slug}</h2>\n'
+        all_categories_html += (
+            f'<h2 style="color:#43b5a6;margin-top:32px;font-size:1.3rem;">{slug}</h2>\n'
+        )
 
         assets_by_cat: dict[str, list[dict]] = {}
         for asset in manifest.get("assets", []):
@@ -344,12 +345,12 @@ def build_aggregated_gallery(marca_slugs: list[str]) -> str:
                 name = a.get("type", a.get("variant", ""))
                 variant = a.get("variant", "")
                 display_name = f"{name} · {variant}" if variant and variant != name else name
-                dims = f"{a.get('width', 0)}×{a.get('height', 0)}" if a.get("width", 0) > 0 else ""
+                dims = f"{a.get('width', 0)}×{a.get('height', 0)}" if a.get("width", 0) > 0 else ""  # noqa: RUF001 (multiplication sign is intentional dimension separator)
                 status = a.get("status", "unknown")
                 badge_class = f" {status}" if status in ("cached", "error") else ""
                 cards += f"""
         <div class="card">
-          <a href="{slug}/{a['path']}" target="_blank">
+          <a href="{slug}/{a["path"]}" target="_blank">
             <img src="{thumb}" alt="{display_name}" loading="lazy">
             <div class="card-info">
               <div class="card-name">{display_name}</div>
@@ -366,6 +367,7 @@ def build_aggregated_gallery(marca_slugs: list[str]) -> str:
   </div>"""
 
     from datetime import datetime
+
     return GALLERY_TEMPLATE.format(
         marca="TODAS LAS MARCAS (agregado)",
         generated_at="",
@@ -382,10 +384,18 @@ def build_aggregated_gallery(marca_slugs: list[str]) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Galería HTML de assets de marca")
     parser.add_argument("marca", nargs="?", help="Slug de la marca (ej. pinakotheke-kosmos)")
-    parser.add_argument("--all-marcas", "--all", action="store_true", dest="all_marcas",
-                        help="Genera galerías para todas las marcas")
-    parser.add_argument("--aggregated", action="store_true",
-                        help="Genera una galería agregada (todas las marcas en un solo HTML)")
+    parser.add_argument(
+        "--all-marcas",
+        "--all",
+        action="store_true",
+        dest="all_marcas",
+        help="Genera galerías para todas las marcas",
+    )
+    parser.add_argument(
+        "--aggregated",
+        action="store_true",
+        help="Genera una galería agregada (todas las marcas en un solo HTML)",
+    )
     parser.add_argument("--output", type=str, help="Ruta del archivo HTML de salida")
     args = parser.parse_args()
 
@@ -396,7 +406,8 @@ def main() -> int:
 
     if args.all_marcas:
         marca_dirs = sorted(
-            d.name for d in OUTPUT_DIR.iterdir()
+            d.name
+            for d in OUTPUT_DIR.iterdir()
             if d.is_dir() and not d.name.startswith("_") and not d.name.startswith(".")
         )
         if not marca_dirs:
@@ -422,10 +433,7 @@ def main() -> int:
     else:
         slug = args.marca
         html = build_gallery(slug)
-        if args.output:
-            out_path = Path(args.output)
-        else:
-            out_path = OUTPUT_DIR / f"_gallery_{slug}.html"
+        out_path = Path(args.output) if args.output else OUTPUT_DIR / f"_gallery_{slug}.html"
         out_path.write_text(html, encoding="utf-8")
         print(f"✓ Galería guardada: {out_path}")
         return 0

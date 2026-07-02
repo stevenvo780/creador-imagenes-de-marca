@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Eikón">
+  <rect width="64" height="64" rx="14" fill="#1F8276"/>
+  <text x="50%" y="50%" dy="0.34em" text-anchor="middle"
+        font-family="'Space Grotesk', system-ui, sans-serif" font-weight="700"
+        font-size="38" fill="#FBFAF7">E</text>
+  <circle cx="47" cy="20" r="5" fill="#E0A85E"/>
+</svg>

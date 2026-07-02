@@ -1,0 +1,865 @@
+{
+  "axes": {
+    "palette_scheme": {
+      "label": "Paleta de color",
+      "type": "enum",
+      "options": {
+        "brand": {
+          "description": "Paleta completa de la marca (por defecto)",
+          "overrides": {}
+        },
+        "mono": {
+          "description": "Monocromo: texto/fondo invertidos, sin acento",
+          "overrides": {
+            "acento": "var(--texto)",
+            "acento_2": "var(--texto)",
+            "bg": "var(--texto)"
+          }
+        },
+        "light": {
+          "description": "Modo claro: fondo/texto invertidos",
+          "overrides": {
+            "bg": "var(--texto)",
+            "texto": "var(--primario)"
+          }
+        },
+        "dark": {
+          "description": "Modo oscuro: primario como fondo",
+          "overrides": {
+            "bg": "var(--primario)"
+          }
+        },
+        "accent_bg": {
+          "description": "Acento como fondo",
+          "overrides": {
+            "bg": "var(--acento)",
+            "texto": "var(--primario)"
+          }
+        },
+        "gradient": {
+          "description": "Fondo degradado (gradiente hero)",
+          "overrides": {
+            "bg": "var(--grad-hero)"
+          }
+        }
+      }
+    },
+    "typography_pairing": {
+      "label": "Tipografía",
+      "type": "enum",
+      "options": {
+        "brand_default": {
+          "description": "Tipografía por defecto de la marca",
+          "overrides": {}
+        },
+        "sans_serif": {
+          "description": "Sans-serif moderno (Inter/System)",
+          "overrides": {
+            "font_titulo": "Inter",
+            "font_cuerpo": "Inter"
+          }
+        },
+        "serif_modern": {
+          "description": "Título serif con cuerpo sans",
+          "overrides": {
+            "font_titulo": "Playfair Display",
+            "font_cuerpo": "Inter"
+          }
+        },
+        "display": {
+          "description": "Tipografías display",
+          "overrides": {
+            "font_titulo": "Playfair Display",
+            "font_cuerpo": "Playfair Display"
+          }
+        },
+        "geometric_sans": {
+          "description": "Título grotesco geométrico (Space Grotesk) con cuerpo sans",
+          "overrides": {
+            "font_titulo": "Space Grotesk",
+            "font_cuerpo": "Inter"
+          }
+        }
+      }
+    },
+    "layout": {
+      "label": "Composición",
+      "type": "enum",
+      "options": {
+        "symbol_only": {
+          "description": "Solo símbolo (sin texto)",
+          "data_attrs": {
+            "data-layout": "symbol_only"
+          }
+        },
+        "wordmark_only": {
+          "description": "Solo texto (wordmark)",
+          "data_attrs": {
+            "data-layout": "wordmark_only"
+          }
+        },
+        "lockup_horizontal": {
+          "description": "Bloque horizontal (símbolo + texto lado a lado)",
+          "data_attrs": {
+            "data-layout": "lockup_horizontal"
+          }
+        },
+        "lockup_vertical": {
+          "description": "Bloque vertical (símbolo arriba del texto)",
+          "data_attrs": {
+            "data-layout": "lockup_vertical"
+          }
+        }
+      }
+    },
+    "background_treatment": {
+      "label": "Fondo",
+      "type": "enum",
+      "options": {
+        "solid": {
+          "description": "Fondo de color sólido",
+          "overrides": {
+            "bg": "var(--primario)"
+          }
+        },
+        "gradient": {
+          "description": "Fondo degradado",
+          "overrides": {
+            "bg": "var(--grad-bg)"
+          }
+        },
+        "geometric": {
+          "description": "Patrón geométrico",
+          "data_attrs": {
+            "data-bg-treatment": "geometric"
+          }
+        },
+        "grid": {
+          "description": "Superposición de cuadrícula",
+          "data_attrs": {
+            "data-bg-treatment": "grid"
+          }
+        },
+        "orb": {
+          "description": "Efecto de orbe radial",
+          "data_attrs": {
+            "data-bg-treatment": "orb"
+          }
+        },
+        "texture": {
+          "description": "Textura sutil",
+          "data_attrs": {
+            "data-bg-treatment": "texture"
+          }
+        }
+      }
+    },
+    "density_scale": {
+      "label": "Espaciado",
+      "type": "enum",
+      "options": {
+        "compact": {
+          "description": "Compacto: escala 85%",
+          "overrides": {
+            "font_size_scale": "0.85",
+            "space_scale": "0.85"
+          }
+        },
+        "normal": {
+          "description": "Normal: escala 100% (por defecto)",
+          "overrides": {
+            "font_size_scale": "1",
+            "space_scale": "1"
+          }
+        },
+        "spacious": {
+          "description": "Amplio: escala 115%",
+          "overrides": {
+            "font_size_scale": "1.15",
+            "space_scale": "1.15"
+          }
+        }
+      }
+    },
+    "corner_shape": {
+      "label": "Esquinas",
+      "type": "enum",
+      "options": {
+        "sharp": {
+          "description": "Esquinas rectas (0px)",
+          "overrides": {
+            "corner_radius": "0"
+          }
+        },
+        "rounded": {
+          "description": "Esquinas redondeadas (14px)",
+          "overrides": {
+            "corner_radius": "14px"
+          }
+        },
+        "pill": {
+          "description": "Forma de píldora (999px)",
+          "overrides": {
+            "corner_radius": "999px"
+          }
+        }
+      }
+    },
+    "isotype_style": {
+      "label": "Estilo de símbolo",
+      "type": "enum",
+      "options": {
+        "lissajous": {
+          "description": "Curva de Lissajous",
+          "data_attrs": {
+            "data-isotype-style": "lissajous"
+          }
+        },
+        "rosa_polar": {
+          "description": "Rosa polar",
+          "data_attrs": {
+            "data-isotype-style": "rosa_polar"
+          }
+        },
+        "espirografo": {
+          "description": "Espirógrafo",
+          "data_attrs": {
+            "data-isotype-style": "espirografo"
+          }
+        },
+        "epitrocoide": {
+          "description": "Epitrocoide",
+          "data_attrs": {
+            "data-isotype-style": "epitrocoide"
+          }
+        },
+        "superelipse": {
+          "description": "Superelipse",
+          "data_attrs": {
+            "data-isotype-style": "superelipse"
+          }
+        },
+        "superformula": {
+          "description": "Superfórmula",
+          "data_attrs": {
+            "data-isotype-style": "superformula"
+          }
+        },
+        "cardioide": {
+          "description": "Cardioide",
+          "data_attrs": {
+            "data-isotype-style": "cardioide"
+          }
+        },
+        "lemniscata": {
+          "description": "Lemniscata",
+          "data_attrs": {
+            "data-isotype-style": "lemniscata"
+          }
+        },
+        "astroide": {
+          "description": "Astroide",
+          "data_attrs": {
+            "data-isotype-style": "astroide"
+          }
+        },
+        "nefroide": {
+          "description": "Nefroide",
+          "data_attrs": {
+            "data-isotype-style": "nefroide"
+          }
+        },
+        "deltoide": {
+          "description": "Deltoide",
+          "data_attrs": {
+            "data-isotype-style": "deltoide"
+          }
+        },
+        "mariposa": {
+          "description": "Curva mariposa",
+          "data_attrs": {
+            "data-isotype-style": "mariposa"
+          }
+        },
+        "corazon": {
+          "description": "Curva de corazón",
+          "data_attrs": {
+            "data-isotype-style": "corazon"
+          }
+        },
+        "hipocicloide": {
+          "description": "Hipocicloide",
+          "data_attrs": {
+            "data-isotype-style": "hipocicloide"
+          }
+        },
+        "epicicloide": {
+          "description": "Epicicloide",
+          "data_attrs": {
+            "data-isotype-style": "epicicloide"
+          }
+        },
+        "espiral_arquimedes": {
+          "description": "Espiral de Arquímedes",
+          "data_attrs": {
+            "data-isotype-style": "espiral_arquimedes"
+          }
+        },
+        "espiral_logaritmica": {
+          "description": "Espiral logarítmica",
+          "data_attrs": {
+            "data-isotype-style": "espiral_logaritmica"
+          }
+        },
+        "espiral_fermat": {
+          "description": "Espiral de Fermat",
+          "data_attrs": {
+            "data-isotype-style": "espiral_fermat"
+          }
+        },
+        "espiral_aurea": {
+          "description": "Espiral áurea",
+          "data_attrs": {
+            "data-isotype-style": "espiral_aurea"
+          }
+        },
+        "clotoide": {
+          "description": "Espiral de Euler",
+          "data_attrs": {
+            "data-isotype-style": "clotoide"
+          }
+        },
+        "espiral_hiperbolica": {
+          "description": "Espiral hiperbólica",
+          "data_attrs": {
+            "data-isotype-style": "espiral_hiperbolica"
+          }
+        },
+        "doble_espiral": {
+          "description": "Doble espiral",
+          "data_attrs": {
+            "data-isotype-style": "doble_espiral"
+          }
+        },
+        "espiral_cuadrada": {
+          "description": "Espiral cuadrada",
+          "data_attrs": {
+            "data-isotype-style": "espiral_cuadrada"
+          }
+        },
+        "poligono_regular": {
+          "description": "Polígono regular",
+          "data_attrs": {
+            "data-isotype-style": "poligono_regular"
+          }
+        },
+        "estrella_np": {
+          "description": "Estrella de n puntas",
+          "data_attrs": {
+            "data-isotype-style": "estrella_np"
+          }
+        },
+        "poligonos_anidados": {
+          "description": "Polígonos anidados",
+          "data_attrs": {
+            "data-isotype-style": "poligonos_anidados"
+          }
+        },
+        "poligonos_rotados": {
+          "description": "Polígonos en capas",
+          "data_attrs": {
+            "data-isotype-style": "poligonos_rotados"
+          }
+        },
+        "reuleaux": {
+          "description": "Triángulo de Reuleaux",
+          "data_attrs": {
+            "data-isotype-style": "reuleaux"
+          }
+        },
+        "estrella_rafaga": {
+          "description": "Ráfaga de estrella",
+          "data_attrs": {
+            "data-isotype-style": "estrella_rafaga"
+          }
+        },
+        "poligono_espiral": {
+          "description": "Espiral de polígonos",
+          "data_attrs": {
+            "data-isotype-style": "poligono_espiral"
+          }
+        },
+        "triangulos_radiales": {
+          "description": "Triángulos radiales",
+          "data_attrs": {
+            "data-isotype-style": "triangulos_radiales"
+          }
+        },
+        "zigzag_radial": {
+          "description": "Zigzag radial",
+          "data_attrs": {
+            "data-isotype-style": "zigzag_radial"
+          }
+        },
+        "corona_picos": {
+          "description": "Corona de picos",
+          "data_attrs": {
+            "data-isotype-style": "corona_picos"
+          }
+        },
+        "truchet": {
+          "description": "Mosaico de Truchet",
+          "data_attrs": {
+            "data-isotype-style": "truchet"
+          }
+        },
+        "penrose": {
+          "description": "Teselado de Penrose",
+          "data_attrs": {
+            "data-isotype-style": "penrose"
+          }
+        },
+        "retícula_hexagonal": {
+          "description": "Retícula hexagonal",
+          "data_attrs": {
+            "data-isotype-style": "retícula_hexagonal"
+          }
+        },
+        "retícula_triangular": {
+          "description": "Retícula triangular",
+          "data_attrs": {
+            "data-isotype-style": "retícula_triangular"
+          }
+        },
+        "voronoi": {
+          "description": "Diagrama de Voronoi",
+          "data_attrs": {
+            "data-isotype-style": "voronoi"
+          }
+        },
+        "delaunay": {
+          "description": "Triangulación de Delaunay",
+          "data_attrs": {
+            "data-isotype-style": "delaunay"
+          }
+        },
+        "empaque_circulos": {
+          "description": "Empaque de círculos",
+          "data_attrs": {
+            "data-isotype-style": "empaque_circulos"
+          }
+        },
+        "patron_islamico": {
+          "description": "Patrón islámico",
+          "data_attrs": {
+            "data-isotype-style": "patron_islamico"
+          }
+        },
+        "espiga": {
+          "description": "Espiga",
+          "data_attrs": {
+            "data-isotype-style": "espiga"
+          }
+        },
+        "molinete": {
+          "description": "Molinete",
+          "data_attrs": {
+            "data-isotype-style": "molinete"
+          }
+        },
+        "cairo": {
+          "description": "Teselado de El Cairo",
+          "data_attrs": {
+            "data-isotype-style": "cairo"
+          }
+        },
+        "ammann": {
+          "description": "Teselado de Ammann",
+          "data_attrs": {
+            "data-isotype-style": "ammann"
+          }
+        },
+        "sierpinski_triangulo": {
+          "description": "Triángulo de Sierpinski",
+          "data_attrs": {
+            "data-isotype-style": "sierpinski_triangulo"
+          }
+        },
+        "sierpinski_alfombra": {
+          "description": "Alfombra de Sierpinski",
+          "data_attrs": {
+            "data-isotype-style": "sierpinski_alfombra"
+          }
+        },
+        "koch": {
+          "description": "Copo de Koch",
+          "data_attrs": {
+            "data-isotype-style": "koch"
+          }
+        },
+        "dragon": {
+          "description": "Curva del dragón",
+          "data_attrs": {
+            "data-isotype-style": "dragon"
+          }
+        },
+        "hilbert": {
+          "description": "Curva de Hilbert",
+          "data_attrs": {
+            "data-isotype-style": "hilbert"
+          }
+        },
+        "gosper": {
+          "description": "Curva de Gosper",
+          "data_attrs": {
+            "data-isotype-style": "gosper"
+          }
+        },
+        "levy": {
+          "description": "Curva C de Lévy",
+          "data_attrs": {
+            "data-isotype-style": "levy"
+          }
+        },
+        "t_cuadrado": {
+          "description": "Fractal T-cuadrado",
+          "data_attrs": {
+            "data-isotype-style": "t_cuadrado"
+          }
+        },
+        "vicsek": {
+          "description": "Fractal de Vicsek",
+          "data_attrs": {
+            "data-isotype-style": "vicsek"
+          }
+        },
+        "arbol_pitagoras": {
+          "description": "Árbol de Pitágoras",
+          "data_attrs": {
+            "data-isotype-style": "arbol_pitagoras"
+          }
+        },
+        "h_arbol": {
+          "description": "Árbol H",
+          "data_attrs": {
+            "data-isotype-style": "h_arbol"
+          }
+        },
+        "gasket_apolonio": {
+          "description": "Empaque de Apolonio",
+          "data_attrs": {
+            "data-isotype-style": "gasket_apolonio"
+          }
+        },
+        "planta_lsystem": {
+          "description": "Planta (L-system)",
+          "data_attrs": {
+            "data-isotype-style": "planta_lsystem"
+          }
+        },
+        "arbol_ramificado": {
+          "description": "Árbol ramificado",
+          "data_attrs": {
+            "data-isotype-style": "arbol_ramificado"
+          }
+        },
+        "helecho": {
+          "description": "Helecho de Barnsley",
+          "data_attrs": {
+            "data-isotype-style": "helecho"
+          }
+        },
+        "metaballs": {
+          "description": "Metabolas",
+          "data_attrs": {
+            "data-isotype-style": "metaballs"
+          }
+        },
+        "blob_organico": {
+          "description": "Forma orgánica",
+          "data_attrs": {
+            "data-isotype-style": "blob_organico"
+          }
+        },
+        "flujo_campo": {
+          "description": "Líneas de flujo",
+          "data_attrs": {
+            "data-isotype-style": "flujo_campo"
+          }
+        },
+        "reaccion_difusion": {
+          "description": "Reacción-difusión",
+          "data_attrs": {
+            "data-isotype-style": "reaccion_difusion"
+          }
+        },
+        "automata_r30": {
+          "description": "Autómata regla 30",
+          "data_attrs": {
+            "data-isotype-style": "automata_r30"
+          }
+        },
+        "game_of_life": {
+          "description": "Vida de Conway",
+          "data_attrs": {
+            "data-isotype-style": "game_of_life"
+          }
+        },
+        "grietas": {
+          "description": "Grietas",
+          "data_attrs": {
+            "data-isotype-style": "grietas"
+          }
+        },
+        "flor_vida": {
+          "description": "Flor de la vida",
+          "data_attrs": {
+            "data-isotype-style": "flor_vida"
+          }
+        },
+        "semilla_vida": {
+          "description": "Semilla de la vida",
+          "data_attrs": {
+            "data-isotype-style": "semilla_vida"
+          }
+        },
+        "vesica": {
+          "description": "Vesica piscis",
+          "data_attrs": {
+            "data-isotype-style": "vesica"
+          }
+        },
+        "anillos_borromeos": {
+          "description": "Anillos borromeos",
+          "data_attrs": {
+            "data-isotype-style": "anillos_borromeos"
+          }
+        },
+        "triquetra": {
+          "description": "Triquetra",
+          "data_attrs": {
+            "data-isotype-style": "triquetra"
+          }
+        },
+        "circulos_concentricos": {
+          "description": "Círculos concéntricos",
+          "data_attrs": {
+            "data-isotype-style": "circulos_concentricos"
+          }
+        },
+        "venn": {
+          "description": "Círculos superpuestos",
+          "data_attrs": {
+            "data-isotype-style": "venn"
+          }
+        },
+        "metatron": {
+          "description": "Cubo de Metatrón",
+          "data_attrs": {
+            "data-isotype-style": "metatron"
+          }
+        },
+        "roseta": {
+          "description": "Rosetón",
+          "data_attrs": {
+            "data-isotype-style": "roseta"
+          }
+        },
+        "mandala": {
+          "description": "Mandala",
+          "data_attrs": {
+            "data-isotype-style": "mandala"
+          }
+        },
+        "interferencia": {
+          "description": "Interferencia de ondas",
+          "data_attrs": {
+            "data-isotype-style": "interferencia"
+          }
+        },
+        "ondas_concentricas": {
+          "description": "Ondas concéntricas",
+          "data_attrs": {
+            "data-isotype-style": "ondas_concentricas"
+          }
+        },
+        "chladni": {
+          "description": "Patrón de Chladni",
+          "data_attrs": {
+            "data-isotype-style": "chladni"
+          }
+        },
+        "moire": {
+          "description": "Patrón de muaré",
+          "data_attrs": {
+            "data-isotype-style": "moire"
+          }
+        },
+        "lineas_contorno": {
+          "description": "Líneas de contorno",
+          "data_attrs": {
+            "data-isotype-style": "lineas_contorno"
+          }
+        },
+        "bandas_seno": {
+          "description": "Bandas sinusoidales",
+          "data_attrs": {
+            "data-isotype-style": "bandas_seno"
+          }
+        },
+        "campo_dipolo": {
+          "description": "Campo dipolo",
+          "data_attrs": {
+            "data-isotype-style": "campo_dipolo"
+          }
+        },
+        "remolino": {
+          "description": "Remolino",
+          "data_attrs": {
+            "data-isotype-style": "remolino"
+          }
+        },
+        "ondas_radiales": {
+          "description": "Ondas radiales",
+          "data_attrs": {
+            "data-isotype-style": "ondas_radiales"
+          }
+        },
+        "trenza_ondas": {
+          "description": "Trenza de ondas",
+          "data_attrs": {
+            "data-isotype-style": "trenza_ondas"
+          }
+        },
+        "filotaxis": {
+          "description": "Filotaxis (girasol)",
+          "data_attrs": {
+            "data-isotype-style": "filotaxis"
+          }
+        },
+        "puntos_aureos": {
+          "description": "Puntos en ángulo áureo",
+          "data_attrs": {
+            "data-isotype-style": "puntos_aureos"
+          }
+        },
+        "poisson": {
+          "description": "Puntos dispersos",
+          "data_attrs": {
+            "data-isotype-style": "poisson"
+          }
+        },
+        "trama_puntos": {
+          "description": "Trama de puntos",
+          "data_attrs": {
+            "data-isotype-style": "trama_puntos"
+          }
+        },
+        "degradado_puntos": {
+          "description": "Degradado de puntos",
+          "data_attrs": {
+            "data-isotype-style": "degradado_puntos"
+          }
+        },
+        "constelacion": {
+          "description": "Constelación",
+          "data_attrs": {
+            "data-isotype-style": "constelacion"
+          }
+        },
+        "monograma": {
+          "description": "Monograma",
+          "data_attrs": {
+            "data-isotype-style": "monograma"
+          }
+        },
+        "letra_negativa": {
+          "description": "Letra en negativo",
+          "data_attrs": {
+            "data-isotype-style": "letra_negativa"
+          }
+        },
+        "letra_stencil": {
+          "description": "Letra stencil",
+          "data_attrs": {
+            "data-isotype-style": "letra_stencil"
+          }
+        },
+        "ligadura": {
+          "description": "Ligadura de iniciales",
+          "data_attrs": {
+            "data-isotype-style": "ligadura"
+          }
+        },
+        "inicial_circulo": {
+          "description": "Inicial en círculo",
+          "data_attrs": {
+            "data-isotype-style": "inicial_circulo"
+          }
+        },
+        "escudo": {
+          "description": "Escudo",
+          "data_attrs": {
+            "data-isotype-style": "escudo"
+          }
+        },
+        "sello": {
+          "description": "Sello circular",
+          "data_attrs": {
+            "data-isotype-style": "sello"
+          }
+        },
+        "laurel": {
+          "description": "Corona de laurel",
+          "data_attrs": {
+            "data-isotype-style": "laurel"
+          }
+        },
+        "banderin": {
+          "description": "Banderín",
+          "data_attrs": {
+            "data-isotype-style": "banderin"
+          }
+        },
+        "none": {
+          "description": "Sin símbolo procedural",
+          "data_attrs": {}
+        }
+      }
+    },
+    "accent_placement": {
+      "label": "Acento",
+      "type": "enum",
+      "options": {
+        "none": {
+          "description": "Sin acento (por defecto)",
+          "data_attrs": {}
+        },
+        "underline": {
+          "description": "Barra de acento subrayada",
+          "data_attrs": {
+            "data-accent-placement": "underline"
+          }
+        },
+        "corner": {
+          "description": "Marcador de acento en esquina",
+          "data_attrs": {
+            "data-accent-placement": "corner"
+          }
+        },
+        "sidebar": {
+          "description": "Franja de acento lateral",
+          "data_attrs": {
+            "data-accent-placement": "sidebar"
+          }
+        },
+        "dot": {
+          "description": "Elemento de acento en punto",
+          "data_attrs": {
+            "data-accent-placement": "dot"
+          }
+        }
+      }
+    }
+  }
+}

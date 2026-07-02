@@ -27,7 +27,7 @@
 - `contrast_validator.py` — validador WCAG AA.
 - `gallery.py` — generador de galerías.
 - `scripts/eikon_aggregate_wcag.py`, `scripts/eikon_count.py` — cierres documentales.
-- `MASTER-TAXONOMIA.md`, `BRIEF-AGENCIA.md` — specs y brief.
+- `docs/MASTER-TAXONOMIA.md`, `docs/legacy/BRIEF-AGENCIA.md` — specs y brief.
 - `tests/test_eikon_checks.py` — tests de regresión.
 - `requirements.txt` — deps declaradas.
 - `_STATUS.md` — snapshot regenerable (ver abajo).

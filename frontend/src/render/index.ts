@@ -1,0 +1,1 @@
+export { renderBatchClientSide } from "./clientRender";

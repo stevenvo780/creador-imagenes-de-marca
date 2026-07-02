@@ -19,15 +19,15 @@ Exit codes:
     1 — no se encontraron reportes por marca
     2 — error de E/S inesperado
 """
+
 from __future__ import annotations
 
 import argparse
 import json
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
-
 
 # Tamaño razonable para un reporte "vacío" pero válido
 EMPTY_REPORT_PLACEHOLDER = "<empty>"
@@ -103,25 +103,26 @@ def build_aggregate(output_dir: Path) -> dict[str, Any] | None:
         aaa_pass = int(safe_get(data, "wcag_aaa", "pass", default=0))
         aaa_fail = int(safe_get(data, "wcag_aaa", "fail", default=0))
         ts = str(data.get("timestamp", ""))
-        summary = str(data.get("summary", ""))
 
         real_fails = aa_fail - no_fg
         if real_fails > 0:
             brands_with_failures += 1
 
-        per_brand_rows.append({
-            "marca": slug,
-            "assets": assets,
-            "aa_pass": aa_pass,
-            "aa_fail": aa_fail,
-            "no_foreground": no_fg,
-            "aaa_pass": aaa_pass,
-            "aaa_fail": aaa_fail,
-            "timestamp": ts,
-        })
+        per_brand_rows.append(
+            {
+                "marca": slug,
+                "assets": assets,
+                "aa_pass": aa_pass,
+                "aa_fail": aa_fail,
+                "no_foreground": no_fg,
+                "aaa_pass": aaa_pass,
+                "aaa_fail": aaa_fail,
+                "timestamp": ts,
+            }
+        )
 
-        for fail in data.get("failing_assets_aa", []) or []:
-            failing_assets.append({
+        failing_assets.extend(
+            {
                 "marca": slug,
                 "img": fail.get("img"),
                 "contrast_ratio": fail.get("contrast_ratio"),
@@ -129,7 +130,9 @@ def build_aggregate(output_dir: Path) -> dict[str, Any] | None:
                 "text_color": fail.get("text_color"),
                 "issue": fail.get("issue"),
                 "no_foreground": bool(fail.get("no_foreground", False)),
-            })
+            }
+            for fail in (data.get("failing_assets_aa", []) or [])
+        )
 
         total_assets += assets
         total_aa_pass += aa_pass
@@ -139,7 +142,7 @@ def build_aggregate(output_dir: Path) -> dict[str, Any] | None:
         total_aaa_fail += aaa_fail
 
     aggregate = {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "config": {
             "source": "per-brand _contraste-report.json",
             "output_dir": str(output_dir),
@@ -192,7 +195,7 @@ def print_table(per_brand_rows: list[dict[str, Any]], totals: dict[str, int]) ->
         str(totals["aaa_fail"]),
     )
 
-    all_rows = body_rows + [total_row]
+    all_rows = [*body_rows, total_row]
     widths = [max(len(headers[i]), max(len(r[i]) for r in all_rows)) for i in range(len(headers))]
     sep = "  "
     print(sep.join(headers[i].ljust(widths[i]) for i in range(len(headers))))
