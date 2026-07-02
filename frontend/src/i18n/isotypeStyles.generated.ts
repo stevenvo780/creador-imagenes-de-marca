@@ -25,6 +25,12 @@ export const ISOTYPE_LABELS: Record<string, string> = {
   "sello": "Sello circular",
   "laurel": "Corona de laurel",
   "banderin": "Banderín",
+  "marca_anidada": "Marca anidada",
+  "marca_geometrica": "Marca geométrica",
+  "grid_modular": "Retícula modular",
+  "monograma_reticulado": "Monograma reticulado",
+  "negativo_espacio": "Espacio negativo",
+  "icono_inicial": "Ícono + inicial",
 };
 
 export const ISOTYPE_CATEGORIES: { category: string; styles: string[] }[] = [
@@ -32,6 +38,7 @@ export const ISOTYPE_CATEGORIES: { category: string; styles: string[] }[] = [
   { category: "Espirales", styles: ["espiral_aurea"] },
   { category: "Fractales", styles: ["dragon", "hilbert"] },
   { category: "Círculos", styles: ["flor_vida", "semilla_vida", "vesica", "anillos_borromeos", "triquetra", "metatron"] },
-  { category: "Tipográfico", styles: ["monograma", "letra_negativa", "letra_stencil", "ligadura", "inicial_circulo"] },
-  { category: "Emblemas", styles: ["escudo", "sello", "laurel", "banderin"] },
+  { category: "Tipográfico", styles: ["monograma", "letra_negativa", "letra_stencil", "ligadura", "inicial_circulo", "monograma_reticulado", "negativo_espacio", "icono_inicial"] },
+  { category: "Emblemas", styles: ["escudo", "sello", "laurel", "banderin", "marca_anidada"] },
+  { category: "Geométricas", styles: ["marca_geometrica", "grid_modular"] },
 ];

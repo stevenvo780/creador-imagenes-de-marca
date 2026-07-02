@@ -52,6 +52,16 @@ ALGORITHMS: list[tuple[str, str, str, str]] = [
     ("sello", "Sello circular", "Emblemas", "anillo doble con dentado y centro"),
     ("laurel", "Corona de laurel", "Emblemas", "dos ramas curvas con hojas"),
     ("banderin", "Banderín", "Emblemas", "cinta/banner con cola en V"),
+    ("marca_anidada", "Marca anidada", "Emblemas", "3 capas concéntricas con inicial al centro"),
+
+    # ── Geométricas (marcas nuevas con criterio) ─────────────────────────────
+    ("marca_geometrica", "Marca geométrica", "Geométricas", "2-3 formas simples combinadas por seed"),
+    ("grid_modular", "Retícula modular", "Geométricas", "grilla 2x2/3x3 con celdas llenas seeded"),
+
+    # ── Tipográfico (marcas nuevas basadas en inicial) ───────────────────────
+    ("monograma_reticulado", "Monograma reticulado", "Tipográfico", "inicial sobre retícula 5x5 estilo Bauhaus"),
+    ("negativo_espacio", "Espacio negativo", "Tipográfico", "inicial recortada en forma sólida (FedEx/Roche)"),
+    ("icono_inicial", "Ícono + inicial", "Tipográfico", "ícono geométrico simple + inicial alineados"),
 ]
 
 

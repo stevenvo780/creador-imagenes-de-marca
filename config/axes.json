@@ -347,6 +347,42 @@
             "data-isotype-style": "banderin"
           }
         },
+        "marca_anidada": {
+          "description": "Marca anidada",
+          "data_attrs": {
+            "data-isotype-style": "marca_anidada"
+          }
+        },
+        "marca_geometrica": {
+          "description": "Marca geométrica",
+          "data_attrs": {
+            "data-isotype-style": "marca_geometrica"
+          }
+        },
+        "grid_modular": {
+          "description": "Retícula modular",
+          "data_attrs": {
+            "data-isotype-style": "grid_modular"
+          }
+        },
+        "monograma_reticulado": {
+          "description": "Monograma reticulado",
+          "data_attrs": {
+            "data-isotype-style": "monograma_reticulado"
+          }
+        },
+        "negativo_espacio": {
+          "description": "Espacio negativo",
+          "data_attrs": {
+            "data-isotype-style": "negativo_espacio"
+          }
+        },
+        "icono_inicial": {
+          "description": "Ícono + inicial",
+          "data_attrs": {
+            "data-isotype-style": "icono_inicial"
+          }
+        },
         "none": {
           "description": "Sin símbolo procedural",
           "data_attrs": {}

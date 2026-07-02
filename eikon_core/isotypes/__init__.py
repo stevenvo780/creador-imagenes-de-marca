@@ -31,6 +31,9 @@ _PACK_MODULES = [
     "pack_distribucion",
     "pack_tipografico",
     "pack_emblemas",
+    "pack_brand_geo",
+    "pack_brand_sym",
+    "pack_brand_form",
 ]
 
 GENERATORS: dict[str, Callable[[Any], str]] = {}
@@ -42,7 +45,7 @@ for _mod in _PACK_MODULES:
         _pack = getattr(_m, "PACK", {})
         if isinstance(_pack, dict):
             GENERATORS.update(_pack)
-    except Exception as _e:  # noqa: BLE001 — un pack roto no debe tumbar el import
+    except Exception as _e:
         _LOAD_ERRORS[_mod] = str(_e)
         logger.warning("pack de isotipos no cargado: %s (%s)", _mod, _e)
 
