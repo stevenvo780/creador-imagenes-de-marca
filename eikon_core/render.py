@@ -27,8 +27,11 @@ def _get_default_variant_for_asset_type(asset_type: str) -> str:
         "business_card": "v1_front",
         "letterhead": "v1_corporate",
         "stat_card": "v1_big_data",
-        "og_general": "v1_docs",
+        # og_general: v1_website (símbolo grande sobre disco) es más fuerte que
+        # v1_docs (snippet de código con logo chico) para la preview de enlace.
+        "og_general": "v1_website",
         "og_product": "v1_product",
+        "ad_rectangle": "v1_visual",
         "linkedin_header": "v1_institucional",
         "twitter_header": "v1_brand",
     }

@@ -148,12 +148,14 @@
   }
 
   body[data-variant="v1_visual"] .symbol-wrap {
-    width: 84px;
-    height: 84px;
+    width: 115px;
+    height: 115px;
   }
   body[data-variant="v1_visual"] .symbol-wrap::before {
-    inset: -16px;
-    background: radial-gradient(circle at center, rgba(67,181,166,0.34) 0%, rgba(141,124,192,0.12) 45%, transparent 72%);
+    inset: 0;
+    background: var(--acento);
+    opacity: 0.22;
+    border-radius: 50%;
   }
   body[data-variant="v1_visual"] .signature-rule { display: block; }
   body[data-variant="v1_visual"] .big-number { display: none; }
