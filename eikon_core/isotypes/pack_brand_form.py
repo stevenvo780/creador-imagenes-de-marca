@@ -95,62 +95,7 @@ def gen_grid_modular(p: IsotypeParams) -> str:
     return _wrap(p, parts)
 
 
-# 2. trazo_unico — línea continua monoline sin levantar el lápiz
-def gen_trazo_unico(p: IsotypeParams) -> str:
-    c = p.size / 2
-    sw = p.size * 0.025
-    rad = p.size * 0.36
-
-    # tipo: 0=Lissajous, 1=espiral, 2=onda senoidal
-    curve_type = int(seeded_random(p.seed, 1, 3))
-
-    n_pts = 280
-
-    if curve_type == 0:
-        # Figura de Lissajous: x=sin(a·t+δ), y=sin(b·t)
-        a = 2 + int(seeded_random(p.seed, 2, 4))   # 2..5
-        b = 3 + int(seeded_random(p.seed, 3, 4))   # 3..6
-        delta = seeded_random(p.seed, 4, math.pi)  # 0..π
-        pts = []
-        for i in range(n_pts + 1):
-            t = 2 * math.pi * i / n_pts
-            pts.append((c + rad * math.sin(a * t + delta), c + rad * math.sin(b * t)))
-        d = _path_from_points(pts, close=True)
-        return _wrap(p, [create_svg_path(d, fill="none", stroke=p.primary_color, stroke_width=sw)])
-
-    elif curve_type == 1:
-        # Espiral arquimediana: r = a·θ
-        turns = 3.0 + seeded_random(p.seed, 5, 2.5)  # 3..5.5 vueltas
-        a = rad / (2 * math.pi * turns)
-        pts = []
-        for i in range(n_pts + 1):
-            theta = 2 * math.pi * turns * i / n_pts
-            r = a * theta
-            pts.append((c + r * math.cos(theta), c + r * math.sin(theta)))
-        d = _path_from_points(pts, close=False)
-        return _wrap(p, [create_svg_path(d, fill="none", stroke=p.primary_color, stroke_width=sw)])
-
-    else:
-        # Onda senoidal horizontal con amplitud y frecuencia por seed
-        freq = 3 + int(seeded_random(p.seed, 6, 5))    # 3..7 ciclos
-        amp = rad * (0.55 + seeded_random(p.seed, 7, 0.45))  # 0.55..1.0 de rad
-        orient = seeded_random(p.seed, 8, 1.0)          # 0=horizontal, 1=vertical
-
-        pts = []
-        for i in range(n_pts + 1):
-            t = i / n_pts
-            if orient < 0.5:
-                x = c - rad + 2 * rad * t
-                y = c + amp * math.sin(freq * math.pi * t)
-            else:
-                y = c - rad + 2 * rad * t
-                x = c + amp * math.sin(freq * math.pi * t)
-            pts.append((x, y))
-        d = _path_from_points(pts, close=False)
-        return _wrap(p, [create_svg_path(d, fill="none", stroke=p.primary_color, stroke_width=sw)])
-
-
-# 3. marca_anidada — 3 capas concéntricas (exterior/medio/interior) a colores
+# marca_anidada — 3 capas concéntricas (exterior/medio/interior) a colores
 def gen_marca_anidada(p: IsotypeParams) -> str:
     c = p.size / 2
     sw = p.size * 0.022
@@ -226,13 +171,11 @@ def _add_shape(
 
 PACK: dict[str, object] = {
     "grid_modular": gen_grid_modular,
-    "trazo_unico": gen_trazo_unico,
     "marca_anidada": gen_marca_anidada,
 }
 
 
 CATALOG_ENTRIES: list[tuple[str, str, str, str]] = [
     ("grid_modular", "Retícula Modular", "form", "patrón geométrico de cuadros"),
-    ("trazo_unico", "Trazo Único", "form", "línea continua sin levantar"),
     ("marca_anidada", "Marca Anidada", "form", "3 capas concéntricas con jerarquía"),
 ]

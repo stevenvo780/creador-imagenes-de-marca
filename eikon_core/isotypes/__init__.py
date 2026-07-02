@@ -20,15 +20,10 @@ logger = logging.getLogger(__name__)
 # Orden de carga (los ejemplos primero; luego cada pack de categoría).
 _PACK_MODULES = [
     "_example",
-    "pack_curvas",
     "pack_espirales",
     "pack_poligonos",
-    "pack_teselados",
     "pack_fractales",
-    "pack_organico",
-    "pack_ondas",
     "pack_circulos",
-    "pack_distribucion",
     "pack_tipografico",
     "pack_emblemas",
     "pack_brand_geo",

@@ -36,10 +36,10 @@ import math
 from typing import TYPE_CHECKING
 
 from eikon_core.svg_generator import (
+    create_regular_polygon,
     create_svg_circle,
     create_svg_path,
     create_svg_polygon,
-    create_regular_polygon,
     seeded_random,
     wrap_svg,
 )
