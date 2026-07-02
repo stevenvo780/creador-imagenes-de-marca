@@ -32,6 +32,7 @@ def _get_default_variant_for_asset_type(asset_type: str) -> str:
         "og_general": "v1_website",
         "og_product": "v1_product",
         "ad_rectangle": "v1_visual",
+        "favicon": "v3_512",
         "linkedin_header": "v1_institucional",
         "twitter_header": "v1_brand",
     }
