@@ -8,56 +8,62 @@
   :root {
     --bg: #0b1417; --texto: #e8e0d4;
     --acento: #43b5a6; --acento-2: #8d7cc0;
-    --font-titulo: 'Inter', sans-serif;
+    --font-titulo: 'Playfair Display', Georgia, serif;
+    --type-base: 16px;
+    --type-lg: 20px;
+    --type-2xl: 31px;
+    --space-2: 16px;
+    --space-6: 48px;
+    --tracking-tight: -0.02em;
+    --tracking-normal: 0em;
+    --leading-tight: 1.2;
+    --leading-normal: 1.5;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { width: 800px; height: 800px; overflow: hidden; }
   body {
     background-color: var(--bg);
-    display: flex; align-items: center; justify-content: center;
-  }
-  body[data-variant="v1_color"] { --bg: #0b1417; }
-  body[data-variant="v2_mono"]  { --bg: #f4f1ea; }
-  body[data-variant="v3_inverse"] { --bg: #0b1417; }
-
-  /* Tratamientos de fondo combinatorios (eje background_treatment).
-     Solo se activan cuando data-bg-treatment está presente, lo que únicamente
-     ocurre en renders combinatorios; el render de taxonomía nunca setea ese
-     atributo, por lo que estas reglas son inertes ahí (sin regresión). Cada
-     valor produce un fondo pixel-distinto y determinista (CSS puro). */
-  body[data-bg-treatment="solid"] { background-image: none; }
-  body[data-bg-treatment="gradient"] {
-    background-image: linear-gradient(135deg, var(--bg) 0%, var(--acento) 120%);
-  }
-  body[data-bg-treatment="geometric"] {
-    background-image: repeating-linear-gradient(45deg,
-      transparent 0 28px, rgba(255, 255, 255, 0.07) 28px 56px);
-  }
-  body[data-bg-treatment="grid"] {
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.09) 1px, transparent 1px);
-    background-size: 48px 48px;
-  }
-  body[data-bg-treatment="orb"] {
-    background-image: radial-gradient(circle at 50% 42%,
-      var(--acento) 0%, transparent 55%);
-  }
-  body[data-bg-treatment="texture"] {
-    background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1.5px, transparent 1.5px);
-    background-size: 14px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-6);
   }
 
-  .symbol-wrap { width: 500px; height: 500px; position: relative; }
-  .symbol-wrap svg { width: 100%; height: 100%; }
+  /* Variantes de color — fondos sólidos limpios */
+  body[data-variant="v1_color"] { --bg: #0b1417; --texto: #e8e0d4; }
+  body[data-variant="v2_mono"]  { --bg: #f4f1ea; --texto: #0b1417; }
+  body[data-variant="v3_inverse"] { --bg: #f4f1ea; --texto: #0b1417; }
 
-  body[data-variant="v1_color"] .symbol-wrap svg * { stroke: url(#isoGrad); }
-  body[data-variant="v2_mono"]  .symbol-wrap svg * { stroke: #0b1417; fill: #0b1417; }
-  body[data-variant="v3_inverse"] .symbol-wrap svg * { stroke: #e8e0d4; fill: #e8e0d4; }
+  /* Logo protagonista — 520px (65% del canvas), centrado, sin envoltura decorativa */
+  .symbol-wrap {
+    width: 520px;
+    height: 520px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .symbol-wrap svg,
+  .symbol-wrap img { width: 100%; height: 100%; }
+
+  /* Colores del símbolo por variante */
+  body[data-variant="v1_color"] .symbol-wrap svg * {
+    stroke: var(--acento);
+    fill: none;
+  }
+  body[data-variant="v2_mono"] .symbol-wrap svg * {
+    stroke: #0b1417;
+    fill: #0b1417;
+  }
+  body[data-variant="v3_inverse"] .symbol-wrap svg * {
+    stroke: #0b1417;
+    fill: #0b1417;
+  }
 
   .contract-fields { display: none !important; }
 
-  /* Soporte para isotipo generado */
+  /* Isotipo generado o fallback SVG */
   body[data-isotype-style="none"] .symbol-wrap .default-mark { display: block; }
   body[data-isotype-style]:not([data-isotype-style="none"]) .symbol-wrap .default-mark { display: none; }
 
@@ -68,33 +74,53 @@
     align-items: center;
     justify-content: center;
   }
-
   .symbol-wrap .isotype-mark img,
   .symbol-wrap .isotype-mark svg {
     width: 100%;
     height: 100%;
     object-fit: contain;
   }
+
+  /* Capa de texto opcional (data-titulo, data-subtitulo) */
+  .text-layer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0 var(--space-6);
+  }
+  .text-layer [data-titulo] {
+    font-family: var(--font-titulo);
+    font-size: var(--type-2xl);
+    color: var(--texto);
+    font-weight: 600;
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+  }
+  .text-layer [data-subtitulo] {
+    font-size: var(--type-base);
+    color: var(--texto);
+    opacity: 0.8;
+    letter-spacing: var(--tracking-normal);
+    line-height: var(--leading-normal);
+  }
 </style>
 </head>
 <body>
   <div class="symbol-wrap">
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="default-mark">
-      <defs>
-        <linearGradient id="isoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#43b5a6"/><stop offset="100%" stop-color="#8d7cc0"/>
-        </linearGradient>
-      </defs>
-      <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke-width="2.5"/>
+      <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" stroke-width="2.5"/>
       <line x1="50" y1="5" x2="50" y2="95" stroke-width="1.5" opacity="0.5"/>
       <line x1="7" y1="25" x2="93" y2="75" stroke-width="1.5" opacity="0.5"/>
       <line x1="93" y1="25" x2="7" y2="75" stroke-width="1.5" opacity="0.5"/>
-      <circle cx="50" cy="50" r="4"/>
-      <circle cx="50" cy="5" r="3"/><circle cx="93" cy="25" r="3"/>
-      <circle cx="93" cy="75" r="3"/><circle cx="50" cy="95" r="3"/>
-      <circle cx="7" cy="75" r="3"/><circle cx="7" cy="25" r="3"/>
+      <circle cx="50" cy="50" r="4"/><circle cx="50" cy="5" r="3"/>
+      <circle cx="93" cy="25" r="3"/><circle cx="93" cy="75" r="3"/>
+      <circle cx="50" cy="95" r="3"/><circle cx="7" cy="75" r="3"/><circle cx="7" cy="25" r="3"/>
     </svg>
     <div class="isotype-mark" data-isotype-container></div>
+  </div>
+  <div class="text-layer" aria-hidden="true">
+    <span data-titulo></span><span data-subtitulo></span>
   </div>
   <div class="contract-fields" aria-hidden="true">
     <span data-logo-simbolo></span><span data-logo-texto></span>

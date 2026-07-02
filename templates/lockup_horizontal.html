@@ -6,54 +6,97 @@
 <title>Eikon - Lockup Horizontal</title>
 <style>
   :root {
-    --bg: #0b1417; --texto: #e8e0d4; --primario: #0b1417;
-    --acento: #43b5a6; --acento-2: #8d7cc0;
-    --font-titulo: 'Inter', sans-serif; --font-cuerpo: 'Inter', sans-serif;
+    --bg: #0b1417;
+    --texto: #e8e0d4;
+    --primario: #0b1417;
+    --acento: #43b5a6;
+    --acento-2: #8d7cc0;
+    --font-titulo: 'Playfair Display', Georgia, serif;
+    --font-cuerpo: 'Inter', system-ui, sans-serif;
+    --space-3: 24px;
+    --space-4: 32px;
+    --space-5: 40px;
+    --space-8: 64px;
+    --type-6xl: 76px;
+    --tracking-tight: -0.02em;
+    --leading-tight: 1.2;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 1200px; height: 400px; overflow: hidden; }
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  html,
+  body {
+    width: 1200px;
+    height: 400px;
+    overflow: hidden;
+  }
   body {
     background-color: var(--bg);
     color: var(--texto);
     font-family: var(--font-cuerpo);
-    display: flex; align-items: center; justify-content: center;
-    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4) var(--space-5);
   }
-  /* COLOR variant (default palette) */
-  body[data-variant="v1_color"] { --bg: #0b1417; --texto: #e8e0d4; }
-  /* MONO: black on cream */
-  body[data-variant="v2_mono"]  { --bg: #f4f1ea; --texto: #0b1417; }
-  /* INVERSE: cream on black */
-  body[data-variant="v3_inverse"] { --bg: #f4f1ea; --texto: #0b1417; }
-
-  .container {
-    display: flex; align-items: center; justify-content: center; gap: 28px;
-    max-width: 1100px; margin: 0 auto; width: 100%;
+  body[data-variant="v1_color"] {
+    --bg: #0b1417;
+    --texto: #e8e0d4;
   }
-  .symbol-wrap {
-    flex-shrink: 0; width: 140px; height: 140px;
-    display: flex; align-items: center; justify-content: center;
+  body[data-variant="v2_mono"] {
+    --bg: #f4f1ea;
+    --texto: #0b1417;
   }
-  .symbol-wrap svg {
-    width: 120px; height: 120px;
+  body[data-variant="v3_inverse"] {
+    --bg: #f4f1ea;
+    --texto: #0b1417;
   }
-  /* Color variant: gradient on symbol */
-  body[data-variant="v1_color"] .symbol-wrap svg * { stroke: url(#hexGrad); }
-  body[data-variant="v2_mono"] .symbol-wrap svg *  { stroke: #0b1417; fill: #0b1417; }
-  body[data-variant="v3_inverse"] .symbol-wrap svg * { stroke: #0b1417; fill: #0b1417; }
-
-  .wordmark {
-    font-family: var(--font-titulo); font-size: 72px; font-weight: 700;
-    letter-spacing: -0.02em; line-height: 1.15;
+  .layout {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    width: 100%;
+    max-width: 1100px;
+  }
+  [data-isotype-container] {
+    flex-shrink: 0;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  [data-isotype-container] svg {
+    width: 100%;
+    height: 100%;
+  }
+  body[data-variant="v1_color"] [data-isotype-container] svg * {
+    stroke: url(#hexGrad);
+  }
+  body[data-variant="v2_mono"] [data-isotype-container] svg *,
+  body[data-variant="v3_inverse"] [data-isotype-container] svg * {
+    stroke: #0b1417;
+    fill: #0b1417;
+  }
+  [data-logo-texto] {
+    font-family: var(--font-titulo);
+    font-size: var(--type-6xl);
+    font-weight: 700;
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
     color: var(--texto);
     white-space: nowrap;
   }
-  .contract-fields { display: none !important; }
+  .contract-fields {
+    display: none !important;
+  }
 </style>
 </head>
-<body>
-  <div class="container">
-    <div class="symbol-wrap">
+<body data-variant="v1_color">
+  <div class="layout">
+    <div data-isotype-container>
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="hexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -61,14 +104,11 @@
             <stop offset="100%" stop-color="#8d7cc0"/>
           </linearGradient>
         </defs>
-        <!-- Hexagon outer -->
         <polygon points="50,5 93,25 93,75 50,95 7,75 7,25"
                  fill="none" stroke-width="2.5"/>
-        <!-- Internal structure lines -->
         <line x1="50" y1="5" x2="50" y2="95" stroke-width="1" opacity="0.5"/>
         <line x1="7" y1="25" x2="93" y2="75" stroke-width="1" opacity="0.5"/>
         <line x1="93" y1="25" x2="7" y2="75" stroke-width="1" opacity="0.5"/>
-        <!-- Nodes -->
         <circle cx="50" cy="50" r="3"/>
         <circle cx="50" cy="5" r="2.5"/>
         <circle cx="93" cy="25" r="2.5"/>
@@ -78,7 +118,7 @@
         <circle cx="7" cy="25" r="2.5"/>
       </svg>
     </div>
-    <h1 class="wordmark" data-logo-texto data-fit data-fit-min="22">Kósmos</h1>
+    <h1 data-logo-texto data-fit data-fit-min="22">Kósmos</h1>
   </div>
   <div class="contract-fields" aria-hidden="true">
     <span data-titulo></span><span data-subtitulo></span><span data-copy></span>

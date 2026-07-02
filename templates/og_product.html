@@ -10,21 +10,24 @@
     --acento-2: #8d7cc0;
     --acento-3: #A3E4D7;
     --texto: #e8e0d4;
-    --texto-muted: #8fa3a8;
-    --surface: #131e22;
-    --grad-hero: linear-gradient(135deg, #43b5a6 0%, #8d7cc0 60%, #4a3a80 100%);
-    --grad-bg: radial-gradient(ellipse at 72% 28%, #1a2c2f 0%, #0b1417 62%);
-    --grad-text: linear-gradient(135deg, color-mix(in srgb, var(--acento), white 18%) 0%, color-mix(in srgb, var(--acento-2), white 22%) 100%);
-    --grad-rule: linear-gradient(180deg, transparent 0%, var(--acento) 12%, var(--acento-2) 88%, transparent 100%);
-    --grad-disc: radial-gradient(circle at 32% 28%, color-mix(in srgb, var(--acento), white 24%) 0%, var(--acento) 50%, color-mix(in srgb, var(--acento), black 28%) 100%);
-    --grad-line: linear-gradient(90deg, var(--acento) 0%, var(--acento-2) 100%);
+    --texto-muted: #a09080;
+    --surface: #152028;
     --font-titulo: "Playfair Display", Georgia, "Times New Roman", serif;
     --font-cuerpo: "Inter", "DejaVu Sans", Arial, system-ui, sans-serif;
-    --font-simbolo: var(--font-titulo);
-    --orb-opacity: 0.16;
-    --noise-opacity: 0.04;
-    --disc-size: 320px;
-    --rule-x: 420px;
+    --type-4xl: 49px;
+    --type-3xl: 39px;
+    --type-lg: 20px;
+    --type-base: 16px;
+    --type-sm: 10px;
+    --space-2: 16px;
+    --space-3: 24px;
+    --space-4: 32px;
+    --space-6: 48px;
+    --space-8: 64px;
+    --tracking-tight: -0.02em;
+    --tracking-normal: 0em;
+    --leading-tight: 1.2;
+    --leading-normal: 1.5;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,218 +42,138 @@
     text-rendering: optimizeLegibility;
   }
 
-  .bg { position: absolute; inset: 0; background: var(--grad-bg); }
-  .noise {
-    position: absolute;
-    inset: 0;
-    opacity: var(--noise-opacity);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
-    background-size: 260px 260px;
-    mix-blend-mode: soft-light;
-  }
-  .orb {
-    position: absolute;
-    border-radius: 999px;
-    filter: blur(120px);
-    opacity: var(--orb-opacity);
-    pointer-events: none;
-  }
-  .orb-1 { width: 700px; height: 700px; top: -260px; right: -140px; background: var(--acento); }
-  .orb-2 { width: 540px; height: 540px; left: -120px; bottom: -240px; background: var(--acento-2); opacity: calc(var(--orb-opacity) * 0.65); }
-
-  .rule {
-    position: absolute;
-    left: var(--rule-x);
-    top: 110px;
-    bottom: 96px;
-    width: 2px;
-    background: var(--grad-rule);
-    border-radius: 2px;
-  }
-  .rule::before {
-    content: "";
-    position: absolute;
-    top: -7px;
-    left: 50%;
-    width: 9px;
-    height: 9px;
-    background: var(--acento);
-    border-radius: 1px;
-    transform: translate(-50%, 0) rotate(45deg);
-    box-shadow: 0 0 14px color-mix(in srgb, var(--acento) 55%, transparent);
-  }
-
   .stage {
     position: absolute;
-    left: 40px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: var(--disc-size);
-    height: var(--disc-size);
+    left: 0;
+    top: 0;
+    width: 48%;
+    height: 100%;
+    background: var(--surface);
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: var(--space-6);
   }
-  .disc {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    background: var(--grad-disc);
-    box-shadow:
-      0 38px 72px -22px color-mix(in srgb, var(--bg) 95%, transparent),
-      inset 0 0 0 1px color-mix(in srgb, var(--texto) 9%, transparent),
-      inset 0 -56px 96px -22px color-mix(in srgb, var(--primario) 42%, transparent);
-  }
-  .disc::after {
-    content: "";
-    position: absolute;
-    inset: 20px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--bg) 55%, transparent) 0%, var(--bg) 85%);
-    box-shadow: inset 0 0 32px color-mix(in srgb, var(--bg) 90%, transparent);
-    pointer-events: none;
-  }
+
   [data-isotype-container] {
     position: relative;
-    width: 62%;
-    height: 62%;
-    z-index: 10;
+    width: 280px;
+    height: 280px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
+
   [data-isotype-container] img {
     width: 100%;
     height: 100%;
     display: block;
     object-fit: contain;
-    /* El símbolo viene en colores de marca; NO invertir (lavaba el detalle a
-       un blob blanco). Sobre el disco interior oscuro resalta a color. */
-    filter: drop-shadow(0 6px 16px color-mix(in srgb, var(--primario) 50%, transparent));
   }
 
   .brand {
     position: absolute;
-    left: calc(var(--rule-x) + 52px);
-    top: 92px;
-    right: 64px;
+    left: 48%;
+    top: var(--space-4);
+    right: var(--space-4);
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: var(--space-3);
+    padding: var(--space-4);
   }
+
+  .eyebrow {
+    font-size: var(--type-sm);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wide, 0.02em);
+    color: var(--acento);
+    text-transform: uppercase;
+  }
+
   .wordmark {
-    max-width: 660px;
-    max-height: 160px;
     font-family: var(--font-titulo);
-    font-size: 78px;
-    font-weight: 900;
-    line-height: 1.02;
-    letter-spacing: -0.014em;
-    background: var(--grad-text);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
+    font-size: var(--type-4xl);
+    font-weight: 700;
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    color: var(--texto);
+    max-width: 600px;
   }
-  .accent-line {
-    width: 56px;
-    height: 3px;
-    border-radius: 2px;
-    background: var(--grad-line);
-  }
+
   .tagline {
-    max-width: 540px;
-    max-height: 64px;
-    color: var(--texto-muted);
-    font-size: 22px;
+    font-size: var(--type-lg);
     font-weight: 400;
-    line-height: 1.32;
-    letter-spacing: 0.004em;
+    line-height: var(--leading-normal);
+    color: var(--texto-muted);
+    max-width: 500px;
   }
 
   .content {
     position: absolute;
-    left: calc(var(--rule-x) + 52px);
-    right: 64px;
-    bottom: 72px;
+    left: 48%;
+    bottom: var(--space-4);
+    right: var(--space-4);
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    max-width: 600px;
+    gap: var(--space-2);
   }
-  .eyebrow {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-transform: uppercase;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.24em;
-    color: var(--acento-3);
-  }
-  .eyebrow::before {
-    content: "";
-    width: 28px;
-    height: 1px;
-    background: var(--acento);
-  }
+
   .titulo {
-    max-width: 580px;
-    max-height: 116px;
     font-family: var(--font-titulo);
-    font-size: 50px;
-    font-weight: 800;
-    line-height: 1.08;
-    letter-spacing: -0.006em;
+    font-size: var(--type-3xl);
+    font-weight: 700;
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
     color: var(--texto);
   }
+
   .copy {
-    max-width: 540px;
-    max-height: 104px;
-    font-size: 17px;
+    font-size: var(--type-base);
     font-weight: 400;
-    line-height: 1.46;
-    color: color-mix(in srgb, var(--texto) 78%, transparent);
+    line-height: var(--leading-normal);
+    color: var(--texto-muted);
+    max-width: 520px;
+  }
+
+  .accent-rule {
+    position: absolute;
+    left: 48%;
+    top: calc(var(--space-4) + var(--space-6) + var(--space-3));
+    width: var(--space-2);
+    height: 1px;
+    background: var(--acento);
   }
 
   .signature {
     position: absolute;
-    right: 28px;
-    bottom: 22px;
-    font-family: var(--font-cuerpo);
-    font-size: 10px;
+    right: var(--space-4);
+    bottom: var(--space-2);
+    font-size: var(--type-sm);
     font-weight: 500;
-    letter-spacing: 0.32em;
-    color: color-mix(in srgb, var(--texto) 32%, transparent);
+    letter-spacing: 0.08em;
+    color: color-mix(in srgb, var(--texto-muted) 70%, transparent);
     text-transform: uppercase;
-    z-index: 2;
   }
 </style>
 </head>
 <body>
-  <div class="bg"></div>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="noise"></div>
-  <div class="rule"></div>
-
   <div class="stage">
-    <div class="disc"></div>
     <div data-isotype-container></div>
   </div>
 
+  <div class="accent-rule"></div>
+
   <header class="brand">
-    <h1 class="wordmark" data-logo-texto data-fit data-fit-min="38"></h1>
-    <div class="accent-line"></div>
-    <p class="tagline" data-subtitulo data-fit data-fit-min="14"></p>
+    <div class="eyebrow">Producto</div>
+    <h1 class="wordmark" data-logo-texto data-fit data-fit-min="28"></h1>
+    <p class="tagline" data-subtitulo data-fit data-fit-min="12"></p>
   </header>
 
   <section class="content">
-    <div class="eyebrow">Producto</div>
-    <h2 class="titulo" data-titulo data-fit data-fit-min="26"></h2>
-    <p class="copy" data-copy data-fit data-fit-min="13"></p>
+    <h2 class="titulo" data-titulo data-fit data-fit-min="22"></h2>
+    <p class="copy" data-copy data-fit data-fit-min="11"></p>
   </section>
 
-  <div class="signature">Eikón · Studio</div>
+  <div class="signature">Eikón</div>
 </body>
 </html>
