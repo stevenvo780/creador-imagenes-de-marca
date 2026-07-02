@@ -64,6 +64,41 @@
   font-display: block;
   src: url("fonts/SpaceGrotesk-700.woff2") format("woff2");
 }
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("fonts/JetBrainsMono-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url("fonts/JetBrainsMono-700.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("fonts/CormorantGaramond-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+  src: url("fonts/CormorantGaramond-600.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url("fonts/CormorantGaramond-700.woff2") format("woff2");
+}
 
 :root {
   /* Color Tokens (injected by brand mapping) */
@@ -87,6 +122,64 @@
   /* Combinatorial Scaling Tokens (density_scale axis) */
   --font-size-scale: 1;
   --space-scale: 1;
+
+  /* ===== ESCALA DE ESPACIADO — múltiplos de 8 (siguiendo Material Design 3) =====
+   * Estos tokens reemplazan los números mágicos (22/28/60px).
+   * Úsalos SIEMPRE en lugar de valores arbitrarios. CI fallará si aparece un px fuera de escala.
+   */
+  --space-0: 0;
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+  --space-8: 64px;
+  --space-10: 80px;
+  --space-12: 96px;
+
+  /* ===== ESCALA TIPOGRÁFICA MODULAR — base 16px × ratio 1.25 =====
+   * Genera 10 pasos de tamaño (xs → 6xl). Aplica calc() para escala multiplicativa.
+   * Ratio 1.25 = professional / versatile. Para display (grandes encabezados),
+   * una línea usa 1.333 (golden ratio).
+   *
+   * Fórmula: size = base × (ratio ^ step)
+   * Ejemplos:
+   * - --type-xs: 16 × 1.25^-3 = 8.192px ≈ 8px
+   * - --type-sm: 16 × 1.25^-2 = 10.24px ≈ 10px
+   * - --type-base: 16px (base 1)
+   * - --type-lg: 16 × 1.25^1 = 20px
+   * - --type-2xl: 16 × 1.25^4 = 39.0625px ≈ 39px
+   * - --type-6xl: 16 × 1.25^8 = 95.37px ≈ 95px
+   *
+   * REGLA: cualquier <h1>, <p>, .title, .text debe usar estos tokens, nunca px arbitrarios.
+   */
+  --type-xs: 8px;          /* 16 × 1.25^-3 */
+  --type-sm: 10px;         /* 16 × 1.25^-2 */
+  --type-base: 16px;       /* base */
+  --type-lg: 20px;         /* 16 × 1.25^1 */
+  --type-xl: 25px;         /* 16 × 1.25^2 */
+  --type-2xl: 31px;        /* 16 × 1.25^3 */
+  --type-3xl: 39px;        /* 16 × 1.25^4 */
+  --type-4xl: 49px;        /* 16 × 1.25^5 */
+  --type-5xl: 61px;        /* 16 × 1.25^6 */
+  --type-6xl: 76px;        /* 16 × 1.25^7 */
+
+  /* ===== TRACKING (letter-spacing) — derivado del tamaño =====
+   * Densidades proporcionales al tamaño. Tamaños pequeños necesitan más espaciado (legibilidad);
+   * tamaños grandes necesitan menos (ya tienen peso visual).
+   */
+  --tracking-tight: -0.02em;   /* tamaños grandes (h1/h2) */
+  --tracking-normal: 0em;      /* cuerpo estándar */
+  --tracking-wide: 0.02em;     /* énfasis, labels */
+
+  /* ===== LINE-HEIGHT — por familia tipográfica =====
+   * System (Inter, Space Grotesk, JetBrains): más compacto, legible en pantalla.
+   * Serif (Playfair, Cormorant): más relajado, elegancia.
+   */
+  --leading-tight: 1.2;        /* headings, labels */
+  --leading-normal: 1.5;       /* body text */
+  --leading-relaxed: 1.8;      /* lengthy prose, poetry */
 
   /* Border Radius Token (corner_shape axis) */
   --corner-radius: 0;
