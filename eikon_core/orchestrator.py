@@ -197,6 +197,7 @@ async def render_combination(
     cache: dict[str, str] | None = None,
     dry_run: bool = False,
     batch_id: int | None = None,
+    content_overrides: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     """Renderiza un asset con parametros de combinacion especificada.
 
@@ -251,4 +252,5 @@ async def render_combination(
         dry_run=dry_run,
         combination_params=combination.params,
         batch_subdir=str(batch_id) if batch_id is not None else None,
+        content_overrides=content_overrides,
     )

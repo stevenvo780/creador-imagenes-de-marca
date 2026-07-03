@@ -263,6 +263,7 @@ def _spec_from_dict(data: dict[str, Any]) -> CombinationSpec:
         permuted=list(data.get("permuted", [])),
         count=int(data.get("count", 1)),
         seed_salt=str(data.get("seed_salt", "")),
+        content=dict(data.get("content", {})),
     )
 
 
@@ -552,6 +553,7 @@ class WorkerPool:
             return
 
         marca_slug = spec.brand
+        content_overrides = dict(spec.content)
         ranked_by_category: list[tuple[str, list[VariationScore]]] = []
         rendered_total = 0
         ranked_total = 0
@@ -594,6 +596,7 @@ class WorkerPool:
                 category,
                 asset_type,
                 axes_config,
+                content_overrides=content_overrides,
                 progress_rendered_offset=rendered_total,
                 progress_ranked_offset=ranked_total,
             )
@@ -698,6 +701,7 @@ class WorkerPool:
         category: str,
         asset_type: str,
         axes_config: AxesConfig,
+        content_overrides: dict[str, str] | None = None,
         progress_rendered_offset: int = 0,
         progress_ranked_offset: int = 0,
     ) -> list[VariationScore] | None:
@@ -737,6 +741,7 @@ class WorkerPool:
                             cache=None,
                             dry_run=False,
                             batch_id=batch_id,
+                            content_overrides=content_overrides,
                         ),
                         timeout=self.render_timeout_seconds,
                     )

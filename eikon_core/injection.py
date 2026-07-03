@@ -6,6 +6,7 @@ def injection_script(
     variant_name: str = "",
     template_name: str = "",
     data_attrs: dict[str, str] | None = None,
+    texts_dict: dict[str, str] | None = None,
 ) -> str:
     """JS que inyecta los valores de marca en vivo dentro del template renderizado."""
     css_map = {
@@ -57,7 +58,11 @@ def injection_script(
             lines.append(f"  document.body.dataset.{camel_key} = '{escaped_value}';")
 
     for attr, key in attr_map.items():
-        value = vars_dict.get(key, "").replace("'", "\\'")
+        if texts_dict and key in texts_dict:
+            raw = texts_dict[key] or vars_dict.get(key, "")
+        else:
+            raw = vars_dict.get(key, "")
+        value = raw.replace("'", "\\'")
         lines.append(
             f"  document.querySelectorAll('[{attr}]').forEach(el => {{ el.textContent = '{value}'; }});"
         )
@@ -73,6 +78,7 @@ def injection_script_with_isotype(
     variant_name: str = "",
     template_name: str = "",
     data_attrs: dict[str, str] | None = None,
+    texts_dict: dict[str, str] | None = None,
 ) -> str:
     """JS que inyecta valores de marca + SVG isótipo generado en vivo.
 
@@ -82,12 +88,13 @@ def injection_script_with_isotype(
         variant_name: Nombre de variante para dataset
         template_name: Nombre de template
         data_attrs: Atributos data- adicionales
+        texts_dict: Textos a inyectar en elementos data-* (content overrides)
 
     Returns:
         Script JS completo con inyección de isótipo
     """
     # Obtener script base sin isótipo
-    base_script = injection_script(vars_dict, variant_name, template_name, data_attrs)
+    base_script = injection_script(vars_dict, variant_name, template_name, data_attrs, texts_dict)
 
     if not isotype_svg:
         return base_script

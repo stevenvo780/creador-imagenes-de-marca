@@ -45,6 +45,7 @@ class CombinationSpec:
     permuted: list[str] = field(default_factory=list)
     count: int = 1
     seed_salt: str = ""
+    content: dict[str, str] = field(default_factory=dict)
 
     def validate(self) -> None:
         """Validate the spec."""
@@ -111,6 +112,7 @@ def split_spec_by_asset_type(
                 permuted=list(spec.permuted),
                 count=max(1, count),
                 seed_salt=spec.seed_salt,
+                content=dict(spec.content),
             )
         )
     return tuple(specs)

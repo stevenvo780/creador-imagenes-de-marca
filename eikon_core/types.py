@@ -18,7 +18,7 @@ class TypeSpec:
 
     def get_device_scale_factor(self, categoria: str) -> int:
         """deviceScaleFactor ALTO: 3 para logos/print, 2 para social/web/cards."""
-        if categoria in ("logos", "stationery"):
+        if categoria in ("logos", "stationery", "print"):
             return 3
         return 2
 

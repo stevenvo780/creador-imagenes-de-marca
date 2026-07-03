@@ -3,107 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1280, height=720, initial-scale=1">
-<title>Eikon - YouTube Thumbnail</title>
+<title>Eikon — YouTube Thumbnail</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --primario: #0b1417;
-    --acento-2: #8d7cc0;
-    --texto: #e8e0d4;
-    --bg: #0b1417;
-    --gradient-hero: linear-gradient(135deg, #43b5a6, #8d7cc0);
-    --font-titulo: 'Playfair Display', Georgia, serif;
-    --font-cuerpo: 'Inter', Arial, sans-serif;
-  }
+:root {
+  --bg: #0b1417; --texto: #e8e0d4; --primario: #0b1417;
+  --acento: #43b5a6; --acento-2: #8d7cc0; --texto-muted: #a09080;
+  --font-titulo: 'Playfair Display', Georgia, serif;
+  --font-cuerpo: 'Inter', system-ui, sans-serif;
+  --space-0: 0; --space-1: 8px; --space-2: 16px; --space-3: 24px;
+  --space-4: 32px; --space-5: 40px; --space-6: 48px;
+  --space-8: 64px; --space-10: 80px; --space-12: 96px;
+  --type-xs: 8px; --type-sm: 10px; --type-base: 16px;
+  --type-lg: 20px; --type-xl: 25px; --type-2xl: 31px;
+  --type-3xl: 39px; --type-4xl: 49px; --type-5xl: 61px; --type-6xl: 76px;
+  --tracking-tight: -0.02em; --tracking-normal: 0em; --tracking-wide: 0.02em;
+  --leading-tight: 1.2; --leading-normal: 1.5; --leading-relaxed: 1.8;
+}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 1280px; height: 720px; overflow: hidden; }
-  body {
-    background-color: var(--bg);
-    color: var(--texto);
-    font-family: var(--font-cuerpo);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 60px 80px;
-  }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1280px; height: 720px; overflow: hidden; }
 
-  /* VARIANTES */
-  body[data-variant="v1_bold"] { border: 8px solid var(--acento-2); }
-  body[data-variant="v2_clean"] { border-bottom: 16px solid var(--acento-2); }
-  body[data-variant="v3_face"] { background: linear-gradient(135deg, var(--bg), rgba(67, 181, 166, 0.08)); }
+body { background: var(--bg); color: var(--texto); font-family: var(--font-cuerpo); }
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 36px;
-    width: 100%;
-    text-align: center;
-  }
+.depth-radial {
+  background: radial-gradient(ellipse at 50% 45%, color-mix(in srgb, var(--bg) 92%, white) 0%, var(--bg) 60%, var(--bg) 100%);
+}
+.depth-grain {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='ytGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23ytGrain)' opacity='0.06'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+.glow-1 {
+  position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 70%; height: 70%;
+  background: radial-gradient(ellipse, var(--acento) 0%, transparent 70%);
+  opacity: 0.08; filter: blur(100px);
+}
+.glow-2 {
+  position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
+  top: 25%; right: 15%;
+  width: 35%; height: 40%;
+  background: radial-gradient(circle, var(--acento-2) 0%, transparent 70%);
+  opacity: 0.06; filter: blur(70px);
+}
 
-  .title {
-    font-family: var(--font-titulo);
-    font-size: 120px;
-    font-weight: 700;
-    line-height: 1.1;
-  }
+.container {
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  gap: var(--space-4); text-align: center;
+  padding: var(--space-6) var(--space-8); position: relative; z-index: 1;
+  width: 100%; height: 100%;
+}
 
-  .copy {
-    font-size: 72px;
-    line-height: 1.4;
-  }
+.top-section {
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-3);
+}
 
-  .symbol {
-    font-size: 140px;
-    font-weight: 700;
-  }
+.symbol {
+  font-size: var(--type-4xl); font-weight: 900; line-height: 1;
+  background: linear-gradient(135deg, var(--acento), var(--acento-2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  min-height: 56px;
+}
 
-  .subtitle {
-    font-size: 56px;
-    line-height: 1.3;
-  }
+.titulo {
+  font-family: var(--font-titulo); font-size: 92px; font-weight: 900;
+  line-height: var(--leading-tight); letter-spacing: var(--tracking-tight);
+  color: var(--texto); max-width: 1100px; min-height: 110px;
+  background: linear-gradient(135deg, var(--acento-2), var(--acento));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
 
-  .etiqueta {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: var(--acento-2);
-    color: var(--primario);
-    padding: 8px 16px;
-    font-size: 24px;
-    font-weight: 700;
-    border-radius: 6px;
-  }
+.copy {
+  font-size: var(--type-4xl); font-weight: 600;
+  line-height: var(--leading-normal); color: var(--texto);
+  max-width: 1000px; min-height: 56px;
+}
 
-  .contract-fields { display: none !important; }
+.etiqueta {
+  position: absolute; top: var(--space-3); right: var(--space-3);
+  background: var(--acento-2); color: var(--bg);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--type-xl); font-weight: 800; border-radius: 6px;
+  letter-spacing: var(--tracking-wide); z-index: 2; min-height: 32px; display: flex; align-items: center;
+}
+
+/* ═══ VARIANTS ═══ */
+body[data-variant="v1_bold"] { border: var(--space-1) solid var(--acento-2); }
+body[data-variant="v2_clean"] { border-bottom: var(--space-2) solid var(--acento-2); }
+body[data-variant="v3_face"] .symbol { font-size: calc(var(--type-4xl) + 20px); }
+
+.contract-fields { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
 </style>
 </head>
-<body data-variant="v1_bold">
-  <span class="etiqueta" data-etiqueta data-fit data-fit-min="14">TAGS</span>
+<body data-variant="v1_bold" class="depth-radial">
+<div class="glow-1"></div>
+<div class="glow-2"></div>
+<div class="depth-grain"></div>
 
-  <div class="container">
-    <span class="symbol" data-logo-simbolo data-fit data-fit-min="80">*</span>
-    <h1 class="title" data-titulo data-fit data-fit-min="60">Título</h1>
-    <p class="copy" data-copy data-fit data-fit-min="40">Copy</p>
-  </div>
+<span class="etiqueta" data-etiqueta data-fit data-fit-min="16"></span>
 
-  <div class="contract-fields" aria-hidden="true">
-    <span data-titulo></span>
-    <span data-subtitulo></span>
-    <span data-copy></span>
-    <span data-logo-simbolo></span>
-    <span data-logo-texto></span>
-    <span data-numero></span>
-    <span data-etiqueta></span>
-    <span data-autor></span>
-    <span data-cargo></span>
-    <span data-url></span>
-    <span data-acento></span>
-    <span data-acento-2></span>
+<div class="container">
+  <div class="top-section">
+    <span class="symbol" data-logo-simbolo data-fit data-fit-min="48">∞</span>
+    <h1 class="titulo" data-titulo data-fit data-fit-min="64">Headline</h1>
   </div>
+  <p class="copy" data-copy data-fit data-fit-min="32">Subtítulo</p>
+  <div data-isotype-container style="display:none;"></div>
+</div>
+
+<div class="contract-fields" aria-hidden="true">
+  <span data-titulo></span><span data-subtitulo></span><span data-copy></span>
+  <span data-logo-simbolo></span><span data-logo-texto></span>
+  <span data-numero></span><span data-etiqueta></span><span data-autor></span>
+  <span data-cargo></span><span data-url></span>
+  <span data-acento></span><span data-acento-2></span>
+</div>
 </body>
 </html>

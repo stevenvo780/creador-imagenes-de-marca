@@ -16,16 +16,51 @@ interface AssetTypeOption {
   label: string;
 }
 
-const ASSET_TYPES: AssetTypeOption[] = [
-  { value: "business_card", label: "Tarjeta de negocio" },
-  { value: "og_general", label: "OG General" },
-  { value: "og_product", label: "OG Producto" },
-  { value: "ad_rectangle", label: "Anuncio rectangular" },
-  { value: "web_hero_desktop", label: "Banner web (escritorio)" },
+interface AssetTypeGroup {
+  category: string;
+  types: AssetTypeOption[];
+}
+
+const ASSET_TYPES_GROUPED: AssetTypeGroup[] = [
+  {
+    category: "Redes sociales",
+    types: [
+      { value: "ig_post", label: "Instagram Post (1080×1080)" },
+      { value: "ig_story", label: "Instagram Story (1080×1920)" },
+      { value: "ig_carousel", label: "Instagram Carousel (1080×1350)" },
+      { value: "x_post", label: "X/Twitter Post (1200×675)" },
+      { value: "linkedin_post", label: "LinkedIn Post (1200×627)" },
+      { value: "yt_thumbnail", label: "YouTube Thumbnail (1280×720)" },
+    ],
+  },
+  {
+    category: "Web",
+    types: [
+      { value: "web_hero_desktop", label: "Banner web (escritorio)" },
+      { value: "email_header", label: "Email Header (600×300)" },
+    ],
+  },
+  {
+    category: "Anuncios",
+    types: [
+      { value: "ad_rectangle", label: "Anuncio rectangular (300×250)" },
+    ],
+  },
+  {
+    category: "Marca e impresión",
+    types: [
+      { value: "business_card", label: "Tarjeta de negocio (1050×600)" },
+      { value: "og_general", label: "OG General (1200×630)" },
+      { value: "og_product", label: "OG Producto (1200×630)" },
+      { value: "poster_a4", label: "Póster A4 (2480×3508)" },
+    ],
+  },
 ];
 
 const ASSET_LABEL: Record<string, string> = Object.fromEntries(
-  ASSET_TYPES.map((t) => [t.value, t.label]),
+  ASSET_TYPES_GROUPED.flatMap((group) =>
+    group.types.map((t) => [t.value, t.label]),
+  ),
 );
 
 // ── Campos de contenido por tipo ────────────────────────────────────────────
@@ -62,6 +97,46 @@ const CONTENT_FIELDS: Record<string, ContentField[]> = {
     { key: "headline", label: "Titular", placeholder: "Ej.: Transformá tu manera de pensar" },
     { key: "tagline", label: "Bajada", placeholder: "Ej.: Cursos de filosofía, lógica y retórica" },
     { key: "cta", label: "Llamado a la acción", placeholder: "Ej.: Explorar cursos" },
+  ],
+  ig_post: [
+    { key: "titulo", label: "Título/Headline", placeholder: "Ej.: Nuevo artículo publicado" },
+    { key: "copy", label: "Copy/Caption", placeholder: "Ej.: Lee nuestro último análisis..." },
+    { key: "etiqueta", label: "Hashtag principal", placeholder: "Ej.: #filosofia" },
+  ],
+  ig_story: [
+    { key: "titulo", label: "Titular", placeholder: "Ej.: Pregunta del día" },
+    { key: "copy", label: "Texto adicional", placeholder: "Ej.: ¿Cuál es tu respuesta?" },
+  ],
+  ig_carousel: [
+    { key: "titulo", label: "Título", placeholder: "Ej.: 5 preguntas esenciales" },
+    { key: "copy", label: "Descripción", placeholder: "Ej.: Deslizá para ver más..." },
+  ],
+  x_post: [
+    { key: "titulo", label: "Texto del post", placeholder: "Ej.: Reflexión sobre la democracia..." },
+    { key: "url", label: "URL", placeholder: "Ej.: elenxos.com/articulo" },
+  ],
+  linkedin_post: [
+    { key: "titulo", label: "Titular", placeholder: "Ej.: Liderando el cambio en educación" },
+    { key: "copy", label: "Descripción", placeholder: "Ej.: En esta publicación comparto..." },
+    { key: "url", label: "URL", placeholder: "Ej.: elenxos.com" },
+  ],
+  fb_cover: [
+    { key: "titulo", label: "Título", placeholder: "Ej.: Comunidad Elenxos" },
+    { key: "subtitulo", label: "Subtítulo", placeholder: "Ej.: Filosofía aplicada" },
+  ],
+  yt_thumbnail: [
+    { key: "titulo", label: "Texto principal", placeholder: "Ej.: ¿Qué es la lógica?" },
+    { key: "numero", label: "Número/Episodio (opcional)", placeholder: "Ej.: EP 12" },
+  ],
+  poster_a4: [
+    { key: "titulo", label: "Título del evento/producto", placeholder: "Ej.: Congreso de Filosofía 2026" },
+    { key: "subtitulo", label: "Subtítulo", placeholder: "Ej.: Reflexiones sobre la era digital" },
+    { key: "copy", label: "Descripción", placeholder: "Ej.: 12-14 de marzo | Auditorio Nacional" },
+    { key: "url", label: "Sitio web / CTA", placeholder: "Ej.: congreso.elenxos.com" },
+  ],
+  email_header: [
+    { key: "titulo", label: "Titular del email", placeholder: "Ej.: Novedades de esta semana" },
+    { key: "copy", label: "Subtítulo", placeholder: "Ej.: Los temas más relevantes para vos" },
   ],
 };
 
@@ -388,10 +463,14 @@ export function AssetStudioPage() {
                 <option value="" disabled>
                   Seleccioná un tipo
                 </option>
-                {ASSET_TYPES.map((t) => (
-                  <option key={t.value} value={t.value}>
-                    {t.label}
-                  </option>
+                {ASSET_TYPES_GROUPED.map((group) => (
+                  <optgroup key={group.category} label={group.category}>
+                    {group.types.map((t) => (
+                      <option key={t.value} value={t.value}>
+                        {t.label}
+                      </option>
+                    ))}
+                  </optgroup>
                 ))}
               </SelectField>
             </Card>

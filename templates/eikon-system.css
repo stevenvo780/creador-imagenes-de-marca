@@ -356,3 +356,112 @@ body[data-accent-placement='dot'] .layout::after {
   gap: calc(var(--_base-gap, 16px) * var(--space-scale, 1));
   padding: calc(20px * var(--space-scale, 1));
 }
+
+/* ═════════════════════════════════════════════════════════════════════════════
+ * PROFUNDIDAD — Sistema de capas sutiles para elegancia Stripe/Linear/Vercel
+ *
+ * Regla de oro: SUTIL e INTENCIONAL. Nada de discos fuertes ni gradientes 135°.
+ * Usa estas clases para dar profundidad moderna sin perder limpieza.
+ *
+ * Aplicación:
+ * - .depth-radial: contenedor principal para fondo con gradiente radial suave
+ * - .depth-glow: ::before de elemento focal (logo/headline), resplandor difuminado
+ * - .depth-grain: ::after overlay de grano/ruido SVG feTurbulence
+ * - .depth-aurora: blobs grandes glassmorphism, estilo aurora borealis
+ * ═════════════════════════════════════════════════════════════════════════════ */
+
+/* .depth-radial: Fondo con gradiente radial sutil desde --bg
+ * Centro apenas más claro (~5-8% más bright), borde torna al color original.
+ * Posición: según contexto (20%/50% para asimetría tipo Stripe).
+ */
+.depth-radial {
+  background: radial-gradient(
+    ellipse at 20% 50%,
+    color-mix(in srgb, var(--bg) 92%, white) 0%,
+    var(--bg) 65%,
+    var(--bg) 100%
+  );
+}
+
+/* .depth-glow: Resplandor radial suave detrás de un elemento focal
+ * Usado como ::before del logo/headline, muy difuminado, opacidad baja.
+ * Parámetro: posicioná en absolute, z-index < foco.
+ */
+.depth-glow::before {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--primario) 18%, transparent) 0%,
+    transparent 70%
+  );
+  filter: blur(80px);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* .depth-grain: Overlay de grano/ruido sutil usando SVG feTurbulence
+ * Opacidad ~0.06-0.08, no distraccional. Overlay en ::after.
+ */
+.depth-grain::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='feTurbGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23feTurbGrain)' opacity='0.08'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  background-repeat: repeat;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* .depth-aurora: Blobs grandes difuminados estilo aurora glassmorphism
+ * Dos blobs: primario + acento-2, opacidad muy baja (~0.08-0.12), blur extremo.
+ * Crea efecto de profundidad sutil, modernista.
+ */
+.depth-aurora {
+  position: relative;
+  overflow: hidden;
+}
+.depth-aurora::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 40%;
+  background: radial-gradient(
+    ellipse,
+    color-mix(in srgb, var(--primario) 12%, transparent) 0%,
+    transparent 70%
+  );
+  filter: blur(120px);
+  top: -200px;
+  left: -150px;
+  pointer-events: none;
+  z-index: 0;
+}
+.depth-aurora::after {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 35%;
+  background: radial-gradient(
+    ellipse,
+    color-mix(in srgb, var(--acento-2) 10%, transparent) 0%,
+    transparent 75%
+  );
+  filter: blur(100px);
+  bottom: -250px;
+  right: -100px;
+  pointer-events: none;
+  z-index: 0;
+}

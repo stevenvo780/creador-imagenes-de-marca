@@ -2,113 +2,152 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=1640, height=856, initial-scale=1">
+<title>Eikon — Facebook Cover</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
-  :root {
-    --bg: #0b1417; --acento: #43b5a6; --acento-2: #e0a85e; --acento-3: #c0522a;
-    --texto: #e8e0d4; --texto-muted: #8fa3a8; --surface: #152028;
-    --grad-hero: linear-gradient(135deg, #e0a85e 0%, #c0522a 40%, #43b5a6 100%);
-    --grad-bg: radial-gradient(ellipse at 30% 50%, #152028 0%, #0b1417 60%);
-    --font-titulo: 'Playfair Display', Georgia, serif;
-    --font-cuerpo: 'Inter', system-ui, sans-serif;
-  }
-  body {
-    width: 1640px; height: 856px;
-    font-family: var(--font-cuerpo);
-    background: var(--bg); color: var(--texto);
-    overflow: hidden; position: relative;
-  }
-  .bg { position: absolute; inset: 0; background: var(--grad-bg); }
-  .noise {
-    position: absolute; inset: 0; opacity: 0.05;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 300px 300px;
-  }
-  .orb { position: absolute; border-radius: 50%; filter: blur(160px); }
-  .orb-1 { width: 1000px; height: 1000px; top: -300px; right: 200px; background: var(--acento); opacity: 0.13; }
-  .orb-2 { width: 700px; height: 700px; bottom: -300px; left: 100px; background: var(--acento-2); opacity: 0.12; }
+:root {
+  --bg: #0b1417; --texto: #e8e0d4; --primario: #0b1417;
+  --acento: #43b5a6; --acento-2: #e0a85e; --acento-3: #c0522a;
+  --texto-muted: #8fa3a8; --surface: #152028;
+  --font-titulo: 'Playfair Display', Georgia, serif;
+  --font-cuerpo: 'Inter', system-ui, sans-serif;
+  --space-0: 0; --space-1: 8px; --space-2: 16px; --space-3: 24px;
+  --space-4: 32px; --space-5: 40px; --space-6: 48px;
+  --space-8: 64px; --space-10: 80px; --space-12: 96px;
+  --type-xs: 8px; --type-sm: 10px; --type-base: 16px;
+  --type-lg: 20px; --type-xl: 25px; --type-2xl: 31px;
+  --type-3xl: 39px; --type-4xl: 49px; --type-5xl: 61px; --type-6xl: 76px;
+  --tracking-tight: -0.02em; --tracking-normal: 0em; --tracking-wide: 0.02em;
+  --leading-tight: 1.2; --leading-normal: 1.5; --leading-relaxed: 1.8;
+}
 
-  .simbolo-bg {
-    position: absolute; right: 120px; top: 50%; transform: translateY(-50%);
-    font-family: var(--font-titulo); font-size: 700px; font-weight: 900;
-    background: var(--grad-text, var(--grad-hero));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    opacity: 0.05; user-select: none;
-  }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1640px; height: 856px; overflow: hidden; }
 
-  /* Bottom safe zone indicator */
-  .bottom-fade {
-    position: absolute; bottom: 0; left: 0; right: 0; height: 100px;
-    background: linear-gradient(0deg, rgba(11,20,23,0.6) 0%, transparent 100%);
-  }
+body { background: var(--bg); color: var(--texto); font-family: var(--font-cuerpo); }
 
-  .layout {
-    position: relative; z-index: 10;
-    width: 100%; height: 100%;
-    display: flex; align-items: center;
-    padding: 0 140px;
-    gap: 80px;
-  }
+.depth-radial {
+  background: radial-gradient(ellipse at 28% 50%, color-mix(in srgb, var(--bg) 93%, white) 0%, var(--bg) 65%, var(--bg) 100%);
+}
+.depth-grain {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='fbGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23fbGrain)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+}
+.glow-1 {
+  position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
+  top: -20%; left: 5%; width: 45%; height: 60%;
+  background: radial-gradient(ellipse, var(--acento) 0%, transparent 70%);
+  opacity: 0.08; filter: blur(100px);
+}
+.glow-2 {
+  position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
+  bottom: -20%; right: 5%; width: 50%; height: 55%;
+  background: radial-gradient(ellipse, var(--acento-2) 0%, transparent 70%);
+  opacity: 0.07; filter: blur(100px);
+}
+.glow-3 {
+  position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 35%; height: 45%;
+  background: radial-gradient(ellipse, var(--acento-3) 0%, transparent 70%);
+  opacity: 0.06; filter: blur(90px);
+}
 
-  .logo-block { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.layout {
+  position: relative; z-index: 1;
+  width: 100%; height: 100%;
+  display: flex; align-items: center;
+  padding: 0 var(--space-12);
+  gap: var(--space-10);
+}
 
-  .simbolo {
-    font-family: var(--font-titulo); font-size: 200px; font-weight: 900; line-height: 1;
-    background: var(--grad-text, var(--grad-hero));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
+.logo-block {
+  flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-3);
+  position: relative;
+}
+.logo-block::before {
+  content: ''; position: absolute; width: 340px; height: 340px; border-radius: 50%;
+  background: radial-gradient(circle, var(--acento) 0%, transparent 65%);
+  opacity: 0.10; filter: blur(80px); pointer-events: none; z-index: -1;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+.simbolo {
+  font-family: var(--font-titulo); font-size: 200px; font-weight: 900; line-height: 1;
+  background: linear-gradient(135deg, var(--acento-2), var(--acento-3), var(--acento));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.logo-text {
+  font-size: var(--type-lg); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--texto-muted); text-align: center; max-width: 300px; min-height: 24px;
+}
 
-  .logo-text {
-    font-size: 16px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--texto-muted);
-    max-width: 320px; text-align: center;
-  }
+.divider {
+  width: 1px; height: 180px; flex-shrink: 0;
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,0.07) 30%, rgba(255,255,255,0.07) 70%, transparent);
+}
 
-  .divider {
-    width: 1px; height: 200px;
-    background: rgba(255,255,255,0.08);
-    flex-shrink: 0;
-  }
+.text-block {
+  display: flex; flex-direction: column; gap: var(--space-4);
+  min-width: 0; max-width: 880px; flex: 1;
+}
 
-  .text-block { display: flex; flex-direction: column; gap: 18px; min-width: 0; max-width: 880px; }
+.accent-line {
+  width: var(--space-6); height: 3px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--acento-2), var(--acento-3), var(--acento));
+}
 
-  .accent-line { width: 48px; height: 3px; background: var(--grad-hero); border-radius: 2px; }
+.titulo {
+  font-family: var(--font-titulo); font-size: var(--type-6xl); font-weight: 900;
+  line-height: var(--leading-tight); letter-spacing: var(--tracking-tight);
+  background: linear-gradient(135deg, var(--acento-2), var(--acento-3), var(--acento));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
 
-  .titulo {
-    font-family: var(--font-titulo); font-size: 84px; font-weight: 900; line-height: 1.04;
-    background: var(--grad-text, var(--grad-hero));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    max-height: 176px;
-  }
+.copy {
+  font-size: var(--type-lg); font-weight: 300; line-height: var(--leading-normal);
+  color: var(--texto); opacity: 0.9; max-width: 820px; min-height: 28px;
+}
 
-  .copy {
-    font-size: 30px; font-weight: 300; color: var(--texto); line-height: 1.35; opacity: 0.9;
-    max-width: 840px; max-height: 84px;
-  }
+.url {
+  font-size: var(--type-base); color: var(--texto-muted);
+  letter-spacing: var(--tracking-wide); margin-top: var(--space-2); min-height: 20px;
+}
 
-  .url { font-size: 16px; color: var(--texto-muted); letter-spacing: 0.04em; }
+.contract-fields { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
 </style>
 </head>
-<body>
-<div class="bg"></div>
-<div class="noise"></div>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<span class="simbolo-bg" data-logo-simbolo></span>
-<div class="bottom-fade"></div>
+<body class="depth-radial">
+<div class="glow-1"></div>
+<div class="glow-2"></div>
+<div class="glow-3"></div>
+<div class="depth-grain"></div>
+
 <div class="layout">
   <div class="logo-block">
-    <span class="simbolo" data-logo-simbolo data-fit data-fit-min="100"></span>
-    <span class="logo-text" data-logo-texto data-fit data-fit-min="12"></span>
+    <span class="simbolo" data-logo-simbolo data-fit data-fit-min="100">∞</span>
+    <span class="logo-text" data-logo-texto data-fit data-fit-min="14">marca</span>
+    <div data-isotype-container style="display:none;"></div>
   </div>
   <div class="divider"></div>
   <div class="text-block">
     <div class="accent-line"></div>
-    <h1 class="titulo" data-titulo data-fit data-fit-min="44"></h1>
-    <p class="copy" data-copy data-fit data-fit-min="18"></p>
-    <span class="url" data-url data-fit data-fit-min="12"></span>
+    <h1 class="titulo" data-titulo data-fit data-fit-min="48">Portada</h1>
+    <p class="copy" data-copy data-fit data-fit-min="18">Contenido visual destacado</p>
+    <span class="url" data-url data-fit data-fit-min="14"></span>
   </div>
+</div>
+
+<div class="contract-fields" aria-hidden="true">
+  <span data-titulo></span><span data-subtitulo></span><span data-copy></span>
+  <span data-logo-simbolo></span><span data-logo-texto></span>
+  <span data-numero></span><span data-etiqueta></span><span data-autor></span>
+  <span data-cargo></span><span data-url></span>
+  <span data-acento></span><span data-acento-2></span>
 </div>
 </body>
 </html>

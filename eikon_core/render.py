@@ -215,6 +215,7 @@ async def render_asset(
     dry_run: bool = False,
     combination_params: dict[str, str] | None = None,
     batch_subdir: str | None = None,
+    content_overrides: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     """Renderiza un asset individual. Retorna metadata para el manifest.
 
@@ -239,6 +240,20 @@ async def render_asset(
         variant_name=variant_spec.name,
         combination_params=combination_params,
     )
+
+    _brand_name = str(marca.get("nombre_producto") or marca.get("nombre_corporativo") or "")
+    texts_dict: dict[str, str] | None = None
+    if content_overrides:
+        texts_dict = {
+            "titulo": content_overrides.get("titulo") or vars_dict.get("titulo", ""),
+            "subtitulo": content_overrides.get("subtitulo") or vars_dict.get("subtitulo", ""),
+            "etiqueta": content_overrides.get("etiqueta") or vars_dict.get("etiqueta", ""),
+            "numero": content_overrides.get("numero") or vars_dict.get("numero", ""),
+            "copy": content_overrides.get("copy") or content_overrides.get("subtitulo") or vars_dict.get("copy", ""),
+            "url": content_overrides.get("url") or vars_dict.get("url", ""),
+            "logo_texto": content_overrides.get("titulo") or _brand_name,
+        }
+
     input_hash = compute_hash(
         marca, categoria, tipo_spec.name, variant_spec.name, template_path, vars_dict
     )
@@ -292,6 +307,7 @@ async def render_asset(
                 variant_name=variant_spec.name,
                 template_name=tipo_spec.name,
                 data_attrs=data_attrs_to_inject if data_attrs_to_inject else None,
+                texts_dict=texts_dict,
             )
         else:
             injection = injection_script(
@@ -299,6 +315,7 @@ async def render_asset(
                 variant_name=variant_spec.name,
                 template_name=tipo_spec.name,
                 data_attrs=data_attrs_to_inject if data_attrs_to_inject else None,
+                texts_dict=texts_dict,
             )
         scale_factor = tipo_spec.get_device_scale_factor(categoria)
 

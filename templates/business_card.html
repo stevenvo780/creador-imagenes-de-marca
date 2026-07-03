@@ -27,12 +27,25 @@
     display: grid; grid-template-columns: 1fr 2fr;
   }
   body[data-variant="v1_front"] .left-col {
-    background: color-mix(in srgb, var(--acento-2) 8%, var(--bg));
+    background: radial-gradient(
+      ellipse at 50% 45%,
+      color-mix(in srgb, var(--acento-2) 14%, var(--bg)) 0%,
+      color-mix(in srgb, var(--acento-2) 8%, var(--bg)) 50%,
+      var(--bg) 100%
+    );
     display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  body[data-variant="v1_front"] .left-col::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='bcGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23bcGrain)' opacity='0.05'/%3E%3C/svg%3E");
+    background-size: 200px 200px; pointer-events: none; z-index: 1;
   }
   body[data-variant="v1_front"] [data-isotype-container] {
     width: var(--space-12); height: var(--space-12);
     display: flex; align-items: center; justify-content: center;
+    position: relative; z-index: 2;
   }
   body[data-variant="v1_front"] [data-isotype-container] svg,
   body[data-variant="v2_back"] [data-isotype-container] svg { width: 100%; height: 100%; }
@@ -43,6 +56,13 @@
   body[data-variant="v1_front"] .logo-text {
     font-family: var(--font-titulo); font-size: var(--type-6xl); font-weight: 900;
     line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--texto);
+    position: relative; z-index: 2;
+  }
+  body[data-variant="v1_front"] .logo-text::before {
+    content: ''; position: absolute; width: 350px; height: 350px; border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--acento) 12%, transparent) 0%, transparent 65%);
+    filter: blur(70px); top: 50%; left: 50%; transform: translate(-50%, -50%);
+    pointer-events: none; z-index: -1;
   }
   body[data-variant="v1_front"] .subtitle {
     font-family: var(--font-cuerpo); font-size: var(--type-xl);

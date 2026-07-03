@@ -4,7 +4,9 @@ import re
 from typing import Any
 
 CANONICAL_FAMILIES = frozenset({"cloud_atlas", "prizma"})
-CANONICAL_CATEGORIES = frozenset({"logos", "banners", "cards", "og", "stationery"})
+CANONICAL_CATEGORIES = frozenset(
+    {"logos", "banners", "social", "print", "web", "cards", "og", "stationery"}
+)
 _NAME_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 _VARIANT_RE = re.compile(r"^v\d+_[a-z0-9_]+$")
 

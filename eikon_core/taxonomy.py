@@ -194,6 +194,102 @@ def _legacy_python_taxonomia(is_prizma: bool) -> dict[str, list[TypeSpec]]:
                 ),
             ),
         ],
+        "social": [
+            TypeSpec(
+                "ig_post",
+                1080,
+                1080,
+                (
+                    VariantSpec("v1_square", "Square"),
+                    VariantSpec("v2_reels", "Reels"),
+                    VariantSpec("v3_carousel", "Carousel"),
+                ),
+            ),
+            TypeSpec(
+                "ig_story",
+                1080,
+                1920,
+                (
+                    VariantSpec("v1_text_heavy", "Text"),
+                    VariantSpec("v2_visual", "Visual"),
+                    VariantSpec("v3_minimal", "Minimal"),
+                ),
+            ),
+            TypeSpec(
+                "ig_carousel",
+                1080,
+                1350,
+                (
+                    VariantSpec("v1_grid", "Grid"),
+                    VariantSpec("v2_sequential", "Sequential"),
+                    VariantSpec("v3_focus", "Focus"),
+                ),
+            ),
+            TypeSpec(
+                "x_post",
+                1200,
+                675,
+                (
+                    VariantSpec("v1_text", "Text"),
+                    VariantSpec("v2_visual", "Visual"),
+                    VariantSpec("v3_thread", "Thread"),
+                ),
+            ),
+            TypeSpec(
+                "linkedin_post",
+                1200,
+                627,
+                (
+                    VariantSpec("v1_article", "Article"),
+                    VariantSpec("v2_article_highlight", "Highlight"),
+                    VariantSpec("v3_event", "Event"),
+                ),
+            ),
+            TypeSpec(
+                "fb_cover",
+                820,
+                315,
+                (
+                    VariantSpec("v1_brand", "Brand"),
+                    VariantSpec("v2_campaign", "Campaign"),
+                    VariantSpec("v3_seasonal", "Seasonal"),
+                ),
+            ),
+            TypeSpec(
+                "yt_thumbnail",
+                1280,
+                720,
+                (
+                    VariantSpec("v1_bold", "Bold"),
+                    VariantSpec("v2_minimal", "Minimal"),
+                    VariantSpec("v3_text_overlay", "Text"),
+                ),
+            ),
+        ],
+        "print": [
+            TypeSpec(
+                "poster_a4",
+                2480,
+                3508,
+                (
+                    VariantSpec("v1_event", "Event"),
+                    VariantSpec("v2_product", "Product"),
+                    VariantSpec("v3_announcement", "Announcement"),
+                ),
+            ),
+        ],
+        "web": [
+            TypeSpec(
+                "email_header",
+                600,
+                300,
+                (
+                    VariantSpec("v1_editorial", "Editorial"),
+                    VariantSpec("v2_marketing", "Marketing"),
+                    VariantSpec("v3_transactional", "Transactional"),
+                ),
+            ),
+        ],
         "cards": [
             *cards_common,
             TypeSpec(

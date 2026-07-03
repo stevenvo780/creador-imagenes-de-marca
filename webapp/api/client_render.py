@@ -57,10 +57,14 @@ _TEMPLATE_WHITELIST = {
     "ig_carousel",
     "ig_post",
     "ig_story",
+    "linkedin_post",
     "og_image",
     "og_general",
     "og_product",
+    "poster_a4",
     "web_hero_desktop",
+    "x_post",
+    "yt_thumbnail",
     "stat_card",
 }
 
