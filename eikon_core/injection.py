@@ -1,5 +1,43 @@
 from __future__ import annotations
 
+import json
+
+_CSS_MAP = {
+    "--primario": "primario",
+    "--acento": "acento",
+    "--acento-2": "acento_2",
+    "--texto": "texto",
+    "--bg": "bg",
+    "--font-titulo": "font_titulo",
+    "--font-cuerpo": "font_cuerpo",
+    "--font-size-scale": "font_size_scale",
+    "--space-scale": "space_scale",
+    "--corner-radius": "corner_radius",
+}
+_ATTR_MAP = {
+    "data-logo-simbolo": "logo_simbolo",
+    "data-logo-texto": "logo_texto",
+    "data-titulo": "titulo",
+    "data-subtitulo": "subtitulo",
+    "data-copy": "copy",
+    "data-url": "url",
+    "data-etiqueta": "etiqueta",
+    "data-numero": "numero",
+    "data-etiqueta-2": "etiqueta_2",
+    "data-numero-2": "numero_2",
+}
+
+
+def _js_payload(obj: dict[str, object]) -> str:
+    """Serializa a un literal JS SEGURO.
+
+    Usamos json.dumps (escapa comillas, backslashes, saltos de línea) + neutralizamos
+    la secuencia ``</`` para que un valor con ``</script>`` no cierre el <script>.
+    Esto evita XSS/inyección de JS: los textos vienen de contenido del usuario y de la
+    marca, así que NUNCA se interpolan crudos en el código JS.
+    """
+    return json.dumps(obj, ensure_ascii=True).replace("</", "<\\/")
+
 
 def injection_script(
     vars_dict: dict[str, str],
@@ -8,68 +46,43 @@ def injection_script(
     data_attrs: dict[str, str] | None = None,
     texts_dict: dict[str, str] | None = None,
 ) -> str:
-    """JS que inyecta los valores de marca en vivo dentro del template renderizado."""
-    css_map = {
-        "--primario": "primario",
-        "--acento": "acento",
-        "--acento-2": "acento_2",
-        "--texto": "texto",
-        "--bg": "bg",
-        "--font-titulo": "font_titulo",
-        "--font-cuerpo": "font_cuerpo",
-        "--font-size-scale": "font_size_scale",
-        "--space-scale": "space_scale",
-        "--corner-radius": "corner_radius",
-    }
-    attr_map = {
-        "data-logo-simbolo": "logo_simbolo",
-        "data-logo-texto": "logo_texto",
-        "data-titulo": "titulo",
-        "data-subtitulo": "subtitulo",
-        "data-copy": "copy",
-        "data-url": "url",
-        "data-etiqueta": "etiqueta",
-        "data-numero": "numero",
-        "data-etiqueta-2": "etiqueta_2",
-        "data-numero-2": "numero_2",
-    }
+    """JS que inyecta los valores de marca en vivo dentro del template renderizado.
 
-    lines = ["(() => {", "  const root = document.documentElement;"]
-    for css_var, key in css_map.items():
-        value = vars_dict.get(key, "")
-        if value:
-            lines.append(f"  root.style.setProperty('{css_var}', '{value}');")
-
-    if variant_name:
-        lines.append(f"  document.body.dataset.variant = '{variant_name}';")
-    if template_name:
-        lines.append(f"  document.body.dataset.template = '{template_name}';")
-
-    # Apply custom data attributes (from combination params)
-    if data_attrs:
-        for attr_name, attr_value in data_attrs.items():
-            escaped_value = attr_value.replace("'", "\\'")
-            # Convert data-attr-name to camelCase for dataset access
-            # data-bg-treatment -> bgTreatment
-            attr_key = attr_name.replace("data-", "")
-            # Convert hyphens to camelCase
-            parts = attr_key.split("-")
-            camel_key = parts[0] + "".join(p.capitalize() for p in parts[1:])
-            lines.append(f"  document.body.dataset.{camel_key} = '{escaped_value}';")
-
-    for attr, key in attr_map.items():
+    Todos los valores (colores, textos, data-attrs) se emiten como un blob JSON y se
+    leen desde JS — nada se interpola crudo, así que valores con comillas / ``</script>``
+    / saltos de línea no pueden romper el script ni inyectar código.
+    """
+    css = {css_var: vars_dict[key] for css_var, key in _CSS_MAP.items() if vars_dict.get(key)}
+    texts: dict[str, str] = {}
+    for attr, key in _ATTR_MAP.items():
         if texts_dict and key in texts_dict:
-            raw = texts_dict[key] or vars_dict.get(key, "")
+            texts[attr] = texts_dict[key] or vars_dict.get(key, "")
         else:
-            raw = vars_dict.get(key, "")
-        value = raw.replace("'", "\\'")
-        lines.append(
-            f"  document.querySelectorAll('[{attr}]').forEach(el => {{ el.textContent = '{value}'; }});"
-        )
+            texts[attr] = vars_dict.get(key, "")
 
-    lines.append("  if (window.__eikonVariantRefresh) window.__eikonVariantRefresh();")
-    lines.append("})();")
-    return "\n".join(lines)
+    payload = _js_payload(
+        {
+            "css": css,
+            "texts": texts,
+            "dataAttrs": dict(data_attrs or {}),
+            "variant": variant_name,
+            "template": template_name,
+        }
+    )
+    return (
+        "(() => {\n"
+        f"  const __e = {payload};\n"
+        "  const root = document.documentElement;\n"
+        "  for (const [k, v] of Object.entries(__e.css)) root.style.setProperty(k, v);\n"
+        "  if (__e.variant) document.body.dataset.variant = __e.variant;\n"
+        "  if (__e.template) document.body.dataset.template = __e.template;\n"
+        "  for (const [k, v] of Object.entries(__e.dataAttrs)) document.body.setAttribute(k, v);\n"
+        "  for (const [attr, val] of Object.entries(__e.texts)) {\n"
+        "    document.querySelectorAll('[' + attr + ']').forEach((el) => { el.textContent = val; });\n"
+        "  }\n"
+        "  if (window.__eikonVariantRefresh) window.__eikonVariantRefresh();\n"
+        "})();"
+    )
 
 
 def injection_script_with_isotype(
@@ -82,40 +95,28 @@ def injection_script_with_isotype(
 ) -> str:
     """JS que inyecta valores de marca + SVG isótipo generado en vivo.
 
-    Args:
-        vars_dict: Diccionario de variables de marca
-        isotype_svg: SVG string del isótipo generado (base64 data URI)
-        variant_name: Nombre de variante para dataset
-        template_name: Nombre de template
-        data_attrs: Atributos data- adicionales
-        texts_dict: Textos a inyectar en elementos data-* (content overrides)
-
-    Returns:
-        Script JS completo con inyección de isótipo
+    El SVG (data URI) también se pasa por JSON — nunca crudo. Limpia el contenedor
+    ([data-isotype-container]) antes de inyectar para reemplazar cualquier placeholder
+    del template (si no, placeholder + símbolo inyectado se superponen).
     """
-    # Obtener script base sin isótipo
     base_script = injection_script(vars_dict, variant_name, template_name, data_attrs, texts_dict)
-
     if not isotype_svg:
         return base_script
 
-    # Agregar inyección de isótipo
-    lines = base_script.split("\n")
-    # Insertar antes del cierre de la IIFE
-    insert_idx = len(lines) - 2  # Antes del último "})();"
-
-    isotype_injection = f"""  // Inyectar SVG isótipo generado (en TODOS los contenedores;
-  // limpiar primero para reemplazar cualquier SVG placeholder del template
-  // — si no, el placeholder y el símbolo inyectado se superponen).
-  document.body.dataset.isotypeUri = '{isotype_svg}';
-  document.querySelectorAll('[data-isotype-container]').forEach((isotypeContainer) => {{
-    isotypeContainer.innerHTML = '';
-    const img = document.createElement('img');
-    img.src = '{isotype_svg}';
-    img.style.width = '100%';
-    img.style.height = '100%';
-    isotypeContainer.appendChild(img);
-  }});"""
-
-    lines.insert(insert_idx, isotype_injection)
-    return "\n".join(lines)
+    svg_literal = _js_payload({"svg": isotype_svg})
+    isotype_injection = (
+        "(() => {\n"
+        f"  const __i = {svg_literal};\n"
+        "  document.body.dataset.isotypeUri = __i.svg;\n"
+        "  document.querySelectorAll('[data-isotype-container]').forEach((c) => {\n"
+        "    c.innerHTML = '';\n"
+        "    const img = document.createElement('img');\n"
+        "    img.src = __i.svg;\n"
+        "    img.style.width = '100%';\n"
+        "    img.style.height = '100%';\n"
+        "    c.appendChild(img);\n"
+        "  });\n"
+        "})();"
+    )
+    # Dos IIFE independientes: primero marca/textos, luego el isótipo.
+    return base_script + "\n" + isotype_injection
