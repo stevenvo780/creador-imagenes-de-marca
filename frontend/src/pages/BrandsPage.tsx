@@ -265,7 +265,7 @@ export function BrandsPage() {
         <ul
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
             gap: "var(--space-5)",
             listStyle: "none",
             margin: 0,
@@ -277,6 +277,7 @@ export function BrandsPage() {
             <li key={b.id}>
               <BrandCard
                 brand={b}
+                navigate={navigate}
                 onGenerate={() => navigate("/batch")}
                 onDelete={() => setToDelete(b)}
               />
@@ -326,10 +327,12 @@ export function BrandsPage() {
 
 function BrandCard({
   brand,
+  navigate,
   onGenerate,
   onDelete,
 }: {
   brand: Brand;
+  navigate: ReturnType<typeof useNavigate>;
   onGenerate: () => void;
   onDelete: () => void;
 }) {
@@ -383,7 +386,8 @@ function BrandCard({
             style={{
               margin: 0,
               fontFamily: "var(--font-display)",
-              fontSize: "var(--font-size-lg)",
+              fontSize: "18px",
+              fontWeight: 600,
               color: "var(--ink)",
               overflow: "hidden",
               textOverflow: "ellipsis",
@@ -394,9 +398,10 @@ function BrandCard({
           </h2>
           <p
             style={{
-              margin: "2px 0 0",
-              fontSize: "var(--font-size-xs)",
-              color: "var(--slate-500)",
+              margin: "4px 0 0",
+              fontSize: "11px",
+              color: "var(--slate-400)",
+              fontWeight: 400,
             }}
           >
             Creada el {formatDate(brand.created_at)}
@@ -414,84 +419,40 @@ function BrandCard({
           marginTop: "auto",
         }}
       >
-        {/* Botón principal: Generar variaciones */}
-        <Button variant="primary" size="sm" onClick={onGenerate}>
-          Generar variaciones
+        {/* Botón secundario: Generación avanzada */}
+        <Button variant="secondary" size="sm" onClick={onGenerate}>
+          Generación avanzada
         </Button>
 
-        {/* Flujo de 2 pasos: Identidad → Estudio */}
+        {/* Flujo de 2 pasos: Identidad → Estudio (botones primarios) */}
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
-            gap: "var(--space-2)",
+            gap: "var(--space-3)",
           }}
         >
-          <Link
-            to={`/brands/${brand.id}/identity`}
-            aria-label={`Identidad de ${brand.name}`}
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => navigate(`/brands/${brand.id}/identity`)}
             title="Paso 1: Elegir logo"
-            style={{
-              color: "var(--teal-600)",
-              fontSize: "var(--font-size-sm)",
-              fontWeight: 500,
-              textDecoration: "none",
-              padding: "var(--space-2) var(--space-3)",
-              borderRadius: "var(--radius-sm)",
-              border: "1px solid var(--teal-200)",
-              background: "var(--white)",
-              textAlign: "center",
-              transition: "all var(--transition-fast)",
-              cursor: "pointer",
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "var(--teal-50)";
-              e.currentTarget.style.borderColor = "var(--teal-400)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "var(--white)";
-              e.currentTarget.style.borderColor = "var(--teal-200)";
-            }}
+            aria-label={`Identidad de ${brand.name}`}
           >
             Identidad
-          </Link>
-          <Link
-            to={`/studio?brand=${brand.id}`}
-            aria-label={`Estudio de ${brand.name}`}
+          </Button>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => navigate(`/studio?brand=${brand.id}`)}
             title="Paso 2: Generar assets"
-            style={{
-              color: "var(--teal-600)",
-              fontSize: "var(--font-size-sm)",
-              fontWeight: 500,
-              textDecoration: "none",
-              padding: "var(--space-2) var(--space-3)",
-              borderRadius: "var(--radius-sm)",
-              border: "1px solid var(--teal-200)",
-              background: "var(--white)",
-              textAlign: "center",
-              transition: "all var(--transition-fast)",
-              cursor: "pointer",
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "var(--teal-50)";
-              e.currentTarget.style.borderColor = "var(--teal-400)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "var(--white)";
-              e.currentTarget.style.borderColor = "var(--teal-200)";
-            }}
+            aria-label={`Estudio de ${brand.name}`}
           >
             Estudio
-          </Link>
+          </Button>
         </div>
 
-        {/* Links secundarios */}
+        {/* Acciones secundarias: Personalizar (ghost) y Eliminar (destructivo) */}
         <div
           style={{
             display: "flex",
@@ -504,25 +465,29 @@ function BrandCard({
             to={`/brands/${brand.id}/edit`}
             aria-label={`Personalizar la marca ${brand.name}`}
             style={{
-              color: "var(--slate-500)",
+              color: "var(--slate-600)",
               fontSize: "var(--font-size-sm)",
-              textDecoration: "underline",
+              textDecoration: "none",
               padding: "var(--space-2) var(--space-3)",
               borderRadius: "var(--radius-sm)",
+              border: "1px solid var(--slate-200)",
+              background: "var(--white)",
               minHeight: 44,
               minWidth: 44,
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              transition: "color var(--transition-fast), background var(--transition-fast)",
+              transition: "all var(--transition-fast)",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = "var(--ink)";
               e.currentTarget.style.background = "var(--mist)";
+              e.currentTarget.style.borderColor = "var(--slate-300)";
+              e.currentTarget.style.color = "var(--ink)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = "var(--slate-500)";
-              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.background = "var(--white)";
+              e.currentTarget.style.borderColor = "var(--slate-200)";
+              e.currentTarget.style.color = "var(--slate-600)";
             }}
           >
             Personalizar
@@ -532,29 +497,30 @@ function BrandCard({
             onClick={onDelete}
             aria-label={`Eliminar la marca ${brand.name}`}
             style={{
-              background: "none",
-              border: "none",
-              color: "var(--slate-500)",
+              background: "var(--white)",
+              border: "1px solid var(--error)",
+              color: "var(--error)",
               fontSize: "var(--font-size-sm)",
               cursor: "pointer",
               padding: "var(--space-2) var(--space-3)",
               borderRadius: "var(--radius-sm)",
-              textDecoration: "underline",
+              textDecoration: "none",
               minHeight: 44,
               minWidth: 44,
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              transition: "color var(--transition-fast), background var(--transition-fast)",
+              transition: "all var(--transition-fast)",
               fontFamily: "inherit",
+              fontWeight: 500,
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = "var(--error)";
-              e.currentTarget.style.background = "var(--mist)";
+              e.currentTarget.style.background = "var(--error-bg)";
+              e.currentTarget.style.borderColor = "var(--error)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = "var(--slate-500)";
-              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.background = "var(--white)";
+              e.currentTarget.style.borderColor = "var(--error)";
             }}
           >
             Eliminar

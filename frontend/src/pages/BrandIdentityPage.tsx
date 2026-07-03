@@ -1,13 +1,19 @@
 import { type FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { brands as brandsApi, type Brand, ApiError } from "../api/client";
-import { Button, Spinner, EmptyState } from "../components";
+import { Button, Card, Steps, Spinner, EmptyState } from "../components";
+import type { StepItem } from "../components";
 
 interface LogoOption {
   style: string;
   seed: number;
   svg_data_uri: string;
 }
+
+const FLOW_STEPS: StepItem[] = [
+  { id: "logo", label: "Elegí tu logo" },
+  { id: "studio", label: "Ir al Estudio" },
+];
 
 export default function BrandIdentityPage() {
   const navigate = useNavigate();
@@ -129,6 +135,8 @@ export default function BrandIdentityPage() {
       ) as [string, string][])
     : [];
 
+  const hasIdentityInfo = paletteEntries.length > 0 || typographyEntries.length > 0;
+
   const isCurrentLogo = (option: LogoOption) =>
     brand?.logo_style === option.style && brand?.logo_seed === option.seed;
 
@@ -188,7 +196,7 @@ export default function BrandIdentityPage() {
 
       {!brandLoading && !brandError && brand && (
         <>
-          {/* Cabecera: nombre + paleta + tipografía */}
+          {/* Cabecera: nombre + flujo + navegación */}
           <div
             style={{
               display: "flex",
@@ -199,7 +207,7 @@ export default function BrandIdentityPage() {
               marginBottom: "var(--space-8)",
             }}
           >
-            <div>
+            <div style={{ flex: 1 }}>
               <h1
                 style={{
                   margin: "0 0 var(--space-1)",
@@ -212,13 +220,17 @@ export default function BrandIdentityPage() {
               </h1>
               <p
                 style={{
-                  margin: 0,
+                  margin: "var(--space-1) 0 0",
                   fontSize: "var(--font-size-sm)",
                   color: "var(--slate-500)",
                 }}
               >
                 Elegí el logo que mejor represente tu marca.
               </p>
+
+              <div style={{ marginTop: "var(--space-3)" }}>
+                <Steps steps={FLOW_STEPS} currentIndex={0} />
+              </div>
             </div>
 
             <Button
@@ -230,100 +242,147 @@ export default function BrandIdentityPage() {
             </Button>
           </div>
 
-          {/* Paleta de colores */}
-          {paletteEntries.length > 0 && (
-            <div style={{ marginBottom: "var(--space-6)" }}>
+          {/* ── Identidad de marca (paleta + tipografía consolidado) ─── */}
+
+          {hasIdentityInfo && (
+            <Card padding="md" style={{ marginBottom: "var(--space-8)" }}>
               <p
                 style={{
-                  margin: "0 0 var(--space-2)",
+                  margin: "0 0 var(--space-4)",
                   fontSize: "var(--font-size-sm)",
                   fontWeight: 600,
                   color: "var(--slate-700)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
                 }}
               >
-                Paleta
+                Identidad de marca
               </p>
+
               <div
                 style={{
                   display: "flex",
-                  gap: "var(--space-3)",
+                  gap: "var(--space-8)",
                   flexWrap: "wrap",
+                  alignItems: "flex-start",
                 }}
               >
-                {paletteEntries.map(([key, color]) => (
-                  <div
-                    key={key}
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      gap: "var(--space-1)",
-                    }}
-                  >
-                    <span
+                {paletteEntries.length > 0 && (
+                  <div>
+                    <p
                       style={{
-                        display: "block",
-                        width: 36,
-                        height: 36,
-                        borderRadius: "var(--radius-sm)",
-                        background: color,
-                        border: "1px solid var(--line)",
-                        boxShadow: "var(--shadow-sm)",
-                      }}
-                    />
-                    <span
-                      style={{
+                        margin: "0 0 var(--space-3)",
                         fontSize: "var(--font-size-xs)",
+                        fontWeight: 600,
                         color: "var(--slate-500)",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.05em",
                       }}
                     >
-                      {key}
-                    </span>
+                      Paleta
+                    </p>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "var(--space-3)",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      {paletteEntries.map(([key, color]) => (
+                        <div
+                          key={key}
+                          title={color}
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            gap: "var(--space-1)",
+                          }}
+                        >
+                          <span
+                            style={{
+                              display: "block",
+                              width: 40,
+                              height: 40,
+                              borderRadius: "var(--radius-sm)",
+                              background: color,
+                              border: "1px solid var(--line)",
+                              boxShadow: "var(--shadow-sm)",
+                              cursor: "default",
+                              transition: "transform var(--transition-fast)",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.transform = "scale(1.15)";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.transform = "";
+                            }}
+                          />
+                          <span
+                            style={{
+                              fontSize: "var(--font-size-xs)",
+                              color: "var(--slate-500)",
+                            }}
+                          >
+                            {key}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
+                )}
 
-          {/* Tipografía */}
-          {typographyEntries.length > 0 && (
-            <div style={{ marginBottom: "var(--space-8)" }}>
-              <p
-                style={{
-                  margin: "0 0 var(--space-2)",
-                  fontSize: "var(--font-size-sm)",
-                  fontWeight: 600,
-                  color: "var(--slate-700)",
-                }}
-              >
-                Tipografía
-              </p>
-              <div style={{ display: "flex", gap: "var(--space-6)", flexWrap: "wrap" }}>
-                {typographyEntries.map(([key, value]) => (
-                  <div key={key}>
-                    <span
+                {typographyEntries.length > 0 && (
+                  <div>
+                    <p
                       style={{
+                        margin: "0 0 var(--space-3)",
                         fontSize: "var(--font-size-xs)",
+                        fontWeight: 600,
                         color: "var(--slate-500)",
-                        display: "block",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.05em",
                       }}
                     >
-                      {key}
-                    </span>
-                    <span
+                      Tipografía
+                    </p>
+                    <div
                       style={{
-                        fontSize: "var(--font-size-lg)",
-                        fontFamily: value,
-                        color: "var(--ink)",
-                        fontWeight: 700,
+                        display: "flex",
+                        gap: "var(--space-6)",
+                        flexWrap: "wrap",
                       }}
                     >
-                      {value}
-                    </span>
+                      {typographyEntries.map(([key, value]) => (
+                        <div key={key} title={value}>
+                          <span
+                            style={{
+                              fontSize: "var(--font-size-xs)",
+                              color: "var(--slate-500)",
+                              display: "block",
+                              marginBottom: "var(--space-1)",
+                            }}
+                          >
+                            {key}
+                          </span>
+                          <span
+                            style={{
+                              fontSize: "var(--font-size-lg)",
+                              fontFamily: value,
+                              color: "var(--ink)",
+                              fontWeight: 700,
+                              cursor: "default",
+                            }}
+                          >
+                            {value}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                ))}
+                )}
               </div>
-            </div>
+            </Card>
           )}
 
           {/* Grid de logos */}
@@ -341,16 +400,27 @@ export default function BrandIdentityPage() {
                 flexWrap: "wrap",
               }}
             >
-              <h2
-                style={{
-                  margin: 0,
-                  fontFamily: "var(--font-display)",
-                  fontSize: "var(--font-size-lg)",
-                  color: "var(--ink)",
-                }}
-              >
-                Variaciones de logo
-              </h2>
+              <div>
+                <h2
+                  style={{
+                    margin: 0,
+                    fontFamily: "var(--font-display)",
+                    fontSize: "var(--font-size-lg)",
+                    color: "var(--ink)",
+                  }}
+                >
+                  Variaciones de logo
+                </h2>
+                <p
+                  style={{
+                    margin: "var(--space-1) 0 0",
+                    fontSize: "var(--font-size-xs)",
+                    color: "var(--slate-500)",
+                  }}
+                >
+                  Trae nuevas variaciones de logo para elegir.
+                </p>
+              </div>
 
               <Button
                 variant="secondary"
@@ -363,7 +433,7 @@ export default function BrandIdentityPage() {
                   void loadLogoOptions();
                 }}
               >
-                Regenerar variaciones
+                ↻ Regenerar
               </Button>
             </div>
 
@@ -438,6 +508,10 @@ export default function BrandIdentityPage() {
                   const selected = isSelected(option);
                   const current = isCurrentLogo(option);
 
+                  const borderStyle: string = selected || current
+                    ? "3px solid var(--teal-600)"
+                    : "2px solid var(--line)";
+
                   return (
                     <button
                       key={`${option.style}-${option.seed}`}
@@ -457,13 +531,11 @@ export default function BrandIdentityPage() {
                         justifyContent: "center",
                         aspectRatio: "1",
                         background: logoBgColor,
-                        border: selected
-                          ? "3px solid var(--teal-600)"
-                          : "2px solid var(--line)",
+                        border: borderStyle,
                         borderRadius: "var(--radius-lg)",
                         cursor: "pointer",
                         padding: "var(--space-4)",
-                        boxShadow: selected
+                        boxShadow: selected || current
                           ? "var(--shadow-md)"
                           : undefined,
                         transition:
@@ -471,23 +543,29 @@ export default function BrandIdentityPage() {
                         outline: "none",
                       }}
                       onMouseEnter={(e) => {
-                        if (!selected) {
-                          e.currentTarget.style.boxShadow = "var(--shadow-md)";
-                          e.currentTarget.style.borderColor = "var(--teal)";
-                        }
+                        e.currentTarget.style.boxShadow = "var(--shadow-md)";
+                        e.currentTarget.style.borderColor = "var(--teal)";
+                        e.currentTarget.style.transform = "scale(1.03)";
                       }}
                       onMouseLeave={(e) => {
-                        if (!selected) {
+                        if (selected || current) {
+                          e.currentTarget.style.boxShadow = "var(--shadow-md)";
+                          e.currentTarget.style.borderColor = "var(--teal-600)";
+                        } else {
                           e.currentTarget.style.boxShadow = "";
                           e.currentTarget.style.borderColor = "var(--line)";
                         }
+                        e.currentTarget.style.transform = "";
                       }}
                       onFocus={(e) => {
                         e.currentTarget.style.boxShadow = "var(--shadow-md)";
                         e.currentTarget.style.borderColor = "var(--teal)";
                       }}
                       onBlur={(e) => {
-                        if (!selected) {
+                        if (selected || current) {
+                          e.currentTarget.style.boxShadow = "var(--shadow-md)";
+                          e.currentTarget.style.borderColor = "var(--teal-600)";
+                        } else {
                           e.currentTarget.style.boxShadow = "";
                           e.currentTarget.style.borderColor = "var(--line)";
                         }
@@ -508,18 +586,22 @@ export default function BrandIdentityPage() {
                         <span
                           style={{
                             position: "absolute",
-                            top: "var(--space-2)",
-                            right: "var(--space-2)",
+                            top: "8px",
+                            right: "8px",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "4px",
                             background: "var(--teal-600)",
                             color: "#fff",
                             fontSize: "var(--font-size-xs)",
                             fontWeight: 600,
-                            padding: "2px var(--space-2)",
+                            padding: "3px 8px",
                             borderRadius: "var(--radius-sm)",
                             lineHeight: 1.4,
+                            boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
                           }}
                         >
-                          Actual
+                          ✓ Actual
                         </span>
                       )}
                     </button>
@@ -534,28 +616,65 @@ export default function BrandIdentityPage() {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "var(--space-3)",
+              gap: "var(--space-4)",
               flexWrap: "wrap",
-              padding: "var(--space-5) 0",
+              padding: "var(--space-6) 0",
               borderTop: "1px solid var(--line)",
             }}
           >
-            <Button
-              variant="primary"
-              busy={saving}
-              disabled={!hasSelection || saving}
-              onClick={handleSave}
-            >
-              {saving ? "Guardando…" : "Guardar identidad"}
-            </Button>
+            <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+              <Button
+                variant="primary"
+                busy={saving}
+                disabled={!hasSelection || saving}
+                onClick={handleSave}
+                style={{
+                  fontSize: "var(--font-size-base)",
+                  fontWeight: 700,
+                  padding: "var(--space-3) var(--space-6)",
+                  minHeight: 48,
+                }}
+              >
+                {saving ? "Guardando…" : "Guardar identidad"}
+              </Button>
 
-            <Button
-              variant="secondary"
-              disabled={!saved}
-              onClick={() => navigate(`/studio?brand=${brand.id}`)}
-            >
-              Ir al Estudio →
-            </Button>
+              <span
+                style={{
+                  fontSize: "var(--font-size-xs)",
+                  color: "var(--slate-500)",
+                }}
+              >
+                Paso 1 de 2
+              </span>
+            </div>
+
+            {saved && (
+              <Button
+                variant="secondary"
+                onClick={() => navigate(`/studio?brand=${brand.id}`)}
+                style={{
+                  borderColor: "var(--teal)",
+                  color: "var(--teal-600)",
+                }}
+              >
+                Ir al Estudio →
+              </Button>
+            )}
+
+            {!saved && (
+              <span
+                style={{
+                  fontSize: "var(--font-size-xs)",
+                  color: "var(--slate-400)",
+                  fontStyle: "italic",
+                  padding: "var(--space-2) var(--space-3)",
+                  background: "var(--mist)",
+                  borderRadius: "var(--radius-sm)",
+                }}
+              >
+                Guardá tu logo para continuar al Estudio
+              </span>
+            )}
           </div>
 
           {/* Mensajes */}
