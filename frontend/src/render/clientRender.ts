@@ -160,46 +160,40 @@ function createAndMountContainer(
   // Copiar el body al contenedor
   const bodyContent = doc.body;
 
-  // Aplicar vars como CSS custom properties al root ANTES de copiar
+  // Vars de la marca como CSS custom properties (:root)
   const styleElement = document.createElement("style");
   let styleContent = `:root {`;
-
   for (const [key, value] of Object.entries(combination.vars)) {
-    // Convertir keys a CSS custom props: primario -> --primario
-    const cssKey = `--${key}`;
-    styleContent += `\n  ${cssKey}: ${value};`;
+    styleContent += `\n  --${key}: ${value};`;
   }
-
   styleContent += "\n}";
   styleElement.textContent = styleContent;
 
-  // Insertar el <style> en la cabeza del body parseado
-  const head = doc.head || doc.createElement("head");
-  if (!doc.head) {
-    bodyContent.parentNode?.insertBefore(head, bodyContent);
-  }
-  head.appendChild(styleElement);
-
-  // Setear data-* attributes DIRECTAMENTE sobre el body de la plantilla (doc.body)
-  // Esto es crítico: los selectores CSS esperan body[data-variant="..."], etc.
+  // Setear data-* DIRECTAMENTE sobre el body de la plantilla.
+  // Crítico: los selectores CSS esperan body[data-variant="..."], etc.
   for (const [attr, value] of Object.entries(combination.data_attrs)) {
-    // Convertir data-attr-name a dataset camelCase: data-bg-treatment -> bgTreatment
     const attrKey = attr.replace("data-", "");
     const parts = attrKey.split("-");
     const camelKey = parts[0] + parts.slice(1).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join("");
     (bodyContent.dataset as any)[camelKey] = value;
-    // También setear como attribute directo para ser explícito
     bodyContent.setAttribute(attr, value);
   }
 
-  // Inyectar el CSS del sistema (eikon-system.css) como <style> al inicio del contenedor
+  // Orden de estilos en el contenedor (el último gana en la cascada):
+  // 1) eikon-system.css (fuentes + tokens globales)
   if (systemCss) {
     const systemCssElement = document.createElement("style");
     systemCssElement.textContent = systemCss;
-    container.insertBefore(systemCssElement, container.firstChild);
+    container.appendChild(systemCssElement);
   }
-
-  // Ahora copiar el body al contenedor
+  // 2) el <style> EMBEBIDO de la plantilla (vivía en <head>; si no se copia, la
+  //    plantilla rinde SIN estilo → fondo/composición rotos). CRÍTICO para compuestas.
+  doc.querySelectorAll("style").forEach((s) => {
+    container.appendChild(s.cloneNode(true));
+  });
+  // 3) las vars de la marca (:root) — sobreescriben los defaults de la plantilla.
+  container.appendChild(styleElement);
+  // 4) el body de la plantilla.
   container.appendChild(bodyContent);
 
   // Inyectar isotipo como <img> en [data-isotype-container]

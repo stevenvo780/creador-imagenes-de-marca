@@ -200,13 +200,18 @@ async def get_batch_plan(  # noqa: C901
             isotype_style, isotype_seed, marca, vars_dict
         )
 
-        # Textos de la marca, aplicando content overrides
+        # Textos, aplicando content overrides. El headline de varias plantillas usa
+        # data-logo-texto (nombre de marca): lo llenamos con el título del usuario si
+        # lo dio, si no con el nombre de la marca (evita el placeholder hardcodeado).
+        _brand_name = str(marca.get("nombre_producto") or brand.get("name") or "")
         texts_obj = {
             "titulo": content_overrides.get("titulo") or vars_dict.get("titulo", ""),
             "subtitulo": content_overrides.get("subtitulo") or vars_dict.get("subtitulo", ""),
             "etiqueta": content_overrides.get("etiqueta") or vars_dict.get("etiqueta", ""),
             "numero": content_overrides.get("numero") or vars_dict.get("numero", ""),
-            "copy": content_overrides.get("copy") or vars_dict.get("copy", ""),
+            "copy": content_overrides.get("copy") or content_overrides.get("subtitulo") or vars_dict.get("copy", ""),
+            "url": content_overrides.get("url") or vars_dict.get("url", ""),
+            "logo-texto": content_overrides.get("titulo") or _brand_name,
         }
 
         combinations_list.append({
