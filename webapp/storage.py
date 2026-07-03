@@ -530,3 +530,100 @@ def select_variation(
             "UPDATE variations SET selected = ? WHERE id = ?",
             (1 if selected else 0, variation_id),
         )
+
+
+def delete_variation(
+    db_url: str | None | Path,
+    tenant_id: int,
+    variation_id: int,
+    storage: Any = None,
+) -> int:
+    """Borra una variación scoped al tenant. Limpia el archivo de salida (best-effort).
+
+    Args:
+        db_url: URL de la BD
+        tenant_id: ID del tenant
+        variation_id: ID de la variación a borrar
+        storage: StorageBackend opcional para limpiar el archivo (LocalStorage, GCSStorage, etc.)
+                 Si se proporciona, intenta borrar el archivo; si falla, continúa.
+
+    Returns:
+        1 si la variación fue borrada, 0 si no existía.
+
+    Raises:
+        KeyError: si la variación no pertenece al tenant
+    """
+    with connect(db_url) as con:
+        # Obtener la variación validando pertenencia
+        row = con.execute(
+            "SELECT id, output_path FROM variations WHERE tenant_id = ? AND id = ?",
+            (tenant_id, variation_id),
+        ).fetchone()
+        if row is None:
+            raise KeyError(f"variation {variation_id} no pertenece al tenant {tenant_id}")
+
+        output_path = row.get("output_path")
+
+        # Borrar del archivo de almacenamiento (best-effort)
+        if output_path and storage:
+            try:
+                relative_key = storage.relative_key(tenant_id, output_path)
+                storage.delete(tenant_id, relative_key)
+            except (FileNotFoundError, ValueError):
+                # Si el archivo no existe o la ruta es inválida, continuar
+                pass
+
+        # Borrar de la BD
+        con.execute("DELETE FROM variations WHERE id = ?", (variation_id,))
+        return 1
+
+
+def delete_variations(
+    db_url: str | None | Path,
+    tenant_id: int,
+    ids: list[int],
+    storage: Any = None,
+) -> int:
+    """Borra múltiples variaciones scoped al tenant en lote.
+
+    Args:
+        db_url: URL de la BD
+        tenant_id: ID del tenant
+        ids: lista de IDs de variaciones a borrar
+        storage: StorageBackend opcional para limpiar archivos (LocalStorage, GCSStorage, etc.)
+
+    Returns:
+        Cantidad de variaciones borradas.
+
+    Raises:
+        Nada: ignora variaciones que no existen o no pertenecen al tenant.
+    """
+    if not ids:
+        return 0
+
+    count = 0
+    with connect(db_url) as con:
+        # Obtener todas las variaciones del tenant para estas IDs
+        placeholders = ",".join("?" * len(ids))
+        rows = con.execute(
+            f"SELECT id, output_path FROM variations WHERE tenant_id = ? AND id IN ({placeholders})",
+            [tenant_id, *ids],
+        ).fetchall()
+
+        # Borrar archivos (best-effort)
+        if storage:
+            for row in rows:
+                output_path = row.get("output_path")
+                if output_path:
+                    try:
+                        relative_key = storage.relative_key(tenant_id, output_path)
+                        storage.delete(tenant_id, relative_key)
+                    except (FileNotFoundError, ValueError):
+                        # Continuar si el archivo no existe o la ruta es inválida
+                        pass
+
+        # Borrar de la BD
+        con.execute(f"DELETE FROM variations WHERE tenant_id = ? AND id IN ({placeholders})", [tenant_id, *ids])
+        count = len(rows)
+
+    return count

@@ -6,6 +6,7 @@
  *   - Seleccionar (checkbox) para descarga en lote.
  *   - Click en imagen → abre el lightbox de detalle.
  *   - Descargar individualmente.
+ *   - Eliminar individualmente.
  *
  * La calidad (score) se muestra como estrellas o badge "Recomendado"
  * usando el componente Stars — nunca el número crudo.
@@ -25,6 +26,10 @@ export interface VariationCardProps {
   onOpenLightbox: () => void;
   onDownload: () => Promise<void>;
   downloading?: boolean;
+  /** Handler para eliminar esta variación. */
+  onDelete?: () => Promise<void>;
+  /** true mientras se está eliminando esta variación. */
+  deleting?: boolean;
 }
 
 export function VariationCard({
@@ -36,6 +41,8 @@ export function VariationCard({
   onOpenLightbox,
   onDownload,
   downloading = false,
+  onDelete,
+  deleting = false,
 }: VariationCardProps) {
   const imageUrl = downloads.fileUrl(variation.id);
 
@@ -198,29 +205,64 @@ export function VariationCard({
           <Stars score={variation.score} />
         </div>
 
-        <button
-          type="button"
-          onClick={() => void onDownload()}
-          disabled={downloading}
-          aria-label={`Descargar variación${brandName ? ` de ${brandName}` : ''}`}
-          title="Descargar imagen"
+        <div
           style={{
+            display: 'flex',
+            gap: 'var(--space-2)',
             flexShrink: 0,
-            padding: 'var(--space-1) var(--space-3)',
-            background: downloading ? 'var(--mist)' : 'var(--teal-600)',
-            color: downloading ? 'var(--slate-500)' : '#fff',
-            border: 'none',
-            borderRadius: 'var(--radius-md)',
-            fontSize: 'var(--font-size-xs)',
-            fontWeight: 600,
-            cursor: downloading ? 'not-allowed' : 'pointer',
-            transition:
-              'background var(--transition-fast), color var(--transition-fast)',
-            whiteSpace: 'nowrap',
           }}
         >
-          {downloading ? '…' : '↓ Descargar'}
-        </button>
+          {onDelete && (
+            <button
+              type="button"
+              onClick={() => {
+                if (window.confirm('¿Borrar esta variación?')) {
+                  void onDelete();
+                }
+              }}
+              disabled={deleting}
+              aria-label={`Eliminar variación${brandName ? ` de ${brandName}` : ''}`}
+              title="Eliminar variación"
+              style={{
+                padding: 'var(--space-1) var(--space-3)',
+                background: deleting ? 'var(--mist)' : 'transparent',
+                color: deleting ? 'var(--slate-400)' : 'var(--slate-500)',
+                border: `1px solid ${deleting ? 'var(--mist)' : 'var(--line)'}`,
+                borderRadius: 'var(--radius-md)',
+                fontSize: 'var(--font-size-xs)',
+                fontWeight: 600,
+                cursor: deleting ? 'not-allowed' : 'pointer',
+                transition:
+                  'background var(--transition-fast), color var(--transition-fast)',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {deleting ? '…' : '🗑 Borrar'}
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => void onDownload()}
+            disabled={downloading}
+            aria-label={`Descargar variación${brandName ? ` de ${brandName}` : ''}`}
+            title="Descargar imagen"
+            style={{
+              padding: 'var(--space-1) var(--space-3)',
+              background: downloading ? 'var(--mist)' : 'var(--teal-600)',
+              color: downloading ? 'var(--slate-500)' : '#fff',
+              border: 'none',
+              borderRadius: 'var(--radius-md)',
+              fontSize: 'var(--font-size-xs)',
+              fontWeight: 600,
+              cursor: downloading ? 'not-allowed' : 'pointer',
+              transition:
+                'background var(--transition-fast), color var(--transition-fast)',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {downloading ? '…' : '↓ Descargar'}
+          </button>
+        </div>
       </div>
     </article>
   );

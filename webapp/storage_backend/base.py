@@ -126,3 +126,16 @@ class StorageBackend(Protocol):
             ValueError: si algún path contiene path traversal
         """
         ...
+
+    def delete(self, tenant_id: int, relative_path: str) -> None:
+        """Borra un archivo del almacenamiento.
+
+        Args:
+            tenant_id: ID del tenant
+            relative_path: ruta relativa dentro de la carpeta del tenant
+
+        Raises:
+            ValueError: si relative_path contiene path traversal
+            FileNotFoundError: si el archivo no existe
+        """
+        ...

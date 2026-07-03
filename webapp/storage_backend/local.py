@@ -212,3 +212,31 @@ class LocalStorage:
                 # Guardar en el ZIP con la ruta relativa
                 zf.write(full_path, arcname=relative_path)
         return zip_buffer.getvalue()
+
+    def delete(self, tenant_id: int, relative_path: str) -> None:
+        """Borra un archivo del almacenamiento local.
+
+        Args:
+            tenant_id: ID del tenant
+            relative_path: ruta relativa dentro de la carpeta del tenant
+
+        Raises:
+            ValueError: si relative_path es inseguro
+            FileNotFoundError: si el archivo no existe
+        """
+        full_path = self._get_full_path(tenant_id, relative_path)
+        if not full_path.exists():
+            raise FileNotFoundError(f"archivo no existe: {full_path}")
+        full_path.unlink()
+        # Opcionalmente limpiar directorios vacíos (best-effort)
+        try:
+            parent = full_path.parent
+            while parent != self._get_tenant_dir(tenant_id):
+                if not any(parent.iterdir()):
+                    parent.rmdir()
+                    parent = parent.parent
+                else:
+                    break
+        except OSError:
+            # Si la limpieza de dirs falla, no es crítico
+            pass

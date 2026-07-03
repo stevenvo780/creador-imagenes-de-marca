@@ -12,6 +12,7 @@ from .brands import router as brands_router
 from .client_render import router as client_render_router
 from .downloads import router as downloads_router
 from .gallery import router as gallery_router
+from .variations import router as variations_router
 from .wizard import router as wizard_router
 
 __all__ = [
@@ -20,5 +21,6 @@ __all__ = [
     "client_render_router",
     "downloads_router",
     "gallery_router",
+    "variations_router",
     "wizard_router",
 ]

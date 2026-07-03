@@ -24,6 +24,7 @@ import {
   brands as brandsApi,
   downloads,
   gallery,
+  variations,
   ApiError,
   type Brand,
   type GalleryOrder,
@@ -74,9 +75,14 @@ export function GalleryPage() {
   const [filterCategory, setFilterCategory] = useState<string>('');
   const [sortBy, setSortBy] = useState<SortKey>('calidad');
 
-  // ── Selección y ZIP ───────────────────────────────────────────────────────
+  // ── Selección, ZIP y eliminación ──────────────────────────────────────────
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [zipping, setZipping] = useState(false);
+  const [deleting, setDeleting] = useState<Set<number>>(new Set());
+  const [deleteConfirm, setDeleteConfirm] = useState<{
+    ids: number[];
+    open: boolean;
+  }>({ ids: [], open: false });
 
   // ── Lightbox ──────────────────────────────────────────────────────────────
   const [lightboxId, setLightboxId] = useState<number | null>(null);
@@ -233,6 +239,66 @@ export function GalleryPage() {
       setZipping(false);
     }
   }, [selected]);
+
+  const handleDeleteBulk = useCallback((ids: number[]) => {
+    if (ids.length === 0) return;
+    setDeleteConfirm({ ids, open: true });
+  }, []);
+
+  const confirmDelete = useCallback(async () => {
+    const ids = deleteConfirm.ids;
+    setDeleteConfirm({ ids: [], open: false });
+    const set = new Set(ids);
+    setDeleting((prev) => new Set([...prev, ...set]));
+    try {
+      if (ids.length === 1) {
+        await variations.delete(ids[0]);
+      } else {
+        await variations.deleteBulk(ids);
+      }
+      setSelected(new Set());
+      const res = await gallery.list({
+        brandId: filterBrand !== '' ? filterBrand : undefined,
+        batchId: filterBatch !== '' ? filterBatch : undefined,
+        order: sortBy,
+      });
+      setItems(res.items);
+    } catch (err) {
+      alert(err instanceof ApiError ? err.detail : 'Error al eliminar.');
+    } finally {
+      setDeleting((prev) => {
+        const next = new Set(prev);
+        for (const id of ids) next.delete(id);
+        return next;
+      });
+    }
+  }, [deleteConfirm.ids, filterBrand, filterBatch, sortBy]);
+
+  const handleDeleteSingle = useCallback(async (id: number) => {
+    setDeleting((prev) => new Set([...prev, id]));
+    try {
+      await variations.delete(id);
+      setSelected((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+      const res = await gallery.list({
+        brandId: filterBrand !== '' ? filterBrand : undefined,
+        batchId: filterBatch !== '' ? filterBatch : undefined,
+        order: sortBy,
+      });
+      setItems(res.items);
+    } catch (err) {
+      alert(err instanceof ApiError ? err.detail : 'Error al eliminar.');
+    } finally {
+      setDeleting((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }
+  }, [filterBrand, filterBatch, sortBy]);
 
   const handleDownloadOne = useCallback(async (id: number) => {
     setDownloading((prev) => new Set(prev).add(id));
@@ -583,6 +649,8 @@ export function GalleryPage() {
                   onOpenLightbox={() => setLightboxId(v.id)}
                   onDownload={() => handleDownloadOne(v.id)}
                   downloading={downloading.has(v.id)}
+                  onDelete={() => handleDeleteSingle(v.id)}
+                  deleting={deleting.has(v.id)}
                 />
               </li>
             ))}
@@ -633,6 +701,20 @@ export function GalleryPage() {
             {zipping ? 'Generando ZIP…' : '↓ Descargar .zip'}
           </Button>
 
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => handleDeleteBulk([...selected])}
+            disabled={deleting.size > 0}
+            style={{
+              color: 'var(--error)',
+              borderColor: 'var(--error)',
+            }}
+          >
+            🗑 Eliminar {selected.size}{' '}
+            {selected.size === 1 ? 'variación' : 'variaciones'}
+          </Button>
+
           <button
             type="button"
             onClick={clearSelection}
@@ -655,6 +737,88 @@ export function GalleryPage() {
         </div>
       )}
 
+      {/* ── Diálogo de confirmación de borrado ── */}
+      {deleteConfirm.open && (
+        <div
+          role="alertdialog"
+          aria-modal="true"
+          aria-labelledby="delete-dialog-title"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 300,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(14, 27, 26, 0.5)',
+            backdropFilter: 'blur(2px)',
+          }}
+        >
+          <div
+            style={{
+              background: 'var(--white)',
+              borderRadius: 'var(--radius-xl)',
+              boxShadow: 'var(--shadow-lg)',
+              padding: 'var(--space-6)',
+              maxWidth: 420,
+              width: '100%',
+              animation: 'eikon-fadein 180ms ease',
+            }}
+          >
+            <h3
+              id="delete-dialog-title"
+              style={{
+                margin: '0 0 var(--space-3)',
+                fontFamily: 'var(--font-display)',
+                fontSize: 'var(--font-size-lg)',
+                color: 'var(--ink)',
+              }}
+            >
+              Confirmar eliminación
+            </h3>
+            <p
+              style={{
+                fontSize: 'var(--font-size-sm)',
+                color: 'var(--slate-600)',
+                margin: '0 0 var(--space-5)',
+              }}
+            >
+              ¿Estás seguro de que querés borrar {deleteConfirm.ids.length}{' '}
+              {deleteConfirm.ids.length === 1 ? 'variación' : 'variaciones'}? No se puede
+              deshacer.
+            </p>
+            <div
+              style={{
+                display: 'flex',
+                gap: 'var(--space-3)',
+                justifyContent: 'flex-end',
+              }}
+            >
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setDeleteConfirm({ ids: [], open: false })}
+              >
+                Cancelar
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => void confirmDelete()}
+                busy={deleting.size > 0}
+                style={{
+                  background: 'var(--error)',
+                  borderColor: 'transparent',
+                  color: '#fff',
+                }}
+              >
+                Eliminar
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── Lightbox de detalle ── */}
       <Lightbox
         variation={lightboxVariation}
@@ -671,6 +835,13 @@ export function GalleryPage() {
           lightboxId !== null ? handleDownloadOne(lightboxId) : Promise.resolve()
         }
         downloading={lightboxId !== null && downloading.has(lightboxId)}
+        onDelete={async () => {
+          if (lightboxId !== null) {
+            await handleDeleteSingle(lightboxId);
+            setLightboxId(null);
+          }
+        }}
+        deleting={lightboxId !== null && deleting.has(lightboxId)}
       />
     </>
   );

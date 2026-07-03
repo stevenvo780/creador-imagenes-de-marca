@@ -224,3 +224,22 @@ class GCSStorage:
                 content = self.open(tenant_id, relative_path)
                 zf.writestr(relative_path, content)
         return zip_buffer.getvalue()
+
+    def delete(self, tenant_id: int, relative_path: str) -> None:
+        """Borra un objeto de Google Cloud Storage.
+
+        Args:
+            tenant_id: ID del tenant.
+            relative_path: ruta relativa dentro de la carpeta del tenant.
+
+        Raises:
+            ValueError: si relative_path es inseguro.
+            FileNotFoundError: si el objeto no existe.
+        """
+        blob = self._blob(tenant_id, relative_path)
+        try:
+            blob.delete()
+        except NotFound as exc:
+            raise FileNotFoundError(
+                f"objeto no existe en GCS: {blob.name}"
+            ) from exc

@@ -20,6 +20,10 @@ export interface LightboxProps {
   onClose: () => void;
   onDownload: () => Promise<void>;
   downloading?: boolean;
+  /** Handler para eliminar esta variación. */
+  onDelete?: () => Promise<void>;
+  /** true mientras se está eliminando esta variación. */
+  deleting?: boolean;
 }
 
 export function Lightbox({
@@ -29,6 +33,8 @@ export function Lightbox({
   onClose,
   onDownload,
   downloading = false,
+  onDelete,
+  deleting = false,
 }: LightboxProps) {
   if (!variation) return null;
 
@@ -120,26 +126,56 @@ export function Lightbox({
             )}
           </div>
 
-          <button
-            type="button"
-            onClick={() => void onDownload()}
-            disabled={downloading}
-            style={{
-              padding: 'var(--space-2) var(--space-6)',
-              background: downloading ? 'var(--mist)' : 'var(--teal-600)',
-              color: downloading ? 'var(--slate-500)' : '#fff',
-              border: 'none',
-              borderRadius: 'var(--radius-md)',
-              fontSize: 'var(--font-size-sm)',
-              fontWeight: 600,
-              cursor: downloading ? 'not-allowed' : 'pointer',
-              transition:
-                'background var(--transition-fast), color var(--transition-fast)',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {downloading ? 'Descargando…' : '↓ Descargar imagen'}
-          </button>
+          <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+            {onDelete && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (window.confirm('¿Borrar esta variación?')) {
+                    void onDelete();
+                  }
+                }}
+                disabled={deleting}
+                aria-label="Eliminar variación"
+                title="Eliminar variación"
+                style={{
+                  padding: 'var(--space-2) var(--space-6)',
+                  background: deleting ? 'var(--mist)' : 'transparent',
+                  color: deleting ? 'var(--slate-400)' : 'var(--slate-500)',
+                  border: `1px solid ${deleting ? 'var(--mist)' : 'var(--line)'}`,
+                  borderRadius: 'var(--radius-md)',
+                  fontSize: 'var(--font-size-sm)',
+                  fontWeight: 600,
+                  cursor: deleting ? 'not-allowed' : 'pointer',
+                  transition:
+                    'background var(--transition-fast), color var(--transition-fast)',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {deleting ? 'Eliminando…' : '🗑 Eliminar'}
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => void onDownload()}
+              disabled={downloading}
+              style={{
+                padding: 'var(--space-2) var(--space-6)',
+                background: downloading ? 'var(--mist)' : 'var(--teal-600)',
+                color: downloading ? 'var(--slate-500)' : '#fff',
+                border: 'none',
+                borderRadius: 'var(--radius-md)',
+                fontSize: 'var(--font-size-sm)',
+                fontWeight: 600,
+                cursor: downloading ? 'not-allowed' : 'pointer',
+                transition:
+                  'background var(--transition-fast), color var(--transition-fast)',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {downloading ? 'Descargando…' : '↓ Descargar imagen'}
+            </button>
+          </div>
         </div>
       </div>
     </Modal>

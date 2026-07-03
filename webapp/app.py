@@ -26,6 +26,7 @@ from webapp.api import (
     client_render_router,
     downloads_router,
     gallery_router,
+    variations_router,
     wizard_router,
 )
 from webapp.api.deps import current_user
@@ -190,6 +191,7 @@ def create_app(
     app.include_router(batches_router)
     app.include_router(client_render_router)
     app.include_router(gallery_router)
+    app.include_router(variations_router)
     app.include_router(downloads_router)
 
     # ── SPA (same-origin): assets estáticos + fallback a index.html ──────

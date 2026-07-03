@@ -125,3 +125,9 @@ class ZipRequest(BaseModel):
     """Lista de IDs de variaciones a empacar en un ZIP descargable."""
 
     ids: list[int] = Field(min_length=1, max_length=200)
+
+
+class DeleteVariationsRequest(BaseModel):
+    """Lista de IDs de variaciones a borrar."""
+
+    ids: list[int] = Field(min_length=1, max_length=200)

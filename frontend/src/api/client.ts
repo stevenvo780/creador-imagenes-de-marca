@@ -321,6 +321,13 @@ export const downloads = {
   },
 };
 
+// ── Variations ───────────────────────────────────────────────────────────────
+
+export const variations = {
+  delete: (id: number) => del<void>(`/api/v1/variations/${id}`),
+  deleteBulk: (ids: number[]) => post<void>(`/api/v1/variations/delete`, { ids }),
+};
+
 // ── Client-side Render ────────────────────────────────────────────────────────
 
 /**
