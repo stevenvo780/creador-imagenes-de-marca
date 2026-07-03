@@ -30,6 +30,8 @@ export interface Brand {
   typography: Record<string, unknown>;
   logo_text: string;
   logo_symbol: string;
+  logo_style: string;
+  logo_seed: number;
   texts: Record<string, unknown>;
   /** Timestamp Unix en segundos (o ISO si el backend cambia). */
   created_at: number | string | null;
@@ -51,6 +53,8 @@ export interface BrandUpdate {
   typography?: Record<string, unknown>;
   logo_text?: string;
   logo_symbol?: string;
+  logo_style?: string;
+  logo_seed?: number;
   texts?: Record<string, unknown>;
 }
 
@@ -91,6 +95,8 @@ export interface BatchCreate {
   seed_salt?: string;
   /** "client": el navegador renderiza y sube los PNG (sin CPU de servidor). */
   render_mode?: "server" | "client";
+  /** Override de textos por pieza (título, subtítulo, copy, url, etc.). */
+  content?: Record<string, string>;
 }
 
 /**
@@ -240,6 +246,8 @@ export const brands = {
   update: (id: number, payload: BrandUpdate) =>
     put<Brand>(`/api/v1/brands/${id}`, payload),
   delete: (id: number) => del<void>(`/api/v1/brands/${id}`),
+  logoOptions: (id: number, count = 24) =>
+    get<{ options: { style: string; seed: number; svg_data_uri: string }[] }>(`/api/v1/brands/${id}/logo-options?count=${count}`),
 };
 
 // ── Wizard ───────────────────────────────────────────────────────────────────

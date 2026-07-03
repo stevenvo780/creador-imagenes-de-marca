@@ -46,6 +46,7 @@ router = APIRouter(prefix="/api/v1", tags=["client-render"])
 _TEMPLATE_WHITELIST = {
     "isotipo",
     "logo_symbol_color",
+    "lockup_horizontal",
     "ad_leaderboard",
     "ad_rectangle",
     "banner_ad",
@@ -57,6 +58,9 @@ _TEMPLATE_WHITELIST = {
     "ig_post",
     "ig_story",
     "og_image",
+    "og_general",
+    "og_product",
+    "web_hero_desktop",
     "stat_card",
 }
 

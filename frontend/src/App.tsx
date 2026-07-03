@@ -10,6 +10,8 @@ import { useSession }        from './auth/useSession';
 import { LoginPage }         from './auth/LoginPage';
 import { BrandsPage }        from './pages/BrandsPage';
 import { BrandEditorPage }   from './pages/Brands/BrandEditorPage';
+import BrandIdentityPage     from './pages/BrandIdentityPage';
+import { AssetStudioPage }   from './pages/AssetStudioPage';
 import { GalleryPage }       from './pages/GalleryPage';
 import { BatchWizardPage }   from './pages/BatchWizardPage';
 import { BatchProgressPage } from './pages/BatchProgressPage';
@@ -69,6 +71,8 @@ export default function App() {
           <Route path="/"                 element={<Navigate to="/brands" replace />} />
           <Route path="/brands"           element={<BrandsPage />} />
           <Route path="/brands/:brandId/edit" element={<BrandEditorPage />} />
+          <Route path="/brands/:brandId/identity" element={<BrandIdentityPage />} />
+          <Route path="/studio"           element={<AssetStudioPage />} />
           <Route path="/batch"            element={<BatchWizardPage />} />
           <Route path="/batch/:batchId"   element={<BatchProgressPage />} />
           <Route path="/gallery"          element={<GalleryPage />} />
