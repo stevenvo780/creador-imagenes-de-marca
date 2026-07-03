@@ -152,69 +152,6 @@
           "device_scale": 2,
           "types": [
             {
-              "name": "linkedin_header",
-              "width": 1584,
-              "height": 396,
-              "template": "linkedin_banner.html",
-              "protected": false,
-              "variants": [
-                {
-                  "id": "v1_institucional",
-                  "label": "Institucional"
-                },
-                {
-                  "id": "v2_producto",
-                  "label": "Producto"
-                },
-                {
-                  "id": "v3_evento",
-                  "label": "Evento"
-                }
-              ]
-            },
-            {
-              "name": "twitter_header",
-              "width": 1500,
-              "height": 500,
-              "template": "x_header.html",
-              "protected": false,
-              "variants": [
-                {
-                  "id": "v1_brand",
-                  "label": "Brand"
-                },
-                {
-                  "id": "v2_lanzamiento",
-                  "label": "Lanzamiento"
-                },
-                {
-                  "id": "v3_comunidad",
-                  "label": "Comunidad"
-                }
-              ]
-            },
-            {
-              "name": "youtube_header",
-              "width": 2560,
-              "height": 1440,
-              "template": "yt_banner.html",
-              "protected": false,
-              "variants": [
-                {
-                  "id": "v1_visual",
-                  "label": "Visual"
-                },
-                {
-                  "id": "v2_grid",
-                  "label": "Grid"
-                },
-                {
-                  "id": "v3_textual",
-                  "label": "Textual"
-                }
-              ]
-            },
-            {
               "name": "web_hero_desktop",
               "width": 1920,
               "height": 600,
@@ -351,6 +288,27 @@
               ]
             },
             {
+              "name": "ig_reel_cover",
+              "width": 1080,
+              "height": 1920,
+              "template": "ig_reel_cover.html",
+              "protected": false,
+              "variants": [
+                {
+                  "id": "v1_brand",
+                  "label": "Brand"
+                },
+                {
+                  "id": "v2_lanzamiento",
+                  "label": "Lanzamiento"
+                },
+                {
+                  "id": "v3_comunidad",
+                  "label": "Comunidad"
+                }
+              ]
+            },
+            {
               "name": "x_post",
               "width": 1200,
               "height": 675,
@@ -372,6 +330,27 @@
               ]
             },
             {
+              "name": "x_header",
+              "width": 1500,
+              "height": 500,
+              "template": "x_header.html",
+              "protected": false,
+              "variants": [
+                {
+                  "id": "v1_brand",
+                  "label": "Brand"
+                },
+                {
+                  "id": "v2_lanzamiento",
+                  "label": "Lanzamiento"
+                },
+                {
+                  "id": "v3_comunidad",
+                  "label": "Comunidad"
+                }
+              ]
+            },
+            {
               "name": "linkedin_post",
               "width": 1200,
               "height": 627,
@@ -389,6 +368,27 @@
                 {
                   "id": "v3_event",
                   "label": "Event"
+                }
+              ]
+            },
+            {
+              "name": "linkedin_banner",
+              "width": 1584,
+              "height": 396,
+              "template": "linkedin_banner.html",
+              "protected": false,
+              "variants": [
+                {
+                  "id": "v1_brand",
+                  "label": "Brand"
+                },
+                {
+                  "id": "v2_lanzamiento",
+                  "label": "Lanzamiento"
+                },
+                {
+                  "id": "v3_comunidad",
+                  "label": "Comunidad"
                 }
               ]
             },
@@ -433,6 +433,48 @@
                   "label": "Text"
                 }
               ]
+            },
+            {
+              "name": "yt_banner",
+              "width": 2560,
+              "height": 1440,
+              "template": "yt_banner.html",
+              "protected": false,
+              "variants": [
+                {
+                  "id": "v1_brand",
+                  "label": "Brand"
+                },
+                {
+                  "id": "v2_lanzamiento",
+                  "label": "Lanzamiento"
+                },
+                {
+                  "id": "v3_comunidad",
+                  "label": "Comunidad"
+                }
+              ]
+            },
+            {
+              "name": "tiktok_cover",
+              "width": 1080,
+              "height": 1920,
+              "template": "tiktok_cover.html",
+              "protected": false,
+              "variants": [
+                {
+                  "id": "v1_brand",
+                  "label": "Brand"
+                },
+                {
+                  "id": "v2_lanzamiento",
+                  "label": "Lanzamiento"
+                },
+                {
+                  "id": "v3_comunidad",
+                  "label": "Comunidad"
+                }
+              ]
             }
           ]
         },
@@ -442,8 +484,8 @@
           "types": [
             {
               "name": "poster_a4",
-              "width": 2480,
-              "height": 3508,
+              "width": 1240,
+              "height": 1754,
               "template": "poster_a4.html",
               "protected": false,
               "variants": [
@@ -472,6 +514,27 @@
               "width": 600,
               "height": 300,
               "template": "email_header.html",
+              "protected": false,
+              "variants": [
+                {
+                  "id": "v1_editorial",
+                  "label": "Editorial"
+                },
+                {
+                  "id": "v2_marketing",
+                  "label": "Marketing"
+                },
+                {
+                  "id": "v3_transactional",
+                  "label": "Transactional"
+                }
+              ]
+            },
+            {
+              "name": "web_hero_mobile",
+              "width": 750,
+              "height": 1334,
+              "template": "web_hero_mobile.html",
               "protected": false,
               "variants": [
                 {

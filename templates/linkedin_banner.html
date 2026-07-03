@@ -4,172 +4,152 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1584, height=396, initial-scale=1">
 <title>Eikon - LinkedIn Banner</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0b1417; --texto: #e8e0d4; --primario: #0b1417;
-    --acento: #43b5a6; --acento-2: #8d7cc0;
-    --font-titulo: 'Inter', sans-serif; --font-cuerpo: 'Inter', sans-serif;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 1584px; height: 396px; overflow: hidden; }
-  body {
-    background: radial-gradient(ellipse at 15% 50%, #152028 0%, #0b1417 55%);
-    color: var(--texto); font-family: var(--font-cuerpo);
-    display: flex; align-items: center; padding: 50px 70px;
-    position: relative;
-  }
-  /* ── VARIANTS ── */
-  /* v1: left-right institucional + franja lateral; AA texto/fondo 14.24:1 */
-  body[data-variant="v1_institucional"] {
-    --bg: #0b1417;
-    background: linear-gradient(90deg, rgba(67,181,166,0.08), transparent 28%), #0b1417;
-  }
-  body[data-variant="v1_institucional"]::before {
-    content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 18px;
-    background: #43b5a6;
-  }
+/* ═══════ FONTS ═══════ */
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 400; font-display: block; src: url("fonts/Inter-400.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 700; font-display: block; src: url("fonts/Inter-700.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 400; font-display: block; src: url("fonts/PlayfairDisplay-400.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 700; font-display: block; src: url("fonts/PlayfairDisplay-700.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 900; font-display: block; src: url("fonts/PlayfairDisplay-900.woff2") format("woff2"); }
 
-  /* v2: composicion invertida, content left/logo right; AA texto/fondo 14.24:1 */
-  body[data-variant="v2_producto"] {
-    flex-direction: row-reverse;
-    background:
-      radial-gradient(ellipse at 12% 72%, rgba(141,124,192,0.22) 0%, rgba(141,124,192,0) 46%),
-      radial-gradient(ellipse at 92% 36%, rgba(67,181,166,0.2) 0%, rgba(67,181,166,0) 38%),
-      #0b1417;
-  }
+/* ═══════ DESIGN TOKENS ═══════ */
+:root {
+  --bg: #0b1417; --texto: #e8e0d4; --primario: #0b1417;
+  --acento: #43b5a6; --acento-2: #8d7cc0; --texto-muted: #a09080;
+  --font-titulo: 'Playfair Display', Georgia, serif;
+  --font-cuerpo: 'Inter', system-ui, sans-serif;
+  --space-0: 0; --space-1: 8px; --space-2: 16px; --space-3: 24px;
+  --space-4: 32px; --space-5: 40px; --space-6: 48px;
+  --space-8: 64px; --space-10: 80px; --space-12: 96px;
+  --type-xs: 8px; --type-sm: 10px; --type-base: 16px;
+  --type-lg: 20px; --type-xl: 25px; --type-2xl: 31px;
+  --type-3xl: 39px; --type-4xl: 49px; --type-5xl: 61px; --type-6xl: 76px;
+  --tracking-tight: -0.02em; --tracking-normal: 0em; --tracking-wide: 0.02em;
+  --leading-tight: 1.2; --leading-normal: 1.5; --leading-relaxed: 1.8;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1584px; height: 396px; overflow: hidden; }
 
-  /* v3: columna centrada + grid sutil; AA texto/fondo 14.24:1 */
-  body[data-variant="v3_evento"] {
-    flex-direction: column; justify-content: center; gap: 18px; text-align: center; padding: 34px 90px;
-    background:
-      repeating-linear-gradient(90deg, rgba(232,224,212,0.045) 0 1px, transparent 1px 64px),
-      repeating-linear-gradient(0deg, rgba(232,224,212,0.035) 0 1px, transparent 1px 64px),
-      radial-gradient(ellipse at 50% 50%, rgba(141,124,192,0.18) 0%, rgba(141,124,192,0) 62%),
-      #0b1417;
-  }
+/* ═══════ DEPTH SYSTEM ═══════ */
+.depth-radial {
+  background: radial-gradient(ellipse at 20% 50%,
+    color-mix(in srgb, var(--bg) 92%, white) 0%,
+    var(--bg) 65%,
+    var(--bg) 100%);
+}
 
-  /* ── Bottom accent bar ── */
-  .bottom-bar {
-    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
-    background: linear-gradient(90deg, var(--acento), var(--acento-2));
-    opacity: 0.6;
-    z-index: 2;
-  }
-  body[data-variant="v2_producto"] .bottom-bar {
-    top: 0; bottom: auto; height: 10px; opacity: 1;
-    background: #43b5a6;
-  }
-  body[data-variant="v3_evento"] .bottom-bar { height: 5px; opacity: 0.9; }
+body {
+  font-family: var(--font-cuerpo); color: var(--texto); position: relative;
+}
 
-  /* ── Logo block (left 36%) ── */
-  .logo-block {
-    flex-shrink: 0; width: 360px;
-    display: flex; align-items: center; gap: 24px;
-    padding-right: 40px; border-right: 1px solid rgba(232,224,212,0.12);
-    z-index: 1;
-  }
-  .logo-block svg { width: 78px; height: 78px; }
-  .logo-block svg * { stroke: url(#liGrad); }
-  body[data-variant="v3_evento"] .logo-block svg * { stroke: #c4b8e8; }
-  body[data-variant="v2_producto"] .logo-block {
-    width: 390px; justify-content: flex-end; padding-right: 0; padding-left: 44px;
-    border-right: 0; border-left: 1px solid rgba(232,224,212,0.14);
-  }
-  body[data-variant="v2_producto"] .logo-block svg { width: 94px; height: 94px; }
-  body[data-variant="v3_evento"] .logo-block {
-    width: auto; padding: 0; border-right: 0;
-    flex-direction: column; gap: 10px; justify-content: center;
-  }
-  body[data-variant="v3_evento"] .logo-block svg { width: 64px; height: 64px; }
-  .logo-brand { font-size: 18px; font-weight: 700; letter-spacing: 0.03em; color: var(--texto); }
-  .logo-tag {
-    font-size: 12px; font-weight: 500; color: #8fa3a8; letter-spacing: 0.04em;
-    text-transform: uppercase; margin-top: 2px;
-  }
+/* ═══════ LAYOUT ═══════ */
+.asset {
+  display: flex; flex-direction: row; align-items: center; height: 100%;
+  padding: var(--space-5) var(--space-8);
+  position: relative; z-index: 1;
+}
+.depth-aurora::before {
+  content: ''; position: absolute; width: 600px; height: 600px; border-radius: 40%;
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--acento) 8%, transparent) 0%, transparent 70%);
+  filter: blur(120px); top: -280px; left: -80px; pointer-events: none; z-index: 0;
+}
+.depth-aurora::after {
+  content: ''; position: absolute; width: 500px; height: 500px; border-radius: 35%;
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--acento-2) 8%, transparent) 0%, transparent 75%);
+  filter: blur(100px); bottom: -280px; right: -60px; pointer-events: none; z-index: 0;
+}
 
-  /* ── Content block (right 60%) ── */
-  .content-block {
-    flex: 1; padding-left: 50px; display: flex; flex-direction: column; gap: 14px;
-    z-index: 1;
-  }
-  body[data-variant="v2_producto"] .content-block {
-    padding-left: 0; padding-right: 56px; align-items: flex-start; text-align: left;
-  }
-  body[data-variant="v3_evento"] .content-block {
-    flex: 0 1 auto; padding-left: 0; align-items: center; text-align: center; gap: 12px;
-  }
-  .accent-line { width: 56px; height: 3px; border-radius: 2px;
-    background: linear-gradient(90deg, var(--acento), var(--acento-2)); }
-  .headline {
-    font-family: var(--font-titulo); font-size: 44px; font-weight: 700;
-    line-height: 1.15; color: var(--texto); max-width: 700px;
-  }
-  body[data-variant="v3_evento"] .headline {
-    background: linear-gradient(135deg, #c4b8e8, #a3e4d7);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  body[data-variant="v2_producto"] .headline {
-    color: #e8e0d4; text-shadow: 0 5px 22px rgba(67,181,166,0.28);
-    max-width: 760px;
-  }
-  body[data-variant="v3_evento"] .headline {
-    max-width: 900px; font-size: 46px;
-  }
-  .credibility {
-    font-size: 16px; font-weight: 500; color: #a3c4c0; letter-spacing: 0.02em;
-    display: flex; align-items: center; gap: 12px;
-  }
-  body[data-variant="v3_evento"] .credibility { justify-content: center; }
-  .divider-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--acento); opacity: 0.6; }
-  .url-cta {
-    font-size: 14px; font-weight: 600; color: var(--acento);
-    letter-spacing: 0.03em; margin-top: 4px;
-  }
-  .contract-fields { display: none !important; }
+/* ═══════ LOGO BLOCK ═══════ */
+.logo-block {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: var(--space-2); flex-shrink: 0; width: 360px; position: relative; z-index: 1;
+  border-right: 1px solid color-mix(in srgb, var(--texto-muted) 12%, transparent);
+  padding-right: var(--space-6);
+}
+.logo-hero {
+  display: flex; align-items: center; justify-content: center;
+  width: 80px; height: 80px;
+  position: relative; z-index: 1;
+}
+.logo-hero img,
+.logo-hero [data-isotype-container],
+.logo-hero svg { width: 100%; height: 100%; object-fit: contain; position: relative; z-index: 2; }
+.logo-brand {
+  font-family: var(--font-cuerpo); font-size: var(--type-lg); font-weight: 700;
+  letter-spacing: var(--tracking-tight); text-align: center;
+}
+.logo-tag {
+  font-family: var(--font-cuerpo); font-size: var(--type-sm); font-weight: 600;
+  letter-spacing: var(--tracking-wide); color: var(--texto-muted);
+  text-transform: uppercase; text-align: center;
+}
+
+/* ═══════ CONTENT BLOCK ═══════ */
+.content-block {
+  display: flex; flex-direction: column; gap: var(--space-2);
+  flex: 1; padding-left: var(--space-6); position: relative; z-index: 1;
+}
+.accent-line {
+  width: var(--space-6); height: 2px;
+  background: linear-gradient(90deg, var(--acento), var(--acento-2));
+  border-radius: 1px;
+}
+.headline {
+  font-family: var(--font-titulo); font-size: 44px; font-weight: 700;
+  line-height: var(--leading-tight); letter-spacing: var(--tracking-tight);
+  max-width: 760px;
+}
+.copy {
+  font-family: var(--font-cuerpo); font-size: var(--type-base); font-weight: 400;
+  line-height: var(--leading-normal); color: color-mix(in srgb, var(--texto) 82%, var(--bg));
+  max-width: 640px;
+}
+.url-cta {
+  font-family: var(--font-cuerpo); font-size: 13px; font-weight: 600;
+  color: var(--acento); letter-spacing: var(--tracking-wide);
+}
+
+/* ═══════ ACCENT BOTTOM BAR ═══════ */
+.accent-bar {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--acento), var(--acento-2));
+  opacity: 0.8; z-index: 2;
+}
+
+/* ═══════ VARIANTS ═══════ */
+body[data-variant="v1_institucional"] .headline { font-size: 44px; }
+body[data-variant="v2_producto"] { background: radial-gradient(ellipse at 80% 50%, color-mix(in srgb, var(--bg) 90%, white) 0%, var(--bg) 65%, var(--bg) 100%); }
+body[data-variant="v2_producto"] .logo-block { border-right-color: color-mix(in srgb, var(--acento) 20%, transparent); }
+body[data-variant="v2_producto"] .accent-bar { opacity: 1; height: 5px; }
+body[data-variant="v3_evento"] .headline { font-size: 48px; font-weight: 900; }
+body[data-variant="v3_evento"] .accent-line { width: var(--space-8); height: 3px; }
+
+.contract-fields { display: none !important; }
 </style>
 </head>
-<body>
-  <div class="bottom-bar"></div>
-  <div class="logo-block">
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="liGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#43b5a6"/><stop offset="100%" stop-color="#8d7cc0"/>
-        </linearGradient>
-      </defs>
-      <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke-width="2.8"/>
-      <line x1="50" y1="5" x2="50" y2="95" stroke-width="1" opacity="0.45"/>
-      <line x1="7" y1="25" x2="93" y2="75" stroke-width="1" opacity="0.45"/>
-      <line x1="93" y1="25" x2="7" y2="75" stroke-width="1" opacity="0.45"/>
-      <circle cx="50" cy="50" r="3.5"/>
-      <circle cx="50" cy="5" r="2.5"/><circle cx="93" cy="25" r="2.5"/>
-      <circle cx="93" cy="75" r="2.5"/><circle cx="50" cy="95" r="2.5"/>
-      <circle cx="7" cy="75" r="2.5"/><circle cx="7" cy="25" r="2.5"/>
-    </svg>
-    <div>
-      <div class="logo-brand" data-logo-texto data-fit data-fit-min="12">Marca</div>
-      <div class="logo-tag" data-subtitulo data-fit data-fit-min="8">Tagline</div>
+<body class="depth-radial" data-template="linkedin_banner" data-variant="v1_institucional" data-brand-line="cloud">
+
+  <main class="asset depth-aurora">
+    <div class="logo-block">
+      <span class="logo-hero" data-isotype-container></span>
+      <span class="logo-brand" data-logo-texto data-fit data-fit-min="14">Marca</span>
+      <span class="logo-tag" data-subtitulo data-fit data-fit-min="8">Tagline</span>
     </div>
-  </div>
-  <div class="content-block">
-    <div class="accent-line"></div>
-    <h1 class="headline" data-titulo data-fit data-fit-min="28">Headline con propuesta de valor</h1>
-    <div class="credibility">
-      <span><!-- 16 repos · 22 simulaciones --></span>
-      <span class="divider-dot"></span>
-      <span data-copy data-fit data-fit-min="10">Copy breve de credibilidad</span>
+
+    <div class="content-block">
+      <div class="accent-line"></div>
+      <h1 class="headline" data-titulo data-fit data-fit-min="28" data-fit-y="true">Headline con propuesta de valor</h1>
+      <p class="copy" data-copy data-fit data-fit-min="12" data-fit-y="true">Copy breve de credibilidad</p>
+      <span class="url-cta" data-url data-fit data-fit-min="9">example.com</span>
     </div>
-    <div class="url-cta" data-url data-fit data-fit-min="10">kosmos.stevenvallejo.com →</div>
-  </div>
+  </main>
+  <div class="accent-bar"></div>
+
   <div class="contract-fields" aria-hidden="true">
     <span data-titulo></span><span data-subtitulo></span><span data-copy></span>
     <span data-logo-simbolo></span><span data-logo-texto></span>
-    <span data-numero></span><span data-etiqueta></span>
-    <span data-autor></span><span data-cargo></span><span data-url></span>
-    <span data-acento></span><span data-acento-2></span>
+    <span data-isotype-container></span><span data-url></span>
   </div>
+<script src="./eikon-runtime.js"></script>
 </body>
 </html>

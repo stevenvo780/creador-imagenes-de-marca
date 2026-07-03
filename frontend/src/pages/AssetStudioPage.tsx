@@ -28,15 +28,21 @@ const ASSET_TYPES_GROUPED: AssetTypeGroup[] = [
       { value: "ig_post", label: "Instagram Post (1080×1080)" },
       { value: "ig_story", label: "Instagram Story (1080×1920)" },
       { value: "ig_carousel", label: "Instagram Carousel (1080×1350)" },
+      { value: "ig_reel_cover", label: "Instagram Reel Cover (1080×1920)" },
+      { value: "x_header", label: "X/Twitter Header (1500×500)" },
       { value: "x_post", label: "X/Twitter Post (1200×675)" },
+      { value: "linkedin_banner", label: "LinkedIn Banner (1584×396)" },
       { value: "linkedin_post", label: "LinkedIn Post (1200×627)" },
+      { value: "yt_banner", label: "YouTube Banner (2560×1440)" },
       { value: "yt_thumbnail", label: "YouTube Thumbnail (1280×720)" },
+      { value: "tiktok_cover", label: "TikTok Cover (1080×1920)" },
+      { value: "fb_cover", label: "Facebook Cover (820×315)" },
     ],
   },
   {
     category: "Web",
     types: [
-      { value: "web_hero_desktop", label: "Banner web (escritorio)" },
+      { value: "web_hero_mobile", label: "Banner web (móvil, 750×1334)" },
       { value: "email_header", label: "Email Header (600×300)" },
     ],
   },
@@ -52,7 +58,7 @@ const ASSET_TYPES_GROUPED: AssetTypeGroup[] = [
       { value: "business_card", label: "Tarjeta de negocio (1050×600)" },
       { value: "og_general", label: "OG General (1200×630)" },
       { value: "og_product", label: "OG Producto (1200×630)" },
-      { value: "poster_a4", label: "Póster A4 (2480×3508)" },
+      { value: "poster_a4", label: "Póster A4 (1240×1754)" },
     ],
   },
 ];
@@ -111,9 +117,25 @@ const CONTENT_FIELDS: Record<string, ContentField[]> = {
     { key: "titulo", label: "Título", placeholder: "Ej.: 5 preguntas esenciales" },
     { key: "copy", label: "Descripción", placeholder: "Ej.: Deslizá para ver más..." },
   ],
+  ig_reel_cover: [
+    { key: "titulo", label: "Titular", placeholder: "Ej.: Pregunta del día" },
+    { key: "copy", label: "Texto adicional", placeholder: "Ej.: ¿Cuál es tu respuesta?" },
+    { key: "url", label: "URL", placeholder: "Ej.: elenxos.com" },
+  ],
+  x_header: [
+    { key: "titulo", label: "Texto principal", placeholder: "Ej.: Ideas para pensar mejor" },
+    { key: "copy", label: "Copy", placeholder: "Ej.: Filosofía aplicada para equipos" },
+    { key: "url", label: "URL", placeholder: "Ej.: elenxos.com" },
+  ],
   x_post: [
     { key: "titulo", label: "Texto del post", placeholder: "Ej.: Reflexión sobre la democracia..." },
     { key: "url", label: "URL", placeholder: "Ej.: elenxos.com/articulo" },
+  ],
+  linkedin_banner: [
+    { key: "titulo", label: "Titular", placeholder: "Ej.: Liderando el cambio en educación" },
+    { key: "subtitulo", label: "Subtítulo", placeholder: "Ej.: Comunidad profesional" },
+    { key: "copy", label: "Descripción", placeholder: "Ej.: En esta publicación comparto..." },
+    { key: "url", label: "URL", placeholder: "Ej.: elenxos.com" },
   ],
   linkedin_post: [
     { key: "titulo", label: "Titular", placeholder: "Ej.: Liderando el cambio en educación" },
@@ -128,6 +150,13 @@ const CONTENT_FIELDS: Record<string, ContentField[]> = {
     { key: "titulo", label: "Texto principal", placeholder: "Ej.: ¿Qué es la lógica?" },
     { key: "numero", label: "Número/Episodio (opcional)", placeholder: "Ej.: EP 12" },
   ],
+  yt_banner: [
+    { key: "titulo", label: "Texto principal", placeholder: "Ej.: ¿Qué es la lógica?" },
+  ],
+  tiktok_cover: [
+    { key: "titulo", label: "Titular", placeholder: "Ej.: Pregunta del día" },
+    { key: "copy", label: "Texto adicional", placeholder: "Ej.: ¿Cuál es tu respuesta?" },
+  ],
   poster_a4: [
     { key: "titulo", label: "Título del evento/producto", placeholder: "Ej.: Congreso de Filosofía 2026" },
     { key: "subtitulo", label: "Subtítulo", placeholder: "Ej.: Reflexiones sobre la era digital" },
@@ -137,6 +166,11 @@ const CONTENT_FIELDS: Record<string, ContentField[]> = {
   email_header: [
     { key: "titulo", label: "Titular del email", placeholder: "Ej.: Novedades de esta semana" },
     { key: "copy", label: "Subtítulo", placeholder: "Ej.: Los temas más relevantes para vos" },
+  ],
+  web_hero_mobile: [
+    { key: "titulo", label: "Titular", placeholder: "Ej.: Transformá tu manera de pensar" },
+    { key: "subtitulo", label: "Bajada", placeholder: "Ej.: Cursos de filosofía, lógica y retórica" },
+    { key: "url", label: "URL", placeholder: "Ej.: elenxos.com/cursos" },
   ],
 };
 

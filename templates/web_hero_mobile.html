@@ -2,66 +2,219 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=540, height=960, initial-scale=1">
+<meta name="viewport" content="width=750, height=1334, initial-scale=1">
 <title>Eikon - Web Hero Mobile</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --primario: #0b1417;
-    --acento-2: #8d7cc0;
-    --texto: #e8e0d4;
-    --bg: #0b1417;
-    --gradient-hero: linear-gradient(135deg, #43b5a6, #8d7cc0);
-    --font-titulo: 'Playfair Display', Georgia, serif;
-    --font-cuerpo: 'Inter', Arial, sans-serif;
-  }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 400; font-display: block; src: url("fonts/Inter-400.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 700; font-display: block; src: url("fonts/Inter-700.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 700; font-display: block; src: url("fonts/PlayfairDisplay-700.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 900; font-display: block; src: url("fonts/PlayfairDisplay-900.woff2") format("woff2"); }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 540px; height: 960px; overflow: hidden; }
-  body {
-    background-color: var(--bg);
-    color: var(--texto);
-    font-family: var(--font-cuerpo);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-  }
+:root {
+  --bg: #0b1417; --texto: #e8e0d4; --primario: #0b1417;
+  --acento: #43b5a6; --acento-2: #8d7cc0; --texto-muted: #a09080;
+  --font-titulo: 'Playfair Display', Georgia, serif;
+  --font-cuerpo: 'Inter', system-ui, sans-serif;
+  --space-0: 0; --space-1: 8px; --space-2: 16px; --space-3: 24px;
+  --space-4: 32px; --space-5: 40px; --space-6: 48px;
+  --space-8: 64px; --space-10: 80px; --space-12: 96px;
+  --type-xs: 8px; --type-sm: 10px; --type-base: 16px;
+  --type-lg: 20px; --type-xl: 25px; --type-2xl: 31px;
+  --type-3xl: 39px; --type-4xl: 49px; --type-5xl: 61px;
+  --type-6xl: 76px;
+  --tracking-tight: -0.02em; --tracking-normal: 0em; --tracking-wide: 0.02em;
+  --leading-tight: 1.2; --leading-normal: 1.5; --leading-relaxed: 1.8;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 750px; height: 1334px; overflow: hidden; }
 
-  /* VARIANTES */
-  body[data-variant="v1_central"] { /* Variante 1 */ }
-  body[data-variant="v2_split"] { /* Variante 2 */ }
-  body[data-variant="v3_cta"] { /* Variante 3 */ }
+body {
+  font-family: var(--font-cuerpo); color: var(--texto); position: relative;
+  background: radial-gradient(
+    ellipse at 28% 22%,
+    color-mix(in srgb, var(--bg) 88%, white) 0%,
+    color-mix(in srgb, var(--bg) 96%, white) 45%,
+    var(--bg) 100%
+  );
+}
+body::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 3;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='whmGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23whmGrain)' opacity='0.06'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
 
+/* ─── Asset frame ─── */
+.asset {
+  position: relative; z-index: 1;
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  padding: var(--space-12) var(--space-8) var(--space-8);
+}
 
-  .container { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; }
-  .title { font-family: var(--font-titulo); font-size: 48px; font-weight: 700; }
-  .copy { font-size: 18px; line-height: 1.5; }
-  .symbol { font-size: 120px; font-weight: 700; }
+/* ─── Logo hero (top) ─── */
+.logo-hero {
+  display: flex; align-items: center; justify-content: center;
+  width: 240px; height: 240px;
+  position: relative; z-index: 2;
+  margin: 0 auto var(--space-5);
+}
+.logo-hero::before {
+  content: ''; position: absolute;
+  width: 460px; height: 460px; border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--acento) 11%, transparent) 0%,
+    color-mix(in srgb, var(--acento-2) 6%, transparent) 38%,
+    transparent 72%
+  );
+  filter: blur(90px);
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  pointer-events: none; z-index: -1;
+}
+.logo-hero img,
+.logo-hero [data-isotype-container],
+.logo-hero svg {
+  width: 100%; height: 100%; object-fit: contain;
+  position: relative; z-index: 2;
+}
 
-  .contract-fields { display: none !important; }
+/* ─── Accent line ─── */
+.accent-line {
+  width: var(--space-6); height: 2px;
+  background: var(--acento); border-radius: 1px;
+  margin: 0 auto var(--space-6);
+}
+
+/* ─── Content block ─── */
+.content {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: var(--space-4);
+  text-align: center; width: 100%;
+}
+.title {
+  font-family: var(--font-titulo); font-weight: 900;
+  font-size: var(--type-6xl); line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight); color: var(--texto);
+  max-width: 640px;
+}
+.subtitle {
+  font-family: var(--font-cuerpo); font-size: var(--type-2xl);
+  font-weight: 600; line-height: var(--leading-normal);
+  color: var(--acento); letter-spacing: var(--tracking-wide);
+  max-width: 560px;
+}
+
+/* ─── Footer ─── */
+.footer-row {
+  margin-top: auto; padding-top: var(--space-5);
+  border-top: 1px solid color-mix(in srgb, var(--texto-muted) 14%, transparent);
+  display: flex; justify-content: space-between; align-items: center;
+  position: relative; z-index: 2;
+}
+.brand-signature {
+  font-family: var(--font-titulo); font-size: var(--type-xl);
+  font-weight: 600; letter-spacing: var(--tracking-wide);
+  color: var(--texto-muted);
+}
+.url {
+  font-family: var(--font-cuerpo); font-size: var(--type-lg);
+  font-weight: 500; color: var(--acento-2);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* ─── Variant-only element visibility ─── */
+.v1-only, .v2-only { display: none; }
+body[data-variant="v1_centered"] .v1-only.logo-hero { display: flex; }
+body[data-variant="v1_centered"] .v1-only.accent-line { display: block; }
+body[data-variant="v1_centered"] .v1-only.brand-signature { display: inline; }
+body[data-variant="v2_split"] .v2-only.split-row { display: flex; }
+body[data-variant="v2_split"] .v2-only.brand-signature { display: inline; }
+
+/* ─── VARIANT v1_centered (default) ─── */
+body[data-variant="v1_centered"] .asset { padding-top: var(--space-10); }
+
+/* ─── VARIANT v2_split ─── */
+body[data-variant="v2_split"] .asset {
+  padding: var(--space-12) var(--space-8) var(--space-8);
+  justify-content: flex-start; gap: var(--space-8);
+}
+body[data-variant="v2_split"] .split-row {
+  align-items: center; gap: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+body[data-variant="v2_split"] .logo-hero {
+  width: 140px; height: 140px; margin: 0; flex-shrink: 0;
+}
+body[data-variant="v2_split"] .logo-hero::before {
+  width: 280px; height: 280px;
+}
+body[data-variant="v2_split"] .v-split-text {
+  display: flex; flex-direction: column; gap: var(--space-1);
+  flex: 1; min-width: 0;
+}
+body[data-variant="v2_split"] .v-eyebrow {
+  font-family: var(--font-cuerpo); font-size: var(--type-xs);
+  font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--acento);
+}
+body[data-variant="v2_split"] .v-wordmark {
+  font-family: var(--font-titulo); font-size: var(--type-3xl);
+  font-weight: 900; letter-spacing: var(--tracking-tight);
+  color: var(--texto); line-height: var(--leading-tight);
+}
+body[data-variant="v2_split"] .accent-line {
+  margin: 0; width: var(--space-5);
+}
+body[data-variant="v2_split"] .content { align-items: flex-start; text-align: left; gap: var(--space-5); }
+body[data-variant="v2_split"] .title {
+  font-size: 88px; font-weight: 900; text-align: left;
+  max-width: 620px;
+}
+body[data-variant="v2_split"] .subtitle { text-align: left; }
+body[data-variant="v2_split"] .footer-row { width: 100%; }
+
+.contract-fields { display: none !important; }
 </style>
 </head>
-<body data-variant="v1_central">
-  <div class="container">
-    <h1 class="title" data-titulo data-fit data-fit-min="28">Título</h1>
-    <p class="copy" data-copy data-fit data-fit-min="12">Copy</p>
+<body data-variant="v1_centered">
+
+<main class="asset">
+
+  <!-- v1_centered: logo protagónico grande (vacío — el injector mete <img>) -->
+  <span class="logo-hero v1-only" data-isotype-container></span>
+
+  <!-- v1_centered: accent line bajo el logo -->
+  <div class="accent-line v1-only"></div>
+
+  <!-- v2_split: lockup horizontal logo + wordmark + eyebrow -->
+  <div class="split-row v2-only">
+    <span class="logo-hero" data-isotype-container></span>
+    <div class="v-split-text">
+      <span class="v-eyebrow" data-logo-texto data-fit data-fit-min="10">Marca</span>
+      <span class="v-wordmark" data-titulo data-fit data-fit-min="22">Wordmark</span>
+    </div>
   </div>
 
-  <div class="contract-fields" aria-hidden="true">
-    <span data-titulo></span>
-    <span data-subtitulo></span>
-    <span data-copy></span>
-    <span data-logo-simbolo></span>
-    <span data-logo-texto></span>
-    <span data-numero></span>
-    <span data-etiqueta></span>
-    <span data-autor></span>
-    <span data-cargo></span>
-    <span data-url></span>
-    <span data-acento></span>
-    <span data-acento-2></span>
-  </div>
+  <!-- Contenido principal -->
+  <section class="content">
+    <h1 class="title" data-titulo data-fit data-fit-min="36" data-fit-y="true">Título</h1>
+    <h2 class="subtitle" data-subtitulo data-fit data-fit-min="20">Subtítulo</h2>
+  </section>
+
+  <!-- Footer: firma + URL -->
+  <footer class="footer-row">
+    <span class="brand-signature v1-only" data-logo-texto data-fit data-fit-min="16">Marca</span>
+    <span class="brand-signature v2-only" data-subtitulo data-fit data-fit-min="14">Subtítulo</span>
+    <span class="url" data-url data-fit data-fit-min="14">example.com</span>
+  </footer>
+
+</main>
+
+<div class="contract-fields" aria-hidden="true">
+  <span data-titulo></span><span data-subtitulo></span><span data-copy></span>
+  <span data-logo-simbolo></span><span data-logo-texto></span>
+  <span data-isotype-container></span><span data-url></span>
+</div>
+<script src="./eikon-runtime.js"></script>
 </body>
 </html>

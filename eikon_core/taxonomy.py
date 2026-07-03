@@ -133,36 +133,6 @@ def _legacy_python_taxonomia(is_prizma: bool) -> dict[str, list[TypeSpec]]:
         "logos": logos,
         "banners": [
             TypeSpec(
-                "linkedin_header",
-                1584,
-                396,
-                (
-                    VariantSpec("v1_institucional", "Institucional"),
-                    VariantSpec("v2_producto", "Producto"),
-                    VariantSpec("v3_evento", "Evento"),
-                ),
-            ),
-            TypeSpec(
-                "twitter_header",
-                1500,
-                500,
-                (
-                    VariantSpec("v1_brand", "Brand"),
-                    VariantSpec("v2_lanzamiento", "Lanzamiento"),
-                    VariantSpec("v3_comunidad", "Comunidad"),
-                ),
-            ),
-            TypeSpec(
-                "youtube_header",
-                2560,
-                1440,
-                (
-                    VariantSpec("v1_visual", "Visual"),
-                    VariantSpec("v2_grid", "Grid"),
-                    VariantSpec("v3_textual", "Textual"),
-                ),
-            ),
-            TypeSpec(
                 "web_hero_desktop",
                 1920,
                 600,
@@ -226,6 +196,16 @@ def _legacy_python_taxonomia(is_prizma: bool) -> dict[str, list[TypeSpec]]:
                 ),
             ),
             TypeSpec(
+                "ig_reel_cover",
+                1080,
+                1920,
+                (
+                    VariantSpec("v1_brand", "Brand"),
+                    VariantSpec("v2_lanzamiento", "Lanzamiento"),
+                    VariantSpec("v3_comunidad", "Comunidad"),
+                ),
+            ),
+            TypeSpec(
                 "x_post",
                 1200,
                 675,
@@ -236,6 +216,16 @@ def _legacy_python_taxonomia(is_prizma: bool) -> dict[str, list[TypeSpec]]:
                 ),
             ),
             TypeSpec(
+                "x_header",
+                1500,
+                500,
+                (
+                    VariantSpec("v1_brand", "Brand"),
+                    VariantSpec("v2_lanzamiento", "Lanzamiento"),
+                    VariantSpec("v3_comunidad", "Comunidad"),
+                ),
+            ),
+            TypeSpec(
                 "linkedin_post",
                 1200,
                 627,
@@ -243,6 +233,16 @@ def _legacy_python_taxonomia(is_prizma: bool) -> dict[str, list[TypeSpec]]:
                     VariantSpec("v1_article", "Article"),
                     VariantSpec("v2_article_highlight", "Highlight"),
                     VariantSpec("v3_event", "Event"),
+                ),
+            ),
+            TypeSpec(
+                "linkedin_banner",
+                1584,
+                396,
+                (
+                    VariantSpec("v1_brand", "Brand"),
+                    VariantSpec("v2_lanzamiento", "Lanzamiento"),
+                    VariantSpec("v3_comunidad", "Comunidad"),
                 ),
             ),
             TypeSpec(
@@ -265,12 +265,32 @@ def _legacy_python_taxonomia(is_prizma: bool) -> dict[str, list[TypeSpec]]:
                     VariantSpec("v3_text_overlay", "Text"),
                 ),
             ),
+            TypeSpec(
+                "yt_banner",
+                2560,
+                1440,
+                (
+                    VariantSpec("v1_brand", "Brand"),
+                    VariantSpec("v2_lanzamiento", "Lanzamiento"),
+                    VariantSpec("v3_comunidad", "Comunidad"),
+                ),
+            ),
+            TypeSpec(
+                "tiktok_cover",
+                1080,
+                1920,
+                (
+                    VariantSpec("v1_brand", "Brand"),
+                    VariantSpec("v2_lanzamiento", "Lanzamiento"),
+                    VariantSpec("v3_comunidad", "Comunidad"),
+                ),
+            ),
         ],
         "print": [
             TypeSpec(
                 "poster_a4",
-                2480,
-                3508,
+                1240,
+                1754,
                 (
                     VariantSpec("v1_event", "Event"),
                     VariantSpec("v2_product", "Product"),
@@ -283,6 +303,16 @@ def _legacy_python_taxonomia(is_prizma: bool) -> dict[str, list[TypeSpec]]:
                 "email_header",
                 600,
                 300,
+                (
+                    VariantSpec("v1_editorial", "Editorial"),
+                    VariantSpec("v2_marketing", "Marketing"),
+                    VariantSpec("v3_transactional", "Transactional"),
+                ),
+            ),
+            TypeSpec(
+                "web_hero_mobile",
+                750,
+                1334,
                 (
                     VariantSpec("v1_editorial", "Editorial"),
                     VariantSpec("v2_marketing", "Marketing"),

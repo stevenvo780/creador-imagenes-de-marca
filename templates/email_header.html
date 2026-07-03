@@ -2,101 +2,178 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=600, height=300, initial-scale=1">
+<title>Eikon - Email Header</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
-  :root {
-    --bg: #0b1417; --acento: #43b5a6; --acento-2: #e0a85e; --acento-3: #c0522a;
-    --texto: #e8e0d4; --texto-muted: #8fa3a8; --surface: #152028;
-    --grad-hero: linear-gradient(135deg, #e0a85e 0%, #c0522a 40%, #43b5a6 100%);
-    --grad-bg: radial-gradient(ellipse at 30% 50%, #152028 0%, #0b1417 55%);
-    --font-titulo: 'Playfair Display', Georgia, serif;
-    --font-cuerpo: 'Inter', system-ui, sans-serif;
-  }
-  body {
-    width: 1200px; height: 400px;
-    font-family: var(--font-cuerpo);
-    background: var(--bg); color: var(--texto);
-    overflow: hidden; position: relative;
-  }
-  .bg { position: absolute; inset: 0; background: var(--grad-bg); }
-  .noise {
-    position: absolute; inset: 0; opacity: 0.05;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 300px 300px;
-  }
-  .orb { position: absolute; border-radius: 50%; filter: blur(100px); }
-  .orb-1 { width: 600px; height: 600px; top: -250px; right: 100px; background: var(--acento); opacity: 0.14; }
-  .orb-2 { width: 450px; height: 450px; bottom: -200px; left: 100px; background: var(--acento-2); opacity: 0.12; }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 400; font-display: block; src: url("fonts/Inter-400.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 700; font-display: block; src: url("fonts/Inter-700.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 700; font-display: block; src: url("fonts/PlayfairDisplay-700.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 900; font-display: block; src: url("fonts/PlayfairDisplay-900.woff2") format("woff2"); }
 
-  /* Top accent bar */
-  .top-bar {
-    position: absolute; top: 0; left: 0; right: 0;
-    height: 4px; background: var(--grad-hero);
-  }
+:root {
+  --bg: #0b1417; --texto: #e8e0d4; --primario: #0b1417;
+  --acento: #43b5a6; --acento-2: #8d7cc0; --texto-muted: #a09080;
+  --grad-hero: linear-gradient(135deg, #43b5a6 0%, #8d7cc0 100%);
+  --font-titulo: 'Playfair Display', Georgia, serif;
+  --font-cuerpo: 'Inter', system-ui, sans-serif;
+  --space-0: 0; --space-1: 8px; --space-2: 16px; --space-3: 24px;
+  --space-4: 32px; --space-5: 40px; --space-6: 48px;
+  --space-8: 64px; --space-10: 80px; --space-12: 96px;
+  --type-xs: 8px; --type-sm: 10px; --type-base: 16px;
+  --type-lg: 20px; --type-xl: 25px; --type-2xl: 31px;
+  --type-3xl: 39px; --type-4xl: 49px; --type-5xl: 61px;
+  --type-6xl: 76px;
+  --tracking-tight: -0.02em; --tracking-normal: 0em; --tracking-wide: 0.02em;
+  --leading-tight: 1.2; --leading-normal: 1.5; --leading-relaxed: 1.8;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 600px; height: 300px; overflow: hidden; }
 
-  .layout {
-    position: relative; z-index: 10;
-    width: 100%; height: 100%;
-    display: flex; align-items: center;
-    padding: 0 80px;
-    gap: 48px;
-  }
+body {
+  font-family: var(--font-cuerpo); color: var(--texto); position: relative;
+  background: radial-gradient(
+    ellipse at 18% 50%,
+    color-mix(in srgb, var(--bg) 92%, white) 0%,
+    var(--bg) 60%,
+    var(--bg) 100%
+  );
+}
 
-  .logo-block { flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; }
+/* Top accent bar — finísima, gradient sutil */
+.accent-bar {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--acento) 0%,
+    var(--acento-2) 100%
+  );
+  z-index: 2;
+}
 
-  .simbolo {
-    font-family: var(--font-titulo); font-size: 96px; font-weight: 900; line-height: 1;
-    background: var(--grad-text, var(--grad-hero));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
+/* Bottom hairline — separa el header del cuerpo del email */
+.bottom-rule {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: color-mix(in srgb, var(--texto-muted) 18%, transparent);
+  z-index: 2;
+}
 
-  .logo-text {
-    font-size: 15px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--texto-muted);
-    max-width: 280px;
-  }
+/* Grain overlay */
+body::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='ehGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23ehGrain)' opacity='0.05'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
 
-  .divider {
-    width: 1px; height: 120px;
-    background: rgba(255,255,255,0.1);
-    flex-shrink: 0;
-  }
+/* ─── Asset frame ─── */
+.asset {
+  position: relative; z-index: 1;
+  width: 100%; height: 100%;
+  display: flex; align-items: center;
+  padding: 0 var(--space-6);
+  gap: var(--space-5);
+}
 
-  .text-block { flex: 1; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+/* ─── Logo block (left) ─── */
+.logo-block {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  width: 100px; height: 100px; flex-shrink: 0;
+  z-index: 2;
+}
+.logo-block::before {
+  content: ''; position: absolute;
+  width: 220px; height: 220px; border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--acento) 10%, transparent) 0%,
+    color-mix(in srgb, var(--acento-2) 5%, transparent) 45%,
+    transparent 75%
+  );
+  filter: blur(60px);
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  pointer-events: none; z-index: -1;
+}
+.logo-block img,
+.logo-block [data-isotype-container],
+.logo-block svg {
+  width: 100%; height: 100%; object-fit: contain;
+  position: relative; z-index: 2;
+}
 
-  .titulo {
-    font-family: var(--font-titulo); font-size: 52px; font-weight: 900; line-height: 1.04;
-    background: var(--grad-text, var(--grad-hero));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    max-height: 112px;
-  }
+/* ─── Vertical divider ─── */
+.divider {
+  width: 1px; height: 96px;
+  background: color-mix(in srgb, var(--texto-muted) 24%, transparent);
+  flex-shrink: 0;
+}
 
-  .subtitulo {
-    font-size: 20px; font-weight: 300; color: var(--texto-muted); letter-spacing: 0.03em;
-    max-height: 54px;
-  }
+/* ─── Text block (right) ─── */
+.text-block {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column;
+  gap: var(--space-1);
+}
+.wordmark {
+  font-family: var(--font-titulo); font-weight: 900;
+  font-size: var(--type-3xl); line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight); color: var(--texto);
+}
+.tagline {
+  font-family: var(--font-cuerpo); font-size: var(--type-base);
+  font-weight: 400; line-height: var(--leading-normal);
+  color: var(--acento); letter-spacing: var(--tracking-wide);
+  max-width: 360px;
+}
+.url {
+  font-family: var(--font-cuerpo); font-size: var(--type-sm);
+  font-weight: 500; color: var(--texto-muted);
+  letter-spacing: var(--tracking-wide); margin-top: 2px;
+}
 
-  .url { font-size: 15px; color: var(--acento); letter-spacing: 0.04em; margin-top: 2px; }
+/* ─── VARIANT v1_horizontal (default) ─── */
+body[data-variant="v1_horizontal"] .asset { padding-right: var(--space-6); }
+
+/* ─── VARIANT v2_compact (logo más pequeño, más aire al texto) ─── */
+body[data-variant="v2_compact"] .logo-block { width: 76px; height: 76px; }
+body[data-variant="v2_compact"] .wordmark { font-size: var(--type-2xl); }
+body[data-variant="v2_compact"] .divider { height: 76px; }
+
+/* ─── VARIANT visibility ─── */
+.v1-only, .v2-only { display: none; }
+body[data-variant="v1_horizontal"] .v1-only { display: inline; }
+body[data-variant="v2_compact"] .v2-only { display: inline; }
+
+.contract-fields { display: none !important; }
 </style>
 </head>
-<body>
-<div class="bg"></div>
-<div class="noise"></div>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="top-bar"></div>
-<div class="layout">
-  <div class="logo-block">
-    <span class="simbolo" data-logo-simbolo data-fit data-fit-min="50"></span>
-    <span class="logo-text" data-logo-texto data-fit data-fit-min="10"></span>
-  </div>
-  <div class="divider"></div>
-  <div class="text-block">
-    <h1 class="titulo" data-titulo data-fit data-fit-min="30"></h1>
-    <p class="subtitulo" data-subtitulo data-fit data-fit-min="14"></p>
-    <span class="url" data-url data-fit data-fit-min="10"></span>
-  </div>
+<body data-variant="v1_horizontal">
+
+<div class="accent-bar"></div>
+<div class="bottom-rule"></div>
+
+<main class="asset">
+
+  <!-- Logo isotipo (vacío — el injector mete <img>) -->
+  <span class="logo-block" data-isotype-container></span>
+
+  <span class="divider"></span>
+
+  <section class="text-block">
+    <span class="wordmark" data-logo-texto data-fit data-fit-min="22">Wordmark</span>
+    <span class="tagline v1-only" data-titulo data-fit data-fit-min="12">Tagline breve de la marca</span>
+    <span class="tagline v2-only" data-subtitulo data-fit data-fit-min="12">Subtítulo</span>
+    <span class="url" data-url data-fit data-fit-min="10">example.com</span>
+  </section>
+
+</main>
+
+<div class="contract-fields" aria-hidden="true">
+  <span data-titulo></span><span data-subtitulo></span><span data-copy></span>
+  <span data-logo-simbolo></span><span data-logo-texto></span>
+  <span data-isotype-container></span><span data-url></span>
 </div>
+<script src="./eikon-runtime.js"></script>
 </body>
 </html>

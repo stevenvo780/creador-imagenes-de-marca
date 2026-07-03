@@ -5,146 +5,112 @@
 <meta name="viewport" content="width=2560, height=1440, initial-scale=1">
 <title>Eikon - YouTube Banner</title>
 <style>
-  :root {
-    --bg: #0b1417; --texto: #e8e0d4; --acento: #43b5a6; --acento-2: #8d7cc0;
-    --font-titulo: 'Inter', sans-serif; --font-cuerpo: 'Inter', sans-serif;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 2560px; height: 1440px; overflow: hidden; }
-  body {
-    background-color: var(--bg); color: var(--texto);
-    font-family: var(--font-cuerpo); position: relative;
-  }
-  /* YouTube safe area: center 1546x423 @ scale */
-  /* v1: stack centrado + franja lateral; AA texto/fondo 14.24:1 */
-  body[data-variant="v1_visual"] {
-    background: radial-gradient(ellipse at 50% 35%, #131e22 0%, #0b1417 65%);
-  }
-  body[data-variant="v1_visual"]::before {
-    content: ''; position: absolute; top: 180px; left: 0; width: 118px; height: 1080px;
-    background: linear-gradient(180deg, #43b5a6 0%, #8d7cc0 100%);
-    opacity: 0.9;
-  }
-  body[data-variant="v1_visual"]::after {
-    content: ''; position: absolute; top: 254px; left: 118px; width: 28px; height: 930px;
-    background: #e0a85e; opacity: 0.85;
-  }
+/* ═══════ FONTS ═══════ */
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 700; font-display: block; src: url("fonts/PlayfairDisplay-700.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 900; font-display: block; src: url("fonts/PlayfairDisplay-900.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 400; font-display: block; src: url("fonts/Inter-400.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 600; font-display: block; src: url("fonts/Inter-600.woff2") format("woff2"); }
 
-  /* v2: headline izquierda + simbolo derecha + grid; AA texto/fondo 14.24:1 */
-  body[data-variant="v2_grid"] {
-    background:
-      repeating-linear-gradient(90deg, rgba(232,224,212,0.055) 0 1px, transparent 1px 88px),
-      repeating-linear-gradient(0deg, rgba(232,224,212,0.04) 0 1px, transparent 1px 88px),
-      radial-gradient(ellipse at 82% 52%, rgba(67,181,166,0.24) 0%, rgba(67,181,166,0) 40%),
-      #0b1417;
-  }
+/* ═══════ DESIGN TOKENS ═══════ */
+:root {
+  --bg: #0b1417; --texto: #e8e0d4; --primario: #0b1417;
+  --acento: #43b5a6; --acento-2: #8d7cc0; --texto-muted: #a09080;
+  --font-titulo: 'Playfair Display', Georgia, serif;
+  --font-cuerpo: 'Inter', system-ui, sans-serif;
+  --space-0: 0; --space-1: 8px; --space-2: 16px; --space-3: 24px;
+  --space-4: 32px; --space-5: 40px; --space-6: 48px;
+  --space-8: 64px; --space-10: 80px; --space-12: 96px;
+  --type-xs: 8px; --type-sm: 10px; --type-base: 16px;
+  --type-lg: 20px; --type-xl: 25px; --type-2xl: 31px;
+  --type-3xl: 39px; --type-4xl: 49px; --type-5xl: 61px; --type-6xl: 76px;
+  --tracking-tight: -0.02em; --tracking-normal: 0em; --tracking-wide: 0.02em;
+  --leading-tight: 1.2; --leading-normal: 1.5; --leading-relaxed: 1.8;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 2560px; height: 1440px; overflow: hidden; }
 
-  /* v3: layout asimetrico top-left/top-right/bottom-center; AA texto/fondo 14.24:1 */
-  body[data-variant="v3_textual"] {
-    background: linear-gradient(180deg, #071012 0%, #0b1417 46%, #152024 100%);
-  }
-  body[data-variant="v3_textual"]::before {
-    content: ''; position: absolute; top: 238px; right: 220px; width: 320px; height: 6px;
-    background: #43b5a6;
-  }
-  body[data-variant="v3_textual"]::after {
-    content: ''; position: absolute; top: 300px; right: 190px; width: 7px; height: 840px;
-    background: linear-gradient(180deg, #e0a85e, #43b5a6);
-  }
+/* ═══════ DEPTH SYSTEM ═══════ */
+.depth-radial {
+  background: radial-gradient(ellipse at 25% 48%,
+    color-mix(in srgb, var(--bg) 88%, white) 0%,
+    color-mix(in srgb, var(--bg) 94%, white) 38%,
+    var(--bg) 100%);
+}
+.depth-glow .logo-hero::before {
+  content: ''; position: absolute;
+  width: 240%; height: 240%; border-radius: 50%;
+  background: radial-gradient(circle,
+    color-mix(in srgb, var(--acento) 7%, transparent) 0%, transparent 55%);
+  filter: blur(120px); top: 50%; left: 50%;
+  transform: translate(-50%, -50%); pointer-events: none; z-index: 0;
+}
+.depth-grain::after {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.76' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)' opacity='0.03'/%3E%3C/svg%3E");
+  background-size: 200px 200px; pointer-events: none; z-index: 2;
+}
 
-  .safe-area {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-    width: 1546px; max-width: 90%; text-align: center;
-    display: flex; flex-direction: column; align-items: center; gap: 22px;
-    z-index: 2;
-  }
-  body[data-variant="v2_grid"] .safe-area {
-    align-items: flex-start; text-align: left; gap: 18px;
-  }
-  body[data-variant="v3_textual"] .safe-area {
-    height: 423px; display: block; text-align: left;
-  }
-  .accent-line { width: 72px; height: 3px; border-radius: 2px;
-    background: linear-gradient(90deg, var(--acento), var(--acento-2)); }
-  body[data-variant="v2_grid"] .accent-line { width: 160px; height: 5px; }
-  body[data-variant="v3_textual"] .accent-line {
-    position: absolute; top: 0; right: 0; width: 260px; height: 5px;
-  }
+body {
+  font-family: var(--font-cuerpo); color: var(--texto); position: relative;
+  display: flex; align-items: center; justify-content: center; height: 100%;
+}
 
-  .symbol-watermark {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-    opacity: 0.04; pointer-events: none;
-    z-index: 1;
-  }
-  .symbol-watermark svg { width: 800px; height: 800px; }
-  .symbol-watermark svg * { stroke: #e8e0d4; fill: none; }
-  body[data-variant="v2_grid"] .symbol-watermark {
-    left: auto; right: 290px; transform: translateY(-50%);
-    opacity: 0.11;
-  }
-  body[data-variant="v2_grid"] .symbol-watermark svg { width: 520px; height: 520px; }
-  body[data-variant="v3_textual"] .symbol-watermark {
-    top: 700px; left: 360px; opacity: 0.025;
-  }
+/* ═══════ SAFE AREA — YouTube recorta a ~1546×423 centro ═══════ */
+.safe-area {
+  position: absolute; width: 1546px; height: 423px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: var(--space-6); text-align: center; z-index: 1;
+}
 
-  .headline {
-    font-family: var(--font-titulo); font-size: 88px; font-weight: 800;
-    line-height: 1.1; color: var(--texto); max-width: 1200px;
-  }
-  body[data-variant="v2_grid"] .headline {
-    background: linear-gradient(135deg, #a3e4d7, #c4b8e8);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-size: 118px; line-height: 0.95; max-width: 980px;
-  }
-  body[data-variant="v3_textual"] .headline {
-    position: absolute; top: 58px; left: 0;
-    max-width: 820px; font-size: 76px; line-height: 1.05;
-  }
-  .subhead {
-    font-size: 32px; font-weight: 400; color: #a3c4c0;
-    line-height: 1.4; max-width: 800px;
-  }
-  body[data-variant="v3_textual"] .subhead {
-    position: absolute; top: 72px; right: 0;
-    max-width: 520px; text-align: right; font-size: 28px;
-  }
-  .url-cta {
-    font-size: 22px; font-weight: 600; color: var(--acento);
-    letter-spacing: 0.03em; margin-top: 12px;
-  }
-  body[data-variant="v2_grid"] .url-cta { margin-top: 2px; }
-  body[data-variant="v3_textual"] .url-cta {
-    position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
-    margin-top: 0; color: #43b5a6;
-  }
-  .contract-fields { display: none !important; }
+/* ═══════ LOGO — protagónico horizontal ═══════ */
+.logo-hero {
+  display: flex; align-items: center; justify-content: center;
+  width: 280px; height: 120px; position: relative;
+  flex-shrink: 0; z-index: 1;
+}
+.logo-hero img,
+.logo-hero [data-isotype-container],
+.logo-hero svg {
+  width: 100%; height: 100%; object-fit: contain; position: relative; z-index: 2;
+}
+
+/* ═══════ HEADLINE ═══════ */
+.title {
+  font-family: var(--font-titulo); font-size: 72px; font-weight: 900;
+  line-height: var(--leading-tight); letter-spacing: var(--tracking-tight);
+  color: var(--texto); position: relative; z-index: 1;
+  max-width: 1300px; word-wrap: break-word;
+}
+
+/* ═══════ TAGLINE — marca secundaria ═══════ */
+.tagline {
+  font-family: var(--font-cuerpo); font-size: 28px; font-weight: 600;
+  letter-spacing: var(--tracking-wide); color: var(--texto-muted);
+  position: relative; z-index: 1;
+}
+
+/* ═══════ VARIANTS ═══════ */
+body[data-variant="v1_centered"] .title { font-size: 80px; }
+body[data-variant="v2_minimal"] .logo-hero { width: 240px; height: 100px; }
+body[data-variant="v2_minimal"] .title { font-size: 68px; }
+body[data-variant="v3_premium"] .title { font-size: 88px; font-weight: 900; }
+
+.contract-fields { display: none !important; }
 </style>
 </head>
-<body>
-  <div class="symbol-watermark">
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke-width="1.5"/>
-      <line x1="50" y1="5" x2="50" y2="95" stroke-width="0.5"/>
-      <line x1="7" y1="25" x2="93" y2="75" stroke-width="0.5"/>
-      <line x1="93" y1="25" x2="7" y2="75" stroke-width="0.5"/>
-      <circle cx="50" cy="50" r="2"/><circle cx="50" cy="5" r="1.5"/>
-      <circle cx="93" cy="25" r="1.5"/><circle cx="93" cy="75" r="1.5"/>
-      <circle cx="50" cy="95" r="1.5"/><circle cx="7" cy="75" r="1.5"/>
-      <circle cx="7" cy="25" r="1.5"/>
-    </svg>
-  </div>
+<body class="depth-radial depth-glow depth-grain" data-template="youtube_banner" data-variant="v1_centered" data-brand-line="cloud">
+
   <div class="safe-area">
-    <div class="accent-line"></div>
-    <h1 class="headline" data-titulo data-fit data-fit-min="48">Kósmos · Catálogo de simulación científica</h1>
-    <p class="subhead" data-copy data-fit data-fit-min="22">Sistemas complejos · Emergencia · Filosofía de la ciencia · Pinakothḗke</p>
-    <div class="url-cta" data-url data-fit data-fit-min="14">kosmos.stevenvallejo.com</div>
+    <span class="logo-hero" data-isotype-container></span>
+    <h1 class="title" data-titulo data-fit data-fit-min="40">Canal de marca</h1>
+    <p class="tagline" data-logo-texto data-fit data-fit-min="16">Tagline</p>
   </div>
+
   <div class="contract-fields" aria-hidden="true">
-    <span data-titulo></span><span data-subtitulo></span><span data-copy></span>
-    <span data-logo-simbolo></span><span data-logo-texto></span>
-    <span data-numero></span><span data-etiqueta></span>
-    <span data-url></span><span data-acento></span><span data-acento-2></span>
+    <span data-titulo></span><span data-logo-texto></span>
+    <span data-isotype-container></span>
   </div>
+
+<script src="./eikon-runtime.js"></script>
 </body>
 </html>
