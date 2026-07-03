@@ -215,7 +215,9 @@ async def get_batch_plan(  # noqa: C901
             "numero": content_overrides.get("numero") or vars_dict.get("numero", ""),
             "copy": content_overrides.get("copy") or content_overrides.get("subtitulo") or vars_dict.get("copy", ""),
             "url": content_overrides.get("url") or vars_dict.get("url", ""),
-            "logo-texto": content_overrides.get("titulo") or _brand_name,
+            # data-logo-texto = firma de marca (SIEMPRE el nombre). El headline del
+            # contenido va por data-titulo — si acá pusiéramos el título se duplicaría.
+            "logo-texto": content_overrides.get("logo_texto") or _brand_name,
         }
 
         combinations_list.append({

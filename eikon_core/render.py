@@ -251,7 +251,9 @@ async def render_asset(
             "numero": content_overrides.get("numero") or vars_dict.get("numero", ""),
             "copy": content_overrides.get("copy") or content_overrides.get("subtitulo") or vars_dict.get("copy", ""),
             "url": content_overrides.get("url") or vars_dict.get("url", ""),
-            "logo_texto": content_overrides.get("titulo") or _brand_name,
+            # data-logo-texto = firma de marca (SIEMPRE el nombre); el headline del
+            # contenido va por data-titulo (evita duplicar el título en la pieza).
+            "logo_texto": content_overrides.get("logo_texto") or _brand_name,
         }
 
     input_hash = compute_hash(

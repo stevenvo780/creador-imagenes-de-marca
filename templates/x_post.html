@@ -98,7 +98,7 @@ body { background: var(--bg); color: var(--texto); font-family: var(--font-cuerp
   display: flex; align-items: center; justify-content: center;
   border-left: 1px solid rgba(255,255,255,0.07);
 }
-.numero { font-family: var(--font-titulo); font-size: 120px; font-weight: 800; line-height: 1;
+.numero { display: none; font-family: var(--font-titulo); font-size: 120px; font-weight: 800; line-height: 1;
   letter-spacing: -0.05em;
   background: linear-gradient(135deg, var(--acento), var(--acento-2));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; min-height: 140px; }
@@ -138,7 +138,7 @@ body[data-variant="v3_anuncio"] .titulo { font-size: 56px; }
 body[data-variant="v3_anuncio"] .copy { font-size: var(--type-lg); }
 
 body[data-variant="v4_stat"] .container { grid-template-columns: 1fr 320px; }
-body[data-variant="v4_stat"] .numero { font-size: 140px; }
+body[data-variant="v4_stat"] .numero { display: block; font-size: 140px; }
 
 .contract-fields { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
 </style>

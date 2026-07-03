@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=1640, height=856, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Eikon — Facebook Cover</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,20 +41,20 @@ body { background: var(--bg); color: var(--texto); font-family: var(--font-cuerp
   position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
   top: -20%; left: 5%; width: 45%; height: 60%;
   background: radial-gradient(ellipse, var(--acento) 0%, transparent 70%);
-  opacity: 0.08; filter: blur(100px);
+  opacity: 0.12; filter: blur(100px);
 }
 .glow-2 {
   position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
   bottom: -20%; right: 5%; width: 50%; height: 55%;
   background: radial-gradient(ellipse, var(--acento-2) 0%, transparent 70%);
-  opacity: 0.07; filter: blur(100px);
+  opacity: 0.11; filter: blur(100px);
 }
 .glow-3 {
   position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
   top: 50%; left: 50%; transform: translate(-50%, -50%);
   width: 35%; height: 45%;
   background: radial-gradient(ellipse, var(--acento-3) 0%, transparent 70%);
-  opacity: 0.06; filter: blur(90px);
+  opacity: 0.10; filter: blur(90px);
 }
 
 .layout {
@@ -83,7 +83,7 @@ body { background: var(--bg); color: var(--texto); font-family: var(--font-cuerp
 }
 .logo-text {
   font-size: var(--type-lg); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--texto-muted); text-align: center; max-width: 300px; min-height: 24px;
+  color: var(--texto); text-align: center; max-width: 300px; min-height: 24px;
 }
 
 .divider {
@@ -104,6 +104,7 @@ body { background: var(--bg); color: var(--texto); font-family: var(--font-cuerp
 .titulo {
   font-family: var(--font-titulo); font-size: var(--type-6xl); font-weight: 900;
   line-height: var(--leading-tight); letter-spacing: var(--tracking-tight);
+  color: var(--acento-2);
   background: linear-gradient(135deg, var(--acento-2), var(--acento-3), var(--acento));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
@@ -131,7 +132,7 @@ body { background: var(--bg); color: var(--texto); font-family: var(--font-cuerp
   <div class="logo-block">
     <span class="simbolo" data-logo-simbolo data-fit data-fit-min="100">∞</span>
     <span class="logo-text" data-logo-texto data-fit data-fit-min="14">marca</span>
-    <div data-isotype-container style="display:none;"></div>
+    <svg data-isotype-container width="200" height="200" viewBox="0 0 200 200" style="flex-shrink:0;"></svg>
   </div>
   <div class="divider"></div>
   <div class="text-block">
