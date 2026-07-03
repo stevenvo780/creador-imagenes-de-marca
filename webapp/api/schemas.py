@@ -56,6 +56,8 @@ class BrandCreate(BaseModel):
     typography: dict[str, Any] = Field(default_factory=dict)
     logo_text: str = ""
     logo_symbol: str = ""
+    logo_style: str = ""
+    logo_seed: int = 0
     texts: dict[str, Any] = Field(default_factory=dict)
 
     @field_validator("palette", mode="before")
@@ -74,6 +76,8 @@ class BrandUpdate(BaseModel):
     typography: dict[str, Any] | None = None
     logo_text: str | None = None
     logo_symbol: str | None = None
+    logo_style: str | None = None
+    logo_seed: int | None = None
     texts: dict[str, Any] | None = None
 
     @field_validator("palette", mode="before")
@@ -96,6 +100,8 @@ class BatchCreate(BaseModel):
     # "server": render con Chromium en el servidor (histórico).
     # "client": el navegador del usuario renderiza y sube los PNG (sin CPU GCP).
     render_mode: Literal["server", "client"] = Field(default="server")
+    # Overrides de contenido variable por pieza: claves como titulo, subtitulo, copy, etc.
+    content: dict[str, str] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def check_axis_overlap(self) -> BatchCreate:

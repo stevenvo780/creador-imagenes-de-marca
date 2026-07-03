@@ -37,6 +37,8 @@ CREATE TABLE IF NOT EXISTS brands (
   typography_json TEXT NOT NULL DEFAULT '{}',
   logo_text TEXT NOT NULL DEFAULT '',
   logo_symbol TEXT NOT NULL DEFAULT '',
+  logo_style TEXT NOT NULL DEFAULT '',
+  logo_seed INTEGER NOT NULL DEFAULT 0,
   texts_json TEXT NOT NULL DEFAULT '{}',
   created_at INTEGER NOT NULL,
   UNIQUE(tenant_id, slug)
@@ -182,6 +184,8 @@ def create_brand(
     typography: dict[str, Any] | None = None,
     logo_text: str = "",
     logo_symbol: str = "",
+    logo_style: str = "",
+    logo_seed: int = 0,
     texts: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Crea un brand para el tenant. Falla si el slug ya existe en ese tenant."""
@@ -190,8 +194,8 @@ def create_brand(
         con.execute(
             """INSERT INTO brands
                (tenant_id, slug, name, palette_json, typography_json,
-                logo_text, logo_symbol, texts_json, created_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                logo_text, logo_symbol, logo_style, logo_seed, texts_json, created_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (
                 tenant_id,
                 slug,
@@ -200,6 +204,8 @@ def create_brand(
                 json.dumps(typography or {}, sort_keys=True),
                 logo_text,
                 logo_symbol,
+                logo_style,
+                logo_seed,
                 json.dumps(texts or {}, sort_keys=True),
                 now,
             ),
@@ -219,6 +225,8 @@ def upsert_brand(
     typography: dict[str, Any] | None = None,
     logo_text: str = "",
     logo_symbol: str = "",
+    logo_style: str = "",
+    logo_seed: int = 0,
     texts: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Inserta o actualiza un brand por (tenant_id, slug). Idempotente."""
@@ -227,14 +235,16 @@ def upsert_brand(
         con.execute(
             """INSERT INTO brands
                (tenant_id, slug, name, palette_json, typography_json,
-                logo_text, logo_symbol, texts_json, created_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                logo_text, logo_symbol, logo_style, logo_seed, texts_json, created_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                ON CONFLICT(tenant_id, slug) DO UPDATE SET
                  name = excluded.name,
                  palette_json = excluded.palette_json,
                  typography_json = excluded.typography_json,
                  logo_text = excluded.logo_text,
                  logo_symbol = excluded.logo_symbol,
+                 logo_style = excluded.logo_style,
+                 logo_seed = excluded.logo_seed,
                  texts_json = excluded.texts_json""",
             (
                 tenant_id,
@@ -244,6 +254,8 @@ def upsert_brand(
                 json.dumps(typography or {}, sort_keys=True),
                 logo_text,
                 logo_symbol,
+                logo_style,
+                logo_seed,
                 json.dumps(texts or {}, sort_keys=True),
                 now,
             ),
@@ -290,9 +302,9 @@ def update_brand(
 ) -> dict[str, Any]:
     """Actualiza campos de un brand validando pertenencia al tenant.
 
-    Campos permitidos: name, palette_json, typography_json, logo_text, logo_symbol, texts_json.
+    Campos permitidos: name, palette_json, typography_json, logo_text, logo_symbol, logo_style, logo_seed, texts_json.
     """
-    allowed = {"name", "palette_json", "typography_json", "logo_text", "logo_symbol", "texts_json"}
+    allowed = {"name", "palette_json", "typography_json", "logo_text", "logo_symbol", "logo_style", "logo_seed", "texts_json"}
     update_fields = {k: v for k, v in fields.items() if k in allowed}
     if not update_fields:
         raise ValueError("sin campos válidos para actualizar")

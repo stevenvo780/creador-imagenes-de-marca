@@ -4,12 +4,16 @@ from __future__ import annotations
 
 import json
 import shutil
+from base64 import b64encode
 from pathlib import Path
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi import Path as FPath
 
+from eikon_core.isotype import IsotypeParams, generate_isotype
+from eikon_core.isotypes.catalog import ALGORITHMS
+from eikon_core.mapping import map_marca_to_vars
 from webapp.services.eikon_runner import PROTECTED_BRAND_SLUGS, validate_slug
 from webapp.storage import (
     create_brand,
@@ -66,6 +70,8 @@ def create_brand_endpoint(
             typography=payload.typography,
             logo_text=payload.logo_text,
             logo_symbol=payload.logo_symbol,
+            logo_style=payload.logo_style,
+            logo_seed=payload.logo_seed,
             texts=payload.texts,
         )
     except Exception as e:
@@ -110,6 +116,10 @@ def update_brand_endpoint(
         fields["logo_text"] = payload.logo_text
     if payload.logo_symbol is not None:
         fields["logo_symbol"] = payload.logo_symbol
+    if payload.logo_style is not None:
+        fields["logo_style"] = payload.logo_style
+    if payload.logo_seed is not None:
+        fields["logo_seed"] = payload.logo_seed
     if payload.texts is not None:
         fields["texts_json"] = json.dumps(payload.texts, sort_keys=True)
     if not fields:
@@ -117,7 +127,7 @@ def update_brand_endpoint(
             status_code=422,
             detail=(
                 "ningún campo actualizable recibido; "
-                "campos permitidos: name, palette, typography, logo_text, logo_symbol, texts"
+                "campos permitidos: name, palette, typography, logo_text, logo_symbol, logo_style, logo_seed, texts"
             ),
         )
     try:
@@ -160,3 +170,90 @@ def delete_brand_endpoint(
     except (ValueError, OSError):
         # Nunca fallar la request por limpieza de archivos; el DB ya fue borrado.
         pass
+
+
+@router.get("/{brand_id}/logo-options")
+def get_logo_options(
+    brand_id: _BrandId,
+    request: Request,
+    count: int = 24,
+    user: dict[str, Any] = Depends(current_user),
+) -> dict[str, Any]:
+    """Devuelve variaciones de logo (isotipo) para que el usuario elija.
+
+    Query params:
+    - count: número de variaciones (default 24, max 100)
+
+    Devuelve:
+    {
+        "options": [
+            {"style": "poligono_regular", "seed": 12345, "svg_data_uri": "data:image/svg+xml;base64,..."},
+            ...
+        ]
+    }
+
+    Determinístico: las variaciones se generan con la PALETA de la marca y diferentes seeds.
+    """
+    settings = get_settings(request)
+    tenant_id = user["tenant_id"]
+    count = min(max(1, count), 100)  # Rango 1-100
+
+    # Valida que el brand pertenece al tenant
+    brand = get_brand(settings.db_url, tenant_id, brand_id)
+    if brand is None:
+        raise HTTPException(status_code=404, detail="brand not found")
+
+    # Construye la marca desde el brand
+    brand_slug = str(brand.get("slug", ""))
+    marca = {
+        "slug": brand_slug,
+        "nombre_producto": str(brand.get("name", "")),
+        "paleta": json.loads(str(brand.get("palette_json", "{}"))),
+        "tipografia": json.loads(str(brand.get("typography_json", "{}"))),
+        "logo_texto": str(brand.get("logo_text", "")),
+        "logo_simbolo": str(brand.get("logo_symbol", "")),
+        "textos": json.loads(str(brand.get("texts_json", "{}"))),
+    }
+
+    # Genera variaciones: recorre ALGORITHMS y varía seeds
+    options = []
+    styles = [algo[0] for algo in ALGORITHMS]  # Lista de style IDs
+    for i in range(count):
+        # Cicla entre estilos disponibles y varía el seed
+        style_idx = i % len(styles)
+        style = styles[style_idx]
+        seed = (i // len(styles)) * 1000 + i  # Seed pseudo-aleatorio pero determinístico
+
+        # Genera SVG isotipo
+        try:
+            vars_dict = map_marca_to_vars(marca, "isotipo")
+            initials = (
+                marca.get("logo_texto")
+                or marca.get("nombre_producto")
+                or marca.get("nombre_corporativo")
+                or "E"
+            ).strip()
+            params = IsotypeParams(
+                seed=seed,
+                style=style,
+                brand_initials=(initials[:2] or "E"),
+                brand_symbol=str(marca.get("logo_simbolo") or "◆"),
+                primary_color=vars_dict.get("primario") or vars_dict.get("acento") or "#43b5a6",
+                accent_color=vars_dict.get("acento") or "#e0a85e",
+                bg_color=vars_dict.get("bg") or "#0f1f1d",
+            )
+            svg = generate_isotype(params)
+            if svg.strip():
+                svg_data_uri = (
+                    "data:image/svg+xml;base64," + b64encode(svg.encode("utf-8")).decode("ascii")
+                )
+                options.append({
+                    "style": style,
+                    "seed": seed,
+                    "svg_data_uri": svg_data_uri,
+                })
+        except Exception:
+            # Skip broken generations
+            pass
+
+    return {"options": options}

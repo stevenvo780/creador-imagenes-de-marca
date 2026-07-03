@@ -72,6 +72,7 @@ async def enqueue_batch(
     spec: CombinationSpec,
     count: int,
     render_mode: str = "server",
+    content: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     """Crea un batch de renderizado combinatorio en la DB y lo encola.
 
@@ -89,6 +90,7 @@ async def enqueue_batch(
         brand_id: ID del brand (ya validado que pertenece al tenant)
         spec: CombinationSpec con brand, ejes a permutar, etc.
         count: Número de combinaciones a generar (sobrescribe spec.count)
+        content: Overrides de contenido variable por pieza (título, subtítulo, etc.)
 
     Returns:
         Dict con los datos del batch creado (incluye id, status='pending', etc.)
@@ -104,11 +106,16 @@ async def enqueue_batch(
     spec_serializable.validate()
 
     is_client = render_mode == "client"
+    spec_dict = asdict(spec_serializable)
+    # Agregar content overrides si se proporcionan
+    if content:
+        spec_dict["content"] = dict(content)
+
     batch = create_batch(
         db_url,
         tenant_id,
         brand_id,
-        spec=asdict(spec_serializable),
+        spec=spec_dict,
         status="running" if is_client else "pending",
     )
 

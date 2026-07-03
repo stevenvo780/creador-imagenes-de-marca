@@ -62,7 +62,7 @@ _TEMPLATE_WHITELIST = {
 
 
 @router.get("/batches/{batch_id}/plan")
-async def get_batch_plan(
+async def get_batch_plan(  # noqa: C901
     batch_id: int,
     request: Request,
     user: dict[str, Any] = Depends(current_user),
@@ -164,6 +164,11 @@ async def get_batch_plan(
         "h": type_spec.height,
     }
 
+    # Cargar overrides de contenido desde el spec (si existen)
+    content_overrides = {}
+    if spec_dict:
+        content_overrides = spec_dict.get("content", {})
+
     # Construye combinaciones enrichidas
     combinations_list = []
     for combo in plan:
@@ -179,18 +184,25 @@ async def get_batch_plan(
         data_attrs = _extract_data_attrs_from_combination(params, asset_type)
 
         # SVG isotipo precomputado (server-side, determinístico)
-        isotype_style = params.get("isotype_style", "orbital")
+        # Si brand tiene logo_style fijo, usar ese; si no, usar el del params
+        if brand.get("logo_style"):
+            isotype_style = str(brand["logo_style"])
+            isotype_seed = hex(int(brand.get("logo_seed", 0)))[2:].zfill(16)
+        else:
+            isotype_style = params.get("isotype_style", "orbital")
+            isotype_seed = seed_hex
+
         isotype_data_uri = _build_isotype_data_uri(
-            isotype_style, seed_hex, marca, vars_dict
+            isotype_style, isotype_seed, marca, vars_dict
         )
 
-        # Textos de la marca
+        # Textos de la marca, aplicando content overrides
         texts_obj = {
-            "titulo": vars_dict.get("titulo", ""),
-            "subtitulo": vars_dict.get("subtitulo", ""),
-            "etiqueta": vars_dict.get("etiqueta", ""),
-            "numero": vars_dict.get("numero", ""),
-            "copy": vars_dict.get("copy", ""),
+            "titulo": content_overrides.get("titulo") or vars_dict.get("titulo", ""),
+            "subtitulo": content_overrides.get("subtitulo") or vars_dict.get("subtitulo", ""),
+            "etiqueta": content_overrides.get("etiqueta") or vars_dict.get("etiqueta", ""),
+            "numero": content_overrides.get("numero") or vars_dict.get("numero", ""),
+            "copy": content_overrides.get("copy") or vars_dict.get("copy", ""),
         }
 
         combinations_list.append({

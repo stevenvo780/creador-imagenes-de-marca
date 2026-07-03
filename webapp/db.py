@@ -18,6 +18,7 @@ Maneja diferencias:
 
 from __future__ import annotations
 
+import contextlib
 import os
 import sqlite3
 from collections.abc import Generator, Sequence
@@ -293,6 +294,8 @@ CREATE TABLE IF NOT EXISTS brands (
   typography_json TEXT NOT NULL DEFAULT '{}',
   logo_text TEXT NOT NULL DEFAULT '',
   logo_symbol TEXT NOT NULL DEFAULT '',
+  logo_style TEXT NOT NULL DEFAULT '',
+  logo_seed INTEGER NOT NULL DEFAULT 0,
   texts_json TEXT NOT NULL DEFAULT '{}',
   created_at INTEGER NOT NULL,
   UNIQUE(tenant_id, slug)
@@ -354,6 +357,41 @@ CREATE INDEX IF NOT EXISTS idx_variations_batch ON variations(batch_id);
                     cur.execute(stmt)
         pg_con.commit()
         pg_con.close()
+
+    # Migración idempotente: agrega columnas nuevas a DBs ya existentes
+    # (CREATE TABLE IF NOT EXISTS no altera tablas que ya existen).
+    migrate_add_logo_columns(db_url)
+
+
+def migrate_add_logo_columns(db_url: str | None | Path) -> None:
+    """Agrega logo_style y logo_seed a la tabla brands si no existen (idempotente)."""
+    dialect, config = parse_db_url(db_url)
+    stmts = (
+        "ALTER TABLE brands ADD COLUMN logo_style TEXT NOT NULL DEFAULT ''",
+        "ALTER TABLE brands ADD COLUMN logo_seed INTEGER NOT NULL DEFAULT 0",
+    )
+
+    if dialect == "sqlite":
+        con = sqlite3.connect(config["path"])
+        try:
+            for stmt in stmts:
+                with contextlib.suppress(sqlite3.OperationalError):
+                    con.execute(stmt)  # OperationalError = la columna ya existe
+            con.commit()
+        finally:
+            con.close()
+    else:
+        import psycopg
+
+        pg_con = psycopg.connect(config["conninfo"])
+        pg_con.autocommit = True  # cada ALTER commitea solo → evita poisoning si una falla
+        try:
+            with pg_con.cursor() as cur:
+                for stmt in stmts:
+                    with contextlib.suppress(Exception):
+                        cur.execute(stmt)  # la columna ya existe
+        finally:
+            pg_con.close()
 
 
 def get_last_insert_id(db_url: str | None | Path, con: DualConnection, table: str) -> int:

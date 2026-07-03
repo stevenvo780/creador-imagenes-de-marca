@@ -99,13 +99,25 @@ async def create_batch_endpoint(
     except ValueError as e:
         raise HTTPException(status_code=422, detail=str(e)) from e
 
+    spec_dict: dict[str, Any] = {
+        "brand": str(brand["slug"]),
+        "asset_types": asset_types,
+        "fixed": dict(payload.fixed),
+        "permuted": list(payload.permuted),
+        "count": payload.count,
+        "seed_salt": payload.seed_salt,
+    }
+    # Agregar content overrides si se proporcionan
+    if payload.content:
+        spec_dict["content"] = dict(payload.content)
+
     spec = CombinationSpec(
-        brand=str(brand["slug"]),
-        asset_types=asset_types,
-        fixed=dict(payload.fixed),
-        permuted=list(payload.permuted),
-        count=payload.count,
-        seed_salt=payload.seed_salt,
+        brand=spec_dict["brand"],
+        asset_types=spec_dict["asset_types"],
+        fixed=spec_dict["fixed"],
+        permuted=spec_dict["permuted"],
+        count=spec_dict["count"],
+        seed_salt=spec_dict["seed_salt"],
     )
     axes_dict = {name: axis.option_names() for name, axis in cfg.axes.items()}
     try:
@@ -118,7 +130,7 @@ async def create_batch_endpoint(
         raise HTTPException(status_code=422, detail=str(e)) from e
 
     batch = await enqueue_batch(
-        db, tenant_id, payload.brand_id, spec, payload.count, render_mode=payload.render_mode
+        db, tenant_id, payload.brand_id, spec, payload.count, render_mode=payload.render_mode, content=payload.content
     )
 
     # El worker rastrea el progreso de cada batch en _pending_batches; el poll_loop

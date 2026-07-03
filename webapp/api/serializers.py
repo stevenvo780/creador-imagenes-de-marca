@@ -30,6 +30,8 @@ def brand_to_dict(row: dict[str, Any]) -> dict[str, Any]:
         "typography": _loads(row.get("typography_json"), {}),
         "logo_text": row.get("logo_text", ""),
         "logo_symbol": row.get("logo_symbol", ""),
+        "logo_style": row.get("logo_style", ""),
+        "logo_seed": row.get("logo_seed", 0),
         "texts": _loads(row.get("texts_json"), {}),
         "created_at": row.get("created_at"),
     }
