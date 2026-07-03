@@ -75,9 +75,11 @@ body {
 .logo-hero {
   display: flex; align-items: center; justify-content: center;
   width: 200px; height: 200px; margin-bottom: var(--space-4);
+  position: relative; z-index: 1;
 }
+.logo-hero img,
 .logo-hero [data-isotype-container],
-.logo-hero svg { width: 100%; height: 100%; }
+.logo-hero svg { width: 100%; height: 100%; object-fit: contain; position: relative; z-index: 2; }
 .accent-line {
   width: var(--space-6); height: 2px; background: var(--acento);
   border-radius: 1px;
