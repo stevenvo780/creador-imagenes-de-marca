@@ -124,9 +124,10 @@ export function BrandsPage() {
               margin: 0,
               fontSize: "var(--font-size-sm)",
               color: "var(--slate-500)",
+              lineHeight: 1.6,
             }}
           >
-            Cada marca es el punto de partida para generar su identidad visual.
+            Cada marca tiene un flujo de 2 pasos: <strong>Identidad</strong> (elegir logo) → <strong>Estudio</strong> (generar assets). También podés crear variaciones rápido o personalizar detalles.
           </p>
         </div>
 
@@ -408,20 +409,94 @@ function BrandCard({
         style={{
           padding: "var(--space-4) var(--space-5)",
           display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "var(--space-3)",
+          flexDirection: "column",
+          gap: "var(--space-4)",
           marginTop: "auto",
-          flexWrap: "wrap",
         }}
       >
+        {/* Botón principal: Generar variaciones */}
         <Button variant="primary" size="sm" onClick={onGenerate}>
           Generar variaciones
         </Button>
+
+        {/* Flujo de 2 pasos: Identidad → Estudio */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "var(--space-2)",
+          }}
+        >
+          <Link
+            to={`/brands/${brand.id}/identity`}
+            aria-label={`Identidad de ${brand.name}`}
+            title="Paso 1: Elegir logo"
+            style={{
+              color: "var(--teal-600)",
+              fontSize: "var(--font-size-sm)",
+              fontWeight: 500,
+              textDecoration: "none",
+              padding: "var(--space-2) var(--space-3)",
+              borderRadius: "var(--radius-sm)",
+              border: "1px solid var(--teal-200)",
+              background: "var(--white)",
+              textAlign: "center",
+              transition: "all var(--transition-fast)",
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "var(--teal-50)";
+              e.currentTarget.style.borderColor = "var(--teal-400)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "var(--white)";
+              e.currentTarget.style.borderColor = "var(--teal-200)";
+            }}
+          >
+            Identidad
+          </Link>
+          <Link
+            to={`/studio?brand=${brand.id}`}
+            aria-label={`Estudio de ${brand.name}`}
+            title="Paso 2: Generar assets"
+            style={{
+              color: "var(--teal-600)",
+              fontSize: "var(--font-size-sm)",
+              fontWeight: 500,
+              textDecoration: "none",
+              padding: "var(--space-2) var(--space-3)",
+              borderRadius: "var(--radius-sm)",
+              border: "1px solid var(--teal-200)",
+              background: "var(--white)",
+              textAlign: "center",
+              transition: "all var(--transition-fast)",
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "var(--teal-50)";
+              e.currentTarget.style.borderColor = "var(--teal-400)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "var(--white)";
+              e.currentTarget.style.borderColor = "var(--teal-200)";
+            }}
+          >
+            Estudio
+          </Link>
+        </div>
+
+        {/* Links secundarios */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
+            justifyContent: "space-between",
             gap: "var(--space-2)",
           }}
         >

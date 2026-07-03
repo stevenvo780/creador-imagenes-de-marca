@@ -16,6 +16,7 @@ export interface AppShellProps {
 
 const NAV_LINKS: Array<{ to: string; label: string }> = [
   { to: '/brands', label: 'Marcas' },
+  { to: '/studio', label: 'Estudio' },
   { to: '/batch',  label: 'Crear'  },
   { to: '/gallery', label: 'Galería' },
 ];
