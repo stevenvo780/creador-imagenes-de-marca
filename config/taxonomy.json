@@ -394,8 +394,8 @@
             },
             {
               "name": "fb_cover",
-              "width": 820,
-              "height": 315,
+              "width": 1640,
+              "height": 624,
               "template": "fb_cover.html",
               "protected": false,
               "variants": [

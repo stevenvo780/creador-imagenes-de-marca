@@ -36,7 +36,7 @@ const ASSET_TYPES_GROUPED: AssetTypeGroup[] = [
       { value: "yt_banner", label: "YouTube Banner (2560×1440)" },
       { value: "yt_thumbnail", label: "YouTube Thumbnail (1280×720)" },
       { value: "tiktok_cover", label: "TikTok Cover (1080×1920)" },
-      { value: "fb_cover", label: "Facebook Cover (820×315)" },
+      { value: "fb_cover", label: "Facebook Cover (1640×624)" },
     ],
   },
   {

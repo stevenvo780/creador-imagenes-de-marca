@@ -247,8 +247,8 @@ def _legacy_python_taxonomia(is_prizma: bool) -> dict[str, list[TypeSpec]]:
             ),
             TypeSpec(
                 "fb_cover",
-                820,
-                315,
+                1640,
+                624,
                 (
                     VariantSpec("v1_brand", "Brand"),
                     VariantSpec("v2_campaign", "Campaign"),
