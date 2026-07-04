@@ -104,6 +104,7 @@ def test_worker_processes_each_requested_asset_type(
         category: str,
         asset_type: str,
         render_axes_config: AxesConfig,
+        content_overrides: dict[str, str] | None = None,
         progress_rendered_offset: int = 0,
         progress_ranked_offset: int = 0,
     ) -> list[VariationScore]:
