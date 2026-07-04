@@ -144,6 +144,33 @@ def _legacy_python_taxonomia(is_prizma: bool) -> dict[str, list[TypeSpec]]:
                 ),
             ),
             TypeSpec(
+                "linkedin_header",
+                1584,
+                396,
+                (
+                    VariantSpec("v1_brand", "Brand"),
+                    VariantSpec("v2_campaign", "Campaign"),
+                ),
+            ),
+            TypeSpec(
+                "twitter_header",
+                1500,
+                500,
+                (
+                    VariantSpec("v1_brand", "Brand"),
+                    VariantSpec("v2_campaign", "Campaign"),
+                ),
+            ),
+            TypeSpec(
+                "youtube_header",
+                2560,
+                1440,
+                (
+                    VariantSpec("v1_brand", "Brand"),
+                    VariantSpec("v2_campaign", "Campaign"),
+                ),
+            ),
+            TypeSpec(
                 "ad_leaderboard",
                 728,
                 90,

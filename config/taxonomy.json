@@ -177,6 +177,57 @@
               ]
             },
             {
+              "name": "linkedin_header",
+              "width": 1584,
+              "height": 396,
+              "template": "linkedin_banner.html",
+              "protected": false,
+              "variants": [
+                {
+                  "id": "v1_brand",
+                  "label": "Brand"
+                },
+                {
+                  "id": "v2_campaign",
+                  "label": "Campaign"
+                }
+              ]
+            },
+            {
+              "name": "twitter_header",
+              "width": 1500,
+              "height": 500,
+              "template": "x_header.html",
+              "protected": false,
+              "variants": [
+                {
+                  "id": "v1_brand",
+                  "label": "Brand"
+                },
+                {
+                  "id": "v2_campaign",
+                  "label": "Campaign"
+                }
+              ]
+            },
+            {
+              "name": "youtube_header",
+              "width": 2560,
+              "height": 1440,
+              "template": "yt_banner.html",
+              "protected": false,
+              "variants": [
+                {
+                  "id": "v1_brand",
+                  "label": "Brand"
+                },
+                {
+                  "id": "v2_campaign",
+                  "label": "Campaign"
+                }
+              ]
+            },
+            {
               "name": "ad_leaderboard",
               "width": 728,
               "height": 90,
