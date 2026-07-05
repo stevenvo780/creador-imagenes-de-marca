@@ -177,7 +177,7 @@ export function VariationCard({
           {brandName && (
             <span
               style={{
-                fontSize: 'var(--font-size-xs)',
+                fontSize: 'var(--font-size-sm)',
                 color: 'var(--slate-500)',
                 fontWeight: 600,
                 overflow: 'hidden',
@@ -192,7 +192,7 @@ export function VariationCard({
             <span
               aria-label={`Familia: ${categoryLabel}`}
               style={{
-                fontSize: 10,
+                fontSize: 12,
                 color: 'var(--teal-600)',
                 fontWeight: 600,
                 letterSpacing: '0.04em',
@@ -224,12 +224,12 @@ export function VariationCard({
               aria-label={`Eliminar variación${brandName ? ` de ${brandName}` : ''}`}
               title="Eliminar variación"
               style={{
-                padding: 'var(--space-1) var(--space-3)',
+                padding: 'var(--space-2) var(--space-4)',
                 background: deleting ? 'var(--mist)' : 'transparent',
                 color: deleting ? 'var(--slate-400)' : 'var(--slate-500)',
                 border: `1px solid ${deleting ? 'var(--mist)' : 'var(--line)'}`,
                 borderRadius: 'var(--radius-md)',
-                fontSize: 'var(--font-size-xs)',
+                fontSize: 'var(--font-size-sm)',
                 fontWeight: 600,
                 cursor: deleting ? 'not-allowed' : 'pointer',
                 transition:
@@ -247,12 +247,12 @@ export function VariationCard({
             aria-label={`Descargar variación${brandName ? ` de ${brandName}` : ''}`}
             title="Descargar imagen"
             style={{
-              padding: 'var(--space-1) var(--space-3)',
+              padding: 'var(--space-2) var(--space-4)',
               background: downloading ? 'var(--mist)' : 'var(--teal-600)',
               color: downloading ? 'var(--slate-500)' : '#fff',
               border: 'none',
               borderRadius: 'var(--radius-md)',
-              fontSize: 'var(--font-size-xs)',
+              fontSize: 'var(--font-size-sm)',
               fontWeight: 600,
               cursor: downloading ? 'not-allowed' : 'pointer',
               transition:

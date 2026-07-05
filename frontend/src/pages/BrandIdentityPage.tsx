@@ -1,7 +1,7 @@
 import { type FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { brands as brandsApi, type Brand, ApiError } from "../api/client";
-import { Button, Card, Steps, Spinner, EmptyState } from "../components";
+import { Badge, Button, Card, Steps, Spinner, EmptyState } from "../components";
 import type { StepItem } from "../components";
 
 interface LogoOption {
@@ -521,7 +521,7 @@ export default function BrandIdentityPage() {
                         setSaved(false);
                         setSaveError("");
                       }}
-                      aria-label={`Logo ${i + 1}${current && brand ? " (actual)" : ""} — estilo ${option.style}`}
+                      aria-label={`Logo ${i + 1}${current ? " (logo actual)" : ""} — estilo ${option.style}`}
                       aria-pressed={selected}
                       autoFocus={i === 0}
                       style={{
@@ -583,26 +583,18 @@ export default function BrandIdentityPage() {
                       />
 
                       {current && (
-                        <span
+                        <Badge
+                          label="✓ Logo actual"
+                          variant="current"
                           style={{
                             position: "absolute",
                             top: "8px",
                             right: "8px",
-                            display: "inline-flex",
-                            alignItems: "center",
                             gap: "4px",
-                            background: "var(--teal-600)",
-                            color: "#fff",
-                            fontSize: "var(--font-size-xs)",
-                            fontWeight: 600,
-                            padding: "3px 8px",
                             borderRadius: "var(--radius-sm)",
-                            lineHeight: 1.4,
-                            boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                            lineHeight: 1.35,
                           }}
-                        >
-                          ✓ Actual
-                        </span>
+                        />
                       )}
                     </button>
                   );

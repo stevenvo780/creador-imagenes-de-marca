@@ -45,6 +45,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   cards: 'Tarjetas',
   og: 'Redes / OG',
   stationery: 'Papelería',
+  otros: 'Sin categoría',
 };
 
 // ── Componente principal ──────────────────────────────────────────────────────
@@ -151,12 +152,15 @@ export function GalleryPage() {
   // ── Categorías disponibles (para el filtro "Familia") ────────────────────
   const availableCategories = useMemo<string[]>(() => {
     const cats = new Set<string>();
+    let hasNull = false;
     for (const v of items) {
       if (v.category) cats.add(v.category);
+      else hasNull = true;
     }
-    // Orden canónico fijo para que el dropdown sea predecible
     const ORDER = ['logos', 'banners', 'cards', 'og', 'stationery'];
-    return ORDER.filter((c) => cats.has(c));
+    const ordered = ORDER.filter((c) => cats.has(c));
+    if (hasNull) ordered.push('otros');
+    return ordered;
   }, [items]);
 
   // ── Mapa id → nombre de marca ─────────────────────────────────────────────
@@ -171,6 +175,7 @@ export function GalleryPage() {
   // aquí sólo aplicamos el filtro de categoría adicional.
   const visibleItems = useMemo<Variation[]>(() => {
     if (filterCategory === '') return items;
+    if (filterCategory === 'otros') return items.filter((v) => v.category === null);
     return items.filter((v) => v.category === filterCategory);
   }, [items, filterCategory]);
 
@@ -420,10 +425,15 @@ export function GalleryPage() {
             <span
               aria-live="polite"
               aria-atomic="true"
-              style={{ fontSize: 'var(--font-size-sm)', color: 'var(--slate-500)' }}
+              style={{
+                fontSize: 'var(--font-size-base)',
+                color: 'var(--ink)',
+                fontWeight: 600,
+              }}
             >
-              {visibleItems.length}{' '}
-              {visibleItems.length === 1 ? 'variación' : 'variaciones'}
+              {visibleItems.length !== items.length
+                ? `${visibleItems.length} de ${items.length} variaciones`
+                : `${items.length} ${items.length === 1 ? 'variación' : 'variaciones'}`}
             </span>
           )}
         </div>
@@ -489,7 +499,7 @@ export function GalleryPage() {
             )}
 
             {/* ── Filtro: Familia / Formato (client-side sobre resultado del servidor) ── */}
-            {availableCategories.length > 1 && (
+            {availableCategories.length > 0 && (
               <FilterGroup id="gallery-category" label="Familia">
                 <select
                   id="gallery-category"
@@ -643,7 +653,7 @@ export function GalleryPage() {
                 <VariationCard
                   variation={v}
                   brandName={brandMap.get(v.brand_id)}
-                  categoryLabel={v.category ? (CATEGORY_LABELS[v.category] ?? v.category) : undefined}
+                  categoryLabel={v.category ? (CATEGORY_LABELS[v.category] ?? v.category) : CATEGORY_LABELS['otros']}
                   isSelected={selected.has(v.id)}
                   onToggleSelect={() => toggleSelect(v.id)}
                   onOpenLightbox={() => setLightboxId(v.id)}

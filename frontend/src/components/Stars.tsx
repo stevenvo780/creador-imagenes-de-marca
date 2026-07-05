@@ -1,6 +1,6 @@
 /**
  * Stars — muestra la calidad de una variación.
- * score 0–1 → 1–5 estrellas (o badge "Recomendado" si score >= 0.8).
+ * score 0–1 → 1–5 estrellas (o badge "Recomendado" si score >= 0.9).
  * NO muestra el número crudo de score al usuario.
  */
 import { Badge } from './Badge';
@@ -11,6 +11,8 @@ export interface StarsProps {
   /** Mostrar siempre como estrellas aunque sea recomendado. */
   forceStars?: boolean;
 }
+
+const RECOMMENDED_THRESHOLD = 0.9;
 
 function scoreToStars(score: number): number {
   // 0–1 → 1–5 estrellas (redondeo a entero)
@@ -26,7 +28,7 @@ export function Stars({ score, forceStars = false }: StarsProps) {
     );
   }
 
-  if (score >= 0.8 && !forceStars) {
+  if (score >= RECOMMENDED_THRESHOLD && !forceStars) {
     return <Badge label="Recomendado" variant="recommended" />;
   }
 

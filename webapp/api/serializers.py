@@ -58,19 +58,40 @@ _KNOWN_CATEGORIES: frozenset[str] = frozenset({"logos", "banners", "cards", "og"
 
 
 def _category_from_path(output_path: str | None) -> str | None:
-    """Extrae la categoría de la variación desde su output_path absoluto.
+    """Extrae la categoría del asset desde su output_path (agnóstico de backend).
 
-    El path almacenado sigue la estructura:
-        .../tenants/{tenant_id}/{marca}/{category}/{asset_type}/{batch_id}/combo_NNN.png
-    La categoría ocupa la posición -4 desde el final de los segmentos del path.
+    Busca el segmento "tenants" en el path; la categoría está 3 posiciones después:
+
+        [36m.../tenants/{tenant_id}/{brand}/{**category**}/{asset_type}/...[0m
+        tenants → tenant_id → brand → **(category)** → asset_type → ...
+
+    Soportado en los tres formatos:
+      - GCS:    gs://bucket/tenants/{tenant_id}/{brand}/{category}/...
+      - Local:  /abs/path/output/tenants/{tenant_id}/{brand}/{category}/...
+      - Relativo: tenants/{tenant_id}/{brand}/{category}/...
+
+    Fallback: si no se encuentra "tenants", usa el índice fijo -4 (comportamiento antiguo).
     Retorna None si output_path es nulo o el segmento no es una categoría conocida.
     """
     if not output_path:
         return None
     parts = output_path.replace("\\", "/").split("/")
-    # [-1]=combo_NNN.png, [-2]=batch_id, [-3]=asset_type, [-4]=category
     if len(parts) < 4:
         return None
+
+    # Método agnóstico: localizar "tenants" → category = +3 posiciones
+    # tenants[0] / tenant_id[1] / brand[2] / category[3] / asset_type[4] / ...
+    try:
+        tenant_idx = parts.index("tenants")
+        cat_idx = tenant_idx + 3
+        if cat_idx < len(parts):
+            candidate = parts[cat_idx]
+            if candidate in _KNOWN_CATEGORIES:
+                return candidate
+    except ValueError:
+        pass
+
+    # Fallback al índice negativo fijo (-4) si el método agnóstico falló
     candidate = parts[-4]
     return candidate if candidate in _KNOWN_CATEGORIES else None
 

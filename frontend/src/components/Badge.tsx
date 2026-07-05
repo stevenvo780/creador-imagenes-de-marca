@@ -1,19 +1,24 @@
 /**
  * Badge — indicador de estado compacto (pastilla de texto).
- * Variantes: default, success, warn, error, recommended
+ * Variantes: default, success, warn, error, recommended, current
  */
 import React from 'react';
 
+export type BadgeVariant =
+  | 'default'
+  | 'success'
+  | 'warn'
+  | 'error'
+  | 'recommended'
+  | 'current';
+
 export interface BadgeProps {
   label: string;
-  variant?: 'default' | 'success' | 'warn' | 'error' | 'recommended';
+  variant?: BadgeVariant;
   style?: React.CSSProperties;
 }
 
-const variantMap: Record<
-  NonNullable<BadgeProps['variant']>,
-  React.CSSProperties
-> = {
+const variantMap: Record<BadgeVariant, React.CSSProperties> = {
   default: {
     background: 'var(--mist)',
     color: 'var(--slate-700)',
@@ -35,9 +40,22 @@ const variantMap: Record<
     border: '1px solid #f5b4b0',
   },
   recommended: {
-    background: '#edf7f6',
+    background: 'var(--teal-600)',
+    color: 'var(--white)',
+    border: '1px solid var(--teal-600)',
+    padding: '4px var(--space-3)',
+    fontSize: 'var(--font-size-sm)',
+    fontWeight: 700,
+    boxShadow: 'var(--shadow-sm)',
+  },
+  current: {
+    background: 'var(--white)',
     color: 'var(--teal-600)',
-    border: '1px solid var(--teal)',
+    border: '1px solid var(--teal-600)',
+    padding: '4px var(--space-3)',
+    fontSize: 'var(--font-size-sm)',
+    fontWeight: 700,
+    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.22)',
   },
 };
 
