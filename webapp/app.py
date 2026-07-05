@@ -276,7 +276,7 @@ def create_app(
         payload: GenerateRequest,
         request: Request,
         user: dict[str, Any] = Depends(current_user),
-    ) -> FileResponse:
+    ) -> Response:
         """Genera un asset PNG síncronamente usando el WorkerPool server-side."""
         if get_worker() is None:
             raise HTTPException(status_code=503, detail="worker not active")
@@ -334,13 +334,15 @@ def create_app(
                     key = storage.relative_key(tenant_id, str(output_path))
                 except ValueError as e:
                     raise HTTPException(status_code=500, detail="invalid output path") from e
-                output_file = Path(str(output_path))
-                if not output_file.is_file():
-                    raise HTTPException(status_code=500, detail="output file not found")
-                return FileResponse(
-                    str(output_file),
+                try:
+                    data = storage.open(tenant_id, key)
+                except FileNotFoundError as e:
+                    raise HTTPException(status_code=404, detail="file not found") from e
+                except ValueError as e:
+                    raise HTTPException(status_code=400, detail="invalid path") from e
+                return Response(
+                    content=data,
                     media_type="image/png",
-                    filename=output_file.name,
                     headers={
                         "X-Eikon-Batch-Id": str(batch_id),
                         "X-Eikon-Asset-Type": asset_type,
