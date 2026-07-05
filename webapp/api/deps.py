@@ -15,7 +15,7 @@ from fastapi import HTTPException, Request, Response
 from eikon_core.combinatorial import AxesConfig
 from webapp.config import Settings
 from webapp.security import create_jwt, decode_jwt
-from webapp.storage import get_user
+from webapp.storage import get_tenant_id_from_api_key, get_user
 from webapp.storage_backend import StorageBackend
 
 
@@ -40,33 +40,55 @@ def get_axes_config(request: Request) -> AxesConfig:
 
 
 async def current_user(request: Request, response: Response) -> dict[str, Any]:
-    """Resuelve el usuario autenticado desde la cookie JWT httpOnly.
+    """Resuelve el usuario autenticado desde cookie JWT httpOnly o API key.
 
-    Lanza 401 si no hay cookie, el token es inválido/expirado, o el usuario
-    ya no existe. El dict devuelto incluye tenant_id para el scoping multi-tenant.
+    Prioridad:
+    1. Cookie JWT httpOnly
+    2. Authorization: Bearer <key>
+    3. X-API-Key: <key>
     """
     settings = get_settings(request)
     token = request.cookies.get(settings.cookie_name)
-    if not token:
-        raise HTTPException(status_code=401, detail="not authenticated")
-    try:
-        payload = decode_jwt(token, settings.jwt_secret)
-    except ValueError as e:
-        raise HTTPException(status_code=401, detail=str(e)) from e
-    user = get_user(settings.db_url, int(payload.get("sub", 0)))
-    if user is None:
-        raise HTTPException(status_code=401, detail="user not found")
-    refreshed_token = create_jwt(
-        {"sub": user["user_id"], "tenant_id": user["tenant_id"]},
-        settings.jwt_secret,
-        settings.jwt_ttl_seconds,
-    )
-    response.set_cookie(
-        settings.cookie_name,
-        refreshed_token,
-        httponly=True,
-        secure=settings.cookie_secure,
-        samesite="lax",
-        max_age=settings.jwt_ttl_seconds,
-    )
-    return user
+    if token:
+        try:
+            payload = decode_jwt(token, settings.jwt_secret)
+        except ValueError as e:
+            raise HTTPException(status_code=401, detail=str(e)) from e
+        user = get_user(settings.db_url, int(payload.get("sub", 0)))
+        if user is None:
+            raise HTTPException(status_code=401, detail="user not found")
+        refreshed_token = create_jwt(
+            {"sub": user["user_id"], "tenant_id": user["tenant_id"]},
+            settings.jwt_secret,
+            settings.jwt_ttl_seconds,
+        )
+        response.set_cookie(
+            settings.cookie_name,
+            refreshed_token,
+            httponly=True,
+            secure=settings.cookie_secure,
+            samesite="lax",
+            max_age=settings.jwt_ttl_seconds,
+        )
+        return user
+
+    api_key = ""
+    auth_header = request.headers.get("Authorization", "")
+    if auth_header.lower().startswith("bearer "):
+        api_key = auth_header[7:].strip()
+    if not api_key:
+        api_key = request.headers.get("X-API-Key", "").strip()
+
+    if api_key:
+        tenant_id = get_tenant_id_from_api_key(settings.db_url, api_key)
+        if tenant_id is None:
+            raise HTTPException(status_code=401, detail="invalid or revoked api key")
+        return {
+            "user_id": None,
+            "tenant_id": tenant_id,
+            "email": None,
+            "role": "api",
+            "tenant_slug": None,
+        }
+
+    raise HTTPException(status_code=401, detail="not authenticated")

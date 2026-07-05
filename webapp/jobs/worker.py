@@ -659,6 +659,14 @@ class WorkerPool:
             marca_path = MARCAS_DIR / f"{spec.brand}.json"
             if marca_path.exists():
                 marca = load_json(marca_path)
+                if brand_row.get("logo_text"):
+                    marca["logo_texto"] = str(brand_row.get("logo_text", ""))
+                if brand_row.get("logo_symbol"):
+                    marca["logo_simbolo"] = str(brand_row.get("logo_symbol", ""))
+                if brand_row.get("logo_style"):
+                    marca["logo_style"] = str(brand_row.get("logo_style", ""))
+                if brand_row.get("logo_seed") is not None:
+                    marca["logo_seed"] = int(brand_row.get("logo_seed") or 0)
             else:
                 marca = {
                     "slug": str(brand_row["slug"]),
@@ -667,6 +675,8 @@ class WorkerPool:
                     "tipografia": json.loads(str(brand_row.get("typography_json", "{}"))),
                     "logo_texto": str(brand_row.get("logo_text", "")),
                     "logo_simbolo": str(brand_row.get("logo_symbol", "")),
+                    "logo_style": str(brand_row.get("logo_style", "")),
+                    "logo_seed": int(brand_row.get("logo_seed") or 0),
                     "textos": json.loads(str(brand_row.get("texts_json", "{}"))),
                 }
         except Exception as exc:

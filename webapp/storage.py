@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import hashlib
 import json
+import secrets
 import time
 from collections.abc import Generator
 from contextlib import contextmanager
@@ -44,6 +46,14 @@ CREATE TABLE IF NOT EXISTS brands (
   UNIQUE(tenant_id, slug)
 );
 CREATE INDEX IF NOT EXISTS idx_brands_tenant ON brands(tenant_id);
+CREATE TABLE IF NOT EXISTS api_keys (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  tenant_id INTEGER NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+  key_hash TEXT NOT NULL,
+  created_at INTEGER NOT NULL,
+  revoked_at INTEGER
+);
+CREATE INDEX IF NOT EXISTS idx_api_keys_tenant ON api_keys(tenant_id);
 CREATE TABLE IF NOT EXISTS batches (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   tenant_id INTEGER NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
@@ -142,6 +152,70 @@ def get_user(db_url: str | None | Path, user_id: int) -> dict[str, Any] | None:
             (user_id,),
         ).fetchone()
     return row_to_dict(row)
+
+
+# ---------------------------------------------------------------------------
+# API keys (scoped por tenant_id)
+# ---------------------------------------------------------------------------
+
+
+def _hash_api_key(key: str) -> str:
+    """Hash de seguridad para API key."""
+    return hashlib.sha256(key.encode()).hexdigest()
+
+
+def create_api_key(db_url: str | None | Path, tenant_id: int) -> tuple[str, dict[str, Any]]:
+    """Genera una API key nueva y guarda solo su hash.
+
+    Devuelve el plaintext una sola vez junto con metadata no sensible.
+    """
+    now = int(time.time())
+    key = secrets.token_urlsafe(32)
+    key_hash = _hash_api_key(key)
+    with connect(db_url) as con:
+        con.execute(
+            "INSERT INTO api_keys(tenant_id, key_hash, created_at) VALUES (?, ?, ?)",
+            (tenant_id, key_hash, now),
+        )
+        key_id = db.get_last_insert_id(db_url, con, "api_keys")
+    return key, {"id": key_id, "tenant_id": tenant_id, "created_at": now}
+
+
+def get_tenant_id_from_api_key(db_url: str | None | Path, key: str) -> int | None:
+    """Resuelve tenant_id desde una API key en plaintext, si existe y no está revocada."""
+    key_hash = _hash_api_key(key)
+    with connect(db_url) as con:
+        row = con.execute(
+            "SELECT tenant_id FROM api_keys WHERE key_hash = ? AND revoked_at IS NULL",
+            (key_hash,),
+        ).fetchone()
+    if row is None:
+        return None
+    return int(row["tenant_id"])
+
+
+def list_api_keys(db_url: str | None | Path, tenant_id: int) -> list[dict[str, Any]]:
+    """Lista las API keys del tenant sin revelar secretos."""
+    with connect(db_url) as con:
+        rows: list[dict[str, Any]] = con.execute(
+            """SELECT id, tenant_id, created_at, revoked_at
+               FROM api_keys
+               WHERE tenant_id = ?
+               ORDER BY created_at DESC, id DESC""",
+            (tenant_id,),
+        ).fetchall()
+    return rows
+
+
+def revoke_api_key(db_url: str | None | Path, tenant_id: int, key_id: int) -> bool:
+    """Revoca una API key del tenant mediante soft delete."""
+    now = int(time.time())
+    with connect(db_url) as con:
+        cursor = con.execute(
+            "UPDATE api_keys SET revoked_at = ? WHERE id = ? AND tenant_id = ? AND revoked_at IS NULL",
+            (now, key_id, tenant_id),
+        )
+        return cursor.rowcount > 0
 
 
 # ---------------------------------------------------------------------------

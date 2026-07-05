@@ -70,11 +70,21 @@ def _build_isotype_data_uri(
             bg_color=vars_dict.get("bg") or "#0f1f1d",
         )
         svg = generate_isotype(params)
-        if not svg.strip():
+        svg_text = svg.strip()
+        if not svg_text or not svg_text.startswith("<svg") or "</svg" not in svg_text:
             return None
-        return "data:image/svg+xml;base64," + b64encode(svg.encode("utf-8")).decode("ascii")
+        return "data:image/svg+xml;base64," + b64encode(svg_text.encode("utf-8")).decode("ascii")
     except Exception:
         return None
+
+
+def _brand_isotype_seed_hex(marca: dict[str, Any], fallback: str) -> str:
+    """Devuelve el seed fijo de la marca en hex, o fallback si no es válido."""
+    try:
+        seed = int(marca.get("logo_seed", 0))
+    except (TypeError, ValueError):
+        return fallback
+    return hex(seed & 0xFFFF_FFFF_FFFF_FFFF)[2:].zfill(16)
 
 
 def _extract_data_attrs_from_combination(
@@ -300,8 +310,18 @@ async def render_asset(
         # Si la combinación pide un isótipo procedural, generarlo e inyectar el SVG
         # real en el contenedor [data-isotype-container] del template (en vez del
         # mark por defecto). No-op para templates sin ese contenedor.
-        isotype_style = (combination_params or {}).get("isotype_style", "none")
-        isotype_uri = _build_isotype_data_uri(isotype_style, input_hash, marca, vars_dict)
+        brand_isotype_style = str(marca.get("logo_style") or "").strip()
+        isotype_style = brand_isotype_style or (combination_params or {}).get(
+            "isotype_style", "none"
+        )
+        seed_hex = (
+            _brand_isotype_seed_hex(marca, input_hash)
+            if brand_isotype_style
+            else input_hash
+        )
+        if isotype_style and isotype_style != "none":
+            data_attrs_to_inject["data-isotype-style"] = isotype_style
+        isotype_uri = _build_isotype_data_uri(isotype_style, seed_hex, marca, vars_dict)
         if isotype_uri:
             injection = injection_script_with_isotype(
                 vars_dict,

@@ -68,7 +68,7 @@ def _schema_for_postgres(script: str) -> str:
     - Las sentencias ``PRAGMA`` (solo SQLite) se filtran al ejecutar.
     """
     out = script.replace("INTEGER PRIMARY KEY AUTOINCREMENT", "SERIAL PRIMARY KEY")
-    for col in ("seed", "created_at", "started_at", "finished_at"):
+    for col in ("seed", "created_at", "started_at", "finished_at", "revoked_at"):
         out = out.replace(f"{col} INTEGER", f"{col} BIGINT")
     return out
 
@@ -301,6 +301,14 @@ CREATE TABLE IF NOT EXISTS brands (
   UNIQUE(tenant_id, slug)
 );
 CREATE INDEX IF NOT EXISTS idx_brands_tenant ON brands(tenant_id);
+CREATE TABLE IF NOT EXISTS api_keys (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  tenant_id INTEGER NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+  key_hash TEXT NOT NULL,
+  created_at INTEGER NOT NULL,
+  revoked_at INTEGER
+);
+CREATE INDEX IF NOT EXISTS idx_api_keys_tenant ON api_keys(tenant_id);
 CREATE TABLE IF NOT EXISTS batches (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   tenant_id INTEGER NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
@@ -361,6 +369,7 @@ CREATE INDEX IF NOT EXISTS idx_variations_batch ON variations(batch_id);
     # Migración idempotente: agrega columnas nuevas a DBs ya existentes
     # (CREATE TABLE IF NOT EXISTS no altera tablas que ya existen).
     migrate_add_logo_columns(db_url)
+    migrate_add_api_keys_table(db_url)
 
 
 def migrate_add_logo_columns(db_url: str | None | Path) -> None:
@@ -390,6 +399,41 @@ def migrate_add_logo_columns(db_url: str | None | Path) -> None:
                 for stmt in stmts:
                     with contextlib.suppress(Exception):
                         cur.execute(stmt)  # la columna ya existe
+        finally:
+            pg_con.close()
+
+
+def migrate_add_api_keys_table(db_url: str | None | Path) -> None:
+    """Crea la tabla api_keys en DBs existentes (idempotente)."""
+    schema = """
+CREATE TABLE IF NOT EXISTS api_keys (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  tenant_id INTEGER NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+  key_hash TEXT NOT NULL,
+  created_at INTEGER NOT NULL,
+  revoked_at INTEGER
+);
+CREATE INDEX IF NOT EXISTS idx_api_keys_tenant ON api_keys(tenant_id);
+"""
+    dialect, config = parse_db_url(db_url)
+    if dialect == "sqlite":
+        con = sqlite3.connect(config["path"])
+        try:
+            con.executescript(schema)
+            con.commit()
+        finally:
+            con.close()
+    else:
+        import psycopg
+
+        pg_con = psycopg.connect(config["conninfo"])
+        pg_con.autocommit = True
+        try:
+            with pg_con.cursor() as cur:
+                for stmt in _schema_for_postgres(schema).split(";"):
+                    stmt = stmt.strip()
+                    if stmt:
+                        cur.execute(stmt)
         finally:
             pg_con.close()
 

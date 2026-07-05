@@ -257,3 +257,51 @@ def get_logo_options(
             pass
 
     return {"options": options}
+
+
+@router.post("/{brand_id}/set-identity", status_code=200)
+def set_brand_identity(
+    brand_id: _BrandId,
+    payload: dict[str, Any],
+    request: Request,
+    user: dict[str, Any] = Depends(current_user),
+) -> dict[str, Any]:
+    """Fija la identidad visual (logo style + seed) de una marca.
+
+    Payload:
+    {
+        "logo_style": "poligono_regular",
+        "logo_seed": 12345  # opcional
+    }
+    """
+    settings = get_settings(request)
+
+    # Validar que el brand pertenece al tenant
+    brand = get_brand(settings.db_url, user["tenant_id"], brand_id)
+    if brand is None:
+        raise HTTPException(status_code=404, detail="brand not found")
+
+    # Actualizar logo_style y logo_seed
+    fields: dict[str, Any] = {}
+    if payload.get("logo_style"):
+        fields["logo_style"] = str(payload["logo_style"])
+    if "logo_seed" in payload and payload["logo_seed"] is not None:
+        fields["logo_seed"] = int(payload["logo_seed"])
+
+    if not fields:
+        raise HTTPException(status_code=422, detail="logo_style or logo_seed required")
+
+    try:
+        updated = update_brand(settings.db_url, user["tenant_id"], brand_id, **fields)
+    except Exception as e:
+        raise HTTPException(status_code=422, detail=str(e)) from e
+
+    return {
+        "success": True,
+        "brand_id": brand_id,
+        "identity": {
+            "logo_style": updated.get("logo_style"),
+            "logo_seed": updated.get("logo_seed"),
+        },
+        "message": "Brand identity set successfully",
+    }

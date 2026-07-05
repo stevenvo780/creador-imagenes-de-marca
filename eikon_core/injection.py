@@ -95,15 +95,19 @@ def injection_script_with_isotype(
 ) -> str:
     """JS que inyecta valores de marca + SVG isótipo generado en vivo.
 
-    El SVG (data URI) también se pasa por JSON — nunca crudo. Limpia el contenedor
-    ([data-isotype-container]) antes de inyectar para reemplazar cualquier placeholder
-    del template (si no, placeholder + símbolo inyectado se superponen).
+    El SVG (data URI o markup SVG) también se pasa por JSON — nunca crudo. Limpia
+    el contenedor ([data-isotype-container]) antes de inyectar para reemplazar
+    cualquier placeholder del template.
     """
     base_script = injection_script(vars_dict, variant_name, template_name, data_attrs, texts_dict)
     if not isotype_svg:
         return base_script
 
     svg_literal = _js_payload({"svg": isotype_svg})
+    # SEGURIDAD: inyectamos el isotipo SIEMPRE como <img src="data:image/svg+xml;base64,…">.
+    # El SVG dentro de un <img> es una imagen estática (no ejecuta scripts) y el data-uri
+    # va por JSON (sin interpolación) → sin XSS. NO usar innerHTML con SVG inline (SVG en el
+    # DOM sí ejecutaría <script>/handlers, y el SVG lleva texto de marca del usuario).
     isotype_injection = (
         "(() => {\n"
         f"  const __i = {svg_literal};\n"
@@ -114,6 +118,7 @@ def injection_script_with_isotype(
         "    img.src = __i.svg;\n"
         "    img.style.width = '100%';\n"
         "    img.style.height = '100%';\n"
+        "    img.style.objectFit = 'contain';\n"
         "    c.appendChild(img);\n"
         "  });\n"
         "})();"

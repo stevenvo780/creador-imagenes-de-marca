@@ -8,19 +8,21 @@ same-origin como fallback estático.
 
 from __future__ import annotations
 
+import asyncio
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
 
-from fastapi import Depends, FastAPI, HTTPException, Response
+from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from eikon_core.combinatorial import load_axes_config
+from eikon_core.combinatorial import CombinationSpec, load_axes_config
 from eikon_core.constants import OUTPUT_DIR
 from webapp.api import (
+    auth_api_router,
     batches_router,
     brands_router,
     client_render_router,
@@ -29,15 +31,19 @@ from webapp.api import (
     variations_router,
     wizard_router,
 )
-from webapp.api.deps import current_user
+from webapp.api.batches import _validate_asset_types
+from webapp.api.deps import current_user, get_axes_config
 from webapp.config import Settings, get_settings
-from webapp.jobs import WorkerPool, set_worker
+from webapp.jobs import WorkerPool, enqueue_batch, get_worker, set_worker
 from webapp.security import create_jwt
 from webapp.services.eikon_runner import validate_slug
 from webapp.storage import (
     authenticate_user,
     create_tenant_user,
+    get_batch,
+    get_brand,
     init_db,
+    list_variations,
 )
 from webapp.storage_backend import get_storage
 
@@ -55,6 +61,14 @@ class RegisterRequest(BaseModel):
 class LoginRequest(BaseModel):
     email: str
     password: str
+
+
+class GenerateRequest(BaseModel):
+    """Payload para generar un asset server-side de forma síncrona."""
+
+    brand_id: int = Field(ge=1)
+    asset_type: str = Field(default="isotipo", min_length=2, max_length=80)
+    content: dict[str, str] = Field(default_factory=dict)
 
 
 def _set_auth_cookie(response: Response, settings: Settings, user: dict[str, Any]) -> None:
@@ -186,6 +200,7 @@ def create_app(
         }
 
     # ── Routers de la API v1 ──────────────────────────────────────────────
+    app.include_router(auth_api_router)
     app.include_router(brands_router)
     app.include_router(wizard_router)
     app.include_router(batches_router)
@@ -193,6 +208,150 @@ def create_app(
     app.include_router(gallery_router)
     app.include_router(variations_router)
     app.include_router(downloads_router)
+
+    # ── Asset types endpoint (MCP compatibility) ──────────────────────────
+    @app.get("/api/v1/asset-types")
+    async def asset_types_endpoint(
+        user: dict[str, Any] = Depends(current_user),
+    ) -> dict[str, Any]:
+        """Lista de tipos de asset disponibles (compatibilidad MCP).
+
+        Devuelve una lista plana de asset types con name, label, category y dimensiones.
+        """
+        import json
+        from pathlib import Path
+        from eikon_core.constants import ROOT
+
+        taxonomy_path = ROOT / "config" / "taxonomy.json"
+        try:
+            raw = json.loads(taxonomy_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return {"asset_types": []}
+
+        # Catálogo de labels en español para tipos de asset
+        type_meta = {
+            "isotipo": {"label": "Símbolo / Isotipo", "description": "El ícono gráfico de la marca"},
+            "lockup_horizontal": {"label": "Logo horizontal", "description": "Símbolo y nombre horizontal"},
+            "lockup_vertical": {"label": "Logo vertical", "description": "Símbolo arriba y nombre debajo"},
+            "wordmark": {"label": "Logo de texto", "description": "El nombre como elemento tipográfico"},
+            "favicon": {"label": "Ícono de pestaña", "description": "Ícono para pestaña del navegador"},
+            "watermark": {"label": "Marca de agua", "description": "Versión translúcida"},
+            "linkedin_header": {"label": "Portada LinkedIn", "description": "1584x396 px"},
+            "twitter_header": {"label": "Portada X / Twitter", "description": "1500x500 px"},
+            "youtube_header": {"label": "Arte de canal YouTube", "description": "2560x1440 px"},
+            "web_hero_desktop": {"label": "Cabecera web", "description": "1920x600 px"},
+            "ad_leaderboard": {"label": "Anuncio horizontal", "description": "728x90 px"},
+            "ad_rectangle": {"label": "Anuncio rectangular", "description": "300x250 px"},
+            "business_card": {"label": "Tarjeta de presentación", "description": "1050x600 px"},
+            "stat_card": {"label": "Tarjeta de estadística", "description": "1080x1080 px"},
+            "og_general": {"label": "Vista previa", "description": "1200x630 px"},
+            "og_product": {"label": "Vista previa producto", "description": "1200x630 px"},
+            "letterhead": {"label": "Papel membretado", "description": "2480x3508 px"},
+        }
+
+        # Recolectar tipos por categoría
+        assets: list[dict[str, Any]] = []
+        seen_names: set[str] = set()
+
+        for brand_family in raw.get("families", {}).values():
+            for cat_id, cat in brand_family.get("categories", {}).items():
+                for t in cat.get("types", []):
+                    name = t.get("name", "")
+                    if name and name not in seen_names:
+                        seen_names.add(name)
+                        meta = type_meta.get(name, {})
+                        assets.append({
+                            "name": name,
+                            "label": meta.get("label", name.replace("_", " ").title()),
+                            "description": meta.get("description", ""),
+                            "category": cat_id,
+                            "width": t.get("width"),
+                            "height": t.get("height"),
+                        })
+
+        return {"asset_types": assets}
+
+    @app.post("/api/v1/generate")
+    async def generate_sync(
+        payload: GenerateRequest,
+        request: Request,
+        user: dict[str, Any] = Depends(current_user),
+    ) -> FileResponse:
+        """Genera un asset PNG síncronamente usando el WorkerPool server-side."""
+        if get_worker() is None:
+            raise HTTPException(status_code=503, detail="worker not active")
+
+        db = settings.db_url
+        tenant_id = int(user["tenant_id"])
+        brand = get_brand(db, tenant_id, payload.brand_id)
+        if brand is None:
+            raise HTTPException(status_code=404, detail="brand not found")
+
+        asset_type = _validate_asset_types([payload.asset_type])[0]
+        fixed: dict[str, str] = {}
+        if not str(brand.get("logo_style") or "").strip():
+            fixed["isotype_style"] = "poligono_regular"
+
+        spec = CombinationSpec(
+            brand=str(brand["slug"]),
+            asset_types=[asset_type],
+            fixed=fixed,
+            permuted=[],
+            count=1,
+            seed_salt="",
+        )
+        try:
+            get_axes_config(request).validate_combination(fixed)
+        except ValueError as e:
+            raise HTTPException(status_code=422, detail=str(e)) from e
+
+        batch = await enqueue_batch(
+            db,
+            tenant_id,
+            int(payload.brand_id),
+            spec,
+            count=1,
+            render_mode="server",
+            content=dict(payload.content),
+        )
+        batch_id = int(batch["id"])
+
+        deadline = asyncio.get_running_loop().time() + 60.0
+        while asyncio.get_running_loop().time() < deadline:
+            batch_row = get_batch(db, tenant_id, batch_id)
+            if batch_row is None:
+                raise HTTPException(status_code=404, detail="batch lost")
+            status = str(batch_row.get("status", ""))
+            if status in {"finished", "completed"}:
+                variations = list_variations(db, tenant_id, batch_id=batch_id, limit=1)
+                if not variations:
+                    raise HTTPException(status_code=500, detail="no variations produced")
+                output_path = variations[0].get("output_path")
+                if not output_path:
+                    raise HTTPException(status_code=500, detail="no output path")
+                storage = request.app.state.storage
+                try:
+                    key = storage.relative_key(tenant_id, str(output_path))
+                except ValueError as e:
+                    raise HTTPException(status_code=500, detail="invalid output path") from e
+                output_file = Path(str(output_path))
+                if not output_file.is_file():
+                    raise HTTPException(status_code=500, detail="output file not found")
+                return FileResponse(
+                    str(output_file),
+                    media_type="image/png",
+                    filename=output_file.name,
+                    headers={
+                        "X-Eikon-Batch-Id": str(batch_id),
+                        "X-Eikon-Asset-Type": asset_type,
+                        "X-Eikon-Storage-Key": key,
+                    },
+                )
+            if status in {"failed", "cancelled"}:
+                raise HTTPException(status_code=500, detail=f"batch rendering {status}")
+            await asyncio.sleep(0.5)
+
+        raise HTTPException(status_code=504, detail="render timeout (>60s)")
 
     # ── SPA (same-origin): assets estáticos + fallback a index.html ──────
     # Sin fallback, recargar/entrar directo a una ruta de cliente (/gallery,
