@@ -70,7 +70,9 @@ def _register(client: TestClient, slug: str = "acme", email: str = "owner@acme.c
     assert r.status_code == 201, r.text
 
 
-def _create_brand(client: TestClient, slug: str = "kosmos", palette: dict | None = None) -> int:
+def _create_brand(
+    client: TestClient, slug: str = "kosmos", palette: dict[str, str] | None = None
+) -> int:
     r = client.post(
         "/api/v1/brands",
         json={

@@ -268,8 +268,8 @@ def _signal_foreground_balance(png_path: Path) -> RankingSignal:
             # Count pixels that differ substantially
             center_gray = np.mean(center, axis=2)
             edges_gray = np.mean(edges, axis=2)
-            center_var = np.std(center_gray)
-            edges_var = np.std(edges_gray)
+            center_var = float(np.std(center_gray))
+            edges_var = float(np.std(edges_gray))
 
             # Prefer when center has content (higher variance)
             fg_ratio = min(1.0, center_var / max(edges_var, 1.0))

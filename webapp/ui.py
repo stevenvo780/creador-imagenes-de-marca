@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, cast
+from typing import Any
 
 from fastapi import Request
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -62,7 +62,7 @@ env.filters["status_pill"] = _pills
 
 def render_template(name: str, **context: Any) -> str:
     template = env.get_template(name)
-    return cast(str, template.render(**context))
+    return template.render(**context)
 
 
 def render(

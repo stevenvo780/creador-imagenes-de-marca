@@ -11,10 +11,7 @@ Valida que `_category_from_path()` funciona correctamente con:
 
 from __future__ import annotations
 
-import pytest
-
 from webapp.api.serializers import _category_from_path
-
 
 # ── Tests con formato GCS ────────────────────────────────────────────────────
 

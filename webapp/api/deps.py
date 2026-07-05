@@ -10,11 +10,11 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, cast
 
-from fastapi import HTTPException, Request
+from fastapi import HTTPException, Request, Response
 
 from eikon_core.combinatorial import AxesConfig
 from webapp.config import Settings
-from webapp.security import decode_jwt
+from webapp.security import create_jwt, decode_jwt
 from webapp.storage import get_user
 from webapp.storage_backend import StorageBackend
 
@@ -39,7 +39,7 @@ def get_axes_config(request: Request) -> AxesConfig:
     return cast(AxesConfig, request.app.state.axes_config)
 
 
-async def current_user(request: Request) -> dict[str, Any]:
+async def current_user(request: Request, response: Response) -> dict[str, Any]:
     """Resuelve el usuario autenticado desde la cookie JWT httpOnly.
 
     Lanza 401 si no hay cookie, el token es inválido/expirado, o el usuario
@@ -56,4 +56,17 @@ async def current_user(request: Request) -> dict[str, Any]:
     user = get_user(settings.db_url, int(payload.get("sub", 0)))
     if user is None:
         raise HTTPException(status_code=401, detail="user not found")
+    refreshed_token = create_jwt(
+        {"sub": user["user_id"], "tenant_id": user["tenant_id"]},
+        settings.jwt_secret,
+        settings.jwt_ttl_seconds,
+    )
+    response.set_cookie(
+        settings.cookie_name,
+        refreshed_token,
+        httponly=True,
+        secure=settings.cookie_secure,
+        samesite="lax",
+        max_age=settings.jwt_ttl_seconds,
+    )
     return user

@@ -522,7 +522,7 @@ def test_rank_dedup_threshold_param(
 def _identical_pngs_with_params(
     tmp_path: Path,
     params_per_idx: list[dict[str, str]],
-    color: tuple = (40, 80, 120),
+    color: tuple[int, int, int] = (40, 80, 120),
 ) -> Path:
     """Genera PNGs IDÉNTICOS (mismo color sólido) asociados a params distintos.
 

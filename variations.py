@@ -40,7 +40,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterator, Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Any, Literal
 
@@ -216,7 +216,7 @@ class VariationPlan:
     def __len__(self) -> int:
         return len(self.variations)
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[Variation]:
         return iter(self.variations)
 
     def __getitem__(self, idx: int) -> Variation:

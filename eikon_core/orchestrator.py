@@ -22,7 +22,7 @@ async def run_generator(  # noqa: C901
     use_cache: bool = False,
     max_parallel: int = 1,
     skip_contrast: bool = False,
-) -> dict:
+) -> dict[str, Any]:
     """Genera assets para las marcas especificadas."""
     apw, _ = _get_playwright()
     counts: dict[str, dict[str, int]] = {}
@@ -50,9 +50,9 @@ async def run_generator(  # noqa: C901
                 family = brand_family(marca)
                 taxonomia = PRIZMA_TAXONOMIA if "prizma" in family else CLOUD_ATLAS_TAXONOMIA
 
-                cache = load_cache(marca_slug) if use_cache else {}
+                cache: dict[str, str] = load_cache(marca_slug) if use_cache else {}
                 counts[marca_slug] = {}
-                asset_metas: list[dict] = []
+                asset_metas: list[dict[str, Any]] = []
                 gen = skip = err = 0
 
                 total_types = sum(len(ts) for ts in taxonomia.values())

@@ -75,7 +75,7 @@ class ContrastValidator:
         c = channel / 255.0
         if c <= 0.04045:
             return c / 12.92
-        return ((c + 0.055) / 1.055) ** 2.4
+        return float(((c + 0.055) / 1.055) ** 2.4)
 
     def _calculate_luminance(self, rgb: tuple[int, int, int]) -> float:
         """

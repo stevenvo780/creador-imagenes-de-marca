@@ -9,6 +9,7 @@ from __future__ import annotations
 import io
 import os
 import zipfile
+from typing import cast
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -117,7 +118,8 @@ class TestGCSStorageOpen:
 
         _, mock_bucket = mock_gcs_client
         mock_blob = MagicMock()
-        mock_blob.download_as_bytes.side_effect = NotFound("objeto no existe")
+        not_found = cast(type[Exception], NotFound)
+        mock_blob.download_as_bytes.side_effect = not_found("objeto no existe")
         mock_bucket.blob.return_value = mock_blob
 
         with pytest.raises(FileNotFoundError, match="objeto no existe en GCS"):
@@ -282,7 +284,8 @@ class TestGCSStorageZipMany:
 
         _, mock_bucket = mock_gcs_client
         mock_blob = MagicMock()
-        mock_blob.download_as_bytes.side_effect = NotFound("missing")
+        not_found = cast(type[Exception], NotFound)
+        mock_blob.download_as_bytes.side_effect = not_found("missing")
         mock_bucket.blob.return_value = mock_blob
 
         with pytest.raises(FileNotFoundError):

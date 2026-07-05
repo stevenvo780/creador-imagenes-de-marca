@@ -20,7 +20,7 @@ def _get_jwt_secret() -> str:
 
 def _get_jwt_ttl() -> int:
     """Lee jwt_ttl del env."""
-    return int(os.environ.get("EIKON_WEBAPP_JWT_TTL", "3600"))
+    return int(os.environ.get("EIKON_WEBAPP_JWT_TTL", "2592000"))
 
 
 def _get_cookie_secure() -> bool:
