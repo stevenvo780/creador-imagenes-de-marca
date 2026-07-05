@@ -86,7 +86,7 @@ export function Modal({
         style={{
           position: 'fixed',
           inset: 0,
-          background: 'rgba(14, 27, 26, 0.5)',
+          background: 'rgba(0, 0, 0, 0.64)',
           zIndex: 200,
           backdropFilter: 'blur(2px)',
         }}
@@ -111,8 +111,9 @@ export function Modal({
       >
         <div
           style={{
-            background: 'var(--white)',
-            borderRadius: 'var(--radius-xl)',
+            background: 'var(--surface)',
+            border: '1px solid var(--border-strong)',
+            borderRadius: 'var(--r-lg)',
             boxShadow: 'var(--shadow-lg)',
             width: '100%',
             maxWidth,
@@ -129,7 +130,7 @@ export function Modal({
               alignItems: 'center',
               justifyContent: 'space-between',
               padding: 'var(--space-5) var(--space-6)',
-              borderBottom: '1px solid var(--line)',
+              borderBottom: '1px solid var(--border)',
             }}
           >
             <h2
@@ -138,7 +139,7 @@ export function Modal({
                 margin: 0,
                 fontFamily: 'var(--font-display)',
                 fontSize: 'var(--font-size-xl)',
-                color: 'var(--ink)',
+                color: 'var(--text)',
               }}
             >
               {title}
@@ -151,7 +152,7 @@ export function Modal({
                 background: 'transparent',
                 border: 'none',
                 cursor: 'pointer',
-                color: 'var(--slate-500)',
+                color: 'var(--text-muted)',
                 fontSize: 'var(--font-size-xl)',
                 lineHeight: 1,
                 // Tap target mínimo 44×44 (WCAG 2.5.5) — el contenido (✕)
@@ -159,7 +160,7 @@ export function Modal({
                 minWidth: 44,
                 minHeight: 44,
                 padding: 'var(--space-2)',
-                borderRadius: 'var(--radius-sm)',
+                borderRadius: 'var(--r-sm)',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -167,11 +168,11 @@ export function Modal({
                   'color var(--transition-fast), background var(--transition-fast)',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--ink)';
-                e.currentTarget.style.background = 'var(--mist)';
+                e.currentTarget.style.color = 'var(--text)';
+                e.currentTarget.style.background = 'var(--surface-2)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--slate-500)';
+                e.currentTarget.style.color = 'var(--text-muted)';
                 e.currentTarget.style.background = 'transparent';
               }}
             >

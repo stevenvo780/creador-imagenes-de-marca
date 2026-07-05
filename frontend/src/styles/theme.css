@@ -1,123 +1,181 @@
 /* ============================================================
-   Eikón — Design System: Cloud Atlas
-   Paleta: teal + dorado, cálida y confiable.
-   Tipografía: Space Grotesk (display) + Inter (cuerpo)
+   Eikon Editorial Design System — Dark Atelier
    ============================================================ */
 
-/* ── Fuentes locales (sin CDN en runtime) ─────────────────── */
-
 @font-face {
-  font-family: 'Space Grotesk';
-  src: url('/fonts/SpaceGrotesk-500.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Space Grotesk';
-  src: url('/fonts/SpaceGrotesk-700.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Inter';
-  src: url('/fonts/Inter-400.woff2') format('woff2');
+  font-family: "Cormorant Garamond";
+  src: url("/fonts/CormorantGaramond-400.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Inter';
-  src: url('/fonts/Inter-700.woff2') format('woff2');
+  font-family: "Cormorant Garamond";
+  src: url("/fonts/CormorantGaramond-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url("/fonts/CormorantGaramond-700.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
-/* ── Tokens Cloud Atlas (:root) ─────────────────────────────── */
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("/fonts/SpaceGrotesk-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("/fonts/SpaceGrotesk-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
-  /* === Paleta Cloud Atlas === */
-  --ink:        #0E1B1A;
-  --teal:       #2FA89A;
-  --teal-600:   #1F8276;
-  --gold:       #E0A85E;
-  --gold-dark:  #b07a2a;   /* dorado oscuro — 4.7:1 sobre blanco (AA) */
-  --paper:      #FBFAF7;
-  --mist:       #EAF1EF;
-  --line:       #DCE5E2;
-  --slate-500:  #5B6B68;
-  --slate-700:  #33403D;
-  --white:      #ffffff;
-  --error:      #c0392b;   /* 5.6:1 sobre blanco — AA ✓ */
-  --error-bg:   #fdecea;
+  --bg: #0e1416;
+  --surface: #151c1f;
+  --surface-2: #1b2429;
+  --border: #29343a;
+  --border-strong: #37454c;
+  --text: #ece7dd;
+  --text-muted: #97a1a3;
+  --text-faint: #626d70;
+  --teal: #43b5a6;
+  --teal-ink: #0e1416;
+  --amber: #e0a85e;
+  --danger: #d66a5a;
+  --ok: #5bbf9a;
 
-  /* === Alias semánticos (también usados por pages/) === */
-  --color-primary:        var(--teal-600);
-  --color-primary-muted:  var(--teal);
-  --color-accent:         var(--gold-dark);
-  --color-bg:             var(--paper);
-  --color-surface:        var(--white);
-  --color-border:         var(--line);
-  --color-text:           var(--ink);
-  --color-text-muted:     var(--slate-500);
-  --color-error:          var(--error);
-  --color-error-bg:       var(--error-bg);
-
-  /* === Tipografía === */
-  --font-display: 'Space Grotesk', system-ui, -apple-system, sans-serif;
-  --font-body:    'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-mono:    'Roboto Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
-
-  /* aliases para pages/ */
-  --font-sans: var(--font-body);
-
-  --font-size-xs:   0.75rem;    /* 12px */
-  --font-size-sm:   0.875rem;   /* 14px */
-  --font-size-base: 1rem;       /* 16px */
-  --font-size-lg:   1.125rem;   /* 18px */
-  --font-size-xl:   1.25rem;    /* 20px */
-  --font-size-2xl:  1.5rem;     /* 24px */
-  --font-size-3xl:  1.875rem;   /* 30px */
-
-  /* === Espaciado (escala 4px) === */
-  --space-1:  4px;
-  --space-2:  8px;
-  --space-3:  12px;
-  --space-4:  16px;
-  --space-5:  20px;
-  --space-6:  24px;
-  --space-8:  32px;
-  --space-10: 40px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
   --space-12: 48px;
   --space-16: 64px;
 
-  /* === Bordes === */
-  --radius-sm:  4px;
-  --radius-md:  8px;
-  --radius-lg:  12px;
-  --radius-xl:  16px;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+
+  --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-2: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+  --display: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  --body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", "SFMono-Regular", "Liberation Mono", Consolas, monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+
+  --transition-fast: 100ms ease;
+  --transition-normal: 180ms ease;
+  --content-max: 1240px;
+  --nav-height: 64px;
+
+  /* Compatibility aliases for existing screens/components. */
+  --ink: var(--text);
+  --paper: var(--bg);
+  --white: var(--surface);
+  --mist: var(--surface-2);
+  --line: var(--border);
+  --teal-600: var(--teal);
+  --gold: var(--amber);
+  --gold-dark: var(--amber);
+  --error: var(--danger);
+  --error-bg: color-mix(in srgb, var(--danger) 13%, transparent);
+  --text-ink: var(--teal-ink);
+
+  --color-primary: var(--teal);
+  --color-primary-muted: var(--teal);
+  --color-accent: var(--amber);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-error: var(--danger);
+  --color-error-bg: var(--error-bg);
+
+  --font-display: var(--display);
+  --font-body: var(--body);
+  --font-sans: var(--body);
+  --font-mono: var(--mono);
+
+  --font-size-xs: var(--text-xs);
+  --font-size-sm: var(--text-sm);
+  --font-size-base: var(--text-base);
+  --font-size-lg: var(--text-lg);
+  --font-size-xl: var(--text-xl);
+  --font-size-2xl: var(--text-2xl);
+  --font-size-3xl: 2rem;
+
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-lg);
   --radius-pill: 999px;
 
-  /* === Sombras === */
-  --shadow-sm: 0 1px 3px rgba(14, 27, 26, 0.06), 0 1px 2px rgba(14, 27, 26, 0.04);
-  --shadow-md: 0 4px 16px rgba(14, 27, 26, 0.08), 0 2px 6px rgba(14, 27, 26, 0.05);
-  --shadow-lg: 0 10px 40px rgba(14, 27, 26, 0.12), 0 4px 12px rgba(14, 27, 26, 0.07);
+  --shadow-sm: var(--shadow-1);
+  --shadow-md: var(--shadow-2);
+  --shadow-lg: 0 16px 44px rgba(0, 0, 0, 0.38);
 
-  /* === Transiciones === */
-  --transition-fast:   100ms ease;
-  --transition-normal: 180ms ease;
-
-  /* === Layout === */
-  --content-max:  1200px;
-  --nav-height:   60px;
+  --slate-200: var(--border);
+  --slate-300: var(--border-strong);
+  --slate-400: var(--text-faint);
+  --slate-500: var(--text-muted);
+  --slate-600: var(--text-muted);
+  --slate-700: var(--text);
 }
-
-/* ── Reset + base ─────────────────────────────────────────── */
 
 *,
 *::before,
@@ -128,65 +186,124 @@
 html {
   -webkit-text-size-adjust: 100%;
   tab-size: 4;
+  background: var(--bg);
 }
 
 body {
   margin: 0;
-  font-family: var(--font-body);
-  font-size: var(--font-size-base);
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: var(--body);
+  font-size: var(--text-base);
   line-height: 1.6;
-  color: var(--ink);
-  background: var(--paper);
+  color: var(--text);
+  background: var(--bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Links */
+#root {
+  min-height: 100vh;
+}
+
+::selection {
+  color: var(--teal-ink);
+  background: var(--teal);
+}
+
 a {
-  color: var(--teal-600);
+  color: var(--teal);
   text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
 }
 
 a:hover {
   text-decoration: none;
 }
 
-/* Headings — Space Grotesk */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
+h1,
+h2,
+h3 {
+  margin: 0 0 var(--space-4);
+  font-family: var(--display);
   font-weight: 700;
   line-height: 1.25;
-  color: var(--ink);
-  margin: 0 0 var(--space-4);
+  color: var(--text);
+  letter-spacing: 0;
 }
 
-/* Reset para listas de navegación */
-ul, ol {
+h4,
+h5,
+h6 {
+  margin: 0 0 var(--space-3);
+  font-family: var(--body);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text);
+  letter-spacing: 0;
+}
+
+p {
+  margin-block: 0 var(--space-4);
+}
+
+ul,
+ol {
   margin: 0;
   padding: 0;
 }
 
-/* Imágenes responsivas */
-img {
-  max-width: 100%;
+img,
+svg {
   display: block;
+  max-width: 100%;
 }
 
-/* Botones: reset base */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
 button {
-  font-family: inherit;
-  cursor: pointer;
+  color: var(--text);
 }
 
-/* ── Foco visible — WCAG AA para navegación por teclado ───── */
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  color: var(--text-faint);
+  cursor: not-allowed;
+}
+
+input,
+select,
+textarea {
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--teal) 20%, transparent);
+}
 
 :focus-visible {
   outline: 3px solid var(--teal);
   outline-offset: 2px;
-  border-radius: var(--radius-sm);
 }
-
-/* ── Accesibilidad — clase sr-only ──────────────────────────── */
 
 .sr-only {
   position: absolute;
@@ -200,63 +317,196 @@ button {
   border-width: 0;
 }
 
-/* ── Animaciones ────────────────────────────────────────────── */
+.eikon-container {
+  width: min(100% - (var(--space-4) * 2), var(--content-max));
+  margin-inline: auto;
+}
 
 @keyframes eikon-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes eikon-pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.45; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
 }
 
 @keyframes eikon-fadein {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Reducción de movimiento */
+.eikon-appbar-nav a:hover,
+.eikon-quiet-link:hover {
+  color: var(--text);
+}
+
+.eikon-button-hover:hover:not(:disabled) {
+  border-color: var(--teal) !important;
+  box-shadow: var(--shadow-1);
+}
+
+.eikon-primary-hover:hover:not(:disabled) {
+  filter: brightness(0.94);
+  box-shadow: var(--shadow-2);
+}
+
+.eikon-page-intro {
+  margin-bottom: var(--space-8);
+}
+
+.eikon-page-intro h1 {
+  margin: 0 0 var(--space-2);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+}
+
+.eikon-page-intro p {
+  max-width: 70ch;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.eikon-studio-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.42fr) minmax(420px, 0.58fr);
+  gap: var(--space-8);
+  align-items: start;
+}
+
+.eikon-studio-panel {
+  position: sticky;
+  top: calc(var(--nav-height) + var(--space-6));
+}
+
+.eikon-studio-easel {
+  min-height: 640px;
+}
+
+.eikon-preview-shell {
+  aspect-ratio: 1 / 1;
+  min-height: 360px;
+}
+
+.eikon-brand-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-5);
+}
+
+.eikon-identity-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: var(--space-8);
+  align-items: start;
+}
+
+.eikon-identity-side {
+  position: sticky;
+  top: calc(var(--nav-height) + var(--space-6));
+}
+
+.eikon-gallery-card .eikon-gallery-actions {
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.eikon-gallery-card:hover .eikon-gallery-actions,
+.eikon-gallery-card:focus-within .eikon-gallery-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (hover: none) {
+  .eikon-gallery-card .eikon-gallery-actions {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --nav-height: 58px;
+  }
+
+  .eikon-studio-grid,
+  .eikon-identity-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .eikon-studio-panel,
+  .eikon-identity-side {
+    position: static;
+  }
+
+  .eikon-studio-easel {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 760px) {
+  .eikon-appbar-inner {
+    min-height: var(--nav-height) !important;
+    height: auto !important;
+    gap: var(--space-3) !important;
+    padding-block: var(--space-2) !important;
+  }
+
+  .eikon-appbar-nav {
+    order: 3;
+    flex-basis: 100% !important;
+  }
+
+  .eikon-appbar-nav ul {
+    overflow-x: auto;
+    padding-bottom: 1px !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .eikon-appbar-inner {
+    padding-inline: var(--space-3) !important;
+  }
+
+  .eikon-appbar-tenant {
+    display: none !important;
+  }
+
+  .eikon-appbar-nav a {
+    padding-inline: var(--space-2) !important;
+  }
+
+  .eikon-preview-shell {
+    min-height: 260px;
+  }
+
+  .eikon-brand-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
-  }
-}
-
-/* ── Utilidades básicas ─────────────────────────────────────── */
-
-.eikon-container {
-  max-width: var(--content-max);
-  margin-inline: auto;
-  padding-inline: var(--space-4);
-}
-
-/* ── Barra superior responsive ──────────────────────────────── */
-/* En pantallas chicas, el nav (Marcas · Crear · Galería) debe seguir
-   visible sin desbordar; ocultamos el chip de cuenta y ajustamos gaps. */
-@media (max-width: 560px) {
-  .eikon-appbar-inner {
-    gap: var(--space-2) !important;
-    padding-inline: var(--space-3) !important;
-  }
-  .eikon-appbar-tenant {
-    display: none !important;
-  }
-  .eikon-appbar-nav ul {
-    gap: 0 !important;
-  }
-  .eikon-appbar-nav a {
-    padding-inline: var(--space-2) !important;
-  }
-}
-
-@media (max-width: 380px) {
-  .eikon-appbar-nav a {
-    padding-inline: 6px !important;
-    font-size: var(--font-size-xs) !important;
   }
 }

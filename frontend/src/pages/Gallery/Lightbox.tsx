@@ -56,8 +56,9 @@ export function Lightbox({
         {/* Imagen grande en marco neutro */}
         <div
           style={{
-            background: 'var(--mist)',
-            borderRadius: 'var(--radius-md)',
+            background: 'var(--bg)',
+            border: '1px solid var(--border-strong)',
+            borderRadius: 'var(--r-lg)',
             padding: 'var(--space-8)',
             display: 'flex',
             alignItems: 'center',
@@ -76,8 +77,8 @@ export function Lightbox({
               maxWidth: '100%',
               maxHeight: '60vh',
               objectFit: 'contain',
-              borderRadius: 'var(--radius-sm)',
-              boxShadow: 'var(--shadow-md)',
+              borderRadius: 'var(--r-sm)',
+              boxShadow: 'var(--shadow-2)',
             }}
           />
         </div>
@@ -105,7 +106,7 @@ export function Lightbox({
                 aria-label={`Familia: ${categoryLabel}`}
                 style={{
                   fontSize: 'var(--font-size-xs)',
-                  color: 'var(--teal-600)',
+                  color: 'var(--teal)',
                   fontWeight: 600,
                   letterSpacing: '0.04em',
                   textTransform: 'uppercase',
@@ -118,7 +119,7 @@ export function Lightbox({
               <span
                 style={{
                   fontSize: 'var(--font-size-xs)',
-                  color: 'var(--slate-500)',
+                  color: 'var(--text-muted)',
                 }}
               >
                 {formattedDate}
@@ -140,10 +141,10 @@ export function Lightbox({
                 title="Eliminar variación"
                 style={{
                   padding: 'var(--space-2) var(--space-6)',
-                  background: deleting ? 'var(--mist)' : 'transparent',
-                  color: deleting ? 'var(--slate-400)' : 'var(--slate-500)',
-                  border: `1px solid ${deleting ? 'var(--mist)' : 'var(--line)'}`,
-                  borderRadius: 'var(--radius-md)',
+                  background: deleting ? 'var(--surface-2)' : 'transparent',
+                  color: deleting ? 'var(--text-faint)' : 'var(--danger)',
+                  border: `1px solid ${deleting ? 'var(--border)' : 'var(--danger)'}`,
+                  borderRadius: 'var(--r-md)',
                   fontSize: 'var(--font-size-sm)',
                   fontWeight: 600,
                   cursor: deleting ? 'not-allowed' : 'pointer',
@@ -161,10 +162,10 @@ export function Lightbox({
               disabled={downloading}
               style={{
                 padding: 'var(--space-2) var(--space-6)',
-                background: downloading ? 'var(--mist)' : 'var(--teal-600)',
-                color: downloading ? 'var(--slate-500)' : '#fff',
+                background: downloading ? 'var(--surface-2)' : 'var(--teal)',
+                color: downloading ? 'var(--text-faint)' : 'var(--teal-ink)',
                 border: 'none',
-                borderRadius: 'var(--radius-md)',
+                borderRadius: 'var(--r-md)',
                 fontSize: 'var(--font-size-sm)',
                 fontWeight: 600,
                 cursor: downloading ? 'not-allowed' : 'pointer',

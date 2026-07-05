@@ -25,7 +25,7 @@ export function Skeleton({
         width,
         height,
         borderRadius,
-        background: 'var(--mist)',
+        background: 'var(--surface-2)',
         animation: 'eikon-pulse 1.4s ease-in-out infinite',
         ...style,
       }}
@@ -39,8 +39,9 @@ export function SkeletonCard() {
     <div
       style={{
         padding: 'var(--space-4)',
-        border: '1px solid var(--line)',
-        borderRadius: 'var(--radius-lg)',
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
+        borderRadius: 'var(--r-lg)',
         display: 'grid',
         gap: 'var(--space-3)',
       }}

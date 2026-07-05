@@ -1,13 +1,13 @@
 /**
- * Button — Cloud Atlas design system
- * Variantes: primary (teal), secondary (borde), ghost (sin fondo)
+ * Button — Eikon editorial design system
+ * Variantes: primary (teal), secondary (borde), ghost (sin fondo), danger
  * Tamaños: sm, md
  * Estado busy: muestra "procesando" y bloquea interacción
  */
 import React from 'react';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
   size?: 'sm' | 'md';
   busy?: boolean;
   children: React.ReactNode;
@@ -18,19 +18,24 @@ const variantStyles: Record<
   React.CSSProperties
 > = {
   primary: {
-    background: 'var(--teal-600)',
-    color: '#fff',
-    border: '2px solid transparent',
+    background: 'var(--teal)',
+    color: 'var(--teal-ink)',
+    border: '1.5px solid transparent',
   },
   secondary: {
-    background: 'var(--white)',
-    color: 'var(--ink)',
-    border: '2px solid var(--line)',
+    background: 'transparent',
+    color: 'var(--text)',
+    border: '1.5px solid var(--border)',
   },
   ghost: {
     background: 'transparent',
-    color: 'var(--teal-600)',
-    border: '2px solid transparent',
+    color: 'var(--teal)',
+    border: '1.5px solid transparent',
+  },
+  danger: {
+    background: 'transparent',
+    color: 'var(--danger)',
+    border: '1.5px solid var(--danger)',
   },
 };
 
@@ -39,18 +44,15 @@ const sizeStyles: Record<
   React.CSSProperties
 > = {
   sm: {
-    padding: 'var(--space-1) var(--space-3)',
+    padding: 'var(--space-2) var(--space-3)',
     fontSize: 'var(--font-size-sm)',
-    borderRadius: 'var(--radius-sm)',
-    // sm se usa en cards densas; aún así garantiza tap target mínimo AA
-    // (WCAG 2.5.5 — 24px) sin desbalancear layouts compactos.
+    borderRadius: 'var(--r-sm)',
     minHeight: 32,
   },
   md: {
-    padding: 'var(--space-2) var(--space-5)',
+    padding: 'var(--space-3) var(--space-4)',
     fontSize: 'var(--font-size-base)',
-    borderRadius: 'var(--radius-md)',
-    // Tap target mínimo recomendado (Apple HIG / WCAG 2.5.5 AAA) en mobile.
+    borderRadius: 'var(--r-md)',
     minHeight: 44,
   },
 };
@@ -64,6 +66,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       disabled,
       style,
+      className,
       ...props
     },
     ref,
@@ -80,7 +83,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       fontWeight: 600,
       cursor: isDisabled ? 'not-allowed' : 'pointer',
       transition:
-        'background var(--transition-fast), border-color var(--transition-fast), opacity var(--transition-fast)',
+        'background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast), opacity var(--transition-fast)',
       textDecoration: 'none',
       whiteSpace: 'nowrap',
       opacity: isDisabled ? 0.6 : 1,
@@ -97,6 +100,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={isDisabled}
         aria-busy={busy}
+        className={[variant === 'primary' ? 'eikon-primary-hover' : 'eikon-button-hover', className]
+          .filter(Boolean)
+          .join(' ')}
         style={computedStyle}
         {...props}
       >

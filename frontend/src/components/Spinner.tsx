@@ -50,12 +50,12 @@ export function Spinner({
           cx="12"
           cy="12"
           r="10"
-          stroke="var(--line)"
+          stroke="var(--border)"
           strokeWidth={stroke}
         />
         <path
           d="M12 2 a10 10 0 0 1 10 10"
-          stroke="var(--teal-600)"
+          stroke="var(--teal)"
           strokeWidth={stroke}
           strokeLinecap="round"
         />

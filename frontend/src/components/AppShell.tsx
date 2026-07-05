@@ -1,6 +1,6 @@
 /**
  * AppShell — envoltorio global de la app: skip link, nav superior fija, main.
- * Navegación en español: Marcas · Crear · Galería
+ * Navegación en español: Marcas · Estudio · Crear · Galería
  * Accesible: skip link, aria-label, foco visible, responsive.
  */
 import React from 'react';
@@ -45,11 +45,12 @@ export function AppShell({ children, tenantSlug, onLogout }: AppShellProps) {
             height: 'auto',
             padding: 'var(--space-2) var(--space-4)',
             background: 'var(--teal-600)',
-            color: '#fff',
-            borderRadius: 'var(--radius-md)',
+            color: 'var(--teal-ink)',
+            borderRadius: 'var(--r-md)',
             textDecoration: 'none',
             fontWeight: 600,
             fontSize: 'var(--font-size-sm)',
+            boxShadow: 'var(--shadow-2)',
           });
         }}
         onBlur={(e) => {
@@ -72,9 +73,10 @@ export function AppShell({ children, tenantSlug, onLogout }: AppShellProps) {
           position: 'sticky',
           top: 0,
           zIndex: 100,
-          background: 'var(--white)',
-          borderBottom: '1px solid var(--line)',
-          boxShadow: 'var(--shadow-sm)',
+          background: 'color-mix(in srgb, var(--bg) 92%, transparent)',
+          borderBottom: '1px solid var(--border-strong)',
+          boxShadow: 'var(--shadow-1)',
+          backdropFilter: 'blur(12px)',
         }}
       >
         <div
@@ -96,9 +98,9 @@ export function AppShell({ children, tenantSlug, onLogout }: AppShellProps) {
               textDecoration: 'none',
               fontFamily: 'var(--font-display)',
               fontWeight: 700,
-              fontSize: 'var(--font-size-xl)',
-              color: 'var(--teal-600)',
-              letterSpacing: '-0.5px',
+              fontSize: '1.65rem',
+              color: 'var(--text)',
+              letterSpacing: 0,
               flexShrink: 0,
             }}
           >
@@ -124,13 +126,18 @@ export function AppShell({ children, tenantSlug, onLogout }: AppShellProps) {
                       display: 'block',
                       padding: 'var(--space-2) var(--space-3)',
                       textDecoration: 'none',
-                      borderRadius: 'var(--radius-md)',
+                      borderRadius: 'var(--r-md)',
                       fontSize: 'var(--font-size-sm)',
-                      fontWeight: isActive ? 700 : 400,
-                      color: isActive ? 'var(--teal-600)' : 'var(--slate-500)',
-                      background: isActive ? 'var(--mist)' : 'transparent',
+                      fontWeight: isActive ? 600 : 500,
+                      color: isActive ? 'var(--text)' : 'var(--text-muted)',
+                      background: isActive
+                        ? 'color-mix(in srgb, var(--teal) 12%, transparent)'
+                        : 'transparent',
+                      boxShadow: isActive
+                        ? 'inset 0 -2px 0 var(--teal)'
+                        : 'inset 0 -2px 0 transparent',
                       transition:
-                        'background var(--transition-fast), color var(--transition-fast)',
+                        'background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast)',
                     })}
                   >
                     {label}
@@ -155,12 +162,12 @@ export function AppShell({ children, tenantSlug, onLogout }: AppShellProps) {
                 title={`Cuenta: ${tenantSlug}`}
                 style={{
                   fontSize: 'var(--font-size-xs)',
-                  color: 'var(--slate-500)',
+                  color: 'var(--text-muted)',
                   fontFamily: 'var(--font-mono)',
-                  background: 'var(--mist)',
+                  background: 'var(--surface-2)',
                   padding: '2px var(--space-2)',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--line)',
+                  borderRadius: 'var(--r-sm)',
+                  border: '1px solid var(--border)',
                   maxWidth: 140,
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -175,17 +182,25 @@ export function AppShell({ children, tenantSlug, onLogout }: AppShellProps) {
               type="button"
               onClick={() => void onLogout()}
               style={{
-                background: 'none',
-                border: '1.5px solid var(--line)',
-                borderRadius: 'var(--radius-md)',
+                background: 'transparent',
+                border: '1.5px solid var(--border)',
+                borderRadius: 'var(--r-md)',
                 padding: 'var(--space-1) var(--space-3)',
                 fontSize: 'var(--font-size-sm)',
-                color: 'var(--slate-700)',
+                color: 'var(--text)',
                 cursor: 'pointer',
                 fontFamily: 'var(--font-body)',
                 fontWeight: 500,
                 transition:
-                  'border-color var(--transition-fast), background var(--transition-fast)',
+                  'border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = 'var(--teal)';
+                e.currentTarget.style.color = 'var(--teal)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'var(--border)';
+                e.currentTarget.style.color = 'var(--text)';
               }}
             >
               Salir

@@ -48,20 +48,21 @@ export function VariationCard({
 
   return (
     <article
+      className="eikon-gallery-card"
       aria-label={
         brandName
           ? `Variación de ${brandName}`
           : `Variación ${variation.id}`
       }
       style={{
-        background: 'var(--white)',
+        background: 'var(--surface)',
         border: isSelected
-          ? '2px solid var(--teal-600)'
-          : '1px solid var(--line)',
-        borderRadius: 'var(--radius-lg)',
+          ? '2px solid var(--teal)'
+          : '1px solid var(--border)',
+        borderRadius: 'var(--r-lg)',
         boxShadow: isSelected
-          ? '0 0 0 3px rgba(47,168,154,0.18), var(--shadow-md)'
-          : 'var(--shadow-sm)',
+          ? '0 0 0 3px color-mix(in srgb, var(--teal) 18%, transparent), var(--shadow-2)'
+          : 'var(--shadow-1)',
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
@@ -85,9 +86,9 @@ export function VariationCard({
             justifyContent: 'center',
             width: 24,
             height: 24,
-            background: isSelected ? 'var(--teal-600)' : 'rgba(255,255,255,0.9)',
-            border: `2px solid ${isSelected ? 'var(--teal-600)' : 'var(--line)'}`,
-            borderRadius: 'var(--radius-sm)',
+            background: isSelected ? 'var(--teal)' : 'var(--surface-2)',
+            border: `2px solid ${isSelected ? 'var(--teal)' : 'var(--border-strong)'}`,
+            borderRadius: 'var(--r-sm)',
             cursor: 'pointer',
             boxShadow: 'var(--shadow-sm)',
             transition: 'background var(--transition-fast), border-color var(--transition-fast)',
@@ -110,7 +111,7 @@ export function VariationCard({
           {isSelected && (
             <span
               aria-hidden="true"
-              style={{ color: '#fff', fontSize: 14, lineHeight: 1, fontWeight: 700 }}
+              style={{ color: 'var(--teal-ink)', fontSize: 14, lineHeight: 1, fontWeight: 700 }}
             >
               ✓
             </span>
@@ -126,7 +127,7 @@ export function VariationCard({
             display: 'block',
             width: '100%',
             border: 'none',
-            background: 'var(--mist)',
+            background: 'var(--bg)',
             padding: 'var(--space-5)',
             cursor: 'zoom-in',
             lineHeight: 0,
@@ -163,7 +164,7 @@ export function VariationCard({
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: 'var(--space-2)',
-          borderTop: '1px solid var(--line)',
+          borderTop: '1px solid var(--border)',
         }}
       >
         <div
@@ -178,7 +179,7 @@ export function VariationCard({
             <span
               style={{
                 fontSize: 'var(--font-size-sm)',
-                color: 'var(--slate-500)',
+                color: 'var(--text-muted)',
                 fontWeight: 600,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
@@ -193,7 +194,7 @@ export function VariationCard({
               aria-label={`Familia: ${categoryLabel}`}
               style={{
                 fontSize: 12,
-                color: 'var(--teal-600)',
+                color: 'var(--teal)',
                 fontWeight: 600,
                 letterSpacing: '0.04em',
                 textTransform: 'uppercase',
@@ -206,10 +207,12 @@ export function VariationCard({
         </div>
 
         <div
+          className="eikon-gallery-actions"
           style={{
             display: 'flex',
             gap: 'var(--space-2)',
             flexShrink: 0,
+            transition: 'opacity var(--transition-fast), transform var(--transition-fast)',
           }}
         >
           {onDelete && (
@@ -225,10 +228,10 @@ export function VariationCard({
               title="Eliminar variación"
               style={{
                 padding: 'var(--space-2) var(--space-4)',
-                background: deleting ? 'var(--mist)' : 'transparent',
-                color: deleting ? 'var(--slate-400)' : 'var(--slate-500)',
-                border: `1px solid ${deleting ? 'var(--mist)' : 'var(--line)'}`,
-                borderRadius: 'var(--radius-md)',
+                background: deleting ? 'var(--surface-2)' : 'transparent',
+                color: deleting ? 'var(--text-faint)' : 'var(--danger)',
+                border: `1px solid ${deleting ? 'var(--border)' : 'var(--danger)'}`,
+                borderRadius: 'var(--r-md)',
                 fontSize: 'var(--font-size-sm)',
                 fontWeight: 600,
                 cursor: deleting ? 'not-allowed' : 'pointer',
@@ -248,10 +251,10 @@ export function VariationCard({
             title="Descargar imagen"
             style={{
               padding: 'var(--space-2) var(--space-4)',
-              background: downloading ? 'var(--mist)' : 'var(--teal-600)',
-              color: downloading ? 'var(--slate-500)' : '#fff',
+              background: downloading ? 'var(--surface-2)' : 'var(--teal)',
+              color: downloading ? 'var(--text-faint)' : 'var(--teal-ink)',
               border: 'none',
-              borderRadius: 'var(--radius-md)',
+              borderRadius: 'var(--r-md)',
               fontSize: 'var(--font-size-sm)',
               fontWeight: 600,
               cursor: downloading ? 'not-allowed' : 'pointer',

@@ -179,6 +179,21 @@ export function GalleryPage() {
     return items.filter((v) => v.category === filterCategory);
   }, [items, filterCategory]);
 
+  const groupedVisibleItems = useMemo(() => {
+    const groups = new Map<string, Variation[]>();
+    for (const item of visibleItems) {
+      const key = item.category ?? 'otros';
+      const group = groups.get(key);
+      if (group) group.push(item);
+      else groups.set(key, [item]);
+    }
+
+    const order = ['logos', 'banners', 'cards', 'og', 'stationery', 'otros'];
+    return [...groups.entries()].sort(
+      ([a], [b]) => order.indexOf(a) - order.indexOf(b),
+    );
+  }, [visibleItems]);
+
   // ── Variación del lightbox ─────────────────────────────────────────────────
   const lightboxVariation = useMemo<Variation | null>(
     () =>
@@ -344,6 +359,7 @@ export function GalleryPage() {
             fontFamily: 'var(--font-display)',
             fontSize: 'var(--font-size-2xl)',
             marginBottom: 'var(--space-8)',
+            color: 'var(--text)',
           }}
         >
           Galería
@@ -373,11 +389,12 @@ export function GalleryPage() {
       <p
         role="alert"
         style={{
-          color: 'var(--error)',
+          color: 'var(--danger)',
           fontSize: 'var(--font-size-sm)',
           padding: 'var(--space-3) var(--space-4)',
           background: 'var(--error-bg)',
-          borderRadius: 'var(--radius-md)',
+          border: '1px solid var(--danger)',
+          borderRadius: 'var(--r-md)',
         }}
       >
         {error}
@@ -405,30 +422,31 @@ export function GalleryPage() {
         <div
           style={{
             display: 'flex',
-            alignItems: 'baseline',
+            alignItems: 'flex-end',
+            justifyContent: 'space-between',
             gap: 'var(--space-3)',
+            flexWrap: 'wrap',
             marginBottom: 'var(--space-6)',
           }}
         >
-          <h1
-            style={{
-              margin: 0,
-              fontFamily: 'var(--font-display)',
-              fontSize: 'var(--font-size-2xl)',
-              color: 'var(--ink)',
-            }}
-          >
-            Galería
-          </h1>
+          <div className="eikon-page-intro" style={{ marginBottom: 0 }}>
+            <h1>Galería</h1>
+            <p>Revisá, descargá y limpiá las variaciones generadas por familia.</p>
+          </div>
 
           {hasItems && (
             <span
               aria-live="polite"
               aria-atomic="true"
               style={{
-                fontSize: 'var(--font-size-base)',
-                color: 'var(--ink)',
-                fontWeight: 600,
+                fontSize: 'var(--font-size-sm)',
+                color: 'var(--text-muted)',
+                fontWeight: 500,
+                fontFamily: 'var(--font-mono)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--r-md)',
+                padding: 'var(--space-2) var(--space-3)',
+                background: 'var(--surface)',
               }}
             >
               {visibleItems.length !== items.length
@@ -448,10 +466,10 @@ export function GalleryPage() {
               gap: 'var(--space-3)',
               marginBottom: 'var(--space-8)',
               padding: 'var(--space-4) var(--space-5)',
-              background: 'var(--white)',
-              border: '1px solid var(--line)',
-              borderRadius: 'var(--radius-lg)',
-              boxShadow: 'var(--shadow-sm)',
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--r-lg)',
+              boxShadow: 'var(--shadow-1)',
             }}
           >
             {/* ── Filtro: Marca (server-side) ── */}
@@ -542,10 +560,10 @@ export function GalleryPage() {
                   alignSelf: 'flex-end',
                   padding: 'var(--space-2) var(--space-3)',
                   background: 'transparent',
-                  border: '1.5px solid var(--line)',
-                  borderRadius: 'var(--radius-md)',
+                  border: '1.5px solid var(--border)',
+                  borderRadius: 'var(--r-md)',
                   fontSize: 'var(--font-size-sm)',
-                  color: 'var(--slate-700)',
+                  color: 'var(--text)',
                   fontWeight: 500,
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
@@ -602,10 +620,10 @@ export function GalleryPage() {
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  padding: 'var(--space-2) var(--space-5)',
-                  background: 'var(--teal-600)',
-                  color: '#fff',
-                  borderRadius: 'var(--radius-md)',
+                  padding: 'var(--space-3) var(--space-4)',
+                  background: 'var(--teal)',
+                  color: 'var(--teal-ink)',
+                  borderRadius: 'var(--r-md)',
                   fontSize: 'var(--font-size-sm)',
                   fontWeight: 600,
                   textDecoration: 'none',
@@ -635,36 +653,74 @@ export function GalleryPage() {
           />
         )}
 
-        {/* ── Grid de variaciones ── */}
-        {visibleItems.length > 0 && (
-          <ul
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-              gap: 'var(--space-6)',
-              listStyle: 'none',
-              margin: 0,
-              padding: 0,
-            }}
-            aria-label="Variaciones de marca"
-          >
-            {visibleItems.map((v) => (
-              <li key={v.id}>
-                <VariationCard
-                  variation={v}
-                  brandName={brandMap.get(v.brand_id)}
-                  categoryLabel={v.category ? (CATEGORY_LABELS[v.category] ?? v.category) : CATEGORY_LABELS['otros']}
-                  isSelected={selected.has(v.id)}
-                  onToggleSelect={() => toggleSelect(v.id)}
-                  onOpenLightbox={() => setLightboxId(v.id)}
-                  onDownload={() => handleDownloadOne(v.id)}
-                  downloading={downloading.has(v.id)}
-                  onDelete={() => handleDeleteSingle(v.id)}
-                  deleting={deleting.has(v.id)}
-                />
-              </li>
+        {/* ── Grid de variaciones agrupado por familia ── */}
+        {groupedVisibleItems.length > 0 && (
+          <div style={{ display: 'grid', gap: 'var(--space-8)' }}>
+            {groupedVisibleItems.map(([category, group]) => (
+              <section key={category} aria-labelledby={`gallery-group-${category}`}>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'baseline',
+                    justifyContent: 'space-between',
+                    gap: 'var(--space-3)',
+                    marginBottom: 'var(--space-4)',
+                    borderBottom: '1px solid var(--border)',
+                    paddingBottom: 'var(--space-3)',
+                  }}
+                >
+                  <h2
+                    id={`gallery-group-${category}`}
+                    style={{
+                      margin: 0,
+                      fontFamily: 'var(--font-display)',
+                      fontSize: 'var(--font-size-2xl)',
+                      color: 'var(--text)',
+                    }}
+                  >
+                    {CATEGORY_LABELS[category] ?? category}
+                  </h2>
+                  <span
+                    style={{
+                      color: 'var(--text-muted)',
+                      fontSize: 'var(--font-size-xs)',
+                      fontFamily: 'var(--font-mono)',
+                    }}
+                  >
+                    {group.length} {group.length === 1 ? 'activo' : 'activos'}
+                  </span>
+                </div>
+                <ul
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+                    gap: 'var(--space-5)',
+                    listStyle: 'none',
+                    margin: 0,
+                    padding: 0,
+                  }}
+                  aria-label={`Variaciones de ${CATEGORY_LABELS[category] ?? category}`}
+                >
+                  {group.map((v) => (
+                    <li key={v.id}>
+                      <VariationCard
+                        variation={v}
+                        brandName={brandMap.get(v.brand_id)}
+                        categoryLabel={v.category ? (CATEGORY_LABELS[v.category] ?? v.category) : CATEGORY_LABELS['otros']}
+                        isSelected={selected.has(v.id)}
+                        onToggleSelect={() => toggleSelect(v.id)}
+                        onOpenLightbox={() => setLightboxId(v.id)}
+                        onDownload={() => handleDownloadOne(v.id)}
+                        downloading={downloading.has(v.id)}
+                        onDelete={() => handleDeleteSingle(v.id)}
+                        deleting={deleting.has(v.id)}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </section>
             ))}
-          </ul>
+          </div>
         )}
       </section>
 
@@ -683,8 +739,8 @@ export function GalleryPage() {
             alignItems: 'center',
             gap: 'var(--space-4)',
             padding: 'var(--space-3) var(--space-5)',
-            background: 'var(--white)',
-            border: '1px solid var(--line)',
+            background: 'var(--surface)',
+            border: '1px solid var(--border-strong)',
             borderRadius: 'var(--radius-pill)',
             boxShadow: 'var(--shadow-lg)',
             animation: 'eikon-fadein 180ms ease',
@@ -695,7 +751,7 @@ export function GalleryPage() {
             style={{
               fontSize: 'var(--font-size-sm)',
               fontWeight: 600,
-              color: 'var(--ink)',
+              color: 'var(--text)',
             }}
           >
             {selected.size}{' '}
@@ -717,8 +773,8 @@ export function GalleryPage() {
             onClick={() => handleDeleteBulk([...selected])}
             disabled={deleting.size > 0}
             style={{
-              color: 'var(--error)',
-              borderColor: 'var(--error)',
+              color: 'var(--danger)',
+              borderColor: 'var(--danger)',
             }}
           >
             🗑 Eliminar {selected.size}{' '}
@@ -733,7 +789,7 @@ export function GalleryPage() {
             style={{
               background: 'none',
               border: 'none',
-              color: 'var(--slate-500)',
+              color: 'var(--text-muted)',
               cursor: 'pointer',
               fontSize: 'var(--font-size-lg)',
               lineHeight: 1,
@@ -760,14 +816,15 @@ export function GalleryPage() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'rgba(14, 27, 26, 0.5)',
+            background: 'rgba(0, 0, 0, 0.64)',
             backdropFilter: 'blur(2px)',
           }}
         >
           <div
             style={{
-              background: 'var(--white)',
-              borderRadius: 'var(--radius-xl)',
+              background: 'var(--surface)',
+              border: '1px solid var(--border-strong)',
+              borderRadius: 'var(--r-lg)',
               boxShadow: 'var(--shadow-lg)',
               padding: 'var(--space-6)',
               maxWidth: 420,
@@ -781,7 +838,7 @@ export function GalleryPage() {
                 margin: '0 0 var(--space-3)',
                 fontFamily: 'var(--font-display)',
                 fontSize: 'var(--font-size-lg)',
-                color: 'var(--ink)',
+                color: 'var(--text)',
               }}
             >
               Confirmar eliminación
@@ -789,7 +846,7 @@ export function GalleryPage() {
             <p
               style={{
                 fontSize: 'var(--font-size-sm)',
-                color: 'var(--slate-600)',
+                color: 'var(--text-muted)',
                 margin: '0 0 var(--space-5)',
               }}
             >
@@ -817,9 +874,9 @@ export function GalleryPage() {
                 onClick={() => void confirmDelete()}
                 busy={deleting.size > 0}
                 style={{
-                  background: 'var(--error)',
+                  background: 'var(--danger)',
                   borderColor: 'transparent',
-                  color: '#fff',
+                  color: 'var(--teal-ink)',
                 }}
               >
                 Eliminar
@@ -879,7 +936,10 @@ function FilterGroup({
         style={{
           fontSize: 'var(--font-size-xs)',
           fontWeight: 600,
-          color: 'var(--slate-500)',
+          color: 'var(--text-muted)',
+          fontFamily: 'var(--font-mono)',
+          textTransform: 'uppercase',
+          letterSpacing: '0.06em',
         }}
       >
         {label}
@@ -906,9 +966,9 @@ function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }
         fontWeight: 600,
         lineHeight: 1.5,
         whiteSpace: 'nowrap',
-        background: 'var(--mist)',
-        color: 'var(--slate-700)',
-        border: '1px solid var(--line)',
+        background: 'var(--surface-2)',
+        color: 'var(--text-muted)',
+        border: '1px solid var(--border)',
       }}
     >
       {label}
@@ -925,7 +985,7 @@ function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }
           background: 'none',
           border: 'none',
           cursor: 'pointer',
-          color: 'var(--slate-500)',
+          color: 'var(--text-muted)',
           fontSize: 10,
           fontWeight: 700,
           borderRadius: '50%',
@@ -944,11 +1004,11 @@ function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }
 
 const selectStyle: CSSProperties = {
   padding: 'var(--space-2) var(--space-3)',
-  border: '1.5px solid var(--line)',
-  borderRadius: 'var(--radius-md)',
+  border: '1.5px solid var(--border)',
+  borderRadius: 'var(--r-md)',
   fontSize: 'var(--font-size-sm)',
-  color: 'var(--ink)',
-  background: 'var(--paper)',
+  color: 'var(--text)',
+  background: 'var(--surface-2)',
   minWidth: 160,
   cursor: 'pointer',
   fontFamily: 'var(--font-body)',

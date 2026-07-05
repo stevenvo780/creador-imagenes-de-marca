@@ -59,11 +59,11 @@ export function Steps({ steps, currentIndex }: StepsProps) {
                     fontWeight: 700,
                     fontFamily: 'var(--font-display)',
                     transition: 'background var(--transition-normal), border-color var(--transition-normal)',
-                    background: isDone || isActive ? 'var(--teal-600)' : 'var(--white)',
-                    color:  isDone || isActive ? '#fff' : 'var(--slate-500)',
+                    background: isDone || isActive ? 'var(--teal)' : 'var(--surface-2)',
+                    color:  isDone || isActive ? 'var(--teal-ink)' : 'var(--text-muted)',
                     border: isDone || isActive
-                      ? '2px solid var(--teal-600)'
-                      : '2px solid var(--line)',
+                      ? '2px solid var(--teal)'
+                      : '2px solid var(--border)',
                   }}
                 >
                   {isDone ? '✓' : i + 1}
@@ -74,7 +74,7 @@ export function Steps({ steps, currentIndex }: StepsProps) {
                   style={{
                     fontSize: 'var(--font-size-xs)',
                     fontWeight: isActive ? 700 : 400,
-                    color: isActive ? 'var(--teal-600)' : 'var(--slate-500)',
+                    color: isActive ? 'var(--teal)' : 'var(--text-muted)',
                     whiteSpace: 'nowrap',
                     textAlign: 'center',
                   }}
@@ -91,7 +91,7 @@ export function Steps({ steps, currentIndex }: StepsProps) {
                     flex: 1,
                     height: '2px',
                     marginBottom: 'calc(var(--font-size-xs) * 1.5 + var(--space-1))',
-                    background: i < currentIndex ? 'var(--teal-600)' : 'var(--line)',
+                    background: i < currentIndex ? 'var(--teal)' : 'var(--border)',
                     transition: 'background var(--transition-normal)',
                   }}
                 />

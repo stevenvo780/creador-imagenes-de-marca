@@ -69,6 +69,11 @@ const ASSET_LABEL: Record<string, string> = Object.fromEntries(
   ),
 );
 
+function extractAssetDimensions(label: string | undefined): string {
+  const match = label?.match(/\d{3,4}\s*×\s*\d{3,4}/);
+  return match ? match[0].replace(/\s+/g, " ") : "Dimensiones variables";
+}
+
 // ── Campos de contenido por tipo ────────────────────────────────────────────
 
 interface ContentField {
@@ -307,40 +312,29 @@ export function AssetStudioPage() {
   // ── Render ──────────────────────────────────────────────────────────────
 
   const currentFields = CONTENT_FIELDS[selectedAssetType] ?? [];
+  const selectedAssetLabel = selectedAssetType
+    ? ASSET_LABEL[selectedAssetType] ?? selectedAssetType
+    : "";
+  const selectedDimensions = extractAssetDimensions(selectedAssetLabel);
+  const selectedBrandInitial = (selectedBrand?.logo_symbol || selectedBrand?.name || "E")
+    .trim()
+    .charAt(0)
+    .toUpperCase();
+  const canGenerate =
+    !!selectedBrand && brandHasLogo && !!selectedAssetType && !generating && !resultVariation;
 
   return (
     <section>
-      {/* Cabecera */}
-      <div
-        style={{
-          marginBottom: "var(--space-6)",
-        }}
-      >
-        <h1
-          style={{
-            margin: "0 0 var(--space-1)",
-            fontFamily: "var(--font-display)",
-            fontSize: "var(--font-size-2xl)",
-            color: "var(--ink)",
-          }}
-        >
-          Estudio de activos
-        </h1>
-        <p
-          style={{
-            margin: 0,
-            fontSize: "var(--font-size-sm)",
-            color: "var(--slate-500)",
-          }}
-        >
+      <div className="eikon-page-intro">
+        <h1>Estudio de activos</h1>
+        <p>
           Generá banners, tarjetas, imágenes OG y más, heredando la identidad visual de tu marca.
         </p>
       </div>
 
-      {/* ── Loading ────────────────────────────────────────────────────── */}
-
       {loadingBrands && (
-        <div
+        <Card
+          padding="lg"
           role="status"
           aria-label="Cargando marcas"
           aria-busy="true"
@@ -353,13 +347,11 @@ export function AssetStudioPage() {
           }}
         >
           <Spinner size="lg" />
-          <p style={{ margin: 0, color: "var(--slate-500)", fontSize: "var(--font-size-sm)" }}>
+          <p style={{ margin: 0, color: "var(--text-muted)", fontSize: "var(--font-size-sm)" }}>
             Cargando marcas…
           </p>
-        </div>
+        </Card>
       )}
-
-      {/* ── Error de carga ─────────────────────────────────────────────── */}
 
       {!loadingBrands && loadError && (
         <p style={errorStyle} role="alert">
@@ -367,362 +359,425 @@ export function AssetStudioPage() {
         </p>
       )}
 
-      {/* ── Vacío ──────────────────────────────────────────────────────── */}
-
       {!loadingBrands && !loadError && brands.length === 0 && (
         <EmptyState
           title="Todavía no tenés marcas"
           description="Creá tu primera marca para empezar a generar activos visuales."
           icon="🏷️"
           action={
-            <Link to="/">
+            <Link to="/brands">
               <Button variant="primary">+ Crear mi primera marca</Button>
             </Link>
           }
         />
       )}
 
-      {/* ── Contenido ──────────────────────────────────────────────────── */}
-
       {!loadingBrands && !loadError && brands.length > 0 && (
-        <div
-          style={{
-            display: "grid",
-            gap: "var(--space-8)",
-            maxWidth: 720,
-          }}
-        >
-
-          {/* ── Paso 1: Selector de marca ─────────────────────────────── */}
-
-          <Card padding="lg">
-            <h2
+        <div className="eikon-studio-grid">
+          <form onSubmit={handleGenerate} className="eikon-studio-panel">
+            <Card
+              padding="lg"
               style={{
-                margin: "0 0 var(--space-4)",
-                fontFamily: "var(--font-display)",
-                fontSize: "var(--font-size-lg)",
-                color: "var(--ink)",
+                display: "grid",
+                gap: "var(--space-6)",
+                borderColor: "var(--border-strong)",
               }}
             >
-              1. Elegí tu marca
-            </h2>
-
-            <SelectField
-              id="brand-select"
-              label="Marca"
-              hint="Seleccioná la marca cuya identidad visual querés usar."
-              value={selectedBrandId ?? ""}
-              onChange={(e) => handleBrandChange(Number(e.target.value))}
-            >
-              <option value="" disabled>
-                Seleccioná una marca
-              </option>
-              {brands.map((b) => (
-                <option key={b.id} value={b.id}>
-                  {b.name}
-                </option>
-              ))}
-            </SelectField>
-
-            {/* Aviso: marca sin logo */}
-            {selectedBrand && !brandHasLogo && (
-              <div
-                style={{
-                  marginTop: "var(--space-4)",
-                  background: "rgba(224, 168, 94, 0.12)",
-                  border: "1px solid var(--gold-dark)",
-                  borderRadius: "var(--radius-md)",
-                  padding: "var(--space-3) var(--space-4)",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "var(--space-2)",
-                }}
-              >
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: "var(--font-size-sm)",
-                    color: "var(--ink)",
-                    fontWeight: 600,
-                  }}
-                >
-                  Esta marca todavía no tiene logo fijo.
-                </p>
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: "var(--font-size-sm)",
-                    color: "var(--slate-700)",
-                  }}
-                >
-                  Andá a la página de identidad y elegí un logo antes de generar activos.
-                </p>
-                <Link
-                  to={`/brands/${selectedBrand.id}/identity`}
-                  style={{
-                    fontSize: "var(--font-size-sm)",
-                    color: "var(--teal-600)",
-                    fontWeight: 600,
-                    alignSelf: "flex-start",
-                  }}
-                >
-                  Fijar identidad →
-                </Link>
-              </div>
-            )}
-          </Card>
-
-          {/* ── Paso 2: Tipo de asset ──────────────────────────────────── */}
-
-          {selectedBrand && brandHasLogo && (
-            <Card padding="lg">
-              <h2
-                style={{
-                  margin: "0 0 var(--space-4)",
-                  fontFamily: "var(--font-display)",
-                  fontSize: "var(--font-size-lg)",
-                  color: "var(--ink)",
-                }}
-              >
-                2. ¿Qué querés generar?
-              </h2>
-
-              <SelectField
-                id="asset-type-select"
-                label="Tipo de activo"
-                hint="Cada tipo tiene un formato y campos de texto distintos."
-                value={selectedAssetType}
-                onChange={(e) => handleAssetTypeChange(e.target.value)}
-              >
-                <option value="" disabled>
-                  Seleccioná un tipo
-                </option>
-                {ASSET_TYPES_GROUPED.map((group) => (
-                  <optgroup key={group.category} label={group.category}>
-                    {group.types.map((t) => (
-                      <option key={t.value} value={t.value}>
-                        {t.label}
-                      </option>
-                    ))}
-                  </optgroup>
-                ))}
-              </SelectField>
-            </Card>
-          )}
-
-          {/* ── Paso 3: Form de contenido ─────────────────────────────── */}
-
-          {selectedBrand && brandHasLogo && selectedAssetType && (
-            <form onSubmit={handleGenerate}>
-              <Card padding="lg" style={{ marginBottom: "var(--space-6)" }}>
-                <h2
-                  style={{
-                    margin: "0 0 var(--space-4)",
-                    fontFamily: "var(--font-display)",
-                    fontSize: "var(--font-size-lg)",
-                    color: "var(--ink)",
-                  }}
-                >
-                  3. Contenido del {ASSET_LABEL[selectedAssetType] ?? selectedAssetType}
+              <section aria-labelledby="studio-brand-heading">
+                <h2 style={sectionTitleStyle} id="studio-brand-heading">
+                  1. Marca
                 </h2>
-
-                <p
-                  style={{
-                    margin: "0 0 var(--space-4)",
-                    fontSize: "var(--font-size-sm)",
-                    color: "var(--slate-500)",
-                  }}
+                <SelectField
+                  id="brand-select"
+                  label="Marca"
+                  hint="Seleccioná la identidad visual que querés usar."
+                  value={selectedBrandId ?? ""}
+                  onChange={(e) => handleBrandChange(Number(e.target.value))}
                 >
-                  Completá los textos que aparecerán en el activo. Todos los campos son opcionales.
-                </p>
-
-                <div style={{ display: "grid", gap: "var(--space-4)" }}>
-                  {currentFields.map((f) => (
-                    <div key={f.key}>
-                      <label
-                        htmlFor={`content-${f.key}`}
-                        style={labelStyle}
-                      >
-                        {f.label}
-                      </label>
-                      <input
-                        id={`content-${f.key}`}
-                        type="text"
-                        value={contentValues[f.key] ?? ""}
-                        onChange={(e) => handleContentChange(f.key, e.target.value)}
-                        placeholder={f.placeholder}
-                        style={inputStyle}
-                      />
-                    </div>
+                  <option value="" disabled>
+                    Seleccioná una marca
+                  </option>
+                  {brands.map((b) => (
+                    <option key={b.id} value={b.id}>
+                      {b.name}
+                    </option>
                   ))}
-                </div>
-              </Card>
+                </SelectField>
 
-              {/* ── Botón Generar ─────────────────────────────────────── */}
-
-              <div style={{ marginBottom: "var(--space-6)" }}>
-                <Button
-                  type="submit"
-                  variant="primary"
-                  busy={generating}
-                  disabled={generating || !!resultVariation}
-                >
-                  {generating ? "Generando…" : resultVariation ? "Generado" : "Generar"}
-                </Button>
-              </div>
-            </form>
-          )}
-
-          {/* ── Error de generación ───────────────────────────────────── */}
-
-          {generateError && (
-            <div
-              role="alert"
-              style={{
-                background: "var(--error-bg)",
-                border: "1px solid var(--error)",
-                borderRadius: "var(--radius-md)",
-                padding: "var(--space-4)",
-                display: "flex",
-                flexDirection: "column",
-                gap: "var(--space-3)",
-              }}
-            >
-              <p style={{ margin: 0, color: "var(--error)", fontSize: "var(--font-size-sm)", fontWeight: 600 }}>
-                {generateError}
-              </p>
-              <div>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => {
-                    setGenerateError("");
-                    setResultVariation(null);
-                    setProgress(null);
-                  }}
-                >
-                  Reintentar
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* ── Progreso ──────────────────────────────────────────────── */}
-
-          {generating && progress && (
-            <Card padding="md">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: "var(--space-4)",
-                  textAlign: "center",
-                }}
-              >
-                <Spinner size="md" />
-                <p
-                  style={{
-                    margin: 0,
-                    fontFamily: "var(--font-display)",
-                    fontSize: "var(--font-size-lg)",
-                    fontWeight: 700,
-                    color: "var(--ink)",
-                  }}
-                  aria-live="polite"
-                >
-                  Generando en tu navegador…
-                </p>
-                <p style={{ margin: 0, fontSize: "var(--font-size-sm)", color: "var(--slate-500)" }}>
-                  {progress.done} de {progress.total} listas
-                </p>
-                <div
-                  style={{
-                    height: 8,
-                    background: "var(--line)",
-                    borderRadius: 999,
-                    overflow: "hidden",
-                    width: "100%",
-                    maxWidth: 360,
-                  }}
-                >
+                {selectedBrand && !brandHasLogo && (
                   <div
                     style={{
-                      height: "100%",
-                      width:
-                        progress.total > 0
-                          ? Math.round((progress.done / progress.total) * 100) + "%"
-                          : "0%",
-                      background: "var(--teal-600)",
-                      transition: "width 0.2s",
+                      marginTop: "var(--space-4)",
+                      background: "color-mix(in srgb, var(--amber) 14%, transparent)",
+                      border: "1px solid color-mix(in srgb, var(--amber) 55%, var(--border))",
+                      borderRadius: "var(--r-md)",
+                      padding: "var(--space-3) var(--space-4)",
+                      display: "grid",
+                      gap: "var(--space-2)",
                     }}
-                  />
+                  >
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: "var(--font-size-sm)",
+                        color: "var(--text)",
+                        fontWeight: 700,
+                      }}
+                    >
+                      Esta marca todavía no tiene logo fijo.
+                    </p>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: "var(--font-size-sm)",
+                        color: "var(--text-muted)",
+                      }}
+                    >
+                      Andá a la página de identidad y elegí un logo antes de generar activos.
+                    </p>
+                    <Link
+                      to={`/brands/${selectedBrand.id}/identity`}
+                      style={{
+                        fontSize: "var(--font-size-sm)",
+                        color: "var(--teal)",
+                        fontWeight: 700,
+                        justifySelf: "start",
+                      }}
+                    >
+                      Fijar identidad
+                    </Link>
+                  </div>
+                )}
+              </section>
+
+              <section aria-labelledby="studio-type-heading">
+                <h2 style={sectionTitleStyle} id="studio-type-heading">
+                  2. Tipo
+                </h2>
+                <SelectField
+                  id="asset-type-select"
+                  label="Tipo de activo"
+                  hint="Cada tipo define formato y campos de contenido."
+                  value={selectedAssetType}
+                  onChange={(e) => handleAssetTypeChange(e.target.value)}
+                  disabled={!selectedBrand || !brandHasLogo}
+                >
+                  <option value="" disabled>
+                    Seleccioná un tipo
+                  </option>
+                  {ASSET_TYPES_GROUPED.map((group) => (
+                    <optgroup key={group.category} label={group.category}>
+                      {group.types.map((t) => (
+                        <option key={t.value} value={t.value}>
+                          {t.label}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </SelectField>
+              </section>
+
+              <section aria-labelledby="studio-content-heading">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    gap: "var(--space-3)",
+                    alignItems: "baseline",
+                    marginBottom: "var(--space-3)",
+                  }}
+                >
+                  <h2 style={{ ...sectionTitleStyle, marginBottom: 0 }} id="studio-content-heading">
+                    3. Contenido
+                  </h2>
+                  {selectedAssetType && (
+                    <span
+                      style={{
+                        color: "var(--text-muted)",
+                        fontFamily: "var(--font-mono)",
+                        fontSize: "var(--font-size-xs)",
+                      }}
+                    >
+                      {selectedDimensions}
+                    </span>
+                  )}
                 </div>
-              </div>
-            </Card>
-          )}
 
-          {/* ── Preview + Descarga ────────────────────────────────────── */}
+                {!selectedAssetType && (
+                  <p style={mutedTextStyle}>
+                    Elegí un tipo de activo para ver los campos disponibles.
+                  </p>
+                )}
 
-          {resultVariation && (
-            <Card padding="lg">
-              <h2
+                {selectedAssetType && (
+                  <>
+                    <p style={mutedTextStyle}>
+                      Completá los textos que aparecerán en el activo. Todos los campos son opcionales.
+                    </p>
+                    <div style={{ display: "grid", gap: "var(--space-4)" }}>
+                      {currentFields.map((f) => (
+                        <div key={f.key}>
+                          <label htmlFor={`content-${f.key}`} style={labelStyle}>
+                            {f.label}
+                          </label>
+                          <input
+                            id={`content-${f.key}`}
+                            type="text"
+                            value={contentValues[f.key] ?? ""}
+                            onChange={(e) => handleContentChange(f.key, e.target.value)}
+                            placeholder={f.placeholder}
+                            style={inputStyle}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </section>
+
+              {generateError && (
+                <div role="alert" style={errorPanelStyle}>
+                  <p style={{ margin: 0, color: "var(--danger)", fontSize: "var(--font-size-sm)", fontWeight: 700 }}>
+                    {generateError}
+                  </p>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => {
+                      setGenerateError("");
+                      setResultVariation(null);
+                      setProgress(null);
+                    }}
+                  >
+                    Reintentar
+                  </Button>
+                </div>
+              )}
+
+              <Button
+                type="submit"
+                variant="primary"
+                busy={generating}
+                disabled={!canGenerate}
                 style={{
-                  margin: "0 0 var(--space-4)",
-                  fontFamily: "var(--font-display)",
+                  width: "100%",
+                  minHeight: 52,
                   fontSize: "var(--font-size-lg)",
-                  color: "var(--ink)",
                 }}
               >
-                Vista previa
-              </h2>
+                {generating ? "Generando…" : resultVariation ? "Generado" : "Generar"}
+              </Button>
+            </Card>
+          </form>
 
-              <div
+          <Card
+            padding="lg"
+            className="eikon-studio-easel"
+            style={{
+              display: "grid",
+              gap: "var(--space-5)",
+              background: "var(--surface)",
+              borderColor: "var(--border-strong)",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: "var(--space-4)",
+                alignItems: "flex-start",
+                flexWrap: "wrap",
+              }}
+            >
+              <div>
+                <h2
+                  style={{
+                    margin: "0 0 var(--space-1)",
+                    fontFamily: "var(--font-display)",
+                    fontSize: "var(--font-size-2xl)",
+                    color: "var(--text)",
+                  }}
+                >
+                  Lienzo
+                </h2>
+                <p style={{ ...mutedTextStyle, margin: 0 }}>
+                  {selectedAssetLabel || "Elegí un formato para preparar la vista previa."}
+                </p>
+              </div>
+              <span
                 style={{
-                  background: "var(--mist)",
-                  borderRadius: "var(--radius-md)",
-                  padding: "var(--space-6)",
-                  marginBottom: "var(--space-5)",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  minHeight: 200,
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "var(--font-size-xs)",
+                  color: "var(--text-muted)",
+                  border: "1px solid var(--border)",
+                  borderRadius: "var(--r-sm)",
+                  padding: "var(--space-1) var(--space-2)",
+                  background: "var(--surface-2)",
                 }}
               >
+                {selectedAssetType ? selectedDimensions : "0000 × 0000"}
+              </span>
+            </div>
+
+            <div
+              className="eikon-preview-shell"
+              style={{
+                position: "relative",
+                display: "grid",
+                placeItems: "center",
+                overflow: "hidden",
+                border: "1px solid var(--border-strong)",
+                borderRadius: "var(--r-lg)",
+                background: "var(--bg)",
+                boxShadow: "inset 0 0 0 1px var(--border), var(--shadow-2)",
+                padding: "var(--space-6)",
+              }}
+            >
+              {resultVariation ? (
                 <img
                   src={resultVariation.file_url}
                   alt="Vista previa del activo generado"
                   style={{
                     maxWidth: "100%",
-                    maxHeight: 480,
-                    borderRadius: "var(--radius-sm)",
-                    boxShadow: "var(--shadow-md)",
-                    display: "block",
+                    maxHeight: "100%",
+                    borderRadius: "var(--r-sm)",
+                    boxShadow: "var(--shadow-2)",
+                    objectFit: "contain",
                   }}
                 />
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  gap: "var(--space-3)",
-                  flexWrap: "wrap",
-                }}
-              >
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    window.open(resultVariation.file_url, "_blank");
+              ) : (
+                <div
+                  style={{
+                    width: "min(100%, 360px)",
+                    aspectRatio: "1 / 1",
+                    border: "1px dashed var(--border-strong)",
+                    borderRadius: "var(--r-lg)",
+                    display: "grid",
+                    placeItems: "center",
+                    padding: "var(--space-6)",
+                    textAlign: "center",
+                    background: "var(--surface)",
                   }}
                 >
-                  Descargar PNG
-                </Button>
-                <Button variant="secondary" onClick={handleReset}>
-                  Generar otro activo
-                </Button>
-              </div>
-            </Card>
-          )}
+                  {generating ? (
+                    <div
+                      style={{
+                        display: "grid",
+                        gap: "var(--space-4)",
+                        justifyItems: "center",
+                        width: "100%",
+                      }}
+                    >
+                      <Spinner size="lg" />
+                      <div>
+                        <p
+                          style={{
+                            margin: 0,
+                            fontFamily: "var(--font-display)",
+                            fontSize: "var(--font-size-xl)",
+                            fontWeight: 700,
+                            color: "var(--text)",
+                          }}
+                          aria-live="polite"
+                        >
+                          Generando en tu navegador…
+                        </p>
+                        {progress && (
+                          <p style={{ margin: 0, fontSize: "var(--font-size-sm)", color: "var(--text-muted)" }}>
+                            {progress.done} de {progress.total} listas
+                          </p>
+                        )}
+                      </div>
+                      <div
+                        style={{
+                          height: 8,
+                          background: "var(--border)",
+                          borderRadius: 999,
+                          overflow: "hidden",
+                          width: "100%",
+                        }}
+                      >
+                        <div
+                          style={{
+                            height: "100%",
+                            width:
+                              progress && progress.total > 0
+                                ? Math.round((progress.done / progress.total) * 100) + "%"
+                                : "0%",
+                            background: "var(--teal)",
+                            transition: "width 0.2s",
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div style={{ display: "grid", gap: "var(--space-4)", justifyItems: "center" }}>
+                      <span
+                        aria-hidden="true"
+                        style={{
+                          width: 72,
+                          height: 72,
+                          borderRadius: "var(--r-md)",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          background: "var(--surface-2)",
+                          border: "1px solid var(--border)",
+                          color: "var(--text)",
+                          fontFamily: "var(--font-display)",
+                          fontSize: "2rem",
+                          fontWeight: 700,
+                        }}
+                      >
+                        {selectedBrandInitial}
+                      </span>
+                      <div>
+                        <p
+                          style={{
+                            margin: "0 0 var(--space-1)",
+                            fontFamily: "var(--font-display)",
+                            fontSize: "var(--font-size-xl)",
+                            fontWeight: 700,
+                            color: "var(--text)",
+                          }}
+                        >
+                          Tu asset aparecerá acá
+                        </p>
+                        <p style={{ ...mutedTextStyle, margin: 0 }}>
+                          {selectedBrand
+                            ? `${selectedBrand.name}${selectedAssetLabel ? ` · ${selectedAssetLabel}` : ""}`
+                            : "Seleccioná una marca para comenzar."}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                gap: "var(--space-3)",
+                flexWrap: "wrap",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Button
+                variant="primary"
+                disabled={!resultVariation}
+                onClick={() => {
+                  if (resultVariation) window.open(resultVariation.file_url, "_blank");
+                }}
+              >
+                Descargar PNG
+              </Button>
+              <Button variant="secondary" onClick={handleReset} disabled={generating}>
+                Generar otro activo
+              </Button>
+            </div>
+          </Card>
         </div>
       )}
     </section>
@@ -731,33 +786,55 @@ export function AssetStudioPage() {
 
 // ── Estilos compartidos ─────────────────────────────────────────────────────
 
+const sectionTitleStyle: React.CSSProperties = {
+  margin: "0 0 var(--space-3)",
+  fontFamily: "var(--font-display)",
+  fontSize: "var(--font-size-xl)",
+  color: "var(--text)",
+};
+
+const mutedTextStyle: React.CSSProperties = {
+  margin: "0 0 var(--space-4)",
+  fontSize: "var(--font-size-sm)",
+  color: "var(--text-muted)",
+};
+
 const labelStyle: React.CSSProperties = {
   display: "block",
   marginBottom: "var(--space-1)",
   fontSize: "var(--font-size-sm)",
   fontWeight: 600,
-  color: "var(--ink)",
+  color: "var(--text)",
 };
 
 const inputStyle: React.CSSProperties = {
   display: "block",
   width: "100%",
   padding: "var(--space-3) var(--space-4)",
-  border: "1.5px solid var(--line)",
-  borderRadius: "var(--radius-md)",
+  border: "1.5px solid var(--border)",
+  borderRadius: "var(--r-md)",
   fontSize: "var(--font-size-base)",
-  color: "var(--ink)",
-  background: "var(--paper)",
+  color: "var(--text)",
+  background: "var(--surface-2)",
   boxSizing: "border-box",
   fontFamily: "var(--font-body)",
 };
 
 const errorStyle: React.CSSProperties = {
-  color: "var(--error)",
+  color: "var(--danger)",
   fontSize: "var(--font-size-sm)",
-  padding: "var(--space-2) var(--space-3)",
+  padding: "var(--space-3) var(--space-4)",
   background: "var(--error-bg)",
-  borderRadius: "var(--radius-sm)",
-  border: "1px solid var(--error)",
+  borderRadius: "var(--r-md)",
+  border: "1px solid var(--danger)",
   margin: 0,
+};
+
+const errorPanelStyle: React.CSSProperties = {
+  background: "var(--error-bg)",
+  border: "1px solid var(--danger)",
+  borderRadius: "var(--r-md)",
+  padding: "var(--space-4)",
+  display: "grid",
+  gap: "var(--space-3)",
 };

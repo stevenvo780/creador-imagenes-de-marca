@@ -27,6 +27,10 @@ export function EmptyState({
         textAlign: 'center',
         padding: 'var(--space-16) var(--space-4)',
         gap: 'var(--space-4)',
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
+        borderRadius: 'var(--r-lg)',
+        boxShadow: 'var(--shadow-1)',
       }}
     >
       <span
@@ -42,7 +46,7 @@ export function EmptyState({
             margin: 0,
             fontFamily: 'var(--font-display)',
             fontSize: 'var(--font-size-xl)',
-            color: 'var(--ink)',
+            color: 'var(--text)',
           }}
         >
           {title}
@@ -52,7 +56,7 @@ export function EmptyState({
             style={{
               margin: 0,
               fontSize: 'var(--font-size-sm)',
-              color: 'var(--slate-500)',
+              color: 'var(--text-muted)',
               maxWidth: '40ch',
               marginInline: 'auto',
             }}

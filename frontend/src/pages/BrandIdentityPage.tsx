@@ -1,7 +1,7 @@
 import { type FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { brands as brandsApi, type Brand, ApiError } from "../api/client";
-import { Badge, Button, Card, Steps, Spinner, EmptyState } from "../components";
+import { Badge, Button, Card, EmptyState, Spinner, Steps } from "../components";
 import type { StepItem } from "../components";
 
 interface LogoOption {
@@ -92,15 +92,8 @@ export default function BrandIdentityPage() {
     }
   }, [brand, options]);
 
-  useEffect(() => {
-    if (saved) {
-      const timer = setTimeout(() => setSaved(false), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [saved]);
-
-  async function handleSave(e: FormEvent) {
-    e.preventDefault();
+  async function handleSave(e?: FormEvent) {
+    e?.preventDefault();
     if (!selectedLogo || !brand) return;
     setSaving(true);
     setSaveError("");
@@ -135,24 +128,19 @@ export default function BrandIdentityPage() {
       ) as [string, string][])
     : [];
 
-  const hasIdentityInfo = paletteEntries.length > 0 || typographyEntries.length > 0;
-
   const isCurrentLogo = (option: LogoOption) =>
     brand?.logo_style === option.style && brand?.logo_seed === option.seed;
 
   const isSelected = (option: LogoOption) =>
     selectedLogo?.style === option.style && selectedLogo?.seed === option.seed;
 
-  const logoBgColor = (brand?.palette as Record<string, string> | undefined)?.bg || "#F5F0EB";
-
   const hasSelection = selectedLogo !== null;
 
   return (
     <section>
-      {/* ── Cargando marca ──────────────────────────────────────────── */}
-
       {brandLoading && (
-        <div
+        <Card
+          padding="lg"
           role="status"
           aria-label="Cargando marca"
           aria-busy="true"
@@ -168,16 +156,14 @@ export default function BrandIdentityPage() {
           <p
             style={{
               margin: 0,
-              color: "var(--slate-500)",
+              color: "var(--text-muted)",
               fontSize: "var(--font-size-sm)",
             }}
           >
             Cargando marca…
           </p>
-        </div>
+        </Card>
       )}
-
-      {/* ── Error al cargar ────────────────────────────────────────── */}
 
       {!brandLoading && brandError && (
         <EmptyState
@@ -185,18 +171,15 @@ export default function BrandIdentityPage() {
           description={brandError}
           icon="⚠️"
           action={
-            <Button variant="primary" onClick={loadBrand}>
+            <Button variant="primary" onClick={() => void loadBrand()}>
               Reintentar
             </Button>
           }
         />
       )}
 
-      {/* ── Contenido ──────────────────────────────────────────────── */}
-
       {!brandLoading && !brandError && brand && (
         <>
-          {/* Cabecera: nombre + flujo + navegación */}
           <div
             style={{
               display: "flex",
@@ -207,34 +190,28 @@ export default function BrandIdentityPage() {
               marginBottom: "var(--space-8)",
             }}
           >
-            <div style={{ flex: 1 }}>
-              <h1
-                style={{
-                  margin: "0 0 var(--space-1)",
-                  fontFamily: "var(--font-display)",
-                  fontSize: "var(--font-size-2xl)",
-                  color: "var(--ink)",
-                }}
-              >
-                {brand.name}
-              </h1>
+            <div className="eikon-page-intro" style={{ marginBottom: 0, flex: 1 }}>
               <p
                 style={{
-                  margin: "var(--space-1) 0 0",
-                  fontSize: "var(--font-size-sm)",
-                  color: "var(--slate-500)",
+                  margin: "0 0 var(--space-2)",
+                  color: "var(--teal)",
+                  fontSize: "var(--font-size-xs)",
+                  fontFamily: "var(--font-mono)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
                 }}
               >
-                Elegí el logo que mejor represente tu marca.
+                Paso 1 de 2
               </p>
-
-              <div style={{ marginTop: "var(--space-3)" }}>
+              <h1>{brand.name}</h1>
+              <p>Elegí el logo que mejor represente tu marca antes de pasar al Estudio.</p>
+              <div style={{ marginTop: "var(--space-4)", maxWidth: 520 }}>
                 <Steps steps={FLOW_STEPS} currentIndex={0} />
               </div>
             </div>
 
             <Button
-              variant="ghost"
+              variant="secondary"
               size="sm"
               onClick={() => navigate(`/brands/${brand.id}/edit`)}
             >
@@ -242,86 +219,261 @@ export default function BrandIdentityPage() {
             </Button>
           </div>
 
-          {/* ── Identidad de marca (paleta + tipografía consolidado) ─── */}
-
-          {hasIdentityInfo && (
-            <Card padding="md" style={{ marginBottom: "var(--space-8)" }}>
-              <p
-                style={{
-                  margin: "0 0 var(--space-4)",
-                  fontSize: "var(--font-size-sm)",
-                  fontWeight: 600,
-                  color: "var(--slate-700)",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                }}
-              >
-                Identidad de marca
-              </p>
-
-              <div
-                style={{
-                  display: "flex",
-                  gap: "var(--space-8)",
-                  flexWrap: "wrap",
-                  alignItems: "flex-start",
-                }}
-              >
-                {paletteEntries.length > 0 && (
+          <div className="eikon-identity-layout">
+            <main>
+              <Card padding="lg" style={{ background: "var(--surface)", borderColor: "var(--border-strong)" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: "var(--space-4)",
+                    marginBottom: "var(--space-5)",
+                    flexWrap: "wrap",
+                  }}
+                >
                   <div>
+                    <h2
+                      style={{
+                        margin: 0,
+                        fontFamily: "var(--font-display)",
+                        fontSize: "var(--font-size-2xl)",
+                        color: "var(--text)",
+                      }}
+                    >
+                      Variaciones de logo
+                    </h2>
                     <p
                       style={{
-                        margin: "0 0 var(--space-3)",
-                        fontSize: "var(--font-size-xs)",
-                        fontWeight: 600,
-                        color: "var(--slate-500)",
-                        textTransform: "uppercase",
-                        letterSpacing: "0.05em",
+                        margin: "var(--space-1) 0 0",
+                        fontSize: "var(--font-size-sm)",
+                        color: "var(--text-muted)",
                       }}
                     >
-                      Paleta
+                      Seleccioná una pieza. El borde teal indica la elección activa.
                     </p>
-                    <div
+                  </div>
+
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    busy={optionsLoading}
+                    onClick={() => {
+                      setSelectedLogo(null);
+                      setSaved(false);
+                      setSaveError("");
+                      void loadLogoOptions();
+                    }}
+                  >
+                    Regenerar
+                  </Button>
+                </div>
+
+                {optionsError && (
+                  <div role="alert" style={errorPanelStyle}>
+                    <p
                       style={{
-                        display: "flex",
-                        gap: "var(--space-3)",
-                        flexWrap: "wrap",
+                        margin: 0,
+                        color: "var(--danger)",
+                        fontSize: "var(--font-size-sm)",
                       }}
                     >
+                      {optionsError}
+                    </p>
+                    <Button variant="secondary" size="sm" onClick={() => void loadLogoOptions()}>
+                      Reintentar
+                    </Button>
+                  </div>
+                )}
+
+                {optionsLoading && (
+                  <div
+                    role="status"
+                    aria-label="Cargando variaciones"
+                    aria-busy="true"
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(auto-fill, minmax(170px, 1fr))",
+                      gap: "var(--space-5)",
+                    }}
+                  >
+                    {Array.from({ length: 8 }, (_, i) => (
+                      <div
+                        key={i}
+                        aria-hidden="true"
+                        style={{
+                          aspectRatio: "1",
+                          borderRadius: "var(--r-lg)",
+                          background: "var(--surface-2)",
+                          border: "1px solid var(--border)",
+                          animation: "eikon-pulse 1.8s ease-in-out infinite",
+                          animationDelay: `${i * 120}ms`,
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {!optionsLoading && !optionsError && options.length > 0 && (
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(auto-fill, minmax(170px, 1fr))",
+                      gap: "var(--space-5)",
+                    }}
+                    aria-label="Variaciones de logo"
+                  >
+                    {options.map((option, i) => {
+                      const selected = isSelected(option);
+                      const current = isCurrentLogo(option);
+
+                      return (
+                        <button
+                          key={`${option.style}-${option.seed}`}
+                          type="button"
+                          onClick={() => {
+                            setSelectedLogo(option);
+                            setSaved(false);
+                            setSaveError("");
+                          }}
+                          aria-label={`Logo ${i + 1}${current ? " (logo actual)" : ""} — estilo ${option.style}`}
+                          aria-pressed={selected}
+                          style={{
+                            position: "relative",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            aspectRatio: "1",
+                            background: "var(--bg)",
+                            border: selected
+                              ? "3px solid var(--teal)"
+                              : current
+                                ? "2px solid var(--amber)"
+                                : "1px solid var(--border)",
+                            borderRadius: "var(--r-lg)",
+                            cursor: "pointer",
+                            padding: "var(--space-5)",
+                            boxShadow: selected ? "0 0 0 4px color-mix(in srgb, var(--teal) 16%, transparent), var(--shadow-2)" : "var(--shadow-1)",
+                            transition:
+                              "border var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast)",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = "translateY(-2px)";
+                            e.currentTarget.style.boxShadow = "var(--shadow-2)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = "";
+                            e.currentTarget.style.boxShadow = selected
+                              ? "0 0 0 4px color-mix(in srgb, var(--teal) 16%, transparent), var(--shadow-2)"
+                              : "var(--shadow-1)";
+                          }}
+                        >
+                          <img
+                            src={option.svg_data_uri}
+                            alt={`Logo variación ${i + 1}`}
+                            style={{
+                              maxWidth: "100%",
+                              maxHeight: "100%",
+                              objectFit: "contain",
+                            }}
+                          />
+
+                          {selected && (
+                            <span
+                              aria-hidden="true"
+                              style={{
+                                position: "absolute",
+                                top: "var(--space-2)",
+                                left: "var(--space-2)",
+                                width: 28,
+                                height: 28,
+                                borderRadius: "var(--radius-pill)",
+                                background: "var(--teal)",
+                                color: "var(--teal-ink)",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                fontWeight: 700,
+                              }}
+                            >
+                              ✓
+                            </span>
+                          )}
+
+                          {current && (
+                            <Badge
+                              label="Logo actual"
+                              variant="current"
+                              style={{
+                                position: "absolute",
+                                top: "var(--space-2)",
+                                right: "var(--space-2)",
+                              }}
+                            />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </Card>
+            </main>
+
+            <aside className="eikon-identity-side">
+              <Card
+                padding="lg"
+                style={{
+                  display: "grid",
+                  gap: "var(--space-6)",
+                  borderColor: "var(--border-strong)",
+                }}
+              >
+                <div>
+                  <p style={eyebrowStyle}>Identidad de marca</p>
+                  <h2
+                    style={{
+                      margin: 0,
+                      fontFamily: "var(--font-display)",
+                      fontSize: "var(--font-size-2xl)",
+                      color: "var(--text)",
+                    }}
+                  >
+                    Material activo
+                  </h2>
+                </div>
+
+                <section>
+                  <p style={sectionLabelStyle}>Paleta</p>
+                  {paletteEntries.length > 0 ? (
+                    <div style={{ display: "grid", gap: "var(--space-3)" }}>
                       {paletteEntries.map(([key, color]) => (
                         <div
                           key={key}
                           title={color}
                           style={{
-                            display: "flex",
-                            flexDirection: "column",
+                            display: "grid",
+                            gridTemplateColumns: "32px 1fr",
                             alignItems: "center",
-                            gap: "var(--space-1)",
+                            gap: "var(--space-3)",
                           }}
                         >
                           <span
                             style={{
-                              display: "block",
-                              width: 40,
-                              height: 40,
-                              borderRadius: "var(--radius-sm)",
+                              width: 32,
+                              height: 32,
+                              borderRadius: "var(--r-sm)",
                               background: color,
-                              border: "1px solid var(--line)",
-                              boxShadow: "var(--shadow-sm)",
-                              cursor: "default",
-                              transition: "transform var(--transition-fast)",
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.transform = "scale(1.15)";
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.transform = "";
+                              border: "1px solid var(--border-strong)",
+                              boxShadow: "var(--shadow-1)",
                             }}
                           />
                           <span
                             style={{
+                              color: "var(--text-muted)",
                               fontSize: "var(--font-size-xs)",
-                              color: "var(--slate-500)",
+                              fontFamily: "var(--font-mono)",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
                             }}
                           >
                             {key}
@@ -329,38 +481,24 @@ export default function BrandIdentityPage() {
                         </div>
                       ))}
                     </div>
-                  </div>
-                )}
+                  ) : (
+                    <p style={mutedTextStyle}>Sin paleta cargada.</p>
+                  )}
+                </section>
 
-                {typographyEntries.length > 0 && (
-                  <div>
-                    <p
-                      style={{
-                        margin: "0 0 var(--space-3)",
-                        fontSize: "var(--font-size-xs)",
-                        fontWeight: 600,
-                        color: "var(--slate-500)",
-                        textTransform: "uppercase",
-                        letterSpacing: "0.05em",
-                      }}
-                    >
-                      Tipografía
-                    </p>
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "var(--space-6)",
-                        flexWrap: "wrap",
-                      }}
-                    >
+                <section>
+                  <p style={sectionLabelStyle}>Tipografía</p>
+                  {typographyEntries.length > 0 ? (
+                    <div style={{ display: "grid", gap: "var(--space-3)" }}>
                       {typographyEntries.map(([key, value]) => (
                         <div key={key} title={value}>
                           <span
                             style={{
-                              fontSize: "var(--font-size-xs)",
-                              color: "var(--slate-500)",
                               display: "block",
                               marginBottom: "var(--space-1)",
+                              fontSize: "var(--font-size-xs)",
+                              color: "var(--text-faint)",
+                              fontFamily: "var(--font-mono)",
                             }}
                           >
                             {key}
@@ -369,9 +507,9 @@ export default function BrandIdentityPage() {
                             style={{
                               fontSize: "var(--font-size-lg)",
                               fontFamily: value,
-                              color: "var(--ink)",
+                              color: "var(--text)",
                               fontWeight: 700,
-                              cursor: "default",
+                              lineHeight: 1.2,
                             }}
                           >
                             {value}
@@ -379,334 +517,123 @@ export default function BrandIdentityPage() {
                         </div>
                       ))}
                     </div>
-                  </div>
-                )}
-              </div>
-            </Card>
-          )}
+                  ) : (
+                    <p style={mutedTextStyle}>Sin tipografías cargadas.</p>
+                  )}
+                </section>
 
-          {/* Grid de logos */}
-          <div
-            style={{ marginBottom: "var(--space-6)" }}
-            aria-label="Variaciones de logo"
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: "var(--space-4)",
-                marginBottom: "var(--space-4)",
-                flexWrap: "wrap",
-              }}
-            >
-              <div>
-                <h2
-                  style={{
-                    margin: 0,
-                    fontFamily: "var(--font-display)",
-                    fontSize: "var(--font-size-lg)",
-                    color: "var(--ink)",
-                  }}
-                >
-                  Variaciones de logo
-                </h2>
-                <p
-                  style={{
-                    margin: "var(--space-1) 0 0",
-                    fontSize: "var(--font-size-xs)",
-                    color: "var(--slate-500)",
-                  }}
-                >
-                  Trae nuevas variaciones de logo para elegir.
-                </p>
-              </div>
+                <div style={{ display: "grid", gap: "var(--space-3)" }}>
+                  <Button
+                    variant="primary"
+                    busy={saving}
+                    disabled={!hasSelection || saving}
+                    onClick={() => void handleSave()}
+                    style={{ width: "100%" }}
+                  >
+                    {saving ? "Guardando…" : "Guardar identidad"}
+                  </Button>
 
-              <Button
-                variant="secondary"
-                size="sm"
-                busy={optionsLoading}
-                onClick={() => {
-                  setSelectedLogo(null);
-                  setSaved(false);
-                  setSaveError("");
-                  void loadLogoOptions();
-                }}
-              >
-                ↻ Regenerar
-              </Button>
-            </div>
-
-            {/* Error de carga de opciones */}
-            {optionsError && (
-              <div
-                role="alert"
-                style={{
-                  background: "var(--error-bg)",
-                  border: "1px solid var(--error)",
-                  borderRadius: "var(--radius-md)",
-                  padding: "var(--space-3) var(--space-4)",
-                  marginBottom: "var(--space-4)",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "var(--space-3)",
-                }}
-              >
-                <p
-                  style={{
-                    margin: 0,
-                    color: "var(--error)",
-                    fontSize: "var(--font-size-sm)",
-                  }}
-                >
-                  {optionsError}
-                </p>
-                <Button variant="secondary" size="sm" onClick={loadLogoOptions}>
-                  Reintentar
-                </Button>
-              </div>
-            )}
-
-            {/* Loading de opciones */}
-            {optionsLoading && (
-              <div
-                role="status"
-                aria-label="Cargando variaciones"
-                aria-busy="true"
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-                  gap: "var(--space-5)",
-                }}
-              >
-                {Array.from({ length: 8 }, (_, i) => (
-                  <div
-                    key={i}
-                    aria-hidden="true"
+                  <Button
+                    variant="secondary"
+                    disabled={!saved}
+                    onClick={() => navigate(`/studio?brand=${brand.id}`)}
                     style={{
-                      aspectRatio: "1",
-                      borderRadius: "var(--radius-lg)",
-                      background: "var(--mist)",
-                      animation: "eikon-pulse 1.8s ease-in-out infinite",
-                      animationDelay: `${i * 120}ms`,
+                      width: "100%",
+                      borderColor: saved ? "var(--teal)" : "var(--border)",
+                      color: saved ? "var(--teal)" : "var(--text-faint)",
                     }}
-                  />
-                ))}
-              </div>
-            )}
+                  >
+                    Ir al Estudio
+                  </Button>
+                </div>
 
-            {/* Grid de logos */}
-            {!optionsLoading && !optionsError && options.length > 0 && (
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-                  gap: "var(--space-5)",
-                }}
-              >
-                {options.map((option, i) => {
-                  const selected = isSelected(option);
-                  const current = isCurrentLogo(option);
+                <div aria-live="assertive" aria-atomic="true">
+                  {saveError && (
+                    <p role="alert" style={errorMessageStyle}>
+                      {saveError}
+                    </p>
+                  )}
 
-                  const borderStyle: string = selected || current
-                    ? "3px solid var(--teal-600)"
-                    : "2px solid var(--line)";
-
-                  return (
-                    <button
-                      key={`${option.style}-${option.seed}`}
-                      type="button"
-                      onClick={() => {
-                        setSelectedLogo(option);
-                        setSaved(false);
-                        setSaveError("");
-                      }}
-                      aria-label={`Logo ${i + 1}${current ? " (logo actual)" : ""} — estilo ${option.style}`}
-                      aria-pressed={selected}
-                      autoFocus={i === 0}
+                  {saved && !saveError && (
+                    <p
                       style={{
-                        position: "relative",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        aspectRatio: "1",
-                        background: logoBgColor,
-                        border: borderStyle,
-                        borderRadius: "var(--radius-lg)",
-                        cursor: "pointer",
-                        padding: "var(--space-4)",
-                        boxShadow: selected || current
-                          ? "var(--shadow-md)"
-                          : undefined,
-                        transition:
-                          "border var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast)",
-                        outline: "none",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.boxShadow = "var(--shadow-md)";
-                        e.currentTarget.style.borderColor = "var(--teal)";
-                        e.currentTarget.style.transform = "scale(1.03)";
-                      }}
-                      onMouseLeave={(e) => {
-                        if (selected || current) {
-                          e.currentTarget.style.boxShadow = "var(--shadow-md)";
-                          e.currentTarget.style.borderColor = "var(--teal-600)";
-                        } else {
-                          e.currentTarget.style.boxShadow = "";
-                          e.currentTarget.style.borderColor = "var(--line)";
-                        }
-                        e.currentTarget.style.transform = "";
-                      }}
-                      onFocus={(e) => {
-                        e.currentTarget.style.boxShadow = "var(--shadow-md)";
-                        e.currentTarget.style.borderColor = "var(--teal)";
-                      }}
-                      onBlur={(e) => {
-                        if (selected || current) {
-                          e.currentTarget.style.boxShadow = "var(--shadow-md)";
-                          e.currentTarget.style.borderColor = "var(--teal-600)";
-                        } else {
-                          e.currentTarget.style.boxShadow = "";
-                          e.currentTarget.style.borderColor = "var(--line)";
-                        }
+                        margin: 0,
+                        color: "var(--ok)",
+                        fontSize: "var(--font-size-sm)",
+                        fontWeight: 700,
+                        padding: "var(--space-3)",
+                        background: "color-mix(in srgb, var(--ok) 14%, transparent)",
+                        borderRadius: "var(--r-md)",
+                        border: "1px solid color-mix(in srgb, var(--ok) 48%, var(--border))",
                       }}
                     >
-                      <img
-                        src={option.svg_data_uri}
-                        alt={`Logo variación ${i + 1}`}
-                        style={{
-                          maxWidth: "100%",
-                          maxHeight: "100%",
-                          display: "block",
-                          objectFit: "contain",
-                        }}
-                      />
+                      Identidad guardada ✓
+                    </p>
+                  )}
 
-                      {current && (
-                        <Badge
-                          label="✓ Logo actual"
-                          variant="current"
-                          style={{
-                            position: "absolute",
-                            top: "8px",
-                            right: "8px",
-                            gap: "4px",
-                            borderRadius: "var(--radius-sm)",
-                            lineHeight: 1.35,
-                          }}
-                        />
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-
-          {/* Barra de acciones */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "var(--space-4)",
-              flexWrap: "wrap",
-              padding: "var(--space-6) 0",
-              borderTop: "1px solid var(--line)",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
-              <Button
-                variant="primary"
-                busy={saving}
-                disabled={!hasSelection || saving}
-                onClick={handleSave}
-                style={{
-                  fontSize: "var(--font-size-base)",
-                  fontWeight: 700,
-                  padding: "var(--space-3) var(--space-6)",
-                  minHeight: 48,
-                }}
-              >
-                {saving ? "Guardando…" : "Guardar identidad"}
-              </Button>
-
-              <span
-                style={{
-                  fontSize: "var(--font-size-xs)",
-                  color: "var(--slate-500)",
-                }}
-              >
-                Paso 1 de 2
-              </span>
-            </div>
-
-            {saved && (
-              <Button
-                variant="secondary"
-                onClick={() => navigate(`/studio?brand=${brand.id}`)}
-                style={{
-                  borderColor: "var(--teal)",
-                  color: "var(--teal-600)",
-                }}
-              >
-                Ir al Estudio →
-              </Button>
-            )}
-
-            {!saved && (
-              <span
-                style={{
-                  fontSize: "var(--font-size-xs)",
-                  color: "var(--slate-400)",
-                  fontStyle: "italic",
-                  padding: "var(--space-2) var(--space-3)",
-                  background: "var(--mist)",
-                  borderRadius: "var(--radius-sm)",
-                }}
-              >
-                Guardá tu logo para continuar al Estudio
-              </span>
-            )}
-          </div>
-
-          {/* Mensajes */}
-          <div aria-live="assertive" aria-atomic="true">
-            {saveError && (
-              <p
-                role="alert"
-                style={{
-                  margin: "var(--space-4) 0 0",
-                  color: "var(--error)",
-                  fontSize: "var(--font-size-sm)",
-                  padding: "var(--space-2) var(--space-3)",
-                  background: "var(--error-bg)",
-                  borderRadius: "var(--radius-sm)",
-                  border: "1px solid var(--error)",
-                }}
-              >
-                {saveError}
-              </p>
-            )}
-
-            {saved && !saveError && (
-              <p
-                style={{
-                  margin: "var(--space-4) 0 0",
-                  color: "var(--teal-600)",
-                  fontSize: "var(--font-size-sm)",
-                  fontWeight: 600,
-                  padding: "var(--space-2) var(--space-3)",
-                  background: "var(--mist)",
-                  borderRadius: "var(--radius-sm)",
-                  border: "1px solid var(--teal)",
-                }}
-              >
-                Identidad guardada ✓
-              </p>
-            )}
+                  {!saved && !saveError && (
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: "var(--font-size-xs)",
+                        color: "var(--text-faint)",
+                      }}
+                    >
+                      Guardá tu logo para habilitar el paso al Estudio.
+                    </p>
+                  )}
+                </div>
+              </Card>
+            </aside>
           </div>
         </>
       )}
     </section>
   );
 }
+
+const eyebrowStyle: React.CSSProperties = {
+  margin: "0 0 var(--space-2)",
+  color: "var(--teal)",
+  fontSize: "var(--font-size-xs)",
+  fontFamily: "var(--font-mono)",
+  textTransform: "uppercase",
+  letterSpacing: "0.08em",
+};
+
+const sectionLabelStyle: React.CSSProperties = {
+  margin: "0 0 var(--space-3)",
+  color: "var(--text-muted)",
+  fontSize: "var(--font-size-xs)",
+  fontFamily: "var(--font-mono)",
+  textTransform: "uppercase",
+  letterSpacing: "0.08em",
+};
+
+const mutedTextStyle: React.CSSProperties = {
+  margin: 0,
+  color: "var(--text-muted)",
+  fontSize: "var(--font-size-sm)",
+};
+
+const errorPanelStyle: React.CSSProperties = {
+  background: "var(--error-bg)",
+  border: "1px solid var(--danger)",
+  borderRadius: "var(--r-md)",
+  padding: "var(--space-4)",
+  marginBottom: "var(--space-5)",
+  display: "flex",
+  alignItems: "center",
+  gap: "var(--space-3)",
+  flexWrap: "wrap",
+};
+
+const errorMessageStyle: React.CSSProperties = {
+  margin: 0,
+  color: "var(--danger)",
+  fontSize: "var(--font-size-sm)",
+  padding: "var(--space-3)",
+  background: "var(--error-bg)",
+  borderRadius: "var(--r-md)",
+  border: "1px solid var(--danger)",
+};

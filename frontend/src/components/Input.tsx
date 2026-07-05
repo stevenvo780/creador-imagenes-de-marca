@@ -19,12 +19,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       padding: 'var(--space-2) var(--space-3)',
       fontFamily: 'var(--font-body)',
       fontSize: 'var(--font-size-base)',
-      color: 'var(--ink)',
-      background: 'var(--paper)',
+      color: 'var(--text)',
+      background: 'var(--surface-2)',
       border: hasError
-        ? '1.5px solid var(--error)'
-        : '1.5px solid var(--line)',
-      borderRadius: 'var(--radius-md)',
+        ? '1.5px solid var(--danger)'
+        : '1.5px solid var(--border)',
+      borderRadius: 'var(--r-md)',
       outline: 'none',
       transition:
         'border-color var(--transition-fast), box-shadow var(--transition-fast)',

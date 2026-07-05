@@ -32,10 +32,10 @@ export function SelectField({
     padding: 'var(--space-2) var(--space-3)',
     fontFamily: 'var(--font-body)',
     fontSize: 'var(--font-size-base)',
-    color: 'var(--ink)',
-    background: 'var(--paper)',
-    border: error ? '1.5px solid var(--error)' : '1.5px solid var(--line)',
-    borderRadius: 'var(--radius-md)',
+    color: 'var(--text)',
+    background: 'var(--surface-2)',
+    border: error ? '1.5px solid var(--danger)' : '1.5px solid var(--border)',
+    borderRadius: 'var(--r-md)',
     cursor: 'pointer',
     appearance: 'auto',
     outline: 'none',
@@ -52,7 +52,7 @@ export function SelectField({
           display: 'block',
           fontSize: 'var(--font-size-sm)',
           fontWeight: 600,
-          color: 'var(--ink)',
+          color: 'var(--text)',
         }}
       >
         {label}
@@ -69,12 +69,12 @@ export function SelectField({
       </select>
 
       {hint && !error && (
-        <p id={hintId} style={{ margin: 0, fontSize: 'var(--font-size-xs)', color: 'var(--slate-500)' }}>
+        <p id={hintId} style={{ margin: 0, fontSize: 'var(--font-size-xs)', color: 'var(--text-muted)' }}>
           {hint}
         </p>
       )}
       {error && (
-        <p id={errorId} role="alert" style={{ margin: 0, fontSize: 'var(--font-size-xs)', color: 'var(--error)', fontWeight: 500 }}>
+        <p id={errorId} role="alert" style={{ margin: 0, fontSize: 'var(--font-size-xs)', color: 'var(--danger)', fontWeight: 500 }}>
           {error}
         </p>
       )}

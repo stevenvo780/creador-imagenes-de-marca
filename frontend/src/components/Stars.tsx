@@ -22,7 +22,7 @@ function scoreToStars(score: number): number {
 export function Stars({ score, forceStars = false }: StarsProps) {
   if (score === null) {
     return (
-      <span style={{ fontSize: 'var(--font-size-xs)', color: 'var(--slate-500)' }}>
+      <span style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-muted)' }}>
         Sin calificar
       </span>
     );
@@ -45,8 +45,7 @@ export function Stars({ score, forceStars = false }: StarsProps) {
           key={i}
           style={{
             fontSize: 'var(--font-size-sm)',
-            // gold-dark = 4.7:1 sobre blanco (AA para objeto gráfico)
-            color: i < filled ? 'var(--gold-dark)' : 'var(--line)',
+            color: i < filled ? 'var(--amber)' : 'var(--border-strong)',
           }}
           aria-hidden="true"
         >

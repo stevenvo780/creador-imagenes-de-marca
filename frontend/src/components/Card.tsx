@@ -1,10 +1,10 @@
 /**
- * Card — superficie elevada con borde y sombra sutil.
+ * Card — superficie editorial elevada con borde sutil.
  * Padding: 'sm' | 'md' | 'lg' | 'none'
  */
 import React from 'react';
 
-export interface CardProps {
+export interface CardProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode;
   padding?: 'none' | 'sm' | 'md' | 'lg';
   elevated?: boolean;
@@ -27,18 +27,19 @@ export function Card({
   style,
   className,
   as: Tag = 'div',
+  ...props
 }: CardProps) {
   const computedStyle: React.CSSProperties = {
-    background: 'var(--white)',
-    border: '1px solid var(--line)',
-    borderRadius: 'var(--radius-lg)',
+    background: 'var(--surface)',
+    border: '1px solid var(--border)',
+    borderRadius: 'var(--r-lg)',
     padding: paddingMap[padding],
-    boxShadow: elevated ? 'var(--shadow-md)' : 'var(--shadow-sm)',
+    boxShadow: elevated ? 'var(--shadow-2)' : 'var(--shadow-1)',
     ...style,
   };
 
   return (
-    <Tag style={computedStyle} className={className}>
+    <Tag style={computedStyle} className={className} {...props}>
       {children}
     </Tag>
   );
