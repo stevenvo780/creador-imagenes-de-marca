@@ -40,10 +40,7 @@ def _normalize_palette(palette: dict[str, Any]) -> dict[str, Any]:
             unknown.append(key)
     if unknown:
         valid = sorted(VALID_PALETTE_KEYS | set(_EN_TO_ES_PALETTE.keys()))
-        raise ValueError(
-            f"claves de paleta desconocidas: {unknown!r}. "
-            f"Claves permitidas: {valid}"
-        )
+        raise ValueError(f"claves de paleta desconocidas: {unknown!r}. Claves permitidas: {valid}")
     return normalized
 
 

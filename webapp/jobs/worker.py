@@ -304,6 +304,18 @@ def _get_batch_tenant_id(db_url: str | None | Path, batch_id: int) -> int | None
     return int(row["tenant_id"])
 
 
+def _safe_tenant_id_from_partial(batch_dict: dict[str, Any] | None) -> int:
+    """Extrae tenant_id de un batch_dict parcial durante un error path.
+    Devuelve -1 si no se puede extraer (update_batch_status rechazará el update con KeyError,
+    lo cual es el comportamiento seguro deseado cuando no conocemos el tenant)."""
+    if batch_dict is None:
+        return -1
+    try:
+        return int(batch_dict["tenant_id"])
+    except Exception:
+        return -1
+
+
 class WorkerPool:
     """Pool de workers in-process que procesa batches combinatorios pendientes.
 
@@ -476,14 +488,23 @@ class WorkerPool:
                 batch_id,
                 self.job_timeout_seconds,
             )
-            await self._mark_batch_failed(batch_id)
+            await self._mark_batch_failed(batch_id, self._lookup_tenant_id(batch_id))
             self._pending_batches.pop(batch_id, None)
         except asyncio.CancelledError:
             raise
         except Exception as exc:
             logger.exception("Error inesperado procesando batch %d: %s", batch_id, exc)
-            await self._mark_batch_failed(batch_id)
+            await self._mark_batch_failed(batch_id, self._lookup_tenant_id(batch_id))
             self._pending_batches.pop(batch_id, None)
+
+    def _lookup_tenant_id(self, batch_id: int) -> int:
+        """Resuelve tenant_id de un batch via DB. Fallback -1 si no se encuentra
+        (update_batch_status rechazará el update con KeyError, comportamiento seguro)."""
+        try:
+            tid = _get_batch_tenant_id(self.db_url, batch_id)
+            return tid if tid is not None else -1
+        except Exception:
+            return -1
 
     async def _run_db_operation(self, name: str, operation: Callable[[], T]) -> T:
         """Ejecuta una operación de DB/IO síncrona sin bloquear el event loop."""
@@ -508,8 +529,11 @@ class WorkerPool:
             )
         return self._db_executor
 
-    async def _mark_batch_failed(self, batch_id: int, tenant_id: int | None = None) -> None:
-        """Marca un batch como failed sin bloquear el event loop."""
+    async def _mark_batch_failed(self, batch_id: int, tenant_id: int) -> None:
+        """Marca un batch como failed sin bloquear el event loop.
+
+        tenant_id es OBLIGATORIO: update_batch_status lo requiere para prevenir IDOR.
+        """
         with contextlib.suppress(Exception):
             await self._run_db_operation(
                 "mark batch failed",
@@ -621,6 +645,7 @@ class WorkerPool:
         self, batch_id: int, db_url: str | None | Path
     ) -> tuple[int, int, CombinationSpec, dict[str, Any]] | None:
         """Carga batch, spec, brand y devuelve (tenant_id, brand_id, spec, marca)."""
+        batch_dict: dict[str, Any] | None = None
         try:
             with connect(db_url) as con:
                 row = con.execute("SELECT * FROM batches WHERE id = ?", (batch_id,)).fetchone()
@@ -632,8 +657,12 @@ class WorkerPool:
             brand_id = int(batch_dict["brand_id"])
         except Exception as exc:
             logger.exception("Error al cargar batch %d: %s", batch_id, exc)
+            # Si llegamos a tener batch_dict parcial, extraemos tenant_id para no perder
+            # la validación de tenant al marcar como failed. Si ni siquiera eso tenemos,
+            # usamos -1 (update_batch_status rechazará el update → comportamiento seguro).
+            tid_for_fail = _safe_tenant_id_from_partial(batch_dict)
             with contextlib.suppress(Exception):
-                update_batch_status(db_url, batch_id, "failed")
+                update_batch_status(db_url, batch_id, "failed", tenant_id=tid_for_fail)
             return None
 
         update_batch_status(db_url, batch_id, "running", tenant_id=tenant_id)
@@ -686,7 +715,9 @@ class WorkerPool:
 
         return tenant_id, brand_id, spec, marca
 
-    def _load_axes_config(self, batch_id: int, db_url: str | None | Path, tenant_id: int) -> AxesConfig | None:
+    def _load_axes_config(
+        self, batch_id: int, db_url: str | None | Path, tenant_id: int
+    ) -> AxesConfig | None:
         """Carga AxesConfig desde disco. None si falla (ya marca failed)."""
         try:
             if self._axes_config_path is not None:

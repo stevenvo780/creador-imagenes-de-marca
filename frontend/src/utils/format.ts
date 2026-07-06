@@ -32,11 +32,6 @@ export function toDate(value: TimeValue): Date | null {
   return Number.isNaN(d.getTime()) ? null : d;
 }
 
-/** Milisegundos para ordenar; 0 si no hay fecha válida. */
-export function toMillis(value: TimeValue): number {
-  return toDate(value)?.getTime() ?? 0;
-}
-
 /** Fecha legible en español (p. ej. "29 de junio de 2026"), o guion. */
 export function formatDate(
   value: TimeValue,

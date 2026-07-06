@@ -31,7 +31,7 @@ def seeded_random(seed: int, index: int, range_max: float = 1.0) -> float:
     # Use big-endian to ensure consistent byte ordering across platforms
     h = hashlib.md5((f"{seed:08x}{index:08x}").encode()).digest()
     # Convert first 4 bytes to int (big-endian)
-    val = int.from_bytes(h[:4], byteorder="big", signed=False) & 0x7fffffff
+    val = int.from_bytes(h[:4], byteorder="big", signed=False) & 0x7FFFFFFF
     # Consistent division with maximum representable value
     return (val / 2147483647.0) * range_max
 
@@ -88,14 +88,16 @@ def create_svg_path(
     stroke_width: float = 1,
 ) -> str:
     """<path> element. d_attr is the full path data (M L C Q etc)."""
-    return (
-        f'<path d="{d_attr}" '
-        f'fill="{fill}" stroke="{stroke}" stroke-width="{stroke_width}"/>'
-    )
+    return f'<path d="{d_attr}" fill="{fill}" stroke="{stroke}" stroke-width="{stroke_width}"/>'
 
 
 def create_svg_line(
-    x1: float, y1: float, x2: float, y2: float, stroke: str = "currentColor", stroke_width: float = 1
+    x1: float,
+    y1: float,
+    x2: float,
+    y2: float,
+    stroke: str = "currentColor",
+    stroke_width: float = 1,
 ) -> str:
     """<line> element."""
     return (
@@ -115,11 +117,18 @@ def create_svg_group(content: str, transform: str = "", class_name: str = "") ->
 
 
 def create_svg_text(
-    text: str, x: float, y: float, font_size: float = 12, fill: str = "currentColor", font_family: str = "sans-serif"
+    text: str,
+    x: float,
+    y: float,
+    font_size: float = 12,
+    fill: str = "currentColor",
+    font_family: str = "sans-serif",
 ) -> str:
     """<text> element."""
     # Escape special characters
-    text = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
+    text = (
+        text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
+    )
     return (
         f'<text x="{x:.2f}" y="{y:.2f}" font-size="{font_size}" fill="{fill}" '
         f'font-family="{font_family}" text-anchor="middle" dominant-baseline="central">'

@@ -106,13 +106,3 @@ export const es = {
     },
   },
 } as const;
-
-export function tLabel(axisId: string): string {
-  const axis = (es as unknown as Record<string, { label: string }>)[axisId];
-  return axis?.label ?? axisId;
-}
-
-export function tOption(axisId: string, optionId: string): string {
-  const axis = (es as unknown as Record<string, { options: Record<string, string> }>)[axisId];
-  return axis?.options[optionId] ?? optionId;
-}

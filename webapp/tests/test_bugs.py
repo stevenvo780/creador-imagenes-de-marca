@@ -49,7 +49,9 @@ def _settings(tmp_path: Path) -> Settings:
 
 @pytest.fixture()
 def app(tmp_path: Path) -> FastAPI:
-    return create_app(_settings(tmp_path), output_root=tmp_path / "output", axes_config_path=AXES_PATH)
+    return create_app(
+        _settings(tmp_path), output_root=tmp_path / "output", axes_config_path=AXES_PATH
+    )
 
 
 @pytest.fixture()
@@ -445,14 +447,14 @@ class TestGalleryOrdering:
         r = client.get(f"/api/v1/gallery?brand_id={bid}&order=invalid")
         assert r.status_code == 422
 
-    def test_gallery_api_batch_id_filter_respected(
-        self, app: FastAPI, tmp_path: Path
-    ) -> None:
+    def test_gallery_api_batch_id_filter_respected(self, app: FastAPI, tmp_path: Path) -> None:
         """GET /gallery?batch_id=X filtra correctamente por batch."""
         from webapp.storage import create_batch
 
         settings = _settings(tmp_path)
-        app_local = create_app(settings, output_root=tmp_path / "output", axes_config_path=AXES_PATH)
+        app_local = create_app(
+            settings, output_root=tmp_path / "output", axes_config_path=AXES_PATH
+        )
         db = settings.sqlite_path
 
         with TestClient(app_local) as c:
@@ -474,7 +476,9 @@ class TestGalleryOrdering:
             r = c.get(f"/api/v1/gallery?batch_id={b1['id']}")
             assert r.status_code == 200
             items = r.json()["items"]
-            assert len(items) == 2, f"esperaba 2 variaciones de batch {b1['id']}, obtuve {len(items)}"
+            assert len(items) == 2, (
+                f"esperaba 2 variaciones de batch {b1['id']}, obtuve {len(items)}"
+            )
 
             r2 = c.get(f"/api/v1/gallery?batch_id={b2['id']}")
             assert r2.status_code == 200
@@ -483,7 +487,9 @@ class TestGalleryOrdering:
     def test_null_scores_at_end_in_api(self, app: FastAPI, tmp_path: Path) -> None:
         """Variaciones con score=NULL aparecen al final en order=calidad."""
         settings = _settings(tmp_path)
-        app_local = create_app(settings, output_root=tmp_path / "output", axes_config_path=AXES_PATH)
+        app_local = create_app(
+            settings, output_root=tmp_path / "output", axes_config_path=AXES_PATH
+        )
         db = settings.sqlite_path
 
         with TestClient(app_local) as c:
@@ -576,7 +582,9 @@ class TestMinorBugs:
         from webapp.storage import create_batch
 
         settings = _settings(tmp_path)
-        app_local = create_app(settings, output_root=tmp_path / "output", axes_config_path=AXES_PATH)
+        app_local = create_app(
+            settings, output_root=tmp_path / "output", axes_config_path=AXES_PATH
+        )
         db = settings.sqlite_path
 
         with TestClient(app_local) as c:
@@ -639,7 +647,12 @@ class TestMinorBugs:
         bid = _create_brand(client)
         r = client.post(
             "/api/v1/batches",
-            json={"brand_id": bid, "asset_types": ["isotipo"], "permuted": ["palette_scheme"], "count": 1},
+            json={
+                "brand_id": bid,
+                "asset_types": ["isotipo"],
+                "permuted": ["palette_scheme"],
+                "count": 1,
+            },
         )
         # 202 (encolado) o 422 si no hay opciones de paleta suficientes
         assert r.status_code in (202, 422)
@@ -650,7 +663,11 @@ class TestMinorBugs:
         bid = _create_brand(client)
         r = client.post(
             "/api/v1/batches",
-            json={"brand_id": bid, "asset_types": ["tipo_inventado_xyz"], "permuted": ["palette_scheme"]},
+            json={
+                "brand_id": bid,
+                "asset_types": ["tipo_inventado_xyz"],
+                "permuted": ["palette_scheme"],
+            },
         )
         assert r.status_code == 422
 

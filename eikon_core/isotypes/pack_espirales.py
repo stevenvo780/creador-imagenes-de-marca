@@ -1,4 +1,5 @@
 """Pack de espirales procedurales — Eikón."""
+
 from __future__ import annotations
 
 import math
@@ -45,7 +46,7 @@ def gen_espiral_aurea(p: IsotypeParams) -> str:
     # Desplazamiento inicial por seed
     offset = seeded_random(p.seed, 32, math.pi / 4)
     # Escala
-    a = max_rad / (phi ** 2)
+    a = max_rad / (phi**2)
 
     pts = []
     n = 300
@@ -62,7 +63,6 @@ def gen_espiral_aurea(p: IsotypeParams) -> str:
         create_svg_circle(c, c, p.size * 0.02, fill=p.accent_color),
     ]
     return _wrap(p, parts)
-
 
 
 # ─────────────────────────────────────────────────────────────────────────────

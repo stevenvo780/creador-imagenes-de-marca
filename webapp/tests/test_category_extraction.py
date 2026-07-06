@@ -105,7 +105,9 @@ def test_category_from_path_relative_cards() -> None:
 
 def test_category_from_path_windows_backslash_logos() -> None:
     """Windows path con backslashes y categoría 'logos'."""
-    path = r"C:\Users\Dev\eikon\output\tenants\tenant-win\mybrand\logos\png_100x100\batch-a\logo.png"
+    path = (
+        r"C:\Users\Dev\eikon\output\tenants\tenant-win\mybrand\logos\png_100x100\batch-a\logo.png"
+    )
     assert _category_from_path(path) == "logos"
 
 

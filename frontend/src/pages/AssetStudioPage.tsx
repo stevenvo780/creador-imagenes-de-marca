@@ -228,7 +228,7 @@ export function AssetStudioPage() {
 
   const selectedBrand = brands.find((b) => b.id === selectedBrandId) ?? null;
   const brandHasLogo = selectedBrand
-    ? (selectedBrand.logo_style && selectedBrand.logo_style.length > 0)
+    ? Boolean(selectedBrand.logo_style && selectedBrand.logo_style.length > 0 && selectedBrand.logo_seed)
     : false;
 
   // ── Handlers ────────────────────────────────────────────────────────────

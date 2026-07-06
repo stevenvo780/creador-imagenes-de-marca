@@ -1,4 +1,5 @@
 """Pack de símbolos circulares y geometría sagrada — Eikón."""
+
 from __future__ import annotations
 
 import math
@@ -52,9 +53,7 @@ def gen_flor_vida(p: IsotypeParams) -> str:
     parts: list[str] = []
     for i, (cx, cy) in enumerate(centers):
         col = p.primary_color if i == 0 else (p.primary_color if i % 2 == 1 else p.accent_color)
-        parts.append(
-            create_svg_circle(cx, cy, R, fill="none", stroke=col, stroke_width=sw)
-        )
+        parts.append(create_svg_circle(cx, cy, R, fill="none", stroke=col, stroke_width=sw))
     return _wrap(p, parts)
 
 

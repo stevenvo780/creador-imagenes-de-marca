@@ -92,7 +92,7 @@ def gen_dragon(p: IsotypeParams) -> str:
 
     pts = [(c, c)]
     x, y = c, c
-    angle = 0
+    angle = 0.0
     step = p.size * 0.015
 
     for turn in sequence:
@@ -108,7 +108,9 @@ def gen_dragon(p: IsotypeParams) -> str:
     pts = _normalize_points(pts, p.size)
 
     d = _path_from_points(pts, close=False)
-    return _wrap(p, [create_svg_path(d, fill="none", stroke=p.accent_color, stroke_width=p.size * 0.02)])
+    return _wrap(
+        p, [create_svg_path(d, fill="none", stroke=p.accent_color, stroke_width=p.size * 0.02)]
+    )
 
 
 # ── Curva de Hilbert ──────────────────────────────────────────────────────
@@ -116,7 +118,9 @@ def gen_hilbert(p: IsotypeParams) -> str:
     """Curva de Hilbert: llenado de espacio (orden 3-4)."""
     order = 3 + int(seeded_random(p.seed, 5, 2))  # 3-4
 
-    def hilbert(x: float, y: float, xi: float, xj: float, yi: float, yj: float, n: int) -> list[tuple[float, float]]:
+    def hilbert(
+        x: float, y: float, xi: float, xj: float, yi: float, yj: float, n: int
+    ) -> list[tuple[float, float]]:
         """Generador recursivo de Hilbert."""
         pts = []
         if n <= 0:
@@ -125,8 +129,12 @@ def gen_hilbert(p: IsotypeParams) -> str:
 
         pts.extend(hilbert(x, y, yi / 2, yj / 2, xi / 2, xj / 2, n - 1))
         pts.extend(hilbert(x + xi / 2, y + xj / 2, xi / 2, xj / 2, yi / 2, yj / 2, n - 1))
-        pts.extend(hilbert(x + xi / 2 + yi / 2, y + xj / 2 + yj / 2, xi / 2, xj / 2, yi / 2, yj / 2, n - 1))
-        pts.extend(hilbert(x + xi / 2 + yi, y + xj / 2 + yj, -yi / 2, -yj / 2, -xi / 2, -xj / 2, n - 1))
+        pts.extend(
+            hilbert(x + xi / 2 + yi / 2, y + xj / 2 + yj / 2, xi / 2, xj / 2, yi / 2, yj / 2, n - 1)
+        )
+        pts.extend(
+            hilbert(x + xi / 2 + yi, y + xj / 2 + yj, -yi / 2, -yj / 2, -xi / 2, -xj / 2, n - 1)
+        )
 
         return pts
 
@@ -135,7 +143,9 @@ def gen_hilbert(p: IsotypeParams) -> str:
     pts = hilbert(c - side / 2, c - side / 2, side, 0, 0, side, order)
 
     d = _path_from_points(pts, close=False)
-    return _wrap(p, [create_svg_path(d, fill="none", stroke=p.primary_color, stroke_width=p.size * 0.019)])
+    return _wrap(
+        p, [create_svg_path(d, fill="none", stroke=p.primary_color, stroke_width=p.size * 0.019)]
+    )
 
 
 # ─────────────────────────────────────────────────────────────────────────────

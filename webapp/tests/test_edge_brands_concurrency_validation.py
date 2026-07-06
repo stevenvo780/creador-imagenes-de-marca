@@ -111,7 +111,9 @@ def _detail_text(payload: Any) -> str:
 @pytest.fixture()
 def app(tmp_path: Path) -> FastAPI:
     """App FastAPI con BD y output_root aislados; axes del repo real."""
-    return create_app(_settings(tmp_path), output_root=tmp_path / "output", axes_config_path=AXES_PATH)
+    return create_app(
+        _settings(tmp_path), output_root=tmp_path / "output", axes_config_path=AXES_PATH
+    )
 
 
 @pytest.fixture()
@@ -147,7 +149,9 @@ class TestCountValidation:
         # Mensaje menciona el rango permitido (1..64) o "greater than" / "at least"
         body_text = _detail_text(r.json())
         assert "count" in body_text
-        assert ("1" in body_text and "64" in body_text) or ("greater than" in body_text or "at least" in body_text)
+        assert ("1" in body_text and "64" in body_text) or (
+            "greater than" in body_text or "at least" in body_text
+        )
 
     def test_count_negative_rejected_422(self, client: TestClient) -> None:
         _register(client, "t-count-neg", "countneg@x.com")
@@ -434,7 +438,9 @@ class TestBrandDeletion:
         rg = client.get(f"/api/v1/brands/{bid}")
         assert rg.status_code == 404
 
-    def test_delete_brand_cleans_output_tree(self, client: TestClient, app: FastAPI, tmp_path: Path) -> None:
+    def test_delete_brand_cleans_output_tree(
+        self, client: TestClient, app: FastAPI, tmp_path: Path
+    ) -> None:
         """DELETE remueve el directorio output/tenants/{tid}/{slug}/ (best-effort)."""
         _register(client, "t-del-tree", "deltree@x.com")
         bid = _create_brand(client, slug="marca-del-tree")
@@ -611,10 +617,9 @@ class TestDuplicateSlugConstraint:
         assert "database is locked" not in detail_lower
 
         # Sí debe ser un mensaje en español claro
-        assert (
-            "slug ya existe" in detail_lower
-            or "ya existe" in detail_lower
-        ), f"mensaje poco claro: {detail_str}"
+        assert "slug ya existe" in detail_lower or "ya existe" in detail_lower, (
+            f"mensaje poco claro: {detail_str}"
+        )
 
     def test_same_slug_different_tenants_ok(self, app: FastAPI) -> None:
         """El constraint UNIQUE es (tenant_id, slug): mismo slug en distinto tenant es válido."""
@@ -662,9 +667,7 @@ class TestConcurrency:
             return int(r.json()["id"])
 
         async def _run() -> list[int]:
-            return await asyncio.gather(
-                *[asyncio.to_thread(enqueue, i) for i in range(4)]
-            )
+            return await asyncio.gather(*[asyncio.to_thread(enqueue, i) for i in range(4)])
 
         ids = asyncio.run(_run())
         assert len(ids) == 4
@@ -693,9 +696,7 @@ class TestConcurrency:
 
         async def _run() -> list[int]:
             # 6 en paralelo
-            return await asyncio.gather(
-                *[asyncio.to_thread(enqueue, i) for i in range(6)]
-            )
+            return await asyncio.gather(*[asyncio.to_thread(enqueue, i) for i in range(6)])
 
         ids = asyncio.run(_run())
         assert len(ids) == 6
@@ -739,7 +740,9 @@ class TestConcurrency:
         assert len(batch_ids) == 4
         assert all(c == 200 for c in health_codes), f"/health no siempre 200: {health_codes}"
 
-    def test_batch_status_progression(self, client: TestClient, app: FastAPI, tmp_path: Path) -> None:
+    def test_batch_status_progression(
+        self, client: TestClient, app: FastAPI, tmp_path: Path
+    ) -> None:
         """Status del batch pasa por pending → running → completed (con lifespan real)."""
         with TestClient(app) as c:
             _register(c, "t-status", "stat@x.com")
@@ -774,12 +777,19 @@ class TestConcurrency:
             # Sin render real (Playwright ausente), el batch queda pending/queued.
             # Aceptamos esa condición como válida en CI sin Playwright.
             assert final_status in {
-                "pending", "queued", "running", "completed", "failed", "cancelled"
+                "pending",
+                "queued",
+                "running",
+                "completed",
+                "failed",
+                "cancelled",
             }, f"status inesperado: {final_status!r}"
 
     @pytest.mark.integration
     @pytest.mark.skipif(not HAS_PLAYWRIGHT, reason="Playwright no instalado")
-    def test_concurrent_4_batches_render_with_health_200(self, app: FastAPI, tmp_path: Path) -> None:
+    def test_concurrent_4_batches_render_with_health_200(
+        self, app: FastAPI, tmp_path: Path
+    ) -> None:
         """4 batches renderizan concurrentemente; /health nunca cae; sin race conditions."""
         with TestClient(app) as c:
             _register(c, "t-conc-render", "concr@x.com")
@@ -805,9 +815,7 @@ class TestConcurrency:
 
             async def _enqueue_all() -> list[int]:
                 return list(
-                    await asyncio.gather(
-                        *[asyncio.to_thread(enqueue, i) for i in range(4)]
-                    )
+                    await asyncio.gather(*[asyncio.to_thread(enqueue, i) for i in range(4)])
                 )
 
             ids = asyncio.run(_enqueue_all())
@@ -849,9 +857,7 @@ class TestConcurrency:
                 )
 
             # /health siempre 200 durante toda la carga
-            assert all(h == 200 for h in health_codes), (
-                f"/health cayó: {sorted(set(health_codes))}"
-            )
+            assert all(h == 200 for h in health_codes), f"/health cayó: {sorted(set(health_codes))}"
 
             # El pool de workers rinde: al menos la mitad completó OK
             completed = sum(1 for s in states.values() if s == "completed")
@@ -915,7 +921,7 @@ class TestSerializationNoOutputPath:
             "id": 42,
             "batch_id": 7,
             "brand_id": 3,
-            "tenant_id": 99,                # NO debe aparecer
+            "tenant_id": 99,  # NO debe aparecer
             "axis_params_json": json.dumps({"palette_scheme": "mono"}),
             "seed": 12345,
             "score": 0.91,
@@ -946,7 +952,7 @@ class TestSerializationNoOutputPath:
 
         fake_brand = {
             "id": 5,
-            "tenant_id": 99,                # NO debe aparecer
+            "tenant_id": 99,  # NO debe aparecer
             "slug": "kosmos",
             "name": "Kósmos",
             "palette_json": json.dumps({"bg": "#000"}),

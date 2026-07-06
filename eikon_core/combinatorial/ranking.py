@@ -113,7 +113,9 @@ def _dhash_distance(hash1: str, hash2: str) -> int:
         return 64  # Max distance for invalid hashes
 
     try:
-        return sum(c1 != c2 for c1, c2 in zip(hash1, hash2, strict=False))
+        return sum(c1 != c2 for c1, c2 in zip(hash1, hash2, strict=False)) + abs(
+            len(hash1) - len(hash2)
+        )
     except Exception:
         return 64
 
@@ -327,7 +329,9 @@ def _signal_placeholder_penalty(params: dict[str, str]) -> RankingSignal:
         reason = "Placeholder (3 dots, not a real mark)"
     else:
         value = 1.0
-        reason = f"Real mark style: '{isotype_style}'" if isotype_style else "No isotype (assumed real)"
+        reason = (
+            f"Real mark style: '{isotype_style}'" if isotype_style else "No isotype (assumed real)"
+        )
 
     return RankingSignal(
         name="placeholder_penalty",
@@ -398,9 +402,7 @@ def _signal_visual_richness(png_path: Path) -> RankingSignal:
             # Good range: reward based on edge complexity
             value = min(1.0, 0.4 + fg_coverage * 0.3 + edge_complexity * 0.3)
 
-        reason = (
-            f"Richness: coverage={fg_coverage:.1%}, edge_complexity={edge_complexity:.2f} → {value:.2f}"
-        )
+        reason = f"Richness: coverage={fg_coverage:.1%}, edge_complexity={edge_complexity:.2f} → {value:.2f}"
         return RankingSignal(
             name="visual_richness",
             weight=0.25,  # 25% weight: structural complexity

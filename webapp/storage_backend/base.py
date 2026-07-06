@@ -1,4 +1,5 @@
 """Protocolo de abstracción para almacenamiento multi-tenant (local, GCS, etc.)"""
+
 from __future__ import annotations
 
 from typing import Protocol

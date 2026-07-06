@@ -257,8 +257,10 @@ def test_update_batch_status(db: Path, two_tenants: tuple[int, int]) -> None:
     tid_a, _ = two_tenants
     brand = create_brand(db, tenant_id=tid_a, slug="kosmos", name="Kósmos")
     batch = create_batch(db, tid_a, brand["id"])
-    update_batch_status(db, batch["id"], "running")
-    update_batch_status(db, batch["id"], "completed", counts={"ok": 10, "fail": 0})
+    update_batch_status(db, batch["id"], "running", tenant_id=tid_a)
+    update_batch_status(
+        db, batch["id"], "completed", counts={"ok": 10, "fail": 0}, tenant_id=tid_a
+    )
     row = get_batch(db, tid_a, batch["id"])
     assert row is not None
     assert row["status"] == "completed"
@@ -402,9 +404,7 @@ def test_seed_brands_idempotent(db: Path, tmp_path: Path) -> None:
             "logo_simbolo": "★",
             "textos": {},
         }
-        (marcas_dir / f"test-brand-{i}.json").write_text(
-            json.dumps(brand_data), encoding="utf-8"
-        )
+        (marcas_dir / f"test-brand-{i}.json").write_text(json.dumps(brand_data), encoding="utf-8")
 
     result_1 = seed_brands(db, marcas_dir=marcas_dir, tenant_slug="seed-owner")
     result_2 = seed_brands(db, marcas_dir=marcas_dir, tenant_slug="seed-owner")

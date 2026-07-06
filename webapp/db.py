@@ -76,8 +76,12 @@ def _schema_for_postgres(script: str) -> str:
 class DualConnection:
     """Wrapper de conexión que soporta SQLite y Postgres con API uniforme."""
 
-    def __init__(self, dialect: str, sqlite_conn: sqlite3.Connection | None = None,
-                 postgres_conn: Any | None = None) -> None:
+    def __init__(
+        self,
+        dialect: str,
+        sqlite_conn: sqlite3.Connection | None = None,
+        postgres_conn: Any | None = None,
+    ) -> None:
         self.dialect = dialect
         self.sqlite_conn = sqlite_conn
         self.postgres_conn = postgres_conn
@@ -169,8 +173,9 @@ class DualConnection:
 class DualCursor:
     """Wrapper de cursor que soporta SQLite y Postgres con API uniforme."""
 
-    def __init__(self, dialect: str, sqlite_cursor: Any = None,
-                 postgres_cursor: Any = None) -> None:
+    def __init__(
+        self, dialect: str, sqlite_cursor: Any = None, postgres_cursor: Any = None
+    ) -> None:
         self.dialect = dialect
         self.sqlite_cursor = sqlite_cursor
         self.postgres_cursor = postgres_cursor
@@ -198,7 +203,9 @@ class DualCursor:
             if row is None:
                 return None
             # Postgres: convertir Row a dict
-            return dict(zip([desc[0] for desc in self.postgres_cursor.description], row, strict=False))
+            return dict(
+                zip([desc[0] for desc in self.postgres_cursor.description], row, strict=False)
+            )
 
     def fetchall(self) -> list[dict[str, Any]]:
         """Devuelve todas las filas como lista de dicts."""

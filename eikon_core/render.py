@@ -259,7 +259,9 @@ async def render_asset(
             "subtitulo": content_overrides.get("subtitulo") or vars_dict.get("subtitulo", ""),
             "etiqueta": content_overrides.get("etiqueta") or vars_dict.get("etiqueta", ""),
             "numero": content_overrides.get("numero") or vars_dict.get("numero", ""),
-            "copy": content_overrides.get("copy") or content_overrides.get("subtitulo") or vars_dict.get("copy", ""),
+            "copy": content_overrides.get("copy")
+            or content_overrides.get("subtitulo")
+            or vars_dict.get("copy", ""),
             "url": content_overrides.get("url") or vars_dict.get("url", ""),
             # data-logo-texto = firma de marca (SIEMPRE el nombre); el headline del
             # contenido va por data-titulo (evita duplicar el título en la pieza).
@@ -305,7 +307,9 @@ async def render_asset(
     page = None
     try:
         # Extract and prepare data attributes from combination params
-        data_attrs_to_inject = _extract_data_attrs_from_combination(combination_params, tipo_spec.name)
+        data_attrs_to_inject = _extract_data_attrs_from_combination(
+            combination_params, tipo_spec.name
+        )
 
         # Si la combinación pide un isótipo procedural, generarlo e inyectar el SVG
         # real en el contenedor [data-isotype-container] del template (en vez del
@@ -314,11 +318,7 @@ async def render_asset(
         isotype_style = brand_isotype_style or (combination_params or {}).get(
             "isotype_style", "none"
         )
-        seed_hex = (
-            _brand_isotype_seed_hex(marca, input_hash)
-            if brand_isotype_style
-            else input_hash
-        )
+        seed_hex = _brand_isotype_seed_hex(marca, input_hash) if brand_isotype_style else input_hash
         if isotype_style and isotype_style != "none":
             data_attrs_to_inject["data-isotype-style"] = isotype_style
         isotype_uri = _build_isotype_data_uri(isotype_style, seed_hex, marca, vars_dict)

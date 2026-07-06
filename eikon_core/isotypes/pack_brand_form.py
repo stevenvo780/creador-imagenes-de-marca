@@ -79,18 +79,28 @@ def gen_grid_modular(p: IsotypeParams) -> str:
                     (cx_cell - half, cy_cell + half),
                 ]
                 if filled:
-                    parts.append(create_svg_polygon(pts, fill=p.primary_color, stroke="none", stroke_width=0))
+                    parts.append(
+                        create_svg_polygon(pts, fill=p.primary_color, stroke="none", stroke_width=0)
+                    )
                 else:
-                    parts.append(create_svg_polygon(pts, fill="none", stroke=p.accent_color, stroke_width=sw))
+                    parts.append(
+                        create_svg_polygon(pts, fill="none", stroke=p.accent_color, stroke_width=sw)
+                    )
             else:
                 # hexágono con rotación alternada por fila para encaje visual
                 row_rot = rot + (row % 2) * 30.0
                 pts = create_regular_polygon(cx_cell, cy_cell, half, 6, rotation_deg=row_rot)
                 d = _path_from_points(pts, close=True)
                 if filled:
-                    parts.append(create_svg_path(d, fill=p.primary_color, stroke=p.accent_color, stroke_width=sw * 0.5))
+                    parts.append(
+                        create_svg_path(
+                            d, fill=p.primary_color, stroke=p.accent_color, stroke_width=sw * 0.5
+                        )
+                    )
                 else:
-                    parts.append(create_svg_path(d, fill="none", stroke=p.accent_color, stroke_width=sw))
+                    parts.append(
+                        create_svg_path(d, fill="none", stroke=p.accent_color, stroke_width=sw)
+                    )
 
     return _wrap(p, parts)
 
@@ -106,25 +116,45 @@ def gen_marca_anidada(p: IsotypeParams) -> str:
     inner_shape = int(seeded_random(p.seed, 2, 3))  # puede variar vs exterior
 
     # radios con variación por seed
-    outer_rad = p.size * (0.36 + seeded_random(p.seed, 3, 0.03))   # 0.36..0.39
+    outer_rad = p.size * (0.36 + seeded_random(p.seed, 3, 0.03))  # 0.36..0.39
     middle_rad = p.size * (0.24 + seeded_random(p.seed, 4, 0.03))  # 0.24..0.27
-    inner_rad = p.size * (0.14 + seeded_random(p.seed, 5, 0.03))   # 0.14..0.17
+    inner_rad = p.size * (0.14 + seeded_random(p.seed, 5, 0.03))  # 0.14..0.17
 
     rot = seeded_random(p.seed, 6, 360.0)
 
     parts: list[str] = []
 
     # ── Capa exterior: fill primary ──
-    _add_shape(parts, outer_shape, c, c, outer_rad, rot, fill=p.primary_color,
-               stroke="none", stroke_width=0, sw=sw)
+    _add_shape(
+        parts,
+        outer_shape,
+        c,
+        c,
+        outer_rad,
+        rot,
+        fill=p.primary_color,
+        stroke="none",
+        stroke_width=0,
+        sw=sw,
+    )
 
     # ── Capa media: stroke accent + ticks ──
-    _add_shape(parts, middle_shape, c, c, middle_rad, rot, fill="none",
-               stroke=p.accent_color, stroke_width=sw, sw=sw)
+    _add_shape(
+        parts,
+        middle_shape,
+        c,
+        c,
+        middle_rad,
+        rot,
+        fill="none",
+        stroke=p.accent_color,
+        stroke_width=sw,
+        sw=sw,
+    )
 
-    n_ticks = 6 + int(seeded_random(p.seed, 7, 7))   # 6..12
+    n_ticks = 6 + int(seeded_random(p.seed, 7, 7))  # 6..12
     tick_len = p.size * (0.02 + seeded_random(p.seed, 8, 0.025))  # 0.02..0.045
-    tick_rot = seeded_random(p.seed, 9, 360.0)       # offset angular de los ticks
+    tick_rot = seeded_random(p.seed, 9, 360.0)  # offset angular de los ticks
     for i in range(n_ticks):
         angle = math.radians(tick_rot) + 2 * math.pi * i / n_ticks
         r_start = middle_rad
@@ -136,8 +166,18 @@ def gen_marca_anidada(p: IsotypeParams) -> str:
         parts.append(create_svg_line(x1, y1, x2, y2, stroke=p.accent_color, stroke_width=sw * 0.7))
 
     # ── Capa interior: bg_color + borde accent + inicial ──
-    _add_shape(parts, inner_shape, c, c, inner_rad, rot,
-               fill=p.bg_color, stroke=p.accent_color, stroke_width=sw * 0.7, sw=sw)
+    _add_shape(
+        parts,
+        inner_shape,
+        c,
+        c,
+        inner_rad,
+        rot,
+        fill=p.bg_color,
+        stroke=p.accent_color,
+        stroke_width=sw * 0.7,
+        sw=sw,
+    )
 
     initial = (p.brand_initials or "K")[0].upper()
     font_size = inner_rad * 1.2
@@ -160,7 +200,9 @@ def _add_shape(
 ) -> None:
     """Agrega la primitiva SVG correspondiente según la forma (0=círculo, 1=hex, 2=cuadrado)."""
     if shape == 0:
-        parts.append(create_svg_circle(cx, cy, r, fill=fill, stroke=stroke, stroke_width=stroke_width))
+        parts.append(
+            create_svg_circle(cx, cy, r, fill=fill, stroke=stroke, stroke_width=stroke_width)
+        )
     else:
         sides = 6 if shape == 1 else 4
         srot = rot if shape == 1 else rot + 45.0  # cuadrado rotado 45° extra para rombo

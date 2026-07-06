@@ -219,7 +219,7 @@ def create_app(
         Devuelve una lista plana de asset types con name, label, category y dimensiones.
         """
         import json
-        from pathlib import Path
+
         from eikon_core.constants import ROOT
 
         taxonomy_path = ROOT / "config" / "taxonomy.json"
@@ -230,11 +230,26 @@ def create_app(
 
         # Catálogo de labels en español para tipos de asset
         type_meta = {
-            "isotipo": {"label": "Símbolo / Isotipo", "description": "El ícono gráfico de la marca"},
-            "lockup_horizontal": {"label": "Logo horizontal", "description": "Símbolo y nombre horizontal"},
-            "lockup_vertical": {"label": "Logo vertical", "description": "Símbolo arriba y nombre debajo"},
-            "wordmark": {"label": "Logo de texto", "description": "El nombre como elemento tipográfico"},
-            "favicon": {"label": "Ícono de pestaña", "description": "Ícono para pestaña del navegador"},
+            "isotipo": {
+                "label": "Símbolo / Isotipo",
+                "description": "El ícono gráfico de la marca",
+            },
+            "lockup_horizontal": {
+                "label": "Logo horizontal",
+                "description": "Símbolo y nombre horizontal",
+            },
+            "lockup_vertical": {
+                "label": "Logo vertical",
+                "description": "Símbolo arriba y nombre debajo",
+            },
+            "wordmark": {
+                "label": "Logo de texto",
+                "description": "El nombre como elemento tipográfico",
+            },
+            "favicon": {
+                "label": "Ícono de pestaña",
+                "description": "Ícono para pestaña del navegador",
+            },
             "watermark": {"label": "Marca de agua", "description": "Versión translúcida"},
             "linkedin_header": {"label": "Portada LinkedIn", "description": "1584x396 px"},
             "twitter_header": {"label": "Portada X / Twitter", "description": "1500x500 px"},
@@ -260,14 +275,16 @@ def create_app(
                     if name and name not in seen_names:
                         seen_names.add(name)
                         meta = type_meta.get(name, {})
-                        assets.append({
-                            "name": name,
-                            "label": meta.get("label", name.replace("_", " ").title()),
-                            "description": meta.get("description", ""),
-                            "category": cat_id,
-                            "width": t.get("width"),
-                            "height": t.get("height"),
-                        })
+                        assets.append(
+                            {
+                                "name": name,
+                                "label": meta.get("label", name.replace("_", " ").title()),
+                                "description": meta.get("description", ""),
+                                "category": cat_id,
+                                "width": t.get("width"),
+                                "height": t.get("height"),
+                            }
+                        )
 
         return {"asset_types": assets}
 
@@ -378,7 +395,9 @@ def create_app(
                 return FileResponse(str(candidate))
         if index_html.is_file():
             return FileResponse(str(index_html))
-        raise HTTPException(status_code=404, detail="SPA build ausente; corré 'npm run build' en frontend/")
+        raise HTTPException(
+            status_code=404, detail="SPA build ausente; corré 'npm run build' en frontend/"
+        )
 
     return app
 
@@ -395,6 +414,7 @@ except ValueError:
     # Permitir una app dummy que será reemplazada cuando los tests creen apps con Settings válidos.
     # En producción, este error DEBE propagarse.
     import sys
+
     if "pytest" in sys.modules or any("pytest" in arg for arg in sys.argv):
         # pytest mode: crear una app dummy con Settings seguro
         _dummy_settings = Settings(

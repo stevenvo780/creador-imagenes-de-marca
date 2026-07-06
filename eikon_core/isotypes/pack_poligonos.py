@@ -5,6 +5,7 @@ polígono regular, anidados concéntricos, capas rotadas, Reuleaux, ráfaga con
 rayos, espiral de polígonos, triángulos radiales, zigzag radial y corona de
 picos. Todas deterministas por seed y solo usan colores de marca.
 """
+
 from __future__ import annotations
 
 import math
@@ -41,14 +42,17 @@ def gen_poligono_regular(p: IsotypeParams) -> str:
     n = 3 + int(seeded_random(p.seed, 1, 6))  # 3..8 lados
     rot = seeded_random(p.seed, 2, 360)
     pts = create_regular_polygon(c, c, rad, n, rotation_deg=rot)
-    return _wrap(p, [
-        create_svg_polygon(
-            pts,
-            fill=p.primary_color,
-            stroke=p.accent_color,
-            stroke_width=p.size * 0.022,
-        )
-    ])
+    return _wrap(
+        p,
+        [
+            create_svg_polygon(
+                pts,
+                fill=p.primary_color,
+                stroke=p.accent_color,
+                stroke_width=p.size * 0.022,
+            )
+        ],
+    )
 
 
 # ── 2. Polígonos anidados concéntricos ───────────────────────────────────────
@@ -63,9 +67,7 @@ def gen_poligonos_anidados(p: IsotypeParams) -> str:
     for i in range(k):
         col = p.primary_color if i % 2 == 0 else p.accent_color
         stroke_col = p.accent_color if i % 2 == 0 else p.primary_color
-        pts = create_regular_polygon(
-            c, c, rad, n, rotation_deg=rot0 + (180 / n) * i
-        )
+        pts = create_regular_polygon(c, c, rad, n, rotation_deg=rot0 + (180 / n) * i)
         parts.append(
             create_svg_polygon(
                 pts,
@@ -90,19 +92,20 @@ def gen_reuleaux(p: IsotypeParams) -> str:
     path_parts = [f"M {verts[0][0]:.2f} {verts[0][1]:.2f}"]
     for i in range(3):
         nv = verts[(i + 1) % 3]
-        path_parts.append(
-            f"A {side:.2f} {side:.2f} 0 0 1 {nv[0]:.2f} {nv[1]:.2f}"
-        )
+        path_parts.append(f"A {side:.2f} {side:.2f} 0 0 1 {nv[0]:.2f} {nv[1]:.2f}")
     path_parts.append("Z")
     d = " ".join(path_parts)
-    return _wrap(p, [
-        create_svg_path(
-            d,
-            fill="none",
-            stroke=p.accent_color,
-            stroke_width=p.size * 0.028,
-        )
-    ])
+    return _wrap(
+        p,
+        [
+            create_svg_path(
+                d,
+                fill="none",
+                stroke=p.accent_color,
+                stroke_width=p.size * 0.028,
+            )
+        ],
+    )
 
 
 # ── Corona de picos (anillo + triángulos hacia afuera) ─────────────────────
@@ -132,9 +135,7 @@ def gen_corona_picos(p: IsotypeParams) -> str:
             )
         )
     # Anillo interior (disco) para cohesión.
-    parts.append(
-        create_svg_circle(c, c, r_inner * 0.55, fill=p.primary_color)
-    )
+    parts.append(create_svg_circle(c, c, r_inner * 0.55, fill=p.primary_color))
     return _wrap(p, parts)
 
 

@@ -234,7 +234,12 @@ def test_batch_count_exceeds_distinct_422(client: TestClient) -> None:
     # palette_scheme tiene 6 opciones; count=10 > 6 -> plan_combinations falla -> 422
     r = client.post(
         "/api/v1/batches",
-        json={"brand_id": bid, "asset_types": ["isotipo"], "permuted": ["palette_scheme"], "count": 10},
+        json={
+            "brand_id": bid,
+            "asset_types": ["isotipo"],
+            "permuted": ["palette_scheme"],
+            "count": 10,
+        },
     )
     assert r.status_code == 422
 
@@ -267,9 +272,12 @@ def test_variation_file_missing_404(client: TestClient) -> None:
 def test_full_flow_render_download_zip(app: FastAPI) -> None:
     with TestClient(app) as client:
         _register(client, "studio", "owner@studio.com")
-        assert client.post(
-            "/auth/login", json={"email": "owner@studio.com", "password": PASSWORD}
-        ).status_code == 200
+        assert (
+            client.post(
+                "/auth/login", json={"email": "owner@studio.com", "password": PASSWORD}
+            ).status_code
+            == 200
+        )
 
         # Brand con slug de una marca real => el worker carga marcas/pinakotheke-kosmos.json
         bid = _create_brand(client, "pinakotheke-kosmos", "Kósmos")

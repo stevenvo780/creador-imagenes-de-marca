@@ -38,14 +38,8 @@ export type { SpinnerProps } from './Spinner';
 export { Skeleton, SkeletonCard } from './Skeleton';
 export type { SkeletonProps } from './Skeleton';
 
-export { Toast }       from './Toast';
-export type { ToastProps } from './Toast';
-
 export { Modal }       from './Modal';
 export type { ModalProps } from './Modal';
-
-export { PageHeader }  from './PageHeader';
-export type { PageHeaderProps } from './PageHeader';
 
 export { Steps }       from './Steps';
 export type { StepsProps, StepItem } from './Steps';

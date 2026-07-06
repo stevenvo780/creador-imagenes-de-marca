@@ -6,6 +6,7 @@ Autenticación: Application Default Credentials (ADC) por defecto.
 En Cloud Run, ADC resuelve con la service account del servicio sin configuración
 adicional.  En local se puede pasar credentials_path (service-account.json).
 """
+
 from __future__ import annotations
 
 import io
@@ -106,9 +107,7 @@ class GCSStorage:
         try:
             return blob.download_as_bytes()  # type: ignore[no-any-return]
         except NotFound as exc:
-            raise FileNotFoundError(
-                f"objeto no existe en GCS: {blob.name}"
-            ) from exc
+            raise FileNotFoundError(f"objeto no existe en GCS: {blob.name}") from exc
 
     def full_path(self, tenant_id: int, relative_path: str) -> str:
         """Devuelve la URI gs:// del objeto sin requerir que exista.
@@ -144,10 +143,8 @@ class GCSStorage:
         """
         prefix = f"gs://{self.bucket_name}/tenants/{tenant_id}/"
         if not stored_path.startswith(prefix):
-            raise ValueError(
-                f"stored_path fuera del scope del tenant {tenant_id}: {stored_path}"
-            )
-        rel = stored_path[len(prefix):]
+            raise ValueError(f"stored_path fuera del scope del tenant {tenant_id}: {stored_path}")
+        rel = stored_path[len(prefix) :]
         self._validate_relative_path(rel)
         return rel
 
@@ -198,7 +195,7 @@ class GCSStorage:
         for blob in self._client.list_blobs(self._bucket, prefix=gcs_prefix):
             name: str = blob.name
             if name.startswith(tenant_prefix):
-                relative = name[len(tenant_prefix):]
+                relative = name[len(tenant_prefix) :]
                 if relative:  # excluir el "directorio" ficticio (blob.name == prefijo exacto)
                     result.append(relative)
         return sorted(result)
@@ -240,6 +237,4 @@ class GCSStorage:
         try:
             blob.delete()
         except NotFound as exc:
-            raise FileNotFoundError(
-                f"objeto no existe en GCS: {blob.name}"
-            ) from exc
+            raise FileNotFoundError(f"objeto no existe en GCS: {blob.name}") from exc

@@ -206,9 +206,7 @@ async def get_batch_plan(  # noqa: C901
             isotype_style = params.get("isotype_style", "orbital")
             isotype_seed = seed_hex
 
-        isotype_data_uri = _build_isotype_data_uri(
-            isotype_style, isotype_seed, marca, vars_dict
-        )
+        isotype_data_uri = _build_isotype_data_uri(isotype_style, isotype_seed, marca, vars_dict)
 
         # Textos, aplicando content overrides. El headline de varias plantillas usa
         # data-logo-texto (nombre de marca): lo llenamos con el título del usuario si
@@ -219,21 +217,25 @@ async def get_batch_plan(  # noqa: C901
             "subtitulo": content_overrides.get("subtitulo") or vars_dict.get("subtitulo", ""),
             "etiqueta": content_overrides.get("etiqueta") or vars_dict.get("etiqueta", ""),
             "numero": content_overrides.get("numero") or vars_dict.get("numero", ""),
-            "copy": content_overrides.get("copy") or content_overrides.get("subtitulo") or vars_dict.get("copy", ""),
+            "copy": content_overrides.get("copy")
+            or content_overrides.get("subtitulo")
+            or vars_dict.get("copy", ""),
             "url": content_overrides.get("url") or vars_dict.get("url", ""),
             # data-logo-texto = firma de marca (SIEMPRE el nombre). El headline del
             # contenido va por data-titulo — si acá pusiéramos el título se duplicaría.
             "logo-texto": content_overrides.get("logo_texto") or _brand_name,
         }
 
-        combinations_list.append({
-            "idx": idx,
-            "params": params,
-            "vars": vars_dict,
-            "data_attrs": data_attrs,
-            "isotype_data_uri": isotype_data_uri,
-            "texts": texts_obj,
-        })
+        combinations_list.append(
+            {
+                "idx": idx,
+                "params": params,
+                "vars": vars_dict,
+                "data_attrs": data_attrs,
+                "isotype_data_uri": isotype_data_uri,
+                "texts": texts_obj,
+            }
+        )
 
     return {
         "batch_id": batch_id,
@@ -309,9 +311,7 @@ async def upload_variation(
     # Reconstruye la clave RELATIVA al tenant (NUNCA del cliente). storage.save
     # agrega el prefijo tenants/{tenant_id}/ por sí mismo, así que NO va aquí.
     # Formato: {marca}/{category}/{asset_type}/{batch_id}/combo_{idx:03d}.png
-    relative_path = (
-        f"{brand_slug}/{category}/{asset_type}/{batch_id}/combo_{combo_idx:03d}.png"
-    )
+    relative_path = f"{brand_slug}/{category}/{asset_type}/{batch_id}/combo_{combo_idx:03d}.png"
 
     # Guarda el PNG. output_path = lo que devuelve save() (ruta abs local o URI
     # gs://), que es lo que la descarga sabe invertir con storage.relative_key().

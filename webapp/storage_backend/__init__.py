@@ -6,6 +6,7 @@ Selección automática vía variable de entorno:
 - ``GCS_BUCKET`` definida → GCSStorage(bucket_name=GCS_BUCKET)
 - ``GCS_BUCKET`` ausente  → LocalStorage(base_dir)
 """
+
 from __future__ import annotations
 
 import os

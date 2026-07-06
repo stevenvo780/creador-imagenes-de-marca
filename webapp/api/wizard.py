@@ -128,9 +128,7 @@ _FAMILY_ORDER = ["logos", "banners", "cards", "og", "stationery"]
 
 
 @router.get("/axes")
-def wizard_axes(
-    request: Request, user: dict[str, Any] = Depends(current_user)
-) -> dict[str, Any]:
+def wizard_axes(request: Request, user: dict[str, Any] = Depends(current_user)) -> dict[str, Any]:
     """Catálogo de ejes: nombre, label, tipo y opciones (name + descripción)."""
     cfg = get_axes_config(request)
     axes: list[dict[str, Any]] = []
@@ -155,9 +153,7 @@ def wizard_axes(
 
 
 @router.get("/brands")
-def wizard_brands(
-    request: Request, user: dict[str, Any] = Depends(current_user)
-) -> dict[str, Any]:
+def wizard_brands(request: Request, user: dict[str, Any] = Depends(current_user)) -> dict[str, Any]:
     """Brands del tenant disponibles como base de un batch."""
     settings = get_settings(request)
     rows = list_brands(settings.db_url, user["tenant_id"])

@@ -78,7 +78,9 @@ def _generate_lettermark(params: IsotypeParams) -> str:
     bg_points = create_regular_polygon(center, center, radius, sides, rotation_deg=rot)
 
     content_parts = [
-        create_svg_polygon(bg_points, fill=params.primary_color, stroke=params.accent_color, stroke_width=2),
+        create_svg_polygon(
+            bg_points, fill=params.primary_color, stroke=params.accent_color, stroke_width=2
+        ),
     ]
 
     # Agregar letra centrada
@@ -95,7 +97,9 @@ def _generate_lettermark(params: IsotypeParams) -> str:
     )
 
     content = "\n".join(content_parts)
-    return wrap_svg(content, viewbox=f"0 0 {params.size} {params.size}", width=params.size, height=params.size)
+    return wrap_svg(
+        content, viewbox=f"0 0 {params.size} {params.size}", width=params.size, height=params.size
+    )
 
 
 def _generate_geometric(params: IsotypeParams) -> str:
@@ -109,7 +113,9 @@ def _generate_geometric(params: IsotypeParams) -> str:
 
     # Crear polígono principal
     main_radius = base_radius
-    main_points = create_regular_polygon(center, center, main_radius, num_sides, rotation_deg=seeded_random(params.seed, 1, 360))
+    main_points = create_regular_polygon(
+        center, center, main_radius, num_sides, rotation_deg=seeded_random(params.seed, 1, 360)
+    )
 
     content_parts = [
         create_svg_polygon(
@@ -129,14 +135,18 @@ def _generate_geometric(params: IsotypeParams) -> str:
         y1 = center + (base_radius * 0.4) * math.sin(angle_rad)
         x2 = center + base_radius * math.cos(angle_rad)
         y2 = center + base_radius * math.sin(angle_rad)
-        content_parts.append(create_svg_line(x1, y1, x2, y2, stroke=params.accent_color, stroke_width=1.5))
+        content_parts.append(
+            create_svg_line(x1, y1, x2, y2, stroke=params.accent_color, stroke_width=1.5)
+        )
 
     # Círculo central pequeño
     inner_radius = golden_ratio(params.size * 0.05)
     content_parts.append(create_svg_circle(center, center, inner_radius, fill=params.accent_color))
 
     content = "\n".join(content_parts)
-    return wrap_svg(content, viewbox=f"0 0 {params.size} {params.size}", width=params.size, height=params.size)
+    return wrap_svg(
+        content, viewbox=f"0 0 {params.size} {params.size}", width=params.size, height=params.size
+    )
 
 
 def _generate_abstract(params: IsotypeParams) -> str:
@@ -170,17 +180,31 @@ def _generate_abstract(params: IsotypeParams) -> str:
         end_x = center + base_radius * math.cos(next_angle_rad)
         end_y = center + base_radius * math.sin(next_angle_rad)
 
-        path_commands.extend(["C", f"{cp1_x:.2f}", f"{cp1_y:.2f}", f"{cp2_x:.2f}", f"{cp2_y:.2f}", f"{end_x:.2f}", f"{end_y:.2f}"])
+        path_commands.extend(
+            [
+                "C",
+                f"{cp1_x:.2f}",
+                f"{cp1_y:.2f}",
+                f"{cp2_x:.2f}",
+                f"{cp2_y:.2f}",
+                f"{end_x:.2f}",
+                f"{end_y:.2f}",
+            ]
+        )
 
     path_commands.append("Z")
     path_d = " ".join(path_commands)
 
     content_parts = [
-        create_svg_path(path_d, fill=params.primary_color, stroke=params.accent_color, stroke_width=2),
+        create_svg_path(
+            path_d, fill=params.primary_color, stroke=params.accent_color, stroke_width=2
+        ),
     ]
 
     content = "\n".join(content_parts)
-    return wrap_svg(content, viewbox=f"0 0 {params.size} {params.size}", width=params.size, height=params.size)
+    return wrap_svg(
+        content, viewbox=f"0 0 {params.size} {params.size}", width=params.size, height=params.size
+    )
 
 
 def _generate_enclosure(params: IsotypeParams) -> str:
@@ -194,21 +218,34 @@ def _generate_enclosure(params: IsotypeParams) -> str:
     rot = seeded_random(params.seed, 12, 90)
     if shape == 0:
         outer = create_svg_circle(
-            center, center, outer_radius, fill=params.primary_color,
-            stroke=params.accent_color, stroke_width=2,
+            center,
+            center,
+            outer_radius,
+            fill=params.primary_color,
+            stroke=params.accent_color,
+            stroke_width=2,
         )
         inner = create_svg_circle(
-            center, center, inner_radius, fill="none", stroke=params.accent_color, stroke_width=1,
+            center,
+            center,
+            inner_radius,
+            fill="none",
+            stroke=params.accent_color,
+            stroke_width=1,
         )
     else:
         sides = 6 if shape == 1 else 4
         outer = create_svg_polygon(
             create_regular_polygon(center, center, outer_radius, sides, rotation_deg=rot),
-            fill=params.primary_color, stroke=params.accent_color, stroke_width=2,
+            fill=params.primary_color,
+            stroke=params.accent_color,
+            stroke_width=2,
         )
         inner = create_svg_polygon(
             create_regular_polygon(center, center, inner_radius, sides, rotation_deg=rot),
-            fill="none", stroke=params.accent_color, stroke_width=1,
+            fill="none",
+            stroke=params.accent_color,
+            stroke_width=1,
         )
     content_parts = [outer, inner]
 
@@ -227,7 +264,9 @@ def _generate_enclosure(params: IsotypeParams) -> str:
     )
 
     content = "\n".join(content_parts)
-    return wrap_svg(content, viewbox=f"0 0 {params.size} {params.size}", width=params.size, height=params.size)
+    return wrap_svg(
+        content, viewbox=f"0 0 {params.size} {params.size}", width=params.size, height=params.size
+    )
 
 
 def _wrap(params: IsotypeParams, parts: list[str]) -> str:
@@ -330,11 +369,29 @@ def _generate_monogram(params: IsotypeParams) -> str:
     sides = (4, 6)[int(seeded_random(params.seed, 29, 2))]
     parts = [
         create_svg_polygon(
-            create_regular_polygon(center, center, radius, sides, rotation_deg=seeded_random(params.seed, 30, 90)),
-            fill="none", stroke=params.primary_color, stroke_width=2,
+            create_regular_polygon(
+                center, center, radius, sides, rotation_deg=seeded_random(params.seed, 30, 90)
+            ),
+            fill="none",
+            stroke=params.primary_color,
+            stroke_width=2,
         ),
-        create_svg_text(initial, center + off, center + off, font_size=fs, fill=params.accent_color, font_family="sans-serif"),
-        create_svg_text(initial, center - off, center - off, font_size=fs, fill=params.primary_color, font_family="sans-serif"),
+        create_svg_text(
+            initial,
+            center + off,
+            center + off,
+            font_size=fs,
+            fill=params.accent_color,
+            font_family="sans-serif",
+        ),
+        create_svg_text(
+            initial,
+            center - off,
+            center - off,
+            font_size=fs,
+            fill=params.primary_color,
+            font_family="sans-serif",
+        ),
     ]
     return _wrap(params, parts)
 

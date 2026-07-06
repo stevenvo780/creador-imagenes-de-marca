@@ -30,6 +30,7 @@ Primitives disponibles (eikon_core/svg_generator):
 - wrap_svg(content,viewbox,width,height) -> str
 - hex_to_rgba(hex_color, alpha=1.0) -> str
 """
+
 from __future__ import annotations
 
 import math
@@ -78,7 +79,9 @@ def gen_lissajous(p: IsotypeParams) -> str:
         t = 2 * math.pi * i / n
         pts.append((c + rad * math.sin(a * t + delta), c + rad * math.sin(b * t)))
     d = _path_from_points(pts, close=True)
-    return _wrap(p, [create_svg_path(d, fill="none", stroke=p.primary_color, stroke_width=p.size * 0.022)])
+    return _wrap(
+        p, [create_svg_path(d, fill="none", stroke=p.primary_color, stroke_width=p.size * 0.022)]
+    )
 
 
 # ── Ejemplo 2: espiral (Arquímedes) ─────────────────────────────────────────
@@ -94,8 +97,12 @@ def gen_espiral_arquimedes(p: IsotypeParams) -> str:
         r = a * theta
         pts.append((c + r * math.cos(theta), c + r * math.sin(theta)))
     parts = [
-        create_svg_path(_path_from_points(pts, close=False), fill="none",
-                        stroke=p.primary_color, stroke_width=p.size * 0.024),
+        create_svg_path(
+            _path_from_points(pts, close=False),
+            fill="none",
+            stroke=p.primary_color,
+            stroke_width=p.size * 0.024,
+        ),
         create_svg_circle(c, c, p.size * 0.04, fill=p.accent_color),
     ]
     return _wrap(p, parts)
@@ -113,7 +120,14 @@ def gen_estrella_np(p: IsotypeParams) -> str:
     for i in range(n):
         pts.append(outer[i])
         pts.append(inner[i])
-    return _wrap(p, [create_svg_polygon(pts, fill=p.primary_color, stroke=p.accent_color, stroke_width=p.size * 0.015)])
+    return _wrap(
+        p,
+        [
+            create_svg_polygon(
+                pts, fill=p.primary_color, stroke=p.accent_color, stroke_width=p.size * 0.015
+            )
+        ],
+    )
 
 
 PACK = {

@@ -104,7 +104,12 @@ _LETTER_GRID: dict[str, tuple[str, str, str, str, str]] = {
 def _letter_cells(initial: str) -> set[tuple[int, int]]:
     """Devuelve las celdas ocupadas por una inicial en matriz 5x5."""
     rows = _LETTER_GRID.get(initial, _LETTER_GRID["A"])
-    return {(row, col) for row, pattern in enumerate(rows) for col, value in enumerate(pattern) if value == "1"}
+    return {
+        (row, col)
+        for row, pattern in enumerate(rows)
+        for col, value in enumerate(pattern)
+        if value == "1"
+    }
 
 
 def _support_pair(cell: tuple[int, int], mode: int) -> tuple[tuple[int, int], tuple[int, int]]:
@@ -133,7 +138,9 @@ def _shape_svg(
 ) -> str:
     """Dibuja círculo, rectángulo o triángulo con una escala común."""
     if shape == 0:
-        return create_svg_circle(cx, cy, radius, fill=fill, stroke=stroke, stroke_width=stroke_width)
+        return create_svg_circle(
+            cx, cy, radius, fill=fill, stroke=stroke, stroke_width=stroke_width
+        )
     if shape == 1:
         points = _rotated_rect_points(cx, cy, radius * 1.55, radius * 1.08, rotation_deg)
         return create_svg_polygon(points, fill=fill, stroke=stroke, stroke_width=stroke_width)
@@ -231,8 +238,12 @@ def gen_negativo_espacio(p: IsotypeParams) -> str:
         right = x1 - radius
         parts.extend(
             [
-                create_svg_circle(left, c, radius, fill=p.primary_color, stroke="none", stroke_width=0),
-                create_svg_circle(right, c, radius, fill=p.primary_color, stroke="none", stroke_width=0),
+                create_svg_circle(
+                    left, c, radius, fill=p.primary_color, stroke="none", stroke_width=0
+                ),
+                create_svg_circle(
+                    right, c, radius, fill=p.primary_color, stroke="none", stroke_width=0
+                ),
                 create_svg_polygon(
                     _rect_points(left, y0, right - left, height),
                     fill=p.primary_color,
@@ -291,13 +302,17 @@ def gen_negativo_espacio(p: IsotypeParams) -> str:
                     stroke_width=0,
                 ),
                 create_svg_polygon(
-                    create_regular_polygon(c + size * 0.12, c + size * 0.01, tri_r, 3, rotation_deg=90 + angle),
+                    create_regular_polygon(
+                        c + size * 0.12, c + size * 0.01, tri_r, 3, rotation_deg=90 + angle
+                    ),
                     fill=p.primary_color,
                     stroke="none",
                     stroke_width=0,
                 ),
                 create_svg_polygon(
-                    _rotated_rect_points(c + size * 0.04, c - size * 0.12, square_w, square_w, 45 + angle),
+                    _rotated_rect_points(
+                        c + size * 0.04, c - size * 0.12, square_w, square_w, 45 + angle
+                    ),
                     fill=p.primary_color,
                     stroke=p.accent_color,
                     stroke_width=stroke_w,
@@ -346,8 +361,14 @@ def gen_marca_geometrica(p: IsotypeParams) -> str:
         orbit = size * (0.095 + seeded_random(p.seed, 6, 0.025))
         centers = [
             (c + math.cos(base) * orbit, c + math.sin(base) * orbit),
-            (c + math.cos(base + 2 * math.pi / 3) * orbit, c + math.sin(base + 2 * math.pi / 3) * orbit),
-            (c + math.cos(base + 4 * math.pi / 3) * orbit, c + math.sin(base + 4 * math.pi / 3) * orbit),
+            (
+                c + math.cos(base + 2 * math.pi / 3) * orbit,
+                c + math.sin(base + 2 * math.pi / 3) * orbit,
+            ),
+            (
+                c + math.cos(base + 4 * math.pi / 3) * orbit,
+                c + math.sin(base + 4 * math.pi / 3) * orbit,
+            ),
         ]
 
     radius_1 = size * (0.22 + seeded_random(p.seed, 7, 0.040))
@@ -359,12 +380,20 @@ def gen_marca_geometrica(p: IsotypeParams) -> str:
     cut_stroke = size * 0.020
 
     parts: list[str] = [
-        _shape_svg(shape_1, centers[0][0], centers[0][1], radius_1, rot_1, p.primary_color, "none", 0),
-        _shape_svg(shape_2, centers[1][0], centers[1][1], radius_2, rot_2, p.accent_color, "none", 0),
+        _shape_svg(
+            shape_1, centers[0][0], centers[0][1], radius_1, rot_1, p.primary_color, "none", 0
+        ),
+        _shape_svg(
+            shape_2, centers[1][0], centers[1][1], radius_2, rot_2, p.accent_color, "none", 0
+        ),
     ]
 
     if layout == 1:
-        parts.append(create_svg_line(centers[0][0], centers[0][1], centers[1][0], centers[1][1], p.bg_color, size * 0.018))
+        parts.append(
+            create_svg_line(
+                centers[0][0], centers[0][1], centers[1][0], centers[1][1], p.bg_color, size * 0.018
+            )
+        )
 
     mix_stroke = p.accent_color if seeded_random(p.seed, 13) > 0.5 else p.primary_color
     parts.append(

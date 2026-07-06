@@ -137,7 +137,9 @@ def gen_sello(p: IsotypeParams) -> str:
     sw_inner = p.size * 0.018
 
     parts: list[str] = [
-        create_svg_circle(c, c, r_outer, fill="none", stroke=p.primary_color, stroke_width=sw_outer),
+        create_svg_circle(
+            c, c, r_outer, fill="none", stroke=p.primary_color, stroke_width=sw_outer
+        ),
         create_svg_circle(c, c, r_inner, fill="none", stroke=p.accent_color, stroke_width=sw_inner),
     ]
 
@@ -242,9 +244,7 @@ def gen_laurel(p: IsotypeParams) -> str:
 
     # Inicial centrada, ligeramente bajo el centro geométrico
     initial = p.brand_initials[0] if p.brand_initials else "A"
-    parts.append(
-        create_svg_text(initial, c, c + p.size * 0.06, p.size * 0.20, fill=p.accent_color)
-    )
+    parts.append(create_svg_text(initial, c, c + p.size * 0.06, p.size * 0.20, fill=p.accent_color))
 
     return _wrap(p, parts)
 

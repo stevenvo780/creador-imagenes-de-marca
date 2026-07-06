@@ -534,9 +534,12 @@ def map_marca_to_vars(
     _vl = variant_name.lower()
     if _vl:
         if any(k in _vl for k in ("mono",)):
-            vars_dict["bg"] = vars_dict["texto"]
-            vars_dict["texto"] = vars_dict["primario"]
-            vars_dict["primario"] = vars_dict["texto"]
+            old_bg = vars_dict["bg"]
+            old_texto = vars_dict["texto"]
+            old_primario = vars_dict["primario"]
+            vars_dict["bg"] = old_texto
+            vars_dict["texto"] = old_primario
+            vars_dict["primario"] = old_bg
         elif any(k in _vl for k in ("inverse", "dark", "_dark")):
             vars_dict["bg"] = vars_dict["primario"]
             vars_dict["texto"] = str(paleta.get("texto") or defaults["texto"])

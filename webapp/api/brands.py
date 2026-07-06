@@ -76,9 +76,7 @@ def create_brand_endpoint(
         )
     except Exception as e:
         # UNIQUE(tenant_id, slug) violado: no filtrar mensaje de SQLite al cliente.
-        raise HTTPException(
-            status_code=409, detail="slug ya existe en este tenant"
-        ) from e
+        raise HTTPException(status_code=409, detail="slug ya existe en este tenant") from e
     return brand_to_dict(row)
 
 
@@ -244,14 +242,16 @@ def get_logo_options(
             )
             svg = generate_isotype(params)
             if svg.strip():
-                svg_data_uri = (
-                    "data:image/svg+xml;base64," + b64encode(svg.encode("utf-8")).decode("ascii")
+                svg_data_uri = "data:image/svg+xml;base64," + b64encode(svg.encode("utf-8")).decode(
+                    "ascii"
                 )
-                options.append({
-                    "style": style,
-                    "seed": seed,
-                    "svg_data_uri": svg_data_uri,
-                })
+                options.append(
+                    {
+                        "style": style,
+                        "seed": seed,
+                        "svg_data_uri": svg_data_uri,
+                    }
+                )
         except Exception:
             # Skip broken generations
             pass

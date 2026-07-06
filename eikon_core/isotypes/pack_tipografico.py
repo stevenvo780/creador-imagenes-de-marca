@@ -172,10 +172,7 @@ def gen_letra_stencil(p: IsotypeParams) -> str:
         # Vértices del rectángulo rotado alrededor de (c, cy_cut)
         hw, hh = cut_w / 2, cut_h / 2
         local = [(-hw, -hh), (hw, -hh), (hw, hh), (-hw, hh)]
-        pts = [
-            (c + lx * cos_a - ly * sin_a, cy_cut + lx * sin_a + ly * cos_a)
-            for lx, ly in local
-        ]
+        pts = [(c + lx * cos_a - ly * sin_a, cy_cut + lx * sin_a + ly * cos_a) for lx, ly in local]
         parts.append(create_svg_polygon(pts, fill=p.bg_color, stroke="none", stroke_width=0))
 
     return _wrap(p, parts)
@@ -242,9 +239,7 @@ def gen_inicial_circulo(p: IsotypeParams) -> str:
 
     parts: list[str] = [
         # Anillo exterior
-        create_svg_circle(
-            c, c, ring_r, fill="none", stroke=p.primary_color, stroke_width=ring_w
-        ),
+        create_svg_circle(c, c, ring_r, fill="none", stroke=p.primary_color, stroke_width=ring_w),
     ]
 
     # Ticks radiales: densidad y ángulo de partida por seed

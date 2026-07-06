@@ -62,7 +62,7 @@ env.filters["status_pill"] = _pills
 
 def render_template(name: str, **context: Any) -> str:
     template = env.get_template(name)
-    return template.render(**context)
+    return template.render(**context)  # type: ignore[no-any-return]
 
 
 def render(

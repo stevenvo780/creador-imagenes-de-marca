@@ -80,6 +80,7 @@ function loadFontsFromSpec(): FontFace[] {
  * Si falla, continúa sin abortar.
  */
 async function preloadFonts(): Promise<{ success: number; failed: number }> {
+  const initialSize = document.fonts.size;
   loadFontsFromSpec();
 
   try {
@@ -89,10 +90,10 @@ async function preloadFonts(): Promise<{ success: number; failed: number }> {
     );
 
     await Promise.race([fontPromise, timeoutPromise]);
-    return { success: document.fonts.size, failed: 0 };
+    return { success: document.fonts.size - initialSize, failed: 0 };
   } catch (e) {
     console.warn("Font preload timeout or error:", e);
-    return { success: 0, failed: document.fonts.size };
+    return { success: 0, failed: document.fonts.size - initialSize };
   }
 }
 
@@ -104,7 +105,7 @@ async function fetchTemplateHtml(templateName: string): Promise<string> {
     credentials: "include",
   });
   if (!res.ok) {
-    throw new Error(`Failed to fetch template: ${res.status}`);
+    throw new Error(`Failed to fetch template '${templateName}': ${res.status}`);
   }
   return res.text();
 }
@@ -175,7 +176,7 @@ function createAndMountContainer(
     const attrKey = attr.replace("data-", "");
     const parts = attrKey.split("-");
     const camelKey = parts[0] + parts.slice(1).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join("");
-    (bodyContent.dataset as any)[camelKey] = value;
+    bodyContent.dataset[camelKey] = value;
     bodyContent.setAttribute(attr, value);
   }
 

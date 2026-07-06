@@ -56,7 +56,7 @@ def injection_script(
     texts: dict[str, str] = {}
     for attr, key in _ATTR_MAP.items():
         if texts_dict and key in texts_dict:
-            texts[attr] = texts_dict[key] or vars_dict.get(key, "")
+            texts[attr] = texts_dict[key] if texts_dict.get(key) is not None else vars_dict.get(key, "")
         else:
             texts[attr] = vars_dict.get(key, "")
 

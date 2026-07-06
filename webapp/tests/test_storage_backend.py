@@ -1,4 +1,5 @@
 """Pruebas para la abstracción de almacenamiento multi-tenant."""
+
 from __future__ import annotations
 
 import shutil
@@ -308,7 +309,9 @@ class TestPathTraversalZipMany:
 class TestDirectoryStructure:
     """Pruebas de estructura de directorios creada."""
 
-    def test_files_stored_under_tenant_dir(self, local_storage: LocalStorage, temp_storage_dir: str) -> None:
+    def test_files_stored_under_tenant_dir(
+        self, local_storage: LocalStorage, temp_storage_dir: str
+    ) -> None:
         """Verifica que los archivos se guardan bajo output/tenants/<tenant_id>/."""
         tenant_id = 42
         local_storage.save(tenant_id, "file.txt", b"DATA")
@@ -317,7 +320,9 @@ class TestDirectoryStructure:
         assert expected_base.exists()
         assert (expected_base / "file.txt").exists()
 
-    def test_different_tenants_separate_dirs(self, local_storage: LocalStorage, temp_storage_dir: str) -> None:
+    def test_different_tenants_separate_dirs(
+        self, local_storage: LocalStorage, temp_storage_dir: str
+    ) -> None:
         """Verifica que diferentes tenants usan directorios separados."""
         local_storage.save(1, "file.txt", b"DATA1")
         local_storage.save(2, "file.txt", b"DATA2")

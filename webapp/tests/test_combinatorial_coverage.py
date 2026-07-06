@@ -789,9 +789,7 @@ def test_worker_renders_and_passes_permuted_axes_to_rank(
             "palette_scheme": Axis(
                 name="palette_scheme",
                 label="Palette",
-                options=tuple(
-                    AxisOption(name=v) for v in ["brand", "mono", "light", "dark"]
-                ),
+                options=tuple(AxisOption(name=v) for v in ["brand", "mono", "light", "dark"]),
             ),
         },
     )
@@ -888,6 +886,7 @@ def test_worker_renders_and_passes_permuted_axes_to_rank(
     pool = worker_module.WorkerPool(tmp_path / "dummy.db", max_concurrent_jobs=1)
     pool._pending_batches[1] = {"rendered": 0, "ranked": 0, "status": "running"}
     marca = {"slug": "x", "nombre_producto": "X"}
+
     async def _drive() -> list[VariationScore] | None:
         return await pool._render_and_rank(
             batch_id=1,
@@ -986,9 +985,7 @@ def test_worker_passes_none_permuted_axes_when_spec_empty(
 
             return _B()
 
-    monkeypatch.setattr(
-        worker_module, "_get_playwright", lambda: (lambda: _Noop(), None)
-    )
+    monkeypatch.setattr(worker_module, "_get_playwright", lambda: (lambda: _Noop(), None))
     monkeypatch.setattr(worker_module, "_make_png_dir", lambda *a, **k: png_dir)
 
     pool = worker_module.WorkerPool(tmp_path / "dummy.db", max_concurrent_jobs=1)

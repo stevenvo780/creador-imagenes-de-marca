@@ -85,9 +85,7 @@ def gallery_select(
     """Marca/desmarca una variación del tenant como seleccionada."""
     settings = get_settings(request)
     try:
-        select_variation(
-            settings.db_url, user["tenant_id"], payload.variation_id, payload.selected
-        )
+        select_variation(settings.db_url, user["tenant_id"], payload.variation_id, payload.selected)
     except KeyError as e:
         raise HTTPException(status_code=404, detail="variation not found") from e
     return {"variation_id": payload.variation_id, "selected": payload.selected}

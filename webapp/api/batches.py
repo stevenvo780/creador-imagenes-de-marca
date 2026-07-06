@@ -130,7 +130,13 @@ async def create_batch_endpoint(
         raise HTTPException(status_code=422, detail=str(e)) from e
 
     batch = await enqueue_batch(
-        db, tenant_id, payload.brand_id, spec, payload.count, render_mode=payload.render_mode, content=payload.content
+        db,
+        tenant_id,
+        payload.brand_id,
+        spec,
+        payload.count,
+        render_mode=payload.render_mode,
+        content=payload.content,
     )
 
     # El worker rastrea el progreso de cada batch en _pending_batches; el poll_loop

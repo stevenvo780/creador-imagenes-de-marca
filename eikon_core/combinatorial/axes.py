@@ -88,9 +88,7 @@ class AxesConfig:
 
     def as_dict(self) -> dict[str, Any]:
         """Serialize to dict."""
-        return {
-            "axes": {name: axis.as_dict() for name, axis in self.axes.items()}
-        }
+        return {"axes": {name: axis.as_dict() for name, axis in self.axes.items()}}
 
 
 def load_axes_config(config_path: Path) -> AxesConfig:

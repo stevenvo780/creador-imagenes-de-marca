@@ -7,6 +7,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from eikon_core.taxonomy import get_category_for_asset_type
+
 # Add parent eikon directory to path for root-level module access
 _EIKON_DIR = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(_EIKON_DIR))
@@ -220,9 +222,14 @@ def plan_combinations(
     for i, params in enumerate(selected_combos):
         # Generate deterministic seed
         param_str = "|".join(f"{k}={v}" for k, v in sorted(params.items()))
+        category = (
+            get_category_for_asset_type(spec.asset_types[0])
+            if spec.asset_types
+            else "logos"
+        ) or "logos"
         seed = variations.deterministic_seed(
             marca=spec.brand,
-            category="logos",
+            category=category,
             type="combination",
             variant=param_str,
             idx=i,

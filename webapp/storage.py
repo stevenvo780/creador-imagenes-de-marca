@@ -127,7 +127,9 @@ def create_tenant_user(
     }
 
 
-def authenticate_user(db_url: str | None | Path, email: str, password: str) -> dict[str, Any] | None:
+def authenticate_user(
+    db_url: str | None | Path, email: str, password: str
+) -> dict[str, Any] | None:
     with connect(db_url) as con:
         row = con.execute(
             "SELECT users.*, tenants.slug AS tenant_slug FROM users JOIN tenants ON tenants.id = users.tenant_id WHERE users.email = ?",
@@ -350,7 +352,9 @@ def get_brand(db_url: str | None | Path, tenant_id: int, brand_id: int) -> dict[
     return row_to_dict(row)
 
 
-def get_brand_by_slug(db_url: str | None | Path, tenant_id: int, slug: str) -> dict[str, Any] | None:
+def get_brand_by_slug(
+    db_url: str | None | Path, tenant_id: int, slug: str
+) -> dict[str, Any] | None:
     """Devuelve un brand por slug dentro del tenant."""
     with connect(db_url) as con:
         row = con.execute(
@@ -378,7 +382,16 @@ def update_brand(
 
     Campos permitidos: name, palette_json, typography_json, logo_text, logo_symbol, logo_style, logo_seed, texts_json.
     """
-    allowed = {"name", "palette_json", "typography_json", "logo_text", "logo_symbol", "logo_style", "logo_seed", "texts_json"}
+    allowed = {
+        "name",
+        "palette_json",
+        "typography_json",
+        "logo_text",
+        "logo_symbol",
+        "logo_style",
+        "logo_seed",
+        "texts_json",
+    }
     update_fields = {k: v for k, v in fields.items() if k in allowed}
     if not update_fields:
         raise ValueError("sin campos válidos para actualizar")
@@ -473,23 +486,23 @@ def update_batch_status(
     status: str,
     counts: dict[str, Any] | None = None,
     *,
-    tenant_id: int | None = None,
+    tenant_id: int,
 ) -> None:
     """Actualiza el status (y opcionalmente counts) de un batch.
 
-    Si tenant_id se proporciona, valida que el batch pertenece al tenant.
-    Recomendado: siempre pasar tenant_id cuando se llama desde un endpoint de API.
+    tenant_id es OBLIGATORIO: se valida que el batch pertenece al tenant antes
+    de aplicar el update. Esto previene IDOR (un tenant no puede modificar
+    batches de otro tenant).
     """
     now = int(time.time())
     with connect(db_url) as con:
-        # Validar pertenencia al tenant si se proporciona
-        if tenant_id is not None:
-            row = con.execute(
-                "SELECT id FROM batches WHERE id = ? AND tenant_id = ?",
-                (batch_id, tenant_id),
-            ).fetchone()
-            if row is None:
-                raise KeyError(f"batch {batch_id} no pertenece al tenant {tenant_id}")
+        # Validar pertenencia al tenant (siempre, sin excepciones)
+        row = con.execute(
+            "SELECT id FROM batches WHERE id = ? AND tenant_id = ?",
+            (batch_id, tenant_id),
+        ).fetchone()
+        if row is None:
+            raise KeyError(f"batch {batch_id} no pertenece al tenant {tenant_id}")
 
         fields = ["status = ?"]
         values: list[Any] = [status]
@@ -553,7 +566,9 @@ def create_variation(
     return dict(row)
 
 
-def get_variation(db_url: str | None | Path, tenant_id: int, variation_id: int) -> dict[str, Any] | None:
+def get_variation(
+    db_url: str | None | Path, tenant_id: int, variation_id: int
+) -> dict[str, Any] | None:
     """Devuelve una variación scoped al tenant."""
     with connect(db_url) as con:
         row = con.execute(
@@ -697,7 +712,10 @@ def delete_variations(
                         pass
 
         # Borrar de la BD
-        con.execute(f"DELETE FROM variations WHERE tenant_id = ? AND id IN ({placeholders})", [tenant_id, *ids])
+        con.execute(
+            f"DELETE FROM variations WHERE tenant_id = ? AND id IN ({placeholders})",
+            [tenant_id, *ids],
+        )
         count = len(rows)
 
     return count

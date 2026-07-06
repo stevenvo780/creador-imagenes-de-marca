@@ -1,4 +1,5 @@
 """Almacenamiento local en disco bajo output/tenants/<tenant_id>/ con seguridad anti path-traversal."""
+
 from __future__ import annotations
 
 import io

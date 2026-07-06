@@ -6,6 +6,7 @@ que todavía no existe o que falla al importar NO rompe el resto.
 
 isotype.py usa este registro para despachar `isotype_style` → generador.
 """
+
 from __future__ import annotations
 
 import importlib

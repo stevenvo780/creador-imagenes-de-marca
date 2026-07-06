@@ -4,6 +4,7 @@ Mockea ``google.cloud.storage.Client`` a nivel de clase para aislar completament
 todas las llamadas HTTP/gRPC.  Verifica save / open / full_path / url_for /
 list_files / zip_many y la selección local-vs-GCS mediante la factory get_storage.
 """
+
 from __future__ import annotations
 
 import io
@@ -47,7 +48,9 @@ def gcs_storage(mock_gcs_client: tuple[MagicMock, MagicMock]) -> GCSStorage:
 class TestGCSStorageSave:
     """Pruebas de subida de objetos a GCS."""
 
-    def test_save_returns_gcs_uri(self, gcs_storage: GCSStorage, mock_gcs_client: tuple[MagicMock, MagicMock]) -> None:
+    def test_save_returns_gcs_uri(
+        self, gcs_storage: GCSStorage, mock_gcs_client: tuple[MagicMock, MagicMock]
+    ) -> None:
         """save devuelve URI gs:// correcta."""
         _, mock_bucket = mock_gcs_client
         mock_blob = MagicMock()
@@ -58,7 +61,9 @@ class TestGCSStorageSave:
         assert result == "gs://test-bucket/tenants/1/marcas/logo.png"
         mock_blob.upload_from_string.assert_called_once_with(b"PNG_DATA")
 
-    def test_save_uses_tenant_scope(self, gcs_storage: GCSStorage, mock_gcs_client: tuple[MagicMock, MagicMock]) -> None:
+    def test_save_uses_tenant_scope(
+        self, gcs_storage: GCSStorage, mock_gcs_client: tuple[MagicMock, MagicMock]
+    ) -> None:
         """save separa objetos de distintos tenants."""
         _, mock_bucket = mock_gcs_client
         mock_blob = MagicMock()
@@ -98,7 +103,9 @@ class TestGCSStorageSave:
 class TestGCSStorageOpen:
     """Pruebas de descarga de objetos desde GCS."""
 
-    def test_open_returns_content(self, gcs_storage: GCSStorage, mock_gcs_client: tuple[MagicMock, MagicMock]) -> None:
+    def test_open_returns_content(
+        self, gcs_storage: GCSStorage, mock_gcs_client: tuple[MagicMock, MagicMock]
+    ) -> None:
         """open devuelve los bytes del objeto."""
         _, mock_bucket = mock_gcs_client
         mock_blob = MagicMock()
