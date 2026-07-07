@@ -30,6 +30,7 @@ _PACK_MODULES = [
     "pack_brand_geo",
     "pack_brand_sym",
     "pack_brand_form",
+    "pack_prisma",
 ]
 
 GENERATORS: dict[str, Callable[[Any], str]] = {}
