@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1417">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Mouseîon · Generador determinista de identidad de marca. $0 en tokens, isotipos procedurales, contraste WCAG AA. Parte del ecosistema de Steven Vallejo.">
+  <meta name="author" content="Steven Vallejo">
+  <meta property="og:title" content="Mouseîon · Generador determinista de identidad de marca">
+  <meta property="og:description" content="De una semilla a un sistema visual completo. $0 en tokens, WCAG AA, open source.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Mouseîon · Generador determinista de identidad de marca</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+
+  <style>
+    :root {
+      --c-bg: #0b1417;
+      --c-bg-soft: #131e22;
+      --c-bg-card: #182730;
+      --c-teal: #43b5a6;
+      --c-gold: #e0a85e;
+      --c-purple: #8d7cc0;
+      --c-light: #d1d5db;
+      --c-light-mute: rgba(209, 213, 219, 0.66);
+      --c-light-faint: rgba(209, 213, 219, 0.40);
+      --c-light-bright: #f1f4f6;
+      --c-border: rgba(209, 213, 219, 0.10);
+      --c-border-strong: rgba(209, 213, 219, 0.22);
+
+      --radius: 14px;
+      --radius-lg: 22px;
+      --radius-pill: 999px;
+
+      --shadow-sm: 0 4px 18px -8px rgba(0, 0, 0, 0.45);
+      --shadow: 0 18px 50px -16px rgba(0, 0, 0, 0.55);
+
+      --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+      --sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      font-size: clamp(1rem, 0.25vw + 0.95rem, 1.0625rem);
+      line-height: 1.6;
+      color: var(--c-light);
+      background: var(--c-bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+    h1, h2, h3, h4 {
+      font-family: var(--serif);
+      font-weight: 500;
+      color: var(--c-light-bright);
+      letter-spacing: -0.012em;
+      line-height: 1.05;
+      margin: 0;
+    }
+    h1 { font-size: clamp(2.5rem, 5vw + 0.75rem, 5.25rem); }
+    h2 { font-size: clamp(1.875rem, 2.4vw + 0.85rem, 3rem); }
+    h3 { font-size: clamp(1.375rem, 0.8vw + 1.1rem, 1.75rem); }
+    p { margin: 0; }
+    ul { list-style: none; margin: 0; padding: 0; }
+    img, svg { max-width: 100%; display: block; }
+    a {
+      color: var(--c-teal);
+      text-decoration: none;
+      transition: color .15s ease, border-color .15s ease;
+    }
+    a:hover { color: var(--c-light-bright); }
+
+    .container {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 clamp(1.25rem, 4vw, 2.5rem);
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--c-teal);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+    ::selection { background: var(--c-teal); color: var(--c-bg); }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.35rem;
+      border-radius: var(--radius-pill);
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      letter-spacing: 0.005em;
+      border: 1px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform .15s ease, background-color .15s ease, border-color .15s ease, color .15s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn--primary {
+      background: var(--c-teal);
+      color: #062423;
+    }
+    .btn--primary:hover { background: var(--c-light-bright); color: #062423; }
+    .btn--ghost {
+      background: transparent;
+      color: var(--c-light-bright);
+      border-color: var(--c-border-strong);
+    }
+    .btn--ghost:hover {
+      border-color: var(--c-teal);
+      color: var(--c-light-bright);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-weight: 600;
+      color: var(--c-teal);
+    }
+    .eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 1.5rem; height: 1px;
+      background: currentColor;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      color: var(--c-light-bright);
+      font-family: var(--serif);
+      font-size: 1.375rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+    .brand__mark {
+      width: 34px; height: 34px;
+      display: grid; place-items: center;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--c-teal) 0%, var(--c-purple) 100%);
+      color: #0a1415;
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 1.0625rem;
+      letter-spacing: -0.04em;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(11, 20, 23, 0.78);
+      backdrop-filter: saturate(180%) blur(14px);
+      -webkit-backdrop-filter: saturate(180%) blur(14px);
+      border-bottom: 1px solid var(--c-border);
+    }
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: clamp(64px, 8vw, 78px);
+      gap: 1rem;
+    }
+    .nav__links {
+      display: none;
+      gap: 1.75rem;
+      align-items: center;
+    }
+    .nav__links a {
+      color: var(--c-light);
+      font-size: 0.9375rem;
+      font-weight: 500;
+    }
+    .nav__links a:hover { color: var(--c-light-bright); }
+    .nav__cta { display: none; }
+
+    @media (min-width: 760px) {
+      .nav__links { display: flex; }
+      .nav__cta { display: inline-flex; }
+    }
+
+    .hero {
+      position: relative;
+      padding: clamp(4rem, 10vw, 7.5rem) 0 clamp(3.5rem, 7vw, 5rem);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 18% 0%, rgba(67, 181, 166, 0.12), transparent 42%),
+        radial-gradient(circle at 92% 8%, rgba(141, 124, 192, 0.14), transparent 48%),
+        radial-gradient(circle at 50% 100%, rgba(224, 168, 94, 0.07), transparent 55%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero > * { position: relative; z-index: 1; }
+
+    .hero__inner {
+      display: grid;
+      gap: clamp(2.25rem, 5vw, 3.75rem);
+      grid-template-columns: 1fr;
+      align-items: center;
+    }
+    @media (min-width: 980px) {
+      .hero__inner { grid-template-columns: 1.15fr 1fr; }
+    }
+
+    .hero__lead {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .hero__title em {
+      font-style: italic;
+      color: var(--c-gold);
+      font-weight: 500;
+    }
+    .hero__title .accent {
+      background: linear-gradient(135deg, var(--c-teal) 0%, var(--c-purple) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .hero__sub {
+      color: var(--c-light-mute);
+      font-size: clamp(1.0625rem, 0.35vw + 1rem, 1.25rem);
+      max-width: 54ch;
+    }
+    .hero__ctas {
+      display: flex;
+      gap: 0.875rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta {
+      display: flex;
+      gap: 0.5rem 1.5rem;
+      flex-wrap: wrap;
+      padding-top: 0.5rem;
+    }
+    .hero__meta li {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--c-light-mute);
+      font-size: 0.875rem;
+    }
+    .hero__meta li::before {
+      content: '';
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--c-teal);
+      flex-shrink: 0;
+    }
+    .hero__meta li:nth-child(2)::before { background: var(--c-gold); }
+    .hero__meta li:nth-child(3)::before { background: var(--c-purple); }
+
+    .hero__demo {
+      position: relative;
+      padding: clamp(1.25rem, 3vw, 1.75rem);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, var(--c-bg-card) 0%, var(--c-bg-soft) 100%);
+      border: 1px solid var(--c-border);
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 1.25rem;
+    }
+    .hero__demo::after {
+      content: '';
+      position: absolute; inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(67, 181, 166, 0.45), rgba(141, 124, 192, 0.0) 60%);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+              mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+              mask-composite: exclude;
+      pointer-events: none;
+    }
+    .hero__demo-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--c-light-mute);
+    }
+    .hero__demo-dots {
+      display: inline-flex;
+      gap: 0.4rem;
+    }
+    .hero__demo-dots span {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: var(--c-border-strong);
+    }
+    .hero__demo-dots span:nth-child(1) { background: var(--c-teal); }
+    .hero__demo-dots span:nth-child(2) { background: var(--c-gold); }
+    .hero__demo-dots span:nth-child(3) { background: var(--c-purple); }
+    .hero__demo-mark {
+      width: 100%;
+      aspect-ratio: 1;
+      max-width: 240px;
+      margin: 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.025), transparent 65%),
+        rgba(0,0,0,0.18);
+      border: 1px solid var(--c-border);
+    }
+    .hero__demo-code {
+      margin: 0;
+      font-family: var(--mono);
+      font-size: clamp(0.78rem, 0.2vw + 0.72rem, 0.875rem);
+      color: var(--c-light);
+      background: rgba(0,0,0,0.28);
+      border: 1px solid var(--c-border);
+      border-radius: 10px;
+      padding: 1rem 1.125rem;
+      line-height: 1.75;
+      overflow-x: auto;
+    }
+    .hero__demo-code .k { color: var(--c-purple); }
+    .hero__demo-code .s { color: var(--c-teal); }
+    .hero__demo-code .n { color: var(--c-gold); }
+    .hero__demo-code .c { color: var(--c-light-faint); font-style: italic; }
+
+    .section {
+      padding: clamp(3.75rem, 8vw, 6rem) 0;
+    }
+    .section__head {
+      display: flex;
+      flex-direction: column;
+      gap: 0.875rem;
+      margin-bottom: clamp(2.25rem, 4vw, 3.25rem);
+      max-width: 60ch;
+    }
+    .section__head p {
+      color: var(--c-light-mute);
+      font-size: 1.0625rem;
+    }
+
+    .features {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    }
+    .feature {
+      padding: clamp(1.35rem, 2.5vw, 1.75rem);
+      border-radius: var(--radius);
+      background: var(--c-bg-soft);
+      border: 1px solid var(--c-border);
+      transition: border-color .2s ease, transform .2s ease, background-color .2s ease;
+    }
+    .feature:hover {
+      border-color: var(--c-border-strong);
+      transform: translateY(-2px);
+      background: var(--c-bg-card);
+    }
+    .feature__dot {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      margin-bottom: 1.125rem;
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.02);
+    }
+    .feature__title {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--c-light-bright);
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+    .feature__copy {
+      color: var(--c-light-mute);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    .steps {
+      display: grid;
+      gap: 1.25rem;
+      grid-template-columns: 1fr;
+      counter-reset: paso;
+    }
+    .step {
+      position: relative;
+      padding: clamp(1.5rem, 3vw, 2rem);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, var(--c-bg-card) 0%, var(--c-bg-soft) 100%);
+      border: 1px solid var(--c-border);
+      display: grid;
+      gap: 0.75rem;
+      counter-increment: paso;
+      transition: border-color .2s ease, transform .2s ease;
+    }
+    .step:hover {
+      border-color: var(--c-border-strong);
+      transform: translateY(-2px);
+    }
+    .step__num {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--c-light-mute);
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.6rem;
+    }
+    .step__num::before {
+      content: counter(paso, decimal-leading-zero);
+      font-family: var(--serif);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--c-light-bright);
+      letter-spacing: -0.02em;
+      text-transform: none;
+    }
+    .step__num--teal::before { color: var(--c-teal); }
+    .step__num--gold::before { color: var(--c-gold); }
+    .step__num--purple::before { color: var(--c-purple); }
+    .step__title {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--c-light-bright);
+    }
+    .step__copy {
+      color: var(--c-light-mute);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    @media (min-width: 880px) {
+      .steps { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .examples {
+      display: grid;
+      gap: 1.25rem;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    }
+    .example {
+      background: var(--c-bg-soft);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.5rem, 3vw, 2.25rem);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      align-items: center;
+      text-align: center;
+      transition: border-color .2s ease, transform .2s ease, background-color .2s ease;
+    }
+    .example:hover {
+      border-color: var(--c-border-strong);
+      transform: translateY(-3px);
+      background: var(--c-bg-card);
+    }
+    .example__mark {
+      width: clamp(120px, 18vw, 160px);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--c-border);
+      transition: transform .35s ease;
+    }
+    .example:hover .example__mark { transform: rotate(8deg); }
+    .example__title {
+      font-family: var(--serif);
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--c-light-bright);
+    }
+    .example__seed {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--c-light-mute);
+      letter-spacing: 0.04em;
+      padding: 0.25rem 0.625rem;
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-pill);
+    }
+    .example__copy {
+      color: var(--c-light-mute);
+      font-size: 0.9375rem;
+      max-width: 38ch;
+    }
+
+    .footer {
+      padding: clamp(2.75rem, 5vw, 4rem) 0;
+      border-top: 1px solid var(--c-border);
+      margin-top: clamp(2rem, 5vw, 4rem);
+      font-size: 0.875rem;
+      color: var(--c-light-mute);
+    }
+    .footer__inner {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      align-items: center;
+      text-align: center;
+    }
+    .footer__links {
+      display: inline-flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .footer__links a {
+      color: var(--c-light);
+      font-weight: 500;
+    }
+    .footer__links a:hover { color: var(--c-light-bright); }
+    .footer__meta {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 0.625rem;
+      justify-content: center;
+      align-items: center;
+    }
+    .footer__meta .dot {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--c-light-faint);
+      display: inline-block;
+    }
+
+    @media (min-width: 760px) {
+      .footer__inner {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+        align-items: center;
+      }
+      .footer__links, .footer__meta { justify-content: flex-end; }
+    }
+
+    @media print {
+      body { background: #fff; color: #111; }
+      .nav, .footer { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" aria-label="Navegación principal">
+    <div class="container nav__inner">
+      <a href="#top" class="brand" aria-label="Mouseîon — inicio">
+        <span class="brand__mark" aria-hidden="true">M</span>
+        <span>Mouseîon</span>
+      </a>
+      <ul class="nav__links">
+        <li><a href="#features">Qué hace</a></li>
+        <li><a href="#pasos">Cómo funciona</a></li>
+        <li><a href="#ejemplos">Ejemplos</a></li>
+        <li><a href="#api">API</a></li>
+        <li><a href="https://github.com/humanizar-dev/eikon" rel="noopener">GitHub</a></li>
+      </ul>
+      <a href="/app" class="btn btn--primary nav__cta">Abrir /app →</a>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="container hero__inner">
+      <div class="hero__lead">
+        <span class="eyebrow">Mouseîon · Identidad procedural</span>
+        <h1 class="hero__title">
+          Generador <em>determinista</em> de <span class="accent">identidad de marca</span>.
+        </h1>
+        <p class="hero__sub">
+          De una semilla a un sistema visual completo: isotipos procedurales, paleta con contraste
+          verificado y tokens listos para tu design system. Sin API de pago, sin GPU, sin
+          alucinaciones. Pura matemática reproducible.
+        </p>
+        <div class="hero__ctas">
+          <a href="/app" class="btn btn--primary">Probar gratis →</a>
+          <a href="#api" class="btn btn--ghost">Llamar a la API</a>
+        </div>
+        <ul class="hero__meta" aria-label="Promesas clave">
+          <li>$0 en tokens</li>
+          <li>WCAG AA</li>
+          <li>Open source</li>
+        </ul>
+      </div>
+
+      <aside class="hero__demo" role="img" aria-label="Demostración: un isotipo generado a partir de la semilla mouseion-2026">
+        <div class="hero__demo-head">
+          <span>seed · mouseion-2026</span>
+          <span class="hero__demo-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+        </div>
+
+        <div class="hero__demo-mark">
+          <svg viewBox="0 0 200 200" width="100%" height="100%" aria-hidden="true">
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#43b5a6" stroke-width="5"/>
+            <polygon points="100,38 153.6,69 153.6,131 100,162 46.4,131 46.4,69" fill="none" stroke="#e0a85e" stroke-width="5"/>
+            <polygon points="100,80 134,130 66,130" fill="#8d7cc0"/>
+            <circle cx="100" cy="120" r="6" fill="#0b1417"/>
+          </svg>
+        </div>
+
+        <pre class="hero__demo-code"><code><span class="c"># generar sistema visual desde una semilla</span>
+<span class="k">brand</span>(
+  seed: <span class="s">"mouseion-2026"</span>,
+  a11y: <span class="s">"AA"</span>,
+  forms: [<span class="s">"circle"</span>, <span class="s">"hex"</span>, <span class="s">"triangle"</span>],
+  output: <span class="s">"tokens.json"</span>
+)</code></pre>
+      </aside>
+    </div>
+  </header>
+
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">Por qué Mouseîon</span>
+        <h2>Tres promesas, una herramienta.</h2>
+        <p>
+          Diseñado para ser predecible, accesible y compartir el mismo sistema visual entre
+          todas las marcas del ecosistema. Misma semilla, mismo render — en cualquier lugar.
+        </p>
+      </div>
+
+      <div class="features">
+        <article class="feature">
+          <span class="feature__dot" style="background: var(--c-teal);"></span>
+          <h3 class="feature__title">$0 en tokens</h3>
+          <p class="feature__copy">
+            Sin API de pago, sin GPU, sin sorpresas. Algoritmos deterministas que corren en
+            cualquier runtime: navegador, Node, Python, Bun, lo que tengas.
+          </p>
+        </article>
+
+        <article class="feature">
+          <span class="feature__dot" style="background: var(--c-gold);"></span>
+          <h3 class="feature__title">Isotipos procedurales</h3>
+          <p class="feature__copy">
+            Geometrías simples — círculo, hexágono, triángulo — que se recompone a partir de
+            una semilla única. Cero assets binarios en el repo.
+          </p>
+        </article>
+
+        <article class="feature">
+          <span class="feature__dot" style="background: var(--c-purple);"></span>
+          <h3 class="feature__title">WCAG AA</h3>
+          <p class="feature__copy">
+            Cada par de colores generado se valida contra contraste mínimo 4.5:1 antes de
+            salir al mundo. Accesibilidad por defecto, no por accidente.
+          </p>
+        </article>
+
+        <article class="feature">
+          <span class="feature__dot" style="background: var(--c-light);"></span>
+          <h3 class="feature__title">100% determinista</h3>
+          <p class="feature__copy">
+            Misma semilla, mismo sistema. Reproducible hasta el último píxel, en cualquier
+            plataforma. Lo que ves en local es lo que se sirve en producción.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="pasos">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">Cómo funciona</span>
+        <h2>Tres pasos: semilla, sistema, entrega.</h2>
+        <p>
+          Funciona como librería, CLI o API HTTP. Lo que elijas, el output es el mismo:
+          un JSON firmado y reproducible que tu design system puede consumir directo.
+        </p>
+      </div>
+
+      <ol class="steps">
+        <li class="step">
+          <span class="step__num step__num--teal">Paso</span>
+          <h3 class="step__title">Define la semilla</h3>
+          <p class="step__copy">
+            Un slug humano — <code>mouseion</code>, <code>prizma</code>, <code>elenxos</code>.
+            La misma palabra genera el mismo sistema en cualquier lado: docs, web, app.
+          </p>
+        </li>
+        <li class="step">
+          <span class="step__num step__num--gold">Paso</span>
+          <h3 class="step__title">Genera el sistema</h3>
+          <p class="step__copy">
+            Paleta, isotipo, escala tipográfica y tokens de color/spacing/motion listos para
+            enchufar en CSS, Swift, Kotlin o Figma Variables.
+          </p>
+        </li>
+        <li class="step">
+          <span class="step__num step__num--purple">Paso</span>
+          <h3 class="step__title">Exporta a tu stack</h3>
+          <p class="step__copy">
+            JSON, SCSS, CSS variables, Swift, Kotlin — un solo comando, todas las
+            plataformas. Versionado en Git, sin assets opacos.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="ejemplos">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">Ejemplos reales</span>
+        <h2>Tres marcas del ecosistema, una sola fuente.</h2>
+        <p>
+          Todas generadas desde la misma herramienta con semillas diferentes.
+          Verifica la tuya en el playground o clona el repo y genera la tuya propia.
+        </p>
+      </div>
+
+      <div class="examples">
+        <article class="example">
+          <div class="example__mark">
+            <svg viewBox="0 0 200 200" width="100%" height="100%" aria-hidden="true">
+              <circle cx="100" cy="100" r="78" fill="none" stroke="#43b5a6" stroke-width="6"/>
+              <circle cx="100" cy="100" r="42" fill="#43b5a6"/>
+              <circle cx="100" cy="100" r="20" fill="#0b1417"/>
+            </svg>
+          </div>
+          <h3 class="example__title">Mouseîon</h3>
+          <span class="example__seed">seed · mouseion</span>
+          <p class="example__copy">
+            La academia: círculo doble en teal. Representa el saber completo, abierto y
+            accesible que gira sobre un núcleo común.
+          </p>
+        </article>
+
+        <article class="example">
+          <div class="example__mark">
+            <svg viewBox="0 0 200 200" width="100%" height="100%" aria-hidden="true">
+              <polygon points="100,20 172,57 172,143 100,180 28,143 28,57" fill="none" stroke="#e0a85e" stroke-width="6"/>
+              <polygon points="100,58 142,82 142,118 100,142 58,118 58,82" fill="#e0a85e"/>
+            </svg>
+          </div>
+          <h3 class="example__title">Pinakothḗke</h3>
+          <span class="example__seed">seed · pinakotheke</span>
+          <p class="example__copy">
+            La pinacoteca: hexágonos anidados en oro. Catálogo, archivo, memoria — todo
+            cabe dentro de la misma forma.
+          </p>
+        </article>
+
+        <article class="example">
+          <div class="example__mark">
+            <svg viewBox="0 0 200 200" width="100%" height="100%" aria-hidden="true">
+              <polygon points="100,22 180,170 20,170" fill="none" stroke="#8d7cc0" stroke-width="6"/>
+              <polygon points="100,78 144,152 56,152" fill="#8d7cc0"/>
+            </svg>
+          </div>
+          <h3 class="example__title">Prizma</h3>
+          <span class="example__seed">seed · prizma</span>
+          <p class="example__copy">
+            El prisma corporativo: triángulo morado que separa luz, negocios y formación
+            sin perder la unidad del haz.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="api" aria-labelledby="api-title">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">API</span>
+        <h2 id="api-title">Un endpoint. JSON reproducible.</h2>
+        <p>
+          Pasa una semilla, recibes el sistema completo. Cacheable, versionable,
+          firmable. Lo mismo que consume tu web, lo consume tu CI.
+        </p>
+      </div>
+
+      <pre class="hero__demo-code" aria-label="Ejemplo de uso de la API"><code><span class="c"># GET /api/brand?seed=mouseion-2026</span>
+curl <span class="s">"https://mouseion.stevenvallejo.com/api/brand?seed=mouseion-2026"</span> \
+  | jq <span class="s">'.palette, .isotype, .tokens'</span></code></pre>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <a href="https://www.stevenvallejo.com" class="brand" rel="noopener" aria-label="Steven Vallejo — sitio personal">
+        <span class="brand__mark" aria-hidden="true">M</span>
+        <span>Mouseîon</span>
+      </a>
+
+      <ul class="footer__links" aria-label="Enlaces del proyecto">
+        <li><a href="/app">/app</a></li>
+        <li><a href="/api">/api</a></li>
+        <li><a href="https://github.com/humanizar-dev/eikon" rel="noopener">GitHub</a></li>
+      </ul>
+
+      <div class="footer__meta">
+        <span>Parte de Mouseîon</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span>Hecho por Steven Vallejo</span>
+        <span class="dot" aria-hidden="true"></span>
+        <a href="https://www.stevenvallejo.com" rel="noopener">https://www.stevenvallejo.com</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import Depends, FastAPI, HTTPException, Request, Response
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -371,6 +371,16 @@ def create_app(
             await asyncio.sleep(0.5)
 
         raise HTTPException(status_code=504, detail="render timeout (>60s)")
+
+    # ── Public Landing Page (sin autenticación) ────────────────────────────
+    landing_path = WEBAPP_DIR / "templates" / "landing.html"
+
+    @app.get("/")
+    async def landing() -> HTMLResponse:
+        """Página de inicio pública (marketing de Eikón)."""
+        if landing_path.is_file():
+            return HTMLResponse(content=landing_path.read_text(encoding="utf-8"))
+        raise HTTPException(status_code=404, detail="Landing page not found")
 
     # ── SPA (same-origin): assets estáticos + fallback a index.html ──────
     # Sin fallback, recargar/entrar directo a una ruta de cliente (/gallery,
