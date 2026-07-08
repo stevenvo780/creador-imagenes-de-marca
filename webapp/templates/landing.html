@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0b1417">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="Mouseîon · Generador determinista de identidad de marca. $0 en tokens, isotipos procedurales, contraste WCAG AA. Parte del ecosistema de Steven Vallejo.">
+  <meta name="description" content="Eikón · Generador determinista de identidad de marca. $0 en tokens, isotipos procedurales, contraste WCAG AA. Parte del ecosistema de Steven Vallejo.">
   <meta name="author" content="Steven Vallejo">
-  <meta property="og:title" content="Mouseîon · Generador determinista de identidad de marca">
+  <meta property="og:title" content="Eikón · Generador determinista de identidad de marca">
   <meta property="og:description" content="De una semilla a un sistema visual completo. $0 en tokens, WCAG AA, open source.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_ES">
   <meta name="twitter:card" content="summary_large_image">
-  <title>Mouseîon · Generador determinista de identidad de marca</title>
+  <title>Eikón · Generador determinista de identidad de marca</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -580,9 +580,9 @@
 
   <nav class="nav" aria-label="Navegación principal">
     <div class="container nav__inner">
-      <a href="#top" class="brand" aria-label="Mouseîon — inicio">
-        <span class="brand__mark" aria-hidden="true">M</span>
-        <span>Mouseîon</span>
+      <a href="#top" class="brand" aria-label="Eikón — inicio">
+        <span class="brand__mark" aria-hidden="true">E</span>
+        <span>Eikón</span>
       </a>
       <ul class="nav__links">
         <li><a href="#features">Qué hace</a></li>
@@ -598,7 +598,7 @@
   <header class="hero" id="top">
     <div class="container hero__inner">
       <div class="hero__lead">
-        <span class="eyebrow">Mouseîon · Identidad procedural</span>
+        <span class="eyebrow">Eikón · Identidad procedural</span>
         <h1 class="hero__title">
           Generador <em>determinista</em> de <span class="accent">identidad de marca</span>.
         </h1>
@@ -618,26 +618,27 @@
         </ul>
       </div>
 
-      <aside class="hero__demo" role="img" aria-label="Demostración: un isotipo generado a partir de la semilla mouseion-2026">
+      <aside class="hero__demo" role="img" aria-label="Demostración: un isotipo generado a partir de la semilla eikon">
         <div class="hero__demo-head">
-          <span>seed · mouseion-2026</span>
+          <span>seed · eikon</span>
           <span class="hero__demo-dots" aria-hidden="true"><span></span><span></span><span></span></span>
         </div>
 
         <div class="hero__demo-mark">
           <svg viewBox="0 0 200 200" width="100%" height="100%" aria-hidden="true">
-            <circle cx="100" cy="100" r="80" fill="none" stroke="#43b5a6" stroke-width="5"/>
-            <polygon points="100,38 153.6,69 153.6,131 100,162 46.4,131 46.4,69" fill="none" stroke="#e0a85e" stroke-width="5"/>
-            <polygon points="100,80 134,130 66,130" fill="#8d7cc0"/>
-            <circle cx="100" cy="120" r="6" fill="#0b1417"/>
+            <circle cx="100" cy="100" r="82" fill="none" stroke="#43b5a6" stroke-width="4"/>
+            <ellipse cx="100" cy="100" rx="82" ry="30" fill="none" stroke="#e0a85e" stroke-width="4" transform="rotate(-25 100 100)"/>
+            <ellipse cx="100" cy="100" rx="82" ry="30" fill="none" stroke="#8d7cc0" stroke-width="4" transform="rotate(45 100 100)"/>
+            <circle cx="100" cy="100" r="16" fill="#43b5a6"/>
+            <circle cx="181" cy="62" r="6" fill="#e0a85e"/>
           </svg>
         </div>
 
         <pre class="hero__demo-code"><code><span class="c"># generar sistema visual desde una semilla</span>
 <span class="k">brand</span>(
-  seed: <span class="s">"mouseion-2026"</span>,
+  seed: <span class="s">"eikon"</span>,
   a11y: <span class="s">"AA"</span>,
-  forms: [<span class="s">"circle"</span>, <span class="s">"hex"</span>, <span class="s">"triangle"</span>],
+  forms: [<span class="s">"orbit"</span>, <span class="s">"ring"</span>, <span class="s">"lemniscate"</span>],
   output: <span class="s">"tokens.json"</span>
 )</code></pre>
       </aside>
@@ -647,7 +648,7 @@
   <section class="section" id="features">
     <div class="container">
       <div class="section__head">
-        <span class="eyebrow">Por qué Mouseîon</span>
+        <span class="eyebrow">Por qué Eikón</span>
         <h2>Tres promesas, una herramienta.</h2>
         <p>
           Diseñado para ser predecible, accesible y compartir el mismo sistema visual entre
@@ -766,15 +767,17 @@
         <article class="example">
           <div class="example__mark">
             <svg viewBox="0 0 200 200" width="100%" height="100%" aria-hidden="true">
-              <polygon points="100,20 172,57 172,143 100,180 28,143 28,57" fill="none" stroke="#e0a85e" stroke-width="6"/>
-              <polygon points="100,58 142,82 142,118 100,142 58,118 58,82" fill="#e0a85e"/>
+              <circle cx="100" cy="100" r="80" fill="none" stroke="#e0a85e" stroke-width="6"/>
+              <ellipse cx="100" cy="100" rx="80" ry="30" fill="none" stroke="#e0a85e" stroke-width="4" transform="rotate(-20 100 100)"/>
+              <ellipse cx="100" cy="100" rx="80" ry="30" fill="none" stroke="#e0a85e" stroke-width="4" transform="rotate(60 100 100)"/>
+              <circle cx="100" cy="100" r="20" fill="#e0a85e"/>
             </svg>
           </div>
           <h3 class="example__title">Pinakothḗke</h3>
           <span class="example__seed">seed · pinakotheke</span>
           <p class="example__copy">
-            La pinacoteca: hexágonos anidados en oro. Catálogo, archivo, memoria — todo
-            cabe dentro de la misma forma.
+            La pinacoteca: órbitas anidadas en oro. Catálogo, archivo, memoria — todo
+            gira dentro del mismo sistema.
           </p>
         </article>
 
@@ -807,17 +810,17 @@
         </p>
       </div>
 
-      <pre class="hero__demo-code" aria-label="Ejemplo de uso de la API"><code><span class="c"># GET /api/brand?seed=mouseion-2026</span>
-curl <span class="s">"https://mouseion.stevenvallejo.com/api/brand?seed=mouseion-2026"</span> \
+      <pre class="hero__demo-code" aria-label="Ejemplo de uso de la API"><code><span class="c"># GET /api/brand?seed=eikon</span>
+curl <span class="s">"https://eikon.humanizar.cloud/api/brand?seed=eikon"</span> \
   | jq <span class="s">'.palette, .isotype, .tokens'</span></code></pre>
     </div>
   </section>
 
   <footer class="footer">
     <div class="container footer__inner">
-      <a href="https://www.stevenvallejo.com" class="brand" rel="noopener" aria-label="Steven Vallejo — sitio personal">
-        <span class="brand__mark" aria-hidden="true">M</span>
-        <span>Mouseîon</span>
+      <a href="#top" class="brand" aria-label="Eikón — inicio">
+        <span class="brand__mark" aria-hidden="true">E</span>
+        <span>Eikón</span>
       </a>
 
       <ul class="footer__links" aria-label="Enlaces del proyecto">
