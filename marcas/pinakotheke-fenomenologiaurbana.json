@@ -1,0 +1,73 @@
+{
+  "slug": "pinakotheke-fenomenologiaurbana",
+  "nombre_producto": "Fenomenología urbana",
+  "nombre_corporativo": "Pinakothḗke",
+  "tagline": "Ponencia: la experiencia vivida y la construcción de significado en los espacios urbanos de Medellín desde la fenomenología; corporalidad, memoria colectiva y transformación del lugar.",
+  "url": "https://fenomenologiaurbana.stevenvallejo.com",
+  "tono": "filosófico, riguroso, reflexivo",
+  "simbolo": "◉",
+  "frente": "filosofia",
+  "paleta": {
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_3": "#2a7a70",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22",
+    "acento_2": "#43b5a6"
+  },
+  "gradiente_hero": "linear-gradient(135deg, #43b5a6 0%, #43b5a6 50%, #2a7a70 100%)",
+  "gradiente_bg": "radial-gradient(ellipse at 20% 60%, #131e22 0%, #0b1417 70%)",
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo": "JetBrains Mono"
+  },
+  "logo_texto": "Fenomenología urbana",
+  "logo_simbolo": "◉",
+  "textos": {
+    "linkedin_post": {
+      "titulo": "Fenomenología urbana",
+      "subtitulo": "Fenomenología · Pinakothḗke",
+      "etiqueta": "FILOSOFÍA",
+      "copy": "La experiencia vivida de los espacios de Medellín."
+    },
+    "linkedin_banner": {
+      "titulo": "Fenomenología urbana",
+      "etiqueta": "FILOSOFÍA",
+      "copy": "La experiencia vivida de los espacios de Medellín."
+    },
+    "ig_post": {
+      "titulo": "◉",
+      "subtitulo": "Fenomenología urbana",
+      "etiqueta": "FILOSOFÍA",
+      "copy": "La experiencia vivida de los espacios de Medellín."
+    },
+    "ig_story": {
+      "titulo": "Fenomenología urbana",
+      "copy": "Leer la ponencia ↓"
+    },
+    "x_post": {
+      "titulo": "Fenomenología urbana",
+      "copy": "La experiencia vivida de los espacios de Medellín."
+    },
+    "og_general": {
+      "titulo": "Fenomenología urbana",
+      "subtitulo": "Fenomenología · Pinakothḗke",
+      "copy": "La experiencia vivida de los espacios de Medellín."
+    },
+    "fb_cover": {
+      "titulo": "Fenomenología urbana",
+      "subtitulo": "Fenomenología · Pinakothḗke",
+      "copy": "La experiencia vivida de los espacios de Medellín."
+    },
+    "whatsapp_perfil": {
+      "titulo": "◉",
+      "copy": "Fenomenología urbana"
+    },
+    "contra_cover": {
+      "titulo": "Fenomenología urbana",
+      "copy": "Fenomenología · Pinakothḗke"
+    }
+  }
+}

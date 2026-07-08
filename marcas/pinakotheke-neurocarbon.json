@@ -1,0 +1,73 @@
+{
+  "slug": "pinakotheke-neurocarbon",
+  "nombre_producto": "¿Silicio o Tejido?",
+  "nombre_corporativo": "Pinakothḗke",
+  "tagline": "Ponencia de neurofilosofía: ¿puede la mente emularse en silicio digital o requiere el sustrato biológico del carbono? Examina incompatibilidades arquitectónicas y termodinámicas, y la autopoiesis como rasgo constitutivo de la conciencia.",
+  "url": "https://neurocarbon.stevenvallejo.com",
+  "tono": "filosófico, riguroso, reflexivo",
+  "simbolo": "◐",
+  "frente": "filosofia",
+  "paleta": {
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_3": "#2a7a70",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22",
+    "acento_2": "#8d7cc0"
+  },
+  "gradiente_hero": "linear-gradient(135deg, #8d7cc0 0%, #43b5a6 50%, #2a7a70 100%)",
+  "gradiente_bg": "radial-gradient(ellipse at 20% 60%, #131e22 0%, #0b1417 70%)",
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo": "JetBrains Mono"
+  },
+  "logo_texto": "Silicio o Tejido",
+  "logo_simbolo": "◐",
+  "textos": {
+    "linkedin_post": {
+      "titulo": "Silicio o Tejido",
+      "subtitulo": "Neurofilosofía · Pinakothḗke",
+      "etiqueta": "FILOSOFÍA",
+      "copy": "¿Silicio o tejido? Los límites materiales de la mente."
+    },
+    "linkedin_banner": {
+      "titulo": "Silicio o Tejido",
+      "etiqueta": "FILOSOFÍA",
+      "copy": "¿Silicio o tejido? Los límites materiales de la mente."
+    },
+    "ig_post": {
+      "titulo": "◐",
+      "subtitulo": "Silicio o Tejido",
+      "etiqueta": "FILOSOFÍA",
+      "copy": "¿Silicio o tejido? Los límites materiales de la mente."
+    },
+    "ig_story": {
+      "titulo": "Silicio o Tejido",
+      "copy": "Leer la ponencia ↓"
+    },
+    "x_post": {
+      "titulo": "Silicio o Tejido",
+      "copy": "¿Silicio o tejido? Los límites materiales de la mente."
+    },
+    "og_general": {
+      "titulo": "Silicio o Tejido",
+      "subtitulo": "Neurofilosofía · Pinakothḗke",
+      "copy": "¿Silicio o tejido? Los límites materiales de la mente."
+    },
+    "fb_cover": {
+      "titulo": "Silicio o Tejido",
+      "subtitulo": "Neurofilosofía · Pinakothḗke",
+      "copy": "¿Silicio o tejido? Los límites materiales de la mente."
+    },
+    "whatsapp_perfil": {
+      "titulo": "◐",
+      "copy": "Silicio o Tejido"
+    },
+    "contra_cover": {
+      "titulo": "Silicio o Tejido",
+      "copy": "Neurofilosofía · Pinakothḗke"
+    }
+  }
+}

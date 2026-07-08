@@ -2,8 +2,8 @@
   "slug": "pinakotheke-eikon",
   "nombre_producto": "Eikón",
   "nombre_corporativo": "Pinakothḗke",
-  "tagline": "Generador de pack de imagen de marca en GPU local (SDXL / FLUX.1-schnell): produce 15+ renders sociales (LinkedIn, Instagram, X, YouTube, WhatsApp, OG) para el media kit. Python puro, RTX 5070 Ti requerida. Herramienta interna.",
-  "url": "",
+  "tagline": "Generador determinista de identidad de marca: isotipos procedurales, paletas, iconsets, kits sociales y OG con contraste WCAG AA. $0 en tokens, sin GPU, sin IA — SVG procedural + render, 100% reproducible. Webapp + API + MCP.",
+  "url": "https://eikon.humanizar.cloud",
   "tono": "creativo, técnico, visual",
   "simbolo": "◈",
   "frente": "informatica",
@@ -28,39 +28,44 @@
   "textos": {
     "og_product": {
       "titulo": "Eikón",
-      "subtitulo": "Logos · Paletas · Kits de identidad visual · IA",
-      "copy": "Generador de imagen de marca: logos, paletas, activos visuales y kits de identidad con IA."
+      "subtitulo": "Isotipos · Paletas · Iconsets · Kits sociales",
+      "etiqueta": "IDENTIDAD",
+      "copy": "Generador determinista de identidad de marca: isotipos, paletas, iconsets y kits sociales con WCAG AA. Sin IA, sin GPU, $0."
     },
     "og_general": {
       "titulo": "Eikón",
       "subtitulo": "Ingeniería · Pinakothḗke",
-      "copy": "Generador de imagen de marca con IA."
+      "etiqueta": "IDENTIDAD",
+      "copy": "Generador determinista de identidad de marca."
     },
     "linkedin_post": {
       "titulo": "Eikón",
       "subtitulo": "Ingeniería · Pinakothḗke",
-      "copy": "Generador de imagen de marca con IA."
+      "etiqueta": "IDENTIDAD",
+      "copy": "Generador determinista de identidad de marca. Sin IA, sin GPU: SVG procedural + WCAG AA, 100% reproducible."
     },
     "linkedin_banner": {
       "titulo": "Eikón",
-      "copy": "Logos, paletas y kits de identidad visual generados con IA."
+      "etiqueta": "IDENTIDAD",
+      "copy": "Isotipos, paletas y kits de identidad — deterministas, WCAG AA, $0 en tokens."
     },
     "ig_post": {
       "titulo": "◈",
       "subtitulo": "Eikón",
-      "copy": "Imagen de marca con IA"
+      "etiqueta": "IDENTIDAD",
+      "copy": "Identidad de marca determinista"
     },
     "ig_story": {
       "titulo": "Eikón",
-      "copy": "Media kit 15+ renders ↓"
+      "copy": "Media kit completo ↓"
     },
     "x_post": {
       "titulo": "Eikón",
-      "copy": "Generador de imagen de marca con IA"
+      "copy": "Generador determinista de identidad de marca"
     },
     "yt_thumbnail": {
       "titulo": "Eikón",
-      "copy": "SDXL + FLUX ↓"
+      "copy": "Determinista · $0 ↓"
     },
     "yt_banner": {
       "titulo": "Eikón",

@@ -1,0 +1,73 @@
+{
+  "slug": "pinakotheke-fedon",
+  "nombre_producto": "Refutación de Simmias y Cebes",
+  "nombre_corporativo": "Pinakothḗke",
+  "tagline": "Ponencia: reconstrucción del Fedón (84c–102a) donde Sócrates formula la Teoría de las Formas como teoría causal; contrasta el realismo platónico con el emergentismo contemporáneo.",
+  "url": "https://fedon.stevenvallejo.com",
+  "tono": "filosófico, riguroso, reflexivo",
+  "simbolo": "Φ",
+  "frente": "filosofia",
+  "paleta": {
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_3": "#2a7a70",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22",
+    "acento_2": "#8d7cc0"
+  },
+  "gradiente_hero": "linear-gradient(135deg, #8d7cc0 0%, #43b5a6 50%, #2a7a70 100%)",
+  "gradiente_bg": "radial-gradient(ellipse at 20% 60%, #131e22 0%, #0b1417 70%)",
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo": "JetBrains Mono"
+  },
+  "logo_texto": "Fedón",
+  "logo_simbolo": "Φ",
+  "textos": {
+    "linkedin_post": {
+      "titulo": "Fedón",
+      "subtitulo": "Platón · Pinakothḗke",
+      "etiqueta": "FILOSOFÍA",
+      "copy": "La Teoría de las Formas como teoría causal."
+    },
+    "linkedin_banner": {
+      "titulo": "Fedón",
+      "etiqueta": "FILOSOFÍA",
+      "copy": "La Teoría de las Formas como teoría causal."
+    },
+    "ig_post": {
+      "titulo": "Φ",
+      "subtitulo": "Fedón",
+      "etiqueta": "FILOSOFÍA",
+      "copy": "La Teoría de las Formas como teoría causal."
+    },
+    "ig_story": {
+      "titulo": "Fedón",
+      "copy": "Leer la ponencia ↓"
+    },
+    "x_post": {
+      "titulo": "Fedón",
+      "copy": "La Teoría de las Formas como teoría causal."
+    },
+    "og_general": {
+      "titulo": "Fedón",
+      "subtitulo": "Platón · Pinakothḗke",
+      "copy": "La Teoría de las Formas como teoría causal."
+    },
+    "fb_cover": {
+      "titulo": "Fedón",
+      "subtitulo": "Platón · Pinakothḗke",
+      "copy": "La Teoría de las Formas como teoría causal."
+    },
+    "whatsapp_perfil": {
+      "titulo": "Φ",
+      "copy": "Fedón"
+    },
+    "contra_cover": {
+      "titulo": "Fedón",
+      "copy": "Platón · Pinakothḗke"
+    }
+  }
+}
