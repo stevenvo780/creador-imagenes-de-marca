@@ -26,48 +26,93 @@
   "logo_texto": "Fedón",
   "logo_simbolo": "Φ",
   "textos": {
-    "linkedin_post": {
-      "titulo": "Fedón",
-      "subtitulo": "Platón · Pinakothḗke",
-      "etiqueta": "FILOSOFÍA",
-      "copy": "La Teoría de las Formas como teoría causal."
-    },
-    "linkedin_banner": {
-      "titulo": "Fedón",
-      "etiqueta": "FILOSOFÍA",
-      "copy": "La Teoría de las Formas como teoría causal."
-    },
     "ig_post": {
-      "titulo": "Φ",
-      "subtitulo": "Fedón",
-      "etiqueta": "FILOSOFÍA",
-      "copy": "La Teoría de las Formas como teoría causal."
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "subtitulo": "De la abstracción al poder real",
+      "etiqueta": "",
+      "copy": "Las Formas no adornan: causan. Reconstrucción rigurosa del Fedón donde Platón formula la causalidad de lo real, refutando emergentismo contemporáneo."
     },
     "ig_story": {
-      "titulo": "Fedón",
-      "copy": "Leer la ponencia ↓"
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "copy": "Las Formas causan. Eso es poder de verdad."
     },
-    "x_post": {
-      "titulo": "Fedón",
-      "copy": "La Teoría de las Formas como teoría causal."
+    "ig_carousel": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "copy": "Las Formas no adornan: causan. Reconstrucción rigurosa del Fedón donde Platón formula la causalidad de lo real, refutando emergentismo contemporáneo.",
+      "numero": ""
+    },
+    "ig_reel_cover": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "copy": "Las Formas causan. Eso es poder de verdad."
+    },
+    "stat_card": {
+      "numero": "∞",
+      "etiqueta": "",
+      "copy": "Las Formas causan. Eso es poder de verdad."
+    },
+    "ad_rectangle": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "numero": "",
+      "copy": "Las Formas causan. Eso es poder de verdad.",
+      "cita": "Las Formas causan. Eso es poder de verdad.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "copy": "Las Formas causan. Eso es poder de verdad."
     },
     "og_general": {
-      "titulo": "Fedón",
-      "subtitulo": "Platón · Pinakothḗke",
-      "copy": "La Teoría de las Formas como teoría causal."
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "subtitulo": "De la abstracción al poder real",
+      "copy": "Las Formas no adornan: causan. Reconstrucción rigurosa del Fedón donde Platón formula la causalidad de lo real, refutando emergentismo contemporáneo."
+    },
+    "og_product": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "subtitulo": "De la abstracción al poder real",
+      "copy": "Las Formas no adornan: causan. Reconstrucción rigurosa del Fedón donde Platón formula la causalidad de lo real, refutando emergentismo contemporáneo."
+    },
+    "web_hero": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "subtitulo": "De la abstracción al poder real",
+      "copy": "Las Formas no adornan: causan. Reconstrucción rigurosa del Fedón donde Platón formula la causalidad de lo real, refutando emergentismo contemporáneo."
+    },
+    "linkedin_post": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "subtitulo": "De la abstracción al poder real",
+      "etiqueta": "",
+      "copy": "Las Formas no adornan: causan. Reconstrucción rigurosa del Fedón donde Platón formula la causalidad de lo real, refutando emergentismo contemporáneo."
+    },
+    "linkedin_banner": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "etiqueta": "",
+      "copy": "Las Formas causan. Eso es poder de verdad."
     },
     "fb_cover": {
-      "titulo": "Fedón",
-      "subtitulo": "Platón · Pinakothḗke",
-      "copy": "La Teoría de las Formas como teoría causal."
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "subtitulo": "De la abstracción al poder real",
+      "copy": "Las Formas no adornan: causan. Reconstrucción rigurosa del Fedón donde Platón formula la causalidad de lo real, refutando emergentismo contemporáneo."
+    },
+    "x_post": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "copy": "Las Formas causan. Eso es poder de verdad."
+    },
+    "yt_thumbnail": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "copy": "Las Formas causan. Eso es poder de verdad."
+    },
+    "poster_a4": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "subtitulo": "De la abstracción al poder causal",
+      "copy": "Las Formas no son decoración del mundo: son su causa. Reconstrucción rigurosa del Fedón donde Sócrates funda la teoría causal platónica. Hoy la llamaríamos ontología."
     },
     "whatsapp_perfil": {
-      "titulo": "Φ",
-      "copy": "Fedón"
+      "titulo": "Platón tenía razón. Pero cómo."
     },
     "contra_cover": {
-      "titulo": "Fedón",
-      "copy": "Platón · Pinakothḗke"
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "copy": "De la abstracción al poder real"
     }
-  }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
 }

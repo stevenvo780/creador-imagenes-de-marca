@@ -1,0 +1,149 @@
+- generic [ref=e2]:
+  - link "Saltar al contenido principal" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "Eikón" [ref=e6] [cursor=pointer]:
+        - /url: /
+      - navigation "Navegación principal" [ref=e7]:
+        - list [ref=e8]:
+          - listitem [ref=e9]:
+            - link "Marcas" [ref=e10] [cursor=pointer]:
+              - /url: /brands
+          - listitem [ref=e11]:
+            - link "Crear" [ref=e12] [cursor=pointer]:
+              - /url: /batch
+          - listitem [ref=e13]:
+            - link "Galería" [ref=e14] [cursor=pointer]:
+              - /url: /gallery
+      - generic [ref=e15]:
+        - 'generic "Cuenta: qalocal" [ref=e16]': qalocal
+        - button "Salir" [ref=e17] [cursor=pointer]
+  - main [ref=e18]:
+    - generic [ref=e95]:
+      - generic [ref=e96]:
+        - heading "Galería" [level=1] [ref=e97]
+        - generic [ref=e98]: 4 variaciones
+      - generic [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]: Marca
+          - combobox "Filtrar por marca" [ref=e102] [cursor=pointer]:
+            - option "Todas las marcas" [selected]
+            - option "QA Brand"
+        - generic [ref=e103]:
+          - generic [ref=e104]: Generación
+          - combobox "Filtrar por generación" [ref=e105] [cursor=pointer]:
+            - option "Todas las generaciones" [selected]
+            - 'option "Generación #121"'
+            - 'option "Generación #120"'
+            - 'option "Generación #119"'
+            - 'option "Generación #118"'
+            - 'option "Generación #117"'
+            - 'option "Generación #116"'
+            - 'option "Generación #115"'
+            - 'option "Generación #114"'
+            - 'option "Generación #113"'
+            - 'option "Generación #112"'
+            - 'option "Generación #111"'
+            - 'option "Generación #110"'
+            - 'option "Generación #109"'
+            - 'option "Generación #108"'
+            - 'option "Generación #107"'
+            - 'option "Generación #106"'
+            - 'option "Generación #105"'
+            - 'option "Generación #104"'
+            - 'option "Generación #103"'
+            - 'option "Generación #102"'
+            - 'option "Generación #101"'
+        - generic [ref=e106]:
+          - generic [ref=e107]: Familia
+          - combobox "Filtrar por familia de formato" [ref=e108] [cursor=pointer]:
+            - option "Todas las familias"
+            - option "Logos"
+            - option "Banners"
+            - option "Tarjetas"
+            - option "Redes / OG"
+            - option "Papelería" [selected]
+        - generic [ref=e109]:
+          - generic [ref=e110]: Ordenar por
+          - combobox "Ordenar variaciones" [ref=e111] [cursor=pointer]:
+            - option "Calidad (mejores primero)" [selected]
+            - option "Más recientes"
+        - button "Seleccionar todo" [ref=e112] [cursor=pointer]
+      - generic "Filtros activos" [ref=e619]:
+        - generic [ref=e620]:
+          - text: "Familia: Papelería"
+          - 'button "Quitar filtro: Familia: Papelería" [ref=e621] [cursor=pointer]': ✕
+      - list "Variaciones de marca" [ref=e113]:
+        - listitem [ref=e388]:
+          - article "Variación de QA Brand" [ref=e389]:
+            - generic [ref=e390]:
+              - generic "Seleccionar" [ref=e391] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [ref=e392]
+              - button "Ver detalle de QA Brand" [ref=e393]:
+                - img "Vista previa de variación de QA Brand" [ref=e394]
+            - generic [ref=e395]:
+              - generic [ref=e396]:
+                - generic [ref=e397]: QA Brand
+                - 'generic "Familia: Papelería" [ref=e398]': Papelería
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e399]':
+                  - generic [ref=e400]: ★
+                  - generic [ref=e401]: ★
+                  - generic [ref=e402]: ★
+                  - generic [ref=e403]: ★
+                  - generic [ref=e404]: ★
+              - button "Descargar variación de QA Brand" [ref=e405] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e442]:
+          - article "Variación de QA Brand" [ref=e443]:
+            - generic [ref=e444]:
+              - generic "Seleccionar" [ref=e445] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [ref=e446]
+              - button "Ver detalle de QA Brand" [ref=e447]:
+                - img "Vista previa de variación de QA Brand" [ref=e448]
+            - generic [ref=e449]:
+              - generic [ref=e450]:
+                - generic [ref=e451]: QA Brand
+                - 'generic "Familia: Papelería" [ref=e452]': Papelería
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e453]':
+                  - generic [ref=e454]: ★
+                  - generic [ref=e455]: ★
+                  - generic [ref=e456]: ★
+                  - generic [ref=e457]: ★
+                  - generic [ref=e458]: ★
+              - button "Descargar variación de QA Brand" [ref=e459] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e460]:
+          - article "Variación de QA Brand" [ref=e461]:
+            - generic [ref=e462]:
+              - generic "Seleccionar" [ref=e463] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [ref=e464]
+              - button "Ver detalle de QA Brand" [ref=e465]:
+                - img "Vista previa de variación de QA Brand" [ref=e466]
+            - generic [ref=e467]:
+              - generic [ref=e468]:
+                - generic [ref=e469]: QA Brand
+                - 'generic "Familia: Papelería" [ref=e470]': Papelería
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e471]':
+                  - generic [ref=e472]: ★
+                  - generic [ref=e473]: ★
+                  - generic [ref=e474]: ★
+                  - generic [ref=e475]: ★
+                  - generic [ref=e476]: ★
+              - button "Descargar variación de QA Brand" [ref=e477] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e478]:
+          - article "Variación de QA Brand" [ref=e479]:
+            - generic [ref=e480]:
+              - generic "Seleccionar" [ref=e481] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [ref=e482]
+              - button "Ver detalle de QA Brand" [ref=e483]:
+                - img "Vista previa de variación de QA Brand" [ref=e484]
+            - generic [ref=e485]:
+              - generic [ref=e486]:
+                - generic [ref=e487]: QA Brand
+                - 'generic "Familia: Papelería" [ref=e488]': Papelería
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e489]':
+                  - generic [ref=e490]: ★
+                  - generic [ref=e491]: ★
+                  - generic [ref=e492]: ★
+                  - generic [ref=e493]: ★
+                  - generic [ref=e494]: ★
+              - button "Descargar variación de QA Brand" [ref=e495] [cursor=pointer]: ↓ Descargar

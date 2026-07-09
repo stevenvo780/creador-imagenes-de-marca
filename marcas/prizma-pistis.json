@@ -7,72 +7,84 @@
   "tono": "seguro, auditable, corporativo",
   "simbolo": "✓",
   "suite": "prizma",
-
   "paleta": {
-    "bg":           "#0c0e10",
-    "primario":     "#0c0e10",
-    "acento":       "#f0b94a",
-    "acento_2":     "#d4622e",
-    "acento_3":     "#43b5a6",
-    "texto":        "#f0ece6",
-    "texto_muted":  "#a09080",
-    "surface":      "#16120e"
+    "bg": "#0c0e10",
+    "primario": "#0c0e10",
+    "acento": "#f0b94a",
+    "acento_2": "#d4622e",
+    "acento_3": "#43b5a6",
+    "texto": "#f0ece6",
+    "texto_muted": "#a09080",
+    "surface": "#16120e"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #f0b94a 0%, #d4622e 60%, #8b3a1a 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 60% 40%, #1a120a 0%, #0c0e10 65%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 60% 40%, #1a120a 0%, #0c0e10 65%)",
   "tipografia": {
     "titulos": "Inter",
-    "cuerpo":  "Inter"
+    "cuerpo": "Inter"
   },
-
   "logo_texto": "Pistis",
   "logo_simbolo": "✓",
-
   "textos": {
     "linkedin_post": {
-      "titulo":    "Pistis",
+      "titulo": "Pistis",
       "subtitulo": "Confianza verificable · Prizma",
-      "copy":      "Confianza verificable en cada transacción."
+      "copy": "Confianza verificable en cada transacción."
     },
     "linkedin_banner": {
-      "titulo":    "Pistis",
-      "copy":      "Auditoría, firma y confianza digital para la empresa moderna."
+      "titulo": "Pistis",
+      "copy": "Auditoría, firma y confianza digital para la empresa moderna."
     },
     "ig_post": {
-      "titulo":    "✓",
+      "titulo": "✓",
       "subtitulo": "Pistis",
-      "copy":      "Confianza verificable en cada transacción"
+      "copy": "Confianza verificable en cada transacción"
     },
     "ig_story": {
-      "titulo":    "Pistis",
-      "copy":      "Confianza verificable ↓"
+      "titulo": "Pistis",
+      "copy": "Confianza verificable ↓"
     },
     "x_post": {
-      "titulo":    "Pistis",
-      "copy":      "Confianza verificable en cada transacción"
+      "titulo": "Pistis",
+      "copy": "Confianza verificable en cada transacción"
     },
     "yt_thumbnail": {
-      "titulo":    "Pistis",
-      "copy":      "Auditoría y firma digital"
+      "titulo": "Pistis",
+      "copy": "Auditoría y firma digital"
     },
     "yt_banner": {
-      "titulo":    "Pistis",
+      "titulo": "Pistis",
       "subtitulo": "Confianza verificable · Prizma"
     },
     "og_general": {
-      "titulo":    "Pistis",
+      "titulo": "Pistis",
       "subtitulo": "Confianza verificable · Prizma",
-      "copy":      "Confianza verificable en cada transacción."
+      "copy": "Confianza verificable en cada transacción."
+    },
+    "og_product": {
+      "titulo": "Pistis",
+      "subtitulo": "Auditoría y firma digital · Prizma",
+      "copy": "Solución empresarial para confianza verificable: auditoría, certificados digitales y conformidad normativa."
     },
     "whatsapp_perfil": {
-      "titulo":    "✓",
-      "copy":      "Pistis"
+      "titulo": "✓",
+      "copy": "Pistis"
     },
     "contra_cover": {
-      "titulo":    "Pistis",
-      "copy":      "Confianza verificable · Prizma"
+      "titulo": "Pistis",
+      "copy": "Confianza verificable · Prizma"
+    },
+    "stat_card": {
+      "numero": "100%",
+      "etiqueta": "trazabilidad documental",
+      "copy": "Cada transacción se sella con firma digital auditable. Lo firmás hoy, lo demostrás en cinco años. Cero papel."
+    },
+    "poster_a4": {
+      "titulo": "Cada decisión deja huella",
+      "subtitulo": "Trazabilidad documental con firma digital",
+      "copy": "Cada transacción se sella con firma digital auditable. Lo firmás hoy, lo demostrás en cinco años. Cero papel."
     }
-  }
+  },
+  "logo_style": "prisma_refraccion",
+  "logo_seed": 1412926217
 }

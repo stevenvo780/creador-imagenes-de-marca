@@ -1,0 +1,38 @@
+{
+  "slug": "pinakotheke-ignosticismo",
+  "nombre_producto": "Ignosticismo",
+  "nombre_corporativo": "Pinakothḗke",
+  "tagline": "Ensayo filosófico: el ignosticismo sostiene que preguntar '¿existe Dios?' carece de sentido hasta definir 'Dios' de forma coherente y verificable. El problema semántico es previo al teísmo y al ateísmo.",
+  "url": "https://medium.com/@stevenvallejo780/ignosticismo-an%C3%A1lisis-filos%C3%B3fico-cr%C3%ADtico-0cb2a411569f",
+  "tono": "técnico, investigador, profundo",
+  "simbolo": "∂",
+  "frente": "filosofia",
+  "paleta": {
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_2": "#8d7cc0",
+    "acento_3": "#2a7a70",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22"
+  },
+  "gradiente_hero": "linear-gradient(135deg, #8d7cc0 0%, #43b5a6 50%, #2a7a70 100%)",
+  "gradiente_bg": "radial-gradient(ellipse at 20% 60%, #131e22 0%, #0b1417 70%)",
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo": "JetBrains Mono"
+  },
+  "logo_texto": "Ignosticismo",
+  "logo_simbolo": "∂",
+  "textos": {
+    "ig_post": {
+      "titulo": "¿Existe Dios? Pero definí primero.",
+      "subtitulo": "El problema semántico previo",
+      "etiqueta": "FILOSOFÍA · LÓGICA",
+      "copy": "El ignosticismo no dice 'no sé'. Dice 'esa pregunta carece de sentido hasta que definas 'Dios' de forma coherente'. El debate teísmo-ateísmo empieza después. Mucho después."
+    }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
+}

@@ -55,7 +55,8 @@
 
   /* v3_cta_driven: social proof/data — CTA gradiente */
   body[data-variant="v3_cta_driven"] .headline {
-    background: linear-gradient(90deg, var(--acento), var(--acento-2));
+    /* WCAG AA fix: gradient end was --acento-2 (#2a7a70 gives 4.26:1 on #0a0f12); now uses #A3E4D7 end (13.4:1) */
+    background: linear-gradient(90deg, var(--acento), #A3E4D7);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text;
     font-weight: 800;

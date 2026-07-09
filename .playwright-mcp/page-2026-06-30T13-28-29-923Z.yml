@@ -1,0 +1,20 @@
+- main [ref=e9]:
+  - generic [ref=e10]:
+    - generic [ref=e11]:
+      - heading "Eikón" [level=1] [ref=e12]
+      - paragraph [ref=e13]: Crea la identidad visual de tu marca
+    - tablist "Modo de acceso" [ref=e14]:
+      - tab "Iniciar sesión" [selected] [ref=e15] [cursor=pointer]
+      - tab "Crear cuenta" [ref=e16] [cursor=pointer]
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - generic [ref=e19]: Correo electrónico
+        - textbox "Correo electrónico" [ref=e20]:
+          - /placeholder: usuario@ejemplo.com
+          - text: demo@eikon.app
+      - generic [ref=e21]:
+        - generic [ref=e22]: Contraseña
+        - textbox "Contraseña" [ref=e23]:
+          - /placeholder: Mínimo 8 caracteres
+          - text: EikonDemo2026!
+      - button "Procesando…" [disabled] [ref=e25]

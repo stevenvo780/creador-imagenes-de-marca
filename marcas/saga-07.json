@@ -1,0 +1,224 @@
+{
+  "slug": "saga-07",
+  "nombre_producto": "Saga 07 · Filósofo entre burócratas",
+  "nombre_corporativo": "Steven Vallejo",
+  "tagline": "La gente asume que construyo rápido porque soy máquina. Lo opuesto. Mis años en Discord (tribunal, paño de lágrimas, árbitro de las 2 AM) me enseñaron dónde falla un sistema: en no entender a quién lo va a usar.",
+  "url": "https://www.stevenvallejo.com/es",
+  "url_en": "https://www.stevenvallejo.com/en",
+  "tono": "personal, reflexivo, técnico-humanista",
+  "simbolo": "lemniscata (∞)",
+  "paleta": {
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_2": "#e0a85e",
+    "acento_3": "#c0522a",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#152028"
+  },
+  "gradiente_hero": "linear-gradient(135deg, #e0a85e 0%, #c0522a 40%, #43b5a6 100%)",
+  "gradiente_bg": "radial-gradient(ellipse at 20% 50%, #152028 0%, #0b1417 60%)",
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo": "Inter"
+  },
+  "logo_texto": "Steven Vallejo",
+  "logo_simbolo": "∞",
+  "textos": {
+    "ig_post": {
+      "titulo": "El robot que aprende a hablar",
+      "subtitulo": "Discord me enseñó a ser humano",
+      "etiqueta": "",
+      "copy": "La gente asume que construyo rápido porque soy máquina. Lo opuesto. Mis años en Discord (tribunal, paño de lágrimas, árbitro de las 2 AM) me enseñaron dónde falla un sistema: en no entender a quién lo va a usar."
+    },
+    "ig_story": {
+      "titulo": "El robot que aprende a hablar",
+      "copy": "Un sistema falla cuando no entiende a quién lo va a usar."
+    },
+    "ig_carousel": {
+      "titulo": "El robot que aprende a hablar",
+      "copy": "La gente asume que construyo rápido porque soy máquina. Lo opuesto. Mis años en Discord (tribunal, paño de lágrimas, árbitro de las 2 AM) me enseñaron dónde falla un sistema: en no entender a quién lo va a usar.",
+      "numero": ""
+    },
+    "ig_reel_cover": {
+      "titulo": "Filósofo entre burócratas",
+      "copy": "¿Creés que soy una máquina? Al revés: sé que el código falla si no entiende a la gente."
+    },
+    "stat_card": {
+      "numero": "∞",
+      "etiqueta": "",
+      "copy": "Un sistema falla cuando no entiende a quién lo va a usar."
+    },
+    "ad_rectangle": {
+      "titulo": "El robot que aprende a hablar",
+      "numero": "",
+      "copy": "Un sistema falla cuando no entiende a quién lo va a usar.",
+      "cita": "Un sistema falla cuando no entiende a quién lo va a usar.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "El robot que aprende a hablar",
+      "copy": "Un sistema falla cuando no entiende a quién lo va a usar."
+    },
+    "og_general": {
+      "titulo": "El robot que aprende a hablar",
+      "subtitulo": "Discord me enseñó a ser humano",
+      "copy": "La gente asume que construyo rápido porque soy máquina. Lo opuesto. Mis años en Discord (tribunal, paño de lágrimas, árbitro de las 2 AM) me enseñaron dónde falla un sistema: en no entender a quién lo va a usar."
+    },
+    "og_product": {
+      "titulo": "El robot que aprende a hablar",
+      "subtitulo": "Discord me enseñó a ser humano",
+      "copy": "La gente asume que construyo rápido porque soy máquina. Lo opuesto. Mis años en Discord (tribunal, paño de lágrimas, árbitro de las 2 AM) me enseñaron dónde falla un sistema: en no entender a quién lo va a usar."
+    },
+    "web_hero": {
+      "titulo": "El robot que aprende a hablar",
+      "subtitulo": "Discord me enseñó a ser humano",
+      "copy": "La gente asume que construyo rápido porque soy máquina. Lo opuesto. Mis años en Discord (tribunal, paño de lágrimas, árbitro de las 2 AM) me enseñaron dónde falla un sistema: en no entender a quién lo va a usar."
+    },
+    "linkedin_post": {
+      "titulo": "El robot que aprende a hablar",
+      "subtitulo": "Discord me enseñó a ser humano",
+      "etiqueta": "",
+      "copy": "La gente asume que construyo rápido porque soy máquina. Lo opuesto. Mis años en Discord (tribunal, paño de lágrimas, árbitro de las 2 AM) me enseñaron dónde falla un sistema: en no entender a quién lo va a usar."
+    },
+    "linkedin_banner": {
+      "titulo": "El robot que aprende a hablar",
+      "etiqueta": "",
+      "copy": "Un sistema falla cuando no entiende a quién lo va a usar."
+    },
+    "fb_cover": {
+      "titulo": "El robot que aprende a hablar",
+      "subtitulo": "Discord me enseñó a ser humano",
+      "copy": "La gente asume que construyo rápido porque soy máquina. Lo opuesto. Mis años en Discord (tribunal, paño de lágrimas, árbitro de las 2 AM) me enseñaron dónde falla un sistema: en no entender a quién lo va a usar."
+    },
+    "x_post": {
+      "titulo": "El robot que aprende a hablar",
+      "copy": "Un sistema falla cuando no entiende a quién lo va a usar."
+    },
+    "yt_thumbnail": {
+      "titulo": "El robot que aprende a hablar",
+      "copy": "Un sistema falla cuando no entiende a quién lo va a usar."
+    },
+    "poster_a4": {
+      "titulo": "El robot que aprende a hablar",
+      "subtitulo": "Discord me enseñó a ser humano",
+      "copy": "La gente asume que construyo rápido porque soy máquina. Lo opuesto. Mis años en Discord (tribunal, paño de lágrimas, árbitro de las 2 AM) me enseñaron dónde falla un sistema: en no entender a quién lo va a usar."
+    },
+    "whatsapp_perfil": {
+      "titulo": "El robot que aprende a hablar"
+    },
+    "contra_cover": {
+      "titulo": "El robot que aprende a hablar",
+      "copy": "Discord me enseñó a ser humano"
+    }
+  },
+  "locales": {
+    "en": {
+      "tagline": "Software engineer and philosopher: clear systems for real problems",
+      "url": "https://www.stevenvallejo.com/en",
+      "textos": {
+        "linkedin_post": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems · Philosophy",
+          "copy": "Think before you build: clear systems for real problems."
+        },
+        "linkedin_banner": {
+          "titulo": "Steven Vallejo",
+          "copy": "Engineering, artificial intelligence, and rigorous thought."
+        },
+        "ig_post": {
+          "titulo": "∞",
+          "subtitulo": "Steven Vallejo",
+          "copy": "Software engineer · Philosopher"
+        },
+        "ig_story": {
+          "titulo": "Steven\nVallejo",
+          "copy": "New post ↓"
+        },
+        "x_post": {
+          "titulo": "Steven Vallejo",
+          "copy": "Software engineer and philosopher: clear systems for real problems"
+        },
+        "yt_thumbnail": {
+          "titulo": "Steven Vallejo",
+          "copy": "Watch"
+        },
+        "yt_banner": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software · AI · Philosophy"
+        },
+        "og_general": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems",
+          "copy": "Think before you build: clear systems for real problems."
+        },
+        "contra_cover": {
+          "titulo": "Steven Vallejo",
+          "copy": "Software Architecture & AI Systems"
+        },
+        "ig_reel_cover": {
+          "titulo": "∞",
+          "subtitulo": "Steven Vallejo",
+          "copy": "12+ years of backend, agentic AI & devtools"
+        },
+        "ig_carousel": {
+          "titulo": "Philosophy · Sciences · Engineering",
+          "subtitulo": "Steven Vallejo",
+          "copy": "Three fronts. One framework. Structured clarity."
+        },
+        "x_header": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software engineer · Philosopher",
+          "copy": "stevenvallejo.com"
+        },
+        "fb_cover": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems · Philosophy",
+          "copy": "Building at the intersection of systems, intelligence, and craft."
+        },
+        "tiktok_cover": {
+          "titulo": "SV",
+          "subtitulo": "Steven Vallejo",
+          "copy": "Systems. Intelligence. Craft."
+        },
+        "web_hero": {
+          "titulo": "Think before\nyou build",
+          "subtitulo": "Software Architecture · Agentic AI · Philosophy",
+          "copy": "12+ years translating complex systems into structured, maintainable software. From formal logic and NLP to multi-tenant platforms and OSS devtools."
+        },
+        "web_hero_mobile": {
+          "titulo": "Steven\nVallejo",
+          "subtitulo": "Software Engineering · AI Systems",
+          "copy": "Clear systems for real problems."
+        },
+        "email_header": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Architecture · AI Systems · Philosophy",
+          "copy": "stevenvallejo.com"
+        },
+        "banner_ad": {
+          "titulo": "Steven Vallejo",
+          "copy": "Software Architecture & Agentic AI — stevenvallejo.com"
+        },
+        "business_card": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems",
+          "copy": "stevenvallejo.com"
+        },
+        "poster_a4": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Architecture · Agentic AI · Philosophy",
+          "copy": "Philosopher-engineer with 12+ years of backend, formal logic, and OSS devtools. Building systems that think and explaining systems that last."
+        },
+        "og_product": {
+          "titulo": "Steven Vallejo — Projects",
+          "subtitulo": "Philosophy · Sciences · Engineering",
+          "copy": "Live products across formal logic, scientific simulation, multi-tenant platforms and SMB devtools. Mouseîon ecosystem."
+        }
+      }
+    }
+  },
+  "logo_style": "lemniscate",
+  "logo_seed": 770077
+}

@@ -7,75 +7,112 @@
   "url_en": "https://filosofo.stevenvallejo.com",
   "tono": "reflexivo, humanista, riguroso",
   "simbolo": "lemniscata (∞)",
-
   "paleta": {
-    "bg":           "#0b1417",
-    "primario":     "#0b1417",
-    "acento":       "#43b5a6",
-    "acento_2":     "#e0a85e",
-    "acento_3":     "#c0522a",
-    "texto":        "#e8e0d4",
-    "texto_muted":  "#8fa3a8",
-    "surface":      "#152028"
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_2": "#e0a85e",
+    "acento_3": "#c0522a",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#152028"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #e0a85e 0%, #c0522a 60%, #0b1417 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 20% 50%, #1c1408 0%, #0b1417 60%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 20% 50%, #1c1408 0%, #0b1417 60%)",
   "tipografia": {
     "titulos": "Cormorant Garamond",
-    "cuerpo":  "Cormorant Garamond"
+    "cuerpo": "Cormorant Garamond"
   },
-
   "logo_texto": "SV",
   "logo_simbolo": "∞",
-
   "textos": {
-    "linkedin_post": {
-      "titulo":    "Steven Vallejo · Filósofo",
-      "subtitulo": "Filosofía del lenguaje · Epistemología · Pensamiento crítico",
-      "copy":      "Las preguntas correctas son más valiosas que las respuestas rápidas."
-    },
-    "linkedin_banner": {
-      "titulo":    "Steven Vallejo",
-      "copy":      "Pensamiento riguroso en los márgenes del lenguaje y la razón."
-    },
     "ig_post": {
-      "titulo":    "∞",
-      "subtitulo": "Steven Vallejo · Filósofo",
-      "copy":      "Pensamiento riguroso en los márgenes del lenguaje"
+      "titulo": "Riguroso, sin respuestas fáciles",
+      "subtitulo": "Filosofía de la ciencia · Neurofilosofía · Retórica",
+      "etiqueta": "frentes",
+      "copy": "Escalé todo lo que podía en ciencia y código. Ahora pienso: ¿qué hay en los bordes donde el lenguaje se quiebra y la razón falla?"
     },
     "ig_story": {
-      "titulo":    "Steven\nVallejo",
-      "copy":      "Filosofía ↓"
+      "titulo": "Riguroso, sin respuestas fáciles",
+      "copy": "Hice todo lo que se podía hacer. Ahora pienso qué significa."
     },
-    "x_post": {
-      "titulo":    "Steven Vallejo",
-      "copy":      "Pensamiento riguroso en los márgenes del lenguaje y la razón"
+    "ig_carousel": {
+      "titulo": "Riguroso, sin respuestas fáciles",
+      "copy": "Escalé todo lo que podía en ciencia y código. Ahora pienso: ¿qué hay en los bordes donde el lenguaje se quiebra y la razón falla?",
+      "numero": "3"
     },
-    "yt_thumbnail": {
-      "titulo":    "Steven Vallejo",
-      "copy":      "Ver"
+    "ig_reel_cover": {
+      "titulo": "Riguroso, sin respuestas fáciles",
+      "copy": "Hice todo lo que se podía hacer. Ahora pienso qué significa."
     },
-    "yt_banner": {
-      "titulo":    "Steven Vallejo",
-      "subtitulo": "Filosofía · Lenguaje · Razón"
+    "stat_card": {
+      "numero": "3",
+      "etiqueta": "frentes",
+      "copy": "Hice todo lo que se podía hacer. Ahora pienso qué significa."
+    },
+    "ad_rectangle": {
+      "titulo": "Riguroso, sin respuestas fáciles",
+      "numero": "3",
+      "copy": "Hice todo lo que se podía hacer. Ahora pienso qué significa.",
+      "cita": "Hice todo lo que se podía hacer. Ahora pienso qué significa.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "Riguroso, sin respuestas fáciles",
+      "copy": "Hice todo lo que se podía hacer. Ahora pienso qué significa."
     },
     "og_general": {
-      "titulo":    "Steven Vallejo · Filósofo",
-      "subtitulo": "Filosofía del lenguaje · Epistemología",
-      "copy":      "Las preguntas correctas son más valiosas que las respuestas rápidas."
+      "titulo": "Riguroso, sin respuestas fáciles",
+      "subtitulo": "Filosofía de la ciencia · Neurofilosofía · Retórica",
+      "copy": "Escalé todo lo que podía en ciencia y código. Ahora pienso: ¿qué hay en los bordes donde el lenguaje se quiebra y la razón falla?"
+    },
+    "og_product": {
+      "titulo": "Riguroso, sin respuestas fáciles",
+      "subtitulo": "Filosofía de la ciencia · Neurofilosofía · Retórica",
+      "copy": "Escalé todo lo que podía en ciencia y código. Ahora pienso: ¿qué hay en los bordes donde el lenguaje se quiebra y la razón falla?"
+    },
+    "web_hero": {
+      "titulo": "Riguroso, sin respuestas fáciles",
+      "subtitulo": "Filosofía de la ciencia · Neurofilosofía · Retórica",
+      "copy": "Escalé todo lo que podía en ciencia y código. Ahora pienso: ¿qué hay en los bordes donde el lenguaje se quiebra y la razón falla?"
+    },
+    "linkedin_post": {
+      "titulo": "Riguroso, sin respuestas fáciles",
+      "subtitulo": "Filosofía de la ciencia · Neurofilosofía · Retórica",
+      "etiqueta": "frentes",
+      "copy": "Escalé todo lo que podía en ciencia y código. Ahora pienso: ¿qué hay en los bordes donde el lenguaje se quiebra y la razón falla?"
+    },
+    "linkedin_banner": {
+      "titulo": "Riguroso, sin respuestas fáciles",
+      "etiqueta": "frentes",
+      "copy": "Hice todo lo que se podía hacer. Ahora pienso qué significa."
+    },
+    "fb_cover": {
+      "titulo": "Riguroso, sin respuestas fáciles",
+      "subtitulo": "Filosofía de la ciencia · Neurofilosofía · Retórica",
+      "copy": "Escalé todo lo que podía en ciencia y código. Ahora pienso: ¿qué hay en los bordes donde el lenguaje se quiebra y la razón falla?"
+    },
+    "x_post": {
+      "titulo": "Riguroso, sin respuestas fáciles",
+      "copy": "Hice todo lo que se podía hacer. Ahora pienso qué significa."
+    },
+    "yt_thumbnail": {
+      "titulo": "Riguroso, sin respuestas fáciles",
+      "copy": "Hice todo lo que se podía hacer. Ahora pienso qué significa."
+    },
+    "poster_a4": {
+      "titulo": "Riguroso, sin respuestas fáciles",
+      "subtitulo": "Filosofía de la ciencia · Neurofilosofía · Retórica",
+      "copy": "Escalé todo lo que podía en ciencia y código. Ahora pienso: ¿qué hay en los bordes donde el lenguaje se quiebra y la razón falla?"
     },
     "whatsapp_perfil": {
-      "titulo":    "SV",
-      "copy":      "∞"
+      "titulo": "Riguroso, sin respuestas fáciles"
     },
     "contra_cover": {
-      "titulo":    "Steven Vallejo",
-      "copy":      "Filosofía del lenguaje & Pensamiento crítico"
+      "titulo": "Riguroso, sin respuestas fáciles",
+      "copy": "Filosofía de la ciencia · Neurofilosofía · Retórica"
     }
   },
-
   "locales": {
     "en": {
       "nombre_producto": "Steven Vallejo · Philosopher",
@@ -83,45 +120,47 @@
       "url": "https://filosofo.stevenvallejo.com",
       "textos": {
         "linkedin_post": {
-          "titulo":    "Steven Vallejo · Philosopher",
+          "titulo": "Steven Vallejo · Philosopher",
           "subtitulo": "Philosophy of Language · Epistemology · Critical Thought",
-          "copy":      "The right questions are more valuable than fast answers."
+          "copy": "The right questions are more valuable than fast answers."
         },
         "linkedin_banner": {
-          "titulo":    "Steven Vallejo",
-          "copy":      "Rigorous thought at the edges of language and reason."
+          "titulo": "Steven Vallejo",
+          "copy": "Rigorous thought at the edges of language and reason."
         },
         "ig_post": {
-          "titulo":    "∞",
+          "titulo": "∞",
           "subtitulo": "Steven Vallejo · Philosopher",
-          "copy":      "Rigorous thought at the edges of language"
+          "copy": "Rigorous thought at the edges of language"
         },
         "ig_story": {
-          "titulo":    "Steven\nVallejo",
-          "copy":      "Philosophy ↓"
+          "titulo": "Steven\nVallejo",
+          "copy": "Philosophy ↓"
         },
         "x_post": {
-          "titulo":    "Steven Vallejo",
-          "copy":      "Rigorous thought at the edges of language and reason"
+          "titulo": "Steven Vallejo",
+          "copy": "Rigorous thought at the edges of language and reason"
         },
         "yt_thumbnail": {
-          "titulo":    "Steven Vallejo",
-          "copy":      "Watch"
+          "titulo": "Steven Vallejo",
+          "copy": "Watch"
         },
         "yt_banner": {
-          "titulo":    "Steven Vallejo",
+          "titulo": "Steven Vallejo",
           "subtitulo": "Philosophy · Language · Reason"
         },
         "og_general": {
-          "titulo":    "Steven Vallejo · Philosopher",
+          "titulo": "Steven Vallejo · Philosopher",
           "subtitulo": "Philosophy of Language · Epistemology",
-          "copy":      "The right questions are more valuable than fast answers."
+          "copy": "The right questions are more valuable than fast answers."
         },
         "contra_cover": {
-          "titulo":    "Steven Vallejo",
-          "copy":      "Philosophy of Language & Critical Thought"
+          "titulo": "Steven Vallejo",
+          "copy": "Philosophy of Language & Critical Thought"
         }
       }
     }
-  }
+  },
+  "logo_style": "lemniscate",
+  "logo_seed": 770077
 }

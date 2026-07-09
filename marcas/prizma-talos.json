@@ -7,72 +7,69 @@
   "tono": "robusto, seguro, guardián",
   "simbolo": "⬡",
   "suite": "prizma",
-
   "paleta": {
-    "bg":           "#0c0e10",
-    "primario":     "#0c0e10",
-    "acento":       "#f0b94a",
-    "acento_2":     "#d4622e",
-    "acento_3":     "#43b5a6",
-    "texto":        "#f0ece6",
-    "texto_muted":  "#a09080",
-    "surface":      "#16120e"
+    "bg": "#0c0e10",
+    "primario": "#0c0e10",
+    "acento": "#f0b94a",
+    "acento_2": "#d4622e",
+    "acento_3": "#43b5a6",
+    "texto": "#f0ece6",
+    "texto_muted": "#a09080",
+    "surface": "#16120e"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #d4622e 0%, #9e3015 55%, #6a1a0a 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 80% 20%, #1a120a 0%, #0c0e10 65%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 80% 20%, #1a120a 0%, #0c0e10 65%)",
   "tipografia": {
     "titulos": "Inter",
-    "cuerpo":  "JetBrains Mono"
+    "cuerpo": "JetBrains Mono"
   },
-
   "logo_texto": "Talos",
   "logo_simbolo": "⬡",
-
   "textos": {
     "linkedin_post": {
-      "titulo":    "Talos",
+      "titulo": "Talos",
       "subtitulo": "Seguridad perimetral · Prizma",
-      "copy":      "Seguridad perimetral para la empresa digital."
+      "copy": "Seguridad perimetral para la empresa digital."
     },
     "linkedin_banner": {
-      "titulo":    "Talos",
-      "copy":      "Guarda el perímetro. Detecta anomalías. Responde antes que el daño."
+      "titulo": "Talos",
+      "copy": "Guarda el perímetro. Detecta anomalías. Responde antes que el daño."
     },
     "ig_post": {
-      "titulo":    "⬡",
+      "titulo": "⬡",
       "subtitulo": "Talos",
-      "copy":      "Seguridad perimetral para la empresa digital"
+      "copy": "Seguridad perimetral para la empresa digital"
     },
     "ig_story": {
-      "titulo":    "Talos",
-      "copy":      "Guarda el perímetro ↓"
+      "titulo": "Talos",
+      "copy": "Guarda el perímetro ↓"
     },
     "x_post": {
-      "titulo":    "Talos",
-      "copy":      "Seguridad perimetral para la empresa digital"
+      "titulo": "Talos",
+      "copy": "Seguridad perimetral para la empresa digital"
     },
     "yt_thumbnail": {
-      "titulo":    "Talos",
-      "copy":      "Seguridad perimetral"
+      "titulo": "Talos",
+      "copy": "Seguridad perimetral"
     },
     "yt_banner": {
-      "titulo":    "Talos",
+      "titulo": "Talos",
       "subtitulo": "Seguridad perimetral · Prizma"
     },
     "og_general": {
-      "titulo":    "Talos",
+      "titulo": "Talos",
       "subtitulo": "Seguridad perimetral · Prizma",
-      "copy":      "Seguridad perimetral para la empresa digital."
+      "copy": "Seguridad perimetral para la empresa digital."
     },
     "whatsapp_perfil": {
-      "titulo":    "⬡",
-      "copy":      "Talos"
+      "titulo": "⬡",
+      "copy": "Talos"
     },
     "contra_cover": {
-      "titulo":    "Talos",
-      "copy":      "Seguridad perimetral · Prizma"
+      "titulo": "Talos",
+      "copy": "Seguridad perimetral · Prizma"
     }
-  }
+  },
+  "logo_style": "prisma_refraccion",
+  "logo_seed": 1412926217
 }

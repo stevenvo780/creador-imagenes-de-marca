@@ -1,0 +1,224 @@
+{
+  "slug": "saga-02",
+  "nombre_producto": "Saga 02 · El entrenamiento",
+  "nombre_corporativo": "Steven Vallejo",
+  "tagline": "La película salta la parte importante: años haciendo lo mismo mal, hasta que dejó de salir mal. Sin público, sin montaje épico—solo repeticiones, mala postura y un teclado roto.",
+  "url": "https://www.stevenvallejo.com/es",
+  "url_en": "https://www.stevenvallejo.com/en",
+  "tono": "personal, reflexivo, técnico-humanista",
+  "simbolo": "lemniscata (∞)",
+  "paleta": {
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_2": "#e0a85e",
+    "acento_3": "#c0522a",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#152028"
+  },
+  "gradiente_hero": "linear-gradient(135deg, #e0a85e 0%, #c0522a 40%, #43b5a6 100%)",
+  "gradiente_bg": "radial-gradient(ellipse at 20% 50%, #152028 0%, #0b1417 60%)",
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo": "Inter"
+  },
+  "logo_texto": "Steven Vallejo",
+  "logo_simbolo": "∞",
+  "textos": {
+    "ig_post": {
+      "titulo": "Nadie me vio entrenar",
+      "subtitulo": "Años de hacer lo mismo hasta que salió bien",
+      "etiqueta": "El grind aburrido",
+      "copy": "La película te salta la parte dura: años de mala postura, repeticiones sin público y un teclado roto. Así es como dejás de hacerlo mal. ¿Tenés la paciencia?"
+    },
+    "ig_story": {
+      "titulo": "Nadie me vio entrenar",
+      "copy": "El aplauso no entrena; las repeticiones sí."
+    },
+    "ig_carousel": {
+      "titulo": "Nadie me vio entrenar",
+      "copy": "La película salta la parte importante: años haciendo lo mismo mal, hasta que dejó de salir mal. Sin público, sin montaje épico—solo repeticiones, mala postura y un teclado roto.",
+      "numero": "18"
+    },
+    "ig_reel_cover": {
+      "titulo": "Nadie me vio entrenar",
+      "copy": "El aplauso no entrena; las repeticiones sí."
+    },
+    "stat_card": {
+      "numero": "18",
+      "etiqueta": "años",
+      "copy": "El aplauso no entrena; las repeticiones sí."
+    },
+    "ad_rectangle": {
+      "titulo": "Nadie me vio entrenar",
+      "numero": "18",
+      "copy": "El aplauso no entrena; las repeticiones sí.",
+      "cita": "El aplauso no entrena; las repeticiones sí.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "Nadie me vio entrenar",
+      "copy": "El aplauso no entrena; las repeticiones sí."
+    },
+    "og_general": {
+      "titulo": "Nadie me vio entrenar",
+      "subtitulo": "Años de grind aburrido, sin aplausos",
+      "copy": "La película salta la parte importante: años haciendo lo mismo mal, hasta que dejó de salir mal. Sin público, sin montaje épico—solo repeticiones, mala postura y un teclado roto."
+    },
+    "og_product": {
+      "titulo": "Nadie me vio entrenar",
+      "subtitulo": "Años de grind aburrido, sin aplausos",
+      "copy": "La película salta la parte importante: años haciendo lo mismo mal, hasta que dejó de salir mal. Sin público, sin montaje épico—solo repeticiones, mala postura y un teclado roto."
+    },
+    "web_hero": {
+      "titulo": "Nadie me vio entrenar",
+      "subtitulo": "Años de grind aburrido, sin aplausos",
+      "copy": "La película salta la parte importante: años haciendo lo mismo mal, hasta que dejó de salir mal. Sin público, sin montaje épico—solo repeticiones, mala postura y un teclado roto."
+    },
+    "linkedin_post": {
+      "titulo": "Nadie me vio entrenar",
+      "subtitulo": "Años de grind aburrido, sin aplausos",
+      "etiqueta": "años",
+      "copy": "La película salta la parte importante: años haciendo lo mismo mal, hasta que dejó de salir mal. Sin público, sin montaje épico—solo repeticiones, mala postura y un teclado roto."
+    },
+    "linkedin_banner": {
+      "titulo": "Nadie me vio entrenar",
+      "etiqueta": "años",
+      "copy": "El aplauso no entrena; las repeticiones sí."
+    },
+    "fb_cover": {
+      "titulo": "Nadie me vio entrenar",
+      "subtitulo": "Años de grind aburrido, sin aplausos",
+      "copy": "La película salta la parte importante: años haciendo lo mismo mal, hasta que dejó de salir mal. Sin público, sin montaje épico—solo repeticiones, mala postura y un teclado roto."
+    },
+    "x_post": {
+      "titulo": "Nadie me vio entrenar",
+      "copy": "El aplauso no entrena; las repeticiones sí."
+    },
+    "yt_thumbnail": {
+      "titulo": "Nadie me vio entrenar",
+      "copy": "El aplauso no entrena; las repeticiones sí."
+    },
+    "poster_a4": {
+      "titulo": "Nadie me vio entrenar",
+      "subtitulo": "Años de grind aburrido, sin aplausos",
+      "copy": "La película salta la parte importante: años haciendo lo mismo mal, hasta que dejó de salir mal. Sin público, sin montaje épico—solo repeticiones, mala postura y un teclado roto."
+    },
+    "whatsapp_perfil": {
+      "titulo": "Nadie me vio entrenar"
+    },
+    "contra_cover": {
+      "titulo": "Nadie me vio entrenar",
+      "copy": "Años de grind aburrido, sin aplausos"
+    }
+  },
+  "locales": {
+    "en": {
+      "tagline": "Software engineer and philosopher: clear systems for real problems",
+      "url": "https://www.stevenvallejo.com/en",
+      "textos": {
+        "linkedin_post": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems · Philosophy",
+          "copy": "Think before you build: clear systems for real problems."
+        },
+        "linkedin_banner": {
+          "titulo": "Steven Vallejo",
+          "copy": "Engineering, artificial intelligence, and rigorous thought."
+        },
+        "ig_post": {
+          "titulo": "∞",
+          "subtitulo": "Steven Vallejo",
+          "copy": "Software engineer · Philosopher"
+        },
+        "ig_story": {
+          "titulo": "Steven\nVallejo",
+          "copy": "New post ↓"
+        },
+        "x_post": {
+          "titulo": "Steven Vallejo",
+          "copy": "Software engineer and philosopher: clear systems for real problems"
+        },
+        "yt_thumbnail": {
+          "titulo": "Steven Vallejo",
+          "copy": "Watch"
+        },
+        "yt_banner": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software · AI · Philosophy"
+        },
+        "og_general": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems",
+          "copy": "Think before you build: clear systems for real problems."
+        },
+        "contra_cover": {
+          "titulo": "Steven Vallejo",
+          "copy": "Software Architecture & AI Systems"
+        },
+        "ig_reel_cover": {
+          "titulo": "∞",
+          "subtitulo": "Steven Vallejo",
+          "copy": "12+ years of backend, agentic AI & devtools"
+        },
+        "ig_carousel": {
+          "titulo": "Philosophy · Sciences · Engineering",
+          "subtitulo": "Steven Vallejo",
+          "copy": "Three fronts. One framework. Structured clarity."
+        },
+        "x_header": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software engineer · Philosopher",
+          "copy": "stevenvallejo.com"
+        },
+        "fb_cover": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems · Philosophy",
+          "copy": "Building at the intersection of systems, intelligence, and craft."
+        },
+        "tiktok_cover": {
+          "titulo": "SV",
+          "subtitulo": "Steven Vallejo",
+          "copy": "Systems. Intelligence. Craft."
+        },
+        "web_hero": {
+          "titulo": "Think before\nyou build",
+          "subtitulo": "Software Architecture · Agentic AI · Philosophy",
+          "copy": "12+ years translating complex systems into structured, maintainable software. From formal logic and NLP to multi-tenant platforms and OSS devtools."
+        },
+        "web_hero_mobile": {
+          "titulo": "Steven\nVallejo",
+          "subtitulo": "Software Engineering · AI Systems",
+          "copy": "Clear systems for real problems."
+        },
+        "email_header": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Architecture · AI Systems · Philosophy",
+          "copy": "stevenvallejo.com"
+        },
+        "banner_ad": {
+          "titulo": "Steven Vallejo",
+          "copy": "Software Architecture & Agentic AI — stevenvallejo.com"
+        },
+        "business_card": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems",
+          "copy": "stevenvallejo.com"
+        },
+        "poster_a4": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Architecture · Agentic AI · Philosophy",
+          "copy": "Philosopher-engineer with 12+ years of backend, formal logic, and OSS devtools. Building systems that think and explaining systems that last."
+        },
+        "og_product": {
+          "titulo": "Steven Vallejo — Projects",
+          "subtitulo": "Philosophy · Sciences · Engineering",
+          "copy": "Live products across formal logic, scientific simulation, multi-tenant platforms and SMB devtools. Mouseîon ecosystem."
+        }
+      }
+    }
+  },
+  "logo_style": "lemniscate",
+  "logo_seed": 770077
+}

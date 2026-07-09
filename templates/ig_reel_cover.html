@@ -54,7 +54,8 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; }
 body {
   font-family: var(--font-cuerpo); color: var(--texto); position: relative;
   display: flex; flex-direction: column; height: 100%;
-  align-items: center; padding: var(--space-10) var(--space-6) var(--space-8);
+  align-items: center; justify-content: center;
+  padding: var(--space-10) var(--space-6) var(--space-8);
 }
 
 /* ═══════ LOGO — protagonista centrado ═══════ */
@@ -98,9 +99,10 @@ body {
 /* ═══════ FOOTER — URL + marca ═══════ */
 .footer-row {
   display: flex; justify-content: center; align-items: center;
-  gap: var(--space-4); margin-top: auto;
+  gap: var(--space-4);
+  position: absolute; bottom: var(--space-8); left: var(--space-6); right: var(--space-6);
   border-top: 1px solid color-mix(in srgb, var(--texto-muted) 12%, transparent);
-  padding-top: var(--space-4); position: relative; z-index: 1;
+  padding-top: var(--space-4); z-index: 1;
   flex-shrink: 0;
 }
 .brand-signature {

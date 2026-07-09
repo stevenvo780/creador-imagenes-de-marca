@@ -1,0 +1,36 @@
+{
+  "slug": "pinakotheke-gnosticismo",
+  "nombre_producto": "Gnosticismo",
+  "nombre_corporativo": "Pinakothḗke",
+  "tagline": "Crítica y dialéctica del gnosticismo: el dualismo, la gnosis salvífica y el demiurgo como estructura mítico-filosófica, y su tensión con una epistemología racional.",
+  "url": "https://medium.com/@stevenvallejo780/cr%C3%ADtica-y-dial%C3%A9ctica-del-gnosticismo-6173e5768a0c",
+  "tono": "técnico, investigador, profundo",
+  "simbolo": "∂",
+  "frente": "filosofia",
+  "paleta": {
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_2": "#8d7cc0",
+    "acento_3": "#2a7a70",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22"
+  },
+  "gradiente_hero": "linear-gradient(135deg, #8d7cc0 0%, #43b5a6 50%, #2a7a70 100%)",
+  "gradiente_bg": "radial-gradient(ellipse at 20% 60%, #131e22 0%, #0b1417 70%)",
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo": "JetBrains Mono"
+  },
+  "logo_texto": "Gnosticismo",
+  "logo_simbolo": "∂",
+  "textos": {
+    "ig_reel_cover": {
+      "titulo": "Gnosticismo. Dualismo y gnosis",
+      "copy": "¿El mundo es malo por diseño? Cómo el gnosticismo piensa el demiurgo y la salvación por conocimiento. Mito filosófico vivo."
+    }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
+}

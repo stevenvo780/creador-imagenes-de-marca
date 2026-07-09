@@ -1,0 +1,97 @@
+- generic [ref=e2]:
+  - link "Saltar al contenido principal" [ref=e27] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e28]:
+    - generic [ref=e29]:
+      - link "Eikón" [ref=e30] [cursor=pointer]:
+        - /url: /
+      - navigation "Navegación principal" [ref=e31]:
+        - list [ref=e32]:
+          - listitem [ref=e33]:
+            - link "Marcas" [ref=e34] [cursor=pointer]:
+              - /url: /brands
+          - listitem [ref=e35]:
+            - link "Crear" [ref=e36] [cursor=pointer]:
+              - /url: /batch
+          - listitem [ref=e37]:
+            - link "Galería" [ref=e38] [cursor=pointer]:
+              - /url: /gallery
+      - generic [ref=e39]:
+        - 'generic "Cuenta: demo" [ref=e40]': demo
+        - button "Salir" [ref=e41] [cursor=pointer]
+  - main [ref=e42]:
+    - generic [ref=e43]:
+      - generic [ref=e44]:
+        - generic [ref=e45]:
+          - heading "Tus marcas" [level=1] [ref=e46]
+          - paragraph [ref=e47]: Cada marca es el punto de partida para generar su identidad visual.
+        - button "Cancelar" [ref=e98] [cursor=pointer]
+      - form "Crear una marca nueva" [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]: Nombre de la marca
+          - textbox "Nombre de la marca" [active] [ref=e102]:
+            - /placeholder: "Ej.: Café del Centro"
+        - generic [ref=e103]:
+          - generic [ref=e104]: Texto del logo (opcional)
+          - textbox "Texto del logo (opcional)" [ref=e105]:
+            - /placeholder: Lo que se lee en el logo. Por defecto, el nombre.
+        - generic [ref=e106]:
+          - button "Crear marca" [ref=e107] [cursor=pointer]
+          - button "Cancelar" [ref=e108] [cursor=pointer]
+      - list "Lista de tus marcas" [ref=e49]:
+        - listitem [ref=e50]:
+          - article [ref=e51]:
+            - generic [ref=e52]:
+              - generic [ref=e53]: A
+              - generic [ref=e54]:
+                - heading "Aurora Café" [level=2] [ref=e55]
+                - paragraph [ref=e56]: Creada el 30 de junio de 2026
+            - generic [ref=e57]:
+              - button "Generar variaciones" [ref=e58] [cursor=pointer]
+              - generic [ref=e59]:
+                - link "Personalizar la marca Aurora Café" [ref=e60] [cursor=pointer]:
+                  - /url: /brands/1/edit
+                  - text: Personalizar
+                - button "Eliminar la marca Aurora Café" [ref=e61] [cursor=pointer]: Eliminar
+        - listitem [ref=e62]:
+          - article [ref=e63]:
+            - generic [ref=e64]:
+              - generic [ref=e65]: "N"
+              - generic [ref=e66]:
+                - heading "Nimbus" [level=2] [ref=e67]
+                - paragraph [ref=e68]: Creada el 30 de junio de 2026
+            - generic [ref=e69]:
+              - button "Generar variaciones" [ref=e70] [cursor=pointer]
+              - generic [ref=e71]:
+                - link "Personalizar la marca Nimbus" [ref=e72] [cursor=pointer]:
+                  - /url: /brands/2/edit
+                  - text: Personalizar
+                - button "Eliminar la marca Nimbus" [ref=e73] [cursor=pointer]: Eliminar
+        - listitem [ref=e74]:
+          - article [ref=e75]:
+            - generic [ref=e76]:
+              - generic [ref=e77]: M
+              - generic [ref=e78]:
+                - heading "Atelier Mora" [level=2] [ref=e79]
+                - paragraph [ref=e80]: Creada el 30 de junio de 2026
+            - generic [ref=e81]:
+              - button "Generar variaciones" [ref=e82] [cursor=pointer]
+              - generic [ref=e83]:
+                - link "Personalizar la marca Atelier Mora" [ref=e84] [cursor=pointer]:
+                  - /url: /brands/3/edit
+                  - text: Personalizar
+                - button "Eliminar la marca Atelier Mora" [ref=e85] [cursor=pointer]: Eliminar
+        - listitem [ref=e86]:
+          - article [ref=e87]:
+            - generic [ref=e88]:
+              - generic [ref=e89]: V
+              - generic [ref=e90]:
+                - heading "Vértice Fitness" [level=2] [ref=e91]
+                - paragraph [ref=e92]: Creada el 30 de junio de 2026
+            - generic [ref=e93]:
+              - button "Generar variaciones" [ref=e94] [cursor=pointer]
+              - generic [ref=e95]:
+                - link "Personalizar la marca Vértice Fitness" [ref=e96] [cursor=pointer]:
+                  - /url: /brands/4/edit
+                  - text: Personalizar
+                - button "Eliminar la marca Vértice Fitness" [ref=e97] [cursor=pointer]: Eliminar

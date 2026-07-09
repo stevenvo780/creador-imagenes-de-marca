@@ -7,72 +7,69 @@
   "tono": "veloz, automatizado, integrador",
   "simbolo": "↗",
   "suite": "prizma",
-
   "paleta": {
-    "bg":           "#0c0e10",
-    "primario":     "#0c0e10",
-    "acento":       "#f0b94a",
-    "acento_2":     "#d4622e",
-    "acento_3":     "#43b5a6",
-    "texto":        "#f0ece6",
-    "texto_muted":  "#a09080",
-    "surface":      "#16120e"
+    "bg": "#0c0e10",
+    "primario": "#0c0e10",
+    "acento": "#f0b94a",
+    "acento_2": "#d4622e",
+    "acento_3": "#43b5a6",
+    "texto": "#f0ece6",
+    "texto_muted": "#a09080",
+    "surface": "#16120e"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #d4622e 0%, #f0b94a 50%, #c0862a 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 75% 25%, #1a120a 0%, #0c0e10 65%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 75% 25%, #1a120a 0%, #0c0e10 65%)",
   "tipografia": {
     "titulos": "Inter",
-    "cuerpo":  "JetBrains Mono"
+    "cuerpo": "JetBrains Mono"
   },
-
   "logo_texto": "Talaria",
   "logo_simbolo": "↗",
-
   "textos": {
     "linkedin_post": {
-      "titulo":    "Talaria",
+      "titulo": "Talaria",
       "subtitulo": "Automatización de flujos · Prizma",
-      "copy":      "Automatización que vuela entre sistemas."
+      "copy": "Automatización que vuela entre sistemas."
     },
     "linkedin_banner": {
-      "titulo":    "Talaria",
-      "copy":      "Workflows corporativos que se mueven solos. Sin código, con control."
+      "titulo": "Talaria",
+      "copy": "Workflows corporativos que se mueven solos. Sin código, con control."
     },
     "ig_post": {
-      "titulo":    "↗",
+      "titulo": "↗",
       "subtitulo": "Talaria",
-      "copy":      "Automatización que vuela entre sistemas"
+      "copy": "Automatización que vuela entre sistemas"
     },
     "ig_story": {
-      "titulo":    "Talaria",
-      "copy":      "Workflows que vuelan ↓"
+      "titulo": "Talaria",
+      "copy": "Workflows que vuelan ↓"
     },
     "x_post": {
-      "titulo":    "Talaria",
-      "copy":      "Automatización que vuela entre sistemas"
+      "titulo": "Talaria",
+      "copy": "Automatización que vuela entre sistemas"
     },
     "yt_thumbnail": {
-      "titulo":    "Talaria",
-      "copy":      "Automatización de flujos"
+      "titulo": "Talaria",
+      "copy": "Automatización de flujos"
     },
     "yt_banner": {
-      "titulo":    "Talaria",
+      "titulo": "Talaria",
       "subtitulo": "Automatización de flujos · Prizma"
     },
     "og_general": {
-      "titulo":    "Talaria",
+      "titulo": "Talaria",
       "subtitulo": "Automatización de flujos · Prizma",
-      "copy":      "Automatización que vuela entre sistemas."
+      "copy": "Automatización que vuela entre sistemas."
     },
     "whatsapp_perfil": {
-      "titulo":    "↗",
-      "copy":      "Talaria"
+      "titulo": "↗",
+      "copy": "Talaria"
     },
     "contra_cover": {
-      "titulo":    "Talaria",
-      "copy":      "Automatización de flujos · Prizma"
+      "titulo": "Talaria",
+      "copy": "Automatización de flujos · Prizma"
     }
-  }
+  },
+  "logo_style": "prisma_refraccion",
+  "logo_seed": 1412926217
 }

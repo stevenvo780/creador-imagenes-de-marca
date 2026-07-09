@@ -1,0 +1,34 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "Saltar al contenido principal" [ref=e3] [cursor=pointer]:
+      - /url: "#main-content"
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "Eikón" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - navigation "Navegación principal" [ref=e7]:
+          - list [ref=e8]:
+            - listitem [ref=e9]:
+              - link "Marcas" [ref=e10] [cursor=pointer]:
+                - /url: /brands
+            - listitem [ref=e11]:
+              - link "Crear" [ref=e12] [cursor=pointer]:
+                - /url: /batch
+            - listitem [ref=e13]:
+              - link "Galería" [ref=e14] [cursor=pointer]:
+                - /url: /gallery
+        - generic [ref=e15]:
+          - 'generic "Cuenta: qalocal" [ref=e16]': qalocal
+          - button "Salir" [ref=e17] [cursor=pointer]
+    - main [ref=e18]:
+      - generic [ref=e333]:
+        - status "Cargando…" [ref=e334]:
+          - img [ref=e335]
+        - paragraph [ref=e338]: Generando en tu navegador…
+        - paragraph [ref=e339]: 8 de 10 listas
+  - generic [ref=e344]:
+    - img [ref=e345]
+    - img [ref=e357]
+  - generic [ref=e360]:
+    - img [ref=e361]
+    - img [ref=e373]

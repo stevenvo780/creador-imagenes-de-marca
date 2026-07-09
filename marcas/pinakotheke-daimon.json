@@ -7,72 +7,112 @@
   "tono": "íntimo, inteligente, soberano",
   "simbolo": "◉",
   "frente": "informatica",
-
   "paleta": {
-    "bg":           "#0b1417",
-    "primario":     "#0b1417",
-    "acento":       "#43b5a6",
-    "acento_2":     "#8d7cc0",
-    "acento_3":     "#2a7a70",
-    "texto":        "#e8e0d4",
-    "texto_muted":  "#8fa3a8",
-    "surface":      "#131e22"
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_2": "#8d7cc0",
+    "acento_3": "#2a7a70",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #8d7cc0 0%, #43b5a6 60%, #2a7a70 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 40% 30%, #131e22 0%, #0b1417 70%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 40% 30%, #131e22 0%, #0b1417 70%)",
   "tipografia": {
     "titulos": "Inter",
-    "cuerpo":  "JetBrains Mono"
+    "cuerpo": "JetBrains Mono"
   },
-
   "logo_texto": "Daímon",
   "logo_simbolo": "◉",
-
   "textos": {
-    "linkedin_post": {
-      "titulo":    "Daímon",
-      "subtitulo": "Asistente IA local · Pinakothḗke",
-      "copy":      "Tu asistente de IA, local y soberano."
-    },
-    "linkedin_banner": {
-      "titulo":    "Daímon",
-      "copy":      "IA personal con RAG local. Sin cloud. Sin dependencias externas."
-    },
     "ig_post": {
-      "titulo":    "◉",
-      "subtitulo": "Daímon",
-      "copy":      "Tu asistente de IA, local y soberano"
+      "titulo": "Seis cajas, cero nube",
+      "subtitulo": "IA local con Ollama, ChromaDB, CUDA. Modelos 7B–70B.",
+      "etiqueta": "componentes",
+      "copy": "Daímon no corre modelos: los documenta. Acá está el índice de la pila local: Jarvis v1 y v2, chat GGUF, MCP swarm, MCP agents, PDF-to-MD. Todo sobre Ollama, ChromaDB y CUDA, todo en tu máquina. Si te interesa IA sin pedir permiso a la nube, seguí. Si esperás magia en la nube, este no es tu portal."
     },
     "ig_story": {
-      "titulo":    "Daímon",
-      "copy":      "OCR PDF → MD ↓"
+      "titulo": "Seis cajas, cero nube",
+      "copy": "La nube es un alquiler. Local es propiedad."
     },
-    "x_post": {
-      "titulo":    "Daímon",
-      "copy":      "Tu asistente de IA, local y soberano"
+    "ig_carousel": {
+      "titulo": "Tu IA, bajo tu techo",
+      "copy": "Jarvis v1/v2 rag-eando, chat GGUF local, swarm MCP en Ollama, OCR en GPU y la doc. Soberanía antes que hype.",
+      "numero": "6"
     },
-    "yt_thumbnail": {
-      "titulo":    "Daímon",
-      "copy":      "Tu IA, tu máquina"
+    "ig_reel_cover": {
+      "titulo": "Seis cajas, cero nube",
+      "copy": "La nube es un alquiler. Local es propiedad."
     },
-    "yt_banner": {
-      "titulo":    "Daímon",
-      "subtitulo": "Asistente IA local · Pinakothḗke"
+    "stat_card": {
+      "numero": "6",
+      "etiqueta": "Componentes en la pila",
+      "copy": "Jarvis v1/v2 rag-eando, chat GGUF local, swarm MCP en Ollama, OCR GPU y la doc. Tu pila, tus reglas."
+    },
+    "ad_rectangle": {
+      "titulo": "Seis cajas, cero nube",
+      "numero": "6",
+      "copy": "La nube es un alquiler. Local es propiedad.",
+      "cita": "La nube es un alquiler. Local es propiedad.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "Seis cajas, cero nube",
+      "copy": "La nube es un alquiler. Local es propiedad."
     },
     "og_general": {
-      "titulo":    "Daímon",
-      "subtitulo": "Asistente IA local · Pinakothḗke",
-      "copy":      "Tu asistente de IA, local y soberano."
+      "titulo": "Seis cajas, cero nube",
+      "subtitulo": "IA local con Ollama, ChromaDB, CUDA. Modelos 7B–70B.",
+      "copy": "Daímon no corre modelos: los documenta. Acá está el índice de la pila local: Jarvis v1 y v2, chat GGUF, MCP swarm, MCP agents, PDF-to-MD. Todo sobre Ollama, ChromaDB y CUDA, todo en tu máquina. Si te interesa IA sin pedir permiso a la nube, seguí. Si esperás magia en la nube, este no es tu portal."
+    },
+    "og_product": {
+      "titulo": "Seis cajas, cero nube",
+      "subtitulo": "IA local con Ollama, ChromaDB, CUDA. Modelos 7B–70B.",
+      "copy": "Daímon no corre modelos: los documenta. Acá está el índice de la pila local: Jarvis v1 y v2, chat GGUF, MCP swarm, MCP agents, PDF-to-MD. Todo sobre Ollama, ChromaDB y CUDA, todo en tu máquina. Si te interesa IA sin pedir permiso a la nube, seguí. Si esperás magia en la nube, este no es tu portal."
+    },
+    "web_hero": {
+      "titulo": "Seis cajas, cero nube",
+      "subtitulo": "IA local con Ollama, ChromaDB, CUDA. Modelos 7B–70B.",
+      "copy": "Daímon no corre modelos: los documenta. Acá está el índice de la pila local: Jarvis v1 y v2, chat GGUF, MCP swarm, MCP agents, PDF-to-MD. Todo sobre Ollama, ChromaDB y CUDA, todo en tu máquina. Si te interesa IA sin pedir permiso a la nube, seguí. Si esperás magia en la nube, este no es tu portal."
+    },
+    "linkedin_post": {
+      "titulo": "Seis cajas, cero nube",
+      "subtitulo": "IA local con Ollama, ChromaDB, CUDA. Modelos 7B–70B.",
+      "etiqueta": "componentes",
+      "copy": "Daímon no corre modelos: los documenta. Acá está el índice de la pila local: Jarvis v1 y v2, chat GGUF, MCP swarm, MCP agents, PDF-to-MD. Todo sobre Ollama, ChromaDB y CUDA, todo en tu máquina. Si te interesa IA sin pedir permiso a la nube, seguí. Si esperás magia en la nube, este no es tu portal."
+    },
+    "linkedin_banner": {
+      "titulo": "Seis cajas, cero nube",
+      "etiqueta": "componentes",
+      "copy": "La nube es un alquiler. Local es propiedad."
+    },
+    "fb_cover": {
+      "titulo": "Seis cajas, cero nube",
+      "subtitulo": "IA local con Ollama, ChromaDB, CUDA. Modelos 7B–70B.",
+      "copy": "Daímon no corre modelos: los documenta. Acá está el índice de la pila local: Jarvis v1 y v2, chat GGUF, MCP swarm, MCP agents, PDF-to-MD. Todo sobre Ollama, ChromaDB y CUDA, todo en tu máquina. Si te interesa IA sin pedir permiso a la nube, seguí. Si esperás magia en la nube, este no es tu portal."
+    },
+    "x_post": {
+      "titulo": "Seis cajas, cero nube",
+      "copy": "La nube es un alquiler. Local es propiedad."
+    },
+    "yt_thumbnail": {
+      "titulo": "Seis cajas, cero nube",
+      "copy": "La nube es un alquiler. Local es propiedad."
+    },
+    "poster_a4": {
+      "titulo": "Seis cajas, cero nube",
+      "subtitulo": "IA local con Ollama, ChromaDB, CUDA. Modelos 7B–70B.",
+      "copy": "Daímon no corre modelos: los documenta. Acá está el índice de la pila local: Jarvis v1 y v2, chat GGUF, MCP swarm, MCP agents, PDF-to-MD. Todo sobre Ollama, ChromaDB y CUDA, todo en tu máquina. Si te interesa IA sin pedir permiso a la nube, seguí. Si esperás magia en la nube, este no es tu portal."
     },
     "whatsapp_perfil": {
-      "titulo":    "◉",
-      "copy":      "Daímon"
+      "titulo": "Seis cajas, cero nube"
     },
     "contra_cover": {
-      "titulo":    "Daímon",
-      "copy":      "Asistente IA local · Pinakothḗke"
+      "titulo": "Seis cajas, cero nube",
+      "copy": "IA local con Ollama, ChromaDB, CUDA. Modelos 7B–70B."
     }
-  }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
 }

@@ -1,0 +1,18 @@
+- main [ref=e185]:
+  - generic [ref=e186]:
+    - generic [ref=e187]:
+      - heading "Eikón" [level=1] [ref=e188]
+      - paragraph [ref=e189]: Crea la identidad visual de tu marca
+    - tablist "Modo de acceso" [ref=e190]:
+      - tab "Iniciar sesión" [selected] [ref=e191] [cursor=pointer]
+      - tab "Crear cuenta" [ref=e192] [cursor=pointer]
+    - generic [ref=e193]:
+      - generic [ref=e194]:
+        - generic [ref=e195]: Correo electrónico
+        - textbox "Correo electrónico" [ref=e196]:
+          - /placeholder: usuario@ejemplo.com
+      - generic [ref=e197]:
+        - generic [ref=e198]: Contraseña
+        - textbox "Contraseña" [ref=e199]:
+          - /placeholder: Mínimo 8 caracteres
+      - button "Entrar" [ref=e200] [cursor=pointer]

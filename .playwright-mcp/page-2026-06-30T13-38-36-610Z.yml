@@ -1,0 +1,55 @@
+- generic [ref=e2]:
+  - link "Saltar al contenido principal" [ref=e25] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e26]:
+    - generic [ref=e27]:
+      - link "Eikón" [ref=e28] [cursor=pointer]:
+        - /url: /
+      - navigation "Navegación principal" [ref=e29]:
+        - list [ref=e30]:
+          - listitem [ref=e31]:
+            - link "Marcas" [ref=e32] [cursor=pointer]:
+              - /url: /brands
+          - listitem [ref=e33]:
+            - link "Crear" [active] [ref=e34] [cursor=pointer]:
+              - /url: /batch
+          - listitem [ref=e35]:
+            - link "Galería" [ref=e36] [cursor=pointer]:
+              - /url: /gallery
+      - generic [ref=e37]:
+        - 'generic "Cuenta: qalocal" [ref=e38]': qalocal
+        - button "Salir" [ref=e39] [cursor=pointer]
+  - main [ref=e40]:
+    - generic [ref=e60]:
+      - heading "Crear la identidad de tu marca" [level=1] [ref=e61]
+      - navigation "Pasos del proceso" [ref=e62]:
+        - list [ref=e63]:
+          - listitem [ref=e64]:
+            - generic [ref=e65]: "1"
+            - generic [ref=e66]: Tu marca
+          - listitem [ref=e67]
+          - listitem [ref=e68]:
+            - generic [ref=e69]: "2"
+            - generic [ref=e70]: Qué generar
+          - listitem [ref=e71]
+          - listitem [ref=e72]:
+            - generic [ref=e73]: "3"
+            - generic [ref=e74]: Estilo
+          - listitem [ref=e75]
+          - listitem [ref=e76]:
+            - generic [ref=e77]: "4"
+            - generic [ref=e78]: Variaciones
+          - listitem [ref=e79]
+          - listitem [ref=e80]:
+            - generic [ref=e81]: "5"
+            - generic [ref=e82]: Revisar
+      - generic [ref=e84]:
+        - generic [ref=e85]:
+          - heading "¿Con qué marca vas a trabajar?" [level=2] [ref=e86]
+          - paragraph [ref=e87]: Elige la marca base. Eikón va a generar variaciones de identidad usando sus colores, tipografía y símbolo.
+        - generic [ref=e88]:
+          - generic [ref=e89]: Tu marca
+          - combobox "Tu marca" [ref=e90] [cursor=pointer]:
+            - option "— Elige tu marca —" [selected]
+            - option "QA Brand"
+      - button "Siguiente →" [disabled] [ref=e92]

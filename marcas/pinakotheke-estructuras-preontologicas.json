@@ -2,82 +2,117 @@
   "slug": "pinakotheke-estructuras-preontologicas",
   "nombre_producto": "Estructuras Preontológicas",
   "nombre_corporativo": "Pinakothḗke",
-  "tagline": "Tesis doctoral (Jacob Agudelo + Steven Vallejo, UdeA) en filosofía de la ciencia y ciencias de la complejidad: propone «estructuras pre-ontológicas» como regularidades operativas previas a la objetualidad, validadas mediante métrica EDI y compresión multiescala con evidencia multidominio.",
+  "tagline": "Tesis (Jacob Agudelo + Steven Vallejo, UdeA) en filosofía de la ciencia y ciencias de la complejidad: propone «estructuras pre-ontológicas» como regularidades operativas previas a la objetualidad, validadas mediante métrica EDI y compresión multiescala con evidencia multidominio.",
   "url": "https://estructuras-preontologicas.vercel.app",
   "tono": "filosófico, doctoral, riguroso",
   "simbolo": "Ω",
   "frente": "ciencias",
-
   "paleta": {
-    "bg":           "#0b1417",
-    "primario":     "#0b1417",
-    "acento":       "#e0a85e",
-    "acento_2":     "#cf6a3c",
-    "acento_3":     "#b8873a",
-    "texto":        "#e8e0d4",
-    "texto_muted":  "#8fa3a8",
-    "surface":      "#131e22"
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#e0a85e",
+    "acento_2": "#cf6a3c",
+    "acento_3": "#b8873a",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #e0a85e 0%, #cf6a3c 55%, #7a3a1a 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 35% 45%, #1a1810 0%, #0b1417 70%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 35% 45%, #1a1810 0%, #0b1417 70%)",
   "tipografia": {
     "titulos": "Cormorant Garamond",
-    "cuerpo":  "Inter"
+    "cuerpo": "Inter"
   },
-
   "logo_texto": "Estructuras Preontológicas",
   "logo_simbolo": "Ω",
-
   "textos": {
-    "og_product": {
-      "titulo":    "Estructuras Preontológicas",
-      "subtitulo": "Filosofía de la Ciencia · Investigación Doctoral",
-      "copy":      "Todo fenómeno empírico anclado en un sustrato dinámico. Compresión multiescala y evidencia EDI multidominio."
-    },
-    "og_general": {
-      "titulo":    "Estructuras Preontológicas",
-      "subtitulo": "Filosofía de la Ciencia · Pinakothḗke",
-      "copy":      "Regularidades operativas anteriores a la objetualidad."
-    },
-    "linkedin_post": {
-      "titulo":    "Estructuras Preontológicas",
-      "subtitulo": "Filosofía de la Ciencia · Pinakothḗke",
-      "copy":      "Regularidades operativas anteriores a la objetualidad."
-    },
-    "linkedin_banner": {
-      "titulo":    "Estructuras Preontológicas",
-      "copy":      "Tesis doctoral en filosofía de la ciencia y ciencias de la complejidad."
-    },
     "ig_post": {
-      "titulo":    "Ω",
-      "subtitulo": "Estructuras Preontológicas",
-      "copy":      "Regularidades que preceden al objeto"
+      "titulo": "Estructuras antes del objeto",
+      "subtitulo": "Tesis en filosofía de la ciencia",
+      "etiqueta": "casos del corpus",
+      "copy": "Toda realidad visible tiene un sustrato invisible. Investigación doctoral en la UdeA sobre regularidades que operan ANTES de nombrar algo 'objeto'. Compresión multiescala (10⁻¹⁰ a 10²⁰ metros), métrica EDI propia, validado en un corpus que cruza 30 órdenes de magnitud."
     },
     "ig_story": {
-      "titulo":    "Estructuras Preontológicas",
-      "copy":      "Filosofía de la complejidad ↓"
+      "titulo": "Estructuras antes del objeto",
+      "copy": "Lo que no ves te construye. Eso es toda la tesis."
+    },
+    "ig_carousel": {
+      "titulo": "Lo invisible que sostiene",
+      "copy": "Regularidades operativas ANTES de que algo sea 'objeto'. Compresión multiescala (10⁻¹⁰ a 10²⁰ m), métrica EDI, validada en 30 órdenes de magnitud. Rigor sin dogma.",
+      "numero": "30"
+    },
+    "ig_reel_cover": {
+      "titulo": "Estructuras antes del objeto",
+      "copy": "Lo que no ves te construye. Eso es toda la tesis."
+    },
+    "stat_card": {
+      "numero": "40",
+      "etiqueta": "casos del corpus",
+      "copy": "Lo que no ves te construye. Eso es toda la tesis."
+    },
+    "ad_rectangle": {
+      "titulo": "Estructuras antes del objeto",
+      "numero": "40",
+      "copy": "Lo que no ves te construye. Eso es toda la tesis.",
+      "cita": "Lo que no ves te construye. Eso es toda la tesis.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "Estructuras antes del objeto",
+      "copy": "Lo que no ves te construye. Eso es toda la tesis."
+    },
+    "og_general": {
+      "titulo": "Estructuras antes del objeto",
+      "subtitulo": "Tesis en filosofía de la ciencia",
+      "copy": "Toda realidad visible tiene un sustrato invisible. Investigación doctoral en la UdeA sobre regularidades que operan ANTES de nombrar algo 'objeto'. Compresión multiescala (10⁻¹⁰ a 10²⁰ metros), métrica EDI propia, validado en un corpus que cruza 30 órdenes de magnitud."
+    },
+    "og_product": {
+      "titulo": "Estructuras antes del objeto",
+      "subtitulo": "Tesis en filosofía de la ciencia",
+      "copy": "Toda realidad visible tiene un sustrato invisible. Investigación doctoral en la UdeA sobre regularidades que operan ANTES de nombrar algo 'objeto'. Compresión multiescala (10⁻¹⁰ a 10²⁰ metros), métrica EDI propia, validado en un corpus que cruza 30 órdenes de magnitud."
+    },
+    "web_hero": {
+      "titulo": "Estructuras antes del objeto",
+      "subtitulo": "Tesis en filosofía de la ciencia",
+      "copy": "Toda realidad visible tiene un sustrato invisible. Investigación doctoral en la UdeA sobre regularidades que operan ANTES de nombrar algo 'objeto'. Compresión multiescala (10⁻¹⁰ a 10²⁰ metros), métrica EDI propia, validado en un corpus que cruza 30 órdenes de magnitud."
+    },
+    "linkedin_post": {
+      "titulo": "Estructuras antes del objeto",
+      "subtitulo": "Tesis en filosofía de la ciencia",
+      "etiqueta": "casos del corpus",
+      "copy": "Toda realidad visible tiene un sustrato invisible. Investigación doctoral en la UdeA sobre regularidades que operan ANTES de nombrar algo 'objeto'. Compresión multiescala (10⁻¹⁰ a 10²⁰ metros), métrica EDI propia, validado en un corpus que cruza 30 órdenes de magnitud."
+    },
+    "linkedin_banner": {
+      "titulo": "Estructuras antes del objeto",
+      "etiqueta": "casos del corpus",
+      "copy": "Lo que no ves te construye. Eso es toda la tesis."
+    },
+    "fb_cover": {
+      "titulo": "Estructuras antes del objeto",
+      "subtitulo": "Tesis en filosofía de la ciencia",
+      "copy": "Toda realidad visible tiene un sustrato invisible. Investigación doctoral en la UdeA sobre regularidades que operan ANTES de nombrar algo 'objeto'. Compresión multiescala (10⁻¹⁰ a 10²⁰ metros), métrica EDI propia, validado en un corpus que cruza 30 órdenes de magnitud."
     },
     "x_post": {
-      "titulo":    "Estructuras Preontológicas",
-      "copy":      "Regularidades operativas anteriores a la objetualidad"
+      "titulo": "Estructuras antes del objeto",
+      "copy": "Lo que no ves te construye. Eso es toda la tesis."
     },
     "yt_thumbnail": {
-      "titulo":    "Estructuras Preontológicas",
-      "copy":      "Filosofía ↔ Complejidad"
+      "titulo": "Estructuras antes del objeto",
+      "copy": "Lo que no ves te construye. Eso es toda la tesis."
     },
-    "yt_banner": {
-      "titulo":    "Estructuras Preontológicas",
-      "subtitulo": "Filosofía de la Ciencia · Pinakothḗke"
+    "poster_a4": {
+      "titulo": "Estructuras antes del objeto",
+      "subtitulo": "Tesis en filosofía de la ciencia",
+      "copy": "Toda realidad visible tiene un sustrato invisible. Investigación doctoral en la UdeA sobre regularidades que operan ANTES de nombrar algo 'objeto'. Compresión multiescala (10⁻¹⁰ a 10²⁰ metros), métrica EDI propia, validado en un corpus que cruza 30 órdenes de magnitud."
     },
     "whatsapp_perfil": {
-      "titulo":    "Ω",
-      "copy":      "Estructuras Preontológicas"
+      "titulo": "Estructuras antes del objeto"
     },
     "contra_cover": {
-      "titulo":    "Estructuras Preontológicas",
-      "copy":      "Filosofía de la Ciencia · Pinakothḗke"
+      "titulo": "Estructuras antes del objeto",
+      "copy": "Tesis en filosofía de la ciencia"
     }
-  }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
 }

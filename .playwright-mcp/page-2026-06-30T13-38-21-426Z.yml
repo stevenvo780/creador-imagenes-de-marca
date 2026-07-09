@@ -1,0 +1,43 @@
+- generic [ref=e2]:
+  - link "Saltar al contenido principal" [ref=e25] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e26]:
+    - generic [ref=e27]:
+      - link "Eikón" [ref=e28] [cursor=pointer]:
+        - /url: /
+      - navigation "Navegación principal" [ref=e29]:
+        - list [ref=e30]:
+          - listitem [ref=e31]:
+            - link "Marcas" [ref=e32] [cursor=pointer]:
+              - /url: /brands
+          - listitem [ref=e33]:
+            - link "Crear" [ref=e34] [cursor=pointer]:
+              - /url: /batch
+          - listitem [ref=e35]:
+            - link "Galería" [ref=e36] [cursor=pointer]:
+              - /url: /gallery
+      - generic [ref=e37]:
+        - 'generic "Cuenta: qalocal" [ref=e38]': qalocal
+        - button "Salir" [ref=e39] [cursor=pointer]
+  - main [ref=e40]:
+    - generic [ref=e41]:
+      - generic [ref=e42]:
+        - generic [ref=e43]:
+          - heading "Tus marcas" [level=1] [ref=e44]
+          - paragraph [ref=e45]: Cada marca es el punto de partida para generar su identidad visual.
+        - button "+ Nueva marca" [ref=e46] [cursor=pointer]
+      - list "Lista de tus marcas" [ref=e47]:
+        - listitem [ref=e48]:
+          - article [ref=e49]:
+            - generic [ref=e50]:
+              - generic [ref=e51]: Q
+              - generic [ref=e52]:
+                - heading "QA Brand" [level=2] [ref=e53]
+                - paragraph [ref=e54]: Creada el 30 de junio de 2026
+            - generic [ref=e55]:
+              - button "Generar variaciones" [ref=e56] [cursor=pointer]
+              - generic [ref=e57]:
+                - link "Personalizar la marca QA Brand" [ref=e58] [cursor=pointer]:
+                  - /url: /brands/38/edit
+                  - text: Personalizar
+                - button "Eliminar la marca QA Brand" [ref=e59] [cursor=pointer]: Eliminar

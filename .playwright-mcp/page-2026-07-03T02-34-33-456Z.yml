@@ -1,0 +1,30 @@
+- generic [ref=f6e2]:
+  - link "Saltar al contenido principal" [ref=f6e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=f6e4]:
+    - generic [ref=f6e5]:
+      - link "Eikón" [ref=f6e6] [cursor=pointer]:
+        - /url: /
+      - navigation "Navegación principal" [ref=f6e7]:
+        - list [ref=f6e8]:
+          - listitem [ref=f6e9]:
+            - link "Marcas" [ref=f6e10] [cursor=pointer]:
+              - /url: /brands
+          - listitem [ref=f6e11]:
+            - link "Crear" [ref=f6e12] [cursor=pointer]:
+              - /url: /batch
+          - listitem [ref=f6e13]:
+            - link "Galería" [ref=f6e14] [cursor=pointer]:
+              - /url: /gallery
+      - generic [ref=f6e15]:
+        - 'generic "Cuenta: qalocal" [ref=f6e16]': qalocal
+        - button "Salir" [ref=f6e17] [cursor=pointer]
+  - main [ref=f6e18]:
+    - generic [ref=f6e19]:
+      - generic [ref=f6e20]:
+        - heading "Estudio de activos" [level=1] [ref=f6e21]
+        - paragraph [ref=f6e22]: Generá banners, tarjetas, imágenes OG y más, heredando la identidad visual de tu marca.
+      - status "Cargando marcas" [ref=f6e23]:
+        - status "Cargando…" [ref=f6e24]:
+          - img [ref=f6e25]
+        - paragraph [ref=f6e28]: Cargando marcas…

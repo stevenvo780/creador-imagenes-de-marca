@@ -8,288 +8,280 @@
   "tono": "riguroso, místico, cercano, orgánico, intelectual — Misticismo Lógico",
   "simbolo": "ε",
   "frente": "agora",
-
   "paleta": {
-    "bg":           "#0b1417",
-    "primario":     "#0F2519",
-    "acento":       "#43b5a6",
-    "acento_2":     "#A3E4D7",
-    "acento_3":     "#2a7a70",
-    "texto":        "#e8e0d4",
-    "texto_muted":  "#8fa3a8",
-    "surface":      "#0d1e12"
+    "bg": "#0b1417",
+    "primario": "#0F2519",
+    "acento": "#43b5a6",
+    "acento_2": "#A3E4D7",
+    "acento_3": "#2a7a70",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#0d1e12"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #43b5a6 0%, #A3E4D7 60%, #0F2519 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 25% 60%, #0d1e12 0%, #0b1417 70%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 25% 60%, #0d1e12 0%, #0b1417 70%)",
   "tipografia": {
     "titulos": "Inter",
-    "cuerpo":  "Inter"
+    "cuerpo": "Inter"
   },
-
   "logo_texto": "Aε",
   "logo_simbolo": "ε",
-
   "textos": {
     "linkedin_post": {
-      "titulo":    "Humanidades que se ejecutan",
+      "titulo": "Humanidades que se ejecutan",
       "subtitulo": "Plataforma académica · Elenxos",
-      "copy":      "Escribes investigación en Markdown, formalizas la lógica con ST y la compruebas en el mismo documento. Sin instalar nada, desde el navegador."
+      "copy": "Escribes investigación en Markdown, formalizas la lógica con ST y la compruebas en el mismo documento. Sin instalar nada, desde el navegador."
     },
     "linkedin_banner": {
-      "titulo":    "Agora · Elenxos",
-      "copy":      "Formaliza. Verifica. Colabora. Publica."
+      "titulo": "Agora · Elenxos",
+      "copy": "Formaliza. Verifica. Colabora. Publica."
     },
     "ig_post": {
-      "titulo":    "ε",
+      "titulo": "ε",
       "subtitulo": "Agora",
-      "copy":      "Un argumento no debería vivir solo en papel. Escríbelo, ejecútalo, compruébalo."
+      "copy": "Un argumento no debería vivir solo en papel. Escríbelo, ejecútalo, compruébalo."
     },
     "ig_story": {
-      "titulo":    "Agora",
-      "copy":      "Lógica formal ejecutable · agora.elenxos.com"
+      "titulo": "Agora",
+      "copy": "Lógica formal ejecutable · agora.elenxos.com"
     },
     "x_post": {
-      "titulo":    "Agora · Elenxos",
-      "copy":      "Escribes en lenguaje natural. auto.logic formaliza. ST ejecuta. La filosofía analítica con el mismo rigor que un teorema."
+      "titulo": "Agora · Elenxos",
+      "copy": "Escribes en lenguaje natural. auto.logic formaliza. ST ejecuta. La filosofía analítica con el mismo rigor que un teorema."
     },
     "yt_thumbnail": {
-      "titulo":    "Lógica ejecutable",
-      "copy":      "Ver"
+      "titulo": "Lógica ejecutable",
+      "copy": "Ver"
     },
     "yt_banner": {
-      "titulo":    "Agora · Elenxos",
+      "titulo": "Agora · Elenxos",
       "subtitulo": "Plataforma académica de lógica formal ejecutable"
     },
     "og_general": {
-      "titulo":    "Agora · Elenxos",
+      "titulo": "Agora · Elenxos",
       "subtitulo": "Plataforma académica",
-      "copy":      "Investiga, formaliza y verifica argumentos en el mismo entorno. Lógica formal ejecutable para humanidades y ciencias."
+      "copy": "Investiga, formaliza y verifica argumentos en el mismo entorno. Lógica formal ejecutable para humanidades y ciencias."
     },
     "whatsapp_perfil": {
-      "titulo":    "Aε",
-      "copy":      "ε"
+      "titulo": "Aε",
+      "copy": "ε"
     },
     "contra_cover": {
-      "titulo":    "Agora",
-      "copy":      "Plataforma académica · Elenxos"
+      "titulo": "Agora",
+      "copy": "Plataforma académica · Elenxos"
     },
     "ig_carousel": {
-      "titulo":    "Agora en 4 piezas",
-      "subtitulo": "Plataforma académica · Elenxos",
-      "copy":      "ST · auto.logic · LogicEducation · Ultimate Terminal"
+      "titulo": "Escribí, formalizá, demostrá",
+      "copy": "Plataforma académica: Markdown → formalización en ST → verificación lógica, en el mismo documento. Sin instalar, sin base de datos. Filosofía analítica con rigor de teorema."
     },
     "ig_reel_cover": {
-      "titulo":    "¿Puede un argumento ejecutarse?",
-      "copy":      "Agora · agora.elenxos.com"
+      "titulo": "¿Puede un argumento ejecutarse?",
+      "copy": "Agora · agora.elenxos.com"
     },
     "x_header": {
-      "titulo":    "Agora · Elenxos",
-      "copy":      "Plataforma académica donde la lógica se escribe, se ejecuta y se comprueba."
+      "titulo": "Agora · Elenxos",
+      "copy": "Plataforma académica donde la lógica se escribe, se ejecuta y se comprueba."
     },
     "fb_cover": {
-      "titulo":    "Agora · Elenxos",
-      "copy":      "Investigación académica con lógica formal ejecutable"
+      "titulo": "Agora · Elenxos",
+      "copy": "Investigación académica con lógica formal ejecutable"
     },
     "tiktok_cover": {
-      "titulo":    "Filosofía que compila",
-      "copy":      "Agora · agora.elenxos.com"
+      "titulo": "Filosofía que compila",
+      "copy": "Agora · agora.elenxos.com"
     },
     "web_hero": {
-      "titulo":    "Donde el razonamiento se vuelve ejecutable",
+      "titulo": "Donde el razonamiento se vuelve ejecutable",
       "subtitulo": "Plataforma académica · Elenxos",
-      "copy":      "Escribe investigación en Markdown. Formaliza la lógica con auto.logic. Ejecútala con ST. Comparte y colabora en tiempo real."
+      "copy": "Escribe investigación en Markdown. Formaliza la lógica con auto.logic. Ejecútala con ST. Comparte y colabora en tiempo real."
     },
     "web_hero_mobile": {
-      "titulo":    "Razonamiento ejecutable",
+      "titulo": "Razonamiento ejecutable",
       "subtitulo": "Plataforma académica · Elenxos",
-      "copy":      "Investiga, formaliza y verifica desde el navegador."
+      "copy": "Investiga, formaliza y verifica desde el navegador."
     },
     "email_header": {
-      "titulo":    "Agora · Elenxos",
-      "copy":      "Lógica formal ejecutable para humanidades y ciencias"
+      "titulo": "Agora · Elenxos",
+      "copy": "Lógica formal ejecutable para humanidades y ciencias"
     },
     "banner_ad": {
-      "titulo":    "Agora",
-      "copy":      "Formaliza. Verifica. Publica. · agora.elenxos.com"
+      "titulo": "Agora",
+      "copy": "Formaliza. Verifica. Publica. · agora.elenxos.com"
     },
     "business_card": {
-      "titulo":    "Agora",
+      "titulo": "Agora",
       "subtitulo": "Plataforma académica · Elenxos",
-      "copy":      "agora.elenxos.com"
+      "copy": "agora.elenxos.com"
     },
     "poster_a4": {
-      "titulo":    "Las humanidades también pueden ejecutarse",
+      "titulo": "Las humanidades también pueden ejecutarse",
       "subtitulo": "Plataforma académica · Elenxos",
-      "copy":      "Escribe un argumento. Formalízalo. Compruébalo. Agora trae el rigor de las ciencias a la investigación humanística mediante lógica formal ejecutable, workers en Docker y colaboración en tiempo real."
+      "copy": "Escribe un argumento. Formalízalo. Compruébalo. Agora trae el rigor de las ciencias a la investigación humanística mediante lógica formal ejecutable, workers en Docker y colaboración en tiempo real."
     },
     "sticker": {
-      "titulo":    "Aε",
-      "copy":      "agora.elenxos.com"
+      "titulo": "Aε",
+      "copy": "agora.elenxos.com"
     },
     "og_product": {
-      "titulo":    "Agora · Elenxos",
+      "titulo": "Agora · Elenxos",
       "subtitulo": "Plataforma académica de lógica formal ejecutable",
-      "copy":      "ST (SAT solver CDCL, 6333 tests) + auto.logic (NLP→lógica, 11 perfiles) + colaboración en tiempo real. Humanidades con el rigor de las ciencias."
+      "copy": "ST (SAT solver CDCL, 6333 tests) + auto.logic (NLP→lógica, 11 perfiles) + colaboración en tiempo real. Humanidades con el rigor de las ciencias."
     },
     "og_portrait": {
-      "titulo":    "Agora",
+      "titulo": "Agora",
       "subtitulo": "Agora",
-      "copy":      "Traducimos el caos en estructuras lógicas"
+      "copy": "Traducimos el caos en estructuras lógicas"
     },
     "logo_lockup_color": {
-      "titulo":    "Agora",
-      "copy":      "Elenxos"
+      "titulo": "Agora",
+      "copy": "Elenxos"
     },
     "logo_lockup_dark": {
-      "titulo":    "Agora",
-      "copy":      "Elenxos"
+      "titulo": "Agora",
+      "copy": "Elenxos"
     },
     "logo_lockup_light": {
-      "titulo":    "Agora",
-      "copy":      "Elenxos"
+      "titulo": "Agora",
+      "copy": "Elenxos"
     },
     "logo_symbol_color": {
-      "titulo":    "ε",
-      "copy":      ""
+      "titulo": "ε",
+      "copy": ""
     },
     "logo_symbol_mono": {
-      "titulo":    "ε",
-      "copy":      ""
+      "titulo": "ε",
+      "copy": ""
     },
     "logo_wordmark": {
-      "titulo":    "Agora",
+      "titulo": "Agora",
       "subtitulo": "Traducimos el caos en estructuras lógicas",
-      "copy":      ""
+      "copy": ""
     },
     "app_icon_1024": {
-      "titulo":    "Aε",
-      "copy":      ""
+      "titulo": "Aε",
+      "copy": ""
     },
     "favicon_512": {
-      "titulo":    "ε",
-      "copy":      ""
+      "titulo": "ε",
+      "copy": ""
     },
     "favicon_192": {
-      "titulo":    "ε",
-      "copy":      ""
+      "titulo": "ε",
+      "copy": ""
     },
     "favicon_180": {
-      "titulo":    "ε",
-      "copy":      ""
+      "titulo": "ε",
+      "copy": ""
     },
     "favicon_32": {
-      "titulo":    "ε",
-      "copy":      ""
+      "titulo": "ε",
+      "copy": ""
     }
   },
-
   "_variantes_nota": "El esquema actual admite 1 entrada de texto por layout_id. Para loopear variantes, render.py necesitaría que cada valor de textos[layout_id] sea una lista [{titulo,copy,subtitulo},...] y que build_vars() itere sobre ella generando una imagen por índice (ej. linkedin_post_v1.png, linkedin_post_v2.png). Sin ese cambio en render.py, poner listas aquí rompe la inyección de campos.",
-
   "_variantes_copy": {
     "linkedin_post": [
       {
-        "titulo":    "Humanidades que se ejecutan",
+        "titulo": "Humanidades que se ejecutan",
         "subtitulo": "Plataforma académica · Elenxos",
-        "copy":      "Escribes investigación en Markdown, formalizas la lógica con ST y la compruebas en el mismo documento. Sin instalar nada, desde el navegador."
+        "copy": "Escribes investigación en Markdown, formalizas la lógica con ST y la compruebas en el mismo documento. Sin instalar nada, desde el navegador."
       },
       {
-        "titulo":    "Un argumento que de verdad se verifica",
+        "titulo": "Un argumento que de verdad se verifica",
         "subtitulo": "Plataforma académica · Elenxos",
-        "copy":      "Agora cierra la distancia entre las humanidades y las ciencias: misma exigencia de rigor, con lógica formal ejecutable propia."
+        "copy": "Agora cierra la distancia entre las humanidades y las ciencias: misma exigencia de rigor, con lógica formal ejecutable propia."
       },
       {
-        "titulo":    "Filosofía y código: el mismo gesto",
+        "titulo": "Filosofía y código: el mismo gesto",
         "subtitulo": "Plataforma académica · Elenxos",
-        "copy":      "No quería un editor más. Quería traer ejecución, verificación y reproducibilidad al trabajo humanístico. Agora es ese intento."
+        "copy": "No quería un editor más. Quería traer ejecución, verificación y reproducibilidad al trabajo humanístico. Agora es ese intento."
       },
       {
-        "titulo":    "Lógica formal sin instalar nada",
+        "titulo": "Lógica formal sin instalar nada",
         "subtitulo": "Plataforma académica · Elenxos",
-        "copy":      "ST: SAT solver CDCL propio, 6 333 tests, 30+ perfiles lógicos. Escríbelo en el navegador, ejecútalo ahí mismo."
+        "copy": "ST: SAT solver CDCL propio, 6 333 tests, 30+ perfiles lógicos. Escríbelo en el navegador, ejecútalo ahí mismo."
       },
       {
-        "titulo":    "auto.logic: texto → lógica de primer orden",
+        "titulo": "auto.logic: texto → lógica de primer orden",
         "subtitulo": "Plataforma académica · Elenxos",
-        "copy":      "NLP por reglas, sin IA de pago. Le das lenguaje natural y te devuelve lógica formalizada lista para verificar con ST."
+        "copy": "NLP por reglas, sin IA de pago. Le das lenguaje natural y te devuelve lógica formalizada lista para verificar con ST."
       },
       {
-        "titulo":    "Investigación académica reproducible",
+        "titulo": "Investigación académica reproducible",
         "subtitulo": "Plataforma académica · Elenxos",
-        "copy":      "Servicios separados, contratos tipados, cifrado de extremo a extremo. La infraestructura es rigurosa porque la ambición intelectual también lo es."
+        "copy": "Servicios separados, contratos tipados, cifrado de extremo a extremo. La infraestructura es rigurosa porque la ambición intelectual también lo es."
       },
       {
-        "titulo":    "Enseñar lógica con un motor que ejecuta de verdad",
+        "titulo": "Enseñar lógica con un motor que ejecuta de verdad",
         "subtitulo": "Plataforma académica · Elenxos",
-        "copy":      "LogicEducation: aprende lógica formal interactivamente en el navegador, conectado al mismo motor ST que usa Agora para investigación real."
+        "copy": "LogicEducation: aprende lógica formal interactivamente en el navegador, conectado al mismo motor ST que usa Agora para investigación real."
       },
       {
-        "titulo":    "Workers en Docker para humanidades",
+        "titulo": "Workers en Docker para humanidades",
         "subtitulo": "Plataforma académica · Elenxos",
-        "copy":      "Agora ejecuta código de investigación en contenedores aislados. Lo costoso y paralelizable no necesita salir a la nube."
+        "copy": "Agora ejecuta código de investigación en contenedores aislados. Lo costoso y paralelizable no necesita salir a la nube."
       }
     ],
     "ig_post": [
       {
-        "titulo":    "ε",
+        "titulo": "ε",
         "subtitulo": "Agora",
-        "copy":      "Un argumento no debería vivir solo en papel. Escríbelo, ejecútalo, compruébalo."
+        "copy": "Un argumento no debería vivir solo en papel. Escríbelo, ejecútalo, compruébalo."
       },
       {
-        "titulo":    "ε",
+        "titulo": "ε",
         "subtitulo": "Agora",
-        "copy":      "Traducimos el caos en estructuras lógicas."
+        "copy": "Traducimos el caos en estructuras lógicas."
       },
       {
-        "titulo":    "ε",
+        "titulo": "ε",
         "subtitulo": "Agora · ST",
-        "copy":      "30+ perfiles lógicos. SAT solver CDCL propio. 6 333 tests. Lógica que de verdad se verifica."
+        "copy": "30+ perfiles lógicos. SAT solver CDCL propio. 6 333 tests. Lógica que de verdad se verifica."
       },
       {
-        "titulo":    "ε",
+        "titulo": "ε",
         "subtitulo": "Agora · auto.logic",
-        "copy":      "Texto en español → lógica de primer orden. Sin IA de pago. Sin dependencias en runtime."
+        "copy": "Texto en español → lógica de primer orden. Sin IA de pago. Sin dependencias en runtime."
       },
       {
-        "titulo":    "ε",
+        "titulo": "ε",
         "subtitulo": "Agora",
-        "copy":      "Las humanidades merecen herramientas tan serias como las de las ciencias."
+        "copy": "Las humanidades merecen herramientas tan serias como las de las ciencias."
       },
       {
-        "titulo":    "ε",
+        "titulo": "ε",
         "subtitulo": "Agora · Elenxos",
-        "copy":      "Formaliza. Verifica. Colabora. Publica. · agora.elenxos.com"
+        "copy": "Formaliza. Verifica. Colabora. Publica. · agora.elenxos.com"
       }
     ],
     "x_post": [
       {
-        "titulo":    "Agora · Elenxos",
-        "copy":      "Escribes en lenguaje natural. auto.logic formaliza. ST ejecuta. La filosofía analítica con el mismo rigor que un teorema."
+        "titulo": "Agora · Elenxos",
+        "copy": "Escribes en lenguaje natural. auto.logic formaliza. ST ejecuta. La filosofía analítica con el mismo rigor que un teorema."
       },
       {
-        "titulo":    "Agora · Elenxos",
-        "copy":      "SAT solver CDCL propio, 6 333 tests, 30+ perfiles lógicos. Todo en el navegador, sin instalar nada. agora.elenxos.com"
+        "titulo": "Agora · Elenxos",
+        "copy": "SAT solver CDCL propio, 6 333 tests, 30+ perfiles lógicos. Todo en el navegador, sin instalar nada. agora.elenxos.com"
       },
       {
-        "titulo":    "Agora · Elenxos",
-        "copy":      "MCP Delegate Agents: el modelo grande define qué hay que hacer; los workers locales ejecutan las piezas. Lo costoso y paralelizable no necesita salir a la nube."
+        "titulo": "Agora · Elenxos",
+        "copy": "MCP Delegate Agents: el modelo grande define qué hay que hacer; los workers locales ejecutan las piezas. Lo costoso y paralelizable no necesita salir a la nube."
       },
       {
-        "titulo":    "Agora · Elenxos",
-        "copy":      "Ultimate Terminal: relay WebSocket + PTY real en el servidor. La base sobre la que corren los workers de Agora en Docker."
+        "titulo": "Agora · Elenxos",
+        "copy": "Ultimate Terminal: relay WebSocket + PTY real en el servidor. La base sobre la que corren los workers de Agora en Docker."
       }
     ],
     "og_general": [
       {
-        "titulo":    "Agora · Elenxos",
+        "titulo": "Agora · Elenxos",
         "subtitulo": "Plataforma académica",
-        "copy":      "Investiga, formaliza y verifica argumentos en el mismo entorno. Lógica formal ejecutable para humanidades y ciencias."
+        "copy": "Investiga, formaliza y verifica argumentos en el mismo entorno. Lógica formal ejecutable para humanidades y ciencias."
       },
       {
-        "titulo":    "Agora · Elenxos",
+        "titulo": "Agora · Elenxos",
         "subtitulo": "Lógica formal ejecutable",
-        "copy":      "ST + auto.logic + LogicEducation + colaboración en tiempo real. Humanidades con el rigor de las ciencias. agora.elenxos.com"
+        "copy": "ST + auto.logic + LogicEducation + colaboración en tiempo real. Humanidades con el rigor de las ciencias. agora.elenxos.com"
       }
     ]
   }

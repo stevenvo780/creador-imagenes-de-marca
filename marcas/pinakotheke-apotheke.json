@@ -26,48 +26,93 @@
   "logo_texto": "Apothḗke",
   "logo_simbolo": "▦",
   "textos": {
-    "linkedin_post": {
-      "titulo": "Apothḗke",
-      "subtitulo": "Inventario React+Neon · Pinakothḗke",
-      "copy": "Inventario que ordena el almacén real."
-    },
-    "linkedin_banner": {
-      "titulo": "Apothḗke",
-      "copy": "Control de inventario serverless con React, Vite y Neon Postgres."
-    },
     "ig_post": {
-      "titulo": "▦",
-      "subtitulo": "Apothḗke",
-      "copy": "Inventario que ordena el almacén real"
+      "titulo": "Almacén organizado, sin ficción",
+      "subtitulo": "Control de stock serverless · React + Neon",
+      "etiqueta": "roles",
+      "copy": "Inventario que no te miente: stock real, órdenes claras, roles definidos. Para PYME que necesita saber sin excusas."
     },
     "ig_story": {
-      "titulo": "Apothḗke",
-      "copy": "Stock mínimo ↓"
+      "titulo": "Almacén organizado, sin ficción",
+      "copy": "Stock limpio, roles claros, movimientos visibles: eso es inventario."
     },
-    "x_post": {
-      "titulo": "Apothḗke",
-      "copy": "Inventario que ordena el almacén real"
+    "ig_carousel": {
+      "titulo": "Almacén organizado, sin ficción",
+      "copy": "Inventario que no te miente: stock real, órdenes claras, roles definidos. Para PYME que necesita saber sin excusas.",
+      "numero": "3"
     },
-    "yt_thumbnail": {
-      "titulo": "Apothḗke",
-      "copy": "Almacén + roles"
+    "ig_reel_cover": {
+      "titulo": "Almacén organizado, sin ficción",
+      "copy": "Stock limpio, roles claros, movimientos visibles: eso es inventario."
     },
-    "yt_banner": {
-      "titulo": "Apothḗke",
-      "subtitulo": "Inventario React+Neon · Pinakothḗke"
+    "stat_card": {
+      "numero": "3",
+      "etiqueta": "roles",
+      "copy": "Stock limpio, roles claros, movimientos visibles: eso es inventario."
+    },
+    "ad_rectangle": {
+      "titulo": "Almacén organizado, sin ficción",
+      "numero": "3",
+      "copy": "Stock limpio, roles claros, movimientos visibles: eso es inventario.",
+      "cita": "Stock limpio, roles claros, movimientos visibles: eso es inventario.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "Almacén organizado, sin ficción",
+      "copy": "Stock limpio, roles claros, movimientos visibles: eso es inventario."
     },
     "og_general": {
-      "titulo": "Apothḗke",
-      "subtitulo": "Inventario React+Neon · Pinakothḗke",
-      "copy": "Inventario que ordena el almacén real."
+      "titulo": "Almacén organizado, sin ficción",
+      "subtitulo": "Control de stock serverless · React + Neon",
+      "copy": "Inventario que no te miente: stock real, órdenes claras, roles definidos. Para PYME que necesita saber sin excusas."
+    },
+    "og_product": {
+      "titulo": "Almacén organizado, sin ficción",
+      "subtitulo": "Control de stock serverless · React + Neon",
+      "copy": "Inventario que no te miente: stock real, órdenes claras, roles definidos. Para PYME que necesita saber sin excusas."
+    },
+    "web_hero": {
+      "titulo": "Almacén organizado, sin ficción",
+      "subtitulo": "Control de stock serverless · React + Neon",
+      "copy": "Inventario que no te miente: stock real, órdenes claras, roles definidos. Para PYME que necesita saber sin excusas."
+    },
+    "linkedin_post": {
+      "titulo": "Almacén organizado, sin ficción",
+      "subtitulo": "Control de stock serverless · React + Neon",
+      "etiqueta": "roles",
+      "copy": "Inventario que no te miente: stock real, órdenes claras, roles definidos. Para PYME que necesita saber sin excusas."
+    },
+    "linkedin_banner": {
+      "titulo": "Almacén organizado, sin ficción",
+      "etiqueta": "roles",
+      "copy": "Stock limpio, roles claros, movimientos visibles: eso es inventario."
+    },
+    "fb_cover": {
+      "titulo": "Almacén organizado, sin ficción",
+      "subtitulo": "Control de stock serverless · React + Neon",
+      "copy": "Inventario que no te miente: stock real, órdenes claras, roles definidos. Para PYME que necesita saber sin excusas."
+    },
+    "x_post": {
+      "titulo": "Almacén organizado, sin ficción",
+      "copy": "Stock limpio, roles claros, movimientos visibles: eso es inventario."
+    },
+    "yt_thumbnail": {
+      "titulo": "Almacén organizado, sin ficción",
+      "copy": "Stock limpio, roles claros, movimientos visibles: eso es inventario."
+    },
+    "poster_a4": {
+      "titulo": "Una bodega que opera de verdad",
+      "subtitulo": "Stock, órdenes, movimientos y analítica — no en Excel",
+      "copy": "Inventario real con tres roles claros (admin, manager, worker), notificaciones y analítica. Seed de datos demo para probarlo hoy. React + Vite + Neon."
     },
     "whatsapp_perfil": {
-      "titulo": "▦",
-      "copy": "Apothḗke"
+      "titulo": "Almacén organizado, sin ficción"
     },
     "contra_cover": {
-      "titulo": "Apothḗke",
-      "copy": "Inventario React+Neon · Pinakothḗke"
+      "titulo": "Almacén organizado, sin ficción",
+      "copy": "Control de stock serverless · React + Neon"
     }
-  }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
 }

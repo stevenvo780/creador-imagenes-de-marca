@@ -1,0 +1,224 @@
+{
+  "slug": "saga-04",
+  "nombre_producto": "Saga 04 · La soledad del fuerte",
+  "nombre_corporativo": "Steven Vallejo",
+  "tagline": "El verdadero lujo no es ganar más: es encontrar alguien que te mire el trabajo y tenga razón en decirte qué no te salió. Eso es lo que extraño.",
+  "url": "https://www.stevenvallejo.com/es",
+  "url_en": "https://www.stevenvallejo.com/en",
+  "tono": "personal, reflexivo, técnico-humanista",
+  "simbolo": "lemniscata (∞)",
+  "paleta": {
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_2": "#e0a85e",
+    "acento_3": "#c0522a",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#152028"
+  },
+  "gradiente_hero": "linear-gradient(135deg, #e0a85e 0%, #c0522a 40%, #43b5a6 100%)",
+  "gradiente_bg": "radial-gradient(ellipse at 20% 50%, #152028 0%, #0b1417 60%)",
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo": "Inter"
+  },
+  "logo_texto": "Steven Vallejo",
+  "logo_simbolo": "∞",
+  "textos": {
+    "ig_post": {
+      "titulo": "Gané de nuevo, qué pereza",
+      "subtitulo": "Cuando ganar se vuelve costumbre",
+      "etiqueta": "La soledad del fuerte",
+      "copy": "El lujo real no es ganar más. Es topar con alguien que te mire el trabajo, te diga en qué fallaste y tenga toda la razón. Mirá, eso sí vale oro."
+    },
+    "ig_story": {
+      "titulo": "Gané otra vez, qué pereza",
+      "copy": "No aplausos: un rival digno."
+    },
+    "ig_carousel": {
+      "titulo": "Gané otra vez, qué pereza",
+      "copy": "El verdadero lujo no es ganar más: es encontrar alguien que te mire el trabajo y tenga razón en decirte qué no te salió. Eso es lo que extraño.",
+      "numero": ""
+    },
+    "ig_reel_cover": {
+      "titulo": "Gané otra vez, qué pereza",
+      "copy": "No aplausos: un rival digno."
+    },
+    "stat_card": {
+      "numero": "∞",
+      "etiqueta": "",
+      "copy": "No aplausos: un rival digno."
+    },
+    "ad_rectangle": {
+      "titulo": "Gané otra vez, qué pereza",
+      "numero": "",
+      "copy": "No aplausos: un rival digno.",
+      "cita": "No aplausos: un rival digno.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "Gané otra vez, qué pereza",
+      "copy": "No aplausos: un rival digno."
+    },
+    "og_general": {
+      "titulo": "Gané otra vez, qué pereza",
+      "subtitulo": "Cuando la victoria se aburre",
+      "copy": "El verdadero lujo no es ganar más: es encontrar alguien que te mire el trabajo y tenga razón en decirte qué no te salió. Eso es lo que extraño."
+    },
+    "og_product": {
+      "titulo": "Gané otra vez, qué pereza",
+      "subtitulo": "Cuando la victoria se aburre",
+      "copy": "El verdadero lujo no es ganar más: es encontrar alguien que te mire el trabajo y tenga razón en decirte qué no te salió. Eso es lo que extraño."
+    },
+    "web_hero": {
+      "titulo": "Gané otra vez, qué pereza",
+      "subtitulo": "Cuando la victoria se aburre",
+      "copy": "El verdadero lujo no es ganar más: es encontrar alguien que te mire el trabajo y tenga razón en decirte qué no te salió. Eso es lo que extraño."
+    },
+    "linkedin_post": {
+      "titulo": "Gané otra vez, qué pereza",
+      "subtitulo": "Cuando la victoria se aburre",
+      "etiqueta": "",
+      "copy": "El verdadero lujo no es ganar más: es encontrar alguien que te mire el trabajo y tenga razón en decirte qué no te salió. Eso es lo que extraño."
+    },
+    "linkedin_banner": {
+      "titulo": "Gané otra vez, qué pereza",
+      "etiqueta": "",
+      "copy": "No aplausos: un rival digno."
+    },
+    "fb_cover": {
+      "titulo": "Gané otra vez, qué pereza",
+      "subtitulo": "Cuando la victoria se aburre",
+      "copy": "El verdadero lujo no es ganar más: es encontrar alguien que te mire el trabajo y tenga razón en decirte qué no te salió. Eso es lo que extraño."
+    },
+    "x_post": {
+      "titulo": "Gané otra vez, qué pereza",
+      "copy": "No aplausos: un rival digno."
+    },
+    "yt_thumbnail": {
+      "titulo": "Gané otra vez, qué pereza",
+      "copy": "No aplausos: un rival digno."
+    },
+    "poster_a4": {
+      "titulo": "Gané otra vez, qué pereza",
+      "subtitulo": "Cuando la victoria se aburre",
+      "copy": "El verdadero lujo no es ganar más: es encontrar alguien que te mire el trabajo y tenga razón en decirte qué no te salió. Eso es lo que extraño."
+    },
+    "whatsapp_perfil": {
+      "titulo": "Gané otra vez, qué pereza"
+    },
+    "contra_cover": {
+      "titulo": "Gané otra vez, qué pereza",
+      "copy": "Cuando la victoria se aburre"
+    }
+  },
+  "locales": {
+    "en": {
+      "tagline": "Software engineer and philosopher: clear systems for real problems",
+      "url": "https://www.stevenvallejo.com/en",
+      "textos": {
+        "linkedin_post": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems · Philosophy",
+          "copy": "Think before you build: clear systems for real problems."
+        },
+        "linkedin_banner": {
+          "titulo": "Steven Vallejo",
+          "copy": "Engineering, artificial intelligence, and rigorous thought."
+        },
+        "ig_post": {
+          "titulo": "∞",
+          "subtitulo": "Steven Vallejo",
+          "copy": "Software engineer · Philosopher"
+        },
+        "ig_story": {
+          "titulo": "Steven\nVallejo",
+          "copy": "New post ↓"
+        },
+        "x_post": {
+          "titulo": "Steven Vallejo",
+          "copy": "Software engineer and philosopher: clear systems for real problems"
+        },
+        "yt_thumbnail": {
+          "titulo": "Steven Vallejo",
+          "copy": "Watch"
+        },
+        "yt_banner": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software · AI · Philosophy"
+        },
+        "og_general": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems",
+          "copy": "Think before you build: clear systems for real problems."
+        },
+        "contra_cover": {
+          "titulo": "Steven Vallejo",
+          "copy": "Software Architecture & AI Systems"
+        },
+        "ig_reel_cover": {
+          "titulo": "∞",
+          "subtitulo": "Steven Vallejo",
+          "copy": "12+ years of backend, agentic AI & devtools"
+        },
+        "ig_carousel": {
+          "titulo": "Philosophy · Sciences · Engineering",
+          "subtitulo": "Steven Vallejo",
+          "copy": "Three fronts. One framework. Structured clarity."
+        },
+        "x_header": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software engineer · Philosopher",
+          "copy": "stevenvallejo.com"
+        },
+        "fb_cover": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems · Philosophy",
+          "copy": "Building at the intersection of systems, intelligence, and craft."
+        },
+        "tiktok_cover": {
+          "titulo": "SV",
+          "subtitulo": "Steven Vallejo",
+          "copy": "Systems. Intelligence. Craft."
+        },
+        "web_hero": {
+          "titulo": "Think before\nyou build",
+          "subtitulo": "Software Architecture · Agentic AI · Philosophy",
+          "copy": "12+ years translating complex systems into structured, maintainable software. From formal logic and NLP to multi-tenant platforms and OSS devtools."
+        },
+        "web_hero_mobile": {
+          "titulo": "Steven\nVallejo",
+          "subtitulo": "Software Engineering · AI Systems",
+          "copy": "Clear systems for real problems."
+        },
+        "email_header": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Architecture · AI Systems · Philosophy",
+          "copy": "stevenvallejo.com"
+        },
+        "banner_ad": {
+          "titulo": "Steven Vallejo",
+          "copy": "Software Architecture & Agentic AI — stevenvallejo.com"
+        },
+        "business_card": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems",
+          "copy": "stevenvallejo.com"
+        },
+        "poster_a4": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Architecture · Agentic AI · Philosophy",
+          "copy": "Philosopher-engineer with 12+ years of backend, formal logic, and OSS devtools. Building systems that think and explaining systems that last."
+        },
+        "og_product": {
+          "titulo": "Steven Vallejo — Projects",
+          "subtitulo": "Philosophy · Sciences · Engineering",
+          "copy": "Live products across formal logic, scientific simulation, multi-tenant platforms and SMB devtools. Mouseîon ecosystem."
+        }
+      }
+    }
+  },
+  "logo_style": "lemniscate",
+  "logo_seed": 770077
+}

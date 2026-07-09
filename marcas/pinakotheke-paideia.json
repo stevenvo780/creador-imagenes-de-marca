@@ -7,117 +7,112 @@
   "tono": "humanista, socrático, libresco",
   "simbolo": "Π",
   "frente": "filosofia",
-
   "paleta": {
-    "bg":           "#0b1417",
-    "primario":     "#0b1417",
-    "acento":       "#e0a85e",
-    "acento_2":     "#b8873a",
-    "acento_3":     "#c0522a",
-    "texto":        "#e8e0d4",
-    "texto_muted":  "#8fa3a8",
-    "surface":      "#131e22"
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#e0a85e",
+    "acento_2": "#b8873a",
+    "acento_3": "#c0522a",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #e0a85e 0%, #b8873a 60%, #7a5520 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 30% 40%, #131e22 0%, #0b1417 70%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 30% 40%, #131e22 0%, #0b1417 70%)",
   "tipografia": {
     "titulos": "Cormorant Garamond",
-    "cuerpo":  "Inter"
+    "cuerpo": "Inter"
   },
-
   "logo_texto": "Paideía",
   "logo_simbolo": "Π",
-
   "textos": {
-    "linkedin_post": {
-      "titulo":    "Paideía",
-      "subtitulo": "Humanidades · Pinakothḗke",
-      "copy":      "Formación del alma a través del texto."
-    },
-    "linkedin_banner": {
-      "titulo":    "Paideía",
-      "copy":      "222 textos de humanidades. Un archivo personal de formación."
-    },
     "ig_post": {
-      "titulo":    "Π",
-      "subtitulo": "Paideía",
-      "copy":      "Formación del alma a través del texto"
+      "titulo": "Filosofía en serio, sin disfraz",
+      "subtitulo": "Griego · Neurofilosofía · Ciudad",
+      "etiqueta": "rutas",
+      "copy": "227 rutas de contenido académico en Next.js estático. Griego clásico, neurofilosofía y reflexión sobre la ciudad: formación rigurosa, sin IA ni base de datos, solo texto que dura."
     },
     "ig_story": {
-      "titulo":    "Paideía",
-      "copy":      "Nuevo texto ↓"
-    },
-    "x_post": {
-      "titulo":    "Paideía",
-      "copy":      "Formación del alma a través del texto"
-    },
-    "yt_thumbnail": {
-      "titulo":    "Paideía",
-      "copy":      "Ver"
-    },
-    "yt_banner": {
-      "titulo":    "Paideía",
-      "subtitulo": "Humanidades · Pinakothḗke"
-    },
-    "og_general": {
-      "titulo":    "Paideía",
-      "subtitulo": "Humanidades · Pinakothḗke",
-      "copy":      "Formación del alma a través del texto."
-    },
-    "whatsapp_perfil": {
-      "titulo":    "Π",
-      "copy":      "Paideía"
-    },
-    "contra_cover": {
-      "titulo":    "Paideía",
-      "copy":      "Humanidades · Pinakothḗke"
-    },
-    "ig_reel_cover": {
-      "titulo":    "227 rutas",
-      "subtitulo": "Griego Clásico · Neurofilosofía · Filosofía de la Ciudad",
-      "copy":      "Un portal de humanidades digitales construido texto a texto"
+      "titulo": "Filosofía en serio, sin disfraz",
+      "copy": "Filosofía sin pose es difícil, pero es lo que vale."
     },
     "ig_carousel": {
-      "titulo":    "Humanidades digitales",
-      "subtitulo": "Paideía · Pinakothḗke",
-      "copy":      "Las humanidades merecen herramientas tan serias como las ciencias"
+      "titulo": "Filosofía en serio, sin disfraz",
+      "copy": "222 rutas de contenido académico: Griego Clásico con morfología real, Neurofilosofía en 10 módulos, Filosofía de la Ciudad. Next.js estático, sin IA, sin base de datos. Solo texto que dura.",
+      "numero": "222"
     },
-    "x_header": {
-      "titulo":    "Paideía",
-      "subtitulo": "Portal de humanidades digitales",
-      "copy":      "Griego Clásico · Neurofilosofía · Filosofía de la Ciudad · paideia.stevenvallejo.com"
+    "ig_reel_cover": {
+      "titulo": "Filosofía en serio, sin disfraz",
+      "copy": "Filosofía sin pose es difícil, pero es lo que vale."
     },
-    "fb_cover": {
-      "titulo":    "Paideía",
-      "subtitulo": "Humanidades · Pinakothḗke",
-      "copy":      "Portal de humanidades digitales: 227 rutas estáticas de contenido académico en MDX"
+    "stat_card": {
+      "numero": "227",
+      "etiqueta": "rutas",
+      "copy": "Filosofía sin pose es difícil, pero es lo que vale."
     },
-    "tiktok_cover": {
-      "titulo":    "Π",
-      "subtitulo": "Paideía",
-      "copy":      "Filosofía, griego y ciudad. El texto que forma."
+    "ad_rectangle": {
+      "titulo": "Filosofía en serio, sin disfraz",
+      "numero": "227",
+      "copy": "Filosofía sin pose es difícil, pero es lo que vale.",
+      "cita": "Filosofía sin pose es difícil, pero es lo que vale.",
+      "autor": "Steven Vallejo"
     },
-    "web_hero": {
-      "titulo":    "Formación del alma a través del texto",
-      "subtitulo": "Griego Clásico · Neurofilosofía · Filosofía de la Ciudad",
-      "copy":      "Portal de humanidades digitales con 227 rutas de contenido académico. Un archivo personal de formación rigurosa."
+    "ad_leaderboard": {
+      "titulo": "Filosofía en serio, sin disfraz",
+      "copy": "Filosofía sin pose es difícil, pero es lo que vale."
     },
-    "web_hero_mobile": {
-      "titulo":    "Formación del alma a través del texto",
-      "subtitulo": "Paideía · Pinakothḗke",
-      "copy":      "227 textos. Humanidades digitales."
-    },
-    "email_header": {
-      "titulo":    "Paideía",
-      "subtitulo": "Humanidades · Pinakothḗke",
-      "copy":      "Formación del alma a través del texto — paideia.stevenvallejo.com"
+    "og_general": {
+      "titulo": "Filosofía en serio, sin disfraz",
+      "subtitulo": "Griego · Neurofilosofía · Ciudad",
+      "copy": "227 rutas de contenido académico en Next.js estático. Griego clásico, neurofilosofía y reflexión sobre la ciudad: formación rigurosa, sin IA ni base de datos, solo texto que dura."
     },
     "og_product": {
-      "titulo":    "Paideía — Portal de humanidades",
-      "subtitulo": "Griego Clásico · Neurofilosofía · Filosofía de la Ciudad",
-      "copy":      "227 rutas estáticas de contenido académico en MDX. Pinakothḗke."
+      "titulo": "Filosofía en serio, sin disfraz",
+      "subtitulo": "Griego · Neurofilosofía · Ciudad",
+      "copy": "227 rutas de contenido académico en Next.js estático. Griego clásico, neurofilosofía y reflexión sobre la ciudad: formación rigurosa, sin IA ni base de datos, solo texto que dura."
+    },
+    "web_hero": {
+      "titulo": "Filosofía en serio, sin disfraz",
+      "subtitulo": "Griego · Neurofilosofía · Ciudad",
+      "copy": "227 rutas de contenido académico en Next.js estático. Griego clásico, neurofilosofía y reflexión sobre la ciudad: formación rigurosa, sin IA ni base de datos, solo texto que dura."
+    },
+    "linkedin_post": {
+      "titulo": "Filosofía en serio, sin disfraz",
+      "subtitulo": "Griego · Neurofilosofía · Ciudad",
+      "etiqueta": "rutas",
+      "copy": "227 rutas de contenido académico en Next.js estático. Griego clásico, neurofilosofía y reflexión sobre la ciudad: formación rigurosa, sin IA ni base de datos, solo texto que dura."
+    },
+    "linkedin_banner": {
+      "titulo": "Filosofía en serio, sin disfraz",
+      "etiqueta": "rutas",
+      "copy": "Filosofía sin pose es difícil, pero es lo que vale."
+    },
+    "fb_cover": {
+      "titulo": "Filosofía en serio, sin disfraz",
+      "subtitulo": "Griego · Neurofilosofía · Ciudad",
+      "copy": "227 rutas de contenido académico en Next.js estático. Griego clásico, neurofilosofía y reflexión sobre la ciudad: formación rigurosa, sin IA ni base de datos, solo texto que dura."
+    },
+    "x_post": {
+      "titulo": "Filosofía en serio, sin disfraz",
+      "copy": "Filosofía sin pose es difícil, pero es lo que vale."
+    },
+    "yt_thumbnail": {
+      "titulo": "Filosofía en serio, sin disfraz",
+      "copy": "Filosofía sin pose es difícil, pero es lo que vale."
+    },
+    "poster_a4": {
+      "titulo": "Filosofía en serio, sin disfraz",
+      "subtitulo": "Griego · Neurofilosofía · Ciudad",
+      "copy": "227 rutas de contenido académico en Next.js estático. Griego clásico, neurofilosofía y reflexión sobre la ciudad: formación rigurosa, sin IA ni base de datos, solo texto que dura."
+    },
+    "whatsapp_perfil": {
+      "titulo": "Filosofía en serio, sin disfraz"
+    },
+    "contra_cover": {
+      "titulo": "Filosofía en serio, sin disfraz",
+      "copy": "Griego · Neurofilosofía · Ciudad"
     }
-  }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
 }

@@ -1,0 +1,66 @@
+- generic [ref=f2e2]:
+  - link "Saltar al contenido principal" [ref=f2e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=f2e4]:
+    - generic [ref=f2e5]:
+      - link "Eikón" [ref=f2e6] [cursor=pointer]:
+        - /url: /
+      - navigation "Navegación principal" [ref=f2e7]:
+        - list [ref=f2e8]:
+          - listitem [ref=f2e9]:
+            - link "Marcas" [ref=f2e10] [cursor=pointer]:
+              - /url: /brands
+          - listitem [ref=f2e11]:
+            - link "Crear" [ref=f2e12] [cursor=pointer]:
+              - /url: /batch
+          - listitem [ref=f2e13]:
+            - link "Galería" [ref=f2e14] [cursor=pointer]:
+              - /url: /gallery
+      - generic [ref=f2e15]:
+        - 'generic "Cuenta: qalocal" [ref=f2e16]': qalocal
+        - button "Salir" [ref=f2e17] [cursor=pointer]
+  - main [ref=f2e18]:
+    - generic [ref=f2e19]:
+      - generic [ref=f2e20]:
+        - heading "Estudio de activos" [level=1] [ref=f2e21]
+        - paragraph [ref=f2e22]: Generá banners, tarjetas, imágenes OG y más, heredando la identidad visual de tu marca.
+      - generic [ref=f2e29]:
+        - generic [ref=f2e30]:
+          - heading "1. Elegí tu marca" [level=2] [ref=f2e31]
+          - generic [ref=f2e32]:
+            - generic [ref=f2e33]: Marca
+            - combobox "Marca" [ref=f2e34] [cursor=pointer]:
+              - option "Seleccioná una marca" [disabled]
+              - option "QA Brand"
+              - option "Vértice Fitness" [selected]
+            - paragraph [ref=f2e35]: Seleccioná la marca cuya identidad visual querés usar.
+        - generic [ref=f2e36]:
+          - heading "2. ¿Qué querés generar?" [level=2] [ref=f2e37]
+          - generic [ref=f2e38]:
+            - generic [ref=f2e39]: Tipo de activo
+            - combobox "Tipo de activo" [ref=f2e40] [cursor=pointer]:
+              - option "Seleccioná un tipo" [disabled]
+              - option "Tarjeta de negocio"
+              - option "OG General" [selected]
+              - option "OG Producto"
+              - option "Anuncio rectangular"
+              - option "Banner web (escritorio)"
+            - paragraph [ref=f2e41]: Cada tipo tiene un formato y campos de texto distintos.
+        - generic [ref=f2e42]:
+          - generic [ref=f2e43]:
+            - heading "3. Contenido del OG General" [level=2] [ref=f2e44]
+            - paragraph [ref=f2e45]: Completá los textos que aparecerán en el activo. Todos los campos son opcionales.
+            - generic [ref=f2e46]:
+              - generic [ref=f2e47]:
+                - generic [ref=f2e48]: Título
+                - textbox "Título" [ref=f2e49]:
+                  - /placeholder: "Ej.: El arte de preguntar"
+              - generic [ref=f2e50]:
+                - generic [ref=f2e51]: Subtítulo
+                - textbox "Subtítulo" [ref=f2e52]:
+                  - /placeholder: "Ej.: Una guía para educadores"
+              - generic [ref=f2e53]:
+                - generic [ref=f2e54]: URL
+                - textbox "URL" [ref=f2e55]:
+                  - /placeholder: "Ej.: elenxos.com"
+          - button "Generar" [ref=f2e57] [cursor=pointer]

@@ -7,72 +7,69 @@
   "tono": "estructurado, claro, narrativo",
   "simbolo": "≡",
   "suite": "prizma",
-
   "paleta": {
-    "bg":           "#0c0e10",
-    "primario":     "#0c0e10",
-    "acento":       "#f0b94a",
-    "acento_2":     "#d4622e",
-    "acento_3":     "#43b5a6",
-    "texto":        "#f0ece6",
-    "texto_muted":  "#a09080",
-    "surface":      "#16120e"
+    "bg": "#0c0e10",
+    "primario": "#0c0e10",
+    "acento": "#f0b94a",
+    "acento_2": "#d4622e",
+    "acento_3": "#43b5a6",
+    "texto": "#f0ece6",
+    "texto_muted": "#a09080",
+    "surface": "#16120e"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #f0b94a 0%, #d4622e 50%, #9e3015 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 30% 70%, #1a120a 0%, #0c0e10 65%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 30% 70%, #1a120a 0%, #0c0e10 65%)",
   "tipografia": {
     "titulos": "Inter",
-    "cuerpo":  "Inter"
+    "cuerpo": "Inter"
   },
-
   "logo_texto": "Logos",
   "logo_simbolo": "≡",
-
   "textos": {
     "linkedin_post": {
-      "titulo":    "Logos",
+      "titulo": "Logos",
       "subtitulo": "Documentación corporativa · Prizma",
-      "copy":      "Documentación corporativa con razón de ser."
+      "copy": "Documentación corporativa con razón de ser."
     },
     "linkedin_banner": {
-      "titulo":    "Logos",
-      "copy":      "Cada política, proceso y decisión tiene su lugar. Y su razón."
+      "titulo": "Logos",
+      "copy": "Cada política, proceso y decisión tiene su lugar. Y su razón."
     },
     "ig_post": {
-      "titulo":    "≡",
+      "titulo": "≡",
       "subtitulo": "Logos",
-      "copy":      "Documentación corporativa con razón de ser"
+      "copy": "Documentación corporativa con razón de ser"
     },
     "ig_story": {
-      "titulo":    "Logos",
-      "copy":      "Cada política, su lugar ↓"
+      "titulo": "Logos",
+      "copy": "Cada política, su lugar ↓"
     },
     "x_post": {
-      "titulo":    "Logos",
-      "copy":      "Documentación corporativa con razón de ser"
+      "titulo": "Logos",
+      "copy": "Documentación corporativa con razón de ser"
     },
     "yt_thumbnail": {
-      "titulo":    "Logos",
-      "copy":      "Documentación con razón de ser"
+      "titulo": "Logos",
+      "copy": "Documentación con razón de ser"
     },
     "yt_banner": {
-      "titulo":    "Logos",
+      "titulo": "Logos",
       "subtitulo": "Documentación corporativa · Prizma"
     },
     "og_general": {
-      "titulo":    "Logos",
+      "titulo": "Logos",
       "subtitulo": "Documentación corporativa · Prizma",
-      "copy":      "Documentación corporativa con razón de ser."
+      "copy": "Documentación corporativa con razón de ser."
     },
     "whatsapp_perfil": {
-      "titulo":    "≡",
-      "copy":      "Logos"
+      "titulo": "≡",
+      "copy": "Logos"
     },
     "contra_cover": {
-      "titulo":    "Logos",
-      "copy":      "Documentación corporativa · Prizma"
+      "titulo": "Logos",
+      "copy": "Documentación corporativa · Prizma"
     }
-  }
+  },
+  "logo_style": "prisma_refraccion",
+  "logo_seed": 1412926217
 }

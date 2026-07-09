@@ -9,137 +9,130 @@
   "simbolo": "Π",
   "logo_style": "orbital",
   "logo_seed": 130431078,
-
   "paleta": {
-    "bg":           "#0b1417",
-    "primario":     "#0b1417",
-    "acento":       "#43b5a6",
-    "acento_2":     "#e0a85e",
-    "acento_3":     "#8d7cc0",
-    "texto":        "#e8e0d4",
-    "texto_muted":  "#8fa3a8",
-    "surface":      "#131e22"
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_2": "#e0a85e",
+    "acento_3": "#8d7cc0",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22"
   },
-
   "frentes": {
     "filosofia": {
-      "nombre":        "Filosofía",
+      "nombre": "Filosofía",
       "acento_frente": "#e0a85e",
-      "gradiente":     "linear-gradient(135deg, #e0a85e 0%, #b8873a 100%)"
+      "gradiente": "linear-gradient(135deg, #e0a85e 0%, #b8873a 100%)"
     },
     "ciencia": {
-      "nombre":        "Ciencia",
+      "nombre": "Ciencia",
       "acento_frente": "#43b5a6",
       "acento_frente_2": "#8d7cc0",
-      "gradiente":     "linear-gradient(135deg, #43b5a6 0%, #8d7cc0 100%)"
+      "gradiente": "linear-gradient(135deg, #43b5a6 0%, #8d7cc0 100%)"
     },
     "ingenieria": {
-      "nombre":        "Ingeniería",
+      "nombre": "Ingeniería",
       "acento_frente": "#43b5a6",
-      "gradiente":     "linear-gradient(135deg, #43b5a6 0%, #2a7a70 100%)"
+      "gradiente": "linear-gradient(135deg, #43b5a6 0%, #2a7a70 100%)"
     }
   },
-
   "gradiente_hero": "linear-gradient(135deg, #e0a85e 0%, #43b5a6 50%, #8d7cc0 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 30% 40%, #131e22 0%, #0b1417 70%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 30% 40%, #131e22 0%, #0b1417 70%)",
   "tipografia": {
     "titulos": "Cormorant Garamond",
-    "cuerpo":  "Inter"
+    "cuerpo": "Inter"
   },
-
   "logo_texto": "Π",
   "logo_simbolo": "Π",
-
   "textos": {
     "linkedin_post": {
-      "titulo":    "Pinakothḗke",
+      "titulo": "Pinakothḗke",
       "subtitulo": "Catálogos del saber personal",
-      "copy":      "Filosofía · Ciencia · Ingeniería"
+      "copy": "Filosofía · Ciencia · Ingeniería"
     },
     "linkedin_banner": {
-      "titulo":    "Pinakothḗke",
-      "copy":      "Una pinacoteca de ideas. Tres frentes. Un solo archivo."
+      "titulo": "Pinakothḗke",
+      "copy": "Una pinacoteca de ideas. Tres frentes. Un solo archivo."
     },
     "ig_post": {
-      "titulo":    "Π",
+      "titulo": "Π",
       "subtitulo": "Pinakothḗke",
-      "copy":      "Catálogos del saber personal"
+      "copy": "Catálogos del saber personal"
     },
     "ig_story": {
-      "titulo":    "Pinakothḗke",
-      "copy":      "Nuevo catálogo ↓"
+      "titulo": "Pinakothḗke",
+      "copy": "Nuevo catálogo ↓"
     },
     "x_post": {
-      "titulo":    "Pinakothḗke",
-      "copy":      "Catálogos del saber personal"
+      "titulo": "Pinakothḗke",
+      "copy": "Catálogos del saber personal"
     },
     "yt_thumbnail": {
-      "titulo":    "Pinakothḗke",
-      "copy":      "Ver"
+      "titulo": "Pinakothḗke",
+      "copy": "Ver"
     },
     "yt_banner": {
-      "titulo":    "Pinakothḗke",
+      "titulo": "Pinakothḗke",
       "subtitulo": "Filosofía · Ciencia · Ingeniería"
     },
     "og_general": {
-      "titulo":    "Pinakothḗke",
+      "titulo": "Pinakothḗke",
       "subtitulo": "Catálogos del saber personal",
-      "copy":      "Filosofía · Ciencia · Ingeniería"
+      "copy": "Filosofía · Ciencia · Ingeniería"
     },
     "whatsapp_perfil": {
-      "titulo":    "Π",
-      "copy":      "Pinakothḗke"
+      "titulo": "Π",
+      "copy": "Pinakothḗke"
     },
     "contra_cover": {
-      "titulo":    "Pinakothḗke",
-      "copy":      "Catálogos del saber personal"
+      "titulo": "Pinakothḗke",
+      "copy": "Catálogos del saber personal"
     }
   },
-
   "locales": {
     "en": {
       "tagline": "Catalogs of personal knowledge",
       "url": "https://www.stevenvallejo.com/en",
       "textos": {
         "linkedin_post": {
-          "titulo":    "Pinakothḗke",
+          "titulo": "Pinakothḗke",
           "subtitulo": "Catalogs of personal knowledge",
-          "copy":      "Philosophy · Science · Engineering"
+          "copy": "Philosophy · Science · Engineering"
         },
         "linkedin_banner": {
-          "titulo":    "Pinakothḗke",
-          "copy":      "A gallery of ideas. Three fronts. One archive."
+          "titulo": "Pinakothḗke",
+          "copy": "A gallery of ideas. Three fronts. One archive."
         },
         "ig_post": {
-          "titulo":    "Π",
+          "titulo": "Π",
           "subtitulo": "Pinakothḗke",
-          "copy":      "Catalogs of personal knowledge"
+          "copy": "Catalogs of personal knowledge"
         },
         "ig_story": {
-          "titulo":    "Pinakothḗke",
-          "copy":      "New catalog ↓"
+          "titulo": "Pinakothḗke",
+          "copy": "New catalog ↓"
         },
         "x_post": {
-          "titulo":    "Pinakothḗke",
-          "copy":      "Catalogs of personal knowledge"
+          "titulo": "Pinakothḗke",
+          "copy": "Catalogs of personal knowledge"
         },
         "yt_thumbnail": {
-          "titulo":    "Pinakothḗke",
-          "copy":      "Watch"
+          "titulo": "Pinakothḗke",
+          "copy": "Watch"
         },
         "yt_banner": {
-          "titulo":    "Pinakothḗke",
+          "titulo": "Pinakothḗke",
           "subtitulo": "Philosophy · Science · Engineering"
         },
         "og_general": {
-          "titulo":    "Pinakothḗke",
+          "titulo": "Pinakothḗke",
           "subtitulo": "Catalogs of personal knowledge",
-          "copy":      "Philosophy · Science · Engineering"
+          "copy": "Philosophy · Science · Engineering"
         },
         "contra_cover": {
-          "titulo":    "Pinakothḗke",
-          "copy":      "Catalogs of personal knowledge"
+          "titulo": "Pinakothḗke",
+          "copy": "Catalogs of personal knowledge"
         }
       }
     }

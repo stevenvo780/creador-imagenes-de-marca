@@ -1,0 +1,41 @@
+[      10ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://127.0.0.1:8040/assets/index-BGMGsjZN.js:202
+[  115778ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  115779ms] [WARNING] Combo 0 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  115781ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  115781ms] [WARNING] Combo 0 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  115873ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  115874ms] [WARNING] Combo 1 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  115876ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  115876ms] [WARNING] Combo 1 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  115973ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  115974ms] [WARNING] Combo 2 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  115976ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  115976ms] [WARNING] Combo 2 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  116075ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  116077ms] [WARNING] Combo 3 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  116078ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  116079ms] [WARNING] Combo 3 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  116173ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  116174ms] [WARNING] Combo 4 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  116175ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  116176ms] [WARNING] Combo 4 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  116273ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  116275ms] [WARNING] Combo 5 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  116277ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  116277ms] [WARNING] Combo 5 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  116377ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  116378ms] [WARNING] Combo 6 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  116380ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  116380ms] [WARNING] Combo 6 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  116471ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  116471ms] [WARNING] Combo 7 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  116473ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  116473ms] [WARNING] Combo 7 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  116572ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  116573ms] [WARNING] Combo 8 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  116575ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  116575ms] [WARNING] Combo 8 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  116671ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  116672ms] [WARNING] Combo 9 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2
+[  116673ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/batches/165/variations/upload:0
+[  116673ms] [WARNING] Combo 9 failed: API 422: [object Object] @ http://127.0.0.1:8040/assets/index-1X3DQpNe.js:2

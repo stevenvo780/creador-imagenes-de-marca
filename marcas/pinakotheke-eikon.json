@@ -26,58 +26,93 @@
   "logo_texto": "Eikón",
   "logo_simbolo": "◈",
   "textos": {
-    "og_product": {
-      "titulo": "Eikón",
-      "subtitulo": "Isotipos · Paletas · Iconsets · Kits sociales",
-      "etiqueta": "IDENTIDAD",
-      "copy": "Generador determinista de identidad de marca: isotipos, paletas, iconsets y kits sociales con WCAG AA. Sin IA, sin GPU, $0."
-    },
-    "og_general": {
-      "titulo": "Eikón",
-      "subtitulo": "Ingeniería · Pinakothḗke",
-      "etiqueta": "IDENTIDAD",
-      "copy": "Generador determinista de identidad de marca."
-    },
-    "linkedin_post": {
-      "titulo": "Eikón",
-      "subtitulo": "Ingeniería · Pinakothḗke",
-      "etiqueta": "IDENTIDAD",
-      "copy": "Generador determinista de identidad de marca. Sin IA, sin GPU: SVG procedural + WCAG AA, 100% reproducible."
-    },
-    "linkedin_banner": {
-      "titulo": "Eikón",
-      "etiqueta": "IDENTIDAD",
-      "copy": "Isotipos, paletas y kits de identidad — deterministas, WCAG AA, $0 en tokens."
-    },
     "ig_post": {
-      "titulo": "◈",
-      "subtitulo": "Eikón",
-      "etiqueta": "IDENTIDAD",
-      "copy": "Identidad de marca determinista"
+      "titulo": "Isotipos que rinden cuentas",
+      "subtitulo": "Paletas, logos, kits sociales WCAG AA",
+      "etiqueta": "assets WCAG AA",
+      "copy": "Eikón renderiza identidades: 46 templates, $0 en tokens, 100% reproducible. Sin IA, sin GPU, sin sorpresas — solo procedural determinista + WCAG AA auditado."
     },
     "ig_story": {
-      "titulo": "Eikón",
-      "copy": "Media kit completo ↓"
+      "titulo": "Isotipos que rinden cuentas",
+      "copy": "Procedural, auditable, repetible — todo lo demás, ruido."
+    },
+    "ig_carousel": {
+      "titulo": "Identidad sin gastar un token",
+      "numero": "46",
+      "copy": "Isotipos, paletas, iconsets, kits sociales y OG. SVG procedural, sin IA, sin GPU. WCAG AA, 100% reproducible. Con API y servidor MCP."
+    },
+    "ig_reel_cover": {
+      "titulo": "Isotipos que rinden cuentas",
+      "copy": "Procedural, auditable, repetible — todo lo demás, ruido."
+    },
+    "stat_card": {
+      "numero": "1302",
+      "etiqueta": "assets WCAG AA",
+      "copy": "Procedural, auditable, repetible — todo lo demás, ruido."
+    },
+    "ad_rectangle": {
+      "titulo": "Isotipos que rinden cuentas",
+      "numero": "1302",
+      "copy": "Procedural, auditable, repetible — todo lo demás, ruido.",
+      "cita": "Procedural, auditable, repetible — todo lo demás, ruido.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "Isotipos que rinden cuentas",
+      "copy": "Procedural, auditable, repetible — todo lo demás, ruido."
+    },
+    "og_general": {
+      "titulo": "Isotipos que rinden cuentas",
+      "subtitulo": "Paletas, logos, kits sociales WCAG AA",
+      "copy": "Eikón renderiza identidades: 46 templates, $0 en tokens, 100% reproducible. Sin IA, sin GPU, sin sorpresas — solo procedural determinista + WCAG AA auditado."
+    },
+    "og_product": {
+      "titulo": "Isotipos que rinden cuentas",
+      "subtitulo": "Paletas, logos, kits sociales WCAG AA",
+      "copy": "Eikón renderiza identidades: 46 templates, $0 en tokens, 100% reproducible. Sin IA, sin GPU, sin sorpresas — solo procedural determinista + WCAG AA auditado."
+    },
+    "web_hero": {
+      "titulo": "Isotipos que rinden cuentas",
+      "subtitulo": "Paletas, logos, kits sociales WCAG AA",
+      "copy": "Eikón renderiza identidades: 46 templates, $0 en tokens, 100% reproducible. Sin IA, sin GPU, sin sorpresas — solo procedural determinista + WCAG AA auditado."
+    },
+    "linkedin_post": {
+      "titulo": "Isotipos que rinden cuentas",
+      "subtitulo": "Paletas, logos, kits sociales WCAG AA",
+      "etiqueta": "assets WCAG AA",
+      "copy": "Eikón renderiza identidades: 46 templates, $0 en tokens, 100% reproducible. Sin IA, sin GPU, sin sorpresas — solo procedural determinista + WCAG AA auditado."
+    },
+    "linkedin_banner": {
+      "titulo": "Isotipos que rinden cuentas",
+      "etiqueta": "assets WCAG AA",
+      "copy": "Procedural, auditable, repetible — todo lo demás, ruido."
+    },
+    "fb_cover": {
+      "titulo": "Isotipos que rinden cuentas",
+      "subtitulo": "Paletas, logos, kits sociales WCAG AA",
+      "copy": "Eikón renderiza identidades: 46 templates, $0 en tokens, 100% reproducible. Sin IA, sin GPU, sin sorpresas — solo procedural determinista + WCAG AA auditado."
     },
     "x_post": {
-      "titulo": "Eikón",
-      "copy": "Generador determinista de identidad de marca"
+      "titulo": "Isotipos que rinden cuentas",
+      "copy": "Procedural, auditable, repetible — todo lo demás, ruido."
     },
     "yt_thumbnail": {
-      "titulo": "Eikón",
-      "copy": "Determinista · $0 ↓"
+      "titulo": "Isotipos que rinden cuentas",
+      "copy": "Procedural, auditable, repetible — todo lo demás, ruido."
     },
-    "yt_banner": {
-      "titulo": "Eikón",
-      "subtitulo": "Ingeniería · Pinakothḗke"
+    "poster_a4": {
+      "titulo": "Isotipos que rinden cuentas",
+      "subtitulo": "Paletas, logos, kits sociales WCAG AA",
+      "copy": "Eikón renderiza identidades: 46 templates, $0 en tokens, 100% reproducible. Sin IA, sin GPU, sin sorpresas — solo procedural determinista + WCAG AA auditado."
     },
     "whatsapp_perfil": {
-      "titulo": "◈",
-      "copy": "Eikón"
+      "titulo": "Isotipos que rinden cuentas"
     },
     "contra_cover": {
-      "titulo": "Eikón",
-      "copy": "Ingeniería · Pinakothḗke"
+      "titulo": "Isotipos que rinden cuentas",
+      "copy": "Paletas, logos, kits sociales WCAG AA"
     }
-  }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
 }

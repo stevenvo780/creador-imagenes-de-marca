@@ -26,48 +26,93 @@
   "logo_texto": "Xenía",
   "logo_simbolo": "◇",
   "textos": {
-    "linkedin_post": {
-      "titulo": "Xenía",
-      "subtitulo": "CRM para PYME · Pinakothḗke",
-      "copy": "El CRM que trata a los clientes como huéspedes."
-    },
-    "linkedin_banner": {
-      "titulo": "Xenía",
-      "copy": "Relaciones duraderas. Clientes como huéspedes de honor."
-    },
     "ig_post": {
-      "titulo": "◇",
-      "subtitulo": "Xenía",
-      "copy": "El CRM que trata a los clientes como huéspedes"
+      "titulo": "Un CRM que habla colombiano",
+      "subtitulo": "19 entidades, localizado de verdad",
+      "etiqueta": "PYME · NIT · COP",
+      "copy": "Pipeline kanban, contactos, empresas, negocios, actividades, cotizaciones y facturas. Hecho con React 19 + Vite + Express para una PYME colombiana."
     },
     "ig_story": {
-      "titulo": "Xenía",
-      "copy": "Pipeline kanban ↓"
+      "titulo": "El CRM que abre la puerta",
+      "copy": "No inventé nada. Solo le puse nombre a algo que tu abuela ya hacía."
     },
-    "x_post": {
-      "titulo": "Xenía",
-      "copy": "El CRM que trata a los clientes como huéspedes"
+    "ig_carousel": {
+      "titulo": "El CRM que abre la puerta",
+      "copy": "Hecho en Colombia para la PYME colombiana. 19 entidades, NIT, COP y departamentos de serie. Nada raro en eso.",
+      "numero": "19"
     },
-    "yt_thumbnail": {
-      "titulo": "Xenía",
-      "copy": "19 entidades · CRM PYME"
+    "ig_reel_cover": {
+      "titulo": "El CRM que abre la puerta",
+      "copy": "No inventé nada. Solo le puse nombre a algo que tu abuela ya hacía."
     },
-    "yt_banner": {
-      "titulo": "Xenía",
-      "subtitulo": "CRM para PYME · Pinakothḗke"
+    "stat_card": {
+      "numero": "19",
+      "etiqueta": "entidades",
+      "copy": "No inventé nada. Solo le puse nombre a algo que tu abuela ya hacía."
+    },
+    "ad_rectangle": {
+      "titulo": "El CRM que abre la puerta",
+      "numero": "19",
+      "copy": "No inventé nada. Solo le puse nombre a algo que tu abuela ya hacía.",
+      "cita": "No inventé nada. Solo le puse nombre a algo que tu abuela ya hacía.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "El CRM que abre la puerta",
+      "copy": "No inventé nada. Solo le puse nombre a algo que tu abuela ya hacía."
     },
     "og_general": {
-      "titulo": "Xenía",
-      "subtitulo": "CRM para PYME · Pinakothḗke",
-      "copy": "El CRM que trata a los clientes como huéspedes."
+      "titulo": "El CRM que abre la puerta",
+      "subtitulo": "CRM para la PYME colombiana, hecho en casa.",
+      "copy": "Hecho en Colombia para la PYME colombiana. 19 entidades, NIT, COP y departamentos de serie. Nada raro en eso."
+    },
+    "og_product": {
+      "titulo": "El CRM que abre la puerta",
+      "subtitulo": "CRM para la PYME colombiana, hecho en casa.",
+      "copy": "Hecho en Colombia para la PYME colombiana. 19 entidades, NIT, COP y departamentos de serie. Nada raro en eso."
+    },
+    "web_hero": {
+      "titulo": "El CRM que abre la puerta",
+      "subtitulo": "CRM para la PYME colombiana, hecho en casa.",
+      "copy": "Hecho en Colombia para la PYME colombiana. 19 entidades, NIT, COP y departamentos de serie. Nada raro en eso."
+    },
+    "linkedin_post": {
+      "titulo": "El CRM que abre la puerta",
+      "subtitulo": "CRM para la PYME colombiana, hecho en casa.",
+      "etiqueta": "entidades",
+      "copy": "Hecho en Colombia para la PYME colombiana. 19 entidades, NIT, COP y departamentos de serie. Nada raro en eso."
+    },
+    "linkedin_banner": {
+      "titulo": "El CRM que abre la puerta",
+      "etiqueta": "entidades",
+      "copy": "No inventé nada. Solo le puse nombre a algo que tu abuela ya hacía."
+    },
+    "fb_cover": {
+      "titulo": "El CRM que abre la puerta",
+      "subtitulo": "CRM para la PYME colombiana, hecho en casa.",
+      "copy": "Hecho en Colombia para la PYME colombiana. 19 entidades, NIT, COP y departamentos de serie. Nada raro en eso."
+    },
+    "x_post": {
+      "titulo": "El CRM que abre la puerta",
+      "copy": "No inventé nada. Solo le puse nombre a algo que tu abuela ya hacía."
+    },
+    "yt_thumbnail": {
+      "titulo": "El CRM que abre la puerta",
+      "copy": "No inventé nada. Solo le puse nombre a algo que tu abuela ya hacía."
+    },
+    "poster_a4": {
+      "titulo": "El CRM que abre la puerta",
+      "subtitulo": "CRM para la PYME colombiana, hecho en casa.",
+      "copy": "Hecho en Colombia para la PYME colombiana. 19 entidades, NIT, COP y departamentos de serie. Nada raro en eso."
     },
     "whatsapp_perfil": {
-      "titulo": "◇",
-      "copy": "Xenía"
+      "titulo": "El CRM que abre la puerta"
     },
     "contra_cover": {
-      "titulo": "Xenía",
-      "copy": "CRM para PYME · Pinakothḗke"
+      "titulo": "El CRM que abre la puerta",
+      "copy": "CRM para la PYME colombiana, hecho en casa."
     }
-  }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
 }

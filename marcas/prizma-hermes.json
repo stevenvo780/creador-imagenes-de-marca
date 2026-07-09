@@ -7,72 +7,70 @@
   "tono": "ágil, corporativo, conector",
   "simbolo": "⚡",
   "suite": "prizma",
-
   "paleta": {
-    "bg":           "#0c0e10",
-    "primario":     "#0c0e10",
-    "acento":       "#f0b94a",
-    "acento_2":     "#d4622e",
-    "acento_3":     "#43b5a6",
-    "texto":        "#f0ece6",
-    "texto_muted":  "#a09080",
-    "surface":      "#16120e"
+    "bg": "#0c0e10",
+    "primario": "#0c0e10",
+    "acento": "#f0b94a",
+    "acento_2": "#d4622e",
+    "acento_3": "#43b5a6",
+    "texto": "#f0ece6",
+    "texto_muted": "#a09080",
+    "surface": "#16120e"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #f0b94a 0%, #d4622e 55%, #9e3015 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 70% 30%, #1a120a 0%, #0c0e10 65%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 70% 30%, #1a120a 0%, #0c0e10 65%)",
   "tipografia": {
     "titulos": "Inter",
-    "cuerpo":  "Inter"
+    "cuerpo": "Inter"
   },
-
   "logo_texto": "Hermes",
   "logo_simbolo": "⚡",
-
   "textos": {
     "linkedin_post": {
-      "titulo":    "Hermes",
+      "titulo": "Hermes",
       "subtitulo": "Mensajería corporativa · Prizma",
-      "copy":      "Mensajería corporativa sin fricción."
+      "copy": "Mensajería corporativa sin fricción."
     },
     "linkedin_banner": {
-      "titulo":    "Hermes",
-      "copy":      "Conecta equipos. Elimina el ruido. Mueve la empresa."
+      "titulo": "Hermes",
+      "copy": "Conecta equipos. Elimina el ruido. Mueve la empresa."
     },
     "ig_post": {
-      "titulo":    "⚡",
-      "subtitulo": "Hermes",
-      "copy":      "Mensajería corporativa sin fricción"
+      "titulo": "Mensajería sin fricción.",
+      "subtitulo": "Conectá equipos. Callá el ruido.",
+      "etiqueta": "#sinruido",
+      "copy": "Hermes une a tus equipos en un solo hilo. Sin grupos duplicados, sin mensajes perdidos. El mensaje correcto llega a la persona correcta, siempre."
     },
     "ig_story": {
-      "titulo":    "Hermes",
-      "copy":      "Mensajería sin fricción ↓"
+      "titulo": "Hermes",
+      "copy": "Mensajería sin fricción ↓"
     },
     "x_post": {
-      "titulo":    "Hermes",
-      "copy":      "Mensajería corporativa sin fricción"
+      "titulo": "Hermes",
+      "copy": "Mensajería corporativa sin fricción"
     },
     "yt_thumbnail": {
-      "titulo":    "Hermes",
-      "copy":      "Mensajería sin fricción"
+      "titulo": "Hermes",
+      "copy": "Mensajería sin fricción"
     },
     "yt_banner": {
-      "titulo":    "Hermes",
+      "titulo": "Hermes",
       "subtitulo": "Mensajería corporativa · Prizma"
     },
     "og_general": {
-      "titulo":    "Hermes",
+      "titulo": "Hermes",
       "subtitulo": "Mensajería corporativa · Prizma",
-      "copy":      "Mensajería corporativa sin fricción."
+      "copy": "Mensajería corporativa sin fricción."
     },
     "whatsapp_perfil": {
-      "titulo":    "⚡",
-      "copy":      "Hermes"
+      "titulo": "⚡",
+      "copy": "Hermes"
     },
     "contra_cover": {
-      "titulo":    "Hermes",
-      "copy":      "Mensajería corporativa · Prizma"
+      "titulo": "Hermes",
+      "copy": "Mensajería corporativa · Prizma"
     }
-  }
+  },
+  "logo_style": "prisma_refraccion",
+  "logo_seed": 1412926217
 }

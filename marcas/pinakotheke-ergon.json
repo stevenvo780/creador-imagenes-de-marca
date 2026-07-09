@@ -7,72 +7,112 @@
   "tono": "productivo, pragmático, accesible",
   "simbolo": "▣",
   "frente": "ingenieria",
-
   "paleta": {
-    "bg":           "#0b1417",
-    "primario":     "#0b1417",
-    "acento":       "#43b5a6",
-    "acento_2":     "#2a7a70",
-    "acento_3":     "#A3E4D7",
-    "texto":        "#e8e0d4",
-    "texto_muted":  "#8fa3a8",
-    "surface":      "#131e22"
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_2": "#2a7a70",
+    "acento_3": "#A3E4D7",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #43b5a6 0%, #2a7a70 70%, #1a4a45 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 20% 60%, #131e22 0%, #0b1417 70%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 20% 60%, #131e22 0%, #0b1417 70%)",
   "tipografia": {
     "titulos": "Inter",
-    "cuerpo":  "Inter"
+    "cuerpo": "Inter"
   },
-
   "logo_texto": "Érgon",
   "logo_simbolo": "▣",
-
   "textos": {
-    "linkedin_post": {
-      "titulo":    "Érgon",
-      "subtitulo": "Starter kits PYME · Pinakothḗke",
-      "copy":      "Tres starter kits para PYMEs colombianas: CRM, horas y VPN. 80% construido, 20% a medida."
-    },
-    "linkedin_banner": {
-      "titulo":    "Érgon",
-      "copy":      "Turborepo con CRM, horas, VPN y landing. Listo para usar."
-    },
     "ig_post": {
-      "titulo":    "▣",
-      "subtitulo": "Érgon",
-      "copy":      "CRM, horas, VPN. Listos para customizar"
+      "titulo": "Turborepo PYME sin drama",
+      "subtitulo": "CRM, horas, VPN · 80% listo",
+      "etiqueta": "starter kits",
+      "copy": "Tres starter kits en un turborepo. Vienen armados 80%; vos customizás el 20% que necesitás. CRM para vender, tracker de horas, y VPN para la seguridad mínima decente. Sin que tengas que reinventar cada pieza desde cero."
     },
     "ig_story": {
-      "titulo":    "Érgon",
-      "copy":      "CRM, horas, VPN ↓"
+      "titulo": "Turborepo PYME sin drama",
+      "copy": "Si montar PYME software fuera emocionante, no necesitarías Érgon. Acá simplemente funciona."
     },
-    "x_post": {
-      "titulo":    "Érgon",
-      "copy":      "80% listo, 20% a medida. Tres kits PYME en un turborepo"
+    "ig_carousel": {
+      "titulo": "Turborepo PYME sin drama",
+      "copy": "Tres starter kits en un turborepo. Vienen armados 80%; vos customizás el 20% que necesitás. CRM para vender, tracker de horas, y VPN para la seguridad mínima decente. Sin que tengas que reinventar cada pieza desde cero.",
+      "numero": "3"
     },
-    "yt_thumbnail": {
-      "titulo":    "Érgon",
-      "copy":      "80% listo · 20% a medida"
+    "ig_reel_cover": {
+      "titulo": "Turborepo PYME sin drama",
+      "copy": "Si montar PYME software fuera emocionante, no necesitarías Érgon. Acá simplemente funciona."
     },
-    "yt_banner": {
-      "titulo":    "Érgon",
-      "subtitulo": "Starter kits PYME · Pinakothḗke"
+    "stat_card": {
+      "numero": "3",
+      "etiqueta": "starter kits",
+      "copy": "Si montar PYME software fuera emocionante, no necesitarías Érgon. Acá simplemente funciona."
+    },
+    "ad_rectangle": {
+      "titulo": "Turborepo PYME sin drama",
+      "numero": "3",
+      "copy": "Si montar PYME software fuera emocionante, no necesitarías Érgon. Acá simplemente funciona.",
+      "cita": "Si montar PYME software fuera emocionante, no necesitarías Érgon. Acá simplemente funciona.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "Turborepo PYME sin drama",
+      "copy": "Si montar PYME software fuera emocionante, no necesitarías Érgon. Acá simplemente funciona."
     },
     "og_general": {
-      "titulo":    "Érgon",
-      "subtitulo": "Starter kits PYME · Pinakothḗke",
-      "copy":      "Tres starter kits para PYMEs: CRM, horas, VPN. 80% construido, 20% a medida."
+      "titulo": "Turborepo PYME sin drama",
+      "subtitulo": "CRM, horas, VPN · 80% listo",
+      "copy": "Tres starter kits en un turborepo. Vienen armados 80%; vos customizás el 20% que necesitás. CRM para vender, tracker de horas, y VPN para la seguridad mínima decente. Sin que tengas que reinventar cada pieza desde cero."
+    },
+    "og_product": {
+      "titulo": "Turborepo PYME sin drama",
+      "subtitulo": "CRM, horas, VPN · 80% listo",
+      "copy": "Tres starter kits en un turborepo. Vienen armados 80%; vos customizás el 20% que necesitás. CRM para vender, tracker de horas, y VPN para la seguridad mínima decente. Sin que tengas que reinventar cada pieza desde cero."
+    },
+    "web_hero": {
+      "titulo": "Turborepo PYME sin drama",
+      "subtitulo": "CRM, horas, VPN · 80% listo",
+      "copy": "Tres starter kits en un turborepo. Vienen armados 80%; vos customizás el 20% que necesitás. CRM para vender, tracker de horas, y VPN para la seguridad mínima decente. Sin que tengas que reinventar cada pieza desde cero."
+    },
+    "linkedin_post": {
+      "titulo": "Turborepo PYME sin drama",
+      "subtitulo": "CRM, horas, VPN · 80% listo",
+      "etiqueta": "starter kits",
+      "copy": "Tres starter kits en un turborepo. Vienen armados 80%; vos customizás el 20% que necesitás. CRM para vender, tracker de horas, y VPN para la seguridad mínima decente. Sin que tengas que reinventar cada pieza desde cero."
+    },
+    "linkedin_banner": {
+      "titulo": "Turborepo PYME sin drama",
+      "etiqueta": "starter kits",
+      "copy": "Si montar PYME software fuera emocionante, no necesitarías Érgon. Acá simplemente funciona."
+    },
+    "fb_cover": {
+      "titulo": "Turborepo PYME sin drama",
+      "subtitulo": "CRM, horas, VPN · 80% listo",
+      "copy": "Tres starter kits en un turborepo. Vienen armados 80%; vos customizás el 20% que necesitás. CRM para vender, tracker de horas, y VPN para la seguridad mínima decente. Sin que tengas que reinventar cada pieza desde cero."
+    },
+    "x_post": {
+      "titulo": "Turborepo PYME sin drama",
+      "copy": "Si montar PYME software fuera emocionante, no necesitarías Érgon. Acá simplemente funciona."
+    },
+    "yt_thumbnail": {
+      "titulo": "Turborepo PYME sin drama",
+      "copy": "Si montar PYME software fuera emocionante, no necesitarías Érgon. Acá simplemente funciona."
+    },
+    "poster_a4": {
+      "titulo": "Tres kits, 80% hechos",
+      "subtitulo": "Pagás solo el 20% a tu medida",
+      "copy": "CRM en React+Vite+Express. Hours Tracker en Next.js. VPN Manager en Flask+Docker. Lo común resuelto, lo específico a medida. Sacás a producción sin pagar el discovery completo."
     },
     "whatsapp_perfil": {
-      "titulo":    "▣",
-      "copy":      "Érgon"
+      "titulo": "Turborepo PYME sin drama"
     },
     "contra_cover": {
-      "titulo":    "Érgon",
-      "copy":      "Starter kits PYME · Pinakothḗke"
+      "titulo": "Turborepo PYME sin drama",
+      "copy": "CRM, horas, VPN · 80% listo"
     }
-  }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
 }

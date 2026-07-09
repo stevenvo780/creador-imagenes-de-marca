@@ -419,12 +419,28 @@ def _generate_grid(params: IsotypeParams) -> str:
 
 # Despacho de estilos → generador. Añadir un estilo nuevo es: escribir su
 # función y registrarla aquí + agregar la opción en config/axes.json.
+def _generate_lemniscate(params: IsotypeParams) -> str:
+    """Lemniscata (infinito ∞) — la marca personal de Steven Vallejo. Dos lazos entrelazados."""
+    c = params.size / 2
+    r = params.size * 0.185
+    off = params.size * 0.205
+    sw = max(2.0, params.size * 0.055)
+    parts = [
+        create_svg_circle(c - off, c, r, fill="none", stroke=params.primary_color, stroke_width=sw),
+        create_svg_circle(c + off, c, r, fill="none", stroke=params.accent_color, stroke_width=sw),
+        create_svg_circle(c, c, params.size * 0.028, fill=params.accent_color),
+    ]
+    return _wrap(params, parts)
+
+
+
 _GENERATORS = {
     "lettermark": _generate_lettermark,
     "geometric": _generate_geometric,
     "abstract": _generate_abstract,
     "enclosure": _generate_enclosure,
     "orbital": _generate_orbital,
+    "lemniscate": _generate_lemniscate,
     "facet": _generate_facet,
     "concentric": _generate_concentric,
     "burst": _generate_burst,

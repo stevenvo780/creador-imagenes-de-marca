@@ -68,6 +68,12 @@
     "contra_cover": {
       "titulo": "Fenomenología urbana",
       "copy": "Fenomenología · Pinakothḗke"
+    },
+    "ig_carousel": {
+      "titulo": "Fenomenología urbana",
+      "copy": "La experiencia vivida de los espacios: cómo el cuerpo habita, la memoria colectiva transforma el lugar y Medellín existe en la intersección de significados que construimos al caminar. Filosofía encarnada en la calle."
     }
-  }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
 }

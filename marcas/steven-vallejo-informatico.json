@@ -7,120 +7,159 @@
   "url_en": "https://informatico.stevenvallejo.com",
   "tono": "técnico, preciso, pragmático",
   "simbolo": "lemniscata (∞)",
-
   "paleta": {
-    "bg":           "#0b1417",
-    "primario":     "#0b1417",
-    "acento":       "#43b5a6",
-    "acento_2":     "#e0a85e",
-    "acento_3":     "#1a9c8c",
-    "texto":        "#e8e0d4",
-    "texto_muted":  "#8fa3a8",
-    "surface":      "#152028"
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_2": "#e0a85e",
+    "acento_3": "#1a9c8c",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#152028"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #43b5a6 0%, #1a9c8c 60%, #0b1417 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 20% 50%, #0d1e24 0%, #0b1417 60%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 20% 50%, #0d1e24 0%, #0b1417 60%)",
   "tipografia": {
     "titulos": "JetBrains Mono",
-    "cuerpo":  "JetBrains Mono"
+    "cuerpo": "JetBrains Mono"
   },
-
   "logo_texto": "SV",
   "logo_simbolo": "∞",
-
   "textos": {
-    "linkedin_post": {
-      "titulo":    "Steven Vallejo · Informático",
-      "subtitulo": "Arquitectura de software · Sistemas de IA · Backend",
-      "copy":      "Traduzco sistemas complejos en software claro, mantenible y operable."
-    },
-    "linkedin_banner": {
-      "titulo":    "Steven Vallejo",
-      "copy":      "Backend, IA aplicada y arquitectura pragmática."
-    },
     "ig_post": {
-      "titulo":    "∞",
-      "subtitulo": "Steven Vallejo · Informático",
-      "copy":      "Arquitectura de software y sistemas de IA"
+      "titulo": "Sistemas que no piden permiso",
+      "subtitulo": "Backend, IA y plataformas multi-tenant ",
+      "etiqueta": "productos Mouseîon ",
+      "copy": "Doce años de backend, IA agéntica y devtools multi-tenant. Te entrego software que se sostiene solo cuando nadie lo mira, sin aspavientos ni demos que se rompen al primer pico."
     },
     "ig_story": {
-      "titulo":    "Steven\nVallejo",
-      "copy":      "Tecnología ↓"
+      "titulo": "Sistemas que no piden permiso",
+      "copy": "La mejor feature es la que no tuve que añadir."
     },
-    "x_post": {
-      "titulo":    "Steven Vallejo",
-      "copy":      "Arquitectura de software, sistemas de IA y oficio técnico"
+    "ig_carousel": {
+      "titulo": "Sistemas que no piden permiso",
+      "copy": "Doce años de backend, IA agéntica y devtools multi-tenant. Te entrego software que se sostiene solo cuando nadie lo mira, sin aspavientos ni demos que se rompen al primer pico.",
+      "numero": "14"
     },
-    "yt_thumbnail": {
-      "titulo":    "Steven Vallejo",
-      "copy":      "Ver"
+    "ig_reel_cover": {
+      "titulo": "Sistemas que no piden permiso",
+      "copy": "La mejor feature es la que no tuve que añadir."
     },
-    "yt_banner": {
-      "titulo":    "Steven Vallejo",
-      "subtitulo": "Software · IA · Ingeniería"
+    "stat_card": {
+      "numero": "14",
+      "etiqueta": "productos Mouseîon ",
+      "copy": "La mejor feature es la que no tuve que añadir."
+    },
+    "ad_rectangle": {
+      "titulo": "Sistemas que no piden permiso",
+      "numero": "14",
+      "copy": "La mejor feature es la que no tuve que añadir.",
+      "cita": "La mejor feature es la que no tuve que añadir.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "Sistemas que no piden permiso",
+      "copy": "La mejor feature es la que no tuve que añadir."
     },
     "og_general": {
-      "titulo":    "Steven Vallejo · Informático",
-      "subtitulo": "Arquitectura de software · Sistemas de IA",
-      "copy":      "Traduzco sistemas complejos en software claro, mantenible y operable."
+      "titulo": "Sistemas que no piden permiso",
+      "subtitulo": "Backend, IA y plataformas multi-tenant ",
+      "copy": "Doce años de backend, IA agéntica y devtools multi-tenant. Te entrego software que se sostiene solo cuando nadie lo mira, sin aspavientos ni demos que se rompen al primer pico."
+    },
+    "og_product": {
+      "titulo": "Sistemas que no piden permiso",
+      "subtitulo": "Backend, IA y plataformas multi-tenant ",
+      "copy": "Doce años de backend, IA agéntica y devtools multi-tenant. Te entrego software que se sostiene solo cuando nadie lo mira, sin aspavientos ni demos que se rompen al primer pico."
+    },
+    "web_hero": {
+      "titulo": "Sistemas que no piden permiso",
+      "subtitulo": "Backend, IA y plataformas multi-tenant ",
+      "copy": "Doce años de backend, IA agéntica y devtools multi-tenant. Te entrego software que se sostiene solo cuando nadie lo mira, sin aspavientos ni demos que se rompen al primer pico."
+    },
+    "linkedin_post": {
+      "titulo": "Sistemas que no piden permiso",
+      "subtitulo": "Backend, IA y plataformas multi-tenant ",
+      "etiqueta": "productos Mouseîon ",
+      "copy": "Doce años de backend, IA agéntica y devtools multi-tenant. Te entrego software que se sostiene solo cuando nadie lo mira, sin aspavientos ni demos que se rompen al primer pico."
+    },
+    "linkedin_banner": {
+      "titulo": "Sistemas que no piden permiso",
+      "etiqueta": "productos Mouseîon ",
+      "copy": "La mejor feature es la que no tuve que añadir."
+    },
+    "fb_cover": {
+      "titulo": "Sistemas que no piden permiso",
+      "subtitulo": "Backend, IA y plataformas multi-tenant ",
+      "copy": "Doce años de backend, IA agéntica y devtools multi-tenant. Te entrego software que se sostiene solo cuando nadie lo mira, sin aspavientos ni demos que se rompen al primer pico."
+    },
+    "x_post": {
+      "titulo": "Sistemas que no piden permiso",
+      "copy": "La mejor feature es la que no tuve que añadir."
+    },
+    "yt_thumbnail": {
+      "titulo": "Sistemas que no piden permiso",
+      "copy": "La mejor feature es la que no tuve que añadir."
+    },
+    "poster_a4": {
+      "titulo": "Sistemas que no piden permiso",
+      "subtitulo": "Backend, IA y plataformas multi-tenant ",
+      "copy": "Doce años de backend, IA agéntica y devtools multi-tenant. Te entrego software que se sostiene solo cuando nadie lo mira, sin aspavientos ni demos que se rompen al primer pico."
     },
     "whatsapp_perfil": {
-      "titulo":    "SV",
-      "copy":      "∞"
+      "titulo": "Sistemas que no piden permiso"
     },
     "contra_cover": {
-      "titulo":    "Steven Vallejo",
-      "copy":      "Arquitectura de software y sistemas de IA"
+      "titulo": "Sistemas que no piden permiso",
+      "copy": "Backend, IA y plataformas multi-tenant "
     }
   },
-
   "locales": {
     "en": {
       "tagline": "Software architecture, AI systems, and the craft of clean code",
       "url": "https://informatico.stevenvallejo.com",
       "textos": {
         "linkedin_post": {
-          "titulo":    "Steven Vallejo · Software Architect",
+          "titulo": "Steven Vallejo · Software Architect",
           "subtitulo": "Software Architecture · AI Systems · Backend",
-          "copy":      "Translating complex systems into clear, maintainable, operable software."
+          "copy": "Translating complex systems into clear, maintainable, operable software."
         },
         "linkedin_banner": {
-          "titulo":    "Steven Vallejo",
-          "copy":      "Backend, applied AI, and pragmatic architecture."
+          "titulo": "Steven Vallejo",
+          "copy": "Backend, applied AI, and pragmatic architecture."
         },
         "ig_post": {
-          "titulo":    "∞",
+          "titulo": "∞",
           "subtitulo": "Steven Vallejo · Computer Scientist",
-          "copy":      "Software architecture and AI systems"
+          "copy": "Software architecture and AI systems"
         },
         "ig_story": {
-          "titulo":    "Steven\nVallejo",
-          "copy":      "Tech ↓"
+          "titulo": "Steven\nVallejo",
+          "copy": "Tech ↓"
         },
         "x_post": {
-          "titulo":    "Steven Vallejo",
-          "copy":      "Software architecture, AI systems, and the craft of clean code"
+          "titulo": "Steven Vallejo",
+          "copy": "Software architecture, AI systems, and the craft of clean code"
         },
         "yt_thumbnail": {
-          "titulo":    "Steven Vallejo",
-          "copy":      "Watch"
+          "titulo": "Steven Vallejo",
+          "copy": "Watch"
         },
         "yt_banner": {
-          "titulo":    "Steven Vallejo",
+          "titulo": "Steven Vallejo",
           "subtitulo": "Software · AI · Engineering"
         },
         "og_general": {
-          "titulo":    "Steven Vallejo · Software Architect",
+          "titulo": "Steven Vallejo · Software Architect",
           "subtitulo": "Software Architecture · AI Systems",
-          "copy":      "Translating complex systems into clear, maintainable, operable software."
+          "copy": "Translating complex systems into clear, maintainable, operable software."
         },
         "contra_cover": {
-          "titulo":    "Steven Vallejo",
-          "copy":      "Software Architecture & AI Systems"
+          "titulo": "Steven Vallejo",
+          "copy": "Software Architecture & AI Systems"
         }
       }
     }
-  }
+  },
+  "logo_style": "lemniscate",
+  "logo_seed": 770077
 }

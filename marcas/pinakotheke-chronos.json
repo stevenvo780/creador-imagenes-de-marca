@@ -7,72 +7,112 @@
   "tono": "preciso, minimalista, profesional",
   "simbolo": "⏱",
   "frente": "ingenieria",
-
   "paleta": {
-    "bg":           "#0b1417",
-    "primario":     "#0b1417",
-    "acento":       "#43b5a6",
-    "acento_2":     "#2a7a70",
-    "acento_3":     "#A3E4D7",
-    "texto":        "#e8e0d4",
-    "texto_muted":  "#8fa3a8",
-    "surface":      "#131e22"
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_2": "#2a7a70",
+    "acento_3": "#A3E4D7",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #43b5a6 0%, #2a7a70 60%, #163a35 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 70% 30%, #131e22 0%, #0b1417 70%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 70% 30%, #131e22 0%, #0b1417 70%)",
   "tipografia": {
     "titulos": "Inter",
-    "cuerpo":  "JetBrains Mono"
+    "cuerpo": "JetBrains Mono"
   },
-
   "logo_texto": "Chrónos",
   "logo_simbolo": "⏱",
-
   "textos": {
-    "linkedin_post": {
-      "titulo":    "Chrónos",
-      "subtitulo": "Seguimiento de horas · Pinakothḗke",
-      "copy":      "Horas, tarifa y cuentas de cobro para freelancers en Colombia. Registro individual y masivo, exportación PDF."
-    },
-    "linkedin_banner": {
-      "titulo":    "Chrónos",
-      "copy":      "Horas, facturación y reportes para el freelance moderno."
-    },
     "ig_post": {
-      "titulo":    "⏱",
-      "subtitulo": "Chrónos",
-      "copy":      "Horas, tarifa, factura. Para el freelance colombiano"
+      "titulo": "Registrá. Cobrá. Listo.",
+      "subtitulo": "Control de horas para freelancers colombianos",
+      "etiqueta": "",
+      "copy": "Entrá tus horas — una a una o en lote —, configurá tu tarifa, y Chrónos te arma la cuenta de cobro en PDF. Filtrá por día de la semana, llená los huecos con promedios cuando se te olvidó marcar, exportá cuando el cliente pregunte. Hecho en Next.js 15 + SQLite. Sin trampa ni cartón. ⏱"
     },
     "ig_story": {
-      "titulo":    "Chrónos",
-      "copy":      "Cuentas de cobro PDF ↓"
+      "titulo": "Registrá. Cobrá. Listo.",
+      "copy": "Ojalá hubiera tenido esto cada vez que armé una cuenta a mano."
     },
-    "x_post": {
-      "titulo":    "Chrónos",
-      "copy":      "Horas registradas, cuentas claras. PDF en un click"
+    "ig_carousel": {
+      "titulo": "Registrá. Cobrá. Listo.",
+      "copy": "Entrá tus horas — una a una o en lote —, configurá tu tarifa, y Chrónos te arma la cuenta de cobro en PDF. Filtrá por día de la semana, llená los huecos con promedios cuando se te olvidó marcar, exportá cuando el cliente pregunte. Hecho en Next.js 15 + SQLite. Sin trampa ni cartón. ⏱",
+      "numero": ""
     },
-    "yt_thumbnail": {
-      "titulo":    "Chrónos",
-      "copy":      "Horas → Cuenta de cobro"
+    "ig_reel_cover": {
+      "titulo": "Tus horas freelance, sin Excel",
+      "copy": "Registro masivo, tarifa configurable, export a PDF. Tus cuentas viven en tu máquina."
     },
-    "yt_banner": {
-      "titulo":    "Chrónos",
-      "subtitulo": "Seguimiento de horas · Pinakothḗke"
+    "stat_card": {
+      "numero": "∞",
+      "etiqueta": "",
+      "copy": "Ojalá hubiera tenido esto cada vez que armé una cuenta a mano."
+    },
+    "ad_rectangle": {
+      "titulo": "Registrá. Cobrá. Listo.",
+      "numero": "",
+      "copy": "Ojalá hubiera tenido esto cada vez que armé una cuenta a mano.",
+      "cita": "Ojalá hubiera tenido esto cada vez que armé una cuenta a mano.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "Registrá. Cobrá. Listo.",
+      "copy": "Ojalá hubiera tenido esto cada vez que armé una cuenta a mano."
     },
     "og_general": {
-      "titulo":    "Chrónos",
-      "subtitulo": "Seguimiento de horas · Pinakothḗke",
-      "copy":      "Horas registradas, cuentas claras. Factura PDF en un click."
+      "titulo": "Registrá. Cobrá. Listo.",
+      "subtitulo": "Control de horas para freelancers colombianos",
+      "copy": "Entrá tus horas — una a una o en lote —, configurá tu tarifa, y Chrónos te arma la cuenta de cobro en PDF. Filtrá por día de la semana, llená los huecos con promedios cuando se te olvidó marcar, exportá cuando el cliente pregunte. Hecho en Next.js 15 + SQLite. Sin trampa ni cartón. ⏱"
+    },
+    "og_product": {
+      "titulo": "Registrá. Cobrá. Listo.",
+      "subtitulo": "Control de horas para freelancers colombianos",
+      "copy": "Entrá tus horas — una a una o en lote —, configurá tu tarifa, y Chrónos te arma la cuenta de cobro en PDF. Filtrá por día de la semana, llená los huecos con promedios cuando se te olvidó marcar, exportá cuando el cliente pregunte. Hecho en Next.js 15 + SQLite. Sin trampa ni cartón. ⏱"
+    },
+    "web_hero": {
+      "titulo": "Registrá. Cobrá. Listo.",
+      "subtitulo": "Control de horas para freelancers colombianos",
+      "copy": "Entrá tus horas — una a una o en lote —, configurá tu tarifa, y Chrónos te arma la cuenta de cobro en PDF. Filtrá por día de la semana, llená los huecos con promedios cuando se te olvidó marcar, exportá cuando el cliente pregunte. Hecho en Next.js 15 + SQLite. Sin trampa ni cartón. ⏱"
+    },
+    "linkedin_post": {
+      "titulo": "Registrá. Cobrá. Listo.",
+      "subtitulo": "Control de horas para freelancers colombianos",
+      "etiqueta": "",
+      "copy": "Entrá tus horas — una a una o en lote —, configurá tu tarifa, y Chrónos te arma la cuenta de cobro en PDF. Filtrá por día de la semana, llená los huecos con promedios cuando se te olvidó marcar, exportá cuando el cliente pregunte. Hecho en Next.js 15 + SQLite. Sin trampa ni cartón. ⏱"
+    },
+    "linkedin_banner": {
+      "titulo": "Registrá. Cobrá. Listo.",
+      "etiqueta": "",
+      "copy": "Ojalá hubiera tenido esto cada vez que armé una cuenta a mano."
+    },
+    "fb_cover": {
+      "titulo": "Registrá. Cobrá. Listo.",
+      "subtitulo": "Control de horas para freelancers colombianos",
+      "copy": "Entrá tus horas — una a una o en lote —, configurá tu tarifa, y Chrónos te arma la cuenta de cobro en PDF. Filtrá por día de la semana, llená los huecos con promedios cuando se te olvidó marcar, exportá cuando el cliente pregunte. Hecho en Next.js 15 + SQLite. Sin trampa ni cartón. ⏱"
+    },
+    "x_post": {
+      "titulo": "Registrá. Cobrá. Listo.",
+      "copy": "Ojalá hubiera tenido esto cada vez que armé una cuenta a mano."
+    },
+    "yt_thumbnail": {
+      "titulo": "Registrá. Cobrá. Listo.",
+      "copy": "Ojalá hubiera tenido esto cada vez que armé una cuenta a mano."
+    },
+    "poster_a4": {
+      "titulo": "Registrá. Cobrá. Listo.",
+      "subtitulo": "Control de horas para freelancers colombianos",
+      "copy": "Entrá tus horas — una a una o en lote —, configurá tu tarifa, y Chrónos te arma la cuenta de cobro en PDF. Filtrá por día de la semana, llená los huecos con promedios cuando se te olvidó marcar, exportá cuando el cliente pregunte. Hecho en Next.js 15 + SQLite. Sin trampa ni cartón. ⏱"
     },
     "whatsapp_perfil": {
-      "titulo":    "⏱",
-      "copy":      "Chrónos"
+      "titulo": "Registrá. Cobrá. Listo."
     },
     "contra_cover": {
-      "titulo":    "Chrónos",
-      "copy":      "Seguimiento de horas · Pinakothḗke"
+      "titulo": "Registrá. Cobrá. Listo.",
+      "copy": "Control de horas para freelancers colombianos"
     }
-  }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
 }

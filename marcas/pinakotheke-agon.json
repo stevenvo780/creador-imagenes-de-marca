@@ -7,169 +7,112 @@
   "tono": "dialéctico, combativo, preciso",
   "simbolo": "⚔",
   "frente": "filosofia",
-
   "paleta": {
-    "bg":           "#0b1417",
-    "primario":     "#0b1417",
-    "acento":       "#e0a85e",
-    "acento_2":     "#c0522a",
-    "acento_3":     "#b8873a",
-    "texto":        "#e8e0d4",
-    "texto_muted":  "#8fa3a8",
-    "surface":      "#131e22"
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#e0a85e",
+    "acento_2": "#c0522a",
+    "acento_3": "#b8873a",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #e0a85e 0%, #c0522a 50%, #8b3a1a 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 25% 45%, #131e22 0%, #0b1417 70%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 25% 45%, #131e22 0%, #0b1417 70%)",
   "tipografia": {
     "titulos": "Cormorant Garamond",
-    "cuerpo":  "Inter"
+    "cuerpo": "Inter"
   },
-
   "logo_texto": "Agón",
   "logo_simbolo": "⚔",
-
   "textos": {
-    "linkedin_post": {
-      "titulo":    "Modera debates con rigor filosófico",
-      "subtitulo": "Agón · Debate suite · Pinakothḗke",
-      "copy":      "Timer, turnos, detección de falacias y scoring integrados. PWA instalable con uso offline — porque una conversación que importa merece una infraestructura que importe."
-    },
-    "linkedin_banner": {
-      "titulo":    "Agón — Debate Suite",
-      "copy":      "Timer · Turnos · Falacias · Scoring · Simulador de dinámicas · PWA offline"
-    },
     "ig_post": {
-      "titulo":    "⚔",
-      "subtitulo": "Agón · El arte del debate riguroso",
-      "copy":      "Modera cualquier debate con timer, turnos y detección de falacias. Offline-ready."
+      "titulo": "Un debate digno de ti",
+      "subtitulo": "Moderador PWA offline · Turnos · Falacias · Simulador",
+      "etiqueta": "",
+      "copy": "Cronómetro, turnos, detección de falacias, scoring y autómata celular para dinámicas complejas. No es mágico (es código). Pero sí hace que debatir sea más riguroso y menos grito puro."
     },
     "ig_story": {
-      "titulo":    "Agón",
-      "copy":      "Debate estructurado. Sin ruido. ⚔"
-    },
-    "ig_reel_cover": {
-      "titulo":    "⚔ Agón",
-      "copy":      "El debate que merece una herramienta seria"
+      "titulo": "Un debate digno de ti",
+      "copy": "Debatir bien duele más que golpear fuerte. Agón hace que valga la pena."
     },
     "ig_carousel": {
-      "titulo":    "¿Por qué los debates sin herramienta fallan?",
-      "subtitulo": "Agón lo resuelve",
-      "copy":      "Timer · Turnos · Falacias · Simulador de dinámicas complejas"
+      "titulo": "Un debate digno de ti",
+      "copy": "Cronómetro, turnos, detección de falacias, scoring y autómata celular para dinámicas complejas. No es mágico (es código). Pero sí hace que debatir sea más riguroso y menos grito puro.",
+      "numero": ""
     },
-    "x_post": {
-      "titulo":    "Agón · Debate Suite",
-      "copy":      "Modera debates con rigor: timer, turnos, detección de falacias y simulador de autómata celular. PWA offline. agon.stevenvallejo.com"
+    "ig_reel_cover": {
+      "titulo": "Un debate digno de ti",
+      "copy": "Debatir bien duele más que golpear fuerte. Agón hace que valga la pena."
     },
-    "x_header": {
-      "titulo":    "Agón",
-      "subtitulo": "El arte del debate riguroso · agon.stevenvallejo.com",
-      "copy":      "Timer · Turnos · Falacias · Simulador · PWA offline"
+    "stat_card": {
+      "numero": "∞",
+      "etiqueta": "",
+      "copy": "Debatir bien duele más que golpear fuerte. Agón hace que valga la pena."
     },
-    "yt_thumbnail": {
-      "titulo":    "Agón ⚔",
-      "copy":      "Cómo moderar un debate riguroso"
+    "ad_rectangle": {
+      "titulo": "Un debate digno de ti",
+      "numero": "",
+      "copy": "Debatir bien duele más que golpear fuerte. Agón hace que valga la pena.",
+      "cita": "Debatir bien duele más que golpear fuerte. Agón hace que valga la pena.",
+      "autor": "Steven Vallejo"
     },
-    "yt_banner": {
-      "titulo":    "Agón — Debate Suite",
-      "subtitulo": "Timer · Turnos · Falacias · Simulador de dinámicas · Pinakothḗke"
+    "ad_leaderboard": {
+      "titulo": "Un debate digno de ti",
+      "copy": "Debatir bien duele más que golpear fuerte. Agón hace que valga la pena."
     },
     "og_general": {
-      "titulo":    "Agón — Moderador de debates",
-      "subtitulo": "Debate suite · Pinakothḗke",
-      "copy":      "PWA con timer, gestión de turnos, detección de falacias y simulador de dinámicas con autómata celular. Instalable y offline-ready."
+      "titulo": "Un debate digno de ti",
+      "subtitulo": "Moderador PWA offline · Turnos · Falacias · Simulador",
+      "copy": "Cronómetro, turnos, detección de falacias, scoring y autómata celular para dinámicas complejas. No es mágico (es código). Pero sí hace que debatir sea más riguroso y menos grito puro."
     },
     "og_product": {
-      "titulo":    "Agón",
-      "subtitulo": "Moderador de debates · agon.stevenvallejo.com",
-      "copy":      "Herramienta filosófica para el debate estructurado: timer, turnos, scoring, falacias y simulador de emergencias complejas."
-    },
-    "whatsapp_perfil": {
-      "titulo":    "⚔",
-      "copy":      "Agón"
-    },
-    "contra_cover": {
-      "titulo":    "Agón",
-      "copy":      "El arte del debate riguroso · Debate suite · Pinakothḗke"
-    },
-    "fb_cover": {
-      "titulo":    "Agón · Debate Suite",
-      "subtitulo": "El arte del debate riguroso",
-      "copy":      "PWA offline · Timer · Turnos · Falacias · Simulador · agon.stevenvallejo.com"
-    },
-    "tiktok_cover": {
-      "titulo":    "⚔ Agón",
-      "copy":      "Debate sin ruido"
+      "titulo": "Un debate digno de ti",
+      "subtitulo": "Moderador PWA offline · Turnos · Falacias · Simulador",
+      "copy": "Cronómetro, turnos, detección de falacias, scoring y autómata celular para dinámicas complejas. No es mágico (es código). Pero sí hace que debatir sea más riguroso y menos grito puro."
     },
     "web_hero": {
-      "titulo":    "El arte del debate riguroso",
-      "subtitulo": "Agón · Debate Suite · Pinakothḗke",
-      "copy":      "Modera debates con timer, turnos, detección de falacias y un simulador de dinámicas con autómata celular. PWA instalable, funciona sin conexión."
+      "titulo": "Un debate digno de ti",
+      "subtitulo": "Moderador PWA offline · Turnos · Falacias · Simulador",
+      "copy": "Cronómetro, turnos, detección de falacias, scoring y autómata celular para dinámicas complejas. No es mágico (es código). Pero sí hace que debatir sea más riguroso y menos grito puro."
     },
-    "web_hero_mobile": {
-      "titulo":    "Agón",
-      "subtitulo": "El debate que merece rigor",
-      "copy":      "Timer · Turnos · Falacias · Simulador · Offline"
+    "linkedin_post": {
+      "titulo": "Un debate digno de ti",
+      "subtitulo": "Moderador PWA offline · Turnos · Falacias · Simulador",
+      "etiqueta": "",
+      "copy": "Cronómetro, turnos, detección de falacias, scoring y autómata celular para dinámicas complejas. No es mágico (es código). Pero sí hace que debatir sea más riguroso y menos grito puro."
     },
-    "email_header": {
-      "titulo":    "Agón — Debate Suite",
-      "copy":      "El arte del debate riguroso · agon.stevenvallejo.com"
+    "linkedin_banner": {
+      "titulo": "Un debate digno de ti",
+      "etiqueta": "",
+      "copy": "Debatir bien duele más que golpear fuerte. Agón hace que valga la pena."
     },
-    "banner_ad": {
-      "titulo":    "Agón ⚔",
-      "copy":      "Modera debates con rigor filosófico. PWA offline. agon.stevenvallejo.com"
+    "fb_cover": {
+      "titulo": "Un debate digno de ti",
+      "subtitulo": "Moderador PWA offline · Turnos · Falacias · Simulador",
+      "copy": "Cronómetro, turnos, detección de falacias, scoring y autómata celular para dinámicas complejas. No es mágico (es código). Pero sí hace que debatir sea más riguroso y menos grito puro."
     },
-    "business_card": {
-      "titulo":    "Agón",
-      "subtitulo": "Debate Suite · Pinakothḗke",
-      "copy":      "agon.stevenvallejo.com"
+    "x_post": {
+      "titulo": "Un debate digno de ti",
+      "copy": "Debatir bien duele más que golpear fuerte. Agón hace que valga la pena."
+    },
+    "yt_thumbnail": {
+      "titulo": "Un debate digno de ti",
+      "copy": "Debatir bien duele más que golpear fuerte. Agón hace que valga la pena."
     },
     "poster_a4": {
-      "titulo":    "Agón",
-      "subtitulo": "El arte del debate riguroso",
-      "copy":      "Moderador de debates con timer, turnos, detección de falacias y simulador de dinámicas complejas. PWA instalable. agon.stevenvallejo.com"
+      "titulo": "Un debate digno de vos",
+      "subtitulo": "Moderador PWA · Cronómetro · Falacias · Simulador",
+      "copy": "Turnos, cronómetro, detección de falacias, scoring y autómata celular para dinámicas. No es mágico: es código. Pero hace que debatir sea riguroso, no grito puro. Offline, completamente."
     },
-    "sticker": {
-      "titulo":    "⚔",
-      "copy":      "Agón"
+    "whatsapp_perfil": {
+      "titulo": "Un debate digno de ti"
     },
-    "logo_lockup_color": {
-      "titulo":    "Agón",
-      "subtitulo": "Debate suite · Pinakothḗke"
-    },
-    "logo_lockup_dark": {
-      "titulo":    "Agón",
-      "subtitulo": "Debate suite · Pinakothḗke"
-    },
-    "logo_lockup_light": {
-      "titulo":    "Agón",
-      "subtitulo": "Debate suite · Pinakothḗke"
-    },
-    "logo_wordmark": {
-      "titulo":    "Agón",
-      "subtitulo": "El arte del debate riguroso"
-    },
-    "logo_symbol_color": {
-      "titulo":    "⚔"
-    },
-    "logo_symbol_mono": {
-      "titulo":    "⚔"
-    },
-    "app_icon_1024": {
-      "titulo":    "⚔"
-    },
-    "favicon_512": {
-      "titulo":    "⚔"
-    },
-    "favicon_192": {
-      "titulo":    "⚔"
-    },
-    "favicon_180": {
-      "titulo":    "⚔"
-    },
-    "favicon_32": {
-      "titulo":    "⚔"
+    "contra_cover": {
+      "titulo": "Un debate digno de ti",
+      "copy": "Moderador PWA offline · Turnos · Falacias · Simulador"
     }
-  }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
 }

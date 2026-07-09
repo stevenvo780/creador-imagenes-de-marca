@@ -1,0 +1,184 @@
+- generic [ref=e2]:
+  - link "Saltar al contenido principal" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "Eikón" [ref=e6] [cursor=pointer]:
+        - /url: /
+      - navigation "Navegación principal" [ref=e7]:
+        - list [ref=e8]:
+          - listitem [ref=e9]:
+            - link "Marcas" [ref=e10] [cursor=pointer]:
+              - /url: /brands
+          - listitem [ref=e11]:
+            - link "Crear" [ref=e12] [cursor=pointer]:
+              - /url: /batch
+          - listitem [ref=e13]:
+            - link "Galería" [ref=e14] [cursor=pointer]:
+              - /url: /gallery
+      - generic [ref=e15]:
+        - 'generic "Cuenta: qalocal" [ref=e16]': qalocal
+        - button "Salir" [ref=e17] [cursor=pointer]
+  - main [ref=e18]:
+    - generic [ref=e19]:
+      - heading "Crear la identidad de tu marca" [level=1] [ref=e20]
+      - navigation "Pasos del proceso" [ref=e21]:
+        - list [ref=e22]:
+          - listitem [ref=e23]:
+            - generic [ref=e24]: ✓
+            - generic [ref=e25]: Tu marca
+          - listitem [ref=e26]
+          - listitem [ref=e27]:
+            - generic [ref=e28]: ✓
+            - generic [ref=e29]: Qué generar
+          - listitem [ref=e30]
+          - listitem [ref=e31]:
+            - generic [ref=e32]: "3"
+            - generic [ref=e33]: Estilo
+          - listitem [ref=e34]
+          - listitem [ref=e35]:
+            - generic [ref=e36]: "4"
+            - generic [ref=e37]: Variaciones
+          - listitem [ref=e38]
+          - listitem [ref=e39]:
+            - generic [ref=e40]: "5"
+            - generic [ref=e41]: Revisar
+      - generic [ref=e185]:
+        - generic [ref=e186]:
+          - heading "Elige el estilo" [level=2] [ref=e187]
+          - paragraph [ref=e188]: Para cada opción, fija un valor o deja que varíe entre las generaciones. Más variaciones = más diversidad.
+        - generic [ref=e189]:
+          - group [ref=e190]:
+            - generic [ref=e191]:
+              - generic [ref=e192]:
+                - generic [ref=e193]: Acento
+                - paragraph [ref=e194]: Dónde aparece el color de acento.
+              - generic [ref=e195] [cursor=pointer]:
+                - 'checkbox "Acento: que varíe entre generaciones" [ref=e196]'
+                - generic [ref=e197]: Que varíe
+            - generic [ref=e198]:
+              - generic [ref=e199]: Valor elegido
+              - combobox "Valor elegido" [ref=e200] [cursor=pointer]:
+                - option "— Elige una opción —" [selected]
+                - option "Sin acento"
+                - option "Subrayado"
+                - option "Esquina"
+                - option "Lateral"
+                - option "Punto"
+          - group [ref=e201]:
+            - generic [ref=e202]:
+              - generic [ref=e203]:
+                - generic [ref=e204]: Fondo
+                - paragraph [ref=e205]: El estilo de fondo de la imagen generada.
+              - generic [ref=e206] [cursor=pointer]:
+                - 'checkbox "Fondo: que varíe entre generaciones" [ref=e207]'
+                - generic [ref=e208]: Que varíe
+            - generic [ref=e209]:
+              - generic [ref=e210]: Valor elegido
+              - combobox "Valor elegido" [ref=e211] [cursor=pointer]:
+                - option "— Elige una opción —" [selected]
+                - option "Sólido"
+                - option "Degradado"
+                - option "Geométrico"
+                - option "Cuadrícula"
+                - option "Orbe"
+                - option "Textura"
+          - group [ref=e212]:
+            - generic [ref=e213]:
+              - generic [ref=e214]:
+                - generic [ref=e215]: Esquinas
+                - paragraph [ref=e216]: Si las esquinas son rectas, redondeadas o en píldora.
+              - generic [ref=e217] [cursor=pointer]:
+                - 'checkbox "Esquinas: que varíe entre generaciones" [ref=e218]'
+                - generic [ref=e219]: Que varíe
+            - generic [ref=e220]:
+              - generic [ref=e221]: Valor elegido
+              - combobox "Valor elegido" [ref=e222] [cursor=pointer]:
+                - option "— Elige una opción —" [selected]
+                - option "Rectas"
+                - option "Redondeadas"
+                - option "Píldora"
+          - group [ref=e223]:
+            - generic [ref=e224]:
+              - generic [ref=e225]:
+                - generic [ref=e226]: Espaciado
+                - paragraph [ref=e227]: El tamaño relativo de los elementos.
+              - generic [ref=e228] [cursor=pointer]:
+                - 'checkbox "Espaciado: que varíe entre generaciones" [ref=e229]'
+                - generic [ref=e230]: Que varíe
+            - generic [ref=e231]:
+              - generic [ref=e232]: Valor elegido
+              - combobox "Valor elegido" [ref=e233] [cursor=pointer]:
+                - option "— Elige una opción —" [selected]
+                - option "Compacto"
+                - option "Normal"
+                - option "Amplio"
+          - group [ref=e234]:
+            - generic [ref=e235]:
+              - generic [ref=e236]:
+                - generic [ref=e237]: Estilo de símbolo
+                - paragraph [ref=e238]: La forma del símbolo gráfico de tu marca.
+              - generic [ref=e239] [cursor=pointer]:
+                - 'checkbox "Estilo de símbolo: que varíe entre generaciones" [checked] [active] [ref=e240]'
+                - generic [ref=e241]: Que varíe
+            - generic [ref=e242]:
+              - generic [ref=e282]: ↕
+              - text: Este valor va a variar entre las generaciones
+              - generic [ref=e283]: 10 opciones
+          - group [ref=e246]:
+            - generic [ref=e247]:
+              - generic [ref=e248]:
+                - generic [ref=e249]: Composición
+                - paragraph [ref=e250]: Cómo se dispone el símbolo y el nombre.
+              - generic [ref=e251] [cursor=pointer]:
+                - 'checkbox "Composición: que varíe entre generaciones" [ref=e252]'
+                - generic [ref=e253]: Que varíe
+            - generic [ref=e254]:
+              - generic [ref=e255]: Valor elegido
+              - combobox "Valor elegido" [ref=e256] [cursor=pointer]:
+                - option "— Elige una opción —" [selected]
+                - option "Solo símbolo"
+                - option "Solo nombre"
+                - option "Horizontal"
+                - option "Vertical"
+          - group [ref=e257]:
+            - generic [ref=e258]:
+              - generic [ref=e259]:
+                - generic [ref=e260]: Paleta de color
+                - paragraph [ref=e261]: Cómo se aplican los colores de tu marca.
+              - generic [ref=e262] [cursor=pointer]:
+                - 'checkbox "Paleta de color: que varíe entre generaciones" [ref=e263]'
+                - generic [ref=e264]: Que varíe
+            - generic [ref=e265]:
+              - generic [ref=e266]: Valor elegido
+              - combobox "Valor elegido" [ref=e267] [cursor=pointer]:
+                - option "— Elige una opción —" [selected]
+                - option "De tu marca"
+                - option "Monocromo"
+                - option "Claro"
+                - option "Oscuro"
+                - option "Fondo de color"
+                - option "Degradado"
+          - group [ref=e268]:
+            - generic [ref=e269]:
+              - generic [ref=e270]:
+                - generic [ref=e271]: Tipografía
+                - paragraph [ref=e272]: Qué fuentes usa el logo.
+              - generic [ref=e273] [cursor=pointer]:
+                - 'checkbox "Tipografía: que varíe entre generaciones" [ref=e274]'
+                - generic [ref=e275]: Que varíe
+            - generic [ref=e276]:
+              - generic [ref=e277]: Valor elegido
+              - combobox "Valor elegido" [ref=e278] [cursor=pointer]:
+                - option "— Elige una opción —" [selected]
+                - option "De tu marca"
+                - option "Sin serifa"
+                - option "Con serifa"
+                - option "Display"
+                - option "Geométrica"
+        - generic [ref=e284]:
+          - strong [ref=e285]: "1"
+          - text: opción varía
+      - generic [ref=e52]:
+        - button "← Anterior" [ref=e184] [cursor=pointer]
+        - button "Siguiente →" [ref=e53] [cursor=pointer]

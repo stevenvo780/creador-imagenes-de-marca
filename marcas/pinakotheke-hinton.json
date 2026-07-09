@@ -7,72 +7,78 @@
   "tono": "técnico, investigador, profundo",
   "simbolo": "∂",
   "frente": "filosofia",
-
   "paleta": {
-    "bg":           "#0b1417",
-    "primario":     "#0b1417",
-    "acento":       "#43b5a6",
-    "acento_2":     "#8d7cc0",
-    "acento_3":     "#2a7a70",
-    "texto":        "#e8e0d4",
-    "texto_muted":  "#8fa3a8",
-    "surface":      "#131e22"
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_2": "#8d7cc0",
+    "acento_3": "#2a7a70",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #8d7cc0 0%, #43b5a6 50%, #2a7a70 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 20% 60%, #131e22 0%, #0b1417 70%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 20% 60%, #131e22 0%, #0b1417 70%)",
   "tipografia": {
     "titulos": "Inter",
-    "cuerpo":  "JetBrains Mono"
+    "cuerpo": "JetBrains Mono"
   },
-
   "logo_texto": "Hinton",
   "logo_simbolo": "∂",
-
   "textos": {
     "linkedin_post": {
-      "titulo":    "Hinton",
+      "titulo": "Hinton",
       "subtitulo": "IA y aprendizaje profundo · Pinakothḗke",
-      "copy":      "Inteligencia que aprende de sí misma."
+      "copy": "Inteligencia que aprende de sí misma."
     },
     "linkedin_banner": {
-      "titulo":    "Hinton",
-      "copy":      "Investigación aplicada en redes neuronales y aprendizaje profundo."
+      "titulo": "Hinton",
+      "copy": "Investigación aplicada en redes neuronales y aprendizaje profundo."
     },
     "ig_post": {
-      "titulo":    "∂",
+      "titulo": "∂",
       "subtitulo": "Hinton",
-      "copy":      "Inteligencia que aprende de sí misma"
+      "copy": "Inteligencia que aprende de sí misma"
     },
     "ig_story": {
-      "titulo":    "Hinton",
-      "copy":      "Nueva investigación ↓"
+      "titulo": "Hinton",
+      "copy": "Nueva investigación ↓"
     },
     "x_post": {
-      "titulo":    "Hinton",
-      "copy":      "Inteligencia que aprende de sí misma"
+      "titulo": "Hinton",
+      "copy": "Inteligencia que aprende de sí misma"
     },
     "yt_thumbnail": {
-      "titulo":    "Hinton",
-      "copy":      "Ver"
+      "titulo": "Hinton",
+      "copy": "Ver"
     },
     "yt_banner": {
-      "titulo":    "Hinton",
+      "titulo": "Hinton",
       "subtitulo": "IA y aprendizaje profundo · Pinakothḗke"
     },
     "og_general": {
-      "titulo":    "Hinton",
+      "titulo": "Hinton",
       "subtitulo": "IA y aprendizaje profundo · Pinakothḗke",
-      "copy":      "Inteligencia que aprende de sí misma."
+      "copy": "Inteligencia que aprende de sí misma."
     },
     "whatsapp_perfil": {
-      "titulo":    "∂",
-      "copy":      "Hinton"
+      "titulo": "∂",
+      "copy": "Hinton"
     },
     "contra_cover": {
-      "titulo":    "Hinton",
-      "copy":      "IA y aprendizaje profundo · Pinakothḗke"
+      "titulo": "Hinton",
+      "copy": "IA y aprendizaje profundo · Pinakothḗke"
+    },
+    "stat_card": {
+      "numero": "1992",
+      "etiqueta": "año del giro epistemológico",
+      "copy": "Hinton: redes neuronales como programa funcionalista, no como reducción neurológica. La IA tiene límite filosofal, no solo técnico."
+    },
+    "ig_reel_cover": {
+      "titulo": "1992: el giro de la IA",
+      "copy": "Redes neuronales como programa funcionalista, no como reducción neurológica. La IA tiene límite filosófico, no solo técnico."
     }
-  }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
 }

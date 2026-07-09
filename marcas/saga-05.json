@@ -1,0 +1,224 @@
+{
+  "slug": "saga-05",
+  "nombre_producto": "Saga 05 · El giro filosófico",
+  "nombre_corporativo": "Steven Vallejo",
+  "tagline": "Construía rápido, quería tener razón. La filosofía me cambió el ki: ahora resuelvo hondo, viendo el problema entero. El regalo fue perder la necesidad de estar correcto.",
+  "url": "https://www.stevenvallejo.com/es",
+  "url_en": "https://www.stevenvallejo.com/en",
+  "tono": "personal, reflexivo, técnico-humanista",
+  "simbolo": "lemniscata (∞)",
+  "paleta": {
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_2": "#e0a85e",
+    "acento_3": "#c0522a",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#152028"
+  },
+  "gradiente_hero": "linear-gradient(135deg, #e0a85e 0%, #c0522a 40%, #43b5a6 100%)",
+  "gradiente_bg": "radial-gradient(ellipse at 20% 50%, #152028 0%, #0b1417 60%)",
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo": "Inter"
+  },
+  "logo_texto": "Steven Vallejo",
+  "logo_simbolo": "∞",
+  "textos": {
+    "ig_post": {
+      "titulo": "Mi ki cambió de naturaleza",
+      "subtitulo": "De la destreza rápida a la abstracción",
+      "etiqueta": "",
+      "copy": "Construía rápido, quería tener razón. La filosofía me cambió el ki: ahora resuelvo hondo, viendo el problema entero. El regalo fue perder la necesidad de estar correcto."
+    },
+    "ig_story": {
+      "titulo": "Mi ki cambió de naturaleza",
+      "copy": "El que resolvía rápido empezó a resolver hondo."
+    },
+    "ig_carousel": {
+      "titulo": "Mi ki cambió de naturaleza",
+      "copy": "Antes corría para tener razón. La filosofía me cambió el ki: ahora resuelvo hondo. Mirá, el verdadero poder es no necesitar que el ego esté en lo correcto.",
+      "numero": "05"
+    },
+    "ig_reel_cover": {
+      "titulo": "Mi ki cambió de naturaleza",
+      "copy": "El que resolvía rápido empezó a resolver hondo."
+    },
+    "stat_card": {
+      "numero": "∞",
+      "etiqueta": "",
+      "copy": "El que resolvía rápido empezó a resolver hondo."
+    },
+    "ad_rectangle": {
+      "titulo": "Mi ki cambió de naturaleza",
+      "numero": "",
+      "copy": "El que resolvía rápido empezó a resolver hondo.",
+      "cita": "El que resolvía rápido empezó a resolver hondo.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "Mi ki cambió de naturaleza",
+      "copy": "El que resolvía rápido empezó a resolver hondo."
+    },
+    "og_general": {
+      "titulo": "Mi ki cambió de naturaleza",
+      "subtitulo": "De la destreza rápida a la abstracción",
+      "copy": "Construía rápido, quería tener razón. La filosofía me cambió el ki: ahora resuelvo hondo, viendo el problema entero. El regalo fue perder la necesidad de estar correcto."
+    },
+    "og_product": {
+      "titulo": "Mi ki cambió de naturaleza",
+      "subtitulo": "De la destreza rápida a la abstracción",
+      "copy": "Construía rápido, quería tener razón. La filosofía me cambió el ki: ahora resuelvo hondo, viendo el problema entero. El regalo fue perder la necesidad de estar correcto."
+    },
+    "web_hero": {
+      "titulo": "Mi ki cambió de naturaleza",
+      "subtitulo": "De la destreza rápida a la abstracción",
+      "copy": "Construía rápido, quería tener razón. La filosofía me cambió el ki: ahora resuelvo hondo, viendo el problema entero. El regalo fue perder la necesidad de estar correcto."
+    },
+    "linkedin_post": {
+      "titulo": "Mi ki cambió de naturaleza",
+      "subtitulo": "De la destreza rápida a la abstracción",
+      "etiqueta": "",
+      "copy": "Construía rápido, quería tener razón. La filosofía me cambió el ki: ahora resuelvo hondo, viendo el problema entero. El regalo fue perder la necesidad de estar correcto."
+    },
+    "linkedin_banner": {
+      "titulo": "Mi ki cambió de naturaleza",
+      "etiqueta": "",
+      "copy": "El que resolvía rápido empezó a resolver hondo."
+    },
+    "fb_cover": {
+      "titulo": "Mi ki cambió de naturaleza",
+      "subtitulo": "De la destreza rápida a la abstracción",
+      "copy": "Construía rápido, quería tener razón. La filosofía me cambió el ki: ahora resuelvo hondo, viendo el problema entero. El regalo fue perder la necesidad de estar correcto."
+    },
+    "x_post": {
+      "titulo": "Mi ki cambió de naturaleza",
+      "copy": "El que resolvía rápido empezó a resolver hondo."
+    },
+    "yt_thumbnail": {
+      "titulo": "Mi ki cambió de naturaleza",
+      "copy": "El que resolvía rápido empezó a resolver hondo."
+    },
+    "poster_a4": {
+      "titulo": "Mi ki cambió de naturaleza",
+      "subtitulo": "De la destreza rápida a la abstracción",
+      "copy": "Construía rápido, quería tener razón. La filosofía me cambió el ki: ahora resuelvo hondo, viendo el problema entero. El regalo fue perder la necesidad de estar correcto."
+    },
+    "whatsapp_perfil": {
+      "titulo": "Mi ki cambió de naturaleza"
+    },
+    "contra_cover": {
+      "titulo": "Mi ki cambió de naturaleza",
+      "copy": "De la destreza rápida a la abstracción"
+    }
+  },
+  "locales": {
+    "en": {
+      "tagline": "Software engineer and philosopher: clear systems for real problems",
+      "url": "https://www.stevenvallejo.com/en",
+      "textos": {
+        "linkedin_post": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems · Philosophy",
+          "copy": "Think before you build: clear systems for real problems."
+        },
+        "linkedin_banner": {
+          "titulo": "Steven Vallejo",
+          "copy": "Engineering, artificial intelligence, and rigorous thought."
+        },
+        "ig_post": {
+          "titulo": "∞",
+          "subtitulo": "Steven Vallejo",
+          "copy": "Software engineer · Philosopher"
+        },
+        "ig_story": {
+          "titulo": "Steven\nVallejo",
+          "copy": "New post ↓"
+        },
+        "x_post": {
+          "titulo": "Steven Vallejo",
+          "copy": "Software engineer and philosopher: clear systems for real problems"
+        },
+        "yt_thumbnail": {
+          "titulo": "Steven Vallejo",
+          "copy": "Watch"
+        },
+        "yt_banner": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software · AI · Philosophy"
+        },
+        "og_general": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems",
+          "copy": "Think before you build: clear systems for real problems."
+        },
+        "contra_cover": {
+          "titulo": "Steven Vallejo",
+          "copy": "Software Architecture & AI Systems"
+        },
+        "ig_reel_cover": {
+          "titulo": "∞",
+          "subtitulo": "Steven Vallejo",
+          "copy": "12+ years of backend, agentic AI & devtools"
+        },
+        "ig_carousel": {
+          "titulo": "Philosophy · Sciences · Engineering",
+          "subtitulo": "Steven Vallejo",
+          "copy": "Three fronts. One framework. Structured clarity."
+        },
+        "x_header": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software engineer · Philosopher",
+          "copy": "stevenvallejo.com"
+        },
+        "fb_cover": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems · Philosophy",
+          "copy": "Building at the intersection of systems, intelligence, and craft."
+        },
+        "tiktok_cover": {
+          "titulo": "SV",
+          "subtitulo": "Steven Vallejo",
+          "copy": "Systems. Intelligence. Craft."
+        },
+        "web_hero": {
+          "titulo": "Think before\nyou build",
+          "subtitulo": "Software Architecture · Agentic AI · Philosophy",
+          "copy": "12+ years translating complex systems into structured, maintainable software. From formal logic and NLP to multi-tenant platforms and OSS devtools."
+        },
+        "web_hero_mobile": {
+          "titulo": "Steven\nVallejo",
+          "subtitulo": "Software Engineering · AI Systems",
+          "copy": "Clear systems for real problems."
+        },
+        "email_header": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Architecture · AI Systems · Philosophy",
+          "copy": "stevenvallejo.com"
+        },
+        "banner_ad": {
+          "titulo": "Steven Vallejo",
+          "copy": "Software Architecture & Agentic AI — stevenvallejo.com"
+        },
+        "business_card": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems",
+          "copy": "stevenvallejo.com"
+        },
+        "poster_a4": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Architecture · Agentic AI · Philosophy",
+          "copy": "Philosopher-engineer with 12+ years of backend, formal logic, and OSS devtools. Building systems that think and explaining systems that last."
+        },
+        "og_product": {
+          "titulo": "Steven Vallejo — Projects",
+          "subtitulo": "Philosophy · Sciences · Engineering",
+          "copy": "Live products across formal logic, scientific simulation, multi-tenant platforms and SMB devtools. Mouseîon ecosystem."
+        }
+      }
+    }
+  },
+  "logo_style": "lemniscate",
+  "logo_seed": 770077
+}

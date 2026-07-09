@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import functools
+import os
 import time
 from pathlib import Path
 from typing import Any
@@ -64,7 +65,10 @@ async def run_generator(  # noqa: C901
                     counts[marca_slug][categoria] = 0
                     print(f"  → Categoria [{categoria}]:")
 
+                    _solo_tipo = os.environ.get("EIKON_SOLO_TIPO")
                     for type_spec in type_specs:
+                        if _solo_tipo and type_spec.name != _solo_tipo:
+                            continue
                         type_idx += 1
                         scale = type_spec.get_device_scale_factor(categoria)
                         out_w = type_spec.get_output_width(categoria)

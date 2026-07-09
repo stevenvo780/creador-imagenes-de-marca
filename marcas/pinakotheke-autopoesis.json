@@ -38,10 +38,10 @@
       "copy": "Cartografía crítica de una Medellín posible."
     },
     "ig_post": {
-      "titulo": "◇",
-      "subtitulo": "La ciudad asignada",
-      "etiqueta": "FILOSOFÍA",
-      "copy": "Cartografía crítica de una Medellín posible."
+      "titulo": "La ciudad bien asignada",
+      "subtitulo": "Cartografía crítica de Medellín",
+      "etiqueta": "FILOSOFÍA · CIUDAD",
+      "copy": "Repensar cómo se asigna el espacio metropolitano: dónde vive el significado y por qué Medellín podría organizarse de otro modo. No es urbanismo técnico: es pensar la ciudad como una forma de vida que se produce a sí misma."
     },
     "ig_story": {
       "titulo": "La ciudad asignada",
@@ -69,5 +69,7 @@
       "titulo": "La ciudad asignada",
       "copy": "Filosofía de la ciudad · Pinakothḗke"
     }
-  }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
 }
