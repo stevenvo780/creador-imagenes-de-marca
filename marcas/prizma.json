@@ -3,7 +3,7 @@
   "nombre_producto": "Prizma",
   "nombre_corporativo": "Prizma",
   "tagline": "Suite corporativa modular en producción sobre Cloud Run: POS con facturación DIAN (Talanton), crédito sin interés (Pistis), marketing por WhatsApp (Iris), e-commerce conversacional (Hermes), logística última milla (Talaria) y CRM, orquestados por un hub de eventos (Nous). NestJS + Next.js, 8 microservicios desplegados.",
-  "url": "https://prisma-enterprice.cloud",
+  "url": "prisma-enterprice.cloud",
   "tono": "corporativo, preciso, brillante, confiable",
   "simbolo": "◈",
   "logo_style": "prisma_refraccion",
@@ -103,8 +103,8 @@
     },
     "poster_a4": {
       "titulo": "Ocho servicios. Una operación.",
-      "subtitulo": "Prizma — la suite modular que tu empresa ya necesitaba.",
-      "copy": "POS, crédito, WhatsApp, e-commerce, logística y CRM en microservicios sobre Cloud Run. Escala con tu negocio. No vendemos cajas: armamos la operación a la medida."
+      "subtitulo": "Suite modular para PYME en Cloud Run",
+      "copy": "POS con DIAN, crédito, WhatsApp, e-commerce, logística y CRM en microservicios. Funciona hoy, escala cuando lo necesites."
     },
     "whatsapp_perfil": {
       "titulo": "Hecho en casa, usado en calle"

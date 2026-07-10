@@ -3,7 +3,7 @@
   "nombre_producto": "Scholḗ",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Tiempo para pensar con criterio",
-  "url": "https://blog.stevenvallejo.com",
+  "url": "blog.stevenvallejo.com",
   "tono": "reflexivo, didáctico, criterioso",
   "simbolo": "✦",
   "frente": "filosofia",
@@ -37,9 +37,9 @@
     },
     "ig_post": {
       "titulo": "Scholḗ",
-      "subtitulo": "Tiempo para pensar con criterio",
+      "subtitulo": "Blog de código y filosofía",
       "etiqueta": "BLOG",
-      "copy": "Artículos donde el código y la abstracción se enseñan juntos. Arquitectura que forma. Pensamiento sin prisa ni pose."
+      "copy": "Artículos donde el código y la abstracción se enseñan juntos. Casos reales de arquitectura de software y pensamiento, sin prisa."
     },
     "ig_story": {
       "titulo": "Scholḗ",

@@ -27,8 +27,8 @@
   "logo_simbolo": "∂",
   "textos": {
     "ig_carousel": {
-      "titulo": "Programar es metafísica",
-      "copy": "Cada decisión de arquitectura software encarna una posición ontológica: ¿el estado es centralizado o distribuido? ¿El dato es primario? ¿El tiempo es reversible? Programas que revelan qué creés que es real."
+      "titulo": "Filosofía y programación",
+      "copy": "Ensayo: cómo los paradigmas y arquitecturas de software (estado centralizado o distribuido, el dato como primario, el tiempo) implican posiciones ontológicas sobre qué es real."
     }
   },
   "logo_style": "orbital",

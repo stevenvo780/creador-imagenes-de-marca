@@ -3,7 +3,7 @@
   "nombre_producto": "Saga 03 · El problema imposible",
   "nombre_corporativo": "Steven Vallejo",
   "tagline": "Los problemas imposibles llevan esa etiqueta por abandono, no por complejidad. Tres semanas de método, foco y horas calladas bastaron. Lo que no esperaba fue ganar y quedarse sin con quién jugar.",
-  "url": "https://www.stevenvallejo.com/es",
+  "url": "stevenvallejo.com/es",
   "url_en": "https://www.stevenvallejo.com/en",
   "tono": "personal, reflexivo, técnico-humanista",
   "simbolo": "lemniscata (∞)",
@@ -42,8 +42,8 @@
       "numero": "3"
     },
     "ig_reel_cover": {
-      "titulo": "El problema imposible",
-      "copy": "Tres semanas de silencio y método. Lo resolvés, pero te quedás sin con quién jugar."
+      "titulo": "Tres semanas de método",
+      "copy": "Un problema que parecía imposible. Método terco, en silencio. Lo resolvés, y te quedás sin con quién comentarlo."
     },
     "stat_card": {
       "numero": "3",

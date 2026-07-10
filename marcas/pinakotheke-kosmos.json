@@ -3,7 +3,7 @@
   "nombre_producto": "Kósmos",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Simulación del orden natural",
-  "url": "https://kosmos.stevenvallejo.com",
+  "url": "kosmos.stevenvallejo.com",
   "tono": "científico, sistémico, visual",
   "simbolo": "⬡",
   "frente": "ciencias",
@@ -42,8 +42,8 @@
       "numero": "22"
     },
     "ig_reel_cover": {
-      "titulo": "El orden que emerge del caos",
-      "copy": "Redes, autómatas, emergencia. Complejidad que corre en tu máquina, no en un PDF."
+      "titulo": "Sistemas complejos, ejecutables",
+      "copy": "16 proyectos de investigación en sistemas complejos; 5 con simulación ejecutable embebida. Redes, agentes, emergencia."
     },
     "stat_card": {
       "numero": "22",

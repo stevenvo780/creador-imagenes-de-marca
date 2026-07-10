@@ -3,7 +3,7 @@
   "nombre_producto": "Eikón",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Generador determinista de identidad de marca: isotipos procedurales, paletas, iconsets, kits sociales y OG con contraste WCAG AA. $0 en tokens, sin GPU, sin IA — SVG procedural + render, 100% reproducible. Webapp + API + MCP.",
-  "url": "https://eikon.humanizar.cloud",
+  "url": "eikon.humanizar.cloud",
   "tono": "creativo, técnico, visual",
   "simbolo": "◈",
   "frente": "informatica",
@@ -37,9 +37,8 @@
       "copy": "Procedural, auditable, repetible — todo lo demás, ruido."
     },
     "ig_carousel": {
-      "titulo": "Identidad sin gastar un token",
-      "numero": "46",
-      "copy": "Isotipos, paletas, iconsets, kits sociales y OG. SVG procedural, sin IA, sin GPU. WCAG AA, 100% reproducible. Con API y servidor MCP."
+      "titulo": "Identidad sin gastar token",
+      "copy": "Isotipos, paletas, iconsets, kits sociales, OG. SVG procedural, WCAG AA, 100% reproducible. Sin IA, sin GPU, sin sorpresas. API + webapp + MCP."
     },
     "ig_reel_cover": {
       "titulo": "Isotipos que rinden cuentas",

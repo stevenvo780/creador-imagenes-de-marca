@@ -3,7 +3,7 @@
   "nombre_producto": "Estructuras Preontológicas",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Tesis (Jacob Agudelo + Steven Vallejo, UdeA) en filosofía de la ciencia y ciencias de la complejidad: propone «estructuras pre-ontológicas» como regularidades operativas previas a la objetualidad, validadas mediante métrica EDI y compresión multiescala con evidencia multidominio.",
-  "url": "https://estructuras-preontologicas.vercel.app",
+  "url": "estructuras-preontologicas.vercel.app",
   "tono": "filosófico, doctoral, riguroso",
   "simbolo": "Ω",
   "frente": "ciencias",
@@ -37,9 +37,8 @@
       "copy": "Lo que no ves te construye. Eso es toda la tesis."
     },
     "ig_carousel": {
-      "titulo": "Lo invisible que sostiene",
-      "copy": "Regularidades operativas ANTES de que algo sea 'objeto'. Compresión multiescala (10⁻¹⁰ a 10²⁰ m), métrica EDI, validada en 30 órdenes de magnitud. Rigor sin dogma.",
-      "numero": "30"
+      "titulo": "Estructuras preontológicas",
+      "copy": "Regularidades operativas previas a la objetualidad. Compresión multiescala (10⁻¹⁰–10²⁰ m), métrica EDI, validada en 30 órdenes de magnitud y varios dominios."
     },
     "ig_reel_cover": {
       "titulo": "Estructuras antes del objeto",

@@ -3,7 +3,7 @@
   "nombre_producto": "Áporía",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Plataforma editorial CMS full-stack (Next.js 16 + Neon/Postgres + Firebase Auth): publica papers, archiva investigación y corre experimentos colectivos con visualización en tiempo real. Panel /studio para CRUD editorial con auth real.",
-  "url": "https://aporia.stevenvallejo.com",
+  "url": "aporia.stevenvallejo.com",
   "tono": "investigador, paradójico, fronterizo",
   "simbolo": "∞",
   "frente": "ciencias",
@@ -46,10 +46,10 @@
       "copy": "Paradojas y fronteras donde el rigor tropieza con lo inexplicable."
     },
     "ig_post": {
-      "titulo": "Publicá lo imposible",
-      "subtitulo": "Plataforma editorial para ciencia en paradoja",
-      "etiqueta": "Ciencias · Paradojas",
-      "copy": "CMS editorial para papers, experimentos y visualización en vivo. Panel /studio con CRUD de verdad. Toda paradoja nace de una pregunta honesta."
+      "titulo": "Plataforma editorial para papers",
+      "subtitulo": "Publica papers y experimentos colectivos en tiempo real",
+      "etiqueta": "CMS · Editorial",
+      "copy": "CMS editorial: publica papers, archiva investigación y corre experimentos colectivos con visualización viva. Panel /studio con CRUD. Next.js + Neon + Firebase Auth."
     },
     "ig_story": {
       "titulo": "Áporía",

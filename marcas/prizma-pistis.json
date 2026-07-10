@@ -3,7 +3,7 @@
   "nombre_producto": "Pistis",
   "nombre_corporativo": "Prizma",
   "tagline": "Confianza verificable en cada transacción",
-  "url": "https://prisma-enterprice.cloud",
+  "url": "prisma-enterprice.cloud",
   "tono": "seguro, auditable, corporativo",
   "simbolo": "✓",
   "suite": "prizma",
@@ -80,9 +80,9 @@
       "copy": "Cada transacción se sella con firma digital auditable. Lo firmás hoy, lo demostrás en cinco años. Cero papel."
     },
     "poster_a4": {
-      "titulo": "Cada decisión deja huella",
-      "subtitulo": "Trazabilidad documental con firma digital",
-      "copy": "Cada transacción se sella con firma digital auditable. Lo firmás hoy, lo demostrás en cinco años. Cero papel."
+      "titulo": "Gestión de crédito y cartera",
+      "subtitulo": "Transacciones, clientes y trazabilidad",
+      "copy": "Administra crédito y cartera: transacciones, clientes y seguimiento con trazabilidad en base de datos. Integra MercadoPago."
     }
   },
   "logo_style": "prisma_refraccion",

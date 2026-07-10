@@ -3,7 +3,7 @@
   "nombre_producto": "Xenía",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "CRM para PYMEs colombianas con 19 entidades: pipeline kanban, contactos, empresas, negocios, actividades, cotizaciones y facturas. Localizado para NIT, COP, departamentos y tipos societarios. React 19 + Vite + Express + Neon Postgres, desplegado en Vercel.",
-  "url": "https://xenia.stevenvallejo.com",
+  "url": "xenia.stevenvallejo.com",
   "tono": "hospitalario, relacional, PYME",
   "simbolo": "◇",
   "frente": "ingenieria",
@@ -27,10 +27,10 @@
   "logo_simbolo": "◇",
   "textos": {
     "ig_post": {
-      "titulo": "Un CRM que habla colombiano",
-      "subtitulo": "19 entidades, localizado de verdad",
-      "etiqueta": "PYME · NIT · COP",
-      "copy": "Pipeline kanban, contactos, empresas, negocios, actividades, cotizaciones y facturas. Hecho con React 19 + Vite + Express para una PYME colombiana."
+      "titulo": "CRM que habla colombiano",
+      "subtitulo": "19 entidades, NIT y COP de serie",
+      "etiqueta": "CRM PYME",
+      "copy": "Pipeline kanban, contactos, empresas, negocios, actividades, cotizaciones, facturas. Localizado de verdad: NIT, COP, departamentos, tipos societarios. React 19 + Vercel."
     },
     "ig_story": {
       "titulo": "El CRM que abre la puerta",

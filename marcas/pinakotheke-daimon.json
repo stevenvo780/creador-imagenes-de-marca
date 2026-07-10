@@ -3,7 +3,7 @@
   "nombre_producto": "Daímon",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Vitrina de la pila de IA personal: Jarvis v1/v2 (RAG + ChromaDB, modelos 14B–70B), chat GGUF local (llama-cpp-python), swarm MCP con Ollama (deepseek-r1 + qwen2.5) y conversor OCR PDF→Markdown en GPU. Documentación estática Next.js 15.",
-  "url": "https://daimon.stevenvallejo.com",
+  "url": "daimon.stevenvallejo.com",
   "tono": "íntimo, inteligente, soberano",
   "simbolo": "◉",
   "frente": "informatica",
@@ -37,9 +37,8 @@
       "copy": "La nube es un alquiler. Local es propiedad."
     },
     "ig_carousel": {
-      "titulo": "Tu IA, bajo tu techo",
-      "copy": "Jarvis v1/v2 rag-eando, chat GGUF local, swarm MCP en Ollama, OCR en GPU y la doc. Soberanía antes que hype.",
-      "numero": "6"
+      "titulo": "Tu IA, en tu máquina",
+      "copy": "Jarvis v1/v2 con RAG, chat GGUF local, MCP swarm en Ollama, OCR por GPU y su documentación. 6 componentes de una pila de IA local, sin nube. ChromaDB, modelos 14B–70B."
     },
     "ig_reel_cover": {
       "titulo": "Seis cajas, cero nube",

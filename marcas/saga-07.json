@@ -3,7 +3,7 @@
   "nombre_producto": "Saga 07 · Filósofo entre burócratas",
   "nombre_corporativo": "Steven Vallejo",
   "tagline": "La gente asume que construyo rápido porque soy máquina. Lo opuesto. Mis años en Discord (tribunal, paño de lágrimas, árbitro de las 2 AM) me enseñaron dónde falla un sistema: en no entender a quién lo va a usar.",
-  "url": "https://www.stevenvallejo.com/es",
+  "url": "stevenvallejo.com/es",
   "url_en": "https://www.stevenvallejo.com/en",
   "tono": "personal, reflexivo, técnico-humanista",
   "simbolo": "lemniscata (∞)",
@@ -42,8 +42,8 @@
       "numero": ""
     },
     "ig_reel_cover": {
-      "titulo": "Filósofo entre burócratas",
-      "copy": "¿Creés que soy una máquina? Al revés: sé que el código falla si no entiende a la gente."
+      "titulo": "Entender al usuario",
+      "copy": "Paso más tiempo oyendo gente que escribiendo código. Los sistemas fallan cuando no entienden a quién los va a usar."
     },
     "stat_card": {
       "numero": "∞",

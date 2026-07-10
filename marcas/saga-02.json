@@ -3,7 +3,7 @@
   "nombre_producto": "Saga 02 · El entrenamiento",
   "nombre_corporativo": "Steven Vallejo",
   "tagline": "La película salta la parte importante: años haciendo lo mismo mal, hasta que dejó de salir mal. Sin público, sin montaje épico—solo repeticiones, mala postura y un teclado roto.",
-  "url": "https://www.stevenvallejo.com/es",
+  "url": "stevenvallejo.com/es",
   "url_en": "https://www.stevenvallejo.com/en",
   "tono": "personal, reflexivo, técnico-humanista",
   "simbolo": "lemniscata (∞)",
@@ -27,10 +27,10 @@
   "logo_simbolo": "∞",
   "textos": {
     "ig_post": {
-      "titulo": "Nadie me vio entrenar",
-      "subtitulo": "Años de hacer lo mismo hasta que salió bien",
-      "etiqueta": "El grind aburrido",
-      "copy": "La película te salta la parte dura: años de mala postura, repeticiones sin público y un teclado roto. Así es como dejás de hacerlo mal. ¿Tenés la paciencia?"
+      "titulo": "El entrenamiento",
+      "subtitulo": "La parte que la película salta",
+      "etiqueta": "años de repetición",
+      "copy": "La película te salta esto: años de hacerlo mal, sin público. Solo repeticiones, mala postura, teclado roto. Así dejás de hacerlo mal. Punto."
     },
     "ig_story": {
       "titulo": "Nadie me vio entrenar",

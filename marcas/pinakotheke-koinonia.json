@@ -3,7 +3,7 @@
   "nombre_producto": "Koinonía",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Plataforma multi-tenant para comunidades Discord: portal web (eventos, biblioteca, ranking, tienda, roles), API NestJS 10 + Neon Postgres y bot discord.js con XP y recompensas por voz. Un solo codebase y una sola BD para múltiples comunidades aisladas por tenantId.",
-  "url": "https://koinonia.stevenvallejo.com",
+  "url": "koinonia.stevenvallejo.com",
   "tono": "social, colectivo, multi-tenant",
   "simbolo": "◎",
   "frente": "informatica",
@@ -37,8 +37,8 @@
       "copy": "La fuerza está en quiénes se reúnen. La plataforma, en el fondo."
     },
     "ig_carousel": {
-      "titulo": "Una BD, muchas comunidades",
-      "copy": "1 código, 1 BD, varios tenants: eventos, biblioteca, ranking, tienda y roles por comunidad Discord, aislados por tenantId."
+      "titulo": "Una BD, N comunidades",
+      "copy": "1 código, 1 BD, múltiples Discord. Eventos, biblioteca, ranking, tienda, roles. Aislados por tenantId. NestJS API + Next.js web + discord.js bot, todo multi-tenant."
     },
     "ig_reel_cover": {
       "titulo": "Tu comunidad armada para crecer",

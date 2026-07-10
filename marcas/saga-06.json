@@ -3,7 +3,7 @@
   "nombre_producto": "Saga 06 · El traje divino",
   "nombre_corporativo": "Steven Vallejo",
   "tagline": "Laboratorio casero con IA agéntica. La máquina zumba a 80 grados. El cuello de botella sos vos mismo.",
-  "url": "https://www.stevenvallejo.com/es",
+  "url": "stevenvallejo.com/es",
   "url_en": "https://www.stevenvallejo.com/en",
   "tono": "personal, reflexivo, técnico-humanista",
   "simbolo": "lemniscata (∞)",
@@ -27,10 +27,10 @@
   "logo_simbolo": "∞",
   "textos": {
     "ig_post": {
-      "titulo": "Vos sos el cuello de botella",
-      "subtitulo": "Con IA agéntica, la máquina vuela",
-      "etiqueta": "80 grados",
-      "copy": "Montás un laboratorio casero con IA agéntica y la máquina zumba de lo lindo. Pero al final del día, el cuello de botella no es el silicio: sos vos mismo."
+      "titulo": "El sistema mejora",
+      "subtitulo": "Pero el operador sigue siendo lo limitado",
+      "etiqueta": "IA agéntica",
+      "copy": "Montas IA que ejecuta 24/7. La máquina zumba sin parar. Pero al final del día, el cuello de botella sos vos. Tu capacidad de pensar qué pedirle."
     },
     "ig_story": {
       "titulo": "El piloto es el cuello de botella",

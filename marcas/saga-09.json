@@ -3,7 +3,7 @@
   "nombre_producto": "Saga 09 · Incluso Saitama come",
   "nombre_corporativo": "Steven Vallejo",
   "tagline": "Sé hacer servidores propios, IA agéntica, métodos para resolver sin engañarme. Y aun así, todo eso tiene que pagar las cuentas. No vengo a pedir nada: vengo a ofrecer algo que sé hacer bien, mirándote a los ojos, de igual a igual.",
-  "url": "https://www.stevenvallejo.com/es",
+  "url": "stevenvallejo.com/es",
   "url_en": "https://www.stevenvallejo.com/en",
   "tono": "personal, reflexivo, técnico-humanista",
   "simbolo": "lemniscata (∞)",
@@ -42,8 +42,8 @@
       "numero": ""
     },
     "ig_reel_cover": {
-      "titulo": "Incluso Saitama come",
-      "copy": "Sé montar servidores e IA local. Hay que comer, sabés. Lo práctico no quita lo crack."
+      "titulo": "Oficio y pan",
+      "copy": "Sé montar sistemas. Sé entrenar IA. Y sé que todo eso tiene que pagar cuentas."
     },
     "stat_card": {
       "numero": "∞",

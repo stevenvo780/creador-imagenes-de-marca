@@ -3,7 +3,7 @@
   "nombre_producto": "Paideía",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Portal de humanidades digitales con 227 rutas estáticas en MDX: Griego Clásico (morfología, traducciones, glosario), Neurofilosofía (210 archivos, 10 módulos) y Filosofía de la Ciudad. Construido en Next.js 15, sin base de datos, 100% estático.",
-  "url": "https://paideia.stevenvallejo.com",
+  "url": "paideia.stevenvallejo.com",
   "tono": "humanista, socrático, libresco",
   "simbolo": "Π",
   "frente": "filosofia",
@@ -37,9 +37,8 @@
       "copy": "Filosofía sin pose es difícil, pero es lo que vale."
     },
     "ig_carousel": {
-      "titulo": "Filosofía en serio, sin disfraz",
-      "copy": "222 rutas de contenido académico: Griego Clásico con morfología real, Neurofilosofía en 10 módulos, Filosofía de la Ciudad. Next.js estático, sin IA, sin base de datos. Solo texto que dura.",
-      "numero": "222"
+      "titulo": "Mi catálogo de humanidades",
+      "copy": "227 rutas de contenido en MDX estático: Griego Clásico, Neurofilosofía (10 módulos) y Filosofía de la Ciudad. Sin IA generativa, sin base de datos."
     },
     "ig_reel_cover": {
       "titulo": "Filosofía en serio, sin disfraz",

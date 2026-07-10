@@ -84,12 +84,12 @@ body {
 /* ═══════ HERO ═══════ */
 .hero {
   flex: 1; display: flex; flex-direction: column; align-items: center;
-  justify-content: center; gap: var(--space-4);
+  justify-content: space-evenly; gap: var(--space-4);
   position: relative; z-index: 1; width: 100%;
 }
 .logo-hero {
   display: flex; align-items: center; justify-content: center;
-  width: 200px; height: 200px; margin-bottom: var(--space-3);
+  width: 268px; height: 268px; margin-bottom: 0;
   position: relative; z-index: 1;
 }
 .logo-hero img,
@@ -108,9 +108,9 @@ body {
   line-height: var(--leading-normal); color: var(--acento); text-align: center;
 }
 .copy {
-  font-family: var(--font-cuerpo); font-size: var(--type-lg); font-weight: 400;
-  line-height: var(--leading-relaxed); color: var(--texto-muted);
-  max-width: 740px; text-align: center;
+  font-family: var(--font-cuerpo); font-size: var(--type-xl); font-weight: 400;
+  line-height: var(--leading-relaxed); color: color-mix(in srgb, var(--texto) 80%, var(--bg) 20%);
+  max-width: 820px; text-align: center;
 }
 
 /* ═══════ FOOTER ═══════ */
@@ -121,11 +121,11 @@ body {
   position: relative; z-index: 1; flex-shrink: 0;
 }
 .url {
-  font-size: var(--type-base); font-weight: 600; color: var(--texto);
+  font-size: 40px; font-weight: 700; color: var(--texto);
   letter-spacing: var(--tracking-wide);
 }
 .brand-signature {
-  font-family: var(--font-titulo); font-size: var(--type-base); font-weight: 600;
+  font-family: var(--font-titulo); font-size: 28px; font-weight: 600;
   letter-spacing: var(--tracking-wide); color: var(--texto-muted);
 }
 .accent-bottom {
@@ -160,7 +160,7 @@ body[data-variant="v3_minimal"] .logo-hero { width: 160px; height: 160px; }
     </section>
 
     <footer class="footer-row">
-      <span class="url" data-url data-fit data-fit-min="12">example.com</span>
+      <span class="url" data-url data-fit data-fit-min="30">example.com</span>
       <span class="brand-signature" data-logo-texto data-fit data-fit-min="12">Marca</span>
     </footer>
     <div class="accent-bottom"></div>

@@ -3,7 +3,7 @@
   "nombre_producto": "Nous",
   "nombre_corporativo": "Prizma",
   "tagline": "Inteligencia corporativa que razona, no procesa",
-  "url": "https://prisma-enterprice.cloud",
+  "url": "prisma-enterprice.cloud",
   "tono": "estratégico, IA, decisión",
   "simbolo": "⬟",
   "suite": "prizma",
@@ -36,10 +36,10 @@
       "copy": "IA que apoya decisiones estratégicas. Con contexto. Con criterio."
     },
     "ig_post": {
-      "titulo": "La IA que ya decidió por vos",
-      "subtitulo": "Razona sobre tu negocio, no solo lo grafica",
-      "etiqueta": "PRIZMA · IA",
-      "copy": "Nous no procesa: razona. Entrega análisis que ya traen la decisión tomada, lista para ejecutar."
+      "titulo": "Orquestador de eventos",
+      "subtitulo": "Conecta los servicios de Prizma",
+      "etiqueta": "PRIZMA",
+      "copy": "Enruta los eventos entre los microservicios de Prizma: webhooks, colas por prioridad y reintentos. Redis y conectores de negocio (billing, delivery, messaging)."
     },
     "ig_story": {
       "titulo": "Nous",

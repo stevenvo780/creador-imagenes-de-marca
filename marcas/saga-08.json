@@ -3,7 +3,7 @@
   "nombre_producto": "Saga 08 · Ki exponencial",
   "nombre_corporativo": "Steven Vallejo",
   "tagline": "Un agente ejecuta mientras vos almuerzas. Multiplica fuerza, no criterio. Cada cosa que construyes deja una pieza lista para construir la siguiente más rápido.",
-  "url": "https://www.stevenvallejo.com/es",
+  "url": "stevenvallejo.com/es",
   "url_en": "https://www.stevenvallejo.com/en",
   "tono": "personal, reflexivo, técnico-humanista",
   "simbolo": "lemniscata (∞)",
@@ -27,10 +27,10 @@
   "logo_simbolo": "∞",
   "textos": {
     "ig_post": {
-      "titulo": "Ki exponencial",
-      "subtitulo": "Cada batalla te deja mejor armado",
-      "etiqueta": "Fuerza multiplicada",
-      "copy": "Un agente ejecuta mientras almorzás. Multiplicás tu fuerza, no el criterio. Cada bloque de código que hacés hoy te sirve para construir más rápido mañana."
+      "titulo": "Amplificación",
+      "subtitulo": "El trabajo compuesto",
+      "etiqueta": "agentes IA",
+      "copy": "Un agente ejecuta mientras almorzás. Pero ojo: multiplica tu fuerza, no tu criterio. Cada cosa que haces bien hoy te permite hacer algo más complejo mañana. Así crece el trabajo."
     },
     "ig_story": {
       "titulo": "Ki que crece multiplicando",

@@ -3,7 +3,7 @@
   "nombre_producto": "Saga 10 · Busco mi Vegeta",
   "nombre_corporativo": "Steven Vallejo",
   "tagline": "Busco un par con quien levantar algo que pese. Mientras llega, tráeme tu imposible: el sistema nudoso, la automatización a medias, el proyecto que lleva meses esperando turno en la pestaña que no cierras.",
-  "url": "https://www.stevenvallejo.com/es",
+  "url": "stevenvallejo.com/es",
   "url_en": "https://www.stevenvallejo.com/en",
   "tono": "personal, reflexivo, técnico-humanista",
   "simbolo": "lemniscata (∞)",
@@ -101,9 +101,9 @@
       "copy": "Tengo el puño listo. Solo me falta el monstruo."
     },
     "poster_a4": {
-      "titulo": "Busco mi Vegeta",
-      "subtitulo": "Alguien que me dé pelea de verdad",
-      "copy": "Busco un par para levantar cosas que pesen. Traeme tu imposible: el sistema enredado o el proyecto que lleva meses en la pestaña que no cerrás. Vení y resolvemos de una."
+      "titulo": "Busco con quien trabajar",
+      "subtitulo": "Mientras tanto, traé tu imposible",
+      "copy": "Busco un par con quien levantar algo que pese. Mientras llega, tráeme tu imposible: el sistema enredado, la automatización a medias, el proyecto esperando en la pestaña que no cerrás. Vení y resolvemos de una."
     },
     "whatsapp_perfil": {
       "titulo": "Busco mi Vegeta"

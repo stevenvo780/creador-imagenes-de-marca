@@ -3,7 +3,7 @@
   "nombre_producto": "Apothḗke",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Sistema de gestión de almacén e inventario: stock, órdenes, movimientos, roles (admin/manager/worker), notificaciones y analítica. React 19 + Vite + Neon Postgres en funciones serverless Vercel, con seed de datos demo.",
-  "url": "https://apotheke.stevenvallejo.com",
+  "url": "apotheke.stevenvallejo.com",
   "tono": "operacional, claro, PYME",
   "simbolo": "▦",
   "frente": "ingenieria",
@@ -102,8 +102,8 @@
     },
     "poster_a4": {
       "titulo": "Una bodega que opera de verdad",
-      "subtitulo": "Stock, órdenes, movimientos y analítica — no en Excel",
-      "copy": "Inventario real con tres roles claros (admin, manager, worker), notificaciones y analítica. Seed de datos demo para probarlo hoy. React + Vite + Neon."
+      "subtitulo": "Stock, órdenes, roles. No en Excel.",
+      "copy": "Inventario real con 3 roles (admin, manager, worker). Notificaciones, analítica y seed de datos demo. React + Vite + Neon serverless."
     },
     "whatsapp_perfil": {
       "titulo": "Almacén organizado, sin ficción"

@@ -3,7 +3,7 @@
   "nombre_producto": "Agón",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "PWA offline para moderar debates académicos y competitivos: gestiona turnos, cronómetro, puntuación y detección de falacias. Incluye simulador de dinámicas con autómata celular (canvas 2D).",
-  "url": "https://agon.stevenvallejo.com",
+  "url": "agon.stevenvallejo.com",
   "tono": "dialéctico, combativo, preciso",
   "simbolo": "⚔",
   "frente": "filosofia",
@@ -101,9 +101,9 @@
       "copy": "Debatir bien duele más que golpear fuerte. Agón hace que valga la pena."
     },
     "poster_a4": {
-      "titulo": "Un debate digno de vos",
-      "subtitulo": "Moderador PWA · Cronómetro · Falacias · Simulador",
-      "copy": "Turnos, cronómetro, detección de falacias, scoring y autómata celular para dinámicas. No es mágico: es código. Pero hace que debatir sea riguroso, no grito puro. Offline, completamente."
+      "titulo": "Moderador de debates, offline",
+      "subtitulo": "PWA: turnos, cronómetro, falacias, scoring",
+      "copy": "Gestiona turnos, cronómetro, detección de falacias, puntuación y un autómata celular para dinámicas. Funciona sin conexión. Es código, no magia."
     },
     "whatsapp_perfil": {
       "titulo": "Un debate digno de ti"

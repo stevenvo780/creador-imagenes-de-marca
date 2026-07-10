@@ -3,7 +3,7 @@
   "nombre_producto": "Fenomenología urbana",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Ponencia: la experiencia vivida y la construcción de significado en los espacios urbanos de Medellín desde la fenomenología; corporalidad, memoria colectiva y transformación del lugar.",
-  "url": "https://fenomenologiaurbana.stevenvallejo.com",
+  "url": "fenomenologiaurbana.stevenvallejo.com",
   "tono": "filosófico, riguroso, reflexivo",
   "simbolo": "◉",
   "frente": "filosofia",
@@ -71,7 +71,7 @@
     },
     "ig_carousel": {
       "titulo": "Fenomenología urbana",
-      "copy": "La experiencia vivida de los espacios: cómo el cuerpo habita, la memoria colectiva transforma el lugar y Medellín existe en la intersección de significados que construimos al caminar. Filosofía encarnada en la calle."
+      "copy": "La experiencia vivida de los espacios urbanos: cómo el cuerpo habita el lugar y la memoria colectiva lo transforma. Medellín como caso de estudio."
     }
   },
   "logo_style": "orbital",

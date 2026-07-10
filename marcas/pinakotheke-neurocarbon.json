@@ -3,7 +3,7 @@
   "nombre_producto": "¿Silicio o Tejido?",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Ponencia de neurofilosofía: ¿puede la mente emularse en silicio digital o requiere el sustrato biológico del carbono? Examina incompatibilidades arquitectónicas y termodinámicas, y la autopoiesis como rasgo constitutivo de la conciencia.",
-  "url": "https://neurocarbon.stevenvallejo.com",
+  "url": "neurocarbon.stevenvallejo.com",
   "tono": "filosófico, riguroso, reflexivo",
   "simbolo": "◐",
   "frente": "filosofia",
@@ -42,8 +42,8 @@
       "numero": ""
     },
     "ig_reel_cover": {
-      "titulo": "Silicio no pensaría como vos",
-      "copy": "¿La mente es cómputo o tejido? El sustrato decide."
+      "titulo": "Silicio vs tejido",
+      "copy": "¿Puede la mente emularse en silicio o requiere carbono? Ponencia que examina la incompatibilidad arquitectónica y termodinámica."
     },
     "stat_card": {
       "numero": "∞",

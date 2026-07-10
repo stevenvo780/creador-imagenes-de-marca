@@ -3,7 +3,7 @@
   "nombre_producto": "Nómos",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Indexador de documentos legislativos con búsqueda full-text: adapta scraping a Cámara y Senado de Colombia y Cámara de Diputados de RD. FastAPI + Neon Postgres + Mangum en Vercel serverless. Patrón Source Adapter intercambiable sin tocar el pipeline.",
-  "url": "https://nomos.stevenvallejo.com",
+  "url": "nomos.stevenvallejo.com",
   "tono": "riguroso, legal, técnico",
   "simbolo": "§",
   "frente": "ingenieria",
@@ -42,8 +42,8 @@
       "numero": "3"
     },
     "ig_reel_cover": {
-      "titulo": "Leyes de Colombia y RD, buscables",
-      "copy": "Scraper cambia por país, pipeline no. FastAPI + Neon serverless. Full-text CO y RD."
+      "titulo": "Leyes buscables, crudas",
+      "copy": "Full-text de proyectos CO y RD sin filtro. FastAPI + Neon serverless. Source adapter por país, pipeline único."
     },
     "stat_card": {
       "numero": "3",

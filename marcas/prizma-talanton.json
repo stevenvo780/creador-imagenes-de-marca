@@ -3,7 +3,7 @@
   "nombre_producto": "Talanton",
   "nombre_corporativo": "Prizma",
   "tagline": "Gestión del talento que pesa lo que vale",
-  "url": "https://prisma-enterprice.cloud",
+  "url": "prisma-enterprice.cloud",
   "tono": "estratégico, RH, corporativo",
   "simbolo": "⚖",
   "suite": "prizma",
@@ -36,10 +36,10 @@
       "copy": "Recluta, evalúa y desarrolla el capital humano con precisión."
     },
     "ig_post": {
-      "titulo": "Talento que pesa lo que vale.",
-      "subtitulo": "Reclutá, evaluá, desarrollá — sin corazonadas.",
-      "etiqueta": "#talanton",
-      "copy": "Talanton mide personas con los mismos criterios con que medís resultados. Reclutá con datos, evaluá con criterio, desarrollá con plan."
+      "titulo": "Punto de venta",
+      "subtitulo": "Inventario, ventas y facturación DIAN",
+      "etiqueta": "PRIZMA POS",
+      "copy": "POS con inventario físico, ventas y facturación electrónica DIAN. Panel de administración y control de caja."
     },
     "ig_story": {
       "titulo": "Talanton",

@@ -3,7 +3,7 @@
   "nombre_producto": "Saga 01 · Origen",
   "nombre_corporativo": "Steven Vallejo",
   "tagline": "Un niño curioso en Antioquia, criado por internet a las 3 de la mañana. Ese origen sin manual ni gloria, donde aprendí que la máquina responde si le hablas bonito, es exactamente donde empieza.",
-  "url": "https://www.stevenvallejo.com/es",
+  "url": "stevenvallejo.com/es",
   "url_en": "https://www.stevenvallejo.com/en",
   "tono": "personal, reflexivo, técnico-humanista",
   "simbolo": "lemniscata (∞)",
@@ -42,8 +42,8 @@
       "numero": "13"
     },
     "ig_reel_cover": {
-      "titulo": "El inicio sin manual",
-      "copy": "Criado por internet a las 3 AM. Aprendí que si le hablás bonito, la máquina responde."
+      "titulo": "Cómo empezó",
+      "copy": "Un niño solo de madrugada, sin manual. Descubrió que hablarle bien a la máquina tiene sus propias reglas."
     },
     "stat_card": {
       "numero": "13",

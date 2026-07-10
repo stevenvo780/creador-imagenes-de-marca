@@ -3,7 +3,7 @@
   "nombre_producto": "Chrónos",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "App SaaS de control de horas freelance y cuentas de cobro localizadas para Colombia: registro individual y masivo, cálculo de ingresos con tarifa configurable, exportación PDF, filtros por día de semana y llenado automático por promedios. Next.js 15 + SQLite.",
-  "url": "https://chronos.stevenvallejo.com",
+  "url": "chronos.stevenvallejo.com",
   "tono": "preciso, minimalista, profesional",
   "simbolo": "⏱",
   "frente": "ingenieria",
@@ -42,8 +42,8 @@
       "numero": ""
     },
     "ig_reel_cover": {
-      "titulo": "Tus horas freelance, sin Excel",
-      "copy": "Registro masivo, tarifa configurable, export a PDF. Tus cuentas viven en tu máquina."
+      "titulo": "Registrá. Cobrá. Listo.",
+      "copy": "Horas individuales o en lote, tarifa configurable, cuenta PDF. Filtros, promedios automáticos. Next.js + SQLite, freelance colombiano."
     },
     "stat_card": {
       "numero": "∞",

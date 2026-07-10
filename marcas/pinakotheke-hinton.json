@@ -3,7 +3,7 @@
   "nombre_producto": "Hinton",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Presentación académica sobre el texto de Hinton (1992): aborda la epistemología de las redes neuronales artificiales, la ambigüedad ontológica del modelo y su valor como programa de investigación funcionalista frente a una reducción neurológica acabada.",
-  "url": "https://hinton.stevenvallejo.com",
+  "url": "hinton.stevenvallejo.com",
   "tono": "técnico, investigador, profundo",
   "simbolo": "∂",
   "frente": "filosofia",
@@ -75,8 +75,8 @@
       "copy": "Hinton: redes neuronales como programa funcionalista, no como reducción neurológica. La IA tiene límite filosofal, no solo técnico."
     },
     "ig_reel_cover": {
-      "titulo": "1992: el giro de la IA",
-      "copy": "Redes neuronales como programa funcionalista, no como reducción neurológica. La IA tiene límite filosófico, no solo técnico."
+      "titulo": "Hinton, 1992: qué sabe una red",
+      "copy": "Epistemología de las redes neuronales: su ambigüedad ontológica y su valor como programa funcionalista frente a la reducción neurológica."
     }
   },
   "logo_style": "orbital",

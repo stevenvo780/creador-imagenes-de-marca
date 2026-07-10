@@ -3,7 +3,7 @@
   "nombre_producto": "Saga 05 · El giro filosófico",
   "nombre_corporativo": "Steven Vallejo",
   "tagline": "Construía rápido, quería tener razón. La filosofía me cambió el ki: ahora resuelvo hondo, viendo el problema entero. El regalo fue perder la necesidad de estar correcto.",
-  "url": "https://www.stevenvallejo.com/es",
+  "url": "stevenvallejo.com/es",
   "url_en": "https://www.stevenvallejo.com/en",
   "tono": "personal, reflexivo, técnico-humanista",
   "simbolo": "lemniscata (∞)",
@@ -37,9 +37,8 @@
       "copy": "El que resolvía rápido empezó a resolver hondo."
     },
     "ig_carousel": {
-      "titulo": "Mi ki cambió de naturaleza",
-      "copy": "Antes corría para tener razón. La filosofía me cambió el ki: ahora resuelvo hondo. Mirá, el verdadero poder es no necesitar que el ego esté en lo correcto.",
-      "numero": "05"
+      "titulo": "El trabajo profundo",
+      "copy": "Pasé de resolver rápido a resolver hondo. De querer tener razón a ver el problema completo. El regalo fue dejar de necesitar estar correcto."
     },
     "ig_reel_cover": {
       "titulo": "Mi ki cambió de naturaleza",

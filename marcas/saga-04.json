@@ -3,7 +3,7 @@
   "nombre_producto": "Saga 04 · La soledad del fuerte",
   "nombre_corporativo": "Steven Vallejo",
   "tagline": "El verdadero lujo no es ganar más: es encontrar alguien que te mire el trabajo y tenga razón en decirte qué no te salió. Eso es lo que extraño.",
-  "url": "https://www.stevenvallejo.com/es",
+  "url": "stevenvallejo.com/es",
   "url_en": "https://www.stevenvallejo.com/en",
   "tono": "personal, reflexivo, técnico-humanista",
   "simbolo": "lemniscata (∞)",
@@ -27,10 +27,10 @@
   "logo_simbolo": "∞",
   "textos": {
     "ig_post": {
-      "titulo": "Gané de nuevo, qué pereza",
+      "titulo": "La soledad del oficio",
       "subtitulo": "Cuando ganar se vuelve costumbre",
-      "etiqueta": "La soledad del fuerte",
-      "copy": "El lujo real no es ganar más. Es topar con alguien que te mire el trabajo, te diga en qué fallaste y tenga toda la razón. Mirá, eso sí vale oro."
+      "etiqueta": "crítica honesta",
+      "copy": "El lujo no es ganar más. Es topar con alguien que mire tu trabajo, te diga dónde fallaste y tenga razón. Ese lujo, te juro, no se vende."
     },
     "ig_story": {
       "titulo": "Gané otra vez, qué pereza",

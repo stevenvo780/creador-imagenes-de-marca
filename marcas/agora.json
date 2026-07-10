@@ -72,7 +72,7 @@
     },
     "ig_carousel": {
       "titulo": "Escribí, formalizá, demostrá",
-      "copy": "Plataforma académica: Markdown → formalización en ST → verificación lógica, en el mismo documento. Sin instalar, sin base de datos. Filosofía analítica con rigor de teorema."
+      "copy": "Plataforma académica: Markdown → formalización en ST → verificación lógica, todo en el mismo documento. Lógica formal ejecutable para humanidades."
     },
     "ig_reel_cover": {
       "titulo": "¿Puede un argumento ejecutarse?",
@@ -284,5 +284,6 @@
         "copy": "ST + auto.logic + LogicEducation + colaboración en tiempo real. Humanidades con el rigor de las ciencias. agora.elenxos.com"
       }
     ]
-  }
+  },
+  "url": ""
 }

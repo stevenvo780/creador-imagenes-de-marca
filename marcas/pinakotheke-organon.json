@@ -3,7 +3,7 @@
   "nombre_producto": "Órganon",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Pipeline interactivo en vivo: entrada en español → autologic (formalizador NLP basado en reglas) → ST (lenguaje lógico con SAT solver CDCL propio, 6 333 tests) → resultado ejecutado. Sin IA, sin base de datos, todo en proceso serverless Vercel.",
-  "url": "https://organon.stevenvallejo.com",
+  "url": "organon.stevenvallejo.com",
   "tono": "lógico, formal, computacional",
   "simbolo": "⊢",
   "frente": "informatica",
@@ -27,10 +27,10 @@
   "logo_simbolo": "⊢",
   "textos": {
     "ig_post": {
-      "titulo": "Texto a prueba ejecutable",
-      "subtitulo": "Del español al razonamiento formal, en vivo.",
-      "etiqueta": "6 333 tests · SAT CDCL",
-      "copy": "Escribís una idea en español. Un formalizador la pasa a lógica. Un SAT solver propio la demuestra. Sin IA, sin base de datos, todo en una función serverless."
+      "titulo": "Texto a lógica formal",
+      "subtitulo": "Español → SAT solver sin IA",
+      "etiqueta": "lógica formal",
+      "copy": "Escribís un argumento. Órganon lo pasa a lógica formal por reglas (sin IA). ST lo ejecuta con SAT solver CDCL propio, 6.333 tests verificados. Determinista, serverless."
     },
     "ig_story": {
       "titulo": "Texto a prueba ejecutable",

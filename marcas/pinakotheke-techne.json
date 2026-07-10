@@ -3,7 +3,7 @@
   "nombre_producto": "Téchne",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Documentación y showcase de 4 devtools OSS para Linux: Ultimate Terminal (control distribuido de máquinas via browser), Mission Center Web (monitor de recursos sin Electron), clawbar (voz + barra de estado Hyprland con Whisper/Kokoro) e Hyprland Multi-Monitor (workspaces independientes por monitor). Astro Starlight, 100% estático.",
-  "url": "https://techne.stevenvallejo.com",
+  "url": "techne.stevenvallejo.com",
   "tono": "artesanal, pragmático, OSS",
   "simbolo": "⚙",
   "frente": "informatica",
@@ -37,9 +37,8 @@
       "copy": "Software que cabe en la cabeza, no en la nube."
     },
     "ig_carousel": {
-      "titulo": "Cuatro devtools OSS para Linux",
-      "numero": "4",
-      "copy": "Ultimate Terminal, Mission Center Web, clawbar y Hyprland Multi-Monitor. Sin Electron innecesario, sin plataforma intermedia. Hechos a mano, libres."
+      "titulo": "4 devtools OSS para Linux",
+      "copy": "Ultimate Terminal (control por WebSocket), Mission Center Web (monitor sin Electron), clawbar (voz + barra Hyprland) y workspaces por monitor. Documentados en Astro."
     },
     "ig_reel_cover": {
       "titulo": "Téchne: oficio puro para Linux",

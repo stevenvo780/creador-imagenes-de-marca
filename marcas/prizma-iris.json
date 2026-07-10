@@ -3,7 +3,7 @@
   "nombre_producto": "Iris",
   "nombre_corporativo": "Prizma",
   "tagline": "Analítica que revela el espectro completo",
-  "url": "https://prisma-enterprice.cloud",
+  "url": "prisma-enterprice.cloud",
   "tono": "visual, analítico, estratégico",
   "simbolo": "◐",
   "suite": "prizma",
@@ -70,9 +70,8 @@
       "copy": "Business analytics · Prizma"
     },
     "ig_carousel": {
-      "titulo": "Lo que los números te ocultan.",
-      "copy": "Iris convierte datos en espectro visual. Lo que el Excel esconde, el dashboard lo saca a la vista: tendencias, cuellos de botella, oportunidades.",
-      "numero": "100%"
+      "titulo": "Mensajería masiva WhatsApp",
+      "copy": "Plataforma de envíos masivos para WhatsApp Business: campañas, plantillas y gestión de contactos."
     }
   },
   "logo_style": "prisma_refraccion",

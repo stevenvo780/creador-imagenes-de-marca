@@ -3,7 +3,7 @@
   "nombre_producto": "Érgon",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Landing comercial para una suite de tres starter kits PYME listos para customizar: CRM (React+Vite+Express), Hours Tracker (Next.js 15 + Turso) y VPN Manager (Flask+Docker). Modelo «80% construido, pagas el 20% a medida».",
-  "url": "https://ergon.stevenvallejo.com",
+  "url": "ergon.stevenvallejo.com",
   "tono": "productivo, pragmático, accesible",
   "simbolo": "▣",
   "frente": "ingenieria",
@@ -101,9 +101,9 @@
       "copy": "Si montar PYME software fuera emocionante, no necesitarías Érgon. Acá simplemente funciona."
     },
     "poster_a4": {
-      "titulo": "Tres kits, 80% hechos",
-      "subtitulo": "Pagás solo el 20% a tu medida",
-      "copy": "CRM en React+Vite+Express. Hours Tracker en Next.js. VPN Manager en Flask+Docker. Lo común resuelto, lo específico a medida. Sacás a producción sin pagar el discovery completo."
+      "titulo": "Tres starter kits para PYME",
+      "subtitulo": "Lo común resuelto; el dominio, tuyo",
+      "copy": "CRM (React+Vite+Express), Hours Tracker (Next.js+Turso) y VPN Manager (Flask). Auth, CRUD y deploy vienen listos; la lógica de negocio la ponés vos. Turborepo."
     },
     "whatsapp_perfil": {
       "titulo": "Turborepo PYME sin drama"
