@@ -40,17 +40,59 @@ def _get_default_variant_for_asset_type(asset_type: str) -> str:
     return defaults.get(asset_type, "v1_color")
 
 
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+_LOGO_MIME = {".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg"}
+
+
+def _resolve_logo_asset(path_str: str) -> Path | None:
+    """Resuelve la ruta de un logo real: absoluta, o relativa al repo/marcas."""
+    p = Path(path_str)
+    candidates = [p] if p.is_absolute() else [_REPO_ROOT / p, cfg.MARCAS_DIR / p, cfg.MARCAS_DIR.parent / p]
+    for c in candidates:
+        with contextlib.suppress(Exception):
+            if c.is_file():
+                return c
+    return None
+
+
+def _load_logo_asset_data_uri(path_str: str) -> str | None:
+    """Carga un logo de marca pre-existente (SVG/PNG/JPG) como data URI.
+
+    Permite que Eikón ADOPTE la imagen de marca oficial de un producto (ej. el
+    isotipo de Ágora/Elenxos) en vez de generar uno procedural. También sirve para
+    logos creados por profesionales que el usuario quiera inyectar.
+    """
+    f = _resolve_logo_asset(path_str)
+    if f is None:
+        return None
+    mime = _LOGO_MIME.get(f.suffix.lower())
+    if mime is None:
+        return None
+    with contextlib.suppress(Exception):
+        data = f.read_bytes()
+        if not data:
+            return None
+        return f"data:{mime};base64," + b64encode(data).decode("ascii")
+    return None
+
+
 def _build_isotype_data_uri(
     style: str,
     seed_hex: str,
     marca: dict[str, Any],
     vars_dict: dict[str, str],
 ) -> str | None:
-    """Genera el SVG procedural del isótipo y lo devuelve como data URI base64.
+    """Devuelve el isótipo como data URI base64.
 
-    Devuelve None para ``style == "none"`` (o vacío), para que el render use el
-    mark por defecto del template. Determinístico: el seed deriva del input_hash.
+    Prioridad: si la marca declara ``logo_asset`` (ruta a un logo real/oficial),
+    se usa ese archivo (adopta marcas pre-existentes). Si no, genera el isótipo
+    procedural determinístico. Devuelve None si no hay ni asset ni estilo válido.
     """
+    asset = str(marca.get("logo_asset") or "").strip()
+    if asset:
+        uri = _load_logo_asset_data_uri(asset)
+        if uri:
+            return uri
     if not style or style == "none":
         return None
     try:
