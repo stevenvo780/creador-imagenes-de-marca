@@ -32,6 +32,7 @@ webapp = [
 eikon = "eikon:main"
 
 [tool.setuptools]
+packages = ["eikon_core"]
 py-modules = ["eikon", "contrast_validator", "gallery", "web_icons", "variations"]
 include-package-data = true
 

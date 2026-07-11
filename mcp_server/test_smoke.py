@@ -15,19 +15,7 @@ def test_imports():
     print("=" * 70)
 
     try:
-        from server import (
-            EIKON_API_KEY,
-            EIKON_BASE_URL,
-            USE_FASTMCP,
-            eikon_create_brand,
-            eikon_gallery,
-            eikon_generate_asset,
-            eikon_list_asset_types,
-            eikon_list_brands,
-            eikon_logo_options,
-            eikon_set_identity,
-            get_headers,
-        )
+        import server  # noqa: F401
         print("✓ All modules imported successfully")
         return True
     except ImportError as e:
@@ -138,13 +126,6 @@ def test_function_signatures():
         else:
             print(f"✓ {name}: async={is_async}")
 
-        # Check required params (those without defaults)
-        required_params = [
-            p
-            for p in sig.parameters.values()
-            if p.default == inspect.Parameter.empty
-        ]
-        required_names = [p.name for p in required_params]
         for param in expected_params:
             if param not in actual_params:
                 print(f"  ⚠ Missing parameter: {param}")
