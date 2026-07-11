@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "eikon": {
+      "command": "python3",
+      "args": ["/workspace/Pinakotheke/eikon/mcp_server/server.py"],
+      "env": {
+        "EIKON_BASE_URL": "https://eikon-633619052458.us-central1.run.app",
+        "EIKON_API_KEY": "sk-proj-..."
+      }
+    }
+  }
+}

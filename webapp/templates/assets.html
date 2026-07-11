@@ -1,0 +1,61 @@
+{% extends "_layout.html" %}
+{% set _active = 'assets' %}
+{% block title %}Assets · Eikon{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div>
+    <h1>Assets</h1>
+    <p class="lead">
+      {% if marca_slug %}Filtrando por <b>{{ marca_slug }}</b>.{% else %}Vista global.{% endif %}
+    </p>
+  </div>
+  <div class="right">
+    <a class="btn secondary size-sm" href="/dashboard">← Dashboard</a>
+    <span class="meta">{{ assets|length }} items</span>
+  </div>
+</section>
+
+<form method="get" action="/assets" class="card flat" style="margin-bottom: var(--space-4);">
+  <div style="display:flex; gap: var(--space-3); align-items:end; flex-wrap: wrap;">
+    <label class="field" style="margin:0; flex:1 1 200px;">
+      <span class="field-label">Marca slug</span>
+      <input name="marca_slug" value="{{ marca_slug or '' }}" placeholder="prizma-iris" />
+    </label>
+    <button class="btn primary" type="submit">Filtrar</button>
+    {% if marca_slug %}
+    <a class="btn ghost" href="/assets">Limpiar</a>
+    {% endif %}
+  </div>
+</form>
+
+{% if assets %}
+<div class="asset-grid">
+  {% for a in assets %}
+  <article class="asset-card" aria-label="{{ a.marca_slug }} {{ a.type }} {{ a.variant }}">
+    <div class="asset-thumb">
+      {% if a.output_path %}
+        <img src="/api/v1/assets/file?path={{ a.output_path|urlencode }}" alt="{{ a.variant }}" loading="lazy" />
+      {% else %}
+        <span class="meta">sin preview</span>
+      {% endif %}
+    </div>
+    <div class="asset-meta">
+      <div>
+        <b>{{ a.type }}</b><br>
+        <span class="meta">{{ a.variant }}</span>
+      </div>
+      <div style="text-align:right;">
+        <span class="meta">{{ a.size_bytes|bytes }}</span><br>
+        <span class="meta">{{ a.created_at|dt }}</span>
+      </div>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty">
+  <strong>Sin assets persistidos todavía</strong>
+  Lanza un job real (no dry-run) desde el dashboard y aparecerán aquí.
+</div>
+{% endif %}
+{% endblock %}

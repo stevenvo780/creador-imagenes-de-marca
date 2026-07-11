@@ -1,0 +1,85 @@
+- generic [ref=e2]:
+  - link "Saltar al contenido principal" [ref=e27] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e28]:
+    - generic [ref=e29]:
+      - link "Eikón" [ref=e30] [cursor=pointer]:
+        - /url: /
+      - navigation "Navegación principal" [ref=e31]:
+        - list [ref=e32]:
+          - listitem [ref=e33]:
+            - link "Marcas" [ref=e34] [cursor=pointer]:
+              - /url: /brands
+          - listitem [ref=e35]:
+            - link "Crear" [ref=e36] [cursor=pointer]:
+              - /url: /batch
+          - listitem [ref=e37]:
+            - link "Galería" [ref=e38] [cursor=pointer]:
+              - /url: /gallery
+      - generic [ref=e39]:
+        - 'generic "Cuenta: demo" [ref=e40]': demo
+        - button "Salir" [ref=e41] [cursor=pointer]
+  - main [ref=e42]:
+    - generic [ref=e122]:
+      - generic [ref=e123]:
+        - generic [ref=e124]:
+          - heading "Editar marca" [level=1] [ref=e125]
+          - paragraph [ref=e126]: Ajustá el nombre, el texto del logo y la paleta de colores.
+        - link "← Volver a mis marcas" [ref=e127] [cursor=pointer]:
+          - /url: /brands
+          - button "← Volver a mis marcas" [ref=e128]
+      - form "Editar marca" [ref=e129]:
+        - group "Datos básicos" [ref=e130]:
+          - generic [ref=e131]: Datos básicos
+          - generic [ref=e132]:
+            - generic [ref=e133]: Nombre de la marca
+            - textbox "Nombre de la marca" [active] [ref=e134]: Marca QA Prueba
+            - paragraph [ref=e135]: Lo ven tus usuarios en todas las pantallas.
+          - generic [ref=e136]:
+            - generic [ref=e137]: Texto del logo (opcional)
+            - textbox "Texto del logo (opcional)" [ref=e138]: QA
+            - paragraph [ref=e139]: Lo que se lee dentro del logo. Si lo dejás vacío, usamos el nombre.
+        - group "Paleta de colores" [ref=e140]:
+          - generic [ref=e141]: Paleta de colores
+          - paragraph [ref=e142]: "Tocá el cuadrado para abrir el selector, o escribí el valor en hexadecimal (por ejemplo #1F8276)."
+          - generic [ref=e143]:
+            - generic [ref=e144]:
+              - generic [ref=e145]: Fondo
+              - generic [ref=e146]:
+                - textbox "Fondo" [ref=e148] [cursor=pointer]: "#ffffff"
+                - textbox "Fondo — valor hexadecimal" [ref=e149]:
+                  - /placeholder: "#1F8276"
+                  - text: "#FFFFFF"
+            - generic [ref=e150]:
+              - generic [ref=e151]: Texto
+              - generic [ref=e152]:
+                - textbox "Texto" [ref=e154] [cursor=pointer]: "#0e1b1a"
+                - textbox "Texto — valor hexadecimal" [ref=e155]:
+                  - /placeholder: "#1F8276"
+                  - text: "#0E1B1A"
+            - generic [ref=e156]:
+              - generic [ref=e157]: Primario
+              - generic [ref=e158]:
+                - textbox "Primario" [ref=e160] [cursor=pointer]: "#1f8276"
+                - textbox "Primario — valor hexadecimal" [ref=e161]:
+                  - /placeholder: "#1F8276"
+                  - text: "#1F8276"
+            - generic [ref=e162]:
+              - generic [ref=e163]: Acento
+              - generic [ref=e164]:
+                - textbox "Acento" [ref=e166] [cursor=pointer]: "#e0a85e"
+                - textbox "Acento — valor hexadecimal" [ref=e167]:
+                  - /placeholder: "#1F8276"
+                  - text: "#E0A85E"
+            - generic [ref=e168]:
+              - generic [ref=e169]: Acento 2
+              - generic [ref=e170]:
+                - textbox "Acento 2" [ref=e172] [cursor=pointer]: "#b07a2a"
+                - textbox "Acento 2 — valor hexadecimal" [ref=e173]:
+                  - /placeholder: "#1F8276"
+                  - text: "#B07A2A"
+        - generic [ref=e174]:
+          - link "Cancelar" [ref=e175] [cursor=pointer]:
+            - /url: /brands
+            - button "Cancelar" [ref=e176]
+          - button "Guardar cambios" [ref=e177] [cursor=pointer]

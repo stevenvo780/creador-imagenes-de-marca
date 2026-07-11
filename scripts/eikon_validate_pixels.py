@@ -34,15 +34,17 @@ Exit codes:
     1 — se encontraron errores (cuando --fail-on-errors está activo)
     2 — error de E/S (manifest no encontrado, etc.)
 """
+
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
 import sys
-from datetime import datetime, timezone
+from collections.abc import Iterable, Sequence
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Any
 
 try:
     from PIL import Image, UnidentifiedImageError
@@ -74,7 +76,16 @@ DEFAULT_MIN_BYTES = 1024
 
 # Tipos donde se tolera que las variantes sean bit-idénticas (decorativos,
 # favicons que sólo cambian paleta pero no layout, etc.).
-DEFAULT_ALLOW_IDENTICAL_TYPES: Tuple[str, ...] = ()
+DEFAULT_ALLOW_IDENTICAL_TYPES: tuple[str, ...] = ()
+
+# Favicons se renderizan/exportan a tamaños físicos estándar (32/180/512)
+# aunque la taxonomía base declare 512px @3x (=1536). No es un error de
+# pixel: la variante codifica el tamaño esperado.
+FAVICON_VARIANT_SIZES: dict[str, tuple[int, int]] = {
+    "v1_32": (32, 32),
+    "v2_180": (180, 180),
+    "v3_512": (512, 512),
+}
 
 # Margen para el muestreo de bordes (px en cada lado).
 BORDER_SAMPLE = 16
@@ -86,6 +97,7 @@ BORDER_STRIDE = 8
 # =============================================================================
 # Utilidades
 # =============================================================================
+
 
 def _md5_of_file(path: Path, chunk: int = 65536) -> str:
     """Hash rápido del contenido del archivo (no del PNG decodificado)."""
@@ -99,7 +111,7 @@ def _md5_of_file(path: Path, chunk: int = 65536) -> str:
     return h.hexdigest()
 
 
-def _sample_border_color(im: Image.Image) -> Optional[Tuple[int, int, int]]:
+def _sample_border_color(im: Image.Image) -> tuple[int, int, int] | None:
     """
     Devuelve el color RGB promedio muestreando los 4 bordes de la imagen.
 
@@ -116,18 +128,15 @@ def _sample_border_color(im: Image.Image) -> Optional[Tuple[int, int, int]]:
         except Exception:
             return None
 
-    samples: List[Tuple[int, int, int]] = []
     stride_x = max(1, min(BORDER_STRIDE, w // 2))
     stride_y = max(1, min(BORDER_STRIDE, h // 2))
 
     # bordes superior e inferior (fila completa)
-    for y in (0, h - 1):
-        for x in range(0, w, stride_x):
-            samples.append(im.getpixel((x, y)))
+    samples = [im.getpixel((x, y)) for y in (0, h - 1) for x in range(0, w, stride_x)]
     # bordes laterales (sin contar las esquinas ya tomadas)
-    for x in (0, w - 1):
-        for y in range(stride_y, h - stride_y, stride_y):
-            samples.append(im.getpixel((x, y)))
+    samples.extend(
+        im.getpixel((x, y)) for x in (0, w - 1) for y in range(stride_y, h - stride_y, stride_y)
+    )
 
     if not samples:
         return None
@@ -138,9 +147,7 @@ def _sample_border_color(im: Image.Image) -> Optional[Tuple[int, int, int]]:
     return (r, g, b)
 
 
-def _foreground_density(
-    im: Image.Image, bg: Tuple[int, int, int]
-) -> float:
+def _foreground_density(im: Image.Image, bg: tuple[int, int, int]) -> float:
     """
     Calcula la fracción de píxeles que difieren del color de borde.
 
@@ -179,19 +186,35 @@ def _load_image(path: Path) -> Image.Image:
     return im
 
 
+def _normalize_known_dim_exceptions(result: dict[str, Any]) -> None:
+    """Elimina falsos positivos conocidos de dimensiones por tipo/variante."""
+    if result.get("type") != "favicon":
+        return
+    variant = str(result.get("variant") or "")
+    expected = FAVICON_VARIANT_SIZES.get(variant)
+    actual = result.get("actual") or {}
+    if not expected or (actual.get("width"), actual.get("height")) != expected:
+        return
+    before = list(result.get("issues") or [])
+    result["issues"] = [i for i in before if not str(i).startswith("dim_mismatch")]
+    result.setdefault("checks", {})["dim_match"] = True
+    result.setdefault("checks", {})["dim_match_exception"] = "favicon_physical_size"
+
+
 # =============================================================================
 # Validación por asset
 # =============================================================================
 
+
 def validate_asset(
     png_path: Path,
-    declared_w: Optional[int],
-    declared_h: Optional[int],
+    declared_w: int | None,
+    declared_h: int | None,
     *,
     min_bytes: int = DEFAULT_MIN_BYTES,
     fg_density_min: float = DEFAULT_FG_DENSITY_MIN,
     compute_fg: bool = True,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Valida un solo asset y devuelve un dict con checks + issues.
 
@@ -199,7 +222,7 @@ def validate_asset(
     código estable (`missing`, `corrupt`, `empty`, `dim_mismatch`,
     `low_fg_density`).
     """
-    result: Dict[str, Any] = {
+    result: dict[str, Any] = {
         "path": str(png_path),
         "exists": png_path.exists(),
         "checks": {
@@ -239,7 +262,7 @@ def validate_asset(
     result["actual"]["md5"] = _md5_of_file(png_path)
 
     if declared_w is not None and declared_h is not None:
-        dim_match = (actual_w == declared_w and actual_h == declared_h)
+        dim_match = actual_w == declared_w and actual_h == declared_h
         result["checks"]["dim_match"] = dim_match
         if not dim_match:
             result["issues"].append(
@@ -263,7 +286,7 @@ def validate_asset(
                     result["issues"].append(
                         f"low_fg_density: density={density:.4f} < {fg_density_min}"
                     )
-        except Exception as e:  # noqa: BLE001 — defensivo
+        except Exception as e:
             result["issues"].append(f"fg_check_error: {type(e).__name__}")
 
     return result
@@ -273,10 +296,11 @@ def validate_asset(
 # Detección de variantes idénticas
 # =============================================================================
 
-def find_identical_variants(
-    asset_results: Sequence[Dict[str, Any]],
+
+def find_identical_variants(  # noqa: C901  # comparación pixel con muchas ramas
+    asset_results: Sequence[dict[str, Any]],
     allow_identical_types: Iterable[str] = (),
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """
     Agrupa assets por `(category, type)` y reporta grupos donde ≥2 variantes
     tienen exactamente el mismo md5 (bit-idénticas).
@@ -294,7 +318,7 @@ def find_identical_variants(
             if piece:
                 allow.add(piece)
 
-    groups: Dict[Tuple[str, str], List[Dict[str, Any]]] = {}
+    groups: dict[tuple[str, str], list[dict[str, Any]]] = {}
     for r in asset_results:
         cat = r.get("category")
         typ = r.get("type")
@@ -305,21 +329,23 @@ def find_identical_variants(
             continue
         groups.setdefault((cat, typ), []).append(r)
 
-    identicals: List[Dict[str, Any]] = []
+    identicals: list[dict[str, Any]] = []
     for (cat, typ), members in sorted(groups.items()):
         if len(members) < 2:
             continue
-        by_hash: Dict[str, List[str]] = {}
+        by_hash: dict[str, list[str]] = {}
         for m in members:
             by_hash.setdefault(m["actual"]["md5"], []).append(m["variant"])
         for md5, variants in by_hash.items():
             if len(variants) >= 2:
-                identicals.append({
-                    "category": cat,
-                    "type": typ,
-                    "md5": md5,
-                    "variants": sorted(variants),
-                })
+                identicals.append(
+                    {
+                        "category": cat,
+                        "type": typ,
+                        "md5": md5,
+                        "variants": sorted(variants),
+                    }
+                )
     return identicals
 
 
@@ -327,7 +353,8 @@ def find_identical_variants(
 # Carga del manifest y orquestación
 # =============================================================================
 
-def load_manifest(marca_dir: Path, manifest_name: str = DEFAULT_MANIFEST) -> Dict[str, Any]:
+
+def load_manifest(marca_dir: Path, manifest_name: str = DEFAULT_MANIFEST) -> dict[str, Any]:
     path = marca_dir / manifest_name
     if not path.exists():
         raise FileNotFoundError(f"manifest no encontrado: {path}")
@@ -342,14 +369,14 @@ def validate_marca(
     fg_density_min: float = DEFAULT_FG_DENSITY_MIN,
     allow_identical_types: Sequence[str] = (),
     compute_fg: bool = True,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Valida todos los PNGs referenciados por `_manifest.json` en `marca_dir`.
     """
     manifest = load_manifest(marca_dir, manifest_name)
     marca_slug = manifest.get("marca") or marca_dir.name
 
-    asset_results: List[Dict[str, Any]] = []
+    asset_results: list[dict[str, Any]] = []
     for entry in manifest.get("assets", []):
         rel = entry.get("path")
         if not rel:
@@ -368,6 +395,7 @@ def validate_marca(
         result["type"] = entry.get("type")
         result["variant"] = entry.get("variant")
         result["manifest_status"] = entry.get("status")
+        _normalize_known_dim_exceptions(result)
         asset_results.append(result)
 
     identicals = find_identical_variants(asset_results, allow_identical_types)
@@ -375,11 +403,13 @@ def validate_marca(
     # resumen
     total = len(asset_results)
     errors = sum(
-        1 for r in asset_results
+        1
+        for r in asset_results
         if any(i.startswith(("missing", "empty", "corrupt", "dim_mismatch")) for i in r["issues"])
     )
     warnings = sum(
-        1 for r in asset_results
+        1
+        for r in asset_results
         if any(i.startswith(("low_fg_density", "fg_check_error")) for i in r["issues"])
     )
     # variantes idénticas son errores (variant DEBE diferir salvo allow-list)
@@ -387,7 +417,7 @@ def validate_marca(
 
     return {
         "marca": marca_slug,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": datetime.now(UTC).isoformat(),
         "marca_dir": str(marca_dir),
         "thresholds": {
             "min_bytes": min_bytes,
@@ -409,9 +439,10 @@ def validate_marca(
 # CLI
 # =============================================================================
 
-def _discover_marcas(output_dir: Path) -> List[Path]:
+
+def _discover_marcas(output_dir: Path) -> list[Path]:
     """Devuelve subdirs de output que parecen marcas (tienen _manifest.json)."""
-    marcas: List[Path] = []
+    marcas: list[Path] = []
     if not output_dir.exists():
         return marcas
     for child in sorted(output_dir.iterdir()):
@@ -422,7 +453,7 @@ def _discover_marcas(output_dir: Path) -> List[Path]:
     return marcas
 
 
-def _print_summary_stdout(reports: List[Dict[str, Any]]) -> None:
+def _print_summary_stdout(reports: list[dict[str, Any]]) -> None:
     if not reports:
         print("(sin marcas procesadas)")
         return
@@ -440,12 +471,10 @@ def _print_summary_stdout(reports: List[Dict[str, Any]]) -> None:
     total_e = sum(r["totals"]["errors"] for r in reports)
     total_w = sum(r["totals"]["warnings"] for r in reports)
     total_i = sum(r["totals"]["identical_variant_pairs"] for r in reports)
-    print(
-        f"{'TOTAL':<32} {total_a:>7} {total_e:>7} {total_w:>6} {total_i:>10}"
-    )
+    print(f"{'TOTAL':<32} {total_a:>7} {total_e:>7} {total_w:>6} {total_i:>10}")
 
 
-def main(argv: Optional[Sequence[str]] = None) -> int:
+def main(argv: Sequence[str] | None = None) -> int:  # noqa: C901  # dispatch de CLI
     parser = argparse.ArgumentParser(
         description="Validador pixel ligero para Eikon (Pillow-only).",
     )
@@ -519,9 +548,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         parser.error("especificá --marca <slug> o --all")
 
     output_dir = Path(args.output_dir)
-    allow = tuple(t.strip() for t in args.allow_identical_types.split(",") if t.strip())  # case se normaliza dentro de find_identical_variants
+    allow = tuple(
+        t.strip() for t in args.allow_identical_types.split(",") if t.strip()
+    )  # case se normaliza dentro de find_identical_variants
 
-    targets: List[Path] = []
+    targets: list[Path] = []
     if args.marca:
         targets.append(output_dir / args.marca)
     if args.all:
@@ -530,7 +561,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             if m not in targets:
                 targets.append(m)
 
-    reports: List[Dict[str, Any]] = []
+    reports: list[dict[str, Any]] = []
     total_error_exit = False
 
     for marca_dir in targets:
@@ -580,8 +611,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     # exit code
     any_errors = any(
-        r["totals"]["errors"] > 0 or r["totals"]["identical_variant_pairs"] > 0
-        for r in reports
+        r["totals"]["errors"] > 0 or r["totals"]["identical_variant_pairs"] > 0 for r in reports
     )
     if args.fail_on_errors and (any_errors or total_error_exit):
         return 1

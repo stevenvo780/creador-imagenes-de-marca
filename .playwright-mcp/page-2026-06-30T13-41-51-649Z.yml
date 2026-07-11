@@ -1,0 +1,37 @@
+- generic [ref=e2]:
+  - link "Saltar al contenido principal" [ref=e25] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e26]:
+    - generic [ref=e27]:
+      - link "Eikón" [ref=e28] [cursor=pointer]:
+        - /url: /
+      - navigation "Navegación principal" [ref=e29]:
+        - list [ref=e30]:
+          - listitem [ref=e31]:
+            - link "Marcas" [ref=e32] [cursor=pointer]:
+              - /url: /brands
+          - listitem [ref=e33]:
+            - link "Crear" [ref=e34] [cursor=pointer]:
+              - /url: /batch
+          - listitem [ref=e35]:
+            - link "Galería" [ref=e36] [cursor=pointer]:
+              - /url: /gallery
+      - generic [ref=e37]:
+        - 'generic "Cuenta: qalocal" [ref=e38]': qalocal
+        - button "Salir" [ref=e39] [cursor=pointer]
+  - main [ref=e40]:
+    - generic [ref=e382]:
+      - generic [ref=e383]:
+        - heading "¡Tus variaciones están listas!" [level=2] [ref=e384]
+        - paragraph [ref=e385]: El proceso terminó correctamente.
+      - generic [ref=e386]:
+        - generic [ref=e387]:
+          - generic [ref=e388]: ✓
+          - generic [ref=e389]: Listas
+        - generic [ref=e390]:
+          - paragraph [ref=e391]: Generación completada
+          - paragraph [ref=e392]: 4 variaciones creadas
+        - paragraph [ref=e393]: "Finalizado: 30 jun 2026, 13:41"
+      - generic [ref=e394]:
+        - button "Ver mis variaciones →" [ref=e395] [cursor=pointer]
+        - button "Generar de nuevo" [ref=e396] [cursor=pointer]

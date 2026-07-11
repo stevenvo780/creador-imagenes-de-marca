@@ -3,7 +3,7 @@
   "nombre_producto": "Koinonía",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Plataforma multi-tenant para comunidades Discord: portal web (eventos, biblioteca, ranking, tienda, roles), API NestJS 10 + Neon Postgres y bot discord.js con XP y recompensas por voz. Un solo codebase y una sola BD para múltiples comunidades aisladas por tenantId.",
-  "url": "https://koinonia.stevenvallejo.com",
+  "url": "koinonia.stevenvallejo.com",
   "tono": "social, colectivo, multi-tenant",
   "simbolo": "◎",
   "frente": "informatica",
@@ -26,109 +26,92 @@
   "logo_texto": "Koinonía",
   "logo_simbolo": "◎",
   "textos": {
-    "linkedin_post": {
-      "titulo": "Comunidades con memoria y estructura",
-      "subtitulo": "Plataforma multi-tenant · Pinakothḗke",
-      "copy": "Fusión de Cafetería del Caos y Tertulia Literaria: eventos, biblioteca, ranking y normativa. Login real con Firebase. Next.js 15 + NestJS serverless + Neon."
-    },
-    "linkedin_banner": {
-      "titulo": "Koinonía",
-      "copy": "Plataforma multi-tenant para comunidades de práctica. Eventos · Biblioteca · Ranking · Normativa."
-    },
     "ig_post": {
-      "titulo": "◎",
-      "subtitulo": "Koinonía",
-      "copy": "Tu comunidad, tu memoria. Multi-tenant desde el día uno."
+      "titulo": "Tu comunidad armada para crecer",
+      "subtitulo": "Eventos, biblioteca, ranking sin ruido",
+      "etiqueta": "pilares",
+      "copy": "Juntá eventos, organizá tu biblioteca colectiva, definí las normas. Cada comunidad en su propio espacio — datos limpios, sin contaminación de afuera. Eso es todo lo que necesitás."
     },
     "ig_story": {
-      "titulo": "Koinonía",
-      "copy": "Eventos + biblioteca + ranking en una sola plataforma ↓"
-    },
-    "x_post": {
-      "titulo": "Koinonía",
-      "copy": "Plataforma multi-tenant de comunidades: Next.js 15 + NestJS serverless + Neon + Firebase auth. Eventos, biblioteca, ranking y normativa. En vivo → koinonia.stevenvallejo.com"
-    },
-    "yt_thumbnail": {
-      "titulo": "Koinonía",
-      "copy": "NestJS + Discord"
-    },
-    "yt_banner": {
-      "titulo": "Koinonía",
-      "subtitulo": "Comunidades multi-tenant con memoria y estructura · Pinakothḗke"
-    },
-    "og_general": {
-      "titulo": "Koinonía",
-      "subtitulo": "Comunidades multi-tenant · Pinakothḗke",
-      "copy": "Plataforma de comunidades con eventos, biblioteca compartida, ranking de participantes y normativa. Login real Firebase. Stack: Next.js 15 + NestJS serverless + Neon."
-    },
-    "whatsapp_perfil": {
-      "titulo": "◎",
-      "copy": "Koinonía"
-    },
-    "contra_cover": {
-      "titulo": "Koinonía",
-      "copy": "Plataforma multi-tenant de comunidades · Pinakothḗke"
+      "titulo": "Tu comunidad armada para crecer",
+      "copy": "La fuerza está en quiénes se reúnen. La plataforma, en el fondo."
     },
     "ig_carousel": {
-      "titulo": "Multi-tenant desde el día uno",
-      "subtitulo": "Koinonía · Pinakothḗke",
-      "copy": "Cada comunidad tiene su espacio, sus eventos y su biblioteca. Sin mezclar datos entre tenants."
+      "titulo": "Una BD, N comunidades",
+      "copy": "1 código, 1 BD, múltiples Discord. Eventos, biblioteca, ranking, tienda, roles. Aislados por tenantId. NestJS API + Next.js web + discord.js bot, todo multi-tenant."
     },
     "ig_reel_cover": {
-      "titulo": "Koinonía",
-      "copy": "Demo: comunidad en vivo con login real"
+      "titulo": "Tu comunidad armada para crecer",
+      "copy": "La fuerza está en quiénes se reúnen. La plataforma, en el fondo."
     },
-    "x_header": {
-      "titulo": "Koinonía",
-      "subtitulo": "Comunidades con memoria y estructura · Pinakothḗke",
-      "copy": "Eventos · Biblioteca · Ranking · Normativa"
+    "stat_card": {
+      "numero": "1",
+      "etiqueta": "Código · N comunidades",
+      "copy": "1 código, 1 BD, varios tenants. Eventos, biblioteca, ranking, tienda y roles para cada comunidad. Aislados con tenantId."
     },
-    "fb_cover": {
-      "titulo": "Koinonía",
-      "subtitulo": "Plataforma multi-tenant de comunidades",
-      "copy": "Eventos, biblioteca, ranking y normativa. Pinakothḗke."
+    "ad_rectangle": {
+      "titulo": "Tu comunidad armada para crecer",
+      "numero": "4",
+      "copy": "La fuerza está en quiénes se reúnen. La plataforma, en el fondo.",
+      "cita": "La fuerza está en quiénes se reúnen. La plataforma, en el fondo.",
+      "autor": "Steven Vallejo"
     },
-    "web_hero": {
-      "titulo": "Comunidades con memoria y estructura",
-      "subtitulo": "Koinonía · Pinakothḗke",
-      "copy": "Plataforma multi-tenant para comunidades de práctica. Crea tu espacio, gestiona eventos, organiza tu biblioteca colectiva y define las reglas del juego. Login real con Firebase."
+    "ad_leaderboard": {
+      "titulo": "Tu comunidad armada para crecer",
+      "copy": "La fuerza está en quiénes se reúnen. La plataforma, en el fondo."
     },
-    "web_hero_mobile": {
-      "titulo": "Koinonía",
-      "subtitulo": "Comunidades multi-tenant",
-      "copy": "Eventos · Biblioteca · Ranking · Normativa"
-    },
-    "email_header": {
-      "titulo": "Koinonía",
-      "subtitulo": "Comunidades con memoria y estructura · Pinakothḗke",
-      "copy": "koinonia.stevenvallejo.com"
-    },
-    "banner_ad": {
-      "titulo": "Koinonía",
-      "copy": "Plataforma multi-tenant de comunidades — koinonia.stevenvallejo.com"
+    "og_general": {
+      "titulo": "Tu comunidad armada para crecer",
+      "subtitulo": "Eventos, biblioteca, ranking sin ruido",
+      "copy": "Juntá eventos, organizá tu biblioteca colectiva, definí las normas. Cada comunidad en su propio espacio — datos limpios, sin contaminación de afuera. Eso es todo lo que necesitás."
     },
     "og_product": {
-      "titulo": "Koinonía — Plataforma de comunidades",
-      "subtitulo": "Multi-tenant · Eventos · Biblioteca · Ranking",
-      "copy": "Next.js 15 + NestJS serverless + Neon + Firebase auth. Fusión de Cafetería del Caos y Tertulia Literaria."
+      "titulo": "Tu comunidad armada para crecer",
+      "subtitulo": "Eventos, biblioteca, ranking sin ruido",
+      "copy": "Juntá eventos, organizá tu biblioteca colectiva, definí las normas. Cada comunidad en su propio espacio — datos limpios, sin contaminación de afuera. Eso es todo lo que necesitás."
+    },
+    "web_hero": {
+      "titulo": "Tu comunidad armada para crecer",
+      "subtitulo": "Eventos, biblioteca, ranking sin ruido",
+      "copy": "Juntá eventos, organizá tu biblioteca colectiva, definí las normas. Cada comunidad en su propio espacio — datos limpios, sin contaminación de afuera. Eso es todo lo que necesitás."
+    },
+    "linkedin_post": {
+      "titulo": "Tu comunidad armada para crecer",
+      "subtitulo": "Eventos, biblioteca, ranking sin ruido",
+      "etiqueta": "pilares",
+      "copy": "Juntá eventos, organizá tu biblioteca colectiva, definí las normas. Cada comunidad en su propio espacio — datos limpios, sin contaminación de afuera. Eso es todo lo que necesitás."
+    },
+    "linkedin_banner": {
+      "titulo": "Tu comunidad armada para crecer",
+      "etiqueta": "pilares",
+      "copy": "La fuerza está en quiénes se reúnen. La plataforma, en el fondo."
+    },
+    "fb_cover": {
+      "titulo": "Tu comunidad armada para crecer",
+      "subtitulo": "Eventos, biblioteca, ranking sin ruido",
+      "copy": "Juntá eventos, organizá tu biblioteca colectiva, definí las normas. Cada comunidad en su propio espacio — datos limpios, sin contaminación de afuera. Eso es todo lo que necesitás."
+    },
+    "x_post": {
+      "titulo": "Tu comunidad armada para crecer",
+      "copy": "La fuerza está en quiénes se reúnen. La plataforma, en el fondo."
+    },
+    "yt_thumbnail": {
+      "titulo": "Tu comunidad armada para crecer",
+      "copy": "La fuerza está en quiénes se reúnen. La plataforma, en el fondo."
     },
     "poster_a4": {
-      "titulo": "Koinonía",
-      "subtitulo": "Comunidades con memoria y estructura",
-      "copy": "Plataforma multi-tenant para comunidades de práctica. Gestiona eventos, biblioteca colectiva, ranking de participantes y normativa propia. Cada comunidad, su espacio. Login real con Firebase. Next.js 15 · NestJS serverless · Neon · Pinakothḗke."
+      "titulo": "Tu comunidad armada para crecer",
+      "subtitulo": "Eventos, biblioteca, ranking sin ruido",
+      "copy": "Juntá eventos, organizá tu biblioteca colectiva, definí las normas. Cada comunidad en su propio espacio — datos limpios, sin contaminación de afuera. Eso es todo lo que necesitás."
     },
-    "business_card": {
-      "titulo": "Koinonía",
-      "subtitulo": "Plataforma de comunidades multi-tenant",
-      "copy": "koinonia.stevenvallejo.com"
+    "whatsapp_perfil": {
+      "titulo": "Tu comunidad armada para crecer"
     },
-    "sticker": {
-      "titulo": "◎",
-      "copy": "Koinonía"
-    },
-    "tiktok_cover": {
-      "titulo": "Koinonía",
-      "copy": "Comunidades con memoria"
+    "contra_cover": {
+      "titulo": "Tu comunidad armada para crecer",
+      "copy": "Eventos, biblioteca, ranking sin ruido"
     }
-  }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
 }

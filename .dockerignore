@@ -1,0 +1,68 @@
+# Control de versiones
+.git
+.gitignore
+.gitattributes
+.gitkeep
+
+# Python: entornos virtuales y cache
+.venv/
+venv*/
+env/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+build/
+
+# Node: módulos y build anterior (el stage node-build los regenera)
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# Output y datos generados en runtime (no se incluyen en la imagen)
+output/
+data/
+
+# Tests y herramientas de desarrollo (no se necesitan en producción)
+tests/
+webapp/tests/
+e2e/
+audit/
+requirements-dev.txt
+
+# Scripts de desarrollo
+scripts/
+
+# Variantes/demos de desarrollo (no son parte del servidor)
+scripts/demo_isotype.py
+scripts/eikon_combine_demo.py
+scripts/eikon_rank_demo.py
+
+# Variables de entorno y secretos (NUNCA incluir en la imagen)
+.env
+.env.*
+*.local
+.envrc
+
+# IDEs y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Claude Code (configuración local del agente)
+.claude/
+
+# Archivos de Docker (no se auto-necesitan en el contexto)
+Dockerfile
+.dockerignore
+
+# Documentación y reportes (no necesarios en runtime)
+docs/
+audit/
+_STATUS.md
+CHANGELOG.md

@@ -1,0 +1,118 @@
+{
+  "slug": "pinakotheke-fedon",
+  "nombre_producto": "Refutación de Simmias y Cebes",
+  "nombre_corporativo": "Pinakothḗke",
+  "tagline": "Ponencia: reconstrucción del Fedón (84c–102a) donde Sócrates formula la Teoría de las Formas como teoría causal; contrasta el realismo platónico con el emergentismo contemporáneo.",
+  "url": "fedon.stevenvallejo.com",
+  "tono": "filosófico, riguroso, reflexivo",
+  "simbolo": "Φ",
+  "frente": "filosofia",
+  "paleta": {
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_3": "#2a7a70",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22",
+    "acento_2": "#8d7cc0"
+  },
+  "gradiente_hero": "linear-gradient(135deg, #8d7cc0 0%, #43b5a6 50%, #2a7a70 100%)",
+  "gradiente_bg": "radial-gradient(ellipse at 20% 60%, #131e22 0%, #0b1417 70%)",
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo": "JetBrains Mono"
+  },
+  "logo_texto": "Fedón",
+  "logo_simbolo": "Φ",
+  "textos": {
+    "ig_post": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "subtitulo": "De la abstracción al poder real",
+      "etiqueta": "",
+      "copy": "Las Formas no adornan: causan. Reconstrucción rigurosa del Fedón donde Platón formula la causalidad de lo real, refutando emergentismo contemporáneo."
+    },
+    "ig_story": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "copy": "Las Formas causan. Eso es poder de verdad."
+    },
+    "ig_carousel": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "copy": "Las Formas no adornan: causan. Reconstrucción rigurosa del Fedón donde Platón formula la causalidad de lo real, refutando emergentismo contemporáneo.",
+      "numero": ""
+    },
+    "ig_reel_cover": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "copy": "Las Formas causan. Eso es poder de verdad."
+    },
+    "stat_card": {
+      "numero": "∞",
+      "etiqueta": "",
+      "copy": "Las Formas causan. Eso es poder de verdad."
+    },
+    "ad_rectangle": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "numero": "",
+      "copy": "Las Formas causan. Eso es poder de verdad.",
+      "cita": "Las Formas causan. Eso es poder de verdad.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "copy": "Las Formas causan. Eso es poder de verdad."
+    },
+    "og_general": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "subtitulo": "De la abstracción al poder real",
+      "copy": "Las Formas no adornan: causan. Reconstrucción rigurosa del Fedón donde Platón formula la causalidad de lo real, refutando emergentismo contemporáneo."
+    },
+    "og_product": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "subtitulo": "De la abstracción al poder real",
+      "copy": "Las Formas no adornan: causan. Reconstrucción rigurosa del Fedón donde Platón formula la causalidad de lo real, refutando emergentismo contemporáneo."
+    },
+    "web_hero": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "subtitulo": "De la abstracción al poder real",
+      "copy": "Las Formas no adornan: causan. Reconstrucción rigurosa del Fedón donde Platón formula la causalidad de lo real, refutando emergentismo contemporáneo."
+    },
+    "linkedin_post": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "subtitulo": "De la abstracción al poder real",
+      "etiqueta": "",
+      "copy": "Las Formas no adornan: causan. Reconstrucción rigurosa del Fedón donde Platón formula la causalidad de lo real, refutando emergentismo contemporáneo."
+    },
+    "linkedin_banner": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "etiqueta": "",
+      "copy": "Las Formas causan. Eso es poder de verdad."
+    },
+    "fb_cover": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "subtitulo": "De la abstracción al poder real",
+      "copy": "Las Formas no adornan: causan. Reconstrucción rigurosa del Fedón donde Platón formula la causalidad de lo real, refutando emergentismo contemporáneo."
+    },
+    "x_post": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "copy": "Las Formas causan. Eso es poder de verdad."
+    },
+    "yt_thumbnail": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "copy": "Las Formas causan. Eso es poder de verdad."
+    },
+    "poster_a4": {
+      "titulo": "Las Formas causan",
+      "subtitulo": "Reconstrucción del Fedón",
+      "copy": "Platón formula la Teoría de las Formas como teoría causal. Las Formas no adornan: producen lo real. Contrasta con emergentismo contemporáneo."
+    },
+    "whatsapp_perfil": {
+      "titulo": "Platón tenía razón. Pero cómo."
+    },
+    "contra_cover": {
+      "titulo": "Platón tenía razón. Pero cómo.",
+      "copy": "De la abstracción al poder real"
+    }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
+}

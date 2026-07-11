@@ -3,76 +3,74 @@
   "nombre_producto": "Scholḗ",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Tiempo para pensar con criterio",
-  "url": "https://blog.stevenvallejo.com",
+  "url": "blog.stevenvallejo.com",
   "tono": "reflexivo, didáctico, criterioso",
   "simbolo": "✦",
   "frente": "filosofia",
-
   "paleta": {
-    "bg":           "#0b1417",
-    "primario":     "#0b1417",
-    "acento":       "#e0a85e",
-    "acento_2":     "#b8873a",
-    "acento_3":     "#43b5a6",
-    "texto":        "#e8e0d4",
-    "texto_muted":  "#8fa3a8",
-    "surface":      "#131e22"
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#e0a85e",
+    "acento_2": "#b8873a",
+    "acento_3": "#43b5a6",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #e0a85e 0%, #b8873a 70%, #7a5520 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 35% 50%, #131e22 0%, #0b1417 70%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 35% 50%, #131e22 0%, #0b1417 70%)",
   "tipografia": {
     "titulos": "Cormorant Garamond",
-    "cuerpo":  "Inter"
+    "cuerpo": "Inter"
   },
-
   "logo_texto": "Scholḗ",
   "logo_simbolo": "✦",
-
   "textos": {
     "linkedin_post": {
-      "titulo":    "Scholḗ",
+      "titulo": "Scholḗ",
       "subtitulo": "Blog de abstracción · Pinakothḗke",
-      "copy":      "Tiempo para pensar con criterio."
+      "copy": "Tiempo para pensar con criterio."
     },
     "linkedin_banner": {
-      "titulo":    "Scholḗ",
-      "copy":      "Código con criterio. Abstracción que enseña."
+      "titulo": "Scholḗ",
+      "copy": "Código con criterio. Abstracción que enseña."
     },
     "ig_post": {
-      "titulo":    "✦",
-      "subtitulo": "Scholḗ",
-      "copy":      "Tiempo para pensar con criterio"
+      "titulo": "Scholḗ",
+      "subtitulo": "Blog de código y filosofía",
+      "etiqueta": "BLOG",
+      "copy": "Artículos donde el código y la abstracción se enseñan juntos. Casos reales de arquitectura de software y pensamiento, sin prisa."
     },
     "ig_story": {
-      "titulo":    "Scholḗ",
-      "copy":      "Nueva entrada ↓"
+      "titulo": "Scholḗ",
+      "copy": "Nueva entrada ↓"
     },
     "x_post": {
-      "titulo":    "Scholḗ",
-      "copy":      "Tiempo para pensar con criterio"
+      "titulo": "Scholḗ",
+      "copy": "Tiempo para pensar con criterio"
     },
     "yt_thumbnail": {
-      "titulo":    "Scholḗ",
-      "copy":      "Ver"
+      "titulo": "Scholḗ",
+      "copy": "Ver"
     },
     "yt_banner": {
-      "titulo":    "Scholḗ",
+      "titulo": "Scholḗ",
       "subtitulo": "Blog de abstracción · Pinakothḗke"
     },
     "og_general": {
-      "titulo":    "Scholḗ",
+      "titulo": "Scholḗ",
       "subtitulo": "Blog de abstracción · Pinakothḗke",
-      "copy":      "Tiempo para pensar con criterio."
+      "copy": "Tiempo para pensar con criterio."
     },
     "whatsapp_perfil": {
-      "titulo":    "✦",
-      "copy":      "Scholḗ"
+      "titulo": "✦",
+      "copy": "Scholḗ"
     },
     "contra_cover": {
-      "titulo":    "Scholḗ",
-      "copy":      "Blog de abstracción · Pinakothḗke"
+      "titulo": "Scholḗ",
+      "copy": "Blog de abstracción · Pinakothḗke"
     }
-  }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
 }

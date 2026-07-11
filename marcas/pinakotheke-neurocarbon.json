@@ -1,0 +1,118 @@
+{
+  "slug": "pinakotheke-neurocarbon",
+  "nombre_producto": "¿Silicio o Tejido?",
+  "nombre_corporativo": "Pinakothḗke",
+  "tagline": "Ponencia de neurofilosofía: ¿puede la mente emularse en silicio digital o requiere el sustrato biológico del carbono? Examina incompatibilidades arquitectónicas y termodinámicas, y la autopoiesis como rasgo constitutivo de la conciencia.",
+  "url": "neurocarbon.stevenvallejo.com",
+  "tono": "filosófico, riguroso, reflexivo",
+  "simbolo": "◐",
+  "frente": "filosofia",
+  "paleta": {
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_3": "#2a7a70",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22",
+    "acento_2": "#8d7cc0"
+  },
+  "gradiente_hero": "linear-gradient(135deg, #8d7cc0 0%, #43b5a6 50%, #2a7a70 100%)",
+  "gradiente_bg": "radial-gradient(ellipse at 20% 60%, #131e22 0%, #0b1417 70%)",
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo": "JetBrains Mono"
+  },
+  "logo_texto": "Silicio o Tejido",
+  "logo_simbolo": "◐",
+  "textos": {
+    "ig_post": {
+      "titulo": "Silicio no pensaría como vos",
+      "subtitulo": "Neurofilosofía: dónde vive realmente la mente",
+      "etiqueta": "",
+      "copy": "¿Puede una red de silicio replicar lo que hace tu cerebro? No es una pregunta de tecnología, sino de física: los sistemas autopoiéticos requieren un sustrato capaz de mantener la complejidad termodinámica. Esta ponencia examina dónde se agota el código y por qué el carbono —hasta ahora— sigue siendo insustituible."
+    },
+    "ig_story": {
+      "titulo": "Silicio no pensaría como vos",
+      "copy": "¿La mente es cómputo o tejido? El sustrato decide."
+    },
+    "ig_carousel": {
+      "titulo": "Silicio no pensaría como vos",
+      "copy": "¿Puede una red de silicio replicar lo que hace tu cerebro? No es una pregunta de tecnología, sino de física: los sistemas autopoiéticos requieren un sustrato capaz de mantener la complejidad termodinámica. Esta ponencia examina dónde se agota el código y por qué el carbono —hasta ahora— sigue siendo insustituible.",
+      "numero": ""
+    },
+    "ig_reel_cover": {
+      "titulo": "Silicio vs tejido",
+      "copy": "¿Puede la mente emularse en silicio o requiere carbono? Ponencia que examina la incompatibilidad arquitectónica y termodinámica."
+    },
+    "stat_card": {
+      "numero": "∞",
+      "etiqueta": "",
+      "copy": "¿La mente es cómputo o tejido? El sustrato decide."
+    },
+    "ad_rectangle": {
+      "titulo": "Silicio no pensaría como vos",
+      "numero": "",
+      "copy": "¿La mente es cómputo o tejido? El sustrato decide.",
+      "cita": "¿La mente es cómputo o tejido? El sustrato decide.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "Silicio no pensaría como vos",
+      "copy": "¿La mente es cómputo o tejido? El sustrato decide."
+    },
+    "og_general": {
+      "titulo": "Silicio no pensaría como vos",
+      "subtitulo": "Neurofilosofía: dónde vive realmente la mente",
+      "copy": "¿Puede una red de silicio replicar lo que hace tu cerebro? No es una pregunta de tecnología, sino de física: los sistemas autopoiéticos requieren un sustrato capaz de mantener la complejidad termodinámica. Esta ponencia examina dónde se agota el código y por qué el carbono —hasta ahora— sigue siendo insustituible."
+    },
+    "og_product": {
+      "titulo": "Silicio no pensaría como vos",
+      "subtitulo": "Neurofilosofía: dónde vive realmente la mente",
+      "copy": "¿Puede una red de silicio replicar lo que hace tu cerebro? No es una pregunta de tecnología, sino de física: los sistemas autopoiéticos requieren un sustrato capaz de mantener la complejidad termodinámica. Esta ponencia examina dónde se agota el código y por qué el carbono —hasta ahora— sigue siendo insustituible."
+    },
+    "web_hero": {
+      "titulo": "Silicio no pensaría como vos",
+      "subtitulo": "Neurofilosofía: dónde vive realmente la mente",
+      "copy": "¿Puede una red de silicio replicar lo que hace tu cerebro? No es una pregunta de tecnología, sino de física: los sistemas autopoiéticos requieren un sustrato capaz de mantener la complejidad termodinámica. Esta ponencia examina dónde se agota el código y por qué el carbono —hasta ahora— sigue siendo insustituible."
+    },
+    "linkedin_post": {
+      "titulo": "Silicio no pensaría como vos",
+      "subtitulo": "Neurofilosofía: dónde vive realmente la mente",
+      "etiqueta": "",
+      "copy": "¿Puede una red de silicio replicar lo que hace tu cerebro? No es una pregunta de tecnología, sino de física: los sistemas autopoiéticos requieren un sustrato capaz de mantener la complejidad termodinámica. Esta ponencia examina dónde se agota el código y por qué el carbono —hasta ahora— sigue siendo insustituible."
+    },
+    "linkedin_banner": {
+      "titulo": "Silicio no pensaría como vos",
+      "etiqueta": "",
+      "copy": "¿La mente es cómputo o tejido? El sustrato decide."
+    },
+    "fb_cover": {
+      "titulo": "Silicio no pensaría como vos",
+      "subtitulo": "Neurofilosofía: dónde vive realmente la mente",
+      "copy": "¿Puede una red de silicio replicar lo que hace tu cerebro? No es una pregunta de tecnología, sino de física: los sistemas autopoiéticos requieren un sustrato capaz de mantener la complejidad termodinámica. Esta ponencia examina dónde se agota el código y por qué el carbono —hasta ahora— sigue siendo insustituible."
+    },
+    "x_post": {
+      "titulo": "Silicio no pensaría como vos",
+      "copy": "¿La mente es cómputo o tejido? El sustrato decide."
+    },
+    "yt_thumbnail": {
+      "titulo": "Silicio no pensaría como vos",
+      "copy": "¿La mente es cómputo o tejido? El sustrato decide."
+    },
+    "poster_a4": {
+      "titulo": "Silicio no pensaría como vos",
+      "subtitulo": "Neurofilosofía: dónde vive realmente la mente",
+      "copy": "¿Puede una red de silicio replicar lo que hace tu cerebro? No es una pregunta de tecnología, sino de física: los sistemas autopoiéticos requieren un sustrato capaz de mantener la complejidad termodinámica. Esta ponencia examina dónde se agota el código y por qué el carbono —hasta ahora— sigue siendo insustituible."
+    },
+    "whatsapp_perfil": {
+      "titulo": "Silicio no pensaría como vos"
+    },
+    "contra_cover": {
+      "titulo": "Silicio no pensaría como vos",
+      "copy": "Neurofilosofía: dónde vive realmente la mente"
+    }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
+}

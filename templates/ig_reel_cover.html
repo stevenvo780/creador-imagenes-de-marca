@@ -4,100 +4,145 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1080, height=1920, initial-scale=1">
 <title>Eikon - IG Reel Cover</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --primario: #0b1417;
-    --acento-2: #8d7cc0;
-    --texto: #e8e0d4;
-    --bg: #0b1417;
-    --gradient-hero: linear-gradient(135deg, #43b5a6, #8d7cc0);
-    --font-titulo: 'Playfair Display', Georgia, serif;
-    --font-cuerpo: 'Inter', Arial, sans-serif;
-  }
+/* ═══════ FONTS ═══════ */
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 400; font-display: block; src: url("fonts/PlayfairDisplay-400.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 700; font-display: block; src: url("fonts/PlayfairDisplay-700.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 900; font-display: block; src: url("fonts/PlayfairDisplay-900.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 400; font-display: block; src: url("fonts/Inter-400.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 600; font-display: block; src: url("fonts/Inter-600.woff2") format("woff2"); }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 1080px; height: 1920px; overflow: hidden; }
-  body {
-    background: var(--bg);
-    color: var(--texto);
-    font-family: var(--font-cuerpo);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 120px 80px;
-  }
+/* ═══════ DESIGN TOKENS ═══════ */
+:root {
+  --bg: #0b1417; --texto: #e8e0d4; --primario: #0b1417;
+  --acento: #43b5a6; --acento-2: #8d7cc0; --acento-3: #A3E4D7; --texto-muted: #a09080;
+  --font-titulo: 'Playfair Display', Georgia, serif;
+  --font-cuerpo: 'Inter', system-ui, sans-serif;
+  --space-0: 0; --space-1: 8px; --space-2: 16px; --space-3: 24px;
+  --space-4: 32px; --space-5: 40px; --space-6: 48px;
+  --space-8: 64px; --space-10: 80px; --space-12: 96px;
+  --type-xs: 8px; --type-sm: 10px; --type-base: 16px;
+  --type-lg: 20px; --type-xl: 25px; --type-2xl: 31px;
+  --type-3xl: 39px; --type-4xl: 49px; --type-5xl: 61px; --type-6xl: 76px;
+  --tracking-tight: -0.02em; --tracking-normal: 0em; --tracking-wide: 0.02em;
+  --leading-tight: 1.2; --leading-normal: 1.5; --leading-relaxed: 1.8;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; }
 
-  /* VARIANTES */
-  body[data-variant="v1_hook"] { border-left: 20px solid var(--acento-2); }
-  body[data-variant="v2_tutorial"] { border: 8px solid var(--acento-2); }
-  body[data-variant="v3_story"] { background: linear-gradient(135deg, var(--bg), rgba(141, 124, 192, 0.1)); }
+/* ═══════ DEPTH SYSTEM ═══════ */
+.depth-radial {
+  background: radial-gradient(ellipse at 50% 30%,
+    color-mix(in srgb, var(--bg) 87%, white) 0%,
+    color-mix(in srgb, var(--bg) 93%, white) 40%,
+    var(--bg) 100%);
+}
+.depth-glow .logo-hero::before {
+  content: ''; position: absolute;
+  width: 220%; height: 220%; border-radius: 50%;
+  background: radial-gradient(circle,
+    color-mix(in srgb, var(--acento-2) 9%, transparent) 0%, transparent 58%);
+  filter: blur(115px); top: 50%; left: 50%;
+  transform: translate(-50%, -50%); pointer-events: none; z-index: 0;
+}
+.depth-grain::after {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)' opacity='0.035'/%3E%3C/svg%3E");
+  background-size: 200px 200px; pointer-events: none; z-index: 2;
+}
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 48px;
-    width: 100%;
-    text-align: center;
-  }
+body {
+  font-family: var(--font-cuerpo); color: var(--texto); position: relative;
+  display: flex; flex-direction: column; height: 100%;
+  align-items: center; justify-content: space-evenly;
+  padding: var(--space-12) var(--space-6) var(--space-10);
+}
 
-  .title {
-    font-family: var(--font-titulo);
-    font-size: 140px;
-    font-weight: 700;
-    line-height: 1.1;
-  }
+/* ═══════ LOGO — protagonista centrado ═══════ */
+.logo-hero {
+  display: flex; align-items: center; justify-content: center;
+  width: 320px; height: 320px; position: relative;
+  flex-shrink: 0; margin-bottom: 0;
+  z-index: 1;
+}
+.logo-hero img,
+.logo-hero [data-isotype-container],
+.logo-hero svg {
+  width: 100%; height: 100%; object-fit: contain; position: relative; z-index: 2;
+}
 
-  .copy {
-    font-size: 84px;
-    line-height: 1.4;
-  }
+/* ═══════ HEADLINE — gran impacto visual ═══════ */
+.title {
+  font-family: var(--font-titulo); font-size: 98px; font-weight: 900;
+  line-height: var(--leading-tight); letter-spacing: var(--tracking-tight);
+  text-align: center; position: relative; z-index: 1;
+  margin-bottom: 0;
+  color: var(--texto);
+}
 
-  .subtitle {
-    font-size: 56px;
-    line-height: 1.3;
-  }
+/* ═══════ SEPARATOR ═══════ */
+.accent-sep {
+  width: var(--space-8); height: 3px; background: var(--acento-2);
+  border-radius: 2px; margin: var(--space-4) auto; flex-shrink: 0;
+  position: relative; z-index: 1;
+}
 
-  .symbol {
-    font-size: 160px;
-    font-weight: 700;
-  }
+/* ═══════ COPY — texto secundario ═══════ */
+.copy {
+  font-size: var(--type-4xl); font-weight: 400; line-height: var(--leading-normal);
+  color: color-mix(in srgb, var(--texto) 82%, var(--bg) 18%);
+  text-align: center; max-width: 920px; align-self: center;
+  position: relative; z-index: 1;
+  margin-bottom: 0;
+}
 
-  .footer {
-    margin-top: auto;
-    font-size: 56px;
-    font-weight: 600;
-    color: var(--acento-2);
-  }
+/* ═══════ FOOTER — URL + marca ═══════ */
+.footer-row {
+  display: flex; justify-content: center; align-items: center;
+  gap: var(--space-4);
+  position: absolute; bottom: var(--space-8); left: var(--space-6); right: var(--space-6);
+  border-top: 1px solid color-mix(in srgb, var(--texto-muted) 12%, transparent);
+  padding-top: var(--space-4); z-index: 1;
+  flex-shrink: 0;
+}
+.brand-signature {
+  font-family: var(--font-titulo); font-size: 28px; font-weight: 600;
+  letter-spacing: var(--tracking-wide); color: var(--texto-muted);
+}
+.url {
+  font-size: 44px; font-weight: 700; color: var(--texto);
+  letter-spacing: var(--tracking-wide);
+}
 
-  .contract-fields { display: none !important; }
+/* ═══════ VARIANTS ═══════ */
+body[data-variant="v1_hook"] { border-left: 16px solid var(--acento); padding-left: calc(var(--space-6) - 2px); }
+body[data-variant="v2_minimalist"] .logo-hero { width: 220px; height: 220px; margin-bottom: var(--space-8); }
+body[data-variant="v2_minimalist"] .title { font-size: 70px; }
+body[data-variant="v3_story"] .title { font-size: 88px; font-weight: 900; }
+
+.contract-fields { display: none !important; }
 </style>
 </head>
-<body data-variant="v1_hook">
-  <div class="container">
-    <span class="symbol" data-logo-simbolo data-fit data-fit-min="90">*</span>
-    <h1 class="title" data-titulo data-fit data-fit-min="70">Título</h1>
-    <p class="copy" data-copy data-fit data-fit-min="48">Copy</p>
-    <span class="footer" data-url data-fit data-fit-min="32">example.com</span>
-  </div>
+<body class="depth-radial depth-glow depth-grain" data-template="instagram_reel_cover" data-variant="v1_hook" data-brand-line="cloud">
+
+  <span class="logo-hero" data-isotype-container></span>
+
+  <h1 class="title" data-titulo data-fit data-fit-min="48">Headline impactante</h1>
+
+  <div class="accent-sep"></div>
+
+  <p class="copy" data-copy data-fit data-fit-min="28">Copy atractivo para el reel</p>
+
+  <footer class="footer-row">
+    <span class="brand-signature" data-logo-texto data-fit data-fit-min="14">Marca</span>
+    <span class="url" data-url data-fit data-fit-min="34">example.com</span>
+  </footer>
 
   <div class="contract-fields" aria-hidden="true">
-    <span data-titulo></span>
-    <span data-subtitulo></span>
-    <span data-copy></span>
-    <span data-logo-simbolo></span>
-    <span data-logo-texto></span>
-    <span data-numero></span>
-    <span data-etiqueta></span>
-    <span data-autor></span>
-    <span data-cargo></span>
-    <span data-url></span>
-    <span data-acento></span>
-    <span data-acento-2></span>
+    <span data-titulo></span><span data-copy></span><span data-logo-texto></span>
+    <span data-url></span><span data-isotype-container></span>
   </div>
+
+<script src="./eikon-runtime.js"></script>
 </body>
 </html>

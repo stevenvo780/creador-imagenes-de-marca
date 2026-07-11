@@ -2,8 +2,8 @@
   "slug": "pinakotheke-eikon",
   "nombre_producto": "Eikón",
   "nombre_corporativo": "Pinakothḗke",
-  "tagline": "Generador de pack de imagen de marca en GPU local (SDXL / FLUX.1-schnell): produce 15+ renders sociales (LinkedIn, Instagram, X, YouTube, WhatsApp, OG) para el media kit. Python puro, RTX 5070 Ti requerida. Herramienta interna.",
-  "url": "",
+  "tagline": "Generador determinista de identidad de marca: isotipos procedurales, paletas, iconsets, kits sociales y OG con contraste WCAG AA. $0 en tokens, sin GPU, sin IA — SVG procedural + render, 100% reproducible. Webapp + API + MCP.",
+  "url": "eikon.humanizar.cloud",
   "tono": "creativo, técnico, visual",
   "simbolo": "◈",
   "frente": "informatica",
@@ -26,53 +26,92 @@
   "logo_texto": "Eikón",
   "logo_simbolo": "◈",
   "textos": {
-    "og_product": {
-      "titulo": "Eikón",
-      "subtitulo": "Logos · Paletas · Kits de identidad visual · IA",
-      "copy": "Generador de imagen de marca: logos, paletas, activos visuales y kits de identidad con IA."
-    },
-    "og_general": {
-      "titulo": "Eikón",
-      "subtitulo": "Ingeniería · Pinakothḗke",
-      "copy": "Generador de imagen de marca con IA."
-    },
-    "linkedin_post": {
-      "titulo": "Eikón",
-      "subtitulo": "Ingeniería · Pinakothḗke",
-      "copy": "Generador de imagen de marca con IA."
-    },
-    "linkedin_banner": {
-      "titulo": "Eikón",
-      "copy": "Logos, paletas y kits de identidad visual generados con IA."
-    },
     "ig_post": {
-      "titulo": "◈",
-      "subtitulo": "Eikón",
-      "copy": "Imagen de marca con IA"
+      "titulo": "Isotipos que rinden cuentas",
+      "subtitulo": "Paletas, logos, kits sociales WCAG AA",
+      "etiqueta": "assets WCAG AA",
+      "copy": "Eikón renderiza identidades: 46 templates, $0 en tokens, 100% reproducible. Sin IA, sin GPU, sin sorpresas — solo procedural determinista + WCAG AA auditado."
     },
     "ig_story": {
-      "titulo": "Eikón",
-      "copy": "Media kit 15+ renders ↓"
+      "titulo": "Isotipos que rinden cuentas",
+      "copy": "Procedural, auditable, repetible — todo lo demás, ruido."
+    },
+    "ig_carousel": {
+      "titulo": "Identidad sin gastar token",
+      "copy": "Isotipos, paletas, iconsets, kits sociales, OG. SVG procedural, WCAG AA, 100% reproducible. Sin IA, sin GPU, sin sorpresas. API + webapp + MCP."
+    },
+    "ig_reel_cover": {
+      "titulo": "Isotipos que rinden cuentas",
+      "copy": "Procedural, auditable, repetible — todo lo demás, ruido."
+    },
+    "stat_card": {
+      "numero": "1302",
+      "etiqueta": "assets WCAG AA",
+      "copy": "Procedural, auditable, repetible — todo lo demás, ruido."
+    },
+    "ad_rectangle": {
+      "titulo": "Isotipos que rinden cuentas",
+      "numero": "1302",
+      "copy": "Procedural, auditable, repetible — todo lo demás, ruido.",
+      "cita": "Procedural, auditable, repetible — todo lo demás, ruido.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "Isotipos que rinden cuentas",
+      "copy": "Procedural, auditable, repetible — todo lo demás, ruido."
+    },
+    "og_general": {
+      "titulo": "Isotipos que rinden cuentas",
+      "subtitulo": "Paletas, logos, kits sociales WCAG AA",
+      "copy": "Eikón renderiza identidades: 46 templates, $0 en tokens, 100% reproducible. Sin IA, sin GPU, sin sorpresas — solo procedural determinista + WCAG AA auditado."
+    },
+    "og_product": {
+      "titulo": "Isotipos que rinden cuentas",
+      "subtitulo": "Paletas, logos, kits sociales WCAG AA",
+      "copy": "Eikón renderiza identidades: 46 templates, $0 en tokens, 100% reproducible. Sin IA, sin GPU, sin sorpresas — solo procedural determinista + WCAG AA auditado."
+    },
+    "web_hero": {
+      "titulo": "Isotipos que rinden cuentas",
+      "subtitulo": "Paletas, logos, kits sociales WCAG AA",
+      "copy": "Eikón renderiza identidades: 46 templates, $0 en tokens, 100% reproducible. Sin IA, sin GPU, sin sorpresas — solo procedural determinista + WCAG AA auditado."
+    },
+    "linkedin_post": {
+      "titulo": "Isotipos que rinden cuentas",
+      "subtitulo": "Paletas, logos, kits sociales WCAG AA",
+      "etiqueta": "assets WCAG AA",
+      "copy": "Eikón renderiza identidades: 46 templates, $0 en tokens, 100% reproducible. Sin IA, sin GPU, sin sorpresas — solo procedural determinista + WCAG AA auditado."
+    },
+    "linkedin_banner": {
+      "titulo": "Isotipos que rinden cuentas",
+      "etiqueta": "assets WCAG AA",
+      "copy": "Procedural, auditable, repetible — todo lo demás, ruido."
+    },
+    "fb_cover": {
+      "titulo": "Isotipos que rinden cuentas",
+      "subtitulo": "Paletas, logos, kits sociales WCAG AA",
+      "copy": "Eikón renderiza identidades: 46 templates, $0 en tokens, 100% reproducible. Sin IA, sin GPU, sin sorpresas — solo procedural determinista + WCAG AA auditado."
     },
     "x_post": {
-      "titulo": "Eikón",
-      "copy": "Generador de imagen de marca con IA"
+      "titulo": "Isotipos que rinden cuentas",
+      "copy": "Procedural, auditable, repetible — todo lo demás, ruido."
     },
     "yt_thumbnail": {
-      "titulo": "Eikón",
-      "copy": "SDXL + FLUX ↓"
+      "titulo": "Isotipos que rinden cuentas",
+      "copy": "Procedural, auditable, repetible — todo lo demás, ruido."
     },
-    "yt_banner": {
-      "titulo": "Eikón",
-      "subtitulo": "Ingeniería · Pinakothḗke"
+    "poster_a4": {
+      "titulo": "Isotipos que rinden cuentas",
+      "subtitulo": "Paletas, logos, kits sociales WCAG AA",
+      "copy": "Eikón renderiza identidades: 46 templates, $0 en tokens, 100% reproducible. Sin IA, sin GPU, sin sorpresas — solo procedural determinista + WCAG AA auditado."
     },
     "whatsapp_perfil": {
-      "titulo": "◈",
-      "copy": "Eikón"
+      "titulo": "Isotipos que rinden cuentas"
     },
     "contra_cover": {
-      "titulo": "Eikón",
-      "copy": "Ingeniería · Pinakothḗke"
+      "titulo": "Isotipos que rinden cuentas",
+      "copy": "Paletas, logos, kits sociales WCAG AA"
     }
-  }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
 }

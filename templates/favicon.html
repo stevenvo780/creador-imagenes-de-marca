@@ -10,7 +10,7 @@
   v3_512 comparten el mismo canvas físico; la diferencia es la estrategia visual:
     - v1_32: símbolo maximizado + stroke grueso (legible al downscale 32×32)
     - v2_180: símbolo estándar con fondo oscuro (Apple Touch Icon)
-    - v3_512: símbolo en canvas completo con gradiente (PWA app icon)
+    - v3_512: símbolo en canvas completo con respaldo teal (PWA app icon)
   El resize a 32×32 y 180×180 debe hacerse en post-procesado (sharp/lanczos).
   No se fuerza hack de viewport variable porque rompería el contrato de template size.
 -->
@@ -35,19 +35,18 @@
 
   /* ── v1_32: maximized symbol for tiny sizes ── */
   body[data-variant="v1_32"] .symbol-wrap { width: 440px; height: 440px; }
-  body[data-variant="v1_32"] .symbol-wrap svg * { stroke-width: 3.5; }
+  body[data-variant="v1_32"] .symbol-wrap svg * { stroke-width: 4; }
 
   /* ── v2_180: standard with background ── */
   body[data-variant="v2_180"] .symbol-wrap { width: 380px; height: 380px; }
   body[data-variant="v2_180"] { border-radius: 36px; }
-  body[data-variant="v2_180"] .symbol-wrap svg * { stroke-width: 3; }
+  body[data-variant="v2_180"] .symbol-wrap svg * { stroke-width: 3.4; }
 
   /* ── v3_512: balanced canvas ── */
   body[data-variant="v3_512"] .symbol-wrap { width: 400px; height: 400px; }
-  body[data-variant="v3_512"] .symbol-wrap svg * { stroke-width: 2.8; }
+  body[data-variant="v3_512"] .symbol-wrap svg * { stroke-width: 3; }
 
   .symbol-wrap svg { width: 100%; height: 100%; }
-  .symbol-wrap svg * { stroke: url(#favGrad); }
 
   .contract-fields { display: none !important; }
 </style>
@@ -55,19 +54,35 @@
 <body>
   <div class="symbol-wrap">
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="favGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#43b5a6"/><stop offset="100%" stop-color="#8d7cc0"/>
-        </linearGradient>
-      </defs>
-      <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none"/>
-      <line x1="50" y1="5" x2="50" y2="95" stroke-width="1.5" opacity="0.5"/>
-      <line x1="7" y1="25" x2="93" y2="75" stroke-width="1.5" opacity="0.5"/>
-      <line x1="93" y1="25" x2="7" y2="75" stroke-width="1.5" opacity="0.5"/>
-      <circle cx="50" cy="50" r="4"/>
-      <circle cx="50" cy="5" r="3"/><circle cx="93" cy="25" r="3"/>
-      <circle cx="93" cy="75" r="3"/><circle cx="50" cy="95" r="3"/>
-      <circle cx="7" cy="75" r="3"/><circle cx="7" cy="25" r="3"/>
+      <!-- Círculo respaldo teal: destaca el símbolo sobre el fondo oscuro -->
+      <circle cx="50" cy="50" r="48" fill="var(--acento)" opacity="0.18"/>
+
+      <!-- Hexágono audaz: relleno teal + trazo grueso -->
+      <polygon points="50,5 93,25 93,75 50,95 7,75 7,25"
+               fill="var(--acento)" fill-opacity="0.14"
+               stroke="var(--acento)" stroke-width="4"
+               stroke-linejoin="round"/>
+
+      <!-- Eje vertical + diagonales internas en teal -->
+      <line x1="50" y1="5" x2="50" y2="95" stroke="var(--acento)"/>
+      <line x1="7" y1="25" x2="93" y2="75" stroke="var(--acento)"/>
+      <line x1="93" y1="25" x2="7" y2="75" stroke="var(--acento)"/>
+
+      <!-- Nodos vértices rellenos en teal -->
+      <circle cx="50" cy="5" r="3.8" fill="var(--acento)"/>
+      <circle cx="93" cy="25" r="3.8" fill="var(--acento)"/>
+      <circle cx="93" cy="75" r="3.8" fill="var(--acento)"/>
+      <circle cx="50" cy="95" r="3.8" fill="var(--acento)"/>
+      <circle cx="7" cy="75" r="3.8" fill="var(--acento)"/>
+      <circle cx="7" cy="25" r="3.8" fill="var(--acento)"/>
+
+      <!-- Núcleo central audaz relleno en teal -->
+      <circle cx="50" cy="50" r="5.5" fill="var(--acento)"/>
+
+      <!-- Firma visual púrpura: rectángulo pequeño diagonal -->
+      <rect x="76" y="9" width="15" height="3.5" rx="1.75"
+            fill="var(--acento-2)"
+            transform="rotate(38 83.5 10.75)"/>
     </svg>
   </div>
   <div class="contract-fields" aria-hidden="true">

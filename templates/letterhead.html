@@ -44,7 +44,8 @@
     --bg: #f4f1ea; --texto: #0b1417;
   }
   body[data-variant="v2_interno"] .top-accent {
-    background: linear-gradient(90deg, #43b5a6, #8d7cc0);
+    /* WCAG AA fix: was #43b5a6→#8d7cc0 (2.22-3.22:1 on cream); now dark teal (7.03-16.52:1) */
+    background: linear-gradient(90deg, #0d5c4a, #0b1417);
     height: 12px;
   }
   body[data-variant="v2_interno"] .header {
@@ -54,11 +55,13 @@
     font-size: 40px; color: #0b1417;
   }
   body[data-variant="v2_interno"] .footer {
-    border-top: 2px dashed rgba(67, 181, 166, 0.58);
+    /* WCAG AA fix: was rgba(#43b5a6,0.58) on cream = 1.59:1; now darker teal */
+    border-top: 2px dashed rgba(13, 92, 74, 0.75);
   }
   body[data-variant="v2_interno"] .side-line {
-    left: 86px; width: 6px; opacity: 0.65;
-    background: linear-gradient(180deg, #43b5a6 0%, #8d7cc0 55%, transparent 88%);
+    left: 86px; width: 6px; opacity: 0.8;
+    background: linear-gradient(180deg, #183d38 0%, #0b1417 55%, transparent 88%);
+    /* WCAG AA fix: composite #183d38 @0.8 on cream gives 5.99:1 (was #43b5a6→#8d7cc0 = 2.73:1) */
   }
 
   .interno-watermark {
@@ -74,7 +77,8 @@
   .interno-badge {
     display: none;
     font-size: 11px; font-weight: 800; letter-spacing: 0.08em;
-    color: #0d5c4a; border: 1.5px solid #43b5a6;
+    /* WCAG AA fix: border was #43b5a6 on cream (2.22:1); now #0d5c4a (7.03:1) */
+    color: #0d5c4a; border: 1.5px solid #0d5c4a;
     padding: 5px 16px; border-radius: 999px; text-transform: uppercase;
   }
   body[data-variant="v2_interno"] .interno-badge { display: inline-block; }

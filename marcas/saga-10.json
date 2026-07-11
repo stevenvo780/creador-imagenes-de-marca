@@ -1,0 +1,224 @@
+{
+  "slug": "saga-10",
+  "nombre_producto": "Saga 10 · Busco mi Vegeta",
+  "nombre_corporativo": "Steven Vallejo",
+  "tagline": "Busco un par con quien levantar algo que pese. Mientras llega, tráeme tu imposible: el sistema nudoso, la automatización a medias, el proyecto que lleva meses esperando turno en la pestaña que no cierras.",
+  "url": "stevenvallejo.com/es",
+  "url_en": "https://www.stevenvallejo.com/en",
+  "tono": "personal, reflexivo, técnico-humanista",
+  "simbolo": "lemniscata (∞)",
+  "paleta": {
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_2": "#e0a85e",
+    "acento_3": "#c0522a",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#152028"
+  },
+  "gradiente_hero": "linear-gradient(135deg, #e0a85e 0%, #c0522a 40%, #43b5a6 100%)",
+  "gradiente_bg": "radial-gradient(ellipse at 20% 50%, #152028 0%, #0b1417 60%)",
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo": "Inter"
+  },
+  "logo_texto": "Steven Vallejo",
+  "logo_simbolo": "∞",
+  "textos": {
+    "ig_post": {
+      "titulo": "Busco mi Vegeta",
+      "subtitulo": "Alguien que me dé pelea de verdad",
+      "etiqueta": "",
+      "copy": "Busco un par con quien levantar algo que pese. Mientras llega, tráeme tu imposible: el sistema nudoso, la automatización a medias, el proyecto que lleva meses esperando turno en la pestaña que no cierras."
+    },
+    "ig_story": {
+      "titulo": "Busco mi Vegeta",
+      "copy": "Tengo el puño listo. Solo me falta el monstruo."
+    },
+    "ig_carousel": {
+      "titulo": "Busco mi Vegeta",
+      "copy": "Busco un par con quien levantar algo que pese. Mientras llega, tráeme tu imposible: el sistema nudoso, la automatización a medias, el proyecto que lleva meses esperando turno en la pestaña que no cierras.",
+      "numero": ""
+    },
+    "ig_reel_cover": {
+      "titulo": "Busco mi Vegeta",
+      "copy": "Tengo el puño listo. Solo me falta el monstruo."
+    },
+    "stat_card": {
+      "numero": "∞",
+      "etiqueta": "",
+      "copy": "Tengo el puño listo. Solo me falta el monstruo."
+    },
+    "ad_rectangle": {
+      "titulo": "Busco mi Vegeta",
+      "numero": "",
+      "copy": "Tengo el puño listo. Solo me falta el monstruo.",
+      "cita": "Tengo el puño listo. Solo me falta el monstruo.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "Busco mi Vegeta",
+      "copy": "Tengo el puño listo. Solo me falta el monstruo."
+    },
+    "og_general": {
+      "titulo": "Busco mi Vegeta",
+      "subtitulo": "Alguien que me dé pelea de verdad",
+      "copy": "Busco un par con quien levantar algo que pese. Mientras llega, tráeme tu imposible: el sistema nudoso, la automatización a medias, el proyecto que lleva meses esperando turno en la pestaña que no cierras."
+    },
+    "og_product": {
+      "titulo": "Busco mi Vegeta",
+      "subtitulo": "Alguien que me dé pelea de verdad",
+      "copy": "Busco un par con quien levantar algo que pese. Mientras llega, tráeme tu imposible: el sistema nudoso, la automatización a medias, el proyecto que lleva meses esperando turno en la pestaña que no cierras."
+    },
+    "web_hero": {
+      "titulo": "Busco mi Vegeta",
+      "subtitulo": "Alguien que me dé pelea de verdad",
+      "copy": "Busco un par con quien levantar algo que pese. Mientras llega, tráeme tu imposible: el sistema nudoso, la automatización a medias, el proyecto que lleva meses esperando turno en la pestaña que no cierras."
+    },
+    "linkedin_post": {
+      "titulo": "Busco mi Vegeta",
+      "subtitulo": "Alguien que me dé pelea de verdad",
+      "etiqueta": "",
+      "copy": "Busco un par con quien levantar algo que pese. Mientras llega, tráeme tu imposible: el sistema nudoso, la automatización a medias, el proyecto que lleva meses esperando turno en la pestaña que no cierras."
+    },
+    "linkedin_banner": {
+      "titulo": "Busco mi Vegeta",
+      "etiqueta": "",
+      "copy": "Tengo el puño listo. Solo me falta el monstruo."
+    },
+    "fb_cover": {
+      "titulo": "Busco mi Vegeta",
+      "subtitulo": "Alguien que me dé pelea de verdad",
+      "copy": "Busco un par con quien levantar algo que pese. Mientras llega, tráeme tu imposible: el sistema nudoso, la automatización a medias, el proyecto que lleva meses esperando turno en la pestaña que no cierras."
+    },
+    "x_post": {
+      "titulo": "Busco mi Vegeta",
+      "copy": "Tengo el puño listo. Solo me falta el monstruo."
+    },
+    "yt_thumbnail": {
+      "titulo": "Busco mi Vegeta",
+      "copy": "Tengo el puño listo. Solo me falta el monstruo."
+    },
+    "poster_a4": {
+      "titulo": "Busco con quien trabajar",
+      "subtitulo": "Mientras tanto, traé tu imposible",
+      "copy": "Busco un par con quien levantar algo que pese. Mientras llega, tráeme tu imposible: el sistema enredado, la automatización a medias, el proyecto esperando en la pestaña que no cerrás. Vení y resolvemos de una."
+    },
+    "whatsapp_perfil": {
+      "titulo": "Busco mi Vegeta"
+    },
+    "contra_cover": {
+      "titulo": "Busco mi Vegeta",
+      "copy": "Alguien que me dé pelea de verdad"
+    }
+  },
+  "locales": {
+    "en": {
+      "tagline": "Software engineer and philosopher: clear systems for real problems",
+      "url": "https://www.stevenvallejo.com/en",
+      "textos": {
+        "linkedin_post": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems · Philosophy",
+          "copy": "Think before you build: clear systems for real problems."
+        },
+        "linkedin_banner": {
+          "titulo": "Steven Vallejo",
+          "copy": "Engineering, artificial intelligence, and rigorous thought."
+        },
+        "ig_post": {
+          "titulo": "∞",
+          "subtitulo": "Steven Vallejo",
+          "copy": "Software engineer · Philosopher"
+        },
+        "ig_story": {
+          "titulo": "Steven\nVallejo",
+          "copy": "New post ↓"
+        },
+        "x_post": {
+          "titulo": "Steven Vallejo",
+          "copy": "Software engineer and philosopher: clear systems for real problems"
+        },
+        "yt_thumbnail": {
+          "titulo": "Steven Vallejo",
+          "copy": "Watch"
+        },
+        "yt_banner": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software · AI · Philosophy"
+        },
+        "og_general": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems",
+          "copy": "Think before you build: clear systems for real problems."
+        },
+        "contra_cover": {
+          "titulo": "Steven Vallejo",
+          "copy": "Software Architecture & AI Systems"
+        },
+        "ig_reel_cover": {
+          "titulo": "∞",
+          "subtitulo": "Steven Vallejo",
+          "copy": "12+ years of backend, agentic AI & devtools"
+        },
+        "ig_carousel": {
+          "titulo": "Philosophy · Sciences · Engineering",
+          "subtitulo": "Steven Vallejo",
+          "copy": "Three fronts. One framework. Structured clarity."
+        },
+        "x_header": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software engineer · Philosopher",
+          "copy": "stevenvallejo.com"
+        },
+        "fb_cover": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems · Philosophy",
+          "copy": "Building at the intersection of systems, intelligence, and craft."
+        },
+        "tiktok_cover": {
+          "titulo": "SV",
+          "subtitulo": "Steven Vallejo",
+          "copy": "Systems. Intelligence. Craft."
+        },
+        "web_hero": {
+          "titulo": "Think before\nyou build",
+          "subtitulo": "Software Architecture · Agentic AI · Philosophy",
+          "copy": "12+ years translating complex systems into structured, maintainable software. From formal logic and NLP to multi-tenant platforms and OSS devtools."
+        },
+        "web_hero_mobile": {
+          "titulo": "Steven\nVallejo",
+          "subtitulo": "Software Engineering · AI Systems",
+          "copy": "Clear systems for real problems."
+        },
+        "email_header": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Architecture · AI Systems · Philosophy",
+          "copy": "stevenvallejo.com"
+        },
+        "banner_ad": {
+          "titulo": "Steven Vallejo",
+          "copy": "Software Architecture & Agentic AI — stevenvallejo.com"
+        },
+        "business_card": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Engineering · AI Systems",
+          "copy": "stevenvallejo.com"
+        },
+        "poster_a4": {
+          "titulo": "Steven Vallejo",
+          "subtitulo": "Software Architecture · Agentic AI · Philosophy",
+          "copy": "Philosopher-engineer with 12+ years of backend, formal logic, and OSS devtools. Building systems that think and explaining systems that last."
+        },
+        "og_product": {
+          "titulo": "Steven Vallejo — Projects",
+          "subtitulo": "Philosophy · Sciences · Engineering",
+          "copy": "Live products across formal logic, scientific simulation, multi-tenant platforms and SMB devtools. Mouseîon ecosystem."
+        }
+      }
+    }
+  },
+  "logo_style": "lemniscate",
+  "logo_seed": 770077
+}

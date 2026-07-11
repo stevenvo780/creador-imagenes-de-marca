@@ -7,137 +7,172 @@
 <style>
   :root {
     --bg: #0b1417; --texto: #e8e0d4; --primario: #0b1417;
-    --acento: #43b5a6; --acento-2: #8d7cc0;
-    --font-titulo: 'Inter', sans-serif; --font-cuerpo: 'Inter', sans-serif;
+    --acento: #43b5a6; --acento-2: #8d7cc0; --texto-muted: #a09080;
+    --font-titulo: 'Playfair Display', Georgia, serif;
+    --font-cuerpo: 'Inter', system-ui, sans-serif;
+    --space-0: 0; --space-1: 8px; --space-2: 16px; --space-3: 24px;
+    --space-4: 32px; --space-5: 40px; --space-6: 48px;
+    --space-8: 64px; --space-10: 80px; --space-12: 96px;
+    --type-xs: 8px; --type-sm: 10px; --type-base: 16px;
+    --type-lg: 20px; --type-xl: 25px; --type-2xl: 31px;
+    --type-3xl: 39px; --type-4xl: 49px; --type-5xl: 61px; --type-6xl: 76px;
+    --tracking-tight: -0.02em; --tracking-normal: 0em; --tracking-wide: 0.02em;
+    --leading-tight: 1.2; --leading-normal: 1.5; --leading-relaxed: 1.8;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { width: 1050px; height: 600px; overflow: hidden; }
 
-  /* ── FRONT (v1_front) ── */
   body[data-variant="v1_front"] {
-    background: #0b1417;
-    font-family: var(--font-cuerpo); color: var(--texto);
-    display: grid; grid-template-columns: 340px 1fr; align-items: center;
-    padding: 0;
+    background: var(--bg); font-family: var(--font-cuerpo); color: var(--texto);
+    display: grid; grid-template-columns: 1fr 2fr;
   }
   body[data-variant="v1_front"] .left-col {
-    background: linear-gradient(180deg, rgba(67, 181, 166, 0.1) 0%, transparent 100%);
+    background: radial-gradient(
+      ellipse at 50% 45%,
+      color-mix(in srgb, var(--acento-2) 14%, var(--bg)) 0%,
+      color-mix(in srgb, var(--acento-2) 8%, var(--bg)) 50%,
+      var(--bg) 100%
+    );
     display: flex; align-items: center; justify-content: center;
-    padding: 50px 30px; height: 100%;
+    position: relative;
+    overflow: hidden;
   }
-  body[data-variant="v1_front"] .left-col svg { width: 180px; height: 180px; }
+  body[data-variant="v1_front"] .left-col::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='bcGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23bcGrain)' opacity='0.05'/%3E%3C/svg%3E");
+    background-size: 200px 200px; pointer-events: none; z-index: 1;
+  }
+  body[data-variant="v1_front"] [data-isotype-container] {
+    width: var(--space-12); height: var(--space-12);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; z-index: 2;
+  }
+  body[data-variant="v1_front"] [data-isotype-container] svg,
+  body[data-variant="v2_back"] [data-isotype-container] svg { width: 100%; height: 100%; }
   body[data-variant="v1_front"] .right-col {
-    padding: 50px 40px;
-    display: flex; flex-direction: column; justify-content: center; gap: 18px;
+    padding: var(--space-10) var(--space-8);
+    display: flex; flex-direction: column; justify-content: center; gap: var(--space-4);
   }
   body[data-variant="v1_front"] .logo-text {
-    font-family: var(--font-titulo); font-size: 44px; font-weight: 700;
-    line-height: 1.1; color: #e8e0d4;
+    font-family: var(--font-titulo); font-size: var(--type-6xl); font-weight: 900;
+    line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--texto);
+    position: relative; z-index: 2;
+  }
+  body[data-variant="v1_front"] .logo-text::before {
+    content: ''; position: absolute; width: 350px; height: 350px; border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--acento) 12%, transparent) 0%, transparent 65%);
+    filter: blur(70px); top: 50%; left: 50%; transform: translate(-50%, -50%);
+    pointer-events: none; z-index: -1;
   }
   body[data-variant="v1_front"] .subtitle {
-    font-size: 16px; font-weight: 500; color: #a3c4c0;
-    letter-spacing: 0.03em;
+    font-family: var(--font-cuerpo); font-size: var(--type-xl);
+    font-weight: 600; letter-spacing: var(--tracking-wide); color: var(--acento);
   }
   body[data-variant="v1_front"] .accent-line {
-    width: 48px; height: 2px; border-radius: 1px;
-    background: linear-gradient(90deg, var(--acento), var(--acento-2));
+    width: var(--space-6); height: 2px; background: var(--acento);
   }
   body[data-variant="v1_front"] .copy {
-    font-size: 14px; font-weight: 400; color: #b5c4c0;
-    line-height: 1.55; max-width: 340px;
+    font-family: var(--font-cuerpo); font-size: var(--type-base); font-weight: 400;
+    line-height: var(--leading-normal); color: var(--texto-muted);
+    max-width: calc(var(--space-12) * 5);
   }
-  body[data-variant="v1_front"] .back-layout { display: none; }
 
-  /* ── BACK (v2_back) ── */
   body[data-variant="v2_back"] {
-    background: #f4f1ea; color: #0b1417;
-    font-family: var(--font-cuerpo);
+    background: var(--bg); color: var(--texto); font-family: var(--font-cuerpo);
     display: flex; align-items: center; justify-content: center;
-    padding: 40px 60px;
+    flex-direction: column; gap: var(--space-5); padding: var(--space-10);
   }
-  body[data-variant="v2_back"] .front-layout { display: none; }
   body[data-variant="v2_back"] .back-layout {
-    display: flex; align-items: center; justify-content: space-between;
-    width: 100%; gap: 40px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: var(--space-5);
   }
-  body[data-variant="v2_back"] .back-left {
-    display: flex; align-items: center; gap: 20px;
+  body[data-variant="v2_back"] [data-isotype-container] {
+    width: var(--space-12); height: var(--space-12);
+    display: flex; align-items: center; justify-content: center;
   }
-  body[data-variant="v2_back"] .back-left svg { width: 70px; height: 70px; }
-  body[data-variant="v2_back"] .back-left svg * { stroke: #0b1417; }
-  body[data-variant="v2_back"] .back-left svg circle { fill: #0b1417; }
   body[data-variant="v2_back"] .back-info {
-    display: flex; flex-direction: column; gap: 4px;
+    text-align: center; display: flex; flex-direction: column;
+    gap: var(--space-1); align-items: center;
   }
   body[data-variant="v2_back"] .back-name {
-    font-family: var(--font-titulo); font-size: 18px; font-weight: 700;
-    color: #0b1417; letter-spacing: 0.02em;
+    font-family: var(--font-titulo); font-size: var(--type-4xl); font-weight: 900;
+    color: var(--texto); letter-spacing: var(--tracking-tight); line-height: var(--leading-tight);
   }
   body[data-variant="v2_back"] .back-tag {
-    font-size: 13px; font-weight: 500; color: #1a2a25;
-    letter-spacing: 0.03em;
+    font-family: var(--font-cuerpo); font-size: var(--type-lg);
+    font-weight: 500; color: var(--acento); letter-spacing: var(--tracking-wide);
+  }
+  body[data-variant="v2_back"] .accent-line-sep {
+    width: var(--space-5); height: 2px; background: var(--acento);
   }
   body[data-variant="v2_back"] .back-url {
-    font-size: 16px; font-weight: 600; color: #0d5c4a;
-    text-align: right; letter-spacing: 0.02em;
-  }
-  body[data-variant="v2_back"] .accent-line {
-    width: 1px; height: 60px; border-radius: 1px;
-    background: linear-gradient(180deg, var(--acento), var(--acento-2));
-    margin: 0 30px;
+    font-family: var(--font-cuerpo); font-size: var(--type-sm); font-weight: 500;
+    color: var(--texto-muted); letter-spacing: var(--tracking-wide);
   }
 
+  body[data-variant="v1_front"] .back-layout,
+  body[data-variant="v2_back"] .front-layout { display: none; }
   .contract-fields { display: none !important; }
 </style>
 </head>
-<body>
+<body data-variant="v1_front">
   <!-- FRONT layout -->
   <div class="front-layout left-col">
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="bcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#43b5a6"/><stop offset="100%" stop-color="#8d7cc0"/>
-        </linearGradient>
-      </defs>
-      <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke="url(#bcGrad)" stroke-width="2.5"/>
-      <line x1="50" y1="5" x2="50" y2="95" stroke="url(#bcGrad)" stroke-width="1" opacity="0.5"/>
-      <line x1="7" y1="25" x2="93" y2="75" stroke="url(#bcGrad)" stroke-width="1" opacity="0.5"/>
-      <line x1="93" y1="25" x2="7" y2="75" stroke="url(#bcGrad)" stroke-width="1" opacity="0.5"/>
-      <circle cx="50" cy="50" r="3" fill="#43b5a6"/>
-      <circle cx="50" cy="5" r="2.5" fill="#43b5a6"/>
-      <circle cx="93" cy="25" r="2.5" fill="#8d7cc0"/>
-      <circle cx="93" cy="75" r="2.5" fill="#8d7cc0"/>
-      <circle cx="50" cy="95" r="2.5" fill="#43b5a6"/>
-      <circle cx="7" cy="75" r="2.5" fill="#8d7cc0"/>
-      <circle cx="7" cy="25" r="2.5" fill="#8d7cc0"/>
-    </svg>
+    <div data-isotype-container>
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#f5f5f5"/>
+          </linearGradient>
+        </defs>
+        <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke="url(#bcGrad)" stroke-width="2.5"/>
+        <line x1="50" y1="5" x2="50" y2="95" stroke="url(#bcGrad)" stroke-width="1" opacity="0.65"/>
+        <line x1="7" y1="25" x2="93" y2="75" stroke="url(#bcGrad)" stroke-width="1" opacity="0.65"/>
+        <line x1="93" y1="25" x2="7" y2="75" stroke="url(#bcGrad)" stroke-width="1" opacity="0.65"/>
+        <circle cx="50" cy="50" r="3" fill="#ffffff"/>
+        <circle cx="50" cy="5" r="2.5" fill="#ffffff"/>
+        <circle cx="93" cy="25" r="2.5" fill="#f5f5f5"/>
+        <circle cx="93" cy="75" r="2.5" fill="#f5f5f5"/>
+        <circle cx="50" cy="95" r="2.5" fill="#ffffff"/>
+        <circle cx="7" cy="75" r="2.5" fill="#f5f5f5"/>
+        <circle cx="7" cy="25" r="2.5" fill="#f5f5f5"/>
+      </svg>
+    </div>
   </div>
   <div class="front-layout right-col">
     <h1 class="logo-text" data-logo-texto data-fit data-fit-min="24">Kósmos</h1>
     <div class="accent-line"></div>
-    <p class="subtitle" data-subtitulo data-fit data-fit-min="10">Simulación del orden natural · Pinakothḗke</p>
+    <p class="subtitle" data-subtitulo data-fit data-fit-min="10">Simulación del orden natural</p>
     <p class="copy" data-copy data-fit data-fit-min="10">Catálogo educativo de sistemas complejos, emergencia y filosofía de la ciencia</p>
   </div>
 
   <!-- BACK layout -->
   <div class="back-layout">
-    <div class="back-left">
+    <div data-isotype-container>
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke="#0b1417" stroke-width="2.5"/>
-        <line x1="50" y1="5" x2="50" y2="95" stroke="#0b1417" stroke-width="1" opacity="0.4"/>
-        <line x1="7" y1="25" x2="93" y2="75" stroke="#0b1417" stroke-width="1" opacity="0.4"/>
-        <line x1="93" y1="25" x2="7" y2="75" stroke="#0b1417" stroke-width="1" opacity="0.4"/>
-        <circle cx="50" cy="50" r="3" fill="#0b1417"/>
-        <circle cx="50" cy="5" r="2" fill="#0b1417"/><circle cx="93" cy="25" r="2" fill="#0b1417"/>
-        <circle cx="93" cy="75" r="2" fill="#0b1417"/><circle cx="50" cy="95" r="2" fill="#0b1417"/>
-        <circle cx="7" cy="75" r="2" fill="#0b1417"/><circle cx="7" cy="25" r="2" fill="#0b1417"/>
+        <defs>
+          <linearGradient id="bcGradBack" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#43b5a6"/><stop offset="100%" stop-color="#8d7cc0"/>
+          </linearGradient>
+        </defs>
+        <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke="url(#bcGradBack)" stroke-width="2.5"/>
+        <line x1="50" y1="5" x2="50" y2="95" stroke="url(#bcGradBack)" stroke-width="1" opacity="0.5"/>
+        <line x1="7" y1="25" x2="93" y2="75" stroke="url(#bcGradBack)" stroke-width="1" opacity="0.5"/>
+        <line x1="93" y1="25" x2="7" y2="75" stroke="url(#bcGradBack)" stroke-width="1" opacity="0.5"/>
+        <circle cx="50" cy="50" r="3" fill="#43b5a6"/>
+        <circle cx="50" cy="5" r="2.5" fill="#43b5a6"/>
+        <circle cx="93" cy="25" r="2.5" fill="#8d7cc0"/>
+        <circle cx="93" cy="75" r="2.5" fill="#8d7cc0"/>
+        <circle cx="50" cy="95" r="2.5" fill="#43b5a6"/>
+        <circle cx="7" cy="75" r="2.5" fill="#8d7cc0"/>
+        <circle cx="7" cy="25" r="2.5" fill="#8d7cc0"/>
       </svg>
-      <div class="back-info">
-        <span class="back-name" data-logo-texto>Kósmos</span>
-        <span class="back-tag" data-subtitulo>Simulación del orden natural</span>
-      </div>
     </div>
-    <div class="accent-line"></div>
+    <div class="back-info">
+      <span class="back-name" data-logo-texto>Kósmos</span>
+      <span class="back-tag" data-subtitulo>Simulación del orden natural</span>
+    </div>
+    <div class="accent-line-sep"></div>
     <div class="back-url" data-url data-fit data-fit-min="10">kosmos.stevenvallejo.com</div>
   </div>
 

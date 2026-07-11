@@ -1,0 +1,75 @@
+{
+  "slug": "pinakotheke-autopoesis",
+  "nombre_producto": "La ciudad bien asignada",
+  "nombre_corporativo": "Pinakothḗke",
+  "tagline": "Ponencia: cartografía crítica de una Medellín posible; repensar la asignación del espacio metropolitano y las formas de vida urbana.",
+  "url": "autopoesis.stevenvallejo.com",
+  "tono": "filosófico, riguroso, reflexivo",
+  "simbolo": "◇",
+  "frente": "filosofia",
+  "paleta": {
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_3": "#2a7a70",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22",
+    "acento_2": "#cf6a3c"
+  },
+  "gradiente_hero": "linear-gradient(135deg, #cf6a3c 0%, #43b5a6 50%, #2a7a70 100%)",
+  "gradiente_bg": "radial-gradient(ellipse at 20% 60%, #131e22 0%, #0b1417 70%)",
+  "tipografia": {
+    "titulos": "Inter",
+    "cuerpo": "JetBrains Mono"
+  },
+  "logo_texto": "La ciudad asignada",
+  "logo_simbolo": "◇",
+  "textos": {
+    "linkedin_post": {
+      "titulo": "La ciudad asignada",
+      "subtitulo": "Filosofía de la ciudad · Pinakothḗke",
+      "etiqueta": "FILOSOFÍA",
+      "copy": "Cartografía crítica de una Medellín posible."
+    },
+    "linkedin_banner": {
+      "titulo": "La ciudad asignada",
+      "etiqueta": "FILOSOFÍA",
+      "copy": "Cartografía crítica de una Medellín posible."
+    },
+    "ig_post": {
+      "titulo": "Cartografía crítica de Medellín",
+      "subtitulo": "Cómo se asigna el espacio urbano",
+      "etiqueta": "FILOSOFÍA",
+      "copy": "Ponencia sobre la asignación del espacio metropolitano: dónde vive el significado en la ciudad y qué formas de vida urbana son posibles."
+    },
+    "ig_story": {
+      "titulo": "La ciudad asignada",
+      "copy": "Leer la ponencia ↓"
+    },
+    "x_post": {
+      "titulo": "La ciudad asignada",
+      "copy": "Cartografía crítica de una Medellín posible."
+    },
+    "og_general": {
+      "titulo": "La ciudad asignada",
+      "subtitulo": "Filosofía de la ciudad · Pinakothḗke",
+      "copy": "Cartografía crítica de una Medellín posible."
+    },
+    "fb_cover": {
+      "titulo": "La ciudad asignada",
+      "subtitulo": "Filosofía de la ciudad · Pinakothḗke",
+      "copy": "Cartografía crítica de una Medellín posible."
+    },
+    "whatsapp_perfil": {
+      "titulo": "◇",
+      "copy": "La ciudad asignada"
+    },
+    "contra_cover": {
+      "titulo": "La ciudad asignada",
+      "copy": "Filosofía de la ciudad · Pinakothḗke"
+    }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
+}

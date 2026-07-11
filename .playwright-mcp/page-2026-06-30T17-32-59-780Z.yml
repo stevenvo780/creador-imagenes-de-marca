@@ -1,0 +1,74 @@
+- generic [ref=e2]:
+  - link "Saltar al contenido principal" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "Eikón" [ref=e6] [cursor=pointer]:
+        - /url: /
+      - navigation "Navegación principal" [ref=e7]:
+        - list [ref=e8]:
+          - listitem [ref=e9]:
+            - link "Marcas" [ref=e10] [cursor=pointer]:
+              - /url: /brands
+          - listitem [ref=e11]:
+            - link "Crear" [ref=e12] [cursor=pointer]:
+              - /url: /batch
+          - listitem [ref=e13]:
+            - link "Galería" [ref=e14] [cursor=pointer]:
+              - /url: /gallery
+      - generic [ref=e15]:
+        - 'generic "Cuenta: qalocal" [ref=e16]': qalocal
+        - button "Salir" [ref=e17] [cursor=pointer]
+  - main [ref=e18]:
+    - generic [ref=e19]:
+      - heading "Crear la identidad de tu marca" [level=1] [ref=e20]
+      - navigation "Pasos del proceso" [ref=e21]:
+        - list [ref=e22]:
+          - listitem [ref=e23]:
+            - generic [ref=e24]: ✓
+            - generic [ref=e25]: Tu marca
+          - listitem [ref=e26]
+          - listitem [ref=e27]:
+            - generic [ref=e28]: ✓
+            - generic [ref=e29]: Qué generar
+          - listitem [ref=e30]
+          - listitem [ref=e31]:
+            - generic [ref=e32]: ✓
+            - generic [ref=e33]: Estilo
+          - listitem [ref=e34]
+          - listitem [ref=e35]:
+            - generic [ref=e36]: "4"
+            - generic [ref=e37]: Variaciones
+          - listitem [ref=e38]
+          - listitem [ref=e39]:
+            - generic [ref=e40]: "5"
+            - generic [ref=e41]: Revisar
+      - generic [ref=e286]:
+        - generic [ref=e287]:
+          - heading "¿Cuántas variaciones quieres?" [level=2] [ref=e288]
+          - paragraph [ref=e289]: Más variaciones = más opciones para elegir, pero tarda un poco más en generarse.
+        - note [ref=e290]:
+          - generic [ref=e291]: ⚙
+          - text: Con los ejes configurados podés generar hasta
+          - strong [ref=e292]: "10"
+          - text: combinaciones distintas.
+        - generic [ref=e293]:
+          - generic [ref=e294]: Cantidad
+          - button "8" [ref=e296] [cursor=pointer]
+          - generic [ref=e297]:
+            - generic [ref=e298]:
+              - generic [ref=e299]: Ajuste fino
+              - generic [ref=e300]: "10"
+            - 'slider "Cantidad de variaciones: 10" [ref=e301] [cursor=pointer]': "10"
+            - generic [ref=e302]:
+              - generic [ref=e303]: "1"
+              - generic [ref=e304]: "10"
+          - generic [ref=e305]:
+            - generic [ref=e306]: ⏱
+            - generic [ref=e307]: Normal — menos de un minuto
+        - 'button "Opciones avanzadas: reproducir los mismos resultados" [ref=e309] [cursor=pointer]':
+          - generic [ref=e310]: ▸
+          - text: "Opciones avanzadas: reproducir los mismos resultados"
+      - generic [ref=e52]:
+        - button "← Anterior" [ref=e184] [cursor=pointer]
+        - button "Siguiente →" [active] [ref=e53] [cursor=pointer]

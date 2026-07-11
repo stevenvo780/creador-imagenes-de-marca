@@ -1,0 +1,427 @@
+{
+  "axes": {
+    "palette_scheme": {
+      "label": "Paleta de color",
+      "type": "enum",
+      "options": {
+        "brand": {
+          "description": "Paleta completa de la marca (por defecto)",
+          "overrides": {}
+        },
+        "mono": {
+          "description": "Monocromo: texto/fondo invertidos, sin acento",
+          "overrides": {
+            "acento": "var(--texto)",
+            "acento_2": "var(--texto)",
+            "bg": "var(--texto)"
+          }
+        },
+        "light": {
+          "description": "Modo claro: fondo/texto invertidos",
+          "overrides": {
+            "bg": "var(--texto)",
+            "texto": "var(--primario)"
+          }
+        },
+        "dark": {
+          "description": "Modo oscuro: primario como fondo",
+          "overrides": {
+            "bg": "var(--primario)"
+          }
+        },
+        "accent_bg": {
+          "description": "Acento como fondo",
+          "overrides": {
+            "bg": "var(--acento)",
+            "texto": "var(--primario)"
+          }
+        },
+        "gradient": {
+          "description": "Fondo degradado (gradiente hero)",
+          "overrides": {
+            "bg": "var(--grad-hero)"
+          }
+        }
+      }
+    },
+    "typography_pairing": {
+      "label": "Tipografía",
+      "type": "enum",
+      "options": {
+        "brand_default": {
+          "description": "Tipografía por defecto de la marca",
+          "overrides": {}
+        },
+        "sans_serif": {
+          "description": "Sans-serif moderno (Inter/System)",
+          "overrides": {
+            "font_titulo": "Inter",
+            "font_cuerpo": "Inter"
+          }
+        },
+        "serif_modern": {
+          "description": "Título serif con cuerpo sans",
+          "overrides": {
+            "font_titulo": "Playfair Display",
+            "font_cuerpo": "Inter"
+          }
+        },
+        "display": {
+          "description": "Tipografías display",
+          "overrides": {
+            "font_titulo": "Playfair Display",
+            "font_cuerpo": "Playfair Display"
+          }
+        },
+        "geometric_sans": {
+          "description": "Título grotesco geométrico (Space Grotesk) con cuerpo sans",
+          "overrides": {
+            "font_titulo": "Space Grotesk",
+            "font_cuerpo": "Inter"
+          }
+        }
+      }
+    },
+    "layout": {
+      "label": "Composición",
+      "type": "enum",
+      "options": {
+        "symbol_only": {
+          "description": "Solo símbolo (sin texto)",
+          "data_attrs": {
+            "data-layout": "symbol_only"
+          }
+        },
+        "wordmark_only": {
+          "description": "Solo texto (wordmark)",
+          "data_attrs": {
+            "data-layout": "wordmark_only"
+          }
+        },
+        "lockup_horizontal": {
+          "description": "Bloque horizontal (símbolo + texto lado a lado)",
+          "data_attrs": {
+            "data-layout": "lockup_horizontal"
+          }
+        },
+        "lockup_vertical": {
+          "description": "Bloque vertical (símbolo arriba del texto)",
+          "data_attrs": {
+            "data-layout": "lockup_vertical"
+          }
+        }
+      }
+    },
+    "background_treatment": {
+      "label": "Fondo",
+      "type": "enum",
+      "options": {
+        "solid": {
+          "description": "Fondo de color sólido",
+          "overrides": {
+            "bg": "var(--primario)"
+          }
+        },
+        "gradient": {
+          "description": "Fondo degradado",
+          "overrides": {
+            "bg": "var(--grad-bg)"
+          }
+        },
+        "geometric": {
+          "description": "Patrón geométrico",
+          "data_attrs": {
+            "data-bg-treatment": "geometric"
+          }
+        },
+        "grid": {
+          "description": "Superposición de cuadrícula",
+          "data_attrs": {
+            "data-bg-treatment": "grid"
+          }
+        },
+        "orb": {
+          "description": "Efecto de orbe radial",
+          "data_attrs": {
+            "data-bg-treatment": "orb"
+          }
+        },
+        "texture": {
+          "description": "Textura sutil",
+          "data_attrs": {
+            "data-bg-treatment": "texture"
+          }
+        }
+      }
+    },
+    "density_scale": {
+      "label": "Espaciado",
+      "type": "enum",
+      "options": {
+        "compact": {
+          "description": "Compacto: escala 85%",
+          "overrides": {
+            "font_size_scale": "0.85",
+            "space_scale": "0.85"
+          }
+        },
+        "normal": {
+          "description": "Normal: escala 100% (por defecto)",
+          "overrides": {
+            "font_size_scale": "1",
+            "space_scale": "1"
+          }
+        },
+        "spacious": {
+          "description": "Amplio: escala 115%",
+          "overrides": {
+            "font_size_scale": "1.15",
+            "space_scale": "1.15"
+          }
+        }
+      }
+    },
+    "corner_shape": {
+      "label": "Esquinas",
+      "type": "enum",
+      "options": {
+        "sharp": {
+          "description": "Esquinas rectas (0px)",
+          "overrides": {
+            "corner_radius": "0"
+          }
+        },
+        "rounded": {
+          "description": "Esquinas redondeadas (14px)",
+          "overrides": {
+            "corner_radius": "14px"
+          }
+        },
+        "pill": {
+          "description": "Forma de píldora (999px)",
+          "overrides": {
+            "corner_radius": "999px"
+          }
+        }
+      }
+    },
+    "isotype_style": {
+      "label": "Estilo de símbolo",
+      "type": "enum",
+      "options": {
+        "poligono_regular": {
+          "description": "Polígono regular",
+          "data_attrs": {
+            "data-isotype-style": "poligono_regular"
+          }
+        },
+        "estrella_np": {
+          "description": "Estrella de n puntas",
+          "data_attrs": {
+            "data-isotype-style": "estrella_np"
+          }
+        },
+        "poligonos_anidados": {
+          "description": "Polígonos anidados",
+          "data_attrs": {
+            "data-isotype-style": "poligonos_anidados"
+          }
+        },
+        "reuleaux": {
+          "description": "Triángulo de Reuleaux",
+          "data_attrs": {
+            "data-isotype-style": "reuleaux"
+          }
+        },
+        "corona_picos": {
+          "description": "Corona de picos",
+          "data_attrs": {
+            "data-isotype-style": "corona_picos"
+          }
+        },
+        "espiral_aurea": {
+          "description": "Espiral áurea",
+          "data_attrs": {
+            "data-isotype-style": "espiral_aurea"
+          }
+        },
+        "dragon": {
+          "description": "Curva del dragón",
+          "data_attrs": {
+            "data-isotype-style": "dragon"
+          }
+        },
+        "hilbert": {
+          "description": "Curva de Hilbert",
+          "data_attrs": {
+            "data-isotype-style": "hilbert"
+          }
+        },
+        "flor_vida": {
+          "description": "Flor de la vida",
+          "data_attrs": {
+            "data-isotype-style": "flor_vida"
+          }
+        },
+        "semilla_vida": {
+          "description": "Semilla de la vida",
+          "data_attrs": {
+            "data-isotype-style": "semilla_vida"
+          }
+        },
+        "vesica": {
+          "description": "Vesica piscis",
+          "data_attrs": {
+            "data-isotype-style": "vesica"
+          }
+        },
+        "anillos_borromeos": {
+          "description": "Anillos borromeos",
+          "data_attrs": {
+            "data-isotype-style": "anillos_borromeos"
+          }
+        },
+        "triquetra": {
+          "description": "Triquetra",
+          "data_attrs": {
+            "data-isotype-style": "triquetra"
+          }
+        },
+        "metatron": {
+          "description": "Cubo de Metatrón",
+          "data_attrs": {
+            "data-isotype-style": "metatron"
+          }
+        },
+        "monograma": {
+          "description": "Monograma",
+          "data_attrs": {
+            "data-isotype-style": "monograma"
+          }
+        },
+        "letra_negativa": {
+          "description": "Letra en negativo",
+          "data_attrs": {
+            "data-isotype-style": "letra_negativa"
+          }
+        },
+        "letra_stencil": {
+          "description": "Letra stencil",
+          "data_attrs": {
+            "data-isotype-style": "letra_stencil"
+          }
+        },
+        "ligadura": {
+          "description": "Ligadura de iniciales",
+          "data_attrs": {
+            "data-isotype-style": "ligadura"
+          }
+        },
+        "inicial_circulo": {
+          "description": "Inicial en círculo",
+          "data_attrs": {
+            "data-isotype-style": "inicial_circulo"
+          }
+        },
+        "escudo": {
+          "description": "Escudo",
+          "data_attrs": {
+            "data-isotype-style": "escudo"
+          }
+        },
+        "sello": {
+          "description": "Sello circular",
+          "data_attrs": {
+            "data-isotype-style": "sello"
+          }
+        },
+        "laurel": {
+          "description": "Corona de laurel",
+          "data_attrs": {
+            "data-isotype-style": "laurel"
+          }
+        },
+        "banderin": {
+          "description": "Banderín",
+          "data_attrs": {
+            "data-isotype-style": "banderin"
+          }
+        },
+        "marca_anidada": {
+          "description": "Marca anidada",
+          "data_attrs": {
+            "data-isotype-style": "marca_anidada"
+          }
+        },
+        "marca_geometrica": {
+          "description": "Marca geométrica",
+          "data_attrs": {
+            "data-isotype-style": "marca_geometrica"
+          }
+        },
+        "grid_modular": {
+          "description": "Retícula modular",
+          "data_attrs": {
+            "data-isotype-style": "grid_modular"
+          }
+        },
+        "monograma_reticulado": {
+          "description": "Monograma reticulado",
+          "data_attrs": {
+            "data-isotype-style": "monograma_reticulado"
+          }
+        },
+        "negativo_espacio": {
+          "description": "Espacio negativo",
+          "data_attrs": {
+            "data-isotype-style": "negativo_espacio"
+          }
+        },
+        "icono_inicial": {
+          "description": "Ícono + inicial",
+          "data_attrs": {
+            "data-isotype-style": "icono_inicial"
+          }
+        },
+        "none": {
+          "description": "Sin símbolo procedural",
+          "data_attrs": {}
+        }
+      }
+    },
+    "accent_placement": {
+      "label": "Acento",
+      "type": "enum",
+      "options": {
+        "none": {
+          "description": "Sin acento (por defecto)",
+          "data_attrs": {}
+        },
+        "underline": {
+          "description": "Barra de acento subrayada",
+          "data_attrs": {
+            "data-accent-placement": "underline"
+          }
+        },
+        "corner": {
+          "description": "Marcador de acento en esquina",
+          "data_attrs": {
+            "data-accent-placement": "corner"
+          }
+        },
+        "sidebar": {
+          "description": "Franja de acento lateral",
+          "data_attrs": {
+            "data-accent-placement": "sidebar"
+          }
+        },
+        "dot": {
+          "description": "Elemento de acento en punto",
+          "data_attrs": {
+            "data-accent-placement": "dot"
+          }
+        }
+      }
+    }
+  }
+}

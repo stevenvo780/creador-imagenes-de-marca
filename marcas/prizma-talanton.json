@@ -3,76 +3,74 @@
   "nombre_producto": "Talanton",
   "nombre_corporativo": "Prizma",
   "tagline": "Gestión del talento que pesa lo que vale",
-  "url": "talanton.prizma.app",
+  "url": "prisma-enterprice.cloud",
   "tono": "estratégico, RH, corporativo",
   "simbolo": "⚖",
   "suite": "prizma",
-
   "paleta": {
-    "bg":           "#0c0e10",
-    "primario":     "#0c0e10",
-    "acento":       "#f0b94a",
-    "acento_2":     "#d4622e",
-    "acento_3":     "#43b5a6",
-    "texto":        "#f0ece6",
-    "texto_muted":  "#a09080",
-    "surface":      "#16120e"
+    "bg": "#0c0e10",
+    "primario": "#0c0e10",
+    "acento": "#f0b94a",
+    "acento_2": "#d4622e",
+    "acento_3": "#43b5a6",
+    "texto": "#f0ece6",
+    "texto_muted": "#a09080",
+    "surface": "#16120e"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #f0b94a 0%, #c0862a 55%, #8b5a1a 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 65% 40%, #1a120a 0%, #0c0e10 65%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 65% 40%, #1a120a 0%, #0c0e10 65%)",
   "tipografia": {
     "titulos": "Inter",
-    "cuerpo":  "Inter"
+    "cuerpo": "Inter"
   },
-
   "logo_texto": "Talanton",
   "logo_simbolo": "⚖",
-
   "textos": {
     "linkedin_post": {
-      "titulo":    "Talanton",
+      "titulo": "Talanton",
       "subtitulo": "Gestión del talento · Prizma",
-      "copy":      "Gestión del talento que pesa lo que vale."
+      "copy": "Gestión del talento que pesa lo que vale."
     },
     "linkedin_banner": {
-      "titulo":    "Talanton",
-      "copy":      "Recluta, evalúa y desarrolla el capital humano con precisión."
+      "titulo": "Talanton",
+      "copy": "Recluta, evalúa y desarrolla el capital humano con precisión."
     },
     "ig_post": {
-      "titulo":    "⚖",
-      "subtitulo": "Talanton",
-      "copy":      "Gestión del talento que pesa lo que vale"
+      "titulo": "Punto de venta",
+      "subtitulo": "Inventario, ventas y facturación DIAN",
+      "etiqueta": "PRIZMA POS",
+      "copy": "POS con inventario físico, ventas y facturación electrónica DIAN. Panel de administración y control de caja."
     },
     "ig_story": {
-      "titulo":    "Talanton",
-      "copy":      "Talento que pesa ↓"
+      "titulo": "Talanton",
+      "copy": "Talento que pesa ↓"
     },
     "x_post": {
-      "titulo":    "Talanton",
-      "copy":      "Gestión del talento que pesa lo que vale"
+      "titulo": "Talanton",
+      "copy": "Gestión del talento que pesa lo que vale"
     },
     "yt_thumbnail": {
-      "titulo":    "Talanton",
-      "copy":      "Gestión del talento"
+      "titulo": "Talanton",
+      "copy": "Gestión del talento"
     },
     "yt_banner": {
-      "titulo":    "Talanton",
+      "titulo": "Talanton",
       "subtitulo": "Gestión del talento · Prizma"
     },
     "og_general": {
-      "titulo":    "Talanton",
+      "titulo": "Talanton",
       "subtitulo": "Gestión del talento · Prizma",
-      "copy":      "Gestión del talento que pesa lo que vale."
+      "copy": "Gestión del talento que pesa lo que vale."
     },
     "whatsapp_perfil": {
-      "titulo":    "⚖",
-      "copy":      "Talanton"
+      "titulo": "⚖",
+      "copy": "Talanton"
     },
     "contra_cover": {
-      "titulo":    "Talanton",
-      "copy":      "Gestión del talento · Prizma"
+      "titulo": "Talanton",
+      "copy": "Gestión del talento · Prizma"
     }
-  }
+  },
+  "logo_style": "prisma_refraccion",
+  "logo_seed": 1412926217
 }

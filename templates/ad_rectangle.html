@@ -3,107 +3,203 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=300, height=250, initial-scale=1">
-<title>Eikon - Ad Rectangle</title>
+<title>Eikon - Ad Rectangle 300×250</title>
 <style>
   :root {
-    --bg: #0b1417; --texto: #e8e0d4; --acento: #43b5a6; --acento-2: #8d7cc0;
-    --font-titulo: 'Inter', sans-serif; --font-cuerpo: 'Inter', sans-serif;
+    --bg: #0b1417;
+    --texto: #e8e0d4;
+    --acento: #43b5a6;
+    --acento-2: #8d7cc0;
+    --font-titulo: 'Playfair Display', Georgia, serif;
+    --font-cuerpo: 'Inter', system-ui, -apple-system, sans-serif;
+    --type-xs: 8px;
+    --type-sm: 10px;
+    --type-base: 16px;
+    --type-lg: 20px;
+    --type-xl: 25px;
+    --type-2xl: 31px;
+    --type-3xl: 39px;
+    --space-0: 0;
+    --space-1: 8px;
+    --space-2: 16px;
+    --space-3: 24px;
+    --space-4: 32px;
+    --tracking-tight: -0.02em;
+    --tracking-normal: 0em;
+    --leading-tight: 1.2;
+    --leading-normal: 1.5;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 300px; height: 250px; overflow: hidden; }
-  body {
-    background-color: var(--bg); color: var(--texto);
-    font-family: var(--font-cuerpo);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center; padding: 20px;
-    text-align: center;
-  }
-  body[data-variant="v1_visual"]     { --bg: #0b1417; --texto: #e8e0d4; }
-  body[data-variant="v2_data"]        { --bg: #0b1417; --texto: #e8e0d4; }
-  body[data-variant="v3_testimonial"] { --bg: #131e22; --texto: #e8e0d4; }
 
-  .symbol-wrap { width: 48px; height: 48px; margin-bottom: 10px; }
-  .symbol-wrap svg { width: 100%; height: 100%; }
-  .symbol-wrap svg * { stroke: url(#rectGrad); }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 300px;
+    height: 250px;
+    overflow: hidden;
+  }
+
+  body {
+    background: radial-gradient(circle at 20% 50%, color-mix(in srgb, var(--bg) 94%, white) 0%, var(--bg) 50%, var(--bg) 100%);
+    color: var(--texto);
+    font-family: var(--font-cuerpo);
+    display: flex;
+    gap: var(--space-0);
+    padding: var(--space-0);
+    position: relative;
+    overflow: hidden;
+  }
+  body::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='arGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23arGrain)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 200px 200px; pointer-events: none; z-index: 0;
+  }
+
+  .symbol-container {
+    width: 110px;
+    background-color: var(--acento);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative; z-index: 1;
+  }
+  .symbol-container::before {
+    content: ''; position: absolute; width: 220px; height: 220px; border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--acento) 28%, transparent) 0%, transparent 60%);
+    filter: blur(60px); top: 50%; left: 50%; transform: translate(-50%, -50%);
+    pointer-events: none; z-index: -1;
+  }
+
+  [data-isotype-container] {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  [data-isotype-container] svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  [data-isotype-container] svg * {
+    stroke: var(--bg);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--space-2) var(--space-2);
+    position: relative; z-index: 1;
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
 
   .brand {
-    font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--acento); margin-bottom: 6px;
+    font-family: var(--font-cuerpo);
+    font-size: var(--type-xs);
+    font-weight: 700;
+    letter-spacing: var(--tracking-normal);
+    text-transform: uppercase;
+    color: var(--acento);
+    line-height: var(--leading-tight);
   }
-
-  /* v1_visual: autoridad — símbolo grande + nombre */
-  body[data-variant="v1_visual"] .symbol-wrap { width: 72px; height: 72px; margin-bottom: 14px; }
-  body[data-variant="v1_visual"] .big-number { display: none; }
-  body[data-variant="v1_visual"] .copy { display: none; }
-  body[data-variant="v1_visual"] .cta { display: none; }
-
-  /* v2_data: social proof — número grande + dato */
-  .big-number {
-    display: none;
-    font-family: var(--font-titulo); font-size: 64px; font-weight: 800;
-    background: linear-gradient(135deg, var(--acento), var(--acento-2));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text; line-height: 1; margin-bottom: 4px;
-  }
-  body[data-variant="v2_data"] .big-number { display: block; }
-  body[data-variant="v2_data"] .symbol-wrap { display: none; }
-  body[data-variant="v2_data"] .title { font-size: 13px; }
-  body[data-variant="v2_data"] .url { display: none; }
-
-  /* v3_testimonial: beneficio — copy + CTA dorado */
-  body[data-variant="v3_testimonial"] .title { font-style: italic; font-size: 15px; }
-  body[data-variant="v3_testimonial"] .symbol-wrap { display: none; }
-  body[data-variant="v3_testimonial"] .big-number { display: none; }
-  body[data-variant="v3_testimonial"] .cta { background: #e0a85e; color: #0b1417; }
-  body[data-variant="v3_testimonial"] .url { display: none; }
 
   .title {
-    font-family: var(--font-titulo); font-size: 17px; font-weight: 700;
-    line-height: 1.2; color: var(--texto); margin-bottom: 6px;
+    font-family: var(--font-titulo);
+    font-size: var(--type-xl);
+    font-weight: 700;
+    line-height: var(--leading-tight);
+    color: var(--texto);
+    letter-spacing: var(--tracking-tight);
   }
+
   .copy {
-    font-size: 11px; line-height: 1.4; opacity: 0.8;
-    color: var(--texto); margin-bottom: 8px;
+    font-size: var(--type-sm);
+    line-height: var(--leading-normal);
+    color: var(--texto);
+    opacity: 0.85;
   }
+
+  .meta {
+    font-size: var(--type-xs);
+    letter-spacing: var(--tracking-normal);
+    color: var(--texto);
+    opacity: 0.65;
+  }
+
   .cta {
-    font-size: 10px; font-weight: 700; color: var(--bg);
-    background: linear-gradient(90deg, var(--acento), var(--acento-2));
-    padding: 5px 14px; border-radius: 3px; text-decoration: none;
-    letter-spacing: 0.02em;
+    font-family: var(--font-cuerpo);
+    font-size: var(--type-sm);
+    font-weight: 700;
+    color: var(--bg);
+    background-color: var(--acento);
+    padding: var(--space-1) var(--space-2);
+    border: none;
+    text-decoration: none;
+    letter-spacing: var(--tracking-normal);
+    text-transform: uppercase;
+    cursor: pointer;
+    align-self: flex-start;
   }
-  .url {
-    font-size: 9px; opacity: 0.6; color: var(--texto); margin-top: 4px;
-  }
+
+  body[data-variant="v1_visual"] .copy { display: none; }
+  body[data-variant="v1_visual"] .meta { display: none; }
+  body[data-variant="v1_visual"] .cta { display: none; }
+
+  body[data-variant="v2_data"] .copy { display: block; }
+  body[data-variant="v2_data"] .meta { display: block; }
+  body[data-variant="v2_data"] .cta { display: block; }
+
+  body[data-variant="v3_testimonial"] .symbol-container { background-color: var(--acento-2); }
+  body[data-variant="v3_testimonial"] .title { font-style: italic; font-size: var(--type-lg); }
+  body[data-variant="v3_testimonial"] .copy { display: none; }
+  body[data-variant="v3_testimonial"] .meta { display: block; }
+  body[data-variant="v3_testimonial"] .cta { display: none; }
 
   .contract-fields { display: none !important; }
 </style>
 </head>
 <body>
-  <div class="symbol-wrap">
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="rectGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#43b5a6"/><stop offset="100%" stop-color="#8d7cc0"/>
-        </linearGradient>
-      </defs>
-      <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke-width="2.5"/>
-      <line x1="50" y1="5" x2="50" y2="95" stroke-width="1" opacity="0.5"/>
-      <line x1="7" y1="25" x2="93" y2="75" stroke-width="1" opacity="0.5"/>
-      <line x1="93" y1="25" x2="7" y2="75" stroke-width="1" opacity="0.5"/>
-      <circle cx="50" cy="50" r="3"/><circle cx="50" cy="5" r="2.5"/>
-      <circle cx="93" cy="25" r="2.5"/><circle cx="93" cy="75" r="2.5"/>
-      <circle cx="50" cy="95" r="2.5"/><circle cx="7" cy="75" r="2.5"/><circle cx="7" cy="25" r="2.5"/>
-    </svg>
+  <div class="symbol-container">
+    <div data-isotype-container>
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke-width="2.5"/>
+        <line x1="50" y1="5" x2="50" y2="95" stroke-width="1" opacity="0.6"/>
+        <line x1="7" y1="25" x2="93" y2="75" stroke-width="1" opacity="0.6"/>
+        <line x1="93" y1="25" x2="7" y2="75" stroke-width="1" opacity="0.6"/>
+        <circle cx="50" cy="50" r="3" fill="currentColor"/>
+      </svg>
+    </div>
   </div>
-  <div class="brand" data-logo-texto data-fit data-fit-min="5">Kósmos</div>
-  <div class="big-number" data-numero data-fit data-fit-min="28">22</div>
-  <h1 class="title" data-titulo data-fit data-fit-min="8">Simulación científica open source</h1>
-  <p class="copy" data-copy data-fit data-fit-min="6">22 simulaciones de emergencia y sistemas complejos. Explora el catálogo.</p>
-  <span class="url" data-url data-fit data-fit-min="6">kosmos.stevenvallejo.com</span>
-  <span class="cta">Explorar catálogo →</span>
-  <div class="contract-fields" aria-hidden="true">
-    <span data-titulo></span><span data-copy></span><span data-numero></span>
-    <span data-logo-texto></span><span data-url></span>
+
+  <div class="content-area">
+    <div class="header">
+      <div class="brand" data-logo-texto data-fit data-fit-min="5">Kósmos</div>
+      <h1 class="title" data-titulo data-fit data-fit-min="14">Simulación científica</h1>
+      <p class="copy" data-copy data-fit data-fit-min="7">22 sistemas complejos emergentes en catálogo open source.</p>
+    </div>
+
+    <div>
+      <span class="meta" data-url data-fit data-fit-min="6">kosmos.stevenvallejo.com</span>
+      <button class="cta">Explorar →</button>
+    </div>
+
+    <div class="contract-fields" aria-hidden="true">
+      <span data-titulo></span>
+      <span data-copy></span>
+      <span data-logo-texto></span>
+      <span data-url></span>
+    </div>
   </div>
 </body>
 </html>

@@ -3,55 +3,145 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1080, height=1080, initial-scale=1">
-<title>Eikon - Legacy Alias ig_post.html</title>
-<link rel="stylesheet" href="./eikon-system.css">
+<title>Eikon - Instagram Post</title>
 <style>
-  :root { --asset-width: 1080px; --asset-height: 1080px; }
+/* ═══════ FONTS ═══════ */
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 400; font-display: block; src: url("fonts/Inter-400.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 700; font-display: block; src: url("fonts/Inter-700.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 400; font-display: block; src: url("fonts/PlayfairDisplay-400.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 700; font-display: block; src: url("fonts/PlayfairDisplay-700.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 900; font-display: block; src: url("fonts/PlayfairDisplay-900.woff2") format("woff2"); }
+
+/* ═══════ DESIGN TOKENS ═══════ */
+:root {
+  --bg: #0b1417; --texto: #e8e0d4; --primario: #0b1417;
+  --acento: #43b5a6; --acento-2: #8d7cc0; --texto-muted: #a09080;
+  --font-titulo: 'Playfair Display', Georgia, serif;
+  --font-cuerpo: 'Inter', system-ui, sans-serif;
+  --space-0: 0; --space-1: 8px; --space-2: 16px; --space-3: 24px;
+  --space-4: 32px; --space-5: 40px; --space-6: 48px;
+  --space-8: 64px; --space-10: 80px; --space-12: 96px;
+  --type-xs: 8px; --type-sm: 10px; --type-base: 16px;
+  --type-lg: 20px; --type-xl: 25px; --type-2xl: 31px;
+  --type-3xl: 39px; --type-4xl: 49px; --type-5xl: 61px; --type-6xl: 76px;
+  --tracking-tight: -0.02em; --tracking-normal: 0em; --tracking-wide: 0.02em;
+  --leading-tight: 1.2; --leading-normal: 1.5; --leading-relaxed: 1.8;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1080px; overflow: hidden; }
+
+/* ═══════ DEPTH SYSTEM ═══════ */
+.depth-radial {
+  background: radial-gradient(ellipse at 28% 28%,
+    color-mix(in srgb, var(--bg) 93%, white) 0%,
+    color-mix(in srgb, var(--bg) 97%, white) 40%,
+    var(--bg) 100%);
+}
+.depth-grain::after {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 200px 200px; pointer-events: none; z-index: 2;
+}
+
+body {
+  font-family: var(--font-cuerpo); color: var(--texto); position: relative;
+}
+
+/* ═══════ LAYOUT ═══════ */
+.asset {
+  display: flex; flex-direction: column; align-items: center; height: 100%;
+  padding: var(--space-8) var(--space-8) var(--space-6); position: relative; z-index: 1;
+}
+.depth-aurora::before {
+  content: ''; position: absolute; width: 520px; height: 440px; border-radius: 40%;
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--acento) 7%, transparent) 0%, transparent 70%);
+  filter: blur(90px); top: 55%; left: 50%; transform: translate(-50%, -50%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ═══════ BRAND SIGNATURE ═══════ */
+.brand-signature {
+  font-family: var(--font-titulo); font-size: var(--type-xl); font-weight: 600;
+  letter-spacing: var(--tracking-wide); color: var(--texto-muted);
+  position: relative; z-index: 1;
+}
+
+/* ═══════ CONTENT ═══════ */
+.content {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: var(--space-4); position: relative; z-index: 1;
+  width: 100%; max-width: 820px;
+}
+.logo-hero {
+  display: flex; align-items: center; justify-content: center;
+  width: 200px; height: 200px; margin-bottom: var(--space-4);
+  position: relative; z-index: 1;
+}
+.logo-hero img,
+.logo-hero [data-isotype-container],
+.logo-hero svg { width: 100%; height: 100%; object-fit: contain; position: relative; z-index: 2; }
+.accent-line {
+  width: var(--space-6); height: 2px; background: var(--acento);
+  border-radius: 1px;
+}
+.title {
+  font-family: var(--font-titulo); font-size: var(--type-5xl); font-weight: 700;
+  line-height: var(--leading-tight); letter-spacing: var(--tracking-tight);
+  text-align: center;
+}
+.subtitle {
+  font-family: var(--font-cuerpo); font-size: var(--type-xl); font-weight: 600;
+  line-height: var(--leading-normal); color: var(--acento); text-align: center;
+}
+.copy {
+  font-size: var(--type-lg); font-weight: 400; line-height: var(--leading-relaxed);
+  color: var(--texto-muted); max-width: 640px; text-align: center;
+}
+
+/* ═══════ FOOTER ═══════ */
+.url-row {
+  position: relative; z-index: 1; width: 100%;
+  border-top: 1px solid color-mix(in srgb, var(--texto-muted) 15%, transparent);
+  padding-top: var(--space-3); text-align: center;
+}
+.url {
+  font-size: var(--type-xl); font-weight: 700; color: var(--texto);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* ═══════ VARIANTS ═══════ */
+body[data-variant="v1_tesis"] .title { font-size: 90px; font-weight: 900; }
+body[data-variant="v2_cita"] .copy {
+  font-family: var(--font-titulo); font-size: var(--type-2xl); font-style: italic;
+  color: var(--texto); line-height: var(--leading-relaxed);
+}
+body[data-variant="v2_cita"] .title { font-size: var(--type-3xl); }
+
+.contract-fields { display: none !important; }
 </style>
 </head>
-<body data-template="instagram_post" data-variant="v1_tesis" data-brand-line="cloud">
+<body class="depth-radial depth-grain" data-template="instagram_post" data-variant="v1_tesis" data-brand-line="cloud">
 
-  <main class="asset">
-    <section class="brand-row">
-      <span class="brand-mark" data-logo-simbolo data-fit data-fit-min="18">*</span>
-      <span class="brand-name" data-logo-texto data-fit data-fit-min="10">Marca</span>
-    </section>
+  <main class="asset depth-aurora">
+    <span class="brand-signature" data-logo-texto data-fit data-fit-min="16">Marca</span>
+
     <section class="content">
+      <span class="logo-hero" data-isotype-container></span>
       <div class="accent-line"></div>
-      <div class="metric">
-        <span class="big-number" data-numero data-fit data-fit-min="48">01</span>
-        <span class="label" data-etiqueta data-fit data-fit-min="12">Etiqueta</span>
-      </div>
-      <h1 class="title" data-titulo data-fit data-fit-min="24" data-fit-y="true">Titulo</h1>
-      <h2 class="subtitle" data-subtitulo data-fit data-fit-min="14">Subtitulo</h2>
-      <p class="copy" data-copy data-fit data-fit-min="12" data-fit-y="true">Copy</p>
-      <span class="button-like">Saber mas</span>
+      <h1 class="title" data-titulo data-fit data-fit-min="48" data-fit-y="true">Titulo</h1>
+      <h2 class="subtitle" data-subtitulo data-fit data-fit-min="20">Subtitulo</h2>
+      <p class="copy" data-copy data-fit data-fit-min="14" data-fit-y="true">Copy</p>
     </section>
-    <section class="author-block">
-      <span class="author-dot" data-logo-simbolo>*</span>
-      <div>
-        <div class="author-name" data-autor data-fit data-fit-min="14">Autor</div>
-        <div class="author-role" data-cargo data-fit data-fit-min="10">Cargo</div>
-      </div>
-    </section>
-    <footer class="brand-row">
-      <span class="url" data-url data-fit data-fit-min="10">example.com</span>
+
+    <footer class="url-row">
+      <span class="url" data-url data-fit data-fit-min="20">example.com</span>
     </footer>
   </main>
 
   <div class="contract-fields" aria-hidden="true">
-    <span data-titulo></span>
-    <span data-subtitulo></span>
-    <span data-copy></span>
-    <span data-logo-simbolo></span>
-    <span data-logo-texto></span>
-    <span data-numero></span>
-    <span data-etiqueta></span>
-    <span data-autor></span>
-    <span data-cargo></span>
-    <span data-url></span>
-    <span data-acento></span>
-    <span data-acento-2></span>
+    <span data-titulo></span><span data-subtitulo></span><span data-copy></span>
+    <span data-logo-simbolo></span><span data-logo-texto></span>
+    <span data-isotype-container></span><span data-url></span>
   </div>
 <script src="./eikon-runtime.js"></script>
 </body>

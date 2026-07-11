@@ -3,76 +3,77 @@
   "nombre_producto": "Iris",
   "nombre_corporativo": "Prizma",
   "tagline": "Analítica que revela el espectro completo",
-  "url": "iris.prizma.app",
+  "url": "prisma-enterprice.cloud",
   "tono": "visual, analítico, estratégico",
   "simbolo": "◐",
   "suite": "prizma",
-
   "paleta": {
-    "bg":           "#0c0e10",
-    "primario":     "#0c0e10",
-    "acento":       "#f0b94a",
-    "acento_2":     "#d4622e",
-    "acento_3":     "#43b5a6",
-    "texto":        "#f0ece6",
-    "texto_muted":  "#a09080",
-    "surface":      "#16120e"
+    "bg": "#0c0e10",
+    "primario": "#0c0e10",
+    "acento": "#f0b94a",
+    "acento_2": "#d4622e",
+    "acento_3": "#43b5a6",
+    "texto": "#f0ece6",
+    "texto_muted": "#a09080",
+    "surface": "#16120e"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #f0b94a 0%, #d4622e 45%, #43b5a6 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 50% 50%, #1a120a 0%, #0c0e10 65%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 50% 50%, #1a120a 0%, #0c0e10 65%)",
   "tipografia": {
     "titulos": "Inter",
-    "cuerpo":  "Inter"
+    "cuerpo": "Inter"
   },
-
   "logo_texto": "Iris",
   "logo_simbolo": "◐",
-
   "textos": {
     "linkedin_post": {
-      "titulo":    "Iris",
+      "titulo": "Iris",
       "subtitulo": "Business analytics · Prizma",
-      "copy":      "Analítica que revela el espectro completo."
+      "copy": "Analítica que revela el espectro completo."
     },
     "linkedin_banner": {
-      "titulo":    "Iris",
-      "copy":      "Dashboards que muestran lo que los números ocultan."
+      "titulo": "Iris",
+      "copy": "Dashboards que muestran lo que los números ocultan."
     },
     "ig_post": {
-      "titulo":    "◐",
+      "titulo": "◐",
       "subtitulo": "Iris",
-      "copy":      "Analítica que revela el espectro completo"
+      "copy": "Analítica que revela el espectro completo"
     },
     "ig_story": {
-      "titulo":    "Iris",
-      "copy":      "Espectro de datos ↓"
+      "titulo": "Iris",
+      "copy": "Espectro de datos ↓"
     },
     "x_post": {
-      "titulo":    "Iris",
-      "copy":      "Analítica que revela el espectro completo"
+      "titulo": "Iris",
+      "copy": "Analítica que revela el espectro completo"
     },
     "yt_thumbnail": {
-      "titulo":    "Iris",
-      "copy":      "Business analytics en vivo"
+      "titulo": "Iris",
+      "copy": "Business analytics en vivo"
     },
     "yt_banner": {
-      "titulo":    "Iris",
+      "titulo": "Iris",
       "subtitulo": "Business analytics · Prizma"
     },
     "og_general": {
-      "titulo":    "Iris",
+      "titulo": "Iris",
       "subtitulo": "Business analytics · Prizma",
-      "copy":      "Analítica que revela el espectro completo."
+      "copy": "Analítica que revela el espectro completo."
     },
     "whatsapp_perfil": {
-      "titulo":    "◐",
-      "copy":      "Iris"
+      "titulo": "◐",
+      "copy": "Iris"
     },
     "contra_cover": {
-      "titulo":    "Iris",
-      "copy":      "Business analytics · Prizma"
+      "titulo": "Iris",
+      "copy": "Business analytics · Prizma"
+    },
+    "ig_carousel": {
+      "titulo": "Mensajería masiva WhatsApp",
+      "copy": "Plataforma de envíos masivos para WhatsApp Business: campañas, plantillas y gestión de contactos."
     }
-  }
+  },
+  "logo_style": "prisma_refraccion",
+  "logo_seed": 1412926217
 }

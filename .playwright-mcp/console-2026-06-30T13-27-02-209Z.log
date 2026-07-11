@@ -1,0 +1,2 @@
+[     861ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://eikon-633619052458.us-central1.run.app/auth/me:0
+[  123079ms] [ERROR] Failed to load resource: the server responded with a status of 503 () @ https://eikon-633619052458.us-central1.run.app/auth/login:0

@@ -1,0 +1,115 @@
+{% extends "_layout.html" %}
+{% set _active = 'dashboard' %}
+{% block title %}Dashboard · Eikon{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div>
+    <h1>Hola, {{ user.email.split('@')[0] if user else 'equipo' }}</h1>
+    <p class="lead">Lanza renders para cualquier marca, monitorea jobs en vivo y revisa los assets generados.</p>
+  </div>
+  <div class="right">
+    <span class="pill info"><span class="dot"></span>Tenant {{ user.tenant_slug if user else '—' }}</span>
+    <a class="btn secondary size-sm" href="/jobs">Ver todos los jobs</a>
+  </div>
+</section>
+
+<div class="grid" style="grid-template-columns: minmax(0,2fr) minmax(0,1fr); gap: var(--space-5);">
+  <article class="card elev">
+    <h2>Encolar nuevo job</h2>
+    <form hx-post="/api/v1/jobs"
+          hx-swap="none"
+          hx-on::after-request="window.__eikonToast && window.__eikonToast('Job creado (#'+event.detail.xhr.responseText.replace(/.*\"job_id\":(\\d+).*/,'$1')+')', event.detail.xhr.status<400?'ok':'danger'); refreshJobs();">
+      <div class="grid" style="grid-template-columns: 1.4fr 1fr 0.6fr; gap: var(--space-4);">
+        <label class="field">
+          <span class="field-label">Marca slug</span>
+          <input name="marca_slug" required placeholder="prizma-iris" />
+        </label>
+        <label class="field">
+          <span class="field-label">Categoría <span class="hint">opcional</span></span>
+          <select name="category">
+            <option value="">— todas —</option>
+            <option value="logos">logos</option>
+            <option value="banners">banners</option>
+            <option value="cards">cards</option>
+            <option value="og">og</option>
+            <option value="stationery">stationery</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="field-label">Modo</span>
+          <select name="dry_run">
+            <option value="true">Dry-run</option>
+            <option value="false">Real</option>
+          </select>
+        </label>
+      </div>
+      <div style="display:flex; gap: var(--space-3); align-items: center; margin-top: var(--space-3); flex-wrap: wrap;">
+        <button class="btn primary" type="submit" data-submit-btn>
+          <span class="btn-label">Encolar job</span>
+          <span class="btn-spinner" hidden><span class="spinner"></span></span>
+        </button>
+        <span class="meta">El job se ejecuta en background y aparece abajo al completarse.</span>
+      </div>
+    </form>
+  </article>
+
+  <aside class="card">
+    <h2>Estado</h2>
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-num">1,302</div>
+        <div class="kpi-label">PNGs</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-num">34</div>
+        <div class="kpi-label">Marcas</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-num ok">276<span class="kpi-sub">/0</span></div>
+        <div class="kpi-label">Tests</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-num accent">v1.2</div>
+        <div class="kpi-label">Engine</div>
+      </div>
+    </div>
+    <p style="margin-top: var(--space-4);"><a class="linklike" href="/jobs">Ver historial completo →</a></p>
+  </aside>
+</div>
+
+<article class="card" style="margin-top: var(--space-5);">
+  <h2>Jobs recientes
+    <span class="meta">auto-refresca cada 5s · <a class="linklike" href="#" onclick="refreshJobs();return false;">refrescar</a></span>
+  </h2>
+  <div id="jobs-table"
+       hx-get="/partials/jobs-table"
+       hx-trigger="load delay:200ms, every 5s"
+       hx-swap="innerHTML">cargando…</div>
+</article>
+
+<script>
+function refreshJobs() { htmx.trigger('#jobs-table', 'refresh'); }
+
+// Spinner inline en el botón del dashboard
+document.body.addEventListener('htmx:beforeRequest', function(evt) {
+  var btn = evt.detail.elt.querySelector('[data-submit-btn]');
+  if (btn) {
+    var label = btn.querySelector('.btn-label');
+    var spinner = btn.querySelector('.btn-spinner');
+    if (label) label.textContent = 'Encolando…';
+    if (spinner) spinner.hidden = false;
+    btn.disabled = true;
+  }
+});
+document.body.addEventListener('htmx:afterRequest', function(evt) {
+  var btn = evt.detail.elt.querySelector('[data-submit-btn]');
+  if (btn) {
+    var label = btn.querySelector('.btn-label');
+    var spinner = btn.querySelector('.btn-spinner');
+    if (label) label.textContent = 'Encolar job';
+    if (spinner) spinner.hidden = true;
+    btn.disabled = false;
+  }
+});
+</script>
+{% endblock %}

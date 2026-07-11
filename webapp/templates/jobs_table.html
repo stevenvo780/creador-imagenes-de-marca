@@ -1,0 +1,33 @@
+{% if jobs %}
+<table class="tbl">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Marca</th>
+      <th>Categoría</th>
+      <th class="num">Dry</th>
+      <th>Estado</th>
+      <th>Creado</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for job in jobs %}
+    <tr>
+      <td><code>#{{ job.id }}</code></td>
+      <td class="truncate"><b>{{ job.marca_slug }}</b></td>
+      <td>{{ job.category or '—' }}</td>
+      <td class="num">{{ '✓' if job.dry_run else '✗' }}</td>
+      <td>{{ job.status|status_pill|safe }}</td>
+      <td>{{ job.created_at|dt }}</td>
+      <td class="num"><a class="linklike" href="/jobs/{{ job.id }}">detalle →</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty" style="padding: var(--space-6);">
+  <strong>Sin jobs todavía</strong>
+  Encola el primero desde el <a href="/dashboard">dashboard</a>.
+</div>
+{% endif %}

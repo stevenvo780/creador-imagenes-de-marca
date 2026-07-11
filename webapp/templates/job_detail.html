@@ -1,0 +1,52 @@
+{% extends "_layout.html" %}
+{% set _active = 'jobs' %}
+{% block title %}Job #{{ job.id }} · Eikon{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div>
+    <h1>Job <code style="font-size:18px;">#{{ job.id }}</code></h1>
+    <p class="lead">
+      <b>{{ job.marca_slug }}</b> · {{ job.category or 'todas las categorías' }} ·
+      {{ 'dry-run' if job.dry_run else 'render real' }}
+    </p>
+  </div>
+  <div class="right">
+    <a class="btn secondary size-sm" href="/jobs">← Todos los jobs</a>
+    {{ job.status|status_pill|safe }}
+  </div>
+</section>
+
+<div class="grid" style="grid-template-columns: 1fr 1fr; gap: var(--space-5);">
+  <article class="card flat">
+    <h3>Línea de tiempo</h3>
+    <ul style="list-style:none; padding:0; margin:0; display:grid; gap: var(--space-3);">
+      <li><span class="meta">Creado</span><br><code>{{ job.created_at|dt }}</code></li>
+      <li><span class="meta">Inicio</span><br><code>{{ job.started_at|dt }}</code></li>
+      <li><span class="meta">Fin</span><br><code>{{ job.finished_at|dt }}</code></li>
+    </ul>
+  </article>
+  <article class="card flat">
+    <h3>Parámetros</h3>
+    <pre class="code">{{ params|tojson(indent=2) }}</pre>
+  </article>
+</div>
+
+{% if result_summary %}
+<article class="card" style="margin-top: var(--space-5);">
+  <h2>Resultado</h2>
+  {% if result_summary.returncode is defined %}
+    <p class="meta">Return code: <code>{{ result_summary.returncode }}</code></p>
+    {% if result_summary.stdout_tail %}
+      <h3 style="margin-top: var(--space-4);">stdout (último)</h3>
+      <pre class="code">{{ result_summary.stdout_tail }}</pre>
+    {% endif %}
+    {% if result_summary.stderr_tail %}
+      <h3 style="margin-top: var(--space-4);">stderr (último)</h3>
+      <pre class="code">{{ result_summary.stderr_tail }}</pre>
+    {% endif %}
+  {% else %}
+    <pre class="code">{{ result_summary|tojson(indent=2) }}</pre>
+  {% endif %}
+</article>
+{% endif %}
+{% endblock %}

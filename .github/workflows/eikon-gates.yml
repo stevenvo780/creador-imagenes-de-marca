@@ -1,0 +1,118 @@
+name: eikon-gates
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements*.txt', 'pyproject.toml', 'webapp/requirements-webapp.txt') }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install -r requirements-dev.txt
+          pip install -r webapp/requirements-webapp.txt
+
+      - name: Lint — ruff check
+        run: .venv/bin/ruff check .
+
+      - name: Format — ruff format check
+        run: .venv/bin/ruff format --check .
+
+      - name: Type check — mypy
+        run: .venv/bin/mypy eikon_core webapp
+
+      - name: Coverage — pytest
+        run: |
+          .venv/bin/pytest --cov --cov-fail-under --cov-report=term-missing tests/ webapp/tests/
+
+      - name: Test — Custom suite
+        run: make test
+
+      - name: Test — Variations
+        run: make test-variations
+
+      - name: Test — Taxonomy
+        run: make test-taxonomy
+
+      - name: Test — Webapp core
+        run: make test-webapp
+
+  taxonomy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements*.txt') }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Validate — taxonomy.json (strict)
+        run: python scripts/eikon_validate_taxonomy.py --strict
+
+  render-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements*.txt', 'pyproject.toml') }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Install Playwright
+        run: python -m playwright install --with-deps chromium
+
+      - name: Render — sample marca
+        run: python eikon.py --marca pinakotheke-kosmos --clean
+
+      - name: Validate — layout
+        run: python scripts/eikon_validate_layout.py --fail-on-errors
+
+      - name: Validate — pixels
+        run: python scripts/eikon_validate_pixels.py --all --fail-on-errors
+
+      - name: Validate — ironman QA
+        run: python scripts/eikon_ironman.py --only-issues --fail-on-thresholds

@@ -1,0 +1,6 @@
+[      20ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://127.0.0.1:8040/assets/index-DkfKU8mo.js:202
+[   34888ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8040/api/v1/templates/og_general:0
+[   34888ms] [ERROR] renderBatchClientSide error: Error: Failed to fetch template: 404
+    at P (http://127.0.0.1:8040/assets/index-CwgH_-WM.js:1:1264)
+    at async v (http://127.0.0.1:8040/assets/index-CwgH_-WM.js:3:1994)
+    at async Re (http://127.0.0.1:8040/assets/index-DkfKU8mo.js:233:92167) @ http://127.0.0.1:8040/assets/index-CwgH_-WM.js:2

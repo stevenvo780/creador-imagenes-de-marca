@@ -1,0 +1,57 @@
+- generic [ref=e2]:
+  - link "Saltar al contenido principal" [ref=e19] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e20]:
+    - generic [ref=e21]:
+      - link "Eikón" [ref=e22] [cursor=pointer]:
+        - /url: /
+      - navigation "Navegación principal" [ref=e23]:
+        - list [ref=e24]:
+          - listitem [ref=e25]:
+            - link "Marcas" [ref=e26] [cursor=pointer]:
+              - /url: /brands
+          - listitem [ref=e27]:
+            - link "Crear" [ref=e28] [cursor=pointer]:
+              - /url: /batch
+          - listitem [ref=e29]:
+            - link "Galería" [ref=e30] [cursor=pointer]:
+              - /url: /gallery
+      - generic [ref=e31]:
+        - 'generic "Cuenta: qalocal" [ref=e32]': qalocal
+        - button "Salir" [ref=e33] [cursor=pointer]
+  - main [ref=e34]:
+    - generic [ref=e35]:
+      - generic [ref=e36]:
+        - generic [ref=e37]:
+          - heading "Tus marcas" [level=1] [ref=e38]
+          - paragraph [ref=e39]: Cada marca es el punto de partida para generar su identidad visual.
+        - button "+ Nueva marca" [ref=e40] [cursor=pointer]
+      - list "Lista de tus marcas" [ref=e41]:
+        - listitem [ref=e42]:
+          - article [ref=e43]:
+            - generic [ref=e44]:
+              - generic [ref=e45]: Q
+              - generic [ref=e46]:
+                - heading "QA Brand" [level=2] [ref=e47]
+                - paragraph [ref=e48]: Creada el 30 de junio de 2026
+            - generic [ref=e49]:
+              - button "Generar variaciones" [ref=e50] [cursor=pointer]
+              - generic [ref=e51]:
+                - link "Personalizar la marca QA Brand" [ref=e52] [cursor=pointer]:
+                  - /url: /brands/38/edit
+                  - text: Personalizar
+                - button "Eliminar la marca QA Brand" [ref=e53] [cursor=pointer]: Eliminar
+        - listitem [ref=e54]:
+          - article [ref=e55]:
+            - generic [ref=e56]:
+              - generic [ref=e57]: V
+              - generic [ref=e58]:
+                - heading "Vértice Fitness" [level=2] [ref=e59]
+                - paragraph [ref=e60]: Creada el 2 de julio de 2026
+            - generic [ref=e61]:
+              - button "Generar variaciones" [ref=e62] [cursor=pointer]
+              - generic [ref=e63]:
+                - link "Personalizar la marca Vértice Fitness" [ref=e64] [cursor=pointer]:
+                  - /url: /brands/41/edit
+                  - text: Personalizar
+                - button "Eliminar la marca Vértice Fitness" [ref=e65] [cursor=pointer]: Eliminar

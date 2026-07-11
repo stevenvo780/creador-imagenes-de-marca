@@ -1,6 +1,6 @@
 # _STATUS — Eikon Output Snapshot
 
-_Generado: 2026-06-20 19:52:23 UTC_  
+_Generado: 2026-06-29 04:11:42 UTC_  
 _Output dir: `/workspace/Pinakotheke/eikon/output`_  
 _Source: `scripts/eikon_count.py`_
 
@@ -8,57 +8,29 @@ _Source: `scripts/eikon_count.py`_
 
 | Métrica | Valor |
 |---|---|
-| Marcas | 34 |
-| PNGs totales (recursivo) | 1302 |
-| Assets en manifests | 1302 |
-| Assets `generated` (manifest) | 1250 |
+| Marcas | 6 |
+| PNGs totales (recursivo) | 238 |
+| Assets en manifests | 238 |
+| Assets `generated` (manifest) | 238 |
 | Assets `error` (manifest) | 0 |
-| Assets WCAG AA pass | 970 |
-| Assets WCAG AA fail | 60 |
-|   ↳ sin foreground detectable | 25 |
-| Assets WCAG AAA pass | 774 |
-| Assets WCAG AAA fail | 256 |
-| Galería agregada | sí |
+| Assets WCAG AA pass | 188 |
+| Assets WCAG AA fail | 2 |
+|   ↳ sin foreground detectable | 2 |
+| Assets WCAG AAA pass | 146 |
+| Assets WCAG AAA fail | 44 |
+| Galería agregada | NO |
 | Reporte contraste agregado | sí |
 
 ## Tabla por marca
 
 | Marca | PNG | Manifest | AA pass | AA fail | no_fg | AAA pass | AAA fail | Galería | Layout |
 |---|---:|---|---:|---:|---:|---:|---:|---|---:|
-| `pinakotheke` | 45 | 45/45 | 36 | 1 | 0 | 30 | 7 | ✓ | 2 |
-| `pinakotheke-agon` | 45 | 45/45 | 34 | 3 | 2 | 26 | 11 | ✓ | 2 |
-| `pinakotheke-aporia` | 45 | 45/45 | 34 | 3 | 2 | 29 | 8 | ✓ | 3 |
-| `pinakotheke-apotheke` | 45 | 45/45 | 33 | 4 | 1 | 29 | 8 | ✓ | 3 |
-| `pinakotheke-chronos` | 45 | 45/45 | 34 | 3 | 1 | 29 | 8 | ✓ | 3 |
-| `pinakotheke-daimon` | 45 | 45/45 | 35 | 2 | 1 | 28 | 9 | ✓ | 3 |
-| `pinakotheke-eikon` | 45 | 45/45 | 34 | 3 | 2 | 29 | 8 | ✓ | 3 |
-| `pinakotheke-ergon` | 45 | 45/45 | 33 | 4 | 2 | 26 | 11 | ✓ | 3 |
-| `pinakotheke-estructuras-preontologicas` | 45 | 45/45 | 35 | 2 | 0 | 32 | 5 | ✓ | 2 |
-| `pinakotheke-hinton` | 45 | 45/45 | 35 | 2 | 1 | 27 | 10 | ✓ | 3 |
-| `pinakotheke-koinonia` | 45 | 45/45 | 34 | 3 | 1 | 29 | 8 | ✓ | 3 |
-| `pinakotheke-kosmos` | 45 | 45/45 | 36 | 1 | 0 | 31 | 6 | ✓ | 5 |
-| `pinakotheke-nomos` | 45 | 45/45 | 33 | 4 | 2 | 26 | 11 | ✓ | 3 |
-| `pinakotheke-organon` | 45 | 45/45 | 34 | 3 | 2 | 29 | 8 | ✓ | 3 |
-| `pinakotheke-paideia` | 45 | 45/45 | 35 | 2 | 1 | 28 | 9 | ✓ | 2 |
-| `pinakotheke-schole` | 45 | 45/45 | 34 | 3 | 2 | 26 | 11 | ✓ | 2 |
-| `pinakotheke-techne` | 45 | 45/45 | 32 | 5 | 3 | 26 | 11 | ✓ | 3 |
-| `pinakotheke-xenia` | 45 | 45/45 | 33 | 4 | 2 | 25 | 12 | ✓ | 3 |
-| `prizma` | 26 | 26/26 | 18 | 0 | 0 | 11 | 7 | ✓ | ✓ |
-| `prizma-hermes` | 26 | 26/26 | 18 | 0 | 0 | 12 | 6 | ✓ | ✓ |
-| `prizma-iris` | 26 | 0/26 | 18 | 0 | 0 | 12 | 6 | ✓ | 26 |
-| `prizma-logos` | 26 | 26/26 | 18 | 0 | 0 | 12 | 6 | ✓ | ✓ |
-| `prizma-mnemosyne` | 26 | 26/26 | 18 | 0 | 0 | 13 | 5 | ✓ | ✓ |
-| `prizma-nous` | 26 | 26/26 | 18 | 0 | 0 | 12 | 6 | ✓ | ✓ |
-| `prizma-peitho` | 26 | 26/26 | 18 | 0 | 0 | 12 | 6 | ✓ | ✓ |
-| `prizma-pistis` | 26 | 26/26 | 18 | 0 | 0 | 12 | 6 | ✓ | ✓ |
-| `prizma-prisma` | 26 | 26/26 | 18 | 0 | 0 | 12 | 6 | ✓ | ✓ |
-| `prizma-talanton` | 26 | 26/26 | 18 | 0 | 0 | 13 | 5 | ✓ | ✓ |
-| `prizma-talaria` | 26 | 26/26 | 18 | 0 | 0 | 12 | 6 | ✓ | ✓ |
-| `prizma-talos` | 26 | 0/26 | 18 | 0 | 0 | 12 | 6 | ✓ | 26 |
-| `steven-vallejo` | 45 | 45/45 | 35 | 2 | 0 | 31 | 6 | ✓ | 3 |
-| `steven-vallejo-cientifico` | 45 | 45/45 | 35 | 2 | 0 | 31 | 6 | ✓ | 2 |
-| `steven-vallejo-filosofo` | 45 | 45/45 | 35 | 2 | 0 | 31 | 6 | ✓ | 2 |
-| `steven-vallejo-informatico` | 45 | 45/45 | 35 | 2 | 0 | 31 | 6 | ✓ | 2 |
+| `agora` | 45 | 45/45 | 35 | 2 | 2 | 28 | 9 | ✗ | 3 |
+| `pinakotheke` | 45 | 45/45 | 37 | 0 | 0 | 31 | 6 | ✗ | 2 |
+| `pinakotheke-kosmos` | 45 | 45/45 | 37 | 0 | 0 | 32 | 5 | ✗ | 5 |
+| `prizma` | 29 | 29/29 | 21 | 0 | 0 | 11 | 10 | ✗ | ✓ |
+| `prizma-iris` | 29 | 29/29 | 21 | 0 | 0 | 12 | 9 | ✗ | ✓ |
+| `steven-vallejo-filosofo` | 45 | 45/45 | 37 | 0 | 0 | 32 | 5 | ✗ | 2 |
 
 Leyenda:
 - `PNG` = archivos `.png` bajo `output/<marca>/` (recursivo).

@@ -1,0 +1,3297 @@
+- generic [ref=e2]:
+  - link "Saltar al contenido principal" [ref=e25] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e26]:
+    - generic [ref=e27]:
+      - link "Eikón" [ref=e28] [cursor=pointer]:
+        - /url: /
+      - navigation "Navegación principal" [ref=e29]:
+        - list [ref=e30]:
+          - listitem [ref=e31]:
+            - link "Marcas" [ref=e32] [cursor=pointer]:
+              - /url: /brands
+          - listitem [ref=e33]:
+            - link "Crear" [ref=e34] [cursor=pointer]:
+              - /url: /batch
+          - listitem [ref=e35]:
+            - link "Galería" [ref=e36] [cursor=pointer]:
+              - /url: /gallery
+      - button "Salir" [ref=e38] [cursor=pointer]
+  - main [ref=e39]:
+    - generic [ref=e40]:
+      - generic [ref=e41]:
+        - heading "Galería" [level=1] [ref=e42]
+        - generic [ref=e43]: 224 variaciones
+      - generic [ref=e44]:
+        - generic [ref=e45]:
+          - generic [ref=e46]: Marca
+          - combobox "Filtrar por marca" [ref=e47] [cursor=pointer]:
+            - option "Todas las marcas" [selected]
+            - option "Aurora Café"
+            - option "Nimbus"
+            - option "Atelier Mora"
+            - option "Vértice Fitness"
+        - generic [ref=e48]:
+          - generic [ref=e49]: Generación
+          - combobox "Filtrar por generación" [ref=e50] [cursor=pointer]:
+            - option "Todas las generaciones" [selected]
+            - 'option "Generación #232"'
+            - 'option "Generación #231"'
+            - 'option "Generación #230"'
+            - 'option "Generación #229"'
+            - 'option "Generación #228"'
+            - 'option "Generación #227"'
+            - 'option "Generación #226"'
+            - 'option "Generación #225"'
+            - 'option "Generación #224"'
+            - 'option "Generación #223"'
+            - 'option "Generación #222"'
+            - 'option "Generación #221"'
+            - 'option "Generación #220"'
+            - 'option "Generación #219"'
+            - 'option "Generación #218"'
+            - 'option "Generación #216"'
+            - 'option "Generación #215"'
+            - 'option "Generación #214"'
+            - 'option "Generación #213"'
+            - 'option "Generación #212"'
+            - 'option "Generación #211"'
+            - 'option "Generación #210"'
+            - 'option "Generación #209"'
+            - 'option "Generación #208"'
+            - 'option "Generación #207"'
+            - 'option "Generación #206"'
+            - 'option "Generación #205"'
+            - 'option "Generación #204"'
+            - 'option "Generación #203"'
+            - 'option "Generación #202"'
+            - 'option "Generación #201"'
+            - 'option "Generación #200"'
+            - 'option "Generación #199"'
+            - 'option "Generación #198"'
+            - 'option "Generación #197"'
+            - 'option "Generación #196"'
+            - 'option "Generación #195"'
+            - 'option "Generación #194"'
+            - 'option "Generación #193"'
+            - 'option "Generación #192"'
+            - 'option "Generación #191"'
+            - 'option "Generación #190"'
+            - 'option "Generación #189"'
+            - 'option "Generación #188"'
+            - 'option "Generación #187"'
+            - 'option "Generación #186"'
+            - 'option "Generación #185"'
+            - 'option "Generación #184"'
+            - 'option "Generación #183"'
+            - 'option "Generación #181"'
+            - 'option "Generación #180"'
+            - 'option "Generación #179"'
+            - 'option "Generación #178"'
+            - 'option "Generación #177"'
+            - 'option "Generación #176"'
+            - 'option "Generación #175"'
+            - 'option "Generación #174"'
+            - 'option "Generación #173"'
+            - 'option "Generación #172"'
+            - 'option "Generación #171"'
+            - 'option "Generación #170"'
+            - 'option "Generación #169"'
+            - 'option "Generación #168"'
+            - 'option "Generación #167"'
+            - 'option "Generación #166"'
+            - 'option "Generación #165"'
+            - 'option "Generación #164"'
+            - 'option "Generación #163"'
+            - 'option "Generación #162"'
+            - 'option "Generación #161"'
+            - 'option "Generación #160"'
+            - 'option "Generación #159"'
+            - 'option "Generación #158"'
+            - 'option "Generación #157"'
+            - 'option "Generación #156"'
+            - 'option "Generación #155"'
+            - 'option "Generación #154"'
+            - 'option "Generación #153"'
+            - 'option "Generación #152"'
+            - 'option "Generación #151"'
+            - 'option "Generación #150"'
+            - 'option "Generación #149"'
+            - 'option "Generación #148"'
+        - generic [ref=e51]:
+          - generic [ref=e52]: Familia
+          - combobox "Filtrar por familia de formato" [ref=e53] [cursor=pointer]:
+            - option "Todas las familias" [selected]
+            - option "Logos"
+            - option "Banners"
+            - option "Tarjetas"
+            - option "Redes / OG"
+        - generic [ref=e54]:
+          - generic [ref=e55]: Ordenar por
+          - combobox "Ordenar variaciones" [ref=e56] [cursor=pointer]:
+            - option "Calidad (mejores primero)" [selected]
+            - option "Más recientes"
+        - button "Seleccionar todo" [ref=e57] [cursor=pointer]
+      - list "Variaciones de marca" [ref=e58]:
+        - listitem [ref=e59]:
+          - article "Variación de Nimbus" [ref=e60]:
+            - generic [ref=e61]:
+              - generic "Seleccionar" [ref=e62] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e63]
+              - button "Ver detalle de Nimbus" [ref=e64]:
+                - img "Vista previa de variación de Nimbus" [ref=e65]
+            - generic [ref=e66]:
+              - generic [ref=e67]:
+                - generic [ref=e68]: Nimbus
+                - 'generic "Familia: Logos" [ref=e69]': Logos
+                - generic [ref=e70]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e71] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e72]:
+          - article "Variación de Nimbus" [ref=e73]:
+            - generic [ref=e74]:
+              - generic "Seleccionar" [ref=e75] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e76]
+              - button "Ver detalle de Nimbus" [ref=e77]:
+                - img "Vista previa de variación de Nimbus" [ref=e78]
+            - generic [ref=e79]:
+              - generic [ref=e80]:
+                - generic [ref=e81]: Nimbus
+                - 'generic "Familia: Logos" [ref=e82]': Logos
+                - generic [ref=e83]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e84] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e85]:
+          - article "Variación de Aurora Café" [ref=e86]:
+            - generic [ref=e87]:
+              - generic "Seleccionar" [ref=e88] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e89]
+              - button "Ver detalle de Aurora Café" [ref=e90]:
+                - img "Vista previa de variación de Aurora Café" [ref=e91]
+            - generic [ref=e92]:
+              - generic [ref=e93]:
+                - generic [ref=e94]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e95]': Logos
+                - generic [ref=e96]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e97] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e98]:
+          - article "Variación de Aurora Café" [ref=e99]:
+            - generic [ref=e100]:
+              - generic "Seleccionar" [ref=e101] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e102]
+              - button "Ver detalle de Aurora Café" [ref=e103]:
+                - img "Vista previa de variación de Aurora Café" [ref=e104]
+            - generic [ref=e105]:
+              - generic [ref=e106]:
+                - generic [ref=e107]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e108]': Logos
+                - generic [ref=e109]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e110] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e111]:
+          - article "Variación de Atelier Mora" [ref=e112]:
+            - generic [ref=e113]:
+              - generic "Seleccionar" [ref=e114] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e115]
+              - button "Ver detalle de Atelier Mora" [ref=e116]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e117]
+            - generic [ref=e118]:
+              - generic [ref=e119]:
+                - generic [ref=e120]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e121]': Logos
+                - generic [ref=e122]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e123] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e124]:
+          - article "Variación de Atelier Mora" [ref=e125]:
+            - generic [ref=e126]:
+              - generic "Seleccionar" [ref=e127] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e128]
+              - button "Ver detalle de Atelier Mora" [ref=e129]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e130]
+            - generic [ref=e131]:
+              - generic [ref=e132]:
+                - generic [ref=e133]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e134]': Logos
+                - generic [ref=e135]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e136] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e137]:
+          - article "Variación de Atelier Mora" [ref=e138]:
+            - generic [ref=e139]:
+              - generic "Seleccionar" [ref=e140] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e141]
+              - button "Ver detalle de Atelier Mora" [ref=e142]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e143]
+            - generic [ref=e144]:
+              - generic [ref=e145]:
+                - generic [ref=e146]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e147]': Logos
+                - generic [ref=e148]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e149] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e150]:
+          - article "Variación de Atelier Mora" [ref=e151]:
+            - generic [ref=e152]:
+              - generic "Seleccionar" [ref=e153] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e154]
+              - button "Ver detalle de Atelier Mora" [ref=e155]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e156]
+            - generic [ref=e157]:
+              - generic [ref=e158]:
+                - generic [ref=e159]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e160]': Logos
+                - generic [ref=e161]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e162] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e163]:
+          - article "Variación de Atelier Mora" [ref=e164]:
+            - generic [ref=e165]:
+              - generic "Seleccionar" [ref=e166] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e167]
+              - button "Ver detalle de Atelier Mora" [ref=e168]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e169]
+            - generic [ref=e170]:
+              - generic [ref=e171]:
+                - generic [ref=e172]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e173]': Logos
+                - generic [ref=e174]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e175] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e176]:
+          - article "Variación de Atelier Mora" [ref=e177]:
+            - generic [ref=e178]:
+              - generic "Seleccionar" [ref=e179] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e180]
+              - button "Ver detalle de Atelier Mora" [ref=e181]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e182]
+            - generic [ref=e183]:
+              - generic [ref=e184]:
+                - generic [ref=e185]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e186]': Logos
+                - generic [ref=e187]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e188] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e189]:
+          - article "Variación de Atelier Mora" [ref=e190]:
+            - generic [ref=e191]:
+              - generic "Seleccionar" [ref=e192] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e193]
+              - button "Ver detalle de Atelier Mora" [ref=e194]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e195]
+            - generic [ref=e196]:
+              - generic [ref=e197]:
+                - generic [ref=e198]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e199]': Logos
+                - generic [ref=e200]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e201] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e202]:
+          - article "Variación de Atelier Mora" [ref=e203]:
+            - generic [ref=e204]:
+              - generic "Seleccionar" [ref=e205] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e206]
+              - button "Ver detalle de Atelier Mora" [ref=e207]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e208]
+            - generic [ref=e209]:
+              - generic [ref=e210]:
+                - generic [ref=e211]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e212]': Logos
+                - generic [ref=e213]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e214] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e215]:
+          - article "Variación de Nimbus" [ref=e216]:
+            - generic [ref=e217]:
+              - generic "Seleccionar" [ref=e218] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e219]
+              - button "Ver detalle de Nimbus" [ref=e220]:
+                - img "Vista previa de variación de Nimbus" [ref=e221]
+            - generic [ref=e222]:
+              - generic [ref=e223]:
+                - generic [ref=e224]: Nimbus
+                - 'generic "Familia: Logos" [ref=e225]': Logos
+                - generic [ref=e226]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e227] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e228]:
+          - article "Variación de Nimbus" [ref=e229]:
+            - generic [ref=e230]:
+              - generic "Seleccionar" [ref=e231] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e232]
+              - button "Ver detalle de Nimbus" [ref=e233]:
+                - img "Vista previa de variación de Nimbus" [ref=e234]
+            - generic [ref=e235]:
+              - generic [ref=e236]:
+                - generic [ref=e237]: Nimbus
+                - 'generic "Familia: Logos" [ref=e238]': Logos
+                - generic [ref=e239]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e240] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e241]:
+          - article "Variación de Aurora Café" [ref=e242]:
+            - generic [ref=e243]:
+              - generic "Seleccionar" [ref=e244] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e245]
+              - button "Ver detalle de Aurora Café" [ref=e246]:
+                - img "Vista previa de variación de Aurora Café" [ref=e247]
+            - generic [ref=e248]:
+              - generic [ref=e249]:
+                - generic [ref=e250]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e251]': Logos
+                - generic [ref=e252]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e253] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e254]:
+          - article "Variación de Aurora Café" [ref=e255]:
+            - generic [ref=e256]:
+              - generic "Seleccionar" [ref=e257] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e258]
+              - button "Ver detalle de Aurora Café" [ref=e259]:
+                - img "Vista previa de variación de Aurora Café" [ref=e260]
+            - generic [ref=e261]:
+              - generic [ref=e262]:
+                - generic [ref=e263]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e264]': Logos
+                - generic [ref=e265]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e266] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e267]:
+          - article "Variación de Atelier Mora" [ref=e268]:
+            - generic [ref=e269]:
+              - generic "Seleccionar" [ref=e270] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e271]
+              - button "Ver detalle de Atelier Mora" [ref=e272]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e273]
+            - generic [ref=e274]:
+              - generic [ref=e275]:
+                - generic [ref=e276]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e277]': Logos
+                - generic [ref=e278]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e279] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e280]:
+          - article "Variación de Atelier Mora" [ref=e281]:
+            - generic [ref=e282]:
+              - generic "Seleccionar" [ref=e283] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e284]
+              - button "Ver detalle de Atelier Mora" [ref=e285]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e286]
+            - generic [ref=e287]:
+              - generic [ref=e288]:
+                - generic [ref=e289]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e290]': Logos
+                - generic [ref=e291]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e292] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e293]:
+          - article "Variación de Nimbus" [ref=e294]:
+            - generic [ref=e295]:
+              - generic "Seleccionar" [ref=e296] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e297]
+              - button "Ver detalle de Nimbus" [ref=e298]:
+                - img "Vista previa de variación de Nimbus" [ref=e299]
+            - generic [ref=e300]:
+              - generic [ref=e301]:
+                - generic [ref=e302]: Nimbus
+                - 'generic "Familia: Logos" [ref=e303]': Logos
+                - generic [ref=e304]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e305] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e306]:
+          - article "Variación de Atelier Mora" [ref=e307]:
+            - generic [ref=e308]:
+              - generic "Seleccionar" [ref=e309] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e310]
+              - button "Ver detalle de Atelier Mora" [ref=e311]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e312]
+            - generic [ref=e313]:
+              - generic [ref=e314]:
+                - generic [ref=e315]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e316]': Logos
+                - generic [ref=e317]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e318] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e319]:
+          - article "Variación de Atelier Mora" [ref=e320]:
+            - generic [ref=e321]:
+              - generic "Seleccionar" [ref=e322] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e323]
+              - button "Ver detalle de Atelier Mora" [ref=e324]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e325]
+            - generic [ref=e326]:
+              - generic [ref=e327]:
+                - generic [ref=e328]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e329]': Logos
+                - generic [ref=e330]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e331] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e332]:
+          - article "Variación de Nimbus" [ref=e333]:
+            - generic [ref=e334]:
+              - generic "Seleccionar" [ref=e335] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e336]
+              - button "Ver detalle de Nimbus" [ref=e337]:
+                - img "Vista previa de variación de Nimbus" [ref=e338]
+            - generic [ref=e339]:
+              - generic [ref=e340]:
+                - generic [ref=e341]: Nimbus
+                - 'generic "Familia: Logos" [ref=e342]': Logos
+                - generic [ref=e343]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e344] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e345]:
+          - article "Variación de Nimbus" [ref=e346]:
+            - generic [ref=e347]:
+              - generic "Seleccionar" [ref=e348] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e349]
+              - button "Ver detalle de Nimbus" [ref=e350]:
+                - img "Vista previa de variación de Nimbus" [ref=e351]
+            - generic [ref=e352]:
+              - generic [ref=e353]:
+                - generic [ref=e354]: Nimbus
+                - 'generic "Familia: Logos" [ref=e355]': Logos
+                - generic [ref=e356]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e357] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e358]:
+          - article "Variación de Nimbus" [ref=e359]:
+            - generic [ref=e360]:
+              - generic "Seleccionar" [ref=e361] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e362]
+              - button "Ver detalle de Nimbus" [ref=e363]:
+                - img "Vista previa de variación de Nimbus" [ref=e364]
+            - generic [ref=e365]:
+              - generic [ref=e366]:
+                - generic [ref=e367]: Nimbus
+                - 'generic "Familia: Logos" [ref=e368]': Logos
+                - generic [ref=e369]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e370] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e371]:
+          - article "Variación de Aurora Café" [ref=e372]:
+            - generic [ref=e373]:
+              - generic "Seleccionar" [ref=e374] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e375]
+              - button "Ver detalle de Aurora Café" [ref=e376]:
+                - img "Vista previa de variación de Aurora Café" [ref=e377]
+            - generic [ref=e378]:
+              - generic [ref=e379]:
+                - generic [ref=e380]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e381]': Logos
+                - generic [ref=e382]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e383] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e384]:
+          - article "Variación de Aurora Café" [ref=e385]:
+            - generic [ref=e386]:
+              - generic "Seleccionar" [ref=e387] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e388]
+              - button "Ver detalle de Aurora Café" [ref=e389]:
+                - img "Vista previa de variación de Aurora Café" [ref=e390]
+            - generic [ref=e391]:
+              - generic [ref=e392]:
+                - generic [ref=e393]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e394]': Logos
+                - generic [ref=e395]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e396] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e397]:
+          - article "Variación de Aurora Café" [ref=e398]:
+            - generic [ref=e399]:
+              - generic "Seleccionar" [ref=e400] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e401]
+              - button "Ver detalle de Aurora Café" [ref=e402]:
+                - img "Vista previa de variación de Aurora Café" [ref=e403]
+            - generic [ref=e404]:
+              - generic [ref=e405]:
+                - generic [ref=e406]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e407]': Logos
+                - generic [ref=e408]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e409] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e410]:
+          - article "Variación de Aurora Café" [ref=e411]:
+            - generic [ref=e412]:
+              - generic "Seleccionar" [ref=e413] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e414]
+              - button "Ver detalle de Aurora Café" [ref=e415]:
+                - img "Vista previa de variación de Aurora Café" [ref=e416]
+            - generic [ref=e417]:
+              - generic [ref=e418]:
+                - generic [ref=e419]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e420]': Logos
+                - generic [ref=e421]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e422] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e423]:
+          - article "Variación de Aurora Café" [ref=e424]:
+            - generic [ref=e425]:
+              - generic "Seleccionar" [ref=e426] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e427]
+              - button "Ver detalle de Aurora Café" [ref=e428]:
+                - img "Vista previa de variación de Aurora Café" [ref=e429]
+            - generic [ref=e430]:
+              - generic [ref=e431]:
+                - generic [ref=e432]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e433]': Logos
+                - generic [ref=e434]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e435] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e436]:
+          - article "Variación de Nimbus" [ref=e437]:
+            - generic [ref=e438]:
+              - generic "Seleccionar" [ref=e439] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e440]
+              - button "Ver detalle de Nimbus" [ref=e441]:
+                - img "Vista previa de variación de Nimbus" [ref=e442]
+            - generic [ref=e443]:
+              - generic [ref=e444]:
+                - generic [ref=e445]: Nimbus
+                - 'generic "Familia: Logos" [ref=e446]': Logos
+                - generic [ref=e447]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e448] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e449]:
+          - article "Variación de Nimbus" [ref=e450]:
+            - generic [ref=e451]:
+              - generic "Seleccionar" [ref=e452] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e453]
+              - button "Ver detalle de Nimbus" [ref=e454]:
+                - img "Vista previa de variación de Nimbus" [ref=e455]
+            - generic [ref=e456]:
+              - generic [ref=e457]:
+                - generic [ref=e458]: Nimbus
+                - 'generic "Familia: Logos" [ref=e459]': Logos
+                - generic [ref=e460]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e461] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e462]:
+          - article "Variación de Atelier Mora" [ref=e463]:
+            - generic [ref=e464]:
+              - generic "Seleccionar" [ref=e465] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e466]
+              - button "Ver detalle de Atelier Mora" [ref=e467]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e468]
+            - generic [ref=e469]:
+              - generic [ref=e470]:
+                - generic [ref=e471]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e472]': Logos
+                - generic [ref=e473]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e474] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e475]:
+          - article "Variación de Atelier Mora" [ref=e476]:
+            - generic [ref=e477]:
+              - generic "Seleccionar" [ref=e478] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e479]
+              - button "Ver detalle de Atelier Mora" [ref=e480]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e481]
+            - generic [ref=e482]:
+              - generic [ref=e483]:
+                - generic [ref=e484]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e485]': Logos
+                - generic [ref=e486]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e487] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e488]:
+          - article "Variación de Nimbus" [ref=e489]:
+            - generic [ref=e490]:
+              - generic "Seleccionar" [ref=e491] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e492]
+              - button "Ver detalle de Nimbus" [ref=e493]:
+                - img "Vista previa de variación de Nimbus" [ref=e494]
+            - generic [ref=e495]:
+              - generic [ref=e496]:
+                - generic [ref=e497]: Nimbus
+                - 'generic "Familia: Logos" [ref=e498]': Logos
+                - generic [ref=e499]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e500] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e501]:
+          - article "Variación de Aurora Café" [ref=e502]:
+            - generic [ref=e503]:
+              - generic "Seleccionar" [ref=e504] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e505]
+              - button "Ver detalle de Aurora Café" [ref=e506]:
+                - img "Vista previa de variación de Aurora Café" [ref=e507]
+            - generic [ref=e508]:
+              - generic [ref=e509]:
+                - generic [ref=e510]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e511]': Logos
+                - generic [ref=e512]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e513] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e514]:
+          - article "Variación de Nimbus" [ref=e515]:
+            - generic [ref=e516]:
+              - generic "Seleccionar" [ref=e517] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e518]
+              - button "Ver detalle de Nimbus" [ref=e519]:
+                - img "Vista previa de variación de Nimbus" [ref=e520]
+            - generic [ref=e521]:
+              - generic [ref=e522]:
+                - generic [ref=e523]: Nimbus
+                - 'generic "Familia: Logos" [ref=e524]': Logos
+                - generic [ref=e525]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e526] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e527]:
+          - article "Variación de Atelier Mora" [ref=e528]:
+            - generic [ref=e529]:
+              - generic "Seleccionar" [ref=e530] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e531]
+              - button "Ver detalle de Atelier Mora" [ref=e532]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e533]
+            - generic [ref=e534]:
+              - generic [ref=e535]:
+                - generic [ref=e536]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e537]': Logos
+                - generic [ref=e538]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e539] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e540]:
+          - article "Variación de Atelier Mora" [ref=e541]:
+            - generic [ref=e542]:
+              - generic "Seleccionar" [ref=e543] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e544]
+              - button "Ver detalle de Atelier Mora" [ref=e545]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e546]
+            - generic [ref=e547]:
+              - generic [ref=e548]:
+                - generic [ref=e549]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e550]': Logos
+                - generic [ref=e551]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e552] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e553]:
+          - article "Variación de Atelier Mora" [ref=e554]:
+            - generic [ref=e555]:
+              - generic "Seleccionar" [ref=e556] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e557]
+              - button "Ver detalle de Atelier Mora" [ref=e558]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e559]
+            - generic [ref=e560]:
+              - generic [ref=e561]:
+                - generic [ref=e562]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e563]': Logos
+                - generic [ref=e564]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e565] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e566]:
+          - article "Variación de Atelier Mora" [ref=e567]:
+            - generic [ref=e568]:
+              - generic "Seleccionar" [ref=e569] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e570]
+              - button "Ver detalle de Atelier Mora" [ref=e571]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e572]
+            - generic [ref=e573]:
+              - generic [ref=e574]:
+                - generic [ref=e575]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e576]': Logos
+                - generic [ref=e577]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e578] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e579]:
+          - article "Variación de Atelier Mora" [ref=e580]:
+            - generic [ref=e581]:
+              - generic "Seleccionar" [ref=e582] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e583]
+              - button "Ver detalle de Atelier Mora" [ref=e584]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e585]
+            - generic [ref=e586]:
+              - generic [ref=e587]:
+                - generic [ref=e588]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e589]': Logos
+                - generic [ref=e590]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e591] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e592]:
+          - article "Variación de Atelier Mora" [ref=e593]:
+            - generic [ref=e594]:
+              - generic "Seleccionar" [ref=e595] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e596]
+              - button "Ver detalle de Atelier Mora" [ref=e597]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e598]
+            - generic [ref=e599]:
+              - generic [ref=e600]:
+                - generic [ref=e601]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e602]': Logos
+                - generic [ref=e603]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e604] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e605]:
+          - article "Variación de Aurora Café" [ref=e606]:
+            - generic [ref=e607]:
+              - generic "Seleccionar" [ref=e608] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e609]
+              - button "Ver detalle de Aurora Café" [ref=e610]:
+                - img "Vista previa de variación de Aurora Café" [ref=e611]
+            - generic [ref=e612]:
+              - generic [ref=e613]:
+                - generic [ref=e614]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e615]': Logos
+                - generic [ref=e616]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e617] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e618]:
+          - article "Variación de Nimbus" [ref=e619]:
+            - generic [ref=e620]:
+              - generic "Seleccionar" [ref=e621] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e622]
+              - button "Ver detalle de Nimbus" [ref=e623]:
+                - img "Vista previa de variación de Nimbus" [ref=e624]
+            - generic [ref=e625]:
+              - generic [ref=e626]:
+                - generic [ref=e627]: Nimbus
+                - 'generic "Familia: Logos" [ref=e628]': Logos
+                - generic [ref=e629]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e630] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e631]:
+          - article "Variación de Aurora Café" [ref=e632]:
+            - generic [ref=e633]:
+              - generic "Seleccionar" [ref=e634] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e635]
+              - button "Ver detalle de Aurora Café" [ref=e636]:
+                - img "Vista previa de variación de Aurora Café" [ref=e637]
+            - generic [ref=e638]:
+              - generic [ref=e639]:
+                - generic [ref=e640]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e641]': Logos
+                - generic [ref=e642]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e643] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e644]:
+          - article "Variación de Atelier Mora" [ref=e645]:
+            - generic [ref=e646]:
+              - generic "Seleccionar" [ref=e647] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e648]
+              - button "Ver detalle de Atelier Mora" [ref=e649]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e650]
+            - generic [ref=e651]:
+              - generic [ref=e652]:
+                - generic [ref=e653]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e654]': Logos
+                - generic [ref=e655]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e656] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e657]:
+          - article "Variación de Atelier Mora" [ref=e658]:
+            - generic [ref=e659]:
+              - generic "Seleccionar" [ref=e660] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e661]
+              - button "Ver detalle de Atelier Mora" [ref=e662]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e663]
+            - generic [ref=e664]:
+              - generic [ref=e665]:
+                - generic [ref=e666]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e667]': Logos
+                - generic [ref=e668]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e669] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e670]:
+          - article "Variación de Atelier Mora" [ref=e671]:
+            - generic [ref=e672]:
+              - generic "Seleccionar" [ref=e673] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e674]
+              - button "Ver detalle de Atelier Mora" [ref=e675]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e676]
+            - generic [ref=e677]:
+              - generic [ref=e678]:
+                - generic [ref=e679]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e680]': Logos
+                - generic [ref=e681]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e682] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e683]:
+          - article "Variación de Atelier Mora" [ref=e684]:
+            - generic [ref=e685]:
+              - generic "Seleccionar" [ref=e686] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e687]
+              - button "Ver detalle de Atelier Mora" [ref=e688]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e689]
+            - generic [ref=e690]:
+              - generic [ref=e691]:
+                - generic [ref=e692]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e693]': Logos
+                - generic [ref=e694]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e695] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e696]:
+          - article "Variación de Aurora Café" [ref=e697]:
+            - generic [ref=e698]:
+              - generic "Seleccionar" [ref=e699] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e700]
+              - button "Ver detalle de Aurora Café" [ref=e701]:
+                - img "Vista previa de variación de Aurora Café" [ref=e702]
+            - generic [ref=e703]:
+              - generic [ref=e704]:
+                - generic [ref=e705]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e706]': Logos
+                - generic [ref=e707]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e708] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e709]:
+          - article "Variación de Aurora Café" [ref=e710]:
+            - generic [ref=e711]:
+              - generic "Seleccionar" [ref=e712] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e713]
+              - button "Ver detalle de Aurora Café" [ref=e714]:
+                - img "Vista previa de variación de Aurora Café" [ref=e715]
+            - generic [ref=e716]:
+              - generic [ref=e717]:
+                - generic [ref=e718]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e719]': Logos
+                - generic [ref=e720]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e721] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e722]:
+          - article "Variación de Atelier Mora" [ref=e723]:
+            - generic [ref=e724]:
+              - generic "Seleccionar" [ref=e725] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e726]
+              - button "Ver detalle de Atelier Mora" [ref=e727]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e728]
+            - generic [ref=e729]:
+              - generic [ref=e730]:
+                - generic [ref=e731]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e732]': Logos
+                - generic [ref=e733]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e734] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e735]:
+          - article "Variación de Atelier Mora" [ref=e736]:
+            - generic [ref=e737]:
+              - generic "Seleccionar" [ref=e738] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e739]
+              - button "Ver detalle de Atelier Mora" [ref=e740]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e741]
+            - generic [ref=e742]:
+              - generic [ref=e743]:
+                - generic [ref=e744]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e745]': Logos
+                - generic [ref=e746]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e747] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e748]:
+          - article "Variación de Nimbus" [ref=e749]:
+            - generic [ref=e750]:
+              - generic "Seleccionar" [ref=e751] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e752]
+              - button "Ver detalle de Nimbus" [ref=e753]:
+                - img "Vista previa de variación de Nimbus" [ref=e754]
+            - generic [ref=e755]:
+              - generic [ref=e756]:
+                - generic [ref=e757]: Nimbus
+                - 'generic "Familia: Logos" [ref=e758]': Logos
+                - generic [ref=e759]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e760] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e761]:
+          - article "Variación de Atelier Mora" [ref=e762]:
+            - generic [ref=e763]:
+              - generic "Seleccionar" [ref=e764] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e765]
+              - button "Ver detalle de Atelier Mora" [ref=e766]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e767]
+            - generic [ref=e768]:
+              - generic [ref=e769]:
+                - generic [ref=e770]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e771]': Logos
+                - generic [ref=e772]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e773] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e774]:
+          - article "Variación de Atelier Mora" [ref=e775]:
+            - generic [ref=e776]:
+              - generic "Seleccionar" [ref=e777] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e778]
+              - button "Ver detalle de Atelier Mora" [ref=e779]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e780]
+            - generic [ref=e781]:
+              - generic [ref=e782]:
+                - generic [ref=e783]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e784]': Logos
+                - generic [ref=e785]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e786] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e787]:
+          - article "Variación de Atelier Mora" [ref=e788]:
+            - generic [ref=e789]:
+              - generic "Seleccionar" [ref=e790] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e791]
+              - button "Ver detalle de Atelier Mora" [ref=e792]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e793]
+            - generic [ref=e794]:
+              - generic [ref=e795]:
+                - generic [ref=e796]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e797]': Logos
+                - generic [ref=e798]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e799] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e800]:
+          - article "Variación de Atelier Mora" [ref=e801]:
+            - generic [ref=e802]:
+              - generic "Seleccionar" [ref=e803] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e804]
+              - button "Ver detalle de Atelier Mora" [ref=e805]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e806]
+            - generic [ref=e807]:
+              - generic [ref=e808]:
+                - generic [ref=e809]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e810]': Logos
+                - generic [ref=e811]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e812] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e813]:
+          - article "Variación de Atelier Mora" [ref=e814]:
+            - generic [ref=e815]:
+              - generic "Seleccionar" [ref=e816] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e817]
+              - button "Ver detalle de Atelier Mora" [ref=e818]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e819]
+            - generic [ref=e820]:
+              - generic [ref=e821]:
+                - generic [ref=e822]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e823]': Logos
+                - generic [ref=e824]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e825] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e826]:
+          - article "Variación de Atelier Mora" [ref=e827]:
+            - generic [ref=e828]:
+              - generic "Seleccionar" [ref=e829] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e830]
+              - button "Ver detalle de Atelier Mora" [ref=e831]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e832]
+            - generic [ref=e833]:
+              - generic [ref=e834]:
+                - generic [ref=e835]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e836]': Logos
+                - generic [ref=e837]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e838] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e839]:
+          - article "Variación de Atelier Mora" [ref=e840]:
+            - generic [ref=e841]:
+              - generic "Seleccionar" [ref=e842] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e843]
+              - button "Ver detalle de Atelier Mora" [ref=e844]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e845]
+            - generic [ref=e846]:
+              - generic [ref=e847]:
+                - generic [ref=e848]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e849]': Logos
+                - generic [ref=e850]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e851] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e852]:
+          - article "Variación de Atelier Mora" [ref=e853]:
+            - generic [ref=e854]:
+              - generic "Seleccionar" [ref=e855] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e856]
+              - button "Ver detalle de Atelier Mora" [ref=e857]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e858]
+            - generic [ref=e859]:
+              - generic [ref=e860]:
+                - generic [ref=e861]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e862]': Logos
+                - generic [ref=e863]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e864] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e865]:
+          - article "Variación de Nimbus" [ref=e866]:
+            - generic [ref=e867]:
+              - generic "Seleccionar" [ref=e868] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e869]
+              - button "Ver detalle de Nimbus" [ref=e870]:
+                - img "Vista previa de variación de Nimbus" [ref=e871]
+            - generic [ref=e872]:
+              - generic [ref=e873]:
+                - generic [ref=e874]: Nimbus
+                - 'generic "Familia: Logos" [ref=e875]': Logos
+                - generic [ref=e876]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e877] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e878]:
+          - article "Variación de Nimbus" [ref=e879]:
+            - generic [ref=e880]:
+              - generic "Seleccionar" [ref=e881] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e882]
+              - button "Ver detalle de Nimbus" [ref=e883]:
+                - img "Vista previa de variación de Nimbus" [ref=e884]
+            - generic [ref=e885]:
+              - generic [ref=e886]:
+                - generic [ref=e887]: Nimbus
+                - 'generic "Familia: Logos" [ref=e888]': Logos
+                - generic [ref=e889]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e890] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e891]:
+          - article "Variación de Atelier Mora" [ref=e892]:
+            - generic [ref=e893]:
+              - generic "Seleccionar" [ref=e894] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e895]
+              - button "Ver detalle de Atelier Mora" [ref=e896]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e897]
+            - generic [ref=e898]:
+              - generic [ref=e899]:
+                - generic [ref=e900]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e901]': Logos
+                - generic [ref=e902]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e903] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e904]:
+          - article "Variación de Atelier Mora" [ref=e905]:
+            - generic [ref=e906]:
+              - generic "Seleccionar" [ref=e907] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e908]
+              - button "Ver detalle de Atelier Mora" [ref=e909]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e910]
+            - generic [ref=e911]:
+              - generic [ref=e912]:
+                - generic [ref=e913]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e914]': Logos
+                - generic [ref=e915]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e916] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e917]:
+          - article "Variación de Aurora Café" [ref=e918]:
+            - generic [ref=e919]:
+              - generic "Seleccionar" [ref=e920] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e921]
+              - button "Ver detalle de Aurora Café" [ref=e922]:
+                - img "Vista previa de variación de Aurora Café" [ref=e923]
+            - generic [ref=e924]:
+              - generic [ref=e925]:
+                - generic [ref=e926]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e927]': Logos
+                - generic [ref=e928]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e929] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e930]:
+          - article "Variación de Atelier Mora" [ref=e931]:
+            - generic [ref=e932]:
+              - generic "Seleccionar" [ref=e933] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e934]
+              - button "Ver detalle de Atelier Mora" [ref=e935]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e936]
+            - generic [ref=e937]:
+              - generic [ref=e938]:
+                - generic [ref=e939]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e940]': Logos
+                - generic [ref=e941]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e942] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e943]:
+          - article "Variación de Atelier Mora" [ref=e944]:
+            - generic [ref=e945]:
+              - generic "Seleccionar" [ref=e946] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e947]
+              - button "Ver detalle de Atelier Mora" [ref=e948]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e949]
+            - generic [ref=e950]:
+              - generic [ref=e951]:
+                - generic [ref=e952]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e953]': Logos
+                - generic [ref=e954]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e955] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e956]:
+          - article "Variación de Nimbus" [ref=e957]:
+            - generic [ref=e958]:
+              - generic "Seleccionar" [ref=e959] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e960]
+              - button "Ver detalle de Nimbus" [ref=e961]:
+                - img "Vista previa de variación de Nimbus" [ref=e962]
+            - generic [ref=e963]:
+              - generic [ref=e964]:
+                - generic [ref=e965]: Nimbus
+                - 'generic "Familia: Logos" [ref=e966]': Logos
+                - generic [ref=e967]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e968] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e969]:
+          - article "Variación de Nimbus" [ref=e970]:
+            - generic [ref=e971]:
+              - generic "Seleccionar" [ref=e972] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e973]
+              - button "Ver detalle de Nimbus" [ref=e974]:
+                - img "Vista previa de variación de Nimbus" [ref=e975]
+            - generic [ref=e976]:
+              - generic [ref=e977]:
+                - generic [ref=e978]: Nimbus
+                - 'generic "Familia: Logos" [ref=e979]': Logos
+                - generic [ref=e980]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e981] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e982]:
+          - article "Variación de Atelier Mora" [ref=e983]:
+            - generic [ref=e984]:
+              - generic "Seleccionar" [ref=e985] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e986]
+              - button "Ver detalle de Atelier Mora" [ref=e987]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e988]
+            - generic [ref=e989]:
+              - generic [ref=e990]:
+                - generic [ref=e991]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e992]': Logos
+                - generic [ref=e993]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e994] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e995]:
+          - article "Variación de Atelier Mora" [ref=e996]:
+            - generic [ref=e997]:
+              - generic "Seleccionar" [ref=e998] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e999]
+              - button "Ver detalle de Atelier Mora" [ref=e1000]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e1001]
+            - generic [ref=e1002]:
+              - generic [ref=e1003]:
+                - generic [ref=e1004]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e1005]': Logos
+                - generic [ref=e1006]: Recomendado
+              - button "Descargar variación de Atelier Mora" [ref=e1007] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1008]:
+          - article "Variación de Aurora Café" [ref=e1009]:
+            - generic [ref=e1010]:
+              - generic "Seleccionar" [ref=e1011] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1012]
+              - button "Ver detalle de Aurora Café" [ref=e1013]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1014]
+            - generic [ref=e1015]:
+              - generic [ref=e1016]:
+                - generic [ref=e1017]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e1018]': Logos
+                - generic [ref=e1019]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1020] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1021]:
+          - article "Variación de Aurora Café" [ref=e1022]:
+            - generic [ref=e1023]:
+              - generic "Seleccionar" [ref=e1024] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1025]
+              - button "Ver detalle de Aurora Café" [ref=e1026]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1027]
+            - generic [ref=e1028]:
+              - generic [ref=e1029]:
+                - generic [ref=e1030]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e1031]': Logos
+                - generic [ref=e1032]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1033] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1034]:
+          - article "Variación de Aurora Café" [ref=e1035]:
+            - generic [ref=e1036]:
+              - generic "Seleccionar" [ref=e1037] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1038]
+              - button "Ver detalle de Aurora Café" [ref=e1039]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1040]
+            - generic [ref=e1041]:
+              - generic [ref=e1042]:
+                - generic [ref=e1043]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e1044]': Logos
+                - generic [ref=e1045]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1046] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1047]:
+          - article "Variación de Nimbus" [ref=e1048]:
+            - generic [ref=e1049]:
+              - generic "Seleccionar" [ref=e1050] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1051]
+              - button "Ver detalle de Nimbus" [ref=e1052]:
+                - img "Vista previa de variación de Nimbus" [ref=e1053]
+            - generic [ref=e1054]:
+              - generic [ref=e1055]:
+                - generic [ref=e1056]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1057]': Logos
+                - generic [ref=e1058]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1059] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1060]:
+          - article "Variación de Nimbus" [ref=e1061]:
+            - generic [ref=e1062]:
+              - generic "Seleccionar" [ref=e1063] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1064]
+              - button "Ver detalle de Nimbus" [ref=e1065]:
+                - img "Vista previa de variación de Nimbus" [ref=e1066]
+            - generic [ref=e1067]:
+              - generic [ref=e1068]:
+                - generic [ref=e1069]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1070]': Logos
+                - generic [ref=e1071]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1072] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1073]:
+          - article "Variación de Aurora Café" [ref=e1074]:
+            - generic [ref=e1075]:
+              - generic "Seleccionar" [ref=e1076] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1077]
+              - button "Ver detalle de Aurora Café" [ref=e1078]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1079]
+            - generic [ref=e1080]:
+              - generic [ref=e1081]:
+                - generic [ref=e1082]: Aurora Café
+                - 'generic "Familia: Banners" [ref=e1083]': Banners
+                - generic [ref=e1084]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1085] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1086]:
+          - article "Variación de Aurora Café" [ref=e1087]:
+            - generic [ref=e1088]:
+              - generic "Seleccionar" [ref=e1089] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1090]
+              - button "Ver detalle de Aurora Café" [ref=e1091]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1092]
+            - generic [ref=e1093]:
+              - generic [ref=e1094]:
+                - generic [ref=e1095]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e1096]': Logos
+                - generic [ref=e1097]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1098] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1099]:
+          - article "Variación de Aurora Café" [ref=e1100]:
+            - generic [ref=e1101]:
+              - generic "Seleccionar" [ref=e1102] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1103]
+              - button "Ver detalle de Aurora Café" [ref=e1104]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1105]
+            - generic [ref=e1106]:
+              - generic [ref=e1107]:
+                - generic [ref=e1108]: Aurora Café
+                - 'generic "Familia: Banners" [ref=e1109]': Banners
+                - generic [ref=e1110]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1111] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1112]:
+          - article "Variación de Aurora Café" [ref=e1113]:
+            - generic [ref=e1114]:
+              - generic "Seleccionar" [ref=e1115] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1116]
+              - button "Ver detalle de Aurora Café" [ref=e1117]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1118]
+            - generic [ref=e1119]:
+              - generic [ref=e1120]:
+                - generic [ref=e1121]: Aurora Café
+                - 'generic "Familia: Banners" [ref=e1122]': Banners
+                - generic [ref=e1123]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1124] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1125]:
+          - article "Variación de Aurora Café" [ref=e1126]:
+            - generic [ref=e1127]:
+              - generic "Seleccionar" [ref=e1128] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1129]
+              - button "Ver detalle de Aurora Café" [ref=e1130]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1131]
+            - generic [ref=e1132]:
+              - generic [ref=e1133]:
+                - generic [ref=e1134]: Aurora Café
+                - 'generic "Familia: Banners" [ref=e1135]': Banners
+                - generic [ref=e1136]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1137] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1138]:
+          - article "Variación de Aurora Café" [ref=e1139]:
+            - generic [ref=e1140]:
+              - generic "Seleccionar" [ref=e1141] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1142]
+              - button "Ver detalle de Aurora Café" [ref=e1143]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1144]
+            - generic [ref=e1145]:
+              - generic [ref=e1146]:
+                - generic [ref=e1147]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e1148]': Logos
+                - generic [ref=e1149]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1150] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1151]:
+          - article "Variación de Aurora Café" [ref=e1152]:
+            - generic [ref=e1153]:
+              - generic "Seleccionar" [ref=e1154] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1155]
+              - button "Ver detalle de Aurora Café" [ref=e1156]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1157]
+            - generic [ref=e1158]:
+              - generic [ref=e1159]:
+                - generic [ref=e1160]: Aurora Café
+                - 'generic "Familia: Banners" [ref=e1161]': Banners
+                - generic [ref=e1162]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1163] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1164]:
+          - article "Variación de Aurora Café" [ref=e1165]:
+            - generic [ref=e1166]:
+              - generic "Seleccionar" [ref=e1167] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1168]
+              - button "Ver detalle de Aurora Café" [ref=e1169]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1170]
+            - generic [ref=e1171]:
+              - generic [ref=e1172]:
+                - generic [ref=e1173]: Aurora Café
+                - 'generic "Familia: Banners" [ref=e1174]': Banners
+                - generic [ref=e1175]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1176] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1177]:
+          - article "Variación de Aurora Café" [ref=e1178]:
+            - generic [ref=e1179]:
+              - generic "Seleccionar" [ref=e1180] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1181]
+              - button "Ver detalle de Aurora Café" [ref=e1182]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1183]
+            - generic [ref=e1184]:
+              - generic [ref=e1185]:
+                - generic [ref=e1186]: Aurora Café
+                - 'generic "Familia: Banners" [ref=e1187]': Banners
+                - generic [ref=e1188]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1189] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1190]:
+          - article "Variación de Nimbus" [ref=e1191]:
+            - generic [ref=e1192]:
+              - generic "Seleccionar" [ref=e1193] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1194]
+              - button "Ver detalle de Nimbus" [ref=e1195]:
+                - img "Vista previa de variación de Nimbus" [ref=e1196]
+            - generic [ref=e1197]:
+              - generic [ref=e1198]:
+                - generic [ref=e1199]: Nimbus
+                - 'generic "Familia: Banners" [ref=e1200]': Banners
+                - generic [ref=e1201]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1202] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1203]:
+          - article "Variación de Nimbus" [ref=e1204]:
+            - generic [ref=e1205]:
+              - generic "Seleccionar" [ref=e1206] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1207]
+              - button "Ver detalle de Nimbus" [ref=e1208]:
+                - img "Vista previa de variación de Nimbus" [ref=e1209]
+            - generic [ref=e1210]:
+              - generic [ref=e1211]:
+                - generic [ref=e1212]: Nimbus
+                - 'generic "Familia: Banners" [ref=e1213]': Banners
+                - generic [ref=e1214]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1215] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1216]:
+          - article "Variación de Nimbus" [ref=e1217]:
+            - generic [ref=e1218]:
+              - generic "Seleccionar" [ref=e1219] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1220]
+              - button "Ver detalle de Nimbus" [ref=e1221]:
+                - img "Vista previa de variación de Nimbus" [ref=e1222]
+            - generic [ref=e1223]:
+              - generic [ref=e1224]:
+                - generic [ref=e1225]: Nimbus
+                - 'generic "Familia: Banners" [ref=e1226]': Banners
+                - generic [ref=e1227]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1228] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1229]:
+          - article "Variación de Nimbus" [ref=e1230]:
+            - generic [ref=e1231]:
+              - generic "Seleccionar" [ref=e1232] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1233]
+              - button "Ver detalle de Nimbus" [ref=e1234]:
+                - img "Vista previa de variación de Nimbus" [ref=e1235]
+            - generic [ref=e1236]:
+              - generic [ref=e1237]:
+                - generic [ref=e1238]: Nimbus
+                - 'generic "Familia: Banners" [ref=e1239]': Banners
+                - generic [ref=e1240]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1241] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1242]:
+          - article "Variación de Nimbus" [ref=e1243]:
+            - generic [ref=e1244]:
+              - generic "Seleccionar" [ref=e1245] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1246]
+              - button "Ver detalle de Nimbus" [ref=e1247]:
+                - img "Vista previa de variación de Nimbus" [ref=e1248]
+            - generic [ref=e1249]:
+              - generic [ref=e1250]:
+                - generic [ref=e1251]: Nimbus
+                - 'generic "Familia: Banners" [ref=e1252]': Banners
+                - generic [ref=e1253]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1254] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1255]:
+          - article "Variación de Nimbus" [ref=e1256]:
+            - generic [ref=e1257]:
+              - generic "Seleccionar" [ref=e1258] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1259]
+              - button "Ver detalle de Nimbus" [ref=e1260]:
+                - img "Vista previa de variación de Nimbus" [ref=e1261]
+            - generic [ref=e1262]:
+              - generic [ref=e1263]:
+                - generic [ref=e1264]: Nimbus
+                - 'generic "Familia: Banners" [ref=e1265]': Banners
+                - generic [ref=e1266]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1267] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1268]:
+          - article "Variación de Nimbus" [ref=e1269]:
+            - generic [ref=e1270]:
+              - generic "Seleccionar" [ref=e1271] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1272]
+              - button "Ver detalle de Nimbus" [ref=e1273]:
+                - img "Vista previa de variación de Nimbus" [ref=e1274]
+            - generic [ref=e1275]:
+              - generic [ref=e1276]:
+                - generic [ref=e1277]: Nimbus
+                - 'generic "Familia: Tarjetas" [ref=e1278]': Tarjetas
+                - generic [ref=e1279]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1280] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1281]:
+          - article "Variación de Nimbus" [ref=e1282]:
+            - generic [ref=e1283]:
+              - generic "Seleccionar" [ref=e1284] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1285]
+              - button "Ver detalle de Nimbus" [ref=e1286]:
+                - img "Vista previa de variación de Nimbus" [ref=e1287]
+            - generic [ref=e1288]:
+              - generic [ref=e1289]:
+                - generic [ref=e1290]: Nimbus
+                - 'generic "Familia: Tarjetas" [ref=e1291]': Tarjetas
+                - generic [ref=e1292]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1293] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1294]:
+          - article "Variación de Nimbus" [ref=e1295]:
+            - generic [ref=e1296]:
+              - generic "Seleccionar" [ref=e1297] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1298]
+              - button "Ver detalle de Nimbus" [ref=e1299]:
+                - img "Vista previa de variación de Nimbus" [ref=e1300]
+            - generic [ref=e1301]:
+              - generic [ref=e1302]:
+                - generic [ref=e1303]: Nimbus
+                - 'generic "Familia: Tarjetas" [ref=e1304]': Tarjetas
+                - generic [ref=e1305]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1306] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1307]:
+          - article "Variación de Aurora Café" [ref=e1308]:
+            - generic [ref=e1309]:
+              - generic "Seleccionar" [ref=e1310] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1311]
+              - button "Ver detalle de Aurora Café" [ref=e1312]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1313]
+            - generic [ref=e1314]:
+              - generic [ref=e1315]:
+                - generic [ref=e1316]: Aurora Café
+                - 'generic "Familia: Tarjetas" [ref=e1317]': Tarjetas
+                - generic [ref=e1318]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1319] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1320]:
+          - article "Variación de Aurora Café" [ref=e1321]:
+            - generic [ref=e1322]:
+              - generic "Seleccionar" [ref=e1323] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1324]
+              - button "Ver detalle de Aurora Café" [ref=e1325]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1326]
+            - generic [ref=e1327]:
+              - generic [ref=e1328]:
+                - generic [ref=e1329]: Aurora Café
+                - 'generic "Familia: Tarjetas" [ref=e1330]': Tarjetas
+                - generic [ref=e1331]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1332] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1333]:
+          - article "Variación de Aurora Café" [ref=e1334]:
+            - generic [ref=e1335]:
+              - generic "Seleccionar" [ref=e1336] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1337]
+              - button "Ver detalle de Aurora Café" [ref=e1338]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1339]
+            - generic [ref=e1340]:
+              - generic [ref=e1341]:
+                - generic [ref=e1342]: Aurora Café
+                - 'generic "Familia: Tarjetas" [ref=e1343]': Tarjetas
+                - generic [ref=e1344]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1345] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1346]:
+          - article "Variación de Aurora Café" [ref=e1347]:
+            - generic [ref=e1348]:
+              - generic "Seleccionar" [ref=e1349] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1350]
+              - button "Ver detalle de Aurora Café" [ref=e1351]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1352]
+            - generic [ref=e1353]:
+              - generic [ref=e1354]:
+                - generic [ref=e1355]: Aurora Café
+                - 'generic "Familia: Redes / OG" [ref=e1356]': Redes / OG
+                - generic [ref=e1357]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1358] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1359]:
+          - article "Variación de Nimbus" [ref=e1360]:
+            - generic [ref=e1361]:
+              - generic "Seleccionar" [ref=e1362] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1363]
+              - button "Ver detalle de Nimbus" [ref=e1364]:
+                - img "Vista previa de variación de Nimbus" [ref=e1365]
+            - generic [ref=e1366]:
+              - generic [ref=e1367]:
+                - generic [ref=e1368]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1369]': Logos
+                - generic [ref=e1370]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1371] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1372]:
+          - article "Variación de Nimbus" [ref=e1373]:
+            - generic [ref=e1374]:
+              - generic "Seleccionar" [ref=e1375] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1376]
+              - button "Ver detalle de Nimbus" [ref=e1377]:
+                - img "Vista previa de variación de Nimbus" [ref=e1378]
+            - generic [ref=e1379]:
+              - generic [ref=e1380]:
+                - generic [ref=e1381]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1382]': Logos
+                - generic [ref=e1383]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1384] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1385]:
+          - article "Variación de Nimbus" [ref=e1386]:
+            - generic [ref=e1387]:
+              - generic "Seleccionar" [ref=e1388] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1389]
+              - button "Ver detalle de Nimbus" [ref=e1390]:
+                - img "Vista previa de variación de Nimbus" [ref=e1391]
+            - generic [ref=e1392]:
+              - generic [ref=e1393]:
+                - generic [ref=e1394]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1395]': Logos
+                - generic [ref=e1396]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1397] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1398]:
+          - article "Variación de Nimbus" [ref=e1399]:
+            - generic [ref=e1400]:
+              - generic "Seleccionar" [ref=e1401] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1402]
+              - button "Ver detalle de Nimbus" [ref=e1403]:
+                - img "Vista previa de variación de Nimbus" [ref=e1404]
+            - generic [ref=e1405]:
+              - generic [ref=e1406]:
+                - generic [ref=e1407]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1408]': Logos
+                - generic [ref=e1409]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1410] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1411]:
+          - article "Variación de Nimbus" [ref=e1412]:
+            - generic [ref=e1413]:
+              - generic "Seleccionar" [ref=e1414] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1415]
+              - button "Ver detalle de Nimbus" [ref=e1416]:
+                - img "Vista previa de variación de Nimbus" [ref=e1417]
+            - generic [ref=e1418]:
+              - generic [ref=e1419]:
+                - generic [ref=e1420]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1421]': Logos
+                - generic [ref=e1422]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1423] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1424]:
+          - article "Variación de Nimbus" [ref=e1425]:
+            - generic [ref=e1426]:
+              - generic "Seleccionar" [ref=e1427] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1428]
+              - button "Ver detalle de Nimbus" [ref=e1429]:
+                - img "Vista previa de variación de Nimbus" [ref=e1430]
+            - generic [ref=e1431]:
+              - generic [ref=e1432]:
+                - generic [ref=e1433]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1434]': Logos
+                - generic [ref=e1435]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1436] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1437]:
+          - article "Variación de Aurora Café" [ref=e1438]:
+            - generic [ref=e1439]:
+              - generic "Seleccionar" [ref=e1440] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1441]
+              - button "Ver detalle de Aurora Café" [ref=e1442]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1443]
+            - generic [ref=e1444]:
+              - generic [ref=e1445]:
+                - generic [ref=e1446]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e1447]': Logos
+                - generic [ref=e1448]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1449] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1450]:
+          - article "Variación de Aurora Café" [ref=e1451]:
+            - generic [ref=e1452]:
+              - generic "Seleccionar" [ref=e1453] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1454]
+              - button "Ver detalle de Aurora Café" [ref=e1455]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1456]
+            - generic [ref=e1457]:
+              - generic [ref=e1458]:
+                - generic [ref=e1459]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e1460]': Logos
+                - generic [ref=e1461]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1462] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1463]:
+          - article "Variación de Aurora Café" [ref=e1464]:
+            - generic [ref=e1465]:
+              - generic "Seleccionar" [ref=e1466] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1467]
+              - button "Ver detalle de Aurora Café" [ref=e1468]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1469]
+            - generic [ref=e1470]:
+              - generic [ref=e1471]:
+                - generic [ref=e1472]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e1473]': Logos
+                - generic [ref=e1474]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1475] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1476]:
+          - article "Variación de Aurora Café" [ref=e1477]:
+            - generic [ref=e1478]:
+              - generic "Seleccionar" [ref=e1479] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1480]
+              - button "Ver detalle de Aurora Café" [ref=e1481]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1482]
+            - generic [ref=e1483]:
+              - generic [ref=e1484]:
+                - generic [ref=e1485]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e1486]': Logos
+                - generic [ref=e1487]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1488] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1489]:
+          - article "Variación de Aurora Café" [ref=e1490]:
+            - generic [ref=e1491]:
+              - generic "Seleccionar" [ref=e1492] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1493]
+              - button "Ver detalle de Aurora Café" [ref=e1494]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1495]
+            - generic [ref=e1496]:
+              - generic [ref=e1497]:
+                - generic [ref=e1498]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e1499]': Logos
+                - generic [ref=e1500]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1501] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1502]:
+          - article "Variación de Aurora Café" [ref=e1503]:
+            - generic [ref=e1504]:
+              - generic "Seleccionar" [ref=e1505] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1506]
+              - button "Ver detalle de Aurora Café" [ref=e1507]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1508]
+            - generic [ref=e1509]:
+              - generic [ref=e1510]:
+                - generic [ref=e1511]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e1512]': Logos
+                - generic [ref=e1513]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1514] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1515]:
+          - article "Variación de Nimbus" [ref=e1516]:
+            - generic [ref=e1517]:
+              - generic "Seleccionar" [ref=e1518] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1519]
+              - button "Ver detalle de Nimbus" [ref=e1520]:
+                - img "Vista previa de variación de Nimbus" [ref=e1521]
+            - generic [ref=e1522]:
+              - generic [ref=e1523]:
+                - generic [ref=e1524]: Nimbus
+                - 'generic "Familia: Banners" [ref=e1525]': Banners
+                - generic [ref=e1526]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1527] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1528]:
+          - article "Variación de Aurora Café" [ref=e1529]:
+            - generic [ref=e1530]:
+              - generic "Seleccionar" [ref=e1531] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1532]
+              - button "Ver detalle de Aurora Café" [ref=e1533]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1534]
+            - generic [ref=e1535]:
+              - generic [ref=e1536]:
+                - generic [ref=e1537]: Aurora Café
+                - 'generic "Familia: Banners" [ref=e1538]': Banners
+                - generic [ref=e1539]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1540] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1541]:
+          - article "Variación de Aurora Café" [ref=e1542]:
+            - generic [ref=e1543]:
+              - generic "Seleccionar" [ref=e1544] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1545]
+              - button "Ver detalle de Aurora Café" [ref=e1546]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1547]
+            - generic [ref=e1548]:
+              - generic [ref=e1549]:
+                - generic [ref=e1550]: Aurora Café
+                - 'generic "Familia: Banners" [ref=e1551]': Banners
+                - generic [ref=e1552]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1553] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1554]:
+          - article "Variación de Aurora Café" [ref=e1555]:
+            - generic [ref=e1556]:
+              - generic "Seleccionar" [ref=e1557] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1558]
+              - button "Ver detalle de Aurora Café" [ref=e1559]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1560]
+            - generic [ref=e1561]:
+              - generic [ref=e1562]:
+                - generic [ref=e1563]: Aurora Café
+                - 'generic "Familia: Banners" [ref=e1564]': Banners
+                - generic [ref=e1565]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1566] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1567]:
+          - article "Variación de Nimbus" [ref=e1568]:
+            - generic [ref=e1569]:
+              - generic "Seleccionar" [ref=e1570] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1571]
+              - button "Ver detalle de Nimbus" [ref=e1572]:
+                - img "Vista previa de variación de Nimbus" [ref=e1573]
+            - generic [ref=e1574]:
+              - generic [ref=e1575]:
+                - generic [ref=e1576]: Nimbus
+                - 'generic "Familia: Redes / OG" [ref=e1577]': Redes / OG
+                - generic [ref=e1578]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1579] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1580]:
+          - article "Variación de Aurora Café" [ref=e1581]:
+            - generic [ref=e1582]:
+              - generic "Seleccionar" [ref=e1583] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1584]
+              - button "Ver detalle de Aurora Café" [ref=e1585]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1586]
+            - generic [ref=e1587]:
+              - generic [ref=e1588]:
+                - generic [ref=e1589]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e1590]': Logos
+                - generic [ref=e1591]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1592] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1593]:
+          - article "Variación de Aurora Café" [ref=e1594]:
+            - generic [ref=e1595]:
+              - generic "Seleccionar" [ref=e1596] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1597]
+              - button "Ver detalle de Aurora Café" [ref=e1598]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1599]
+            - generic [ref=e1600]:
+              - generic [ref=e1601]:
+                - generic [ref=e1602]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e1603]': Logos
+                - generic [ref=e1604]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1605] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1606]:
+          - article "Variación de Aurora Café" [ref=e1607]:
+            - generic [ref=e1608]:
+              - generic "Seleccionar" [ref=e1609] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1610]
+              - button "Ver detalle de Aurora Café" [ref=e1611]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1612]
+            - generic [ref=e1613]:
+              - generic [ref=e1614]:
+                - generic [ref=e1615]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e1616]': Logos
+                - generic [ref=e1617]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1618] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1619]:
+          - article "Variación de Nimbus" [ref=e1620]:
+            - generic [ref=e1621]:
+              - generic "Seleccionar" [ref=e1622] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1623]
+              - button "Ver detalle de Nimbus" [ref=e1624]:
+                - img "Vista previa de variación de Nimbus" [ref=e1625]
+            - generic [ref=e1626]:
+              - generic [ref=e1627]:
+                - generic [ref=e1628]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1629]': Logos
+                - generic [ref=e1630]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1631] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1632]:
+          - article "Variación de Nimbus" [ref=e1633]:
+            - generic [ref=e1634]:
+              - generic "Seleccionar" [ref=e1635] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1636]
+              - button "Ver detalle de Nimbus" [ref=e1637]:
+                - img "Vista previa de variación de Nimbus" [ref=e1638]
+            - generic [ref=e1639]:
+              - generic [ref=e1640]:
+                - generic [ref=e1641]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1642]': Logos
+                - generic [ref=e1643]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1644] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1645]:
+          - article "Variación de Nimbus" [ref=e1646]:
+            - generic [ref=e1647]:
+              - generic "Seleccionar" [ref=e1648] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1649]
+              - button "Ver detalle de Nimbus" [ref=e1650]:
+                - img "Vista previa de variación de Nimbus" [ref=e1651]
+            - generic [ref=e1652]:
+              - generic [ref=e1653]:
+                - generic [ref=e1654]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1655]': Logos
+                - generic [ref=e1656]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1657] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1658]:
+          - article "Variación de Nimbus" [ref=e1659]:
+            - generic [ref=e1660]:
+              - generic "Seleccionar" [ref=e1661] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1662]
+              - button "Ver detalle de Nimbus" [ref=e1663]:
+                - img "Vista previa de variación de Nimbus" [ref=e1664]
+            - generic [ref=e1665]:
+              - generic [ref=e1666]:
+                - generic [ref=e1667]: Nimbus
+                - 'generic "Familia: Banners" [ref=e1668]': Banners
+                - generic [ref=e1669]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1670] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1671]:
+          - article "Variación de Nimbus" [ref=e1672]:
+            - generic [ref=e1673]:
+              - generic "Seleccionar" [ref=e1674] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1675]
+              - button "Ver detalle de Nimbus" [ref=e1676]:
+                - img "Vista previa de variación de Nimbus" [ref=e1677]
+            - generic [ref=e1678]:
+              - generic [ref=e1679]:
+                - generic [ref=e1680]: Nimbus
+                - 'generic "Familia: Banners" [ref=e1681]': Banners
+                - generic [ref=e1682]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1683] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1684]:
+          - article "Variación de Nimbus" [ref=e1685]:
+            - generic [ref=e1686]:
+              - generic "Seleccionar" [ref=e1687] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1688]
+              - button "Ver detalle de Nimbus" [ref=e1689]:
+                - img "Vista previa de variación de Nimbus" [ref=e1690]
+            - generic [ref=e1691]:
+              - generic [ref=e1692]:
+                - generic [ref=e1693]: Nimbus
+                - 'generic "Familia: Banners" [ref=e1694]': Banners
+                - generic [ref=e1695]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1696] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1697]:
+          - article "Variación de Nimbus" [ref=e1698]:
+            - generic [ref=e1699]:
+              - generic "Seleccionar" [ref=e1700] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1701]
+              - button "Ver detalle de Nimbus" [ref=e1702]:
+                - img "Vista previa de variación de Nimbus" [ref=e1703]
+            - generic [ref=e1704]:
+              - generic [ref=e1705]:
+                - generic [ref=e1706]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1707]': Logos
+                - generic [ref=e1708]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1709] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1710]:
+          - article "Variación de Nimbus" [ref=e1711]:
+            - generic [ref=e1712]:
+              - generic "Seleccionar" [ref=e1713] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1714]
+              - button "Ver detalle de Nimbus" [ref=e1715]:
+                - img "Vista previa de variación de Nimbus" [ref=e1716]
+            - generic [ref=e1717]:
+              - generic [ref=e1718]:
+                - generic [ref=e1719]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1720]': Logos
+                - generic [ref=e1721]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1722] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1723]:
+          - article "Variación de Nimbus" [ref=e1724]:
+            - generic [ref=e1725]:
+              - generic "Seleccionar" [ref=e1726] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1727]
+              - button "Ver detalle de Nimbus" [ref=e1728]:
+                - img "Vista previa de variación de Nimbus" [ref=e1729]
+            - generic [ref=e1730]:
+              - generic [ref=e1731]:
+                - generic [ref=e1732]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1733]': Logos
+                - generic [ref=e1734]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1735] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1736]:
+          - article "Variación de Nimbus" [ref=e1737]:
+            - generic [ref=e1738]:
+              - generic "Seleccionar" [ref=e1739] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1740]
+              - button "Ver detalle de Nimbus" [ref=e1741]:
+                - img "Vista previa de variación de Nimbus" [ref=e1742]
+            - generic [ref=e1743]:
+              - generic [ref=e1744]:
+                - generic [ref=e1745]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1746]': Logos
+                - generic [ref=e1747]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1748] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1749]:
+          - article "Variación de Nimbus" [ref=e1750]:
+            - generic [ref=e1751]:
+              - generic "Seleccionar" [ref=e1752] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1753]
+              - button "Ver detalle de Nimbus" [ref=e1754]:
+                - img "Vista previa de variación de Nimbus" [ref=e1755]
+            - generic [ref=e1756]:
+              - generic [ref=e1757]:
+                - generic [ref=e1758]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1759]': Logos
+                - generic [ref=e1760]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1761] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1762]:
+          - article "Variación de Nimbus" [ref=e1763]:
+            - generic [ref=e1764]:
+              - generic "Seleccionar" [ref=e1765] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1766]
+              - button "Ver detalle de Nimbus" [ref=e1767]:
+                - img "Vista previa de variación de Nimbus" [ref=e1768]
+            - generic [ref=e1769]:
+              - generic [ref=e1770]:
+                - generic [ref=e1771]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1772]': Logos
+                - generic [ref=e1773]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1774] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1775]:
+          - article "Variación de Nimbus" [ref=e1776]:
+            - generic [ref=e1777]:
+              - generic "Seleccionar" [ref=e1778] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1779]
+              - button "Ver detalle de Nimbus" [ref=e1780]:
+                - img "Vista previa de variación de Nimbus" [ref=e1781]
+            - generic [ref=e1782]:
+              - generic [ref=e1783]:
+                - generic [ref=e1784]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1785]': Logos
+                - generic [ref=e1786]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1787] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1788]:
+          - article "Variación de Nimbus" [ref=e1789]:
+            - generic [ref=e1790]:
+              - generic "Seleccionar" [ref=e1791] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1792]
+              - button "Ver detalle de Nimbus" [ref=e1793]:
+                - img "Vista previa de variación de Nimbus" [ref=e1794]
+            - generic [ref=e1795]:
+              - generic [ref=e1796]:
+                - generic [ref=e1797]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1798]': Logos
+                - generic [ref=e1799]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1800] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1801]:
+          - article "Variación de Nimbus" [ref=e1802]:
+            - generic [ref=e1803]:
+              - generic "Seleccionar" [ref=e1804] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1805]
+              - button "Ver detalle de Nimbus" [ref=e1806]:
+                - img "Vista previa de variación de Nimbus" [ref=e1807]
+            - generic [ref=e1808]:
+              - generic [ref=e1809]:
+                - generic [ref=e1810]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1811]': Logos
+                - generic [ref=e1812]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1813] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1814]:
+          - article "Variación de Nimbus" [ref=e1815]:
+            - generic [ref=e1816]:
+              - generic "Seleccionar" [ref=e1817] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1818]
+              - button "Ver detalle de Nimbus" [ref=e1819]:
+                - img "Vista previa de variación de Nimbus" [ref=e1820]
+            - generic [ref=e1821]:
+              - generic [ref=e1822]:
+                - generic [ref=e1823]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1824]': Logos
+                - generic [ref=e1825]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1826] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1827]:
+          - article "Variación de Nimbus" [ref=e1828]:
+            - generic [ref=e1829]:
+              - generic "Seleccionar" [ref=e1830] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1831]
+              - button "Ver detalle de Nimbus" [ref=e1832]:
+                - img "Vista previa de variación de Nimbus" [ref=e1833]
+            - generic [ref=e1834]:
+              - generic [ref=e1835]:
+                - generic [ref=e1836]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1837]': Logos
+                - generic [ref=e1838]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1839] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1840]:
+          - article "Variación de Nimbus" [ref=e1841]:
+            - generic [ref=e1842]:
+              - generic "Seleccionar" [ref=e1843] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1844]
+              - button "Ver detalle de Nimbus" [ref=e1845]:
+                - img "Vista previa de variación de Nimbus" [ref=e1846]
+            - generic [ref=e1847]:
+              - generic [ref=e1848]:
+                - generic [ref=e1849]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1850]': Logos
+                - generic [ref=e1851]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1852] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1853]:
+          - article "Variación de Nimbus" [ref=e1854]:
+            - generic [ref=e1855]:
+              - generic "Seleccionar" [ref=e1856] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1857]
+              - button "Ver detalle de Nimbus" [ref=e1858]:
+                - img "Vista previa de variación de Nimbus" [ref=e1859]
+            - generic [ref=e1860]:
+              - generic [ref=e1861]:
+                - generic [ref=e1862]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1863]': Logos
+                - generic [ref=e1864]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1865] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1866]:
+          - article "Variación de Nimbus" [ref=e1867]:
+            - generic [ref=e1868]:
+              - generic "Seleccionar" [ref=e1869] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1870]
+              - button "Ver detalle de Nimbus" [ref=e1871]:
+                - img "Vista previa de variación de Nimbus" [ref=e1872]
+            - generic [ref=e1873]:
+              - generic [ref=e1874]:
+                - generic [ref=e1875]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1876]': Logos
+                - generic [ref=e1877]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1878] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1879]:
+          - article "Variación de Nimbus" [ref=e1880]:
+            - generic [ref=e1881]:
+              - generic "Seleccionar" [ref=e1882] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1883]
+              - button "Ver detalle de Nimbus" [ref=e1884]:
+                - img "Vista previa de variación de Nimbus" [ref=e1885]
+            - generic [ref=e1886]:
+              - generic [ref=e1887]:
+                - generic [ref=e1888]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1889]': Logos
+                - generic [ref=e1890]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1891] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1892]:
+          - article "Variación de Nimbus" [ref=e1893]:
+            - generic [ref=e1894]:
+              - generic "Seleccionar" [ref=e1895] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1896]
+              - button "Ver detalle de Nimbus" [ref=e1897]:
+                - img "Vista previa de variación de Nimbus" [ref=e1898]
+            - generic [ref=e1899]:
+              - generic [ref=e1900]:
+                - generic [ref=e1901]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1902]': Logos
+                - generic [ref=e1903]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1904] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1905]:
+          - article "Variación de Nimbus" [ref=e1906]:
+            - generic [ref=e1907]:
+              - generic "Seleccionar" [ref=e1908] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1909]
+              - button "Ver detalle de Nimbus" [ref=e1910]:
+                - img "Vista previa de variación de Nimbus" [ref=e1911]
+            - generic [ref=e1912]:
+              - generic [ref=e1913]:
+                - generic [ref=e1914]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1915]': Logos
+                - generic [ref=e1916]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1917] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1918]:
+          - article "Variación de Nimbus" [ref=e1919]:
+            - generic [ref=e1920]:
+              - generic "Seleccionar" [ref=e1921] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1922]
+              - button "Ver detalle de Nimbus" [ref=e1923]:
+                - img "Vista previa de variación de Nimbus" [ref=e1924]
+            - generic [ref=e1925]:
+              - generic [ref=e1926]:
+                - generic [ref=e1927]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1928]': Logos
+                - generic [ref=e1929]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1930] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1931]:
+          - article "Variación de Nimbus" [ref=e1932]:
+            - generic [ref=e1933]:
+              - generic "Seleccionar" [ref=e1934] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1935]
+              - button "Ver detalle de Nimbus" [ref=e1936]:
+                - img "Vista previa de variación de Nimbus" [ref=e1937]
+            - generic [ref=e1938]:
+              - generic [ref=e1939]:
+                - generic [ref=e1940]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1941]': Logos
+                - generic [ref=e1942]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1943] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1944]:
+          - article "Variación de Nimbus" [ref=e1945]:
+            - generic [ref=e1946]:
+              - generic "Seleccionar" [ref=e1947] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1948]
+              - button "Ver detalle de Nimbus" [ref=e1949]:
+                - img "Vista previa de variación de Nimbus" [ref=e1950]
+            - generic [ref=e1951]:
+              - generic [ref=e1952]:
+                - generic [ref=e1953]: Nimbus
+                - 'generic "Familia: Logos" [ref=e1954]': Logos
+                - generic [ref=e1955]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1956] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1957]:
+          - article "Variación de Nimbus" [ref=e1958]:
+            - generic [ref=e1959]:
+              - generic "Seleccionar" [ref=e1960] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1961]
+              - button "Ver detalle de Nimbus" [ref=e1962]:
+                - img "Vista previa de variación de Nimbus" [ref=e1963]
+            - generic [ref=e1964]:
+              - generic [ref=e1965]:
+                - generic [ref=e1966]: Nimbus
+                - 'generic "Familia: Redes / OG" [ref=e1967]': Redes / OG
+                - generic [ref=e1968]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1969] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1970]:
+          - article "Variación de Nimbus" [ref=e1971]:
+            - generic [ref=e1972]:
+              - generic "Seleccionar" [ref=e1973] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e1974]
+              - button "Ver detalle de Nimbus" [ref=e1975]:
+                - img "Vista previa de variación de Nimbus" [ref=e1976]
+            - generic [ref=e1977]:
+              - generic [ref=e1978]:
+                - generic [ref=e1979]: Nimbus
+                - 'generic "Familia: Redes / OG" [ref=e1980]': Redes / OG
+                - generic [ref=e1981]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e1982] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1983]:
+          - article "Variación de Aurora Café" [ref=e1984]:
+            - generic [ref=e1985]:
+              - generic "Seleccionar" [ref=e1986] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e1987]
+              - button "Ver detalle de Aurora Café" [ref=e1988]:
+                - img "Vista previa de variación de Aurora Café" [ref=e1989]
+            - generic [ref=e1990]:
+              - generic [ref=e1991]:
+                - generic [ref=e1992]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e1993]': Logos
+                - generic [ref=e1994]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e1995] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1996]:
+          - article "Variación de Aurora Café" [ref=e1997]:
+            - generic [ref=e1998]:
+              - generic "Seleccionar" [ref=e1999] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2000]
+              - button "Ver detalle de Aurora Café" [ref=e2001]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2002]
+            - generic [ref=e2003]:
+              - generic [ref=e2004]:
+                - generic [ref=e2005]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2006]': Logos
+                - generic [ref=e2007]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2008] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2009]:
+          - article "Variación de Aurora Café" [ref=e2010]:
+            - generic [ref=e2011]:
+              - generic "Seleccionar" [ref=e2012] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2013]
+              - button "Ver detalle de Aurora Café" [ref=e2014]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2015]
+            - generic [ref=e2016]:
+              - generic [ref=e2017]:
+                - generic [ref=e2018]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2019]': Logos
+                - generic [ref=e2020]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2021] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2022]:
+          - article "Variación de Aurora Café" [ref=e2023]:
+            - generic [ref=e2024]:
+              - generic "Seleccionar" [ref=e2025] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2026]
+              - button "Ver detalle de Aurora Café" [ref=e2027]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2028]
+            - generic [ref=e2029]:
+              - generic [ref=e2030]:
+                - generic [ref=e2031]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2032]': Logos
+                - generic [ref=e2033]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2034] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2035]:
+          - article "Variación de Aurora Café" [ref=e2036]:
+            - generic [ref=e2037]:
+              - generic "Seleccionar" [ref=e2038] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2039]
+              - button "Ver detalle de Aurora Café" [ref=e2040]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2041]
+            - generic [ref=e2042]:
+              - generic [ref=e2043]:
+                - generic [ref=e2044]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2045]': Logos
+                - generic [ref=e2046]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2047] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2048]:
+          - article "Variación de Aurora Café" [ref=e2049]:
+            - generic [ref=e2050]:
+              - generic "Seleccionar" [ref=e2051] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2052]
+              - button "Ver detalle de Aurora Café" [ref=e2053]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2054]
+            - generic [ref=e2055]:
+              - generic [ref=e2056]:
+                - generic [ref=e2057]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2058]': Logos
+                - generic [ref=e2059]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2060] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2061]:
+          - article "Variación de Aurora Café" [ref=e2062]:
+            - generic [ref=e2063]:
+              - generic "Seleccionar" [ref=e2064] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2065]
+              - button "Ver detalle de Aurora Café" [ref=e2066]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2067]
+            - generic [ref=e2068]:
+              - generic [ref=e2069]:
+                - generic [ref=e2070]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2071]': Logos
+                - generic [ref=e2072]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2073] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2074]:
+          - article "Variación de Aurora Café" [ref=e2075]:
+            - generic [ref=e2076]:
+              - generic "Seleccionar" [ref=e2077] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2078]
+              - button "Ver detalle de Aurora Café" [ref=e2079]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2080]
+            - generic [ref=e2081]:
+              - generic [ref=e2082]:
+                - generic [ref=e2083]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2084]': Logos
+                - generic [ref=e2085]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2086] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2087]:
+          - article "Variación de Aurora Café" [ref=e2088]:
+            - generic [ref=e2089]:
+              - generic "Seleccionar" [ref=e2090] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2091]
+              - button "Ver detalle de Aurora Café" [ref=e2092]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2093]
+            - generic [ref=e2094]:
+              - generic [ref=e2095]:
+                - generic [ref=e2096]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2097]': Logos
+                - generic [ref=e2098]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2099] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2100]:
+          - article "Variación de Aurora Café" [ref=e2101]:
+            - generic [ref=e2102]:
+              - generic "Seleccionar" [ref=e2103] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2104]
+              - button "Ver detalle de Aurora Café" [ref=e2105]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2106]
+            - generic [ref=e2107]:
+              - generic [ref=e2108]:
+                - generic [ref=e2109]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2110]': Logos
+                - generic [ref=e2111]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2112] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2113]:
+          - article "Variación de Aurora Café" [ref=e2114]:
+            - generic [ref=e2115]:
+              - generic "Seleccionar" [ref=e2116] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2117]
+              - button "Ver detalle de Aurora Café" [ref=e2118]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2119]
+            - generic [ref=e2120]:
+              - generic [ref=e2121]:
+                - generic [ref=e2122]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2123]': Logos
+                - generic [ref=e2124]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2125] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2126]:
+          - article "Variación de Aurora Café" [ref=e2127]:
+            - generic [ref=e2128]:
+              - generic "Seleccionar" [ref=e2129] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2130]
+              - button "Ver detalle de Aurora Café" [ref=e2131]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2132]
+            - generic [ref=e2133]:
+              - generic [ref=e2134]:
+                - generic [ref=e2135]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2136]': Logos
+                - generic [ref=e2137]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2138] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2139]:
+          - article "Variación de Aurora Café" [ref=e2140]:
+            - generic [ref=e2141]:
+              - generic "Seleccionar" [ref=e2142] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2143]
+              - button "Ver detalle de Aurora Café" [ref=e2144]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2145]
+            - generic [ref=e2146]:
+              - generic [ref=e2147]:
+                - generic [ref=e2148]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2149]': Logos
+                - generic [ref=e2150]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2151] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2152]:
+          - article "Variación de Aurora Café" [ref=e2153]:
+            - generic [ref=e2154]:
+              - generic "Seleccionar" [ref=e2155] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2156]
+              - button "Ver detalle de Aurora Café" [ref=e2157]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2158]
+            - generic [ref=e2159]:
+              - generic [ref=e2160]:
+                - generic [ref=e2161]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2162]': Logos
+                - generic [ref=e2163]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2164] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2165]:
+          - article "Variación de Aurora Café" [ref=e2166]:
+            - generic [ref=e2167]:
+              - generic "Seleccionar" [ref=e2168] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2169]
+              - button "Ver detalle de Aurora Café" [ref=e2170]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2171]
+            - generic [ref=e2172]:
+              - generic [ref=e2173]:
+                - generic [ref=e2174]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2175]': Logos
+                - generic [ref=e2176]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2177] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2178]:
+          - article "Variación de Aurora Café" [ref=e2179]:
+            - generic [ref=e2180]:
+              - generic "Seleccionar" [ref=e2181] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2182]
+              - button "Ver detalle de Aurora Café" [ref=e2183]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2184]
+            - generic [ref=e2185]:
+              - generic [ref=e2186]:
+                - generic [ref=e2187]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2188]': Logos
+                - generic [ref=e2189]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2190] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2191]:
+          - article "Variación de Aurora Café" [ref=e2192]:
+            - generic [ref=e2193]:
+              - generic "Seleccionar" [ref=e2194] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2195]
+              - button "Ver detalle de Aurora Café" [ref=e2196]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2197]
+            - generic [ref=e2198]:
+              - generic [ref=e2199]:
+                - generic [ref=e2200]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2201]': Logos
+                - generic [ref=e2202]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2203] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2204]:
+          - article "Variación de Aurora Café" [ref=e2205]:
+            - generic [ref=e2206]:
+              - generic "Seleccionar" [ref=e2207] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2208]
+              - button "Ver detalle de Aurora Café" [ref=e2209]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2210]
+            - generic [ref=e2211]:
+              - generic [ref=e2212]:
+                - generic [ref=e2213]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2214]': Logos
+                - generic [ref=e2215]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2216] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2217]:
+          - article "Variación de Aurora Café" [ref=e2218]:
+            - generic [ref=e2219]:
+              - generic "Seleccionar" [ref=e2220] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2221]
+              - button "Ver detalle de Aurora Café" [ref=e2222]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2223]
+            - generic [ref=e2224]:
+              - generic [ref=e2225]:
+                - generic [ref=e2226]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2227]': Logos
+                - generic [ref=e2228]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2229] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2230]:
+          - article "Variación de Aurora Café" [ref=e2231]:
+            - generic [ref=e2232]:
+              - generic "Seleccionar" [ref=e2233] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2234]
+              - button "Ver detalle de Aurora Café" [ref=e2235]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2236]
+            - generic [ref=e2237]:
+              - generic [ref=e2238]:
+                - generic [ref=e2239]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2240]': Logos
+                - generic [ref=e2241]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2242] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2243]:
+          - article "Variación de Aurora Café" [ref=e2244]:
+            - generic [ref=e2245]:
+              - generic "Seleccionar" [ref=e2246] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2247]
+              - button "Ver detalle de Aurora Café" [ref=e2248]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2249]
+            - generic [ref=e2250]:
+              - generic [ref=e2251]:
+                - generic [ref=e2252]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2253]': Logos
+                - generic [ref=e2254]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2255] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2256]:
+          - article "Variación de Aurora Café" [ref=e2257]:
+            - generic [ref=e2258]:
+              - generic "Seleccionar" [ref=e2259] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2260]
+              - button "Ver detalle de Aurora Café" [ref=e2261]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2262]
+            - generic [ref=e2263]:
+              - generic [ref=e2264]:
+                - generic [ref=e2265]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2266]': Logos
+                - generic [ref=e2267]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2268] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2269]:
+          - article "Variación de Aurora Café" [ref=e2270]:
+            - generic [ref=e2271]:
+              - generic "Seleccionar" [ref=e2272] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2273]
+              - button "Ver detalle de Aurora Café" [ref=e2274]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2275]
+            - generic [ref=e2276]:
+              - generic [ref=e2277]:
+                - generic [ref=e2278]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e2279]': Logos
+                - generic [ref=e2280]: Recomendado
+              - button "Descargar variación de Aurora Café" [ref=e2281] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2282]:
+          - article "Variación de Nimbus" [ref=e2283]:
+            - generic [ref=e2284]:
+              - generic "Seleccionar" [ref=e2285] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e2286]
+              - button "Ver detalle de Nimbus" [ref=e2287]:
+                - img "Vista previa de variación de Nimbus" [ref=e2288]
+            - generic [ref=e2289]:
+              - generic [ref=e2290]:
+                - generic [ref=e2291]: Nimbus
+                - 'generic "Familia: Logos" [ref=e2292]': Logos
+                - generic [ref=e2293]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e2294] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2295]:
+          - article "Variación de Nimbus" [ref=e2296]:
+            - generic [ref=e2297]:
+              - generic "Seleccionar" [ref=e2298] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e2299]
+              - button "Ver detalle de Nimbus" [ref=e2300]:
+                - img "Vista previa de variación de Nimbus" [ref=e2301]
+            - generic [ref=e2302]:
+              - generic [ref=e2303]:
+                - generic [ref=e2304]: Nimbus
+                - 'generic "Familia: Logos" [ref=e2305]': Logos
+                - generic [ref=e2306]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e2307] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2308]:
+          - article "Variación de Nimbus" [ref=e2309]:
+            - generic [ref=e2310]:
+              - generic "Seleccionar" [ref=e2311] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e2312]
+              - button "Ver detalle de Nimbus" [ref=e2313]:
+                - img "Vista previa de variación de Nimbus" [ref=e2314]
+            - generic [ref=e2315]:
+              - generic [ref=e2316]:
+                - generic [ref=e2317]: Nimbus
+                - 'generic "Familia: Logos" [ref=e2318]': Logos
+                - generic [ref=e2319]: Recomendado
+              - button "Descargar variación de Nimbus" [ref=e2320] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2321]:
+          - article "Variación de Aurora Café" [ref=e2322]:
+            - generic [ref=e2323]:
+              - generic "Seleccionar" [ref=e2324] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2325]
+              - button "Ver detalle de Aurora Café" [ref=e2326]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2327]
+            - generic [ref=e2328]:
+              - generic [ref=e2329]:
+                - generic [ref=e2330]: Aurora Café
+                - 'generic "Familia: Banners" [ref=e2331]': Banners
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2332]':
+                  - generic [ref=e2333]: ★
+                  - generic [ref=e2334]: ★
+                  - generic [ref=e2335]: ★
+                  - generic [ref=e2336]: ★
+                  - generic [ref=e2337]: ★
+              - button "Descargar variación de Aurora Café" [ref=e2338] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2339]:
+          - article "Variación de Aurora Café" [ref=e2340]:
+            - generic [ref=e2341]:
+              - generic "Seleccionar" [ref=e2342] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2343]
+              - button "Ver detalle de Aurora Café" [ref=e2344]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2345]
+            - generic [ref=e2346]:
+              - generic [ref=e2347]:
+                - generic [ref=e2348]: Aurora Café
+                - 'generic "Familia: Banners" [ref=e2349]': Banners
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2350]':
+                  - generic [ref=e2351]: ★
+                  - generic [ref=e2352]: ★
+                  - generic [ref=e2353]: ★
+                  - generic [ref=e2354]: ★
+                  - generic [ref=e2355]: ★
+              - button "Descargar variación de Aurora Café" [ref=e2356] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2357]:
+          - article "Variación de Nimbus" [ref=e2358]:
+            - generic [ref=e2359]:
+              - generic "Seleccionar" [ref=e2360] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e2361]
+              - button "Ver detalle de Nimbus" [ref=e2362]:
+                - img "Vista previa de variación de Nimbus" [ref=e2363]
+            - generic [ref=e2364]:
+              - generic [ref=e2365]:
+                - generic [ref=e2366]: Nimbus
+                - 'generic "Familia: Banners" [ref=e2367]': Banners
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2368]':
+                  - generic [ref=e2369]: ★
+                  - generic [ref=e2370]: ★
+                  - generic [ref=e2371]: ★
+                  - generic [ref=e2372]: ★
+                  - generic [ref=e2373]: ★
+              - button "Descargar variación de Nimbus" [ref=e2374] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2375]:
+          - article "Variación de Nimbus" [ref=e2376]:
+            - generic [ref=e2377]:
+              - generic "Seleccionar" [ref=e2378] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e2379]
+              - button "Ver detalle de Nimbus" [ref=e2380]:
+                - img "Vista previa de variación de Nimbus" [ref=e2381]
+            - generic [ref=e2382]:
+              - generic [ref=e2383]:
+                - generic [ref=e2384]: Nimbus
+                - 'generic "Familia: Banners" [ref=e2385]': Banners
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2386]':
+                  - generic [ref=e2387]: ★
+                  - generic [ref=e2388]: ★
+                  - generic [ref=e2389]: ★
+                  - generic [ref=e2390]: ★
+                  - generic [ref=e2391]: ★
+              - button "Descargar variación de Nimbus" [ref=e2392] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2393]:
+          - article "Variación de Aurora Café" [ref=e2394]:
+            - generic [ref=e2395]:
+              - generic "Seleccionar" [ref=e2396] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2397]
+              - button "Ver detalle de Aurora Café" [ref=e2398]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2399]
+            - generic [ref=e2400]:
+              - generic [ref=e2401]:
+                - generic [ref=e2402]: Aurora Café
+                - 'generic "Familia: Redes / OG" [ref=e2403]': Redes / OG
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2404]':
+                  - generic [ref=e2405]: ★
+                  - generic [ref=e2406]: ★
+                  - generic [ref=e2407]: ★
+                  - generic [ref=e2408]: ★
+                  - generic [ref=e2409]: ★
+              - button "Descargar variación de Aurora Café" [ref=e2410] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2411]:
+          - article "Variación de Aurora Café" [ref=e2412]:
+            - generic [ref=e2413]:
+              - generic "Seleccionar" [ref=e2414] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2415]
+              - button "Ver detalle de Aurora Café" [ref=e2416]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2417]
+            - generic [ref=e2418]:
+              - generic [ref=e2419]:
+                - generic [ref=e2420]: Aurora Café
+                - 'generic "Familia: Redes / OG" [ref=e2421]': Redes / OG
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2422]':
+                  - generic [ref=e2423]: ★
+                  - generic [ref=e2424]: ★
+                  - generic [ref=e2425]: ★
+                  - generic [ref=e2426]: ★
+                  - generic [ref=e2427]: ★
+              - button "Descargar variación de Aurora Café" [ref=e2428] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2429]:
+          - article "Variación de Atelier Mora" [ref=e2430]:
+            - generic [ref=e2431]:
+              - generic "Seleccionar" [ref=e2432] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2433]
+              - button "Ver detalle de Atelier Mora" [ref=e2434]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2435]
+            - generic [ref=e2436]:
+              - generic [ref=e2437]:
+                - generic [ref=e2438]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2439]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2440]':
+                  - generic [ref=e2441]: ★
+                  - generic [ref=e2442]: ★
+                  - generic [ref=e2443]: ★
+                  - generic [ref=e2444]: ★
+                  - generic [ref=e2445]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2446] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2447]:
+          - article "Variación de Atelier Mora" [ref=e2448]:
+            - generic [ref=e2449]:
+              - generic "Seleccionar" [ref=e2450] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2451]
+              - button "Ver detalle de Atelier Mora" [ref=e2452]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2453]
+            - generic [ref=e2454]:
+              - generic [ref=e2455]:
+                - generic [ref=e2456]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2457]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2458]':
+                  - generic [ref=e2459]: ★
+                  - generic [ref=e2460]: ★
+                  - generic [ref=e2461]: ★
+                  - generic [ref=e2462]: ★
+                  - generic [ref=e2463]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2464] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2465]:
+          - article "Variación de Atelier Mora" [ref=e2466]:
+            - generic [ref=e2467]:
+              - generic "Seleccionar" [ref=e2468] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2469]
+              - button "Ver detalle de Atelier Mora" [ref=e2470]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2471]
+            - generic [ref=e2472]:
+              - generic [ref=e2473]:
+                - generic [ref=e2474]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2475]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2476]':
+                  - generic [ref=e2477]: ★
+                  - generic [ref=e2478]: ★
+                  - generic [ref=e2479]: ★
+                  - generic [ref=e2480]: ★
+                  - generic [ref=e2481]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2482] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2483]:
+          - article "Variación de Atelier Mora" [ref=e2484]:
+            - generic [ref=e2485]:
+              - generic "Seleccionar" [ref=e2486] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2487]
+              - button "Ver detalle de Atelier Mora" [ref=e2488]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2489]
+            - generic [ref=e2490]:
+              - generic [ref=e2491]:
+                - generic [ref=e2492]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2493]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2494]':
+                  - generic [ref=e2495]: ★
+                  - generic [ref=e2496]: ★
+                  - generic [ref=e2497]: ★
+                  - generic [ref=e2498]: ★
+                  - generic [ref=e2499]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2500] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2501]:
+          - article "Variación de Atelier Mora" [ref=e2502]:
+            - generic [ref=e2503]:
+              - generic "Seleccionar" [ref=e2504] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2505]
+              - button "Ver detalle de Atelier Mora" [ref=e2506]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2507]
+            - generic [ref=e2508]:
+              - generic [ref=e2509]:
+                - generic [ref=e2510]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2511]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2512]':
+                  - generic [ref=e2513]: ★
+                  - generic [ref=e2514]: ★
+                  - generic [ref=e2515]: ★
+                  - generic [ref=e2516]: ★
+                  - generic [ref=e2517]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2518] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2519]:
+          - article "Variación de Atelier Mora" [ref=e2520]:
+            - generic [ref=e2521]:
+              - generic "Seleccionar" [ref=e2522] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2523]
+              - button "Ver detalle de Atelier Mora" [ref=e2524]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2525]
+            - generic [ref=e2526]:
+              - generic [ref=e2527]:
+                - generic [ref=e2528]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2529]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2530]':
+                  - generic [ref=e2531]: ★
+                  - generic [ref=e2532]: ★
+                  - generic [ref=e2533]: ★
+                  - generic [ref=e2534]: ★
+                  - generic [ref=e2535]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2536] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2537]:
+          - article "Variación de Atelier Mora" [ref=e2538]:
+            - generic [ref=e2539]:
+              - generic "Seleccionar" [ref=e2540] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2541]
+              - button "Ver detalle de Atelier Mora" [ref=e2542]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2543]
+            - generic [ref=e2544]:
+              - generic [ref=e2545]:
+                - generic [ref=e2546]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2547]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2548]':
+                  - generic [ref=e2549]: ★
+                  - generic [ref=e2550]: ★
+                  - generic [ref=e2551]: ★
+                  - generic [ref=e2552]: ★
+                  - generic [ref=e2553]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2554] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2555]:
+          - article "Variación de Atelier Mora" [ref=e2556]:
+            - generic [ref=e2557]:
+              - generic "Seleccionar" [ref=e2558] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2559]
+              - button "Ver detalle de Atelier Mora" [ref=e2560]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2561]
+            - generic [ref=e2562]:
+              - generic [ref=e2563]:
+                - generic [ref=e2564]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2565]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2566]':
+                  - generic [ref=e2567]: ★
+                  - generic [ref=e2568]: ★
+                  - generic [ref=e2569]: ★
+                  - generic [ref=e2570]: ★
+                  - generic [ref=e2571]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2572] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2573]:
+          - article "Variación de Atelier Mora" [ref=e2574]:
+            - generic [ref=e2575]:
+              - generic "Seleccionar" [ref=e2576] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2577]
+              - button "Ver detalle de Atelier Mora" [ref=e2578]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2579]
+            - generic [ref=e2580]:
+              - generic [ref=e2581]:
+                - generic [ref=e2582]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2583]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2584]':
+                  - generic [ref=e2585]: ★
+                  - generic [ref=e2586]: ★
+                  - generic [ref=e2587]: ★
+                  - generic [ref=e2588]: ★
+                  - generic [ref=e2589]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2590] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2591]:
+          - article "Variación de Atelier Mora" [ref=e2592]:
+            - generic [ref=e2593]:
+              - generic "Seleccionar" [ref=e2594] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2595]
+              - button "Ver detalle de Atelier Mora" [ref=e2596]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2597]
+            - generic [ref=e2598]:
+              - generic [ref=e2599]:
+                - generic [ref=e2600]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2601]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2602]':
+                  - generic [ref=e2603]: ★
+                  - generic [ref=e2604]: ★
+                  - generic [ref=e2605]: ★
+                  - generic [ref=e2606]: ★
+                  - generic [ref=e2607]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2608] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2609]:
+          - article "Variación de Atelier Mora" [ref=e2610]:
+            - generic [ref=e2611]:
+              - generic "Seleccionar" [ref=e2612] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2613]
+              - button "Ver detalle de Atelier Mora" [ref=e2614]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2615]
+            - generic [ref=e2616]:
+              - generic [ref=e2617]:
+                - generic [ref=e2618]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2619]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2620]':
+                  - generic [ref=e2621]: ★
+                  - generic [ref=e2622]: ★
+                  - generic [ref=e2623]: ★
+                  - generic [ref=e2624]: ★
+                  - generic [ref=e2625]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2626] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2627]:
+          - article "Variación de Atelier Mora" [ref=e2628]:
+            - generic [ref=e2629]:
+              - generic "Seleccionar" [ref=e2630] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2631]
+              - button "Ver detalle de Atelier Mora" [ref=e2632]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2633]
+            - generic [ref=e2634]:
+              - generic [ref=e2635]:
+                - generic [ref=e2636]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2637]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2638]':
+                  - generic [ref=e2639]: ★
+                  - generic [ref=e2640]: ★
+                  - generic [ref=e2641]: ★
+                  - generic [ref=e2642]: ★
+                  - generic [ref=e2643]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2644] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2645]:
+          - article "Variación de Atelier Mora" [ref=e2646]:
+            - generic [ref=e2647]:
+              - generic "Seleccionar" [ref=e2648] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2649]
+              - button "Ver detalle de Atelier Mora" [ref=e2650]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2651]
+            - generic [ref=e2652]:
+              - generic [ref=e2653]:
+                - generic [ref=e2654]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2655]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2656]':
+                  - generic [ref=e2657]: ★
+                  - generic [ref=e2658]: ★
+                  - generic [ref=e2659]: ★
+                  - generic [ref=e2660]: ★
+                  - generic [ref=e2661]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2662] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2663]:
+          - article "Variación de Atelier Mora" [ref=e2664]:
+            - generic [ref=e2665]:
+              - generic "Seleccionar" [ref=e2666] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2667]
+              - button "Ver detalle de Atelier Mora" [ref=e2668]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2669]
+            - generic [ref=e2670]:
+              - generic [ref=e2671]:
+                - generic [ref=e2672]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2673]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2674]':
+                  - generic [ref=e2675]: ★
+                  - generic [ref=e2676]: ★
+                  - generic [ref=e2677]: ★
+                  - generic [ref=e2678]: ★
+                  - generic [ref=e2679]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2680] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2681]:
+          - article "Variación de Atelier Mora" [ref=e2682]:
+            - generic [ref=e2683]:
+              - generic "Seleccionar" [ref=e2684] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2685]
+              - button "Ver detalle de Atelier Mora" [ref=e2686]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2687]
+            - generic [ref=e2688]:
+              - generic [ref=e2689]:
+                - generic [ref=e2690]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2691]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2692]':
+                  - generic [ref=e2693]: ★
+                  - generic [ref=e2694]: ★
+                  - generic [ref=e2695]: ★
+                  - generic [ref=e2696]: ★
+                  - generic [ref=e2697]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2698] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2699]:
+          - article "Variación de Atelier Mora" [ref=e2700]:
+            - generic [ref=e2701]:
+              - generic "Seleccionar" [ref=e2702] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2703]
+              - button "Ver detalle de Atelier Mora" [ref=e2704]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2705]
+            - generic [ref=e2706]:
+              - generic [ref=e2707]:
+                - generic [ref=e2708]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2709]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2710]':
+                  - generic [ref=e2711]: ★
+                  - generic [ref=e2712]: ★
+                  - generic [ref=e2713]: ★
+                  - generic [ref=e2714]: ★
+                  - generic [ref=e2715]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2716] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2717]:
+          - article "Variación de Atelier Mora" [ref=e2718]:
+            - generic [ref=e2719]:
+              - generic "Seleccionar" [ref=e2720] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2721]
+              - button "Ver detalle de Atelier Mora" [ref=e2722]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2723]
+            - generic [ref=e2724]:
+              - generic [ref=e2725]:
+                - generic [ref=e2726]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2727]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2728]':
+                  - generic [ref=e2729]: ★
+                  - generic [ref=e2730]: ★
+                  - generic [ref=e2731]: ★
+                  - generic [ref=e2732]: ★
+                  - generic [ref=e2733]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2734] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2735]:
+          - article "Variación de Atelier Mora" [ref=e2736]:
+            - generic [ref=e2737]:
+              - generic "Seleccionar" [ref=e2738] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2739]
+              - button "Ver detalle de Atelier Mora" [ref=e2740]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2741]
+            - generic [ref=e2742]:
+              - generic [ref=e2743]:
+                - generic [ref=e2744]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2745]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2746]':
+                  - generic [ref=e2747]: ★
+                  - generic [ref=e2748]: ★
+                  - generic [ref=e2749]: ★
+                  - generic [ref=e2750]: ★
+                  - generic [ref=e2751]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2752] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2753]:
+          - article "Variación de Atelier Mora" [ref=e2754]:
+            - generic [ref=e2755]:
+              - generic "Seleccionar" [ref=e2756] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2757]
+              - button "Ver detalle de Atelier Mora" [ref=e2758]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2759]
+            - generic [ref=e2760]:
+              - generic [ref=e2761]:
+                - generic [ref=e2762]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2763]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2764]':
+                  - generic [ref=e2765]: ★
+                  - generic [ref=e2766]: ★
+                  - generic [ref=e2767]: ★
+                  - generic [ref=e2768]: ★
+                  - generic [ref=e2769]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2770] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2771]:
+          - article "Variación de Atelier Mora" [ref=e2772]:
+            - generic [ref=e2773]:
+              - generic "Seleccionar" [ref=e2774] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Atelier Mora" [ref=e2775]
+              - button "Ver detalle de Atelier Mora" [ref=e2776]:
+                - img "Vista previa de variación de Atelier Mora" [ref=e2777]
+            - generic [ref=e2778]:
+              - generic [ref=e2779]:
+                - generic [ref=e2780]: Atelier Mora
+                - 'generic "Familia: Logos" [ref=e2781]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2782]':
+                  - generic [ref=e2783]: ★
+                  - generic [ref=e2784]: ★
+                  - generic [ref=e2785]: ★
+                  - generic [ref=e2786]: ★
+                  - generic [ref=e2787]: ★
+              - button "Descargar variación de Atelier Mora" [ref=e2788] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2789]:
+          - article "Variación de Aurora Café" [ref=e2790]:
+            - generic [ref=e2791]:
+              - generic "Seleccionar" [ref=e2792] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2793]
+              - button "Ver detalle de Aurora Café" [ref=e2794]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2795]
+            - generic [ref=e2796]:
+              - generic [ref=e2797]:
+                - generic [ref=e2798]: Aurora Café
+                - 'generic "Familia: Banners" [ref=e2799]': Banners
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2800]':
+                  - generic [ref=e2801]: ★
+                  - generic [ref=e2802]: ★
+                  - generic [ref=e2803]: ★
+                  - generic [ref=e2804]: ★
+                  - generic [ref=e2805]: ★
+              - button "Descargar variación de Aurora Café" [ref=e2806] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2807]:
+          - article "Variación de Aurora Café" [ref=e2808]:
+            - generic [ref=e2809]:
+              - generic "Seleccionar" [ref=e2810] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2811]
+              - button "Ver detalle de Aurora Café" [ref=e2812]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2813]
+            - generic [ref=e2814]:
+              - generic [ref=e2815]:
+                - generic [ref=e2816]: Aurora Café
+                - 'generic "Familia: Banners" [ref=e2817]': Banners
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2818]':
+                  - generic [ref=e2819]: ★
+                  - generic [ref=e2820]: ★
+                  - generic [ref=e2821]: ★
+                  - generic [ref=e2822]: ★
+                  - generic [ref=e2823]: ★
+              - button "Descargar variación de Aurora Café" [ref=e2824] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2825]:
+          - article "Variación de Aurora Café" [ref=e2826]:
+            - generic [ref=e2827]:
+              - generic "Seleccionar" [ref=e2828] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2829]
+              - button "Ver detalle de Aurora Café" [ref=e2830]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2831]
+            - generic [ref=e2832]:
+              - generic [ref=e2833]:
+                - generic [ref=e2834]: Aurora Café
+                - 'generic "Familia: Banners" [ref=e2835]': Banners
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2836]':
+                  - generic [ref=e2837]: ★
+                  - generic [ref=e2838]: ★
+                  - generic [ref=e2839]: ★
+                  - generic [ref=e2840]: ★
+                  - generic [ref=e2841]: ★
+              - button "Descargar variación de Aurora Café" [ref=e2842] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2843]:
+          - article "Variación de Nimbus" [ref=e2844]:
+            - generic [ref=e2845]:
+              - generic "Seleccionar" [ref=e2846] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e2847]
+              - button "Ver detalle de Nimbus" [ref=e2848]:
+                - img "Vista previa de variación de Nimbus" [ref=e2849]
+            - generic [ref=e2850]:
+              - generic [ref=e2851]:
+                - generic [ref=e2852]: Nimbus
+                - 'generic "Familia: Banners" [ref=e2853]': Banners
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2854]':
+                  - generic [ref=e2855]: ★
+                  - generic [ref=e2856]: ★
+                  - generic [ref=e2857]: ★
+                  - generic [ref=e2858]: ★
+                  - generic [ref=e2859]: ★
+              - button "Descargar variación de Nimbus" [ref=e2860] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2861]:
+          - article "Variación de Nimbus" [ref=e2862]:
+            - generic [ref=e2863]:
+              - generic "Seleccionar" [ref=e2864] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e2865]
+              - button "Ver detalle de Nimbus" [ref=e2866]:
+                - img "Vista previa de variación de Nimbus" [ref=e2867]
+            - generic [ref=e2868]:
+              - generic [ref=e2869]:
+                - generic [ref=e2870]: Nimbus
+                - 'generic "Familia: Banners" [ref=e2871]': Banners
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2872]':
+                  - generic [ref=e2873]: ★
+                  - generic [ref=e2874]: ★
+                  - generic [ref=e2875]: ★
+                  - generic [ref=e2876]: ★
+                  - generic [ref=e2877]: ★
+              - button "Descargar variación de Nimbus" [ref=e2878] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2879]:
+          - article "Variación de Nimbus" [ref=e2880]:
+            - generic [ref=e2881]:
+              - generic "Seleccionar" [ref=e2882] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e2883]
+              - button "Ver detalle de Nimbus" [ref=e2884]:
+                - img "Vista previa de variación de Nimbus" [ref=e2885]
+            - generic [ref=e2886]:
+              - generic [ref=e2887]:
+                - generic [ref=e2888]: Nimbus
+                - 'generic "Familia: Banners" [ref=e2889]': Banners
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e2890]':
+                  - generic [ref=e2891]: ★
+                  - generic [ref=e2892]: ★
+                  - generic [ref=e2893]: ★
+                  - generic [ref=e2894]: ★
+                  - generic [ref=e2895]: ★
+              - button "Descargar variación de Nimbus" [ref=e2896] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2897]:
+          - article "Variación de Aurora Café" [ref=e2898]:
+            - generic [ref=e2899]:
+              - generic "Seleccionar" [ref=e2900] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2901]
+              - button "Ver detalle de Aurora Café" [ref=e2902]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2903]
+            - generic [ref=e2904]:
+              - generic [ref=e2905]:
+                - generic [ref=e2906]: Aurora Café
+                - 'generic "Familia: Banners" [ref=e2907]': Banners
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e2908]':
+                  - generic [ref=e2909]: ★
+                  - generic [ref=e2910]: ★
+                  - generic [ref=e2911]: ★
+                  - generic [ref=e2912]: ★
+                  - generic [ref=e2913]: ★
+              - button "Descargar variación de Aurora Café" [ref=e2914] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2915]:
+          - article "Variación de Aurora Café" [ref=e2916]:
+            - generic [ref=e2917]:
+              - generic "Seleccionar" [ref=e2918] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2919]
+              - button "Ver detalle de Aurora Café" [ref=e2920]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2921]
+            - generic [ref=e2922]:
+              - generic [ref=e2923]:
+                - generic [ref=e2924]: Aurora Café
+                - 'generic "Familia: Banners" [ref=e2925]': Banners
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e2926]':
+                  - generic [ref=e2927]: ★
+                  - generic [ref=e2928]: ★
+                  - generic [ref=e2929]: ★
+                  - generic [ref=e2930]: ★
+                  - generic [ref=e2931]: ★
+              - button "Descargar variación de Aurora Café" [ref=e2932] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2933]:
+          - article "Variación de Aurora Café" [ref=e2934]:
+            - generic [ref=e2935]:
+              - generic "Seleccionar" [ref=e2936] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e2937]
+              - button "Ver detalle de Aurora Café" [ref=e2938]:
+                - img "Vista previa de variación de Aurora Café" [ref=e2939]
+            - generic [ref=e2940]:
+              - generic [ref=e2941]:
+                - generic [ref=e2942]: Aurora Café
+                - 'generic "Familia: Banners" [ref=e2943]': Banners
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e2944]':
+                  - generic [ref=e2945]: ★
+                  - generic [ref=e2946]: ★
+                  - generic [ref=e2947]: ★
+                  - generic [ref=e2948]: ★
+                  - generic [ref=e2949]: ★
+              - button "Descargar variación de Aurora Café" [ref=e2950] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2951]:
+          - article "Variación de Nimbus" [ref=e2952]:
+            - generic [ref=e2953]:
+              - generic "Seleccionar" [ref=e2954] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e2955]
+              - button "Ver detalle de Nimbus" [ref=e2956]:
+                - img "Vista previa de variación de Nimbus" [ref=e2957]
+            - generic [ref=e2958]:
+              - generic [ref=e2959]:
+                - generic [ref=e2960]: Nimbus
+                - 'generic "Familia: Banners" [ref=e2961]': Banners
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e2962]':
+                  - generic [ref=e2963]: ★
+                  - generic [ref=e2964]: ★
+                  - generic [ref=e2965]: ★
+                  - generic [ref=e2966]: ★
+                  - generic [ref=e2967]: ★
+              - button "Descargar variación de Nimbus" [ref=e2968] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2969]:
+          - article "Variación de Nimbus" [ref=e2970]:
+            - generic [ref=e2971]:
+              - generic "Seleccionar" [ref=e2972] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e2973]
+              - button "Ver detalle de Nimbus" [ref=e2974]:
+                - img "Vista previa de variación de Nimbus" [ref=e2975]
+            - generic [ref=e2976]:
+              - generic [ref=e2977]:
+                - generic [ref=e2978]: Nimbus
+                - 'generic "Familia: Banners" [ref=e2979]': Banners
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e2980]':
+                  - generic [ref=e2981]: ★
+                  - generic [ref=e2982]: ★
+                  - generic [ref=e2983]: ★
+                  - generic [ref=e2984]: ★
+                  - generic [ref=e2985]: ★
+              - button "Descargar variación de Nimbus" [ref=e2986] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e2987]:
+          - article "Variación de Nimbus" [ref=e2988]:
+            - generic [ref=e2989]:
+              - generic "Seleccionar" [ref=e2990] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e2991]
+              - button "Ver detalle de Nimbus" [ref=e2992]:
+                - img "Vista previa de variación de Nimbus" [ref=e2993]
+            - generic [ref=e2994]:
+              - generic [ref=e2995]:
+                - generic [ref=e2996]: Nimbus
+                - 'generic "Familia: Banners" [ref=e2997]': Banners
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e2998]':
+                  - generic [ref=e2999]: ★
+                  - generic [ref=e3000]: ★
+                  - generic [ref=e3001]: ★
+                  - generic [ref=e3002]: ★
+                  - generic [ref=e3003]: ★
+              - button "Descargar variación de Nimbus" [ref=e3004] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e3005]:
+          - article "Variación de Nimbus" [ref=e3006]:
+            - generic [ref=e3007]:
+              - generic "Seleccionar" [ref=e3008] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e3009]
+              - button "Ver detalle de Nimbus" [ref=e3010]:
+                - img "Vista previa de variación de Nimbus" [ref=e3011]
+            - generic [ref=e3012]:
+              - generic [ref=e3013]:
+                - generic [ref=e3014]: Nimbus
+                - 'generic "Familia: Logos" [ref=e3015]': Logos
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e3016]':
+                  - generic [ref=e3017]: ★
+                  - generic [ref=e3018]: ★
+                  - generic [ref=e3019]: ★
+                  - generic [ref=e3020]: ★
+                  - generic [ref=e3021]: ★
+              - button "Descargar variación de Nimbus" [ref=e3022] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e3023]:
+          - article "Variación de Nimbus" [ref=e3024]:
+            - generic [ref=e3025]:
+              - generic "Seleccionar" [ref=e3026] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e3027]
+              - button "Ver detalle de Nimbus" [ref=e3028]:
+                - img "Vista previa de variación de Nimbus" [ref=e3029]
+            - generic [ref=e3030]:
+              - generic [ref=e3031]:
+                - generic [ref=e3032]: Nimbus
+                - 'generic "Familia: Logos" [ref=e3033]': Logos
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e3034]':
+                  - generic [ref=e3035]: ★
+                  - generic [ref=e3036]: ★
+                  - generic [ref=e3037]: ★
+                  - generic [ref=e3038]: ★
+                  - generic [ref=e3039]: ★
+              - button "Descargar variación de Nimbus" [ref=e3040] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e3041]:
+          - article "Variación de Nimbus" [ref=e3042]:
+            - generic [ref=e3043]:
+              - generic "Seleccionar" [ref=e3044] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e3045]
+              - button "Ver detalle de Nimbus" [ref=e3046]:
+                - img "Vista previa de variación de Nimbus" [ref=e3047]
+            - generic [ref=e3048]:
+              - generic [ref=e3049]:
+                - generic [ref=e3050]: Nimbus
+                - 'generic "Familia: Logos" [ref=e3051]': Logos
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e3052]':
+                  - generic [ref=e3053]: ★
+                  - generic [ref=e3054]: ★
+                  - generic [ref=e3055]: ★
+                  - generic [ref=e3056]: ★
+                  - generic [ref=e3057]: ★
+              - button "Descargar variación de Nimbus" [ref=e3058] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e3059]:
+          - article "Variación de Aurora Café" [ref=e3060]:
+            - generic [ref=e3061]:
+              - generic "Seleccionar" [ref=e3062] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e3063]
+              - button "Ver detalle de Aurora Café" [ref=e3064]:
+                - img "Vista previa de variación de Aurora Café" [ref=e3065]
+            - generic [ref=e3066]:
+              - generic [ref=e3067]:
+                - generic [ref=e3068]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e3069]': Logos
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e3070]':
+                  - generic [ref=e3071]: ★
+                  - generic [ref=e3072]: ★
+                  - generic [ref=e3073]: ★
+                  - generic [ref=e3074]: ★
+                  - generic [ref=e3075]: ★
+              - button "Descargar variación de Aurora Café" [ref=e3076] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e3077]:
+          - article "Variación de Aurora Café" [ref=e3078]:
+            - generic [ref=e3079]:
+              - generic "Seleccionar" [ref=e3080] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e3081]
+              - button "Ver detalle de Aurora Café" [ref=e3082]:
+                - img "Vista previa de variación de Aurora Café" [ref=e3083]
+            - generic [ref=e3084]:
+              - generic [ref=e3085]:
+                - generic [ref=e3086]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e3087]': Logos
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e3088]':
+                  - generic [ref=e3089]: ★
+                  - generic [ref=e3090]: ★
+                  - generic [ref=e3091]: ★
+                  - generic [ref=e3092]: ★
+                  - generic [ref=e3093]: ★
+              - button "Descargar variación de Aurora Café" [ref=e3094] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e3095]:
+          - article "Variación de Aurora Café" [ref=e3096]:
+            - generic [ref=e3097]:
+              - generic "Seleccionar" [ref=e3098] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e3099]
+              - button "Ver detalle de Aurora Café" [ref=e3100]:
+                - img "Vista previa de variación de Aurora Café" [ref=e3101]
+            - generic [ref=e3102]:
+              - generic [ref=e3103]:
+                - generic [ref=e3104]: Aurora Café
+                - 'generic "Familia: Logos" [ref=e3105]': Logos
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e3106]':
+                  - generic [ref=e3107]: ★
+                  - generic [ref=e3108]: ★
+                  - generic [ref=e3109]: ★
+                  - generic [ref=e3110]: ★
+                  - generic [ref=e3111]: ★
+              - button "Descargar variación de Aurora Café" [ref=e3112] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e3113]:
+          - article "Variación de Nimbus" [ref=e3114]:
+            - generic [ref=e3115]:
+              - generic "Seleccionar" [ref=e3116] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e3117]
+              - button "Ver detalle de Nimbus" [ref=e3118]:
+                - img "Vista previa de variación de Nimbus" [ref=e3119]
+            - generic [ref=e3120]:
+              - generic [ref=e3121]:
+                - generic [ref=e3122]: Nimbus
+                - 'generic "Familia: Tarjetas" [ref=e3123]': Tarjetas
+                - 'img "Calidad: 2 de 5 estrellas" [ref=e3124]':
+                  - generic [ref=e3125]: ★
+                  - generic [ref=e3126]: ★
+                  - generic [ref=e3127]: ★
+                  - generic [ref=e3128]: ★
+                  - generic [ref=e3129]: ★
+              - button "Descargar variación de Nimbus" [ref=e3130] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e3131]:
+          - article "Variación de Nimbus" [ref=e3132]:
+            - generic [ref=e3133]:
+              - generic "Seleccionar" [ref=e3134] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e3135]
+              - button "Ver detalle de Nimbus" [ref=e3136]:
+                - img "Vista previa de variación de Nimbus" [ref=e3137]
+            - generic [ref=e3138]:
+              - generic [ref=e3139]:
+                - generic [ref=e3140]: Nimbus
+                - 'generic "Familia: Tarjetas" [ref=e3141]': Tarjetas
+                - 'img "Calidad: 2 de 5 estrellas" [ref=e3142]':
+                  - generic [ref=e3143]: ★
+                  - generic [ref=e3144]: ★
+                  - generic [ref=e3145]: ★
+                  - generic [ref=e3146]: ★
+                  - generic [ref=e3147]: ★
+              - button "Descargar variación de Nimbus" [ref=e3148] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e3149]:
+          - article "Variación de Nimbus" [ref=e3150]:
+            - generic [ref=e3151]:
+              - generic "Seleccionar" [ref=e3152] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Nimbus" [ref=e3153]
+              - button "Ver detalle de Nimbus" [ref=e3154]:
+                - img "Vista previa de variación de Nimbus" [ref=e3155]
+            - generic [ref=e3156]:
+              - generic [ref=e3157]:
+                - generic [ref=e3158]: Nimbus
+                - 'generic "Familia: Tarjetas" [ref=e3159]': Tarjetas
+                - 'img "Calidad: 2 de 5 estrellas" [ref=e3160]':
+                  - generic [ref=e3161]: ★
+                  - generic [ref=e3162]: ★
+                  - generic [ref=e3163]: ★
+                  - generic [ref=e3164]: ★
+                  - generic [ref=e3165]: ★
+              - button "Descargar variación de Nimbus" [ref=e3166] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e3167]:
+          - article "Variación de Aurora Café" [ref=e3168]:
+            - generic [ref=e3169]:
+              - generic "Seleccionar" [ref=e3170] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e3171]
+              - button "Ver detalle de Aurora Café" [ref=e3172]:
+                - img "Vista previa de variación de Aurora Café" [ref=e3173]
+            - generic [ref=e3174]:
+              - generic [ref=e3175]:
+                - generic [ref=e3176]: Aurora Café
+                - 'generic "Familia: Tarjetas" [ref=e3177]': Tarjetas
+                - 'img "Calidad: 2 de 5 estrellas" [ref=e3178]':
+                  - generic [ref=e3179]: ★
+                  - generic [ref=e3180]: ★
+                  - generic [ref=e3181]: ★
+                  - generic [ref=e3182]: ★
+                  - generic [ref=e3183]: ★
+              - button "Descargar variación de Aurora Café" [ref=e3184] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e3185]:
+          - article "Variación de Aurora Café" [ref=e3186]:
+            - generic [ref=e3187]:
+              - generic "Seleccionar" [ref=e3188] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e3189]
+              - button "Ver detalle de Aurora Café" [ref=e3190]:
+                - img "Vista previa de variación de Aurora Café" [ref=e3191]
+            - generic [ref=e3192]:
+              - generic [ref=e3193]:
+                - generic [ref=e3194]: Aurora Café
+                - 'generic "Familia: Tarjetas" [ref=e3195]': Tarjetas
+                - 'img "Calidad: 2 de 5 estrellas" [ref=e3196]':
+                  - generic [ref=e3197]: ★
+                  - generic [ref=e3198]: ★
+                  - generic [ref=e3199]: ★
+                  - generic [ref=e3200]: ★
+                  - generic [ref=e3201]: ★
+              - button "Descargar variación de Aurora Café" [ref=e3202] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e3203]:
+          - article "Variación de Aurora Café" [ref=e3204]:
+            - generic [ref=e3205]:
+              - generic "Seleccionar" [ref=e3206] [cursor=pointer]:
+                - checkbox "Seleccionar variación de Aurora Café" [ref=e3207]
+              - button "Ver detalle de Aurora Café" [ref=e3208]:
+                - img "Vista previa de variación de Aurora Café" [ref=e3209]
+            - generic [ref=e3210]:
+              - generic [ref=e3211]:
+                - generic [ref=e3212]: Aurora Café
+                - 'generic "Familia: Tarjetas" [ref=e3213]': Tarjetas
+                - 'img "Calidad: 2 de 5 estrellas" [ref=e3214]':
+                  - generic [ref=e3215]: ★
+                  - generic [ref=e3216]: ★
+                  - generic [ref=e3217]: ★
+                  - generic [ref=e3218]: ★
+                  - generic [ref=e3219]: ★
+              - button "Descargar variación de Aurora Café" [ref=e3220] [cursor=pointer]: ↓ Descargar

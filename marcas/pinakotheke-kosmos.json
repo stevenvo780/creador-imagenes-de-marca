@@ -3,203 +3,116 @@
   "nombre_producto": "Kósmos",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Simulación del orden natural",
-  "url": "https://kosmos.stevenvallejo.com",
+  "url": "kosmos.stevenvallejo.com",
   "tono": "científico, sistémico, visual",
   "simbolo": "⬡",
   "frente": "ciencias",
-
   "paleta": {
-    "bg":           "#0b1417",
-    "primario":     "#0b1417",
-    "acento":       "#43b5a6",
-    "acento_2":     "#8d7cc0",
-    "acento_3":     "#A3E4D7",
-    "texto":        "#e8e0d4",
-    "texto_muted":  "#8fa3a8",
-    "surface":      "#131e22"
+    "bg": "#0b1417",
+    "primario": "#0b1417",
+    "acento": "#43b5a6",
+    "acento_2": "#8d7cc0",
+    "acento_3": "#A3E4D7",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#131e22"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #43b5a6 0%, #8d7cc0 60%, #4a3a80 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 30% 40%, #131e22 0%, #0b1417 70%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 30% 40%, #131e22 0%, #0b1417 70%)",
   "tipografia": {
     "titulos": "Inter",
-    "cuerpo":  "Inter"
+    "cuerpo": "Inter"
   },
-
   "logo_texto": "Kósmos",
   "logo_simbolo": "⬡",
-
   "textos": {
-    "linkedin_post": {
-      "titulo":    "16 repos. 22 simulaciones. Un catálogo.",
-      "subtitulo": "Kósmos · Pinakothḗke · Ciencias de la complejidad",
-      "copy":      "Sistemas complejos, emergencia y filosofía de la ciencia reunidos en un solo catálogo educativo SSG. Cada página es una simulación ejecutable."
-    },
-    "linkedin_header": {
-      "titulo":    "Kósmos — Catálogo de simulación científica",
-      "subtitulo": "Pinakothḗke",
-      "copy":      "16 repos · 22 simulaciones · Sistemas complejos, emergencia y autoorganización"
-    },
-    "twitter_header": {
-      "titulo":    "Kósmos · Simulación científica",
-      "subtitulo": "Pinakothḗke",
-      "copy":      "16 repos · 22 simulaciones · Sistemas complejos"
-    },
-    "youtube_header": {
-      "titulo":    "Kósmos — Catálogo de simulación científica",
-      "copy":      "Sistemas complejos · Emergencia · Filosofía de la ciencia · Pinakothḗke"
-    },
-    "web_hero_desktop": {
-      "titulo":    "Kósmos",
-      "copy":      "Catálogo de simulación científica · Pinakothḗke"
-    },
     "ig_post": {
-      "titulo":    "⬡",
-      "subtitulo": "Kósmos · Sistemas complejos",
-      "copy":      "Emergencia, caos y autoorganización. Catálogo de simulación científica."
+      "titulo": "Caos que se organiza",
+      "subtitulo": "Cuando la complejidad se vuelve observable",
+      "etiqueta": "Simulaciones ejecutables",
+      "copy": "Kósmos reúne 16 repos de sistemas complejos en 22 simulaciones vivas. Vos ejecutas el código, ves cómo emerge el orden del caos: redes, agentes, emergencia, filosofía de la ciencia. Rigor cuantitativo, sin teoría sin verificar."
     },
     "ig_story": {
-      "titulo":    "Kósmos",
-      "subtitulo": "Nueva simulación disponible",
-      "copy":      "Descubre el catálogo ↓ kosmos.stevenvallejo.com"
-    },
-    "x_post": {
-      "titulo":    "Kósmos",
-      "subtitulo": "Catálogo · Sistemas complejos",
-      "copy":      "22 simulaciones de emergencia, caos y autoorganización. SSG, open source. kosmos.stevenvallejo.com"
-    },
-    "yt_thumbnail": {
-      "titulo":    "Simulación en vivo",
-      "subtitulo": "Kósmos · Pinakothḗke",
-      "copy":      "Ver ↓"
-    },
-    "yt_banner": {
-      "titulo":    "Kósmos",
-      "subtitulo": "Sistemas complejos · Emergencia · Filosofía de la ciencia · Pinakothḗke"
-    },
-    "og_general": {
-      "titulo":    "Kósmos — Simulación del orden natural",
-      "subtitulo": "Pinakothḗke · Ciencias de la complejidad",
-      "copy":      "Catálogo educativo que unifica 16 repos de sistemas complejos, emergencia y filosofía de la ciencia. 22 simulaciones SSG, open source."
-    },
-    "og_product": {
-      "titulo":    "Kósmos",
-      "subtitulo": "Simulación científica · 16 repos · 22 páginas",
-      "copy":      "Emergencia, caos, redes, agentes y filosofía de la ciencia en un solo catálogo. Pinakothḗke."
-    },
-    "whatsapp_perfil": {
-      "titulo":    "⬡",
-      "copy":      "Kósmos"
-    },
-    "contra_cover": {
-      "titulo":    "Kósmos",
-      "subtitulo": "Catálogo de simulación científica",
-      "copy":      "Sistemas complejos · Emergencia · Filosofía de la ciencia · Pinakothḗke"
-    },
-    "ig_reel_cover": {
-      "titulo":    "Kósmos",
-      "subtitulo": "⬡ Simulación en curso",
-      "copy":      "Sistemas complejos, emergencia y caos. Pinakothḗke."
+      "titulo": "Caos que se organiza",
+      "copy": "La complejidad ejecutable es la única que se entiende de verdad."
     },
     "ig_carousel": {
-      "titulo":    "⬡ Kósmos",
-      "subtitulo": "Ciencias de la complejidad",
-      "copy":      "Un catálogo de simulaciones que vuelve ejecutables las preguntas de la ciencia."
+      "titulo": "Caos que se organiza",
+      "copy": "Kósmos reúne 16 repos de sistemas complejos en 22 simulaciones vivas. Vos ejecutas el código, ves cómo emerge el orden del caos: redes, agentes, emergencia, filosofía de la ciencia. Rigor cuantitativo, sin teoría sin verificar.",
+      "numero": "22"
     },
-    "x_header": {
-      "titulo":    "Kósmos · Simulación científica",
-      "subtitulo": "Pinakothḗke — kosmos.stevenvallejo.com",
-      "copy":      "16 repos · 22 simulaciones · Sistemas complejos"
-    },
-    "fb_cover": {
-      "titulo":    "Kósmos",
-      "subtitulo": "Catálogo de simulación científica · Pinakothḗke",
-      "copy":      "Emergencia, autoorganización y filosofía de la ciencia — open source."
-    },
-    "tiktok_cover": {
-      "titulo":    "Kósmos",
-      "subtitulo": "⬡ Simulación en tiempo real",
-      "copy":      "Pinakothḗke · Sistemas complejos"
-    },
-    "web_hero": {
-      "titulo":    "Kósmos",
-      "subtitulo": "Catálogo de simulación científica · Pinakothḗke",
-      "copy":      "16 repositorios de sistemas complejos, emergencia y filosofía de la ciencia reunidos en 22 páginas SSG. Rigor cuantitativo, código abierto."
-    },
-    "web_hero_mobile": {
-      "titulo":    "Kósmos",
-      "subtitulo": "Sistemas complejos · Emergencia",
-      "copy":      "Catálogo open source de simulación científica. Pinakothḗke."
-    },
-    "email_header": {
-      "titulo":    "Kósmos — Pinakothḗke",
-      "subtitulo": "Catálogo de simulación científica",
-      "copy":      "Nueva pieza disponible en kosmos.stevenvallejo.com"
-    },
-    "banner_ad": {
-      "titulo":    "Kósmos · Simulación científica",
-      "copy":      "16 repos · 22 páginas · kosmos.stevenvallejo.com"
-    },
-    "ad_leaderboard": {
-      "titulo":    "Catálogo de simulación científica",
-      "subtitulo": "16 repositorios · 22 simulaciones ejecutables",
-      "copy":      "Emergencia, caos y autoorganización en un solo catálogo open source.",
-      "url":       "kosmos.stevenvallejo.com"
-    },
-    "ad_rectangle": {
-      "titulo":    "Simulación científica open source",
-      "subtitulo": "Kósmos · Pinakothḗke",
-      "copy":      "22 simulaciones de emergencia y sistemas complejos. Explora el catálogo.",
-      "url":       "kosmos.stevenvallejo.com"
+    "ig_reel_cover": {
+      "titulo": "Sistemas complejos, ejecutables",
+      "copy": "16 proyectos de investigación en sistemas complejos; 5 con simulación ejecutable embebida. Redes, agentes, emergencia."
     },
     "stat_card": {
-      "titulo":    "Kósmos",
-      "numero":    "22",
-      "etiqueta":  "Simulaciones ejecutables",
-      "numero_2":  "16",
-      "etiqueta_2": "Repositorios integrados",
-      "copy":      "Catálogo educativo de sistemas complejos, emergencia y filosofía de la ciencia."
+      "numero": "22",
+      "etiqueta": "Simulaciones ejecutables",
+      "copy": "La complejidad ejecutable es la única que se entiende de verdad."
     },
-    "business_card": {
-      "titulo":    "Kósmos",
-      "subtitulo": "Simulación del orden natural",
-      "copy":      "Catálogo educativo de sistemas complejos · Pinakothḗke · kosmos.stevenvallejo.com"
+    "ad_rectangle": {
+      "titulo": "Caos que se organiza",
+      "numero": "22",
+      "copy": "La complejidad ejecutable es la única que se entiende de verdad.",
+      "cita": "La complejidad ejecutable es la única que se entiende de verdad.",
+      "autor": "Steven Vallejo"
     },
-    "letterhead": {
-      "titulo":    "Kósmos — Pinakothḗke",
-      "subtitulo": "Simulación del orden natural",
-      "copy":      "Catálogo educativo de sistemas complejos, emergencia y filosofía de la ciencia. 16 repositorios, 22 simulaciones ejecutables. Open source, rigor cuantitativo.",
-      "url":       "kosmos.stevenvallejo.com"
+    "ad_leaderboard": {
+      "titulo": "Caos que se organiza",
+      "copy": "La complejidad ejecutable es la única que se entiende de verdad."
+    },
+    "og_general": {
+      "titulo": "Caos que se organiza",
+      "subtitulo": "Cuando la complejidad se vuelve observable",
+      "copy": "Kósmos reúne 16 repos de sistemas complejos en 22 simulaciones vivas. Vos ejecutas el código, ves cómo emerge el orden del caos: redes, agentes, emergencia, filosofía de la ciencia. Rigor cuantitativo, sin teoría sin verificar."
+    },
+    "og_product": {
+      "titulo": "Caos que se organiza",
+      "subtitulo": "Cuando la complejidad se vuelve observable",
+      "copy": "Kósmos reúne 16 repos de sistemas complejos en 22 simulaciones vivas. Vos ejecutas el código, ves cómo emerge el orden del caos: redes, agentes, emergencia, filosofía de la ciencia. Rigor cuantitativo, sin teoría sin verificar."
+    },
+    "web_hero": {
+      "titulo": "Caos que se organiza",
+      "subtitulo": "Cuando la complejidad se vuelve observable",
+      "copy": "Kósmos reúne 16 repos de sistemas complejos en 22 simulaciones vivas. Vos ejecutas el código, ves cómo emerge el orden del caos: redes, agentes, emergencia, filosofía de la ciencia. Rigor cuantitativo, sin teoría sin verificar."
+    },
+    "linkedin_post": {
+      "titulo": "Caos que se organiza",
+      "subtitulo": "Cuando la complejidad se vuelve observable",
+      "etiqueta": "Simulaciones ejecutables",
+      "copy": "Kósmos reúne 16 repos de sistemas complejos en 22 simulaciones vivas. Vos ejecutas el código, ves cómo emerge el orden del caos: redes, agentes, emergencia, filosofía de la ciencia. Rigor cuantitativo, sin teoría sin verificar."
+    },
+    "linkedin_banner": {
+      "titulo": "Caos que se organiza",
+      "etiqueta": "Simulaciones ejecutables",
+      "copy": "La complejidad ejecutable es la única que se entiende de verdad."
+    },
+    "fb_cover": {
+      "titulo": "Caos que se organiza",
+      "subtitulo": "Cuando la complejidad se vuelve observable",
+      "copy": "Kósmos reúne 16 repos de sistemas complejos en 22 simulaciones vivas. Vos ejecutas el código, ves cómo emerge el orden del caos: redes, agentes, emergencia, filosofía de la ciencia. Rigor cuantitativo, sin teoría sin verificar."
+    },
+    "x_post": {
+      "titulo": "Caos que se organiza",
+      "copy": "La complejidad ejecutable es la única que se entiende de verdad."
+    },
+    "yt_thumbnail": {
+      "titulo": "Caos que se organiza",
+      "copy": "La complejidad ejecutable es la única que se entiende de verdad."
     },
     "poster_a4": {
-      "titulo":    "Kósmos",
-      "subtitulo": "Simulación del orden natural",
-      "copy":      "Catálogo educativo de sistemas complejos, emergencia y filosofía de la ciencia. 16 repos · 22 simulaciones. kosmos.stevenvallejo.com"
+      "titulo": "Caos que se organiza",
+      "subtitulo": "Cuando la complejidad se vuelve observable",
+      "copy": "Kósmos reúne 16 repos de sistemas complejos en 22 simulaciones vivas. Vos ejecutas el código, ves cómo emerge el orden del caos: redes, agentes, emergencia, filosofía de la ciencia. Rigor cuantitativo, sin teoría sin verificar."
     },
-    "sticker": {
-      "titulo":    "⬡",
-      "copy":      "Kósmos"
+    "whatsapp_perfil": {
+      "titulo": "Caos que se organiza"
     },
-    "logo_lockup_color": {
-      "titulo":    "Kósmos",
-      "subtitulo": "Pinakothḗke",
-      "copy":      "Simulación del orden natural"
-    },
-    "logo_lockup_dark": {
-      "titulo":    "Kósmos",
-      "subtitulo": "Pinakothḗke",
-      "copy":      "Simulación del orden natural"
-    },
-    "logo_lockup_light": {
-      "titulo":    "Kósmos",
-      "subtitulo": "Pinakothḗke",
-      "copy":      "Simulación del orden natural"
-    },
-    "logo_wordmark": {
-      "titulo":    "Kósmos",
-      "subtitulo": "Simulación del orden natural · Pinakothḗke",
-      "copy":      ""
+    "contra_cover": {
+      "titulo": "Caos que se organiza",
+      "copy": "Cuando la complejidad se vuelve observable"
     }
-  }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
 }

@@ -348,3 +348,13 @@ Antes de commitear cambios en motor/plantillas/marcas:
 - `agora-*`: ignorados por `--all` por diseño (no son parte de Eikón).
 - Galerías `_gallery_aggregated.html` pesadas (~5–10 MB con thumbnails base64):
   aceptable para uso local; no versionar.
+
+## 10. Auditorías manuales
+
+Las plantillas y reportes de auditoría viven en `audit/`:
+
+- Plantilla base: `audit/TEMPLATE-phase.md`.
+- Metodología: `audit/METHODOLOGY.md`.
+- Reportes instanciados: `audit/reports/`.
+
+El reporte final MVP actual es `audit/reports/2026-06-29-final-mvp.md`.

@@ -19,12 +19,13 @@ Exit codes:
     1 — no se encontraron marcas
     2 — error de E/S
 """
+
 from __future__ import annotations
 
 import argparse
 import json
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -94,21 +95,23 @@ def build_rows(output_dir: Path) -> list[dict[str, Any]]:
         contraste = load_contraste(brand_dir / "_contraste-report.json")
         gallery = (output_dir / f"_gallery_{slug}.html").is_file()
 
-        rows.append({
-            "marca": slug,
-            "pngs": pngs,
-            "manifest_total": m_total,
-            "manifest_generated": m_gen,
-            "manifest_errors": m_err,
-            "has_manifest": m_total > 0,
-            "contraste_total": contraste.get("total_assets", 0),
-            "aa_pass": contraste.get("aa_pass", 0),
-            "aa_fail": contraste.get("aa_fail", 0),
-            "no_foreground": contraste.get("no_foreground", 0),
-            "aaa_pass": contraste.get("aaa_pass", 0),
-            "aaa_fail": contraste.get("aaa_fail", 0),
-            "has_gallery": gallery,
-        })
+        rows.append(
+            {
+                "marca": slug,
+                "pngs": pngs,
+                "manifest_total": m_total,
+                "manifest_generated": m_gen,
+                "manifest_errors": m_err,
+                "has_manifest": m_total > 0,
+                "contraste_total": contraste.get("total_assets", 0),
+                "aa_pass": contraste.get("aa_pass", 0),
+                "aa_fail": contraste.get("aa_fail", 0),
+                "no_foreground": contraste.get("no_foreground", 0),
+                "aaa_pass": contraste.get("aaa_pass", 0),
+                "aaa_fail": contraste.get("aaa_fail", 0),
+                "has_gallery": gallery,
+            }
+        )
     return rows
 
 
@@ -144,17 +147,18 @@ def aggregate_totals(rows: list[dict[str, Any]], output_dir: Path) -> dict[str, 
     }
 
 
-def render_markdown(rows: list[dict[str, Any]], totals: dict[str, Any],
-                    output_dir: Path, root: Path) -> str:
+def render_markdown(
+    rows: list[dict[str, Any]], totals: dict[str, Any], output_dir: Path, root: Path
+) -> str:
     """Genera el cuerpo Markdown del _STATUS.md."""
-    now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    now = datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S UTC")
 
     header_lines = [
         "# _STATUS — Eikon Output Snapshot",
         "",
         f"_Generado: {now}_  ",
         f"_Output dir: `{output_dir}`_  ",
-        f"_Source: `scripts/eikon_count.py`_",
+        "_Source: `scripts/eikon_count.py`_",
         "",
         "## Resumen global",
         "",
@@ -183,12 +187,10 @@ def render_markdown(rows: list[dict[str, Any]], totals: dict[str, Any],
     ]
     for r in rows:
         manifest_cell = (
-            f"{r['manifest_generated']}/{r['manifest_total']}"
-            if r["has_manifest"] else "—"
+            f"{r['manifest_generated']}/{r['manifest_total']}" if r["has_manifest"] else "—"
         )
         layout_cell = (
-            f"{r['layout_issues']}" if r["layout_issues"] > 0
-            else "✓" if r["has_manifest"] else "—"
+            f"{r['layout_issues']}" if r["layout_issues"] > 0 else "✓" if r["has_manifest"] else "—"
         )
         body.append(
             f"| `{r['marca']}` | {r['pngs']} | {manifest_cell} | "
@@ -201,66 +203,86 @@ def render_markdown(rows: list[dict[str, Any]], totals: dict[str, Any],
     body.append("- `PNG` = archivos `.png` bajo `output/<marca>/` (recursivo).")
     body.append("- `Manifest` = `generated / total_assets` en `_manifest.json` (o `—` si falta).")
     body.append("- `Galería` = presencia de `output/_gallery_<marca>.html`.")
-    body.append("- `no_fg` = assets donde el validador WCAG no detectó foreground (no se cuentan como `AA fail` real).")
-    body.append("- `Layout` = assets con `layout_status != \"pass\"` o `layout_warnings` no vacío (✓ = 0 issues, — = sin manifest). Ver `scripts/eikon_validate_layout.py`.")
+    body.append(
+        "- `no_fg` = assets donde el validador WCAG no detectó foreground (no se cuentan como `AA fail` real)."
+    )
+    body.append(
+        '- `Layout` = assets con `layout_status != "pass"` o `layout_warnings` no vacío (✓ = 0 issues, — = sin manifest). Ver `scripts/eikon_validate_layout.py`.'
+    )
     body.append("")
 
     # Bloque de ayuda
-    body.extend([
-        "## Cómo regenerar",
-        "",
-        "Asumiendo cwd = raíz de eikon:",
-        "",
-        "```bash",
-        "# 1. Conteo + _STATUS.md (incluye columna Layout)",
-        "python3 scripts/eikon_count.py",
-        "",
-        "# 2. Validación de layout por marca (assets con layout_status != pass",
-        "#    o layout_warnings no vacío). --fail-on-errors → exit 1 si hay issues.",
-        "python3 scripts/eikon_validate_layout.py",
-        "python3 scripts/eikon_validate_layout.py --json",
-        "python3 scripts/eikon_validate_layout.py --fail-on-errors",
-        "",
-        "# 3. Reporte WCAG agregado en output/_contraste-report.json",
-        "python3 scripts/eikon_aggregate_wcag.py",
-        "",
-        "# 4. Galerías individuales + agregada",
-        "python3 gallery.py --all-marcas",
-        "python3 gallery.py --all-marcas --aggregated",
-        "",
-        "# 5. Re-render completo (cuando hay cambios en motor/plantillas)",
-        "python3 eikon.py --all",
-        "```",
-        "",
-        "Ver `docs/QA-CHECKLIST.md` para el checklist visual de QA.",
-        "",
-    ])
+    body.extend(
+        [
+            "## Cómo regenerar",
+            "",
+            "Asumiendo cwd = raíz de eikon:",
+            "",
+            "```bash",
+            "# 1. Conteo + _STATUS.md (incluye columna Layout)",
+            "python3 scripts/eikon_count.py",
+            "",
+            "# 2. Validación de layout por marca (assets con layout_status != pass",
+            "#    o layout_warnings no vacío). --fail-on-errors → exit 1 si hay issues.",
+            "python3 scripts/eikon_validate_layout.py",
+            "python3 scripts/eikon_validate_layout.py --json",
+            "python3 scripts/eikon_validate_layout.py --fail-on-errors",
+            "",
+            "# 3. Reporte WCAG agregado en output/_contraste-report.json",
+            "python3 scripts/eikon_aggregate_wcag.py",
+            "",
+            "# 4. Galerías individuales + agregada",
+            "python3 gallery.py --all-marcas",
+            "python3 gallery.py --all-marcas --aggregated",
+            "",
+            "# 5. Re-render completo (cuando hay cambios en motor/plantillas)",
+            "python3 eikon.py --all",
+            "```",
+            "",
+            "Ver `docs/QA-CHECKLIST.md` para el checklist visual de QA.",
+            "",
+        ]
+    )
 
     return "\n".join(header_lines + body)
 
 
 def print_console_table(rows: list[dict[str, Any]], totals: dict[str, Any]) -> None:
     """Imprime tabla compacta en stdout."""
-    headers = ("marca", "png", "manifest", "AA pass", "AA fail", "no_fg", "AAA pass", "AAA fail", "gal", "layout")
+    headers = (
+        "marca",
+        "png",
+        "manifest",
+        "AA pass",
+        "AA fail",
+        "no_fg",
+        "AAA pass",
+        "AAA fail",
+        "gal",
+        "layout",
+    )
     body_rows = []
     for r in rows:
         manifest = f"{r['manifest_generated']}/{r['manifest_total']}" if r["has_manifest"] else "—"
         layout_cell = (
-            str(r["layout_issues"]) if r.get("layout_issues", 0) > 0
+            str(r["layout_issues"])
+            if r.get("layout_issues", 0) > 0
             else ("ok" if r["has_manifest"] else "—")
         )
-        body_rows.append((
-            r["marca"],
-            str(r["pngs"]),
-            manifest,
-            str(r["aa_pass"]),
-            str(r["aa_fail"]),
-            str(r["no_foreground"]),
-            str(r["aaa_pass"]),
-            str(r["aaa_fail"]),
-            "si" if r["has_gallery"] else "no",
-            layout_cell,
-        ))
+        body_rows.append(
+            (
+                r["marca"],
+                str(r["pngs"]),
+                manifest,
+                str(r["aa_pass"]),
+                str(r["aa_fail"]),
+                str(r["no_foreground"]),
+                str(r["aaa_pass"]),
+                str(r["aaa_fail"]),
+                "si" if r["has_gallery"] else "no",
+                layout_cell,
+            )
+        )
 
     widths = [max(len(headers[i]), max(len(r[i]) for r in body_rows)) for i in range(len(headers))]
     sep = "  "
@@ -327,6 +349,7 @@ def main() -> int:
     try:
         sys.path.insert(0, str(Path(__file__).resolve().parent))
         from eikon_validate_layout import layout_issues_by_brand  # type: ignore
+
         layout_map = layout_issues_by_brand(output_dir)
     except Exception:
         layout_map = {}
@@ -335,8 +358,7 @@ def main() -> int:
 
     if not rows:
         print(
-            f"✗ No se encontraron marcas en {output_dir}/ "
-            "(solo entradas agregadas u ocultas)",
+            f"✗ No se encontraron marcas en {output_dir}/ (solo entradas agregadas u ocultas)",
             file=sys.stderr,
         )
         return 1

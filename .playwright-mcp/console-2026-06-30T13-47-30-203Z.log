@@ -1,0 +1,3 @@
+[      11ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://127.0.0.1:8040/assets/index-W2wFzAuQ.js:202
+[   90789ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/brands/39:0
+[  113304ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://127.0.0.1:8040/api/v1/brands/39:0

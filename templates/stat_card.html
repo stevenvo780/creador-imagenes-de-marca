@@ -79,8 +79,9 @@
   }
   .bar {
     width: 64px; border-radius: 6px 6px 0 0;
-    background: linear-gradient(180deg, var(--acento), var(--acento-2));
-    opacity: 0.85;
+    /* WCAG AA fix: was --acento→--acento-2 (#2a7a70 @0.85 composite = 2.94:1); now reversed+brightened */
+    background: linear-gradient(180deg, var(--acento), var(--acento));
+    opacity: 0.9;
   }
 
   /* ═══════════════════════════════════════

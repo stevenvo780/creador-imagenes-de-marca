@@ -5,347 +5,479 @@
 <meta name="viewport" content="width=1200, height=630, initial-scale=1">
 <title>Eikon - OG General</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0b1417; --texto: #e8e0d4; --acento: #43b5a6; --acento-2: #8d7cc0;
-    --font-titulo: 'Inter', sans-serif; --font-cuerpo: 'Inter', sans-serif;
+    --bg: #0b1417;
+    --texto: #e8e0d4;
+    --primario: #43b5a6;
+    --acento: #8d7cc0;
+    --acento-2: #f0b94a;
+    --font-titulo: 'Inter', sans-serif;
+    --font-cuerpo: 'Inter', sans-serif;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { width: 1200px; height: 630px; overflow: hidden; }
   body {
-    background-color: var(--bg); color: var(--texto);
-    font-family: var(--font-cuerpo); position: relative;
+    background-color: var(--bg);
+    color: var(--texto);
+    font-family: var(--font-cuerpo);
+    position: relative;
   }
-  /* Variant backgrounds */
-  body[data-variant="v1_website"] { --bg: #0b1417; }
-  body[data-variant="v2_articulo"] { --bg: #f4f1ea; }
-  body[data-variant="v3_feature"] { --bg: #0b1417; }
-  /* Prizma variants: all dark by design */
-  body[data-variant="v1_docs"] { --bg: #0c0e10; }
-  body[data-variant="v2_enterprise_blog"] { --bg: #0c0e10; }
-  body[data-variant="v3_tool"] { --bg: #0c0e10; }
 
-  /* ── Shared accent line ── */
-  .accent-line { width: 64px; height: 3px; border-radius: 2px;
-    background: linear-gradient(90deg, var(--acento), var(--acento-2)); }
-
-  /* ═══════════════════════════════════════
-     v1_website: Home general — Logo centrado + tagline (Cloud Atlas)
-     ═══════════════════════════════════════ */
+  /* Variant-level CSS var overrides */
   body[data-variant="v1_website"] {
-    display: flex; align-items: center; justify-content: center; padding: 60px;
-    background: radial-gradient(ellipse at 50% 40%, #131e22 0%, #0b1417 70%);
+    --bg: #0b1417;
+    --primario: #43b5a6;
+    --acento: #8d7cc0;
+  }
+  body[data-variant="v2_articulo"] {
+    --bg: #f4f1ea;
+    --texto: #0b1417;
+    --primario: #0d5c4a;
+    --acento: #43b5a6;
+  }
+  body[data-variant="v3_feature"] {
+    --bg: #0b1417;
+    --primario: #43b5a6;
+    --acento: #8d7cc0;
+  }
+  body[data-variant="v1_docs"] {
+    --bg: #0c0e10;
+    --texto: #f0ece6;
+    --primario: #f0b94a;
+    --acento: #d4622e;
+    --acento-2: #43b5a6;
+  }
+  body[data-variant="v2_enterprise_blog"] {
+    --bg: #0c0e10;
+    --texto: #f0ece6;
+    --primario: #f0b94a;
+    --acento: #d4622e;
+    --acento-2: #43b5a6;
+  }
+  body[data-variant="v3_tool"] {
+    --bg: #0c0e10;
+    --texto: #f0ece6;
+    --primario: #f0b94a;
+    --acento: #d4622e;
+    --acento-2: #43b5a6;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     v1_website — Home Cloud Atlas · Logo protagonista sin disco
+     ═══════════════════════════════════════════════════════════════ */
+  body[data-variant="v1_website"] {
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(ellipse at 30% 40%, color-mix(in srgb, var(--bg) 92%, white) 0%, var(--bg) 60%, var(--bg) 100%);
+    position: relative; overflow: hidden;
+  }
+  body[data-variant="v1_website"]::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='ogv1Grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23ogv1Grain)' opacity='0.06'/%3E%3C/svg%3E");
+    background-size: 200px 200px; pointer-events: none; z-index: 0;
   }
   .v1-container {
-    display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center;
+    display: flex; flex-direction: column; align-items: center;
+    gap: var(--space-8); text-align: center; padding: var(--space-10);
+    position: relative; z-index: 1;
   }
-  .v1-symbol svg { width: 96px; height: 96px; }
-  .v1-symbol svg * { stroke: url(#ogGradV1); }
+  .v1-symbol {
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .v1-symbol::before {
+    content: ''; position: absolute; width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--primario) 14%, transparent) 0%, transparent 68%);
+    filter: blur(90px); pointer-events: none; z-index: 0;
+  }
+  .v1-symbol::after { display: none !important; }
+  .v1-symbol [data-isotype-container] { position: relative; z-index: 2; }
+  .v1-symbol svg { width: 220px; height: 220px; }
   .v1-brand {
-    font-family: var(--font-titulo); font-size: 52px; font-weight: 800;
-    line-height: 1.15; letter-spacing: -0.01em;
+    font-family: var(--font-titulo); font-size: var(--type-6xl); font-weight: 700;
+    line-height: var(--leading-tight); letter-spacing: var(--tracking-tight);
+    color: var(--texto); margin: 0;
+  }
+  .v1-accent-bar {
+    width: 64px; height: 2px; border-radius: 1px;
+    background: var(--primario); border: none;
   }
   .v1-tagline {
-    font-size: 22px; font-weight: 400; color: #a3c4c0;
-    max-width: 560px; line-height: 1.45;
+    font-size: var(--type-lg); font-weight: 400; line-height: var(--leading-normal);
+    color: var(--texto); max-width: 520px; margin: 0;
   }
-  .v1-url { font-size: 15px; font-weight: 600; color: var(--acento); margin-top: 8px; }
-  .v1-url .arrow { opacity: 0.7; }
+  .v1-url {
+    font-size: var(--type-sm); font-weight: 600; color: var(--primario);
+    letter-spacing: var(--tracking-wide); margin: 0;
+  }
+  .v1-url .arrow { opacity: 0.65; margin-right: 4px; }
 
-  /* ═══════════════════════════════════════
-     v2_articulo: Eyebrow "ARTÍCULO" + título + autor/fecha (Cloud Atlas)
-     ═══════════════════════════════════════ */
+  /* ═══════════════════════════════════════════════════════════════
+     v2_articulo — Article · Logo asimétrico corner sin disco
+     ═══════════════════════════════════════════════════════════════ */
+  body[data-variant="v2_articulo"] {
+    display: flex; align-items: center;
+    background: radial-gradient(ellipse at 10% 20%, color-mix(in srgb, var(--bg) 88%, white) 0%, var(--bg) 55%, var(--bg) 100%);
+    position: relative; overflow: hidden;
+  }
+  body[data-variant="v2_articulo"]::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='ogv2Grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23ogv2Grain)' opacity='0.05'/%3E%3C/svg%3E");
+    background-size: 200px 200px; pointer-events: none; z-index: 0;
+  }
   .v2-layout {
     display: flex; flex-direction: column; justify-content: center;
-    padding: 60px 70px; height: 100%; gap: 18px;
+    padding: var(--space-10) var(--space-12) var(--space-10) var(--space-8);
+    height: 100%; gap: var(--space-3); width: 100%; position: relative; z-index: 1;
   }
+  .v2-logo-panel {
+    position: absolute; top: var(--space-6); right: var(--space-8);
+    width: 120px; height: 120px; border-radius: var(--corner-radius);
+    background-color: rgba(0, 0, 0, 0.08); display: flex;
+    align-items: center; justify-content: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    position: relative; z-index: 2;
+  }
+  .v2-logo-panel::before {
+    content: ''; position: absolute; width: 280px; height: 280px; border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--primario) 10%, transparent) 0%, transparent 65%);
+    filter: blur(70px); top: 50%; left: 50%; transform: translate(-50%, -50%);
+    pointer-events: none; z-index: -1;
+  }
+  .v2-logo-panel::after { display: none !important; }
+  .v2-logo-panel svg { width: 76px; height: 76px; }
   .v2-eyebrow {
-    font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
-    text-transform: uppercase; color: #0d5c4a;
+    font-size: var(--type-xs); font-weight: 700; letter-spacing: var(--tracking-wide);
+    color: var(--primario); display: flex; align-items: center; gap: var(--space-1);
   }
-  .v2-eyebrow .eyebrow-accent {
-    display: inline-block; width: 6px; height: 6px; border-radius: 50%;
-    background: #43b5a6; margin-right: 7px; vertical-align: middle;
-    position: relative; top: -1px;
+  .v2-eyebrow-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--primario);
   }
   .v2-title {
-    font-family: var(--font-titulo); font-size: 50px; font-weight: 700;
-    line-height: 1.15; color: #0b1417; max-width: 800px;
+    font-family: var(--font-titulo); font-size: var(--type-5xl); font-weight: 700;
+    line-height: var(--leading-normal); letter-spacing: var(--tracking-tight);
+    color: var(--texto); max-width: 760px; margin: 0;
+  }
+  .v2-accent-bar {
+    width: 64px; height: 2px; border-radius: 1px;
+    background: var(--primario); margin: var(--space-2) 0 0 0; border: none;
   }
   .v2-meta {
-    font-size: 14px; font-weight: 500; color: #2a3833;
-    display: flex; align-items: center; gap: 14px;
+    font-size: var(--type-sm); color: var(--texto-muted);
+    display: flex; align-items: center; gap: var(--space-2); margin: 0;
   }
-  .v2-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: #0d5c4a; }
-  .v2-footer {
-    position: absolute; bottom: 50px; right: 70px;
-    display: flex; align-items: center; gap: 10px;
-    font-size: 14px; font-weight: 600; color: #0d5c4a;
-  }
-  .v2-footer svg { width: 26px; height: 26px; }
-  .v2-footer svg * { stroke: #0d5c4a; fill: none; }
+  .v2-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--texto-muted); }
+  .v2-brand-chip { display: none; }
 
-  /* ═══════════════════════════════════════
-     v3_feature: Badge "DESTACADO" + composición visual distintiva (Cloud Atlas)
-     ═══════════════════════════════════════ */
+  /* ═══════════════════════════════════════════════════════════════
+     v3_feature — Feature · Badge + logo bottom-right sin halo
+     ═══════════════════════════════════════════════════════════════ */
   body[data-variant="v3_feature"] {
     display: flex; align-items: center; justify-content: center;
-    background: radial-gradient(ellipse at 70% 30%, #1a1220 0%, #0b1417 65%);
+    background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--bg) 90%, white) 0%, var(--bg) 50%, var(--bg) 100%);
+    position: relative; overflow: hidden;
+  }
+  body[data-variant="v3_feature"]::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='ogv3Grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23ogv3Grain)' opacity='0.05'/%3E%3C/svg%3E");
+    background-size: 200px 200px; pointer-events: none; z-index: 0;
   }
   .v3-layout {
-    display: flex; flex-direction: column; align-items: center; gap: 20px;
-    text-align: center; padding: 60px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: var(--space-6); text-align: center; padding: var(--space-8) var(--space-6);
+    position: relative; z-index: 1;
   }
   .v3-badge {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
-    text-transform: uppercase; color: #0b1417;
-    background: linear-gradient(90deg, #a3e4d7, #c4b8e8);
-    padding: 6px 18px; border-radius: 20px;
+    font-size: var(--type-xs); font-weight: 700; letter-spacing: var(--tracking-wide);
+    color: var(--bg); background: var(--primario);
+    padding: var(--space-1) var(--space-3); border-radius: 16px; border: none;
   }
   .v3-title {
-    font-family: var(--font-titulo); font-size: 52px; font-weight: 800;
-    background: linear-gradient(135deg, #a3e4d7, #c4b8e8);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text; line-height: 1.15; max-width: 700px;
+    font-family: var(--font-titulo); font-size: var(--type-6xl); font-weight: 700;
+    color: var(--texto); line-height: var(--leading-tight);
+    max-width: 720px; letter-spacing: var(--tracking-tight); margin: 0;
+    background: none; -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset; background-clip: unset;
   }
-  .v3-accent-line { width: 64px; height: 3px; border-radius: 2px;
-    background: linear-gradient(90deg, #a3e4d7, #c4b8e8); }
+  .v3-accent-bar {
+    width: 64px; height: 2px; border-radius: 1px;
+    background: var(--primario); border: none;
+  }
   .v3-desc {
-    font-size: 20px; font-weight: 400; color: #c4bfd8;
-    max-width: 520px; line-height: 1.5;
+    font-size: var(--type-lg); color: var(--texto);
+    max-width: 540px; line-height: var(--leading-normal); margin: 0;
   }
-  .v3-footer {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 14px; font-weight: 600; color: #8d7cc0; margin-top: 8px;
+  .v3-logo-area {
+    position: absolute; bottom: var(--space-6); right: var(--space-6);
+    width: 160px; height: 160px; display: flex; align-items: center; justify-content: center;
   }
-  .v3-footer svg { width: 24px; height: 24px; }
-  .v3-footer svg * { stroke: #8d7cc0; fill: none; }
+  .v3-logo-area::before { display: none !important; }
+  .v3-logo-area::after { display: none !important; }
+  .v3-logo-area [data-isotype-container] { position: relative; z-index: 1; }
+  .v3-logo-area svg { width: 140px; height: 140px; }
+  .v3-brand-tag { display: none; }
 
-  /* ═══════════════════════════════════════
-     PRIZMA variants
-     ═══════════════════════════════════════ */
+  /* ═══════════════════════════════════════════════════════════════
+     PRIZMA variants — dark, amber/orange palette
+     ═══════════════════════════════════════════════════════════════ */
 
-  /* v1_docs: Documentation landing — eyebrow DOCS + code/terminal panel + API endpoint */
+  /* v1_docs — Asimetría izq-der: LOGO PROTAGONISTA + texto / código secundario */
   body[data-variant="v1_docs"] {
     display: flex; align-items: center; justify-content: center;
-    background: radial-gradient(ellipse at 30% 30%, #1a120a 0%, #0c0e10 70%);
+    background: radial-gradient(ellipse at 28% 28%, #1a120a 0%, #0c0e10 72%);
   }
   .pz1-layout {
-    display: flex; align-items: center; gap: 40px;
-    padding: 50px 60px; width: 100%; height: 100%; overflow: hidden;
+    display: flex; align-items: center; gap: 32px;
+    padding: 40px 48px; width: 100%; height: 100%; overflow: hidden;
+  }
+  /* Logo on left (reorder via flex) */
+  .pz1-right {
+    order: 1; flex: 0 0 auto; display: flex; flex-direction: column; justify-content: center;
   }
   .pz1-left {
-    flex: 1; display: flex; flex-direction: column; gap: 14px;
+    order: 2; flex: 1; display: flex; flex-direction: column; gap: 14px;
   }
+  /* Logo panel — LEFT HERO with large backing disc */
+  .pz1-trust {
+    display: flex; align-items: center; justify-content: center;
+    width: 180px; height: 180px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(240, 185, 74, 0.12) 0%, rgba(240, 185, 74, 0.04) 100%);
+    border: 2px solid rgba(240, 185, 74, 0.28);
+    box-shadow: 0 0 80px rgba(240, 185, 74, 0.15), inset 0 0 0 1px rgba(240, 185, 74, 0.1);
+    margin: 0; padding: 0;
+  }
+  .pz1-trust [data-isotype-container] svg { width: 110px; height: 110px; }
+  .pz1-trust-label { display: none; }
   .pz1-eyebrow {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
-    text-transform: uppercase; color: #f0b94a;
+    display: inline-flex; align-items: center; gap: 9px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--primario);
   }
   .pz1-eyebrow-dot {
-    width: 8px; height: 8px; border-radius: 50%; background: #f0b94a;
-    box-shadow: 0 0 10px rgba(240, 185, 74, 0.6);
+    width: 8px; height: 8px; border-radius: 50%; background: var(--primario);
+    box-shadow: 0 0 10px rgba(240, 185, 74, 0.5);
   }
   .pz1-title {
-    font-family: var(--font-titulo); font-size: 34px; font-weight: 800;
-    color: #f0ece6; line-height: 1.1; letter-spacing: -0.01em;
-    padding-bottom: 4px;
+    font-family: var(--font-titulo); font-size: 28px; font-weight: 800;
+    color: var(--texto); line-height: 1.1; letter-spacing: -0.015em;
   }
   .pz1-title .hl {
-    background: linear-gradient(135deg, #f0b94a 0%, #d4622e 100%);
+    background: linear-gradient(135deg, var(--primario) 0%, var(--acento) 100%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   .pz1-sub {
-    font-size: 16px; color: #a09080; line-height: 1.5; max-width: 460px;
+    font-size: 14px; font-weight: 400; color: #a09080;
+    line-height: 1.5; max-width: 320px;
   }
-  .pz1-right {
-    flex: 0 0 460px; display: flex; flex-direction: column; gap: 14px;
-  }
+  /* Code elements — hidden in v1_docs (logo is hero) */
   .pz1-code {
-    background: #16120e; border: 1px solid rgba(240, 185, 74, 0.25);
-    border-radius: 10px; padding: 22px; font-family: 'Menlo', monospace;
-    font-size: 13px; line-height: 1.7; overflow: hidden;
+    display: none;
   }
   .pz1-code-head {
     display: flex; align-items: center; gap: 6px; margin-bottom: 12px;
-    padding-bottom: 10px; border-bottom: 1px solid rgba(240, 236, 230, 0.08);
+    padding-bottom: 10px; border-bottom: 1px solid rgba(240, 236, 230, 0.06);
   }
   .pz1-code-head .dot { width: 10px; height: 10px; border-radius: 50%; }
-  .pz1-code-head .d1 { background: #d4622e; }
-  .pz1-code-head .d2 { background: #f0b94a; }
-  .pz1-code-head .d3 { background: #43b5a6; }
-  .pz1-code-head .label { margin-left: auto; font-size: 11px; color: #a09080; }
+  .pz1-code-head .d1 { background: var(--acento); }
+  .pz1-code-head .d2 { background: var(--primario); }
+  .pz1-code-head .d3 { background: var(--acento-2); }
+  .pz1-code-head .label {
+    margin-left: auto; font-size: 11px; color: #a09080; font-family: 'Menlo', monospace;
+  }
   .pz1-line .kw { color: #8d7cc0; }
-  .pz1-line .fn { color: #43b5a6; }
-  .pz1-line .str { color: #f0b94a; }
+  .pz1-line .fn { color: var(--acento-2); }
+  .pz1-line .str { color: var(--primario); }
   .pz1-line .cmt { color: #6a6058; font-style: italic; }
   .pz1-endpoints {
-    display: flex; gap: 8px; flex-wrap: wrap;
+    display: none;
   }
   .pz1-endpoint {
-    font-family: 'Menlo', monospace; font-size: 12px; padding: 8px 14px;
-    border-radius: 6px; background: rgba(67, 181, 166, 0.12);
-    color: #43b5a6; border: 1px solid rgba(67, 181, 166, 0.3);
-    font-weight: 600;
+    font-family: 'Menlo', 'Consolas', monospace; font-size: 12px;
+    padding: 8px 14px; border-radius: 6px;
+    background: rgba(67, 181, 166, 0.1); color: var(--acento-2);
+    border: 1px solid rgba(67, 181, 166, 0.25); font-weight: 600;
   }
-  .pz1-endpoint.is-post { background: rgba(240, 185, 74, 0.12); color: #f0b94a; border-color: rgba(240, 185, 74, 0.3); }
+  .pz1-endpoint.is-post {
+    background: rgba(240, 185, 74, 0.1); color: var(--primario);
+    border-color: rgba(240, 185, 74, 0.25);
+  }
   .pz1-endpoint .verb { font-weight: 800; margin-right: 8px; }
+  .pz1-trust [data-isotype-container] svg * { stroke: url(#ogGradPZ1); }
 
-  /* v2_enterprise_blog: editorial — eyebrow INSIGHTS + headline + author/date meta (Prizma dark) */
+  /* v2_enterprise_blog — Elegancia editorial · logo en marco dorado */
   body[data-variant="v2_enterprise_blog"] {
     display: flex; align-items: center;
-    background: linear-gradient(135deg, #0c0e10 0%, #16120e 100%);
+    background: linear-gradient(150deg, #0c0e10 0%, #18140e 100%);
   }
   .pz2-layout {
-    display: flex; flex-direction: column; gap: 18px;
-    padding: 40px 80px; width: 100%; overflow: hidden;
+    display: flex; flex-direction: column; gap: 20px;
+    padding: 48px 80px; width: 100%; overflow: hidden;
   }
   .pz2-eyebrow {
-    display: inline-flex; align-items: center; gap: 10px;
-    font-size: 12px; font-weight: 700; letter-spacing: 0.14em;
-    text-transform: uppercase; color: #f0b94a;
+    display: inline-flex; align-items: center; gap: 12px;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--primario);
   }
   .pz2-eyebrow-line {
-    width: 28px; height: 2px; background: #f0b94a; border-radius: 1px;
+    width: 32px; height: 2px; background: var(--primario); border-radius: 1px;
   }
   .pz2-title {
-    font-family: var(--font-titulo); font-size: 42px; font-weight: 800;
-    color: #f0ece6; line-height: 1.1; letter-spacing: -0.02em;
-    max-width: 920px; padding-bottom: 4px;
+    font-family: var(--font-titulo); font-size: 48px; font-weight: 800;
+    color: var(--texto); line-height: 1.08; letter-spacing: -0.025em;
+    max-width: 920px;
   }
   .pz2-title .accent-word {
-    background: linear-gradient(135deg, #f0b94a 0%, #d4622e 100%);
+    background: linear-gradient(135deg, var(--primario) 0%, var(--acento) 100%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   .pz2-accent-bar {
-    width: 56px; height: 3px; border-radius: 2px;
-    background: linear-gradient(90deg, #f0b94a, #d4622e);
+    width: 64px; height: 3px; border-radius: 2px;
+    background: linear-gradient(90deg, var(--primario), var(--acento));
   }
   .pz2-meta {
     display: flex; align-items: center; gap: 14px;
-    font-size: 13px; color: #a09080; font-weight: 500;
-    overflow: hidden;
+    font-size: 14px; color: #a09080; font-weight: 500; overflow: hidden;
   }
   .pz2-meta .dot { width: 4px; height: 4px; border-radius: 50%; background: #a09080; }
-  .pz2-meta strong { color: #f0ece6; font-weight: 700; }
-  .pz2-footer {
-    position: absolute; bottom: 50px; right: 80px;
-    display: flex; align-items: center; gap: 10px;
-    font-size: 13px; font-weight: 700; color: #f0b94a;
-    letter-spacing: 0.04em;
+  .pz2-meta strong { color: var(--texto); font-weight: 700; }
+  /* Framed logo — bottom-right LARGER WITH DISC BACKING */
+  .pz2-logo-frame {
+    position: absolute; bottom: 48px; right: 70px;
+    width: 160px; height: 160px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid rgba(240, 185, 74, 0.35);
+    box-shadow: 0 0 80px rgba(240, 185, 74, 0.12), inset 0 0 0 1px rgba(240, 185, 74, 0.1);
+    background: radial-gradient(circle, rgba(240, 185, 74, 0.08) 0%, rgba(240, 185, 74, 0.02) 100%);
   }
-  .pz2-footer svg { width: 22px; height: 22px; }
-  .pz2-footer svg * { stroke: #f0b94a; fill: none; }
+  .pz2-logo-frame svg { width: 100px; height: 100px; }
+  .pz2-logo-frame svg * { stroke: url(#ogGradPZ2); }
+  .pz2-brand-tag {
+    position: absolute; bottom: 32px; right: 244px;
+    font-size: 13px; font-weight: 700; color: var(--primario);
+    letter-spacing: 0.06em;
+  }
 
-  /* v3_tool: product tool UI preview — dashboard mockup with feature pills + chart */
+  /* v3_tool — Dashboard mockup + logo como sello de garantía sobre mockup */
   body[data-variant="v3_tool"] {
     display: flex; align-items: center; justify-content: center;
-    background: radial-gradient(ellipse at 70% 30%, #1a120a 0%, #0c0e10 70%);
+    background: radial-gradient(ellipse at 68% 28%, #1a120a 0%, #0c0e10 72%);
   }
   .pz3-layout {
-    display: flex; align-items: center; gap: 32px;
+    display: flex; align-items: center; gap: 38px;
     padding: 40px 60px; width: 100%; height: 100%; overflow: hidden;
   }
   .pz3-left {
-    flex: 1; display: flex; flex-direction: column; gap: 14px;
-    overflow: hidden;
+    flex: 1; display: flex; flex-direction: column; gap: 14px; overflow: hidden;
   }
   .pz3-badge {
     display: inline-flex; align-items: center; gap: 8px;
-    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
     text-transform: uppercase; color: #0c0e10;
-    background: linear-gradient(90deg, #f0b94a, #d4622e);
-    padding: 6px 14px; border-radius: 14px;
-    align-self: flex-start;
+    background: linear-gradient(105deg, var(--primario), var(--acento));
+    padding: 7px 16px; border-radius: 16px; align-self: flex-start;
   }
   .pz3-title {
-    font-family: var(--font-titulo); font-size: 36px; font-weight: 800;
-    color: #f0ece6; line-height: 1.1; letter-spacing: -0.01em;
-    padding-bottom: 4px;
+    font-family: var(--font-titulo); font-size: 40px; font-weight: 800;
+    color: var(--texto); line-height: 1.08; letter-spacing: -0.015em;
   }
   .pz3-title .hl {
-    background: linear-gradient(135deg, #f0b94a 0%, #43b5a6 100%);
+    background: linear-gradient(135deg, var(--primario) 0%, var(--acento-2) 100%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   .pz3-desc {
-    font-size: 16px; color: #a09080; line-height: 1.5; max-width: 440px;
-    overflow: hidden;
+    font-size: 16px; color: #a09080; line-height: 1.55;
+    max-width: 440px; overflow: hidden;
   }
-  .pz3-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+  .pz3-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
   .pz3-pill {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
-    padding: 6px 12px; border-radius: 12px;
-    background: rgba(67, 181, 166, 0.12); color: #43b5a6;
-    border: 1px solid rgba(67, 181, 166, 0.3);
+    font-size: 11px; font-weight: 700; letter-spacing: 0.07em;
+    padding: 6px 13px; border-radius: 12px;
+    background: rgba(67, 181, 166, 0.1); color: var(--acento-2);
+    border: 1px solid rgba(67, 181, 166, 0.25);
     text-transform: uppercase;
   }
   .pz3-pill.is-warm {
-    background: rgba(240, 185, 74, 0.12); color: #f0b94a;
-    border-color: rgba(240, 185, 74, 0.3);
+    background: rgba(240, 185, 74, 0.1); color: var(--primario);
+    border-color: rgba(240, 185, 74, 0.25);
   }
+  /* Right — Mockup with logo seal */
   .pz3-right {
-    flex: 0 0 460px; height: 100%;
-    display: flex; align-items: center; justify-content: center;
+    flex: 0 0 460px; height: 100%; display: flex; align-items: center; justify-content: center;
+    position: relative;
   }
   .pz3-mockup {
-    width: 100%; max-width: 440px; height: 380px;
-    background: #16120e; border: 1px solid rgba(240, 185, 74, 0.25);
-    border-radius: 12px; padding: 18px;
-    display: flex; flex-direction: column; gap: 14px;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+    width: 100%; max-width: 420px; height: 370px;
+    background: #14100c; border: 1px solid rgba(240, 185, 74, 0.2);
+    border-radius: 12px; padding: 16px 18px;
+    display: flex; flex-direction: column; gap: 12px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
     overflow: hidden;
   }
   .pz3-mockup-bar {
-    display: flex; align-items: center; gap: 6px; padding-bottom: 10px;
-    border-bottom: 1px solid rgba(240, 236, 230, 0.06);
+    display: flex; align-items: center; gap: 6px; padding-bottom: 9px;
+    border-bottom: 1px solid rgba(240, 236, 230, 0.05);
   }
   .pz3-mockup-bar .dot { width: 9px; height: 9px; border-radius: 50%; }
-  .pz3-mockup-bar .d1 { background: #d4622e; }
-  .pz3-mockup-bar .d2 { background: #f0b94a; }
-  .pz3-mockup-bar .d3 { background: #43b5a6; }
+  .pz3-mockup-bar .d1 { background: var(--acento); }
+  .pz3-mockup-bar .d2 { background: var(--primario); }
+  .pz3-mockup-bar .d3 { background: var(--acento-2); }
   .pz3-mockup-bar .label {
     margin-left: auto; font-size: 11px; color: #a09080;
-    font-family: 'Menlo', monospace;
+    font-family: 'Menlo', 'Consolas', monospace;
   }
   .pz3-mockup-kpis {
-    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; overflow: hidden;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; overflow: hidden;
   }
   .pz3-kpi {
-    background: rgba(240, 236, 230, 0.04);
-    border-radius: 8px; padding: 12px;
+    background: rgba(240, 236, 230, 0.03);
+    border-radius: 8px; padding: 10px 12px;
   }
   .pz3-kpi-val {
-    font-family: var(--font-titulo); font-size: 22px; font-weight: 800;
-    color: #f0ece6;
+    font-family: var(--font-titulo); font-size: 24px; font-weight: 800;
+    color: var(--texto);
   }
-  .pz3-kpi-val.is-up { color: #43b5a6; }
-  .pz3-kpi-val.is-warm { color: #f0b94a; }
-  .pz3-kpi-label { font-size: 10px; color: #a09080; margin-top: 2px;
-    text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+  .pz3-kpi-val.is-up { color: var(--acento-2); }
+  .pz3-kpi-val.is-warm { color: var(--primario); }
+  .pz3-kpi-label {
+    font-size: 10px; color: #a09080; margin-top: 2px;
+    text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600;
+  }
   .pz3-chart {
-    flex: 1; display: flex; align-items: flex-end; gap: 8px;
-    padding: 12px 4px 0; border-top: 1px solid rgba(240, 236, 230, 0.06);
+    flex: 1; display: flex; align-items: flex-end; gap: 7px;
+    padding: 10px 4px 0; border-top: 1px solid rgba(240, 236, 230, 0.05);
   }
   .pz3-chart .col {
     flex: 1; border-radius: 3px 3px 0 0;
-    background: linear-gradient(180deg, #f0b94a, #d4622e);
-    opacity: 0.85;
+    background: linear-gradient(180deg, var(--primario), var(--acento));
+    opacity: 0.82;
   }
   .pz3-chart .col.alt {
-    background: linear-gradient(180deg, #43b5a6, #2e8d7c);
+    background: linear-gradient(180deg, var(--acento-2), #2e8d7c);
   }
+  /* Logo seal — overlaid LARGER + disc backing */
+  .pz3-logo-seal {
+    position: absolute; top: 10px; right: 10px; z-index: 3;
+    width: 150px; height: 150px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(240, 185, 74, 0.14) 0%, rgba(12, 14, 16, 0.9) 100%);
+    border: 2px solid rgba(240, 185, 74, 0.3);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(240, 185, 74, 0.08);
+  }
+  .pz3-logo-seal svg { width: 110px; height: 110px; }
+  .pz3-logo-seal svg * { stroke: url(#ogGradPZ3); }
 
   .contract-fields { display: none !important; }
 </style>
 </head>
 <body>
-  <!-- ── v1_website ── -->
+
+  <!-- ═══ v1_website — Cloud Atlas Home ═══ -->
   <div class="v1-container variant-content v1c">
-    <div class="v1-symbol">
+    <div class="v1-symbol" data-isotype-container>
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="ogGradV1" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -363,16 +495,32 @@
       </svg>
     </div>
     <h1 class="v1-brand" data-logo-texto data-fit data-fit-min="28">Kósmos</h1>
-    <div class="accent-line"></div>
-    <p class="v1-tagline" data-copy data-fit data-fit-min="20">Simulación del orden natural · Catálogo educativo de sistemas complejos</p>
-    <div class="v1-url" data-url data-fit data-fit-min="10"><span class="arrow">→ kosmos.stevenvallejo.com</span></div>
+    <div class="v1-accent-bar"></div>
+    <p class="v1-tagline" data-copy data-fit data-fit-min="18">Simulación del orden natural · Catálogo educativo de sistemas complejos</p>
+    <div class="v1-url" data-url data-fit data-fit-min="10"><span class="arrow">→</span>kosmos.stevenvallejo.com</div>
   </div>
 
-  <!-- ── v2_articulo ── -->
+  <!-- ═══ v2_articulo — Cloud Atlas Article ═══ -->
   <div class="v2-layout variant-content v2c" style="display:none">
-    <div class="v2-eyebrow"><span class="eyebrow-accent"></span>Artículo · Kósmos</div>
+    <div class="v2-logo-panel" data-isotype-container>
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="ogGradV2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#43b5a6"/><stop offset="100%" stop-color="#0d5c4a"/>
+          </linearGradient>
+        </defs>
+        <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke-width="2.8"/>
+        <line x1="50" y1="5" x2="50" y2="95" stroke-width="1" opacity="0.35"/>
+        <line x1="7" y1="25" x2="93" y2="75" stroke-width="1" opacity="0.35"/>
+        <line x1="93" y1="25" x2="7" y2="75" stroke-width="1" opacity="0.35"/>
+        <circle cx="50" cy="50" r="3"/><circle cx="50" cy="5" r="2"/>
+        <circle cx="93" cy="25" r="2"/><circle cx="93" cy="75" r="2"/>
+        <circle cx="50" cy="95" r="2"/><circle cx="7" cy="75" r="2"/><circle cx="7" cy="25" r="2"/>
+      </svg>
+    </div>
+    <div class="v2-eyebrow"><span class="v2-eyebrow-dot"></span>Artículo · Kósmos</div>
     <h1 class="v2-title" data-fit data-fit-min="32">Emergencia y autoorganización: cómo 22 simulaciones vuelven ejecutable la filosofía de la ciencia</h1>
-    <div class="accent-line"></div>
+    <div class="v2-accent-bar"></div>
     <div class="v2-meta">
       <span>Por Steven Vallejo</span>
       <span class="dot"></span>
@@ -380,28 +528,22 @@
       <span class="dot"></span>
       <span>Kósmos · Pinakothḗke</span>
     </div>
-    <div class="v2-footer">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke-width="2.8"/>
-        <line x1="50" y1="5" x2="50" y2="95" stroke-width="1" opacity="0.4"/>
-        <line x1="7" y1="25" x2="93" y2="75" stroke-width="1" opacity="0.4"/>
-        <line x1="93" y1="25" x2="7" y2="75" stroke-width="1" opacity="0.4"/>
-        <circle cx="50" cy="50" r="3"/><circle cx="50" cy="5" r="2"/>
-        <circle cx="93" cy="25" r="2"/><circle cx="93" cy="75" r="2"/>
-        <circle cx="50" cy="95" r="2"/><circle cx="7" cy="75" r="2"/><circle cx="7" cy="25" r="2"/>
-      </svg>
-      <span data-logo-texto data-fit data-fit-min="10">Kósmos</span>
-    </div>
+    <div class="v2-brand-chip" data-logo-texto data-fit data-fit-min="10">Kósmos</div>
   </div>
 
-  <!-- ── v3_feature ── -->
+  <!-- ═══ v3_feature — Cloud Atlas Feature ═══ -->
   <div class="v3-layout variant-content v3c" style="display:none">
     <div class="v3-badge">✦ Nuevo en Kósmos</div>
     <h1 class="v3-title" data-fit data-fit-min="32">16 repositorios de sistemas complejos, unificados en un catálogo SSG</h1>
-    <div class="v3-accent-line"></div>
-    <p class="v3-desc" data-fit data-fit-min="20">Simulaciones ejecutables de emergencia, caos y autoorganización. Open source, rigor cuantitativo.</p>
-    <div class="v3-footer">
+    <div class="v3-accent-bar"></div>
+    <p class="v3-desc" data-fit data-fit-min="18">Simulaciones ejecutables de emergencia, caos y autoorganización. Open source, rigor cuantitativo.</p>
+    <div class="v3-logo-area" data-isotype-container>
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="ogGradV3" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#a3e4d7"/><stop offset="100%" stop-color="#c9bde4"/>
+          </linearGradient>
+        </defs>
         <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke-width="2.5"/>
         <line x1="50" y1="5" x2="50" y2="95" stroke-width="1" opacity="0.4"/>
         <line x1="7" y1="25" x2="93" y2="75" stroke-width="1" opacity="0.4"/>
@@ -410,11 +552,11 @@
         <circle cx="93" cy="75" r="2"/><circle cx="50" cy="95" r="2"/>
         <circle cx="7" cy="75" r="2"/><circle cx="7" cy="25" r="2"/>
       </svg>
-      <span data-logo-texto data-fit data-fit-min="10">Kósmos</span>
     </div>
+    <div class="v3-brand-tag" data-logo-texto data-fit data-fit-min="10">Kósmos</div>
   </div>
 
-  <!-- ── v1_docs (Prizma) ── -->
+  <!-- ═══ v1_docs — Prizma Docs ═══ -->
   <div class="pz1-layout variant-content pz1c" style="display:none">
     <div class="pz1-left">
       <span class="pz1-eyebrow"><span class="pz1-eyebrow-dot"></span>Docs · API</span>
@@ -440,10 +582,27 @@
         <span class="pz1-endpoint is-post"><span class="verb">POST</span>/v1/payments</span>
         <span class="pz1-endpoint"><span class="verb">GET</span>/v1/customers</span>
       </div>
+      <div class="pz1-trust" data-isotype-container>
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="ogGradPZ1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#f0b94a"/><stop offset="100%" stop-color="#d4622e"/>
+            </linearGradient>
+          </defs>
+          <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke-width="2.5"/>
+          <line x1="50" y1="5" x2="50" y2="95" stroke-width="1" opacity="0.35"/>
+          <line x1="7" y1="25" x2="93" y2="75" stroke-width="1" opacity="0.35"/>
+          <line x1="93" y1="25" x2="7" y2="75" stroke-width="1" opacity="0.35"/>
+          <circle cx="50" cy="50" r="3"/><circle cx="50" cy="5" r="2"/>
+          <circle cx="93" cy="25" r="2"/><circle cx="93" cy="75" r="2"/>
+          <circle cx="50" cy="95" r="2"/><circle cx="7" cy="75" r="2"/><circle cx="7" cy="25" r="2"/>
+        </svg>
+        <span class="pz1-trust-label" data-logo-texto data-fit data-fit-min="10">Prizma</span>
+      </div>
     </div>
   </div>
 
-  <!-- ── v2_enterprise_blog (Prizma) ── -->
+  <!-- ═══ v2_enterprise_blog — Prizma Editorial ═══ -->
   <div class="pz2-layout variant-content pz2c" style="display:none">
     <span class="pz2-eyebrow"><span class="pz2-eyebrow-line"></span>Insights · Prizma</span>
     <h1 class="pz2-title" data-titulo data-fit data-fit-min="28">El <span class="accent-word">software</span> que el comercio colombiano necesitaba</h1>
@@ -455,21 +614,26 @@
       <span class="dot"></span>
       <span data-subtitulo data-fit data-fit-min="10">Prizma · Suite empresarial</span>
     </div>
-    <div class="pz2-footer">
+    <div class="pz2-logo-frame" data-isotype-container>
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="ogGradPZ2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#f0b94a"/><stop offset="100%" stop-color="#d4622e"/>
+          </linearGradient>
+        </defs>
         <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke-width="2.8"/>
-        <line x1="50" y1="5" x2="50" y2="95" stroke-width="1" opacity="0.4"/>
-        <line x1="7" y1="25" x2="93" y2="75" stroke-width="1" opacity="0.4"/>
-        <line x1="93" y1="25" x2="7" y2="75" stroke-width="1" opacity="0.4"/>
+        <line x1="50" y1="5" x2="50" y2="95" stroke-width="1" opacity="0.35"/>
+        <line x1="7" y1="25" x2="93" y2="75" stroke-width="1" opacity="0.35"/>
+        <line x1="93" y1="25" x2="7" y2="75" stroke-width="1" opacity="0.35"/>
         <circle cx="50" cy="50" r="3"/><circle cx="50" cy="5" r="2"/>
         <circle cx="93" cy="25" r="2"/><circle cx="93" cy="75" r="2"/>
         <circle cx="50" cy="95" r="2"/><circle cx="7" cy="75" r="2"/><circle cx="7" cy="25" r="2"/>
       </svg>
-      <span data-logo-texto data-fit data-fit-min="10">Prizma</span>
     </div>
+    <div class="pz2-brand-tag" data-logo-texto data-fit data-fit-min="10">Prizma</div>
   </div>
 
-  <!-- ── v3_tool (Prizma) ── -->
+  <!-- ═══ v3_tool — Prizma Dashboard ═══ -->
   <div class="pz3-layout variant-content pz3c" style="display:none">
     <div class="pz3-left">
       <span class="pz3-badge">✦ Dashboard · Tool</span>
@@ -502,6 +666,22 @@
           <div class="col" style="height:92%"></div>
           <div class="col alt" style="height:88%"></div>
         </div>
+      </div>
+      <div class="pz3-logo-seal" data-isotype-container>
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="ogGradPZ3" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#f0b94a"/><stop offset="100%" stop-color="#d4622e"/>
+            </linearGradient>
+          </defs>
+          <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke-width="2.5"/>
+          <line x1="50" y1="5" x2="50" y2="95" stroke-width="1" opacity="0.4"/>
+          <line x1="7" y1="25" x2="93" y2="75" stroke-width="1" opacity="0.4"/>
+          <line x1="93" y1="25" x2="7" y2="75" stroke-width="1" opacity="0.4"/>
+          <circle cx="50" cy="50" r="3"/><circle cx="93" cy="25" r="2"/>
+          <circle cx="93" cy="75" r="2"/><circle cx="50" cy="95" r="2"/>
+          <circle cx="7" cy="75" r="2"/><circle cx="7" cy="25" r="2"/>
+        </svg>
       </div>
     </div>
   </div>

@@ -3,7 +3,7 @@
   "nombre_producto": "Nómos",
   "nombre_corporativo": "Pinakothḗke",
   "tagline": "Indexador de documentos legislativos con búsqueda full-text: adapta scraping a Cámara y Senado de Colombia y Cámara de Diputados de RD. FastAPI + Neon Postgres + Mangum en Vercel serverless. Patrón Source Adapter intercambiable sin tocar el pipeline.",
-  "url": "https://nomos.stevenvallejo.com",
+  "url": "nomos.stevenvallejo.com",
   "tono": "riguroso, legal, técnico",
   "simbolo": "§",
   "frente": "ingenieria",
@@ -26,48 +26,93 @@
   "logo_texto": "Nómos",
   "logo_simbolo": "§",
   "textos": {
-    "linkedin_post": {
-      "titulo": "Nómos",
-      "subtitulo": "Scraping legal CO/RD · Pinakothḗke",
-      "copy": "Scraping con reglas, datos con ética."
-    },
-    "linkedin_banner": {
-      "titulo": "Nómos",
-      "copy": "Extracción de datos conforme a la ley. Colombia y Rep. Dominicana."
-    },
     "ig_post": {
-      "titulo": "§",
-      "subtitulo": "Nómos",
-      "copy": "Scraping con reglas, datos con ética"
+      "titulo": "Nómos, buscar lo que voto",
+      "subtitulo": "Busca proyectos de ley sin BS",
+      "etiqueta": "fuentes legislativas",
+      "copy": "Indexa leyes de Colombia y RD sin filtro. Full-text, tiempo real, cero IA. Votaciones, autores, iniciativas: datos crudos."
     },
     "ig_story": {
-      "titulo": "Nómos",
-      "copy": "Senado RD ↓"
+      "titulo": "Nómos, buscar lo que voto",
+      "copy": "Busca leyes como las votan: sin intermediarios, sin filtro."
     },
-    "x_post": {
-      "titulo": "Nómos",
-      "copy": "Scraping con reglas, datos con ética"
+    "ig_carousel": {
+      "titulo": "Nómos, buscar lo que voto",
+      "copy": "Indexa leyes de Colombia y RD sin filtro. Full-text, tiempo real, cero IA. Votaciones, autores, iniciativas: datos crudos.",
+      "numero": "3"
     },
-    "yt_thumbnail": {
-      "titulo": "Nómos",
-      "copy": "Scraping con reglas"
+    "ig_reel_cover": {
+      "titulo": "Leyes buscables, crudas",
+      "copy": "Full-text de proyectos CO y RD sin filtro. FastAPI + Neon serverless. Source adapter por país, pipeline único."
     },
-    "yt_banner": {
-      "titulo": "Nómos",
-      "subtitulo": "Scraping legal CO/RD · Pinakothḗke"
+    "stat_card": {
+      "numero": "3",
+      "etiqueta": "fuentes legislativas",
+      "copy": "Busca leyes como las votan: sin intermediarios, sin filtro."
+    },
+    "ad_rectangle": {
+      "titulo": "Nómos, buscar lo que voto",
+      "numero": "3",
+      "copy": "Busca leyes como las votan: sin intermediarios, sin filtro.",
+      "cita": "Busca leyes como las votan: sin intermediarios, sin filtro.",
+      "autor": "Steven Vallejo"
+    },
+    "ad_leaderboard": {
+      "titulo": "Nómos, buscar lo que voto",
+      "copy": "Busca leyes como las votan: sin intermediarios, sin filtro."
     },
     "og_general": {
-      "titulo": "Nómos",
-      "subtitulo": "Scraping legal CO/RD · Pinakothḗke",
-      "copy": "Scraping con reglas, datos con ética."
+      "titulo": "Nómos, buscar lo que voto",
+      "subtitulo": "Busca proyectos de ley sin BS",
+      "copy": "Indexa leyes de Colombia y RD sin filtro. Full-text, tiempo real, cero IA. Votaciones, autores, iniciativas: datos crudos."
+    },
+    "og_product": {
+      "titulo": "Nómos, buscar lo que voto",
+      "subtitulo": "Busca proyectos de ley sin BS",
+      "copy": "Indexa leyes de Colombia y RD sin filtro. Full-text, tiempo real, cero IA. Votaciones, autores, iniciativas: datos crudos."
+    },
+    "web_hero": {
+      "titulo": "Nómos, buscar lo que voto",
+      "subtitulo": "Busca proyectos de ley sin BS",
+      "copy": "Indexa leyes de Colombia y RD sin filtro. Full-text, tiempo real, cero IA. Votaciones, autores, iniciativas: datos crudos."
+    },
+    "linkedin_post": {
+      "titulo": "Nómos, buscar lo que voto",
+      "subtitulo": "Busca proyectos de ley sin BS",
+      "etiqueta": "fuentes legislativas",
+      "copy": "Indexa leyes de Colombia y RD sin filtro. Full-text, tiempo real, cero IA. Votaciones, autores, iniciativas: datos crudos."
+    },
+    "linkedin_banner": {
+      "titulo": "Nómos, buscar lo que voto",
+      "etiqueta": "fuentes legislativas",
+      "copy": "Busca leyes como las votan: sin intermediarios, sin filtro."
+    },
+    "fb_cover": {
+      "titulo": "Nómos, buscar lo que voto",
+      "subtitulo": "Busca proyectos de ley sin BS",
+      "copy": "Indexa leyes de Colombia y RD sin filtro. Full-text, tiempo real, cero IA. Votaciones, autores, iniciativas: datos crudos."
+    },
+    "x_post": {
+      "titulo": "Nómos, buscar lo que voto",
+      "copy": "Busca leyes como las votan: sin intermediarios, sin filtro."
+    },
+    "yt_thumbnail": {
+      "titulo": "Nómos, buscar lo que voto",
+      "copy": "Busca leyes como las votan: sin intermediarios, sin filtro."
+    },
+    "poster_a4": {
+      "titulo": "Nómos, buscar lo que voto",
+      "subtitulo": "Busca proyectos de ley sin BS",
+      "copy": "Indexa leyes de Colombia y RD sin filtro. Full-text, tiempo real, cero IA. Votaciones, autores, iniciativas: datos crudos."
     },
     "whatsapp_perfil": {
-      "titulo": "§",
-      "copy": "Nómos"
+      "titulo": "Nómos, buscar lo que voto"
     },
     "contra_cover": {
-      "titulo": "Nómos",
-      "copy": "Scraping legal CO/RD · Pinakothḗke"
+      "titulo": "Nómos, buscar lo que voto",
+      "copy": "Busca proyectos de ley sin BS"
     }
-  }
+  },
+  "logo_style": "orbital",
+  "logo_seed": 130431078
 }

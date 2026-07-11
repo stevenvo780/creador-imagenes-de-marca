@@ -1,0 +1,597 @@
+- generic [ref=e2]:
+  - link "Saltar al contenido principal" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "Eikón" [ref=e6] [cursor=pointer]:
+        - /url: /
+      - navigation "Navegación principal" [ref=e7]:
+        - list [ref=e8]:
+          - listitem [ref=e9]:
+            - link "Marcas" [ref=e10] [cursor=pointer]:
+              - /url: /brands
+          - listitem [ref=e11]:
+            - link "Crear" [ref=e12] [cursor=pointer]:
+              - /url: /batch
+          - listitem [ref=e13]:
+            - link "Galería" [ref=e14] [cursor=pointer]:
+              - /url: /gallery
+      - generic [ref=e15]:
+        - 'generic "Cuenta: qalocal" [ref=e16]': qalocal
+        - button "Salir" [ref=e17] [cursor=pointer]
+  - main [ref=e18]:
+    - generic [ref=e1075]:
+      - generic [ref=e1076]:
+        - heading "Galería" [level=1] [ref=e1077]
+        - generic [ref=e1078]: 30 variaciones
+      - generic [ref=e1079]:
+        - generic [ref=e1080]:
+          - generic [ref=e1081]: Marca
+          - combobox "Filtrar por marca" [ref=e1082] [cursor=pointer]:
+            - option "Todas las marcas" [selected]
+            - option "QA Brand"
+        - generic [ref=e1083]:
+          - generic [ref=e1084]: Generación
+          - combobox "Filtrar por generación" [ref=e1085] [cursor=pointer]:
+            - option "Todas las generaciones" [selected]
+            - 'option "Generación #121"'
+            - 'option "Generación #120"'
+            - 'option "Generación #119"'
+            - 'option "Generación #118"'
+            - 'option "Generación #117"'
+            - 'option "Generación #116"'
+            - 'option "Generación #115"'
+            - 'option "Generación #114"'
+            - 'option "Generación #113"'
+            - 'option "Generación #112"'
+            - 'option "Generación #111"'
+            - 'option "Generación #110"'
+            - 'option "Generación #109"'
+            - 'option "Generación #108"'
+            - 'option "Generación #107"'
+            - 'option "Generación #106"'
+            - 'option "Generación #105"'
+            - 'option "Generación #104"'
+            - 'option "Generación #103"'
+            - 'option "Generación #102"'
+            - 'option "Generación #101"'
+        - generic [ref=e1086]:
+          - generic [ref=e1087]: Familia
+          - combobox "Filtrar por familia de formato" [ref=e1088] [cursor=pointer]:
+            - option "Todas las familias" [selected]
+            - option "Logos"
+            - option "Banners"
+            - option "Tarjetas"
+            - option "Redes / OG"
+            - option "Papelería"
+        - generic [ref=e1089]:
+          - generic [ref=e1090]: Ordenar por
+          - combobox "Ordenar variaciones" [ref=e1091] [cursor=pointer]:
+            - option "Calidad (mejores primero)"
+            - option "Más recientes" [selected]
+        - button "Quitar selección" [ref=e1584] [cursor=pointer]
+      - list "Variaciones de marca" [ref=e1093]:
+        - listitem [ref=e1094]:
+          - article "Variación de QA Brand" [ref=e1095]:
+            - generic [ref=e1096]:
+              - generic "Deseleccionar" [ref=e1585] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1098]
+                - generic [ref=e1586]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1099]:
+                - img "Vista previa de variación de QA Brand" [ref=e1100]
+            - generic [ref=e1101]:
+              - generic [ref=e1102]:
+                - generic [ref=e1103]: QA Brand
+                - 'generic "Familia: Tarjetas" [ref=e1104]': Tarjetas
+                - generic [ref=e1105]: Recomendado
+              - button "Descargar variación de QA Brand" [ref=e1106] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1107]:
+          - article "Variación de QA Brand" [ref=e1108]:
+            - generic [ref=e1109]:
+              - generic "Deseleccionar" [ref=e1587] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1111]
+                - generic [ref=e1588]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1112]:
+                - img "Vista previa de variación de QA Brand" [ref=e1113]
+            - generic [ref=e1114]:
+              - generic [ref=e1115]:
+                - generic [ref=e1116]: QA Brand
+                - 'generic "Familia: Banners" [ref=e1117]': Banners
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e1118]':
+                  - generic [ref=e1119]: ★
+                  - generic [ref=e1120]: ★
+                  - generic [ref=e1121]: ★
+                  - generic [ref=e1122]: ★
+                  - generic [ref=e1123]: ★
+              - button "Descargar variación de QA Brand" [ref=e1124] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1125]:
+          - article "Variación de QA Brand" [ref=e1126]:
+            - generic [ref=e1127]:
+              - generic "Deseleccionar" [ref=e1589] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1129]
+                - generic [ref=e1590]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1130]:
+                - img "Vista previa de variación de QA Brand" [ref=e1131]
+            - generic [ref=e1132]:
+              - generic [ref=e1133]:
+                - generic [ref=e1134]: QA Brand
+                - 'generic "Familia: Logos" [ref=e1135]': Logos
+                - generic [ref=e1136]: Recomendado
+              - button "Descargar variación de QA Brand" [ref=e1137] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1138]:
+          - article "Variación de QA Brand" [ref=e1139]:
+            - generic [ref=e1140]:
+              - generic "Deseleccionar" [ref=e1591] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1142]
+                - generic [ref=e1592]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1143]:
+                - img "Vista previa de variación de QA Brand" [ref=e1144]
+            - generic [ref=e1145]:
+              - generic [ref=e1146]:
+                - generic [ref=e1147]: QA Brand
+                - 'generic "Familia: Logos" [ref=e1148]': Logos
+                - generic [ref=e1149]: Recomendado
+              - button "Descargar variación de QA Brand" [ref=e1150] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1151]:
+          - article "Variación de QA Brand" [ref=e1152]:
+            - generic [ref=e1153]:
+              - generic "Deseleccionar" [ref=e1593] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1155]
+                - generic [ref=e1594]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1156]:
+                - img "Vista previa de variación de QA Brand" [ref=e1157]
+            - generic [ref=e1158]:
+              - generic [ref=e1159]:
+                - generic [ref=e1160]: QA Brand
+                - 'generic "Familia: Papelería" [ref=e1161]': Papelería
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e1162]':
+                  - generic [ref=e1163]: ★
+                  - generic [ref=e1164]: ★
+                  - generic [ref=e1165]: ★
+                  - generic [ref=e1166]: ★
+                  - generic [ref=e1167]: ★
+              - button "Descargar variación de QA Brand" [ref=e1168] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1169]:
+          - article "Variación de QA Brand" [ref=e1170]:
+            - generic [ref=e1171]:
+              - generic "Deseleccionar" [ref=e1595] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1173]
+                - generic [ref=e1596]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1174]:
+                - img "Vista previa de variación de QA Brand" [ref=e1175]
+            - generic [ref=e1176]:
+              - generic [ref=e1177]:
+                - generic [ref=e1178]: QA Brand
+                - 'generic "Familia: Papelería" [ref=e1179]': Papelería
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e1180]':
+                  - generic [ref=e1181]: ★
+                  - generic [ref=e1182]: ★
+                  - generic [ref=e1183]: ★
+                  - generic [ref=e1184]: ★
+                  - generic [ref=e1185]: ★
+              - button "Descargar variación de QA Brand" [ref=e1186] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1187]:
+          - article "Variación de QA Brand" [ref=e1188]:
+            - generic [ref=e1189]:
+              - generic "Deseleccionar" [ref=e1597] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1191]
+                - generic [ref=e1598]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1192]:
+                - img "Vista previa de variación de QA Brand" [ref=e1193]
+            - generic [ref=e1194]:
+              - generic [ref=e1195]:
+                - generic [ref=e1196]: QA Brand
+                - 'generic "Familia: Papelería" [ref=e1197]': Papelería
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e1198]':
+                  - generic [ref=e1199]: ★
+                  - generic [ref=e1200]: ★
+                  - generic [ref=e1201]: ★
+                  - generic [ref=e1202]: ★
+                  - generic [ref=e1203]: ★
+              - button "Descargar variación de QA Brand" [ref=e1204] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1205]:
+          - article "Variación de QA Brand" [ref=e1206]:
+            - generic [ref=e1207]:
+              - generic "Deseleccionar" [ref=e1599] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1209]
+                - generic [ref=e1600]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1210]:
+                - img "Vista previa de variación de QA Brand" [ref=e1211]
+            - generic [ref=e1212]:
+              - generic [ref=e1213]:
+                - generic [ref=e1214]: QA Brand
+                - 'generic "Familia: Redes / OG" [ref=e1215]': Redes / OG
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e1216]':
+                  - generic [ref=e1217]: ★
+                  - generic [ref=e1218]: ★
+                  - generic [ref=e1219]: ★
+                  - generic [ref=e1220]: ★
+                  - generic [ref=e1221]: ★
+              - button "Descargar variación de QA Brand" [ref=e1222] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1223]:
+          - article "Variación de QA Brand" [ref=e1224]:
+            - generic [ref=e1225]:
+              - generic "Deseleccionar" [ref=e1601] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1227]
+                - generic [ref=e1602]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1228]:
+                - img "Vista previa de variación de QA Brand" [ref=e1229]
+            - generic [ref=e1230]:
+              - generic [ref=e1231]:
+                - generic [ref=e1232]: QA Brand
+                - 'generic "Familia: Redes / OG" [ref=e1233]': Redes / OG
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e1234]':
+                  - generic [ref=e1235]: ★
+                  - generic [ref=e1236]: ★
+                  - generic [ref=e1237]: ★
+                  - generic [ref=e1238]: ★
+                  - generic [ref=e1239]: ★
+              - button "Descargar variación de QA Brand" [ref=e1240] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1241]:
+          - article "Variación de QA Brand" [ref=e1242]:
+            - generic [ref=e1243]:
+              - generic "Deseleccionar" [ref=e1603] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1245]
+                - generic [ref=e1604]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1246]:
+                - img "Vista previa de variación de QA Brand" [ref=e1247]
+            - generic [ref=e1248]:
+              - generic [ref=e1249]:
+                - generic [ref=e1250]: QA Brand
+                - 'generic "Familia: Redes / OG" [ref=e1251]': Redes / OG
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e1252]':
+                  - generic [ref=e1253]: ★
+                  - generic [ref=e1254]: ★
+                  - generic [ref=e1255]: ★
+                  - generic [ref=e1256]: ★
+                  - generic [ref=e1257]: ★
+              - button "Descargar variación de QA Brand" [ref=e1258] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1259]:
+          - article "Variación de QA Brand" [ref=e1260]:
+            - generic [ref=e1261]:
+              - generic "Deseleccionar" [ref=e1605] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1263]
+                - generic [ref=e1606]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1264]:
+                - img "Vista previa de variación de QA Brand" [ref=e1265]
+            - generic [ref=e1266]:
+              - generic [ref=e1267]:
+                - generic [ref=e1268]: QA Brand
+                - 'generic "Familia: Logos" [ref=e1269]': Logos
+                - 'img "Calidad: 1 de 5 estrellas" [ref=e1270]':
+                  - generic [ref=e1271]: ★
+                  - generic [ref=e1272]: ★
+                  - generic [ref=e1273]: ★
+                  - generic [ref=e1274]: ★
+                  - generic [ref=e1275]: ★
+              - button "Descargar variación de QA Brand" [ref=e1276] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1277]:
+          - article "Variación de QA Brand" [ref=e1278]:
+            - generic [ref=e1279]:
+              - generic "Deseleccionar" [ref=e1607] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1281]
+                - generic [ref=e1608]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1282]:
+                - img "Vista previa de variación de QA Brand" [ref=e1283]
+            - generic [ref=e1284]:
+              - generic [ref=e1285]:
+                - generic [ref=e1286]: QA Brand
+                - 'generic "Familia: Logos" [ref=e1287]': Logos
+                - 'img "Calidad: 1 de 5 estrellas" [ref=e1288]':
+                  - generic [ref=e1289]: ★
+                  - generic [ref=e1290]: ★
+                  - generic [ref=e1291]: ★
+                  - generic [ref=e1292]: ★
+                  - generic [ref=e1293]: ★
+              - button "Descargar variación de QA Brand" [ref=e1294] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1295]:
+          - article "Variación de QA Brand" [ref=e1296]:
+            - generic [ref=e1297]:
+              - generic "Deseleccionar" [ref=e1609] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1299]
+                - generic [ref=e1610]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1300]:
+                - img "Vista previa de variación de QA Brand" [ref=e1301]
+            - generic [ref=e1302]:
+              - generic [ref=e1303]:
+                - generic [ref=e1304]: QA Brand
+                - 'generic "Familia: Logos" [ref=e1305]': Logos
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e1306]':
+                  - generic [ref=e1307]: ★
+                  - generic [ref=e1308]: ★
+                  - generic [ref=e1309]: ★
+                  - generic [ref=e1310]: ★
+                  - generic [ref=e1311]: ★
+              - button "Descargar variación de QA Brand" [ref=e1312] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1313]:
+          - article "Variación de QA Brand" [ref=e1314]:
+            - generic [ref=e1315]:
+              - generic "Deseleccionar" [ref=e1611] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1317]
+                - generic [ref=e1612]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1318]:
+                - img "Vista previa de variación de QA Brand" [ref=e1319]
+            - generic [ref=e1320]:
+              - generic [ref=e1321]:
+                - generic [ref=e1322]: QA Brand
+                - 'generic "Familia: Papelería" [ref=e1323]': Papelería
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e1324]':
+                  - generic [ref=e1325]: ★
+                  - generic [ref=e1326]: ★
+                  - generic [ref=e1327]: ★
+                  - generic [ref=e1328]: ★
+                  - generic [ref=e1329]: ★
+              - button "Descargar variación de QA Brand" [ref=e1330] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1331]:
+          - article "Variación de QA Brand" [ref=e1332]:
+            - generic [ref=e1333]:
+              - generic "Deseleccionar" [ref=e1613] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1335]
+                - generic [ref=e1614]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1336]:
+                - img "Vista previa de variación de QA Brand" [ref=e1337]
+            - generic [ref=e1338]:
+              - generic [ref=e1339]:
+                - generic [ref=e1340]: QA Brand
+                - 'generic "Familia: Logos" [ref=e1341]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e1342]':
+                  - generic [ref=e1343]: ★
+                  - generic [ref=e1344]: ★
+                  - generic [ref=e1345]: ★
+                  - generic [ref=e1346]: ★
+                  - generic [ref=e1347]: ★
+              - button "Descargar variación de QA Brand" [ref=e1348] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1349]:
+          - article "Variación de QA Brand" [ref=e1350]:
+            - generic [ref=e1351]:
+              - generic "Deseleccionar" [ref=e1615] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1353]
+                - generic [ref=e1616]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1354]:
+                - img "Vista previa de variación de QA Brand" [ref=e1355]
+            - generic [ref=e1356]:
+              - generic [ref=e1357]:
+                - generic [ref=e1358]: QA Brand
+                - 'generic "Familia: Redes / OG" [ref=e1359]': Redes / OG
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e1360]':
+                  - generic [ref=e1361]: ★
+                  - generic [ref=e1362]: ★
+                  - generic [ref=e1363]: ★
+                  - generic [ref=e1364]: ★
+                  - generic [ref=e1365]: ★
+              - button "Descargar variación de QA Brand" [ref=e1366] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1367]:
+          - article "Variación de QA Brand" [ref=e1368]:
+            - generic [ref=e1369]:
+              - generic "Deseleccionar" [ref=e1617] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1371]
+                - generic [ref=e1618]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1372]:
+                - img "Vista previa de variación de QA Brand" [ref=e1373]
+            - generic [ref=e1374]:
+              - generic [ref=e1375]:
+                - generic [ref=e1376]: QA Brand
+                - 'generic "Familia: Tarjetas" [ref=e1377]': Tarjetas
+                - generic [ref=e1378]: Recomendado
+              - button "Descargar variación de QA Brand" [ref=e1379] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1380]:
+          - article "Variación de QA Brand" [ref=e1381]:
+            - generic [ref=e1382]:
+              - generic "Deseleccionar" [ref=e1619] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1384]
+                - generic [ref=e1620]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1385]:
+                - img "Vista previa de variación de QA Brand" [ref=e1386]
+            - generic [ref=e1387]:
+              - generic [ref=e1388]:
+                - generic [ref=e1389]: QA Brand
+                - 'generic "Familia: Tarjetas" [ref=e1390]': Tarjetas
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e1391]':
+                  - generic [ref=e1392]: ★
+                  - generic [ref=e1393]: ★
+                  - generic [ref=e1394]: ★
+                  - generic [ref=e1395]: ★
+                  - generic [ref=e1396]: ★
+              - button "Descargar variación de QA Brand" [ref=e1397] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1398]:
+          - article "Variación de QA Brand" [ref=e1399]:
+            - generic [ref=e1400]:
+              - generic "Deseleccionar" [ref=e1621] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1402]
+                - generic [ref=e1622]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1403]:
+                - img "Vista previa de variación de QA Brand" [ref=e1404]
+            - generic [ref=e1405]:
+              - generic [ref=e1406]:
+                - generic [ref=e1407]: QA Brand
+                - 'generic "Familia: Banners" [ref=e1408]': Banners
+                - generic [ref=e1409]: Recomendado
+              - button "Descargar variación de QA Brand" [ref=e1410] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1411]:
+          - article "Variación de QA Brand" [ref=e1412]:
+            - generic [ref=e1413]:
+              - generic "Deseleccionar" [ref=e1623] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1415]
+                - generic [ref=e1624]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1416]:
+                - img "Vista previa de variación de QA Brand" [ref=e1417]
+            - generic [ref=e1418]:
+              - generic [ref=e1419]:
+                - generic [ref=e1420]: QA Brand
+                - 'generic "Familia: Banners" [ref=e1421]': Banners
+                - generic [ref=e1422]: Recomendado
+              - button "Descargar variación de QA Brand" [ref=e1423] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1424]:
+          - article "Variación de QA Brand" [ref=e1425]:
+            - generic [ref=e1426]:
+              - generic "Deseleccionar" [ref=e1625] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1428]
+                - generic [ref=e1626]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1429]:
+                - img "Vista previa de variación de QA Brand" [ref=e1430]
+            - generic [ref=e1431]:
+              - generic [ref=e1432]:
+                - generic [ref=e1433]: QA Brand
+                - 'generic "Familia: Banners" [ref=e1434]': Banners
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e1435]':
+                  - generic [ref=e1436]: ★
+                  - generic [ref=e1437]: ★
+                  - generic [ref=e1438]: ★
+                  - generic [ref=e1439]: ★
+                  - generic [ref=e1440]: ★
+              - button "Descargar variación de QA Brand" [ref=e1441] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1442]:
+          - article "Variación de QA Brand" [ref=e1443]:
+            - generic [ref=e1444]:
+              - generic "Deseleccionar" [ref=e1627] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1446]
+                - generic [ref=e1628]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1447]:
+                - img "Vista previa de variación de QA Brand" [ref=e1448]
+            - generic [ref=e1449]:
+              - generic [ref=e1450]:
+                - generic [ref=e1451]: QA Brand
+                - 'generic "Familia: Banners" [ref=e1452]': Banners
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e1453]':
+                  - generic [ref=e1454]: ★
+                  - generic [ref=e1455]: ★
+                  - generic [ref=e1456]: ★
+                  - generic [ref=e1457]: ★
+                  - generic [ref=e1458]: ★
+              - button "Descargar variación de QA Brand" [ref=e1459] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1460]:
+          - article "Variación de QA Brand" [ref=e1461]:
+            - generic [ref=e1462]:
+              - generic "Deseleccionar" [ref=e1629] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1464]
+                - generic [ref=e1630]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1465]:
+                - img "Vista previa de variación de QA Brand" [ref=e1466]
+            - generic [ref=e1467]:
+              - generic [ref=e1468]:
+                - generic [ref=e1469]: QA Brand
+                - 'generic "Familia: Banners" [ref=e1470]': Banners
+                - generic [ref=e1471]: Recomendado
+              - button "Descargar variación de QA Brand" [ref=e1472] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1473]:
+          - article "Variación de QA Brand" [ref=e1474]:
+            - generic [ref=e1475]:
+              - generic "Deseleccionar" [ref=e1631] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1477]
+                - generic [ref=e1632]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1478]:
+                - img "Vista previa de variación de QA Brand" [ref=e1479]
+            - generic [ref=e1480]:
+              - generic [ref=e1481]:
+                - generic [ref=e1482]: QA Brand
+                - 'generic "Familia: Banners" [ref=e1483]': Banners
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e1484]':
+                  - generic [ref=e1485]: ★
+                  - generic [ref=e1486]: ★
+                  - generic [ref=e1487]: ★
+                  - generic [ref=e1488]: ★
+                  - generic [ref=e1489]: ★
+              - button "Descargar variación de QA Brand" [ref=e1490] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1491]:
+          - article "Variación de QA Brand" [ref=e1492]:
+            - generic [ref=e1493]:
+              - generic "Deseleccionar" [ref=e1633] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1495]
+                - generic [ref=e1634]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1496]:
+                - img "Vista previa de variación de QA Brand" [ref=e1497]
+            - generic [ref=e1498]:
+              - generic [ref=e1499]:
+                - generic [ref=e1500]: QA Brand
+                - 'generic "Familia: Logos" [ref=e1501]': Logos
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e1502]':
+                  - generic [ref=e1503]: ★
+                  - generic [ref=e1504]: ★
+                  - generic [ref=e1505]: ★
+                  - generic [ref=e1506]: ★
+                  - generic [ref=e1507]: ★
+              - button "Descargar variación de QA Brand" [ref=e1508] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1509]:
+          - article "Variación de QA Brand" [ref=e1510]:
+            - generic [ref=e1511]:
+              - generic "Deseleccionar" [ref=e1635] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1513]
+                - generic [ref=e1636]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1514]:
+                - img "Vista previa de variación de QA Brand" [ref=e1515]
+            - generic [ref=e1516]:
+              - generic [ref=e1517]:
+                - generic [ref=e1518]: QA Brand
+                - 'generic "Familia: Logos" [ref=e1519]': Logos
+                - generic [ref=e1520]: Recomendado
+              - button "Descargar variación de QA Brand" [ref=e1521] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1522]:
+          - article "Variación de QA Brand" [ref=e1523]:
+            - generic [ref=e1524]:
+              - generic "Deseleccionar" [ref=e1637] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1526]
+                - generic [ref=e1638]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1527]:
+                - img "Vista previa de variación de QA Brand" [ref=e1528]
+            - generic [ref=e1529]:
+              - generic [ref=e1530]:
+                - generic [ref=e1531]: QA Brand
+                - 'generic "Familia: Logos" [ref=e1532]': Logos
+                - 'img "Calidad: 3 de 5 estrellas" [ref=e1533]':
+                  - generic [ref=e1534]: ★
+                  - generic [ref=e1535]: ★
+                  - generic [ref=e1536]: ★
+                  - generic [ref=e1537]: ★
+                  - generic [ref=e1538]: ★
+              - button "Descargar variación de QA Brand" [ref=e1539] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1540]:
+          - article "Variación de QA Brand" [ref=e1541]:
+            - generic [ref=e1542]:
+              - generic "Deseleccionar" [ref=e1639] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1544]
+                - generic [ref=e1640]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1545]:
+                - img "Vista previa de variación de QA Brand" [ref=e1546]
+            - generic [ref=e1547]:
+              - generic [ref=e1548]:
+                - generic [ref=e1549]: QA Brand
+                - 'generic "Familia: Logos" [ref=e1550]': Logos
+                - generic [ref=e1551]: Recomendado
+              - button "Descargar variación de QA Brand" [ref=e1552] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1553]:
+          - article "Variación de QA Brand" [ref=e1554]:
+            - generic [ref=e1555]:
+              - generic "Deseleccionar" [ref=e1641] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1557]
+                - generic [ref=e1642]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1558]:
+                - img "Vista previa de variación de QA Brand" [ref=e1559]
+            - generic [ref=e1560]:
+              - generic [ref=e1561]:
+                - generic [ref=e1562]: QA Brand
+                - 'generic "Familia: Logos" [ref=e1563]': Logos
+                - 'img "Calidad: 4 de 5 estrellas" [ref=e1564]':
+                  - generic [ref=e1565]: ★
+                  - generic [ref=e1566]: ★
+                  - generic [ref=e1567]: ★
+                  - generic [ref=e1568]: ★
+                  - generic [ref=e1569]: ★
+              - button "Descargar variación de QA Brand" [ref=e1570] [cursor=pointer]: ↓ Descargar
+        - listitem [ref=e1571]:
+          - article "Variación de QA Brand" [ref=e1572]:
+            - generic [ref=e1573]:
+              - generic "Deseleccionar" [ref=e1643] [cursor=pointer]:
+                - checkbox "Seleccionar variación de QA Brand" [checked] [ref=e1575]
+                - generic [ref=e1644]: ✓
+              - button "Ver detalle de QA Brand" [ref=e1576]:
+                - img "Vista previa de variación de QA Brand" [ref=e1577]
+            - generic [ref=e1578]:
+              - generic [ref=e1579]:
+                - generic [ref=e1580]: QA Brand
+                - 'generic "Familia: Logos" [ref=e1581]': Logos
+                - generic [ref=e1582]: Recomendado
+              - button "Descargar variación de QA Brand" [ref=e1583] [cursor=pointer]: ↓ Descargar
+    - region "Acciones sobre la selección" [ref=e1645]:
+      - generic [ref=e1646]: 30 variaciones seleccionadas
+      - button "↓ Descargar .zip" [ref=e1647] [cursor=pointer]
+      - button "Cancelar selección" [ref=e1648] [cursor=pointer]: ✕

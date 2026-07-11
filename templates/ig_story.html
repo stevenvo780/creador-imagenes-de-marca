@@ -4,128 +4,147 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1080, height=1920, initial-scale=1">
 <title>Eikon - Instagram Story</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --primario: #0b1417;
-    --acento-2: #8d7cc0;
-    --texto: #e8e0d4;
-    --bg: #0b1417;
-    --gradient-hero: linear-gradient(135deg, #43b5a6, #8d7cc0);
-    --font-titulo: 'Playfair Display', Georgia, serif;
-    --font-cuerpo: 'Inter', Arial, sans-serif;
-  }
+/* ═══════ FONTS ═══════ */
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 400; font-display: block; src: url("fonts/Inter-400.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 700; font-display: block; src: url("fonts/Inter-700.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 400; font-display: block; src: url("fonts/PlayfairDisplay-400.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 700; font-display: block; src: url("fonts/PlayfairDisplay-700.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 900; font-display: block; src: url("fonts/PlayfairDisplay-900.woff2") format("woff2"); }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 1080px; height: 1920px; overflow: hidden; }
-  body {
-    background-color: var(--bg);
-    color: var(--texto);
-    font-family: var(--font-cuerpo);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    padding: 120px 80px 160px 80px;
-  }
+/* ═══════ DESIGN TOKENS ═══════ */
+:root {
+  --bg: #0b1417; --texto: #e8e0d4; --primario: #0b1417;
+  --acento: #43b5a6; --acento-2: #8d7cc0; --texto-muted: #a09080;
+  --font-titulo: 'Playfair Display', Georgia, serif;
+  --font-cuerpo: 'Inter', system-ui, sans-serif;
+  --space-0: 0; --space-1: 8px; --space-2: 16px; --space-3: 24px;
+  --space-4: 32px; --space-5: 40px; --space-6: 48px;
+  --space-8: 64px; --space-10: 80px; --space-12: 96px;
+  --type-xs: 8px; --type-sm: 10px; --type-base: 16px;
+  --type-lg: 20px; --type-xl: 25px; --type-2xl: 31px;
+  --type-3xl: 39px; --type-4xl: 49px; --type-5xl: 61px; --type-6xl: 76px;
+  --tracking-tight: -0.02em; --tracking-normal: 0em; --tracking-wide: 0.02em;
+  --leading-tight: 1.2; --leading-normal: 1.5; --leading-relaxed: 1.8;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; }
 
-  /* VARIANTES */
-  body[data-variant="v1_cover"] { /* Cover con acento lateral */ }
-  body[data-variant="v2_story"] { /* Story narrativo */ }
-  body[data-variant="v3_promo"] { /* Promoción */ }
-  body[data-variant="v4_qna"] { /* Q&A */ }
+/* ═══════ DEPTH SYSTEM ═══════ */
+.depth-radial {
+  background: radial-gradient(ellipse at 50% 28%,
+    color-mix(in srgb, var(--bg) 90%, white) 0%,
+    color-mix(in srgb, var(--bg) 95%, white) 42%,
+    var(--bg) 100%);
+}
+.depth-glow .logo-hero::before {
+  content: ''; position: absolute;
+  width: 180%; height: 180%; border-radius: 50%;
+  background: radial-gradient(circle,
+    color-mix(in srgb, var(--acento) 8%, transparent) 0%, transparent 62%);
+  filter: blur(100px); top: 50%; left: 50%;
+  transform: translate(-50%, -50%); pointer-events: none; z-index: 0;
+}
+.depth-grain::after {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 200px 200px; pointer-events: none; z-index: 2;
+}
 
-  .brand-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: auto;
-  }
+body {
+  font-family: var(--font-cuerpo); color: var(--texto); position: relative;
+  display: flex; flex-direction: column; height: 100%;
+  padding: var(--space-12) var(--space-12) var(--space-8);
+}
 
-  .brand-mark {
-    font-size: 48px;
-    font-weight: 700;
-  }
+/* ═══════ LOGO — protagónico y grande ═══════ */
+.logo-hero {
+  display: flex; align-items: center; justify-content: center;
+  width: 280px; height: 280px; position: relative;
+  align-self: center; flex-shrink: 0;
+  margin-bottom: var(--space-8);
+  z-index: 1;
+}
+.logo-hero img,
+.logo-hero [data-isotype-container],
+.logo-hero svg {
+  width: 100%; height: 100%; object-fit: contain; position: relative; z-index: 2;
+}
 
-  .brand-name {
-    font-size: 28px;
-    font-weight: 600;
-  }
+/* ═══════ HEADLINE ═══════ */
+.title {
+  font-family: var(--font-titulo); font-size: var(--type-6xl); font-weight: 800;
+  line-height: var(--leading-tight); letter-spacing: var(--tracking-tight);
+  text-align: center; position: relative; z-index: 1;
+}
 
-  .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 32px;
-    text-align: center;
-    flex: 1;
-  }
+/* ═══════ SEPARATOR ═══════ */
+.accent-sep {
+  width: var(--space-8); height: 3px; background: var(--acento);
+  border-radius: 2px; margin: var(--space-6) auto; flex-shrink: 0;
+  position: relative; z-index: 1;
+}
 
-  .logo-symbol {
-    font-size: 140px;
-    font-weight: 700;
-    line-height: 1;
-  }
+/* ═══════ SUBTÍTULO + COPY ═══════ */
+.subtitle {
+  font-family: var(--font-cuerpo); font-size: var(--type-3xl); font-weight: 600;
+  line-height: var(--leading-normal); color: var(--acento); text-align: center;
+  position: relative; z-index: 1; margin-bottom: var(--space-3);
+}
+.copy {
+  font-size: var(--type-2xl); font-weight: 400; line-height: var(--leading-relaxed);
+  color: color-mix(in srgb, var(--texto) 82%, var(--bg) 18%);
+  text-align: center; max-width: 780px; align-self: center;
+  position: relative; z-index: 1;
+}
 
-  .title {
-    font-family: var(--font-titulo);
-    font-size: 120px;
-    font-weight: 700;
-    line-height: 1.1;
-  }
+/* ═══════ FOOTER: marca + URL ═══════ */
+.footer-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: auto; padding-top: var(--space-4);
+  border-top: 1px solid color-mix(in srgb, var(--texto-muted) 15%, transparent);
+  position: relative; z-index: 1; flex-shrink: 0;
+}
+.brand-signature {
+  font-family: var(--font-titulo); font-size: var(--type-xl); font-weight: 600;
+  letter-spacing: var(--tracking-wide); color: var(--texto-muted);
+}
+.url {
+  font-size: var(--type-lg); font-weight: 500; color: var(--acento-2);
+  letter-spacing: var(--tracking-wide);
+}
 
-  .subtitle {
-    font-size: 56px;
-    font-weight: 600;
-    line-height: 1.2;
-  }
+/* ═══════ VARIANTS ═══════ */
+body[data-variant="v1_cover"] .title { font-size: 90px; font-weight: 900; }
+body[data-variant="v2_story"] .title { font-size: var(--type-5xl); font-weight: 700; }
+body[data-variant="v2_story"] .copy { font-size: var(--type-xl); }
+body[data-variant="v3_promo"] .logo-hero { width: 200px; height: 200px; }
+body[data-variant="v3_promo"] .title { font-size: var(--type-5xl); }
+body[data-variant="v4_qna"] .title { font-size: var(--type-4xl); font-weight: 700; }
 
-  .copy {
-    font-size: 72px;
-    line-height: 1.4;
-  }
-
-  .url {
-    font-size: 48px;
-    font-weight: 600;
-    margin-top: auto;
-    color: var(--acento-2);
-  }
-
-  .contract-fields { display: none !important; }
+.contract-fields { display: none !important; }
 </style>
 </head>
-<body data-variant="v1_cover" data-brand-line="cloud">
+<body class="depth-radial depth-glow depth-grain" data-template="instagram_story" data-variant="v1_cover" data-brand-line="cloud">
 
-  <section class="brand-row">
-    <span class="brand-mark" data-logo-simbolo data-fit data-fit-min="28">*</span>
-    <span class="brand-name" data-logo-texto data-fit data-fit-min="16">Marca</span>
-  </section>
+  <span class="logo-hero" data-isotype-container></span>
 
-  <section class="content">
-    <span class="logo-symbol" data-logo-simbolo data-fit data-fit-min="80">*</span>
-    <h1 class="title" data-titulo data-fit data-fit-min="60" data-fit-y="true">Titulo</h1>
-    <h2 class="subtitle" data-subtitulo data-fit data-fit-min="32">Subtitulo</h2>
-    <p class="copy" data-copy data-fit data-fit-min="40" data-fit-y="true">Copy</p>
-  </section>
+  <h1 class="title" data-titulo data-fit data-fit-min="64" data-fit-y="true">Titulo</h1>
 
-  <span class="url" data-url data-fit data-fit-min="24">example.com</span>
+  <div class="accent-sep"></div>
+
+  <h2 class="subtitle" data-subtitulo data-fit data-fit-min="28">Subtitulo</h2>
+  <p class="copy" data-copy data-fit data-fit-min="36" data-fit-y="true">Copy</p>
+
+  <footer class="footer-row">
+    <span class="brand-signature" data-logo-texto data-fit data-fit-min="18">Marca</span>
+    <span class="url" data-url data-fit data-fit-min="16">example.com</span>
+  </footer>
 
   <div class="contract-fields" aria-hidden="true">
-    <span data-titulo></span>
-    <span data-subtitulo></span>
-    <span data-copy></span>
-    <span data-logo-simbolo></span>
-    <span data-logo-texto></span>
-    <span data-numero></span>
-    <span data-etiqueta></span>
-    <span data-autor></span>
-    <span data-cargo></span>
-    <span data-url></span>
-    <span data-acento></span>
-    <span data-acento-2></span>
+    <span data-titulo></span><span data-subtitulo></span><span data-copy></span>
+    <span data-logo-simbolo></span><span data-logo-texto></span>
+    <span data-isotype-container></span><span data-url></span>
   </div>
 
 <script src="./eikon-runtime.js"></script>

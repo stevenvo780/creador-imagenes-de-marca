@@ -1,0 +1,71 @@
+- generic [ref=e2]:
+  - link "Saltar al contenido principal" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "Eikón" [ref=e6] [cursor=pointer]:
+        - /url: /
+      - navigation "Navegación principal" [ref=e7]:
+        - list [ref=e8]:
+          - listitem [ref=e9]:
+            - link "Marcas" [ref=e10] [cursor=pointer]:
+              - /url: /brands
+          - listitem [ref=e11]:
+            - link "Crear" [ref=e12] [cursor=pointer]:
+              - /url: /batch
+          - listitem [ref=e13]:
+            - link "Galería" [ref=e14] [cursor=pointer]:
+              - /url: /gallery
+      - generic [ref=e15]:
+        - 'generic "Cuenta: qalocal" [ref=e16]': qalocal
+        - button "Salir" [ref=e17] [cursor=pointer]
+  - main [ref=e18]:
+    - generic [ref=e19]:
+      - heading "Crear la identidad de tu marca" [level=1] [ref=e20]
+      - navigation "Pasos del proceso" [ref=e21]:
+        - list [ref=e22]:
+          - listitem [ref=e23]:
+            - generic [ref=e24]: ✓
+            - generic [ref=e25]: Tu marca
+          - listitem [ref=e26]
+          - listitem [ref=e27]:
+            - generic [ref=e28]: ✓
+            - generic [ref=e29]: Qué generar
+          - listitem [ref=e30]
+          - listitem [ref=e31]:
+            - generic [ref=e32]: ✓
+            - generic [ref=e33]: Estilo
+          - listitem [ref=e34]
+          - listitem [ref=e35]:
+            - generic [ref=e36]: ✓
+            - generic [ref=e37]: Variaciones
+          - listitem [ref=e38]
+          - listitem [ref=e39]:
+            - generic [ref=e40]: "5"
+            - generic [ref=e41]: Revisar
+      - generic [ref=e311]:
+        - generic [ref=e312]:
+          - heading "Todo listo para generar" [level=2] [ref=e313]
+          - paragraph [ref=e314]:
+            - text: Revisa el resumen y cuando estés lista/o, haz clic en
+            - strong [ref=e315]: "\"Generar mis variaciones\""
+            - text: .
+        - generic [ref=e316]:
+          - generic [ref=e317]:
+            - generic [ref=e318]: Marca
+            - generic [ref=e319]: QA Brand
+          - generic [ref=e320]:
+            - generic [ref=e321]: Formatos
+            - generic [ref=e322]: Símbolo / Isotipo
+          - generic [ref=e323]:
+            - generic [ref=e324]: Variaciones
+            - generic [ref=e325]: "10"
+          - generic [ref=e326]:
+            - generic [ref=e327]: Opciones que varían
+            - generic [ref=e328]: Estilo de símbolo
+        - generic [ref=e329]:
+          - generic [ref=e330]: 💡
+          - generic [ref=e331]: La generación ocurre en segundo plano. Puedes ver el progreso en la siguiente pantalla y revisar los resultados cuando estén listos.
+      - generic [ref=e52]:
+        - button "← Anterior" [ref=e184] [cursor=pointer]
+        - button "Generar mis variaciones" [active] [ref=e332] [cursor=pointer]
