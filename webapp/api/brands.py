@@ -91,7 +91,7 @@ def get_brand_endpoint(
     settings = get_settings(request)
     row = get_brand(settings.db_url, user["tenant_id"], brand_id)
     if row is None:
-        raise HTTPException(status_code=404, detail="brand not found")
+        raise HTTPException(status_code=404, detail="marca no encontrada")
     return brand_to_dict(row)
 
 
@@ -134,7 +134,7 @@ def update_brand_endpoint(
     try:
         row = update_brand(settings.db_url, user["tenant_id"], brand_id, **fields)
     except KeyError as e:
-        raise HTTPException(status_code=404, detail="brand not found") from e
+        raise HTTPException(status_code=404, detail="marca no encontrada") from e
     except ValueError as e:
         raise HTTPException(status_code=422, detail=str(e)) from e
     return brand_to_dict(row)
@@ -153,12 +153,12 @@ def delete_brand_endpoint(
     # Leer el slug antes de borrar para poder limpiar el árbol de salida.
     brand_row = get_brand(settings.db_url, tenant_id, brand_id)
     if brand_row is None:
-        raise HTTPException(status_code=404, detail="brand not found")
+        raise HTTPException(status_code=404, detail="marca no encontrada")
 
     try:
         delete_brand(settings.db_url, tenant_id, brand_id)
     except KeyError as e:
-        raise HTTPException(status_code=404, detail="brand not found") from e
+        raise HTTPException(status_code=404, detail="marca no encontrada") from e
 
     # Limpieza best-effort: borrar árbol de salida output/tenants/<tid>/<slug>/.
     # Usamos el seam para resolver la ruta y validar que está dentro del scope del tenant.
@@ -202,7 +202,7 @@ def get_logo_options(
     # Valida que el brand pertenece al tenant
     brand = get_brand(settings.db_url, tenant_id, brand_id)
     if brand is None:
-        raise HTTPException(status_code=404, detail="brand not found")
+        raise HTTPException(status_code=404, detail="marca no encontrada")
 
     # Construye la marca desde el brand
     brand_slug = str(brand.get("slug", ""))
@@ -282,7 +282,7 @@ def set_brand_identity(
     # Validar que el brand pertenece al tenant
     brand = get_brand(settings.db_url, user["tenant_id"], brand_id)
     if brand is None:
-        raise HTTPException(status_code=404, detail="brand not found")
+        raise HTTPException(status_code=404, detail="marca no encontrada")
 
     # Actualizar logo_style y logo_seed
     fields: dict[str, Any] = {}

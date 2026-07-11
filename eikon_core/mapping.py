@@ -65,13 +65,23 @@ def _extract_hex_color(value: str) -> str | None:
         return None
 
 
-def _normalize_color_value(value: str, fallback: str) -> str:
+def _normalize_color_value(value: str, fallback: str, warn_on_fallback: bool = False) -> str:
+    """Normaliza valor de color a hex válido, con fallback.
+
+    Si warn_on_fallback=True, emite WARN a stderr cuando se usa fallback.
+    """
     try:
         return _normalize_hex_color(value)
     except ValueError:
         extracted = _extract_hex_color(value)
         if extracted:
             return extracted
+    # Fallback necesario
+    if warn_on_fallback and value and value.strip():
+        print(
+            f"[eikon mapping] Color inválido {value!r}; usando fallback {fallback!r}.",
+            file=sys.stderr,
+        )
     return _normalize_hex_color(fallback)
 
 

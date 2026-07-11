@@ -84,7 +84,7 @@ async def create_batch_endpoint(
 
     brand = get_brand(db, tenant_id, payload.brand_id)
     if brand is None:
-        raise HTTPException(status_code=404, detail="brand not found")
+        raise HTTPException(status_code=404, detail="marca no encontrada")
 
     asset_types = _validate_asset_types(payload.asset_types)
 
@@ -164,7 +164,7 @@ def get_batch_endpoint(
     settings = get_settings(request)
     row = get_batch(settings.db_url, user["tenant_id"], batch_id)
     if row is None:
-        raise HTTPException(status_code=404, detail="batch not found")
+        raise HTTPException(status_code=404, detail="lote no encontrado")
     return batch_to_dict(row)
 
 
@@ -181,7 +181,7 @@ def batch_variations_endpoint(
     settings = get_settings(request)
     tenant_id = user["tenant_id"]
     if get_batch(settings.db_url, tenant_id, batch_id) is None:
-        raise HTTPException(status_code=404, detail="batch not found")
+        raise HTTPException(status_code=404, detail="lote no encontrado")
     rows = list_variations(settings.db_url, tenant_id, batch_id=batch_id)
     # NULLs al final; score descendente para los que tienen valor.
     rows.sort(
@@ -201,7 +201,7 @@ async def batch_events_endpoint(
     settings = get_settings(request)
     # Scoping: solo el dueño del batch puede suscribirse a sus eventos.
     if get_batch(settings.db_url, user["tenant_id"], batch_id) is None:
-        raise HTTPException(status_code=404, detail="batch not found")
+        raise HTTPException(status_code=404, detail="lote no encontrado")
     return StreamingResponse(
         job_events(batch_id),
         media_type="text/event-stream",

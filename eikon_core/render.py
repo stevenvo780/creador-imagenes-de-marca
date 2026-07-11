@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import contextlib
+import re
 from base64 import b64encode
 from pathlib import Path
 from typing import Any
@@ -14,6 +15,9 @@ from .layout import LAYOUT_INSPECTION_JS, aggregate_layout_status
 from .mapping import map_marca_to_vars
 from .templates import resolve_template
 from .types import TypeSpec, VariantSpec
+
+# Security constants
+MAX_LOGO_ASSET_BYTES = 5 * 1024 * 1024  # 5 MB limit for logo assets
 
 
 def _get_default_variant_for_asset_type(asset_type: str) -> str:
@@ -44,15 +48,64 @@ _REPO_ROOT = Path(__file__).resolve().parent.parent
 _LOGO_MIME = {".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg"}
 
 
+def _validate_path_not_traversal(path_str: str) -> bool:
+    """Valida que el path no intente path traversal (contiene .. o empieza con /)."""
+    return not (".." in path_str or path_str.startswith("/"))
+
+
 def _resolve_logo_asset(path_str: str) -> Path | None:
-    """Resuelve la ruta de un logo real: absoluta, o relativa al repo/marcas."""
+    """Resuelve la ruta de un logo real: absoluta, o relativa al repo/marcas.
+
+    Valida contra path traversal: rechaza paths con ".." o que comiencen con "/".
+    """
+    # Validación de seguridad contra path traversal
+    if not _validate_path_not_traversal(path_str):
+        return None
+
     p = Path(path_str)
     candidates = [p] if p.is_absolute() else [_REPO_ROOT / p, cfg.MARCAS_DIR / p, cfg.MARCAS_DIR.parent / p]
     for c in candidates:
         with contextlib.suppress(Exception):
             if c.is_file():
+                # Extra safety: verify the resolved path is within expected bounds
+                try:
+                    c_resolved = c.resolve()
+                    # Allow paths within REPO_ROOT, MARCAS_DIR, or their parents
+                    repo_root = _REPO_ROOT.resolve()
+                    marcas_parent = cfg.MARCAS_DIR.resolve().parent
+                    if not (str(c_resolved).startswith(str(repo_root)) or
+                            str(c_resolved).startswith(str(marcas_parent))):
+                        continue
+                except Exception:
+                    continue
                 return c
     return None
+
+
+def _sanitize_svg_content(svg_text: str) -> str | None:
+    """Sanitiza contenido SVG removiendo scripts y event handlers potencialmente peligrosos.
+
+    Rechaza SVGs que contienen:
+    - Elementos <script>
+    - Event handlers (onclick, onload, etc.)
+    - Referencias externas vía xlink:href a URLs no-data:
+    """
+    if not svg_text:
+        return None
+
+    # Rechazar si contiene <script>
+    if re.search(r"<script[^>]*>", svg_text, re.IGNORECASE):
+        return None
+
+    # Rechazar si contiene event handlers HTML (onclick, onload, onerror, etc.)
+    if re.search(r"\s+on\w+\s*=", svg_text, re.IGNORECASE):
+        return None
+
+    # Rechazar si contiene xlink:href no-data (SSRF risk)
+    if re.search(r"xlink:href\s*=\s*['\"](?!data:)", svg_text, re.IGNORECASE):
+        return None
+
+    return svg_text
 
 
 def _load_logo_asset_data_uri(path_str: str) -> str | None:
@@ -61,6 +114,10 @@ def _load_logo_asset_data_uri(path_str: str) -> str | None:
     Permite que Eikón ADOPTE la imagen de marca oficial de un producto (ej. el
     isotipo de Ágora/Elenxos) en vez de generar uno procedural. También sirve para
     logos creados por profesionales que el usuario quiera inyectar.
+
+    Valida:
+    - Tamaño máximo de archivo (MAX_LOGO_ASSET_BYTES)
+    - Para SVGs: contenido sin scripts o event handlers
     """
     f = _resolve_logo_asset(path_str)
     if f is None:
@@ -69,9 +126,25 @@ def _load_logo_asset_data_uri(path_str: str) -> str | None:
     if mime is None:
         return None
     with contextlib.suppress(Exception):
+        # Validar tamaño del archivo
+        file_size = f.stat().st_size
+        if file_size > MAX_LOGO_ASSET_BYTES:
+            return None
+
         data = f.read_bytes()
         if not data:
             return None
+
+        # Para SVGs, sanitizar contenido
+        if mime == "image/svg+xml":
+            try:
+                svg_text = data.decode("utf-8")
+                if _sanitize_svg_content(svg_text) is None:
+                    # SVG contiene contenido peligroso, rechazar
+                    return None
+            except (UnicodeDecodeError, Exception):
+                return None
+
         return f"data:{mime};base64," + b64encode(data).decode("ascii")
     return None
 
@@ -256,7 +329,7 @@ async def _capture_screenshot_with_retry(page: Any, output_path: Path) -> None:
         raise last_error
 
 
-async def render_asset(
+async def render_asset(  # noqa: C901
     browser: Any,
     marca_slug: str,
     categoria: str,
@@ -284,6 +357,16 @@ async def render_asset(
             "variant": variant_spec.name,
             "status": "error",
             "warnings": ["template not found"],
+        }
+
+    # Validar batch_subdir contra path traversal
+    if batch_subdir and (".." in batch_subdir or batch_subdir.startswith(("/", "\\"))):
+        return {
+            "category": categoria,
+            "type": tipo_spec.name,
+            "variant": variant_spec.name,
+            "status": "error",
+            "warnings": ["invalid batch_subdir: path traversal detected"],
         }
 
     vars_dict = map_marca_to_vars(

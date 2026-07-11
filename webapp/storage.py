@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS brands (
   logo_symbol TEXT NOT NULL DEFAULT '',
   logo_style TEXT NOT NULL DEFAULT '',
   logo_seed INTEGER NOT NULL DEFAULT 0,
+  logo_asset TEXT,
   texts_json TEXT NOT NULL DEFAULT '{}',
   created_at INTEGER NOT NULL,
   UNIQUE(tenant_id, slug)

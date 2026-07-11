@@ -56,7 +56,7 @@ async def current_user(request: Request, response: Response) -> dict[str, Any]:
             raise HTTPException(status_code=401, detail=str(e)) from e
         user = get_user(settings.db_url, int(payload.get("sub", 0)))
         if user is None:
-            raise HTTPException(status_code=401, detail="user not found")
+            raise HTTPException(status_code=401, detail="usuario no encontrado")
         refreshed_token = create_jwt(
             {"sub": user["user_id"], "tenant_id": user["tenant_id"]},
             settings.jwt_secret,
@@ -91,4 +91,4 @@ async def current_user(request: Request, response: Response) -> dict[str, Any]:
             "tenant_slug": None,
         }
 
-    raise HTTPException(status_code=401, detail="not authenticated")
+    raise HTTPException(status_code=401, detail="no autenticado")

@@ -122,27 +122,51 @@ def find_source_icon(marca_slug: str, brand: dict) -> Image.Image | None:
     return None
 
 
-def make_transparent(img: Image.Image, brand: dict) -> Image.Image:
+def make_transparent(img: Image.Image, brand: dict) -> Image.Image:  # noqa: C901
     """
     Intenta hacer transparente el fondo de la imagen basándose en el color de fondo de marca.
     Usa flood-fill desde las esquinas con tolerancia.
     Retorna RGBA.
+
+    Valida:
+    - pixel_data no es None
+    - Acceso seguro a píxeles sin corrupción
+    - Límite de iteraciones de flood-fill para evitar DoS
     """
-    img = img.convert("RGBA")
+    try:
+        img = img.convert("RGBA")
+    except Exception:
+        return img
+
     pixel_data = img.load()
     if pixel_data is None:
         return img
     w, h = img.size
 
+    # Validar dimensiones razonables
+    if w <= 0 or h <= 0 or (w * h) > 100_000_000:  # Máx 100 MP
+        return img
+
     paleta = brand.get("paleta", {}) if isinstance(brand.get("paleta"), dict) else {}
     bg_hex = paleta.get("bg") or paleta.get("primario") or "#0b1417"
-    bg_rgb = hex_to_rgb(bg_hex)
+    try:
+        bg_rgb = hex_to_rgb(bg_hex)
+    except Exception:
+        return img
 
     # Tolerancia de color para eliminar el fondo
     tol = 30
+    # Límite de píxeles a procesar para evitar DoS
+    MAX_FILL_PIXELS = 10_000_000
 
     def similar(pix: tuple[Any, ...], ref: tuple[int, int, int]) -> bool:
-        return all(abs(int(pix[i]) - int(ref[i])) < tol for i in range(3))
+        """Compara color de píxel con tolerancia, validando acceso seguro."""
+        try:
+            if len(pix) < 3:
+                return False
+            return all(abs(int(pix[i]) - int(ref[i])) < tol for i in range(3))
+        except (TypeError, ValueError, IndexError):
+            return False
 
     # Flood-fill desde las 4 esquinas
     from collections import deque
@@ -151,20 +175,32 @@ def make_transparent(img: Image.Image, brand: dict) -> Image.Image:
     queue: deque[tuple[int, int]] = deque()
     corners = [(0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1)]
     for cx, cy in corners:
-        pix = cast(tuple[Any, ...], pixel_data[cx, cy])
-        if similar(pix, bg_rgb) and (cx, cy) not in visited:
-            queue.append((cx, cy))
-            visited.add((cx, cy))
+        try:
+            pix = cast(tuple[Any, ...], pixel_data[cx, cy])
+            if similar(pix, bg_rgb) and (cx, cy) not in visited:
+                queue.append((cx, cy))
+                visited.add((cx, cy))
+        except (IndexError, TypeError, KeyError):
+            continue
 
-    while queue:
+    pixels_filled = 0
+    while queue and pixels_filled < MAX_FILL_PIXELS:
         x, y = queue.popleft()
-        pixel_data[x, y] = (0, 0, 0, 0)
+        try:
+            pixel_data[x, y] = (0, 0, 0, 0)
+            pixels_filled += 1
+        except (IndexError, TypeError, KeyError):
+            continue
+
         for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
             if 0 <= nx < w and 0 <= ny < h and (nx, ny) not in visited:
-                pix = cast(tuple[Any, ...], pixel_data[nx, ny])
-                if similar(pix, bg_rgb):
-                    visited.add((nx, ny))
-                    queue.append((nx, ny))
+                try:
+                    pix = cast(tuple[Any, ...], pixel_data[nx, ny])
+                    if similar(pix, bg_rgb):
+                        visited.add((nx, ny))
+                        queue.append((nx, ny))
+                except (IndexError, TypeError, KeyError):
+                    continue
 
     return img
 

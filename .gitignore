@@ -25,6 +25,9 @@ __pycache__/
 .pytest_cache/
 *.pyc
 *.pyo
+*.egg-info/
+dist/
+build/
 
 # Archivos de sistema
 .DS_Store

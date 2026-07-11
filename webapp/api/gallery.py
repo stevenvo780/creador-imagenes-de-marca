@@ -41,7 +41,7 @@ def _gallery_items(
     settings = get_settings(request)
     tenant_id = user["tenant_id"]
     if brand_id is not None and get_brand(settings.db_url, tenant_id, brand_id) is None:
-        raise HTTPException(status_code=404, detail="brand not found")
+        raise HTTPException(status_code=404, detail="marca no encontrada")
     rows = list_variations(settings.db_url, tenant_id, brand_id=brand_id, batch_id=batch_id)
     rows = _sort_rows(rows, order)
     return {"items": [variation_to_dict(r) for r in rows]}
@@ -87,5 +87,5 @@ def gallery_select(
     try:
         select_variation(settings.db_url, user["tenant_id"], payload.variation_id, payload.selected)
     except KeyError as e:
-        raise HTTPException(status_code=404, detail="variation not found") from e
+        raise HTTPException(status_code=404, detail="variación no encontrada") from e
     return {"variation_id": payload.variation_id, "selected": payload.selected}

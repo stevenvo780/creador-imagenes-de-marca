@@ -81,8 +81,14 @@ class ContrastValidator:
         """
         Calcula luminancia relativa WCAG 2.x.
         Coeficientes: 0.2126 R + 0.7152 G + 0.0722 B (ITU-R BT.709).
+
+        Valida que RGB esté en rango [0, 255], clampeando si es necesario.
         """
         r, g, b = rgb
+        # Clampear RGB a rango válido [0, 255]
+        r = max(0, min(255, int(r)))
+        g = max(0, min(255, int(g)))
+        b = max(0, min(255, int(b)))
         r_lin = self._srgb_to_linear(r)
         g_lin = self._srgb_to_linear(g)
         b_lin = self._srgb_to_linear(b)

@@ -44,10 +44,17 @@ async def run_generator(  # noqa: C901
                 print(f"\n→ Procesando marca: {marca_slug}")
                 marca_path = cfg.MARCAS_DIR / f"{marca_slug}.json"
                 if not marca_path.exists():
-                    print(f"  ✗ Marca no encontrada: {marca_path}")
+                    print(f"  ERROR: Marca no encontrada: {marca_path}")
+                    total_err += 1
                     continue
 
-                marca = load_json(marca_path)
+                try:
+                    marca = load_json(marca_path)
+                except Exception as e:
+                    print(f"  ERROR: No se puede parsear {marca_path}: {e}")
+                    total_err += 1
+                    continue
+
                 family = brand_family(marca)
                 taxonomia = PRIZMA_TAXONOMIA if "prizma" in family else CLOUD_ATLAS_TAXONOMIA
 

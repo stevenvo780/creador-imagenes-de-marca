@@ -57,5 +57,5 @@ async def revoke_api_key_endpoint(
     """Revoca una API key del tenant autenticado."""
     settings = get_settings(request)
     if not revoke_api_key(settings.db_url, int(user["tenant_id"]), key_id):
-        raise HTTPException(status_code=404, detail="key not found")
+        raise HTTPException(status_code=404, detail="API key no encontrada")
     return Response(status_code=204)

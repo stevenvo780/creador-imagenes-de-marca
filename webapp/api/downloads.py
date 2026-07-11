@@ -45,7 +45,7 @@ def _zip_response(storage: StorageBackend, tenant_id: int, keys: list[str]) -> R
     try:
         data = storage.zip_many(tenant_id, keys)
     except FileNotFoundError as e:
-        raise HTTPException(status_code=404, detail="file not found") from e
+        raise HTTPException(status_code=404, detail="archivo no encontrado") from e
     except ValueError as e:
         raise HTTPException(status_code=400, detail="invalid path") from e
     return Response(
@@ -67,12 +67,12 @@ def variation_file(
     tenant_id = user["tenant_id"]
     var = get_variation(settings.db_url, tenant_id, variation_id)
     if var is None:
-        raise HTTPException(status_code=404, detail="variation not found")
+        raise HTTPException(status_code=404, detail="variación no encontrada")
     key = _seam_key(storage, tenant_id, var.get("output_path"))
     try:
         data = storage.open(tenant_id, key)
     except FileNotFoundError as e:
-        raise HTTPException(status_code=404, detail="file not found") from e
+        raise HTTPException(status_code=404, detail="archivo no encontrado") from e
     except ValueError as e:
         raise HTTPException(status_code=400, detail="invalid path") from e
     return Response(
@@ -94,7 +94,7 @@ def downloads_batch_zip(
     tenant_id = user["tenant_id"]
 
     if get_batch(settings.db_url, tenant_id, batch_id) is None:
-        raise HTTPException(status_code=404, detail="batch not found")
+        raise HTTPException(status_code=404, detail="lote no encontrado")
 
     keys = [
         _seam_key(storage, tenant_id, var.get("output_path"))

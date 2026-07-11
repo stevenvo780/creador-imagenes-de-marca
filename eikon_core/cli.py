@@ -8,11 +8,12 @@ import traceback
 
 from . import constants as cfg
 from .orchestrator import run_generator
+from .validation import CANONICAL_CATEGORIES
 
 
 def main() -> int:  # noqa: C901
     parser = argparse.ArgumentParser(
-        description="Motor EIKON: Generador Canónico de Assets de Marca",
+        description="Motor Eikón: Generador Canónico de Assets de Marca",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Ejemplos:
@@ -39,9 +40,9 @@ Ejemplos:
         help="Procesa TODAS las marcas registradas (incluye demos no core)",
     )
     parser.add_argument(
-        "--only-marcas", type=str, help="Lista separada por comas de slugs a procesar"
+        "--only-marcas", type=str, help="Lista separada por comas de slugs a procesar (ej: pinakotheke-kosmos,prizma-iris)"
     )
-    parser.add_argument("--solo", type=str, help="Filtra categoría (ej. logos, cards)")
+    parser.add_argument("--solo", type=str, help="Filtra por categoría (opciones: logos, banners, social, print, web, cards, og, stationery)")
     parser.add_argument(
         "--dry-run", action="store_true", help="Enumera assets sin renderizar ni escribir PNGs"
     )
@@ -50,13 +51,13 @@ Ejemplos:
         "--solo-cambios",
         action="store_true",
         dest="resume",
-        help="Usa cache para saltar assets no modificados",
+        help="Alias --solo-cambios: Usa cache para saltar assets no modificados",
     )
     parser.add_argument(
         "--parallel",
         type=int,
         default=1,
-        help="Número de workers paralelos (aceptado por compat, pero rendering siempre serializado a 1)",
+        help="Número de workers paralelos (rango: 1-128; rendering siempre serializado a 1)",
     )
     parser.add_argument(
         "--skip-contraste", action="store_true", help="Omite validación WCAG al final"
@@ -67,7 +68,7 @@ Ejemplos:
     parser.add_argument(
         "--fail-on-layout",
         action="store_true",
-        help="Exit 1 si algún asset tiene layout_status=fail",
+        help="Exit con código de error si algún asset tiene layout_status=fail",
     )
     parser.add_argument(
         "--web-icons", action="store_true", help="Genera favicon/PWA/OG tras render Playwright"
@@ -76,20 +77,36 @@ Ejemplos:
 
     if not args.marca and not args.all and not args.only_marcas:
         parser.print_help()
-        print("\n✗ Error: Especifica --marca <slug>, --all, o --only-marcas <slugs>")
+        print("ERROR: Especifica --marca <slug>, --all, o --only-marcas <slugs>", file=sys.stderr)
+        return 1
+
+    # Validar --parallel: debe estar en rango [1, 128]
+    if args.parallel < 1 or args.parallel > 128:
+        print(
+            f"ERROR: --parallel debe estar en rango [1, 128], se especificó {args.parallel}",
+            file=sys.stderr,
+        )
         return 1
 
     if args.parallel > 1:
         print(
-            f"⚠ --parallel {args.parallel}: Rendering ejecutado en serie (1 worker). "
+            f"WARNING: --parallel {args.parallel}: Rendering ejecutado en serie (1 worker). "
             f"Paralelización aún no implementada.",
             file=sys.stderr,
         )
 
+    # Validar --solo: debe ser una categoría canónica
+    if args.solo and args.solo not in CANONICAL_CATEGORIES:
+        print(
+            f"ERROR: --solo '{args.solo}' no es válido. Opciones: {', '.join(sorted(CANONICAL_CATEGORIES))}",
+            file=sys.stderr,
+        )
+        return 1
+
     marcas_a_procesar: list[str] = []
     if args.all or args.all_marcas:
         if not cfg.MARCAS_DIR.exists():
-            print("✗ Directorio marcas/ no existe", file=sys.stderr)
+            print("ERROR: Directorio marcas/ no existe", file=sys.stderr)
             return 1
         # --all = CORE_MARCAS; --all-marcas = todo
         cores = set(cfg.CORE_MARCAS) if hasattr(cfg, "CORE_MARCAS") else set()
@@ -99,15 +116,35 @@ Ejemplos:
                 marcas_a_procesar.append(slug)
     elif args.only_marcas:
         marcas_a_procesar = [s.strip() for s in args.only_marcas.split(",") if s.strip()]
+        # Validar que todas las marcas existan
+        if cfg.MARCAS_DIR.exists():
+            for slug in marcas_a_procesar:
+                marca_path = cfg.MARCAS_DIR / f"{slug}.json"
+                if not marca_path.exists():
+                    print(
+                        f"ERROR: Marca no encontrada: {slug} (esperado en {marca_path})",
+                        file=sys.stderr,
+                    )
+                    return 1
     else:
-        marcas_a_procesar.append(args.marca)
+        if args.marca:
+            marcas_a_procesar.append(args.marca)
+            # Validar que la marca existe
+            if cfg.MARCAS_DIR.exists():
+                marca_path = cfg.MARCAS_DIR / f"{args.marca}.json"
+                if not marca_path.exists():
+                    print(
+                        f"ERROR: Marca no encontrada: {args.marca} (esperado en {marca_path})",
+                        file=sys.stderr,
+                    )
+                    return 1
 
     if args.clean:
         for slug in marcas_a_procesar:
             brand_output = cfg.OUTPUT_DIR / slug
             if brand_output.exists():
                 shutil.rmtree(brand_output)
-                print(f"  🗑 Limpiado: {brand_output}")
+                print(f"  OK: Limpiado: {brand_output}")
 
     try:
         result = asyncio.run(
@@ -125,7 +162,7 @@ Ejemplos:
         totals = result["total"]
         for slug, cats in result["counts"].items():
             total_assets = sum(cats.values())
-            print(f"✓ {slug}: {total_assets} assets totales.")
+            print(f"OK: {slug}: {total_assets} assets totales.")
         print(f"  Generados: {totals['generated']}")
         print(f"  Cache hit: {totals['cached']}")
         print(f"  Errores:   {totals['errors']}")
@@ -134,7 +171,7 @@ Ejemplos:
             print(f"  Manifests: {len(result['manifests'])}")
 
         if args.fail_on_layout and totals.get("layout_fails", 0) > 0:
-            print(f"  ✗ --fail-on-layout: {totals['layout_fails']} assets con layout_status=fail")
+            print(f"  ERROR: --fail-on-layout: {totals['layout_fails']} assets con layout_status=fail")
             return 1
 
         if args.web_icons and not args.dry_run:
@@ -153,11 +190,11 @@ Ejemplos:
                         continue
                     wi_results = generate_web_icons(slug, brand, dry_run=False)
                     ok_count = sum(1 for ok, _ in wi_results.values() if ok)
-                    print(f"  ✓ {slug}: {ok_count}/{len(wi_results)} web-icons")
+                    print(f"  OK: {slug}: {ok_count}/{len(wi_results)} web-icons")
                     v = verify_web_icons(slug)
                     print_verification(slug, v)
             except Exception as e_wi:
-                print(f"  ⚠ Error en web-icons: {e_wi}", file=sys.stderr)
+                print(f"  WARNING: Error en web-icons: {e_wi}", file=sys.stderr)
                 traceback.print_exc()
 
         return 0 if totals["errors"] == 0 else 1

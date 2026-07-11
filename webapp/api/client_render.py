@@ -103,7 +103,7 @@ async def get_batch_plan(  # noqa: C901
     # Valida batch pertenencia al tenant
     batch = get_batch(db, tenant_id, batch_id)
     if batch is None:
-        raise HTTPException(status_code=404, detail="batch not found")
+        raise HTTPException(status_code=404, detail="lote no encontrado")
 
     # Deserializa el spec
     spec_dict = json.loads(batch.get("spec_json", "{}"))
@@ -113,7 +113,7 @@ async def get_batch_plan(  # noqa: C901
     brand_id = int(batch.get("brand_id", 0))
     brand = get_brand(db, tenant_id, brand_id)
     if brand is None:
-        raise HTTPException(status_code=404, detail="brand not found")
+        raise HTTPException(status_code=404, detail="marca no encontrada")
 
     # Marca: si hay JSON legacy en marcas/{slug}.json lo usamos; si no (marcas
     # creadas por API), construimos la marca desde la PALETA de la DB — igual que
@@ -284,12 +284,12 @@ async def upload_variation(
     # Valida batch pertenencia
     batch = get_batch(db, tenant_id, batch_id)
     if batch is None:
-        raise HTTPException(status_code=404, detail="batch not found")
+        raise HTTPException(status_code=404, detail="lote no encontrado")
 
     brand_id = int(batch.get("brand_id", 0))
     brand = get_brand(db, tenant_id, brand_id)
     if brand is None:
-        raise HTTPException(status_code=404, detail="brand not found")
+        raise HTTPException(status_code=404, detail="marca no encontrada")
 
     # Parsea params JSON
     try:
