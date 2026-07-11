@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080, height=1350, initial-scale=1">
+<title>Eikon - Social 4x5 (house style Elenxos)</title>
+<style>
+/* ═══════ FONTS (Inter, local) ═══════ */
+@font-face { font-family:"Inter"; font-weight:400; font-display:block; src:url("fonts/Inter-400.woff2") format("woff2"); }
+@font-face { font-family:"Inter"; font-weight:600; font-display:block; src:url("fonts/Inter-600.woff2") format("woff2"); }
+@font-face { font-family:"Inter"; font-weight:700; font-display:block; src:url("fonts/Inter-700.woff2") format("woff2"); }
+@font-face { font-family:"Inter"; font-weight:800; font-display:block; src:url("fonts/Inter-800.woff2") format("woff2"); }
+@font-face { font-family:"Inter"; font-weight:900; font-display:block; src:url("fonts/Inter-900.woff2") format("woff2"); }
+
+/* ═══════ TOKENS ═══════ */
+:root{
+  --bg:#0b0b10; --acento:#e85d75; --acento-2:#b14bd9; --acento-3:#a855f7; --texto:#ffffff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1350px;overflow:hidden}
+
+/* ═══════ CANVAS (fondo casi negro + 2 blobs de color de marca) ═══════ */
+body{
+  font-family:Inter,system-ui,sans-serif; color:var(--texto);
+  background:var(--bg);
+  background-image:
+    radial-gradient(circle at 16% 20%, color-mix(in srgb, var(--acento) 22%, transparent), transparent 42%),
+    radial-gradient(circle at 88% 84%, color-mix(in srgb, var(--acento-2) 20%, transparent), transparent 45%);
+  padding:104px 96px; display:flex; flex-direction:column;
+}
+
+/* ═══════ HEAD: tile (ícono real) + wordmark ═══════ */
+.head{display:flex; align-items:center; gap:34px; flex-shrink:0}
+.tile{
+  width:132px; height:132px; border-radius:30px; overflow:hidden; flex-shrink:0;
+  box-shadow:0 18px 46px color-mix(in srgb, var(--acento) 42%, transparent);
+  display:flex; align-items:center; justify-content:center;
+}
+.tile img,.tile [data-isotype-container],.tile svg{width:100%;height:100%;object-fit:cover}
+.wm{
+  font-size:82px; font-weight:900; letter-spacing:-2px; line-height:1;
+  background:linear-gradient(100deg,var(--acento),var(--acento-2));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.sub{font-size:30px; font-weight:600; color:#8a8a99; margin-top:8px}
+
+/* ═══════ HERO ═══════ */
+.hero{flex:1; display:flex; flex-direction:column; justify-content:center}
+.h1{font-size:98px; font-weight:900; line-height:1.03; letter-spacing:-2.5px}
+.h1 .g{
+  background:linear-gradient(100deg,var(--acento),var(--acento-3));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.tag{font-size:35px; font-weight:600; color:#b8b8c4; margin-top:44px; line-height:1.4; white-space:pre-line}
+
+/* ═══════ FOOT ═══════ */
+.foot{display:flex; align-items:center; gap:18px; flex-shrink:0}
+.dot{width:20px; height:20px; border-radius:6px; background:linear-gradient(135deg,var(--acento),var(--acento-2)); flex-shrink:0}
+.dom{font-size:34px; font-weight:800; color:var(--acento); letter-spacing:.3px}
+
+.contract-fields{display:none !important}
+</style>
+</head>
+<body data-template="social_4x5" data-variant="v1_house">
+  <div class="head">
+    <span class="tile" data-isotype-container></span>
+    <div>
+      <div class="wm" data-logo-texto data-fit data-fit-min="40">Marca</div>
+      <div class="sub" data-etiqueta data-fit data-fit-min="18">por Elenxos</div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="h1"><span data-titulo data-fit data-fit-min="52">Titular</span><br><span class="g" data-subtitulo data-fit data-fit-min="52">degradado</span></div>
+    <div class="tag" data-copy data-fit data-fit-min="22">Features de la marca</div>
+  </div>
+
+  <div class="foot">
+    <div class="dot"></div>
+    <div class="dom" data-url data-fit data-fit-min="22">marca.com</div>
+  </div>
+
+  <div class="contract-fields" aria-hidden="true">
+    <span data-titulo></span><span data-subtitulo></span><span data-copy></span>
+    <span data-etiqueta></span><span data-logo-texto></span><span data-url></span><span data-isotype-container></span>
+  </div>
+<script src="./eikon-runtime.js"></script>
+</body>
+</html>

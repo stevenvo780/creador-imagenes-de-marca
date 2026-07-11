@@ -200,6 +200,6 @@ Ejemplos:
         return 0 if totals["errors"] == 0 else 1
 
     except Exception as e:
-        print(f"✗ Error fatal: {e}", file=sys.stderr)
+        print(f"✗ Error irreversible: {e}", file=sys.stderr)
         traceback.print_exc()
         return 1

@@ -128,6 +128,222 @@ def _legacy_python_taxonomia(is_prizma: bool) -> dict[str, list[TypeSpec]]:
                     ),
                 ),
             ],
+            "social": [
+                TypeSpec(
+                    "ig_post",
+                    1080,
+                    1080,
+                    (
+                        VariantSpec("v1_square", "Square"),
+                        VariantSpec("v2_reels", "Reels"),
+                        VariantSpec("v3_carousel", "Carousel"),
+                    ),
+                ),
+                TypeSpec(
+                    "ig_story",
+                    1080,
+                    1920,
+                    (
+                        VariantSpec("v1_text_heavy", "Text"),
+                        VariantSpec("v2_visual", "Visual"),
+                        VariantSpec("v3_minimal", "Minimal"),
+                    ),
+                ),
+                TypeSpec(
+                    "ig_carousel",
+                    1080,
+                    1350,
+                    (
+                        VariantSpec("v1_grid", "Grid"),
+                        VariantSpec("v2_sequential", "Sequential"),
+                        VariantSpec("v3_focus", "Focus"),
+                    ),
+                ),
+                TypeSpec(
+                    "ig_reel_cover",
+                    1080,
+                    1920,
+                    (
+                        VariantSpec("v1_brand", "Brand"),
+                        VariantSpec("v2_lanzamiento", "Lanzamiento"),
+                        VariantSpec("v3_comunidad", "Comunidad"),
+                    ),
+                ),
+                TypeSpec(
+                    "x_post",
+                    1200,
+                    675,
+                    (
+                        VariantSpec("v1_text", "Text"),
+                        VariantSpec("v2_visual", "Visual"),
+                        VariantSpec("v3_thread", "Thread"),
+                    ),
+                ),
+                TypeSpec(
+                    "x_header",
+                    1500,
+                    500,
+                    (
+                        VariantSpec("v1_brand", "Brand"),
+                        VariantSpec("v2_lanzamiento", "Lanzamiento"),
+                        VariantSpec("v3_comunidad", "Comunidad"),
+                    ),
+                ),
+                TypeSpec(
+                    "linkedin_post",
+                    1200,
+                    627,
+                    (
+                        VariantSpec("v1_article", "Article"),
+                        VariantSpec("v2_article_highlight", "Highlight"),
+                        VariantSpec("v3_event", "Event"),
+                    ),
+                ),
+                TypeSpec(
+                    "linkedin_banner",
+                    1584,
+                    396,
+                    (
+                        VariantSpec("v1_brand", "Brand"),
+                        VariantSpec("v2_lanzamiento", "Lanzamiento"),
+                        VariantSpec("v3_comunidad", "Comunidad"),
+                    ),
+                ),
+                TypeSpec(
+                    "fb_cover",
+                    1640,
+                    624,
+                    (
+                        VariantSpec("v1_brand", "Brand"),
+                        VariantSpec("v2_campaign", "Campaign"),
+                        VariantSpec("v3_seasonal", "Seasonal"),
+                    ),
+                ),
+                TypeSpec(
+                    "yt_thumbnail",
+                    1280,
+                    720,
+                    (
+                        VariantSpec("v1_bold", "Bold"),
+                        VariantSpec("v2_minimal", "Minimal"),
+                        VariantSpec("v3_text_overlay", "Text"),
+                    ),
+                ),
+                TypeSpec(
+                    "yt_banner",
+                    2560,
+                    1440,
+                    (
+                        VariantSpec("v1_brand", "Brand"),
+                        VariantSpec("v2_lanzamiento", "Lanzamiento"),
+                        VariantSpec("v3_comunidad", "Comunidad"),
+                    ),
+                ),
+                TypeSpec(
+                    "tiktok_cover",
+                    1080,
+                    1920,
+                    (
+                        VariantSpec("v1_brand", "Brand"),
+                        VariantSpec("v2_lanzamiento", "Lanzamiento"),
+                        VariantSpec("v3_comunidad", "Comunidad"),
+                    ),
+                ),
+            ],
+            "banners": [
+                TypeSpec(
+                    "web_hero_desktop",
+                    1920,
+                    600,
+                    (
+                        VariantSpec("v1_split", "Split"),
+                        VariantSpec("v2_central", "Central"),
+                        VariantSpec("v3_video_fallback", "VideoFallback"),
+                        VariantSpec("v4_minimal", "Minimal"),
+                    ),
+                ),
+                TypeSpec(
+                    "linkedin_header",
+                    1584,
+                    396,
+                    (
+                        VariantSpec("v1_brand", "Brand"),
+                        VariantSpec("v2_campaign", "Campaign"),
+                    ),
+                ),
+                TypeSpec(
+                    "twitter_header",
+                    1500,
+                    500,
+                    (
+                        VariantSpec("v1_brand", "Brand"),
+                        VariantSpec("v2_campaign", "Campaign"),
+                    ),
+                ),
+                TypeSpec(
+                    "youtube_header",
+                    2560,
+                    1440,
+                    (
+                        VariantSpec("v1_brand", "Brand"),
+                        VariantSpec("v2_campaign", "Campaign"),
+                    ),
+                ),
+                TypeSpec(
+                    "ad_leaderboard",
+                    728,
+                    90,
+                    (
+                        VariantSpec("v1_brand", "Brand"),
+                        VariantSpec("v2_promo", "Promo"),
+                        VariantSpec("v3_cta_driven", "CTA"),
+                    ),
+                ),
+                TypeSpec(
+                    "ad_rectangle",
+                    300,
+                    250,
+                    (
+                        VariantSpec("v1_visual", "Visual"),
+                        VariantSpec("v2_data", "Data"),
+                        VariantSpec("v3_testimonial", "Testimonial"),
+                    ),
+                ),
+            ],
+            "web": [
+                TypeSpec(
+                    "email_header",
+                    600,
+                    300,
+                    (
+                        VariantSpec("v1_editorial", "Editorial"),
+                        VariantSpec("v2_marketing", "Marketing"),
+                        VariantSpec("v3_transactional", "Transactional"),
+                    ),
+                ),
+                TypeSpec(
+                    "web_hero_mobile",
+                    750,
+                    1334,
+                    (
+                        VariantSpec("v1_editorial", "Editorial"),
+                        VariantSpec("v2_marketing", "Marketing"),
+                        VariantSpec("v3_transactional", "Transactional"),
+                    ),
+                ),
+            ],
+            "print": [
+                TypeSpec(
+                    "poster_a4",
+                    1240,
+                    1754,
+                    (
+                        VariantSpec("v1_event", "Event"),
+                        VariantSpec("v2_product", "Product"),
+                        VariantSpec("v3_announcement", "Announcement"),
+                    ),
+                ),
+            ],
         }
     return {
         "logos": logos,
@@ -192,6 +408,12 @@ def _legacy_python_taxonomia(is_prizma: bool) -> dict[str, list[TypeSpec]]:
             ),
         ],
         "social": [
+            TypeSpec(
+                "social_4x5",
+                1080,
+                1350,
+                (VariantSpec("v1_house", "House"),),
+            ),
             TypeSpec(
                 "ig_post",
                 1080,

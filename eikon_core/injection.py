@@ -81,6 +81,7 @@ def injection_script(
         "    document.querySelectorAll('[' + attr + ']').forEach((el) => { el.textContent = val; });\n"
         "  }\n"
         "  if (window.__eikonVariantRefresh) window.__eikonVariantRefresh();\n"
+        "  window.__eikonInjected = true;\n"
         "})();"
     )
 

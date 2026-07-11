@@ -276,6 +276,17 @@
           "device_scale": 2,
           "types": [
             {
+              "name": "social_4x5",
+              "width": 1080,
+              "height": 1350,
+              "variants": [
+                {
+                  "id": "v1_house",
+                  "label": "House"
+                }
+              ]
+            },
+            {
               "name": "ig_post",
               "width": 1080,
               "height": 1080,
@@ -946,6 +957,17 @@
           "label": "Social",
           "device_scale": 2,
           "types": [
+            {
+              "name": "social_4x5",
+              "width": 1080,
+              "height": 1350,
+              "variants": [
+                {
+                  "id": "v1_house",
+                  "label": "House"
+                }
+              ]
+            },
             {
               "name": "ig_post",
               "width": 1080,

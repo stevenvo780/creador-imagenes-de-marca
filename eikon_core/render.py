@@ -475,11 +475,12 @@ async def render_asset(  # noqa: C901
 
         url = f"{template_path.as_uri()}?variant={variant_spec.name}"
         await page.goto(url, wait_until="domcontentloaded", timeout=cfg.TIMEOUT_MS)
+        await page.wait_for_timeout(50)  # Brief wait for inline scripts to execute
         await page.evaluate(injection)
 
         # Wait for fonts and stabilize layout (determinism fix)
         await _wait_for_fonts_and_stabilize(page)
-        await page.wait_for_timeout(150)
+        await page.wait_for_timeout(250)  # Increased wait to ensure layout settles after variant switch
 
         # Inspect layout warnings
         await _inspect_layout(page, asset_meta)

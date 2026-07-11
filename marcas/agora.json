@@ -9,12 +9,12 @@
   "simbolo": "ε",
   "frente": "agora",
   "paleta": {
-    "bg": "#0b1417",
-    "primario": "#0F2519",
-    "acento": "#43b5a6",
-    "acento_2": "#A3E4D7",
-    "acento_3": "#2a7a70",
-    "texto": "#e8e0d4",
+    "bg": "#0b0b10",
+    "primario": "#0b0b10",
+    "acento": "#e85d75",
+    "acento_2": "#b14bd9",
+    "acento_3": "#a855f7",
+    "texto": "#ffffff",
     "texto_muted": "#8fa3a8",
     "surface": "#0d1e12"
   },
@@ -24,7 +24,7 @@
     "titulos": "Inter",
     "cuerpo": "Inter"
   },
-  "logo_texto": "Aε",
+  "logo_texto": "Agora",
   "logo_simbolo": "ε",
   "textos": {
     "linkedin_post": {
@@ -176,6 +176,14 @@
     "favicon_32": {
       "titulo": "ε",
       "copy": ""
+    },
+    "social_4x5": {
+      "logo_texto": "Agora",
+      "etiqueta": "por Elenxos",
+      "titulo": "El nuevo estándar para",
+      "subtitulo": "investigación rigurosa",
+      "copy": "Lógica formal ejecutable · Markdown académico\nTerminales cloud · sin instalar nada",
+      "url": "agora.elenxos.com"
     }
   },
   "_variantes_nota": "El esquema actual admite 1 entrada de texto por layout_id. Para loopear variantes, render.py necesitaría que cada valor de textos[layout_id] sea una lista [{titulo,copy,subtitulo},...] y que build_vars() itere sobre ella generando una imagen por índice (ej. linkedin_post_v1.png, linkedin_post_v2.png). Sin ese cambio en render.py, poner listas aquí rompe la inyección de campos.",
@@ -288,5 +296,5 @@
   "url": "",
   "logo_style": "orbital",
   "logo_seed": 130431078,
-  "logo_asset": "assets/logos/agora.svg"
+  "logo_asset": "assets/logos/agora.png"
 }

@@ -233,6 +233,28 @@
   }
   .contract-fields { display: none !important; }
 </style>
+<script>
+  // Define variant refresh early, in HEAD, so it's always available for injection
+  window.__eikonVariantRefresh = () => {
+    const v = document.body.dataset.variant || '';
+    document.querySelectorAll('.variant-content').forEach(el => el.style.display = 'none');
+    if (v.includes('v1_hero_num') || v.includes('hero_num')) {
+      const c = document.querySelector('.v1-content'); if (c) c.style.display = '';
+    } else if (v.includes('v2_dual_stat') || v.includes('dual_stat')) {
+      const c = document.querySelector('.v2-content'); if (c) c.style.display = '';
+    } else if (v.includes('v3_graph_abstract') || v.includes('graph_abstract')) {
+      const c = document.querySelector('.v3-content'); if (c) c.style.display = '';
+    } else if (v.includes('v1_big_data')) {
+      const c = document.querySelector('.pz1-content-block'); if (c) c.style.display = '';
+    } else if (v.includes('v2_comparativa')) {
+      const c = document.querySelector('.pz2-content-block'); if (c) c.style.display = '';
+    } else if (v.includes('v3_uptime')) {
+      const c = document.querySelector('.pz3-content-block'); if (c) c.style.display = '';
+    } else {
+      const c = document.querySelector('.v1-content'); if (c) c.style.display = '';
+    }
+  };
+</script>
 </head>
 <body>
   <div class="header">
@@ -250,7 +272,7 @@
   </div>
 
   <!-- v1_hero_num content (Cloud Atlas) -->
-  <div class="variant-content v1-content">
+  <div class="variant-content v1-content" style="display:none">
     <div class="hero-num" data-numero data-fit data-fit-min="100">22</div>
     <p class="label" data-etiqueta data-fit data-fit-min="14">Simulaciones ejecutables</p>
     <p class="desc" data-copy data-fit data-fit-min="10">Sistemas complejos, emergencia y filosofía de la ciencia en un catálogo open source</p>
@@ -365,27 +387,5 @@
     <span data-numero></span><span data-etiqueta></span>
     <span data-numero-2></span><span data-etiqueta-2></span><span data-url></span>
   </div>
-
-  <script>
-    window.__eikonVariantRefresh = () => {
-      const v = document.body.dataset.variant || '';
-      document.querySelectorAll('.variant-content').forEach(el => el.style.display = 'none');
-      if (v.includes('v1_hero_num') || v.includes('hero_num')) {
-        const c = document.querySelector('.v1-content'); if (c) c.style.display = '';
-      } else if (v.includes('v2_dual_stat') || v.includes('dual_stat')) {
-        const c = document.querySelector('.v2-content'); if (c) c.style.display = '';
-      } else if (v.includes('v3_graph_abstract') || v.includes('graph_abstract')) {
-        const c = document.querySelector('.v3-content'); if (c) c.style.display = '';
-      } else if (v.includes('v1_big_data')) {
-        const c = document.querySelector('.pz1-content-block'); if (c) c.style.display = '';
-      } else if (v.includes('v2_comparativa')) {
-        const c = document.querySelector('.pz2-content-block'); if (c) c.style.display = '';
-      } else if (v.includes('v3_uptime')) {
-        const c = document.querySelector('.pz3-content-block'); if (c) c.style.display = '';
-      } else {
-        const c = document.querySelector('.v1-content'); if (c) c.style.display = '';
-      }
-    };
-  </script>
 </body>
 </html>

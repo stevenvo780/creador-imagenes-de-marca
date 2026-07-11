@@ -557,6 +557,7 @@ def map_marca_to_vars(
             vars_dict["bg"] = str(paleta.get("texto") or defaults["texto"])
             vars_dict["texto"] = str(paleta.get("primario") or defaults["primario"])
         if "stat_card" in tipo:
+            # Cloud Atlas stat_card variants
             if "v1_hero_num" in _vl:
                 pass
             elif "v2_dual_stat" in _vl:
@@ -564,6 +565,23 @@ def map_marca_to_vars(
                 vars_dict["numero_2"] = "16"
             elif "v3_graph_abstract" in _vl:
                 vars_dict["etiqueta"] = "Tendencia"
+            # Prizma stat_card variants
+            elif "v1_big_data" in _vl:
+                # Hero metric: keep defaults, but ensure distinctiveness
+                vars_dict["numero"] = vars_dict.get("numero", "22")
+                vars_dict["etiqueta"] = "Big data · KPI"
+            elif "v2_comparativa" in _vl:
+                # Comparative: adjust labels for two-metric layout
+                vars_dict["numero"] = "72"
+                vars_dict["etiqueta"] = "Actual"
+                vars_dict["numero_2"] = "80"
+                vars_dict["etiqueta_2"] = "Objetivo"
+            elif "v3_uptime" in _vl:
+                # Uptime gauge: adjust for service metrics display
+                vars_dict["numero"] = "99.3"
+                vars_dict["etiqueta"] = "% uptime"
+                vars_dict["numero_2"] = "30"
+                vars_dict["etiqueta_2"] = "días"
 
     vars_dict = apply_text_limits(tipo, vars_dict)
 
