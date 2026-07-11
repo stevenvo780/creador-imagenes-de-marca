@@ -3,24 +3,28 @@
 Eikón MCP Server — Exposes brand asset generation tools via Model Context Protocol.
 
 This server bridges Claude/LLMs to the Eikón backend API for creating and managing
-brand identities and generating marketing assets.
+brand identities and generating marketing assets via asynchronous batch rendering.
 
 Environment Variables:
 - EIKON_BASE_URL (default: https://eikon-633619052458.us-central1.run.app)
 - EIKON_API_KEY (required for Authorization header)
 
 Tools exposed:
-- eikon_list_brands() → list of brands
-- eikon_create_brand(name, palette?, ...) → new brand created
+- eikon_list_brands() → list of brands with IDs and metadata
+- eikon_create_brand(name, palette?, ...) → new brand created (validated palette)
 - eikon_logo_options(brand_id, count?) → logo variations
 - eikon_set_identity(brand_id, logo_style, logo_seed) → set brand identity
-- eikon_list_asset_types() → available asset types with dimensions
-- eikon_generate_asset(brand_id, asset_type, content) → generates image (base64 or URL)
-- eikon_gallery(brand_id?) → list of generated assets
+- eikon_list_asset_types() → available asset types grouped by category
+- eikon_generate_asset(brand_id, asset_type, content?) → async batch generation (polling)
+- eikon_generate_and_get(brand_id, asset_type, content?) → full end-to-end: batch → poll → download → return URL
+- eikon_gallery(brand_id?) → list of generated assets with URLs
 """
 
 import json
 import os
+import asyncio
+import time
+import base64
 from typing import Any
 
 try:
@@ -45,6 +49,16 @@ EIKON_BASE_URL = os.getenv(
 )
 EIKON_API_KEY = os.getenv("EIKON_API_KEY", "")
 
+# Valid palette keys accepted by the API
+VALID_PALETTE_KEYS = {
+    'accent', 'accent_2',
+    'acento', 'acento_2',
+    'background', 'bg',
+    'primario', 'primary',
+    'secondary',
+    'text', 'texto'
+}
+
 
 def get_headers() -> dict[str, str]:
     """Return authorization headers for Eikón API."""
@@ -59,6 +73,7 @@ async def eikon_list_brands() -> dict[str, Any]:
     List all brands in the Eikón system.
 
     Returns a dictionary with brand ID, name, and whether they have a fixed identity.
+    The API returns {"items": [...]}, so we extract the items list.
     """
     async with httpx.AsyncClient() as client:
         try:
@@ -68,7 +83,9 @@ async def eikon_list_brands() -> dict[str, Any]:
                 timeout=30.0,
             )
             response.raise_for_status()
-            brands = response.json()
+            data = response.json()
+            # API response format: {"items": [...]}"
+            brands = data.get("items", []) if isinstance(data, dict) else data
             return {
                 "success": True,
                 "brands": brands,
@@ -92,18 +109,36 @@ async def eikon_create_brand(
 
     Args:
         name: Brand name (required)
-        palette: Color palette dict (optional)
+        palette: Color palette dict (optional). Only these keys are accepted:
+                 accent, accent_2, acento, acento_2, background, bg, primario, primary, secondary, text, texto.
+                 Invalid keys will be filtered out.
         typography: Typography configuration (optional)
         description: Brand description (optional)
 
     Returns brand creation result with new brand ID.
+    Raises 422 if palette has invalid keys (after filtering, should be valid).
     """
     async with httpx.AsyncClient() as client:
         payload = {
             "name": name,
         }
+
+        # Validate and filter palette
         if palette:
-            payload["palette"] = palette
+            filtered_palette = {
+                k: v for k, v in palette.items()
+                if k in VALID_PALETTE_KEYS
+            }
+            if filtered_palette:
+                payload["palette"] = filtered_palette
+            # Log warning if any keys were filtered out
+            invalid_keys = set(palette.keys()) - VALID_PALETTE_KEYS
+            if invalid_keys:
+                return {
+                    "success": False,
+                    "error": f"Invalid palette keys: {invalid_keys}. Valid keys: {VALID_PALETTE_KEYS}",
+                }
+
         if typography:
             payload["typography"] = typography
         if description:
@@ -215,101 +250,301 @@ async def eikon_set_identity(
 
 async def eikon_list_asset_types() -> dict[str, Any]:
     """
-    List all available asset types with their dimensions.
+    List all available asset types with their dimensions, grouped by family.
 
-    Returns asset types grouped by category (logos, cards, og, stationery, banners).
+    Uses the wizard endpoint which provides better structure for UI:
+    families with (id, label, description) and nested types (name, label, width, height).
+
+    Falls back to legacy endpoint if needed.
     """
     async with httpx.AsyncClient() as client:
         try:
+            # Try wizard endpoint first (better structure)
             response = await client.get(
-                f"{EIKON_BASE_URL}/api/v1/asset-types",
+                f"{EIKON_BASE_URL}/api/v1/wizard/asset-types",
                 headers=get_headers(),
                 timeout=30.0,
             )
             response.raise_for_status()
-            asset_types = response.json()
+            data = response.json()
+
+            # Extract families and flatten to a list for easier consumption
+            families = data.get("families", [])
+            all_types = []
+            for family in families:
+                for asset_type in family.get("types", []):
+                    asset_type["family_id"] = family.get("id")
+                    asset_type["family_label"] = family.get("label")
+                    all_types.append(asset_type)
+
             return {
                 "success": True,
-                "asset_types": asset_types,
-                "categories": list(set(
-                    at.get("category", "other")
-                    for at in (asset_types if isinstance(asset_types, list) else [])
-                )),
+                "families": families,
+                "asset_types": all_types,
+                "count": len(all_types),
             }
-        except httpx.HTTPError as e:
-            return {
-                "success": False,
-                "error": f"Failed to list asset types: {e!s}",
-            }
+        except httpx.HTTPError:
+            # Fallback: use legacy endpoint
+            try:
+                response = await client.get(
+                    f"{EIKON_BASE_URL}/api/v1/asset-types",
+                    headers=get_headers(),
+                    timeout=30.0,
+                )
+                response.raise_for_status()
+                data = response.json()
+                asset_types = data.get("asset_types", [])
+                return {
+                    "success": True,
+                    "asset_types": asset_types,
+                    "count": len(asset_types),
+                }
+            except httpx.HTTPError as e:
+                return {
+                    "success": False,
+                    "error": f"Failed to list asset types: {e!s}",
+                }
 
 
 async def eikon_generate_asset(
     brand_id: str,
     asset_type: str,
-    content: dict[str, Any],
+    content: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """
-    Generate a brand asset (image).
+    Generate a brand asset asynchronously via batch API (polling required).
+
+    This creates a batch render job and returns the batch ID + status.
+    The agent should poll the batch until status == "completed", then fetch variations.
 
     Args:
-        brand_id: Brand identifier (required)
-        asset_type: Asset type ID (e.g., 'lockup_horizontal', 'business_card')
-        content: Content dict with optional fields:
-            - titulo (title)
-            - subtitulo (subtitle)
-            - copy (body text)
-            - url (URL)
-            - image_url (background image URL)
-            - custom fields per asset type
+        brand_id: Brand identifier (required, must be int or valid string)
+        asset_type: Asset type ID (e.g., 'lockup_horizontal', 'ig_post', 'business_card')
+        content: Content dict with optional fields (titulo, subtitulo, copy, etc.). Defaults to empty dict.
 
-    Returns the generated image as base64-encoded PNG or download URL.
+    Returns batch creation result with batch_id and status for polling.
     """
     async with httpx.AsyncClient() as client:
+        # Convert brand_id to int if it's a string
+        try:
+            brand_id_int = int(brand_id)
+        except (ValueError, TypeError):
+            return {
+                "success": False,
+                "error": f"Invalid brand_id: {brand_id}. Must be an integer.",
+            }
+
         payload = {
-            "asset_type": asset_type,
-            "content": content,
+            "brand_id": brand_id_int,
+            "asset_types": [asset_type],
+            "count": 1,
+            "render_mode": "server",
         }
+        if content:
+            payload["content"] = content
 
         try:
             response = await client.post(
-                f"{EIKON_BASE_URL}/api/v1/brands/{brand_id}/generate",
+                f"{EIKON_BASE_URL}/api/v1/batches",
                 json=payload,
                 headers=get_headers(),
-                timeout=60.0,  # Generation may take longer
+                timeout=30.0,
             )
             response.raise_for_status()
-            result = response.json()
+            batch = response.json()
 
-            # If result contains image_url, return as URL; if base64, keep as-is
-            if isinstance(result, dict) and "image_url" in result:
-                return {
-                    "success": True,
-                    "asset": {
-                        "type": asset_type,
-                        "image_url": result["image_url"],
-                        "download_url": result.get("download_url"),
-                    },
-                    "message": "Asset generated successfully",
-                }
-            elif isinstance(result, dict) and "image_base64" in result:
-                return {
-                    "success": True,
-                    "asset": {
-                        "type": asset_type,
-                        "image_base64": result["image_base64"],
-                    },
-                    "message": "Asset generated successfully",
-                }
-            else:
-                return {
-                    "success": True,
-                    "asset": result,
-                    "message": "Asset generated successfully",
-                }
+            return {
+                "success": True,
+                "batch_id": batch.get("id"),
+                "status": batch.get("status"),
+                "brand_id": batch.get("brand_id"),
+                "message": f"Batch {batch.get('id')} created. Status: {batch.get('status')}. Poll /api/v1/batches/{batch.get('id')} for completion.",
+            }
         except httpx.HTTPError as e:
             return {
                 "success": False,
-                "error": f"Failed to generate asset: {e!s}",
+                "error": f"Failed to create batch: {e!s}",
+            }
+
+
+async def eikon_generate_and_get(
+    brand_id: str,
+    asset_type: str,
+    content: dict[str, Any] | None = None,
+    poll_timeout_seconds: int = 120,
+    poll_interval_seconds: int = 3,
+) -> dict[str, Any]:
+    """
+    Generate a brand asset end-to-end: create batch → poll for completion → fetch variations → download image.
+
+    This is the convenience function for agents: one call does everything and returns the image URL + base64.
+
+    Args:
+        brand_id: Brand identifier (required, must be int or valid string)
+        asset_type: Asset type ID (e.g., 'lockup_horizontal', 'ig_post', 'business_card')
+        content: Content dict with optional fields (titulo, subtitulo, copy, etc.). Defaults to empty dict.
+        poll_timeout_seconds: Max seconds to wait for batch completion (default 120)
+        poll_interval_seconds: Seconds between polls (default 3)
+
+    Returns:
+        On success: {
+            "success": true,
+            "batch_id": <int>,
+            "variation_id": <int>,
+            "image_url": "<absolute_url>",
+            "image_base64": "<base64_png>",
+            "asset_type": "<type>",
+            "message": "..."
+        }
+        On failure: {"success": false, "error": "..."}
+    """
+    async with httpx.AsyncClient() as client:
+        # Convert brand_id to int
+        try:
+            brand_id_int = int(brand_id)
+        except (ValueError, TypeError):
+            return {
+                "success": False,
+                "error": f"Invalid brand_id: {brand_id}. Must be an integer.",
+            }
+
+        # Step 1: Create batch
+        payload = {
+            "brand_id": brand_id_int,
+            "asset_types": [asset_type],
+            "count": 1,
+            "render_mode": "server",
+        }
+        if content:
+            payload["content"] = content
+
+        try:
+            response = await client.post(
+                f"{EIKON_BASE_URL}/api/v1/batches",
+                json=payload,
+                headers=get_headers(),
+                timeout=30.0,
+            )
+            response.raise_for_status()
+            batch = response.json()
+            batch_id = batch.get("id")
+
+            if not batch_id:
+                return {
+                    "success": False,
+                    "error": f"Failed to get batch ID from response: {batch}",
+                }
+
+        except httpx.HTTPError as e:
+            return {
+                "success": False,
+                "error": f"Failed to create batch: {e!s}",
+            }
+
+        # Step 2: Poll for completion
+        start_time = time.time()
+        while True:
+            elapsed = time.time() - start_time
+            if elapsed > poll_timeout_seconds:
+                return {
+                    "success": False,
+                    "error": f"Batch {batch_id} did not complete within {poll_timeout_seconds}s. Last status: running",
+                }
+
+            try:
+                response = await client.get(
+                    f"{EIKON_BASE_URL}/api/v1/batches/{batch_id}",
+                    headers=get_headers(),
+                    timeout=30.0,
+                )
+                response.raise_for_status()
+                batch_status = response.json()
+                status = batch_status.get("status")
+
+                if status == "completed":
+                    break
+                elif status == "failed":
+                    return {
+                        "success": False,
+                        "error": f"Batch {batch_id} failed: {batch_status}",
+                    }
+                else:
+                    # Status is "pending" or "running"; wait and retry
+                    await asyncio.sleep(poll_interval_seconds)
+
+            except httpx.HTTPError as e:
+                return {
+                    "success": False,
+                    "error": f"Failed to poll batch {batch_id}: {e!s}",
+                }
+
+        # Step 3: Fetch variations
+        try:
+            response = await client.get(
+                f"{EIKON_BASE_URL}/api/v1/batches/{batch_id}/variations",
+                headers=get_headers(),
+                timeout=30.0,
+            )
+            response.raise_for_status()
+            variations_data = response.json()
+
+            # Extract variations list (API returns {"variations": [...], "items": [...]})
+            variations = variations_data.get("variations", [])
+            if not variations:
+                variations = variations_data.get("items", [])
+
+            if not variations:
+                return {
+                    "success": False,
+                    "error": f"No variations found in batch {batch_id}",
+                }
+
+            variation = variations[0]
+            variation_id = variation.get("id")
+            file_url = variation.get("file_url")
+
+            if not variation_id or not file_url:
+                return {
+                    "success": False,
+                    "error": f"Invalid variation data: {variation}",
+                }
+
+        except httpx.HTTPError as e:
+            return {
+                "success": False,
+                "error": f"Failed to fetch variations: {e!s}",
+            }
+
+        # Step 4: Download image file
+        try:
+            response = await client.get(
+                f"{EIKON_BASE_URL}{file_url}",
+                headers=get_headers(),
+                timeout=30.0,
+            )
+            response.raise_for_status()
+            image_bytes = response.content
+
+            # Encode to base64
+            image_base64 = base64.b64encode(image_bytes).decode("utf-8")
+
+            # Construct absolute URL
+            image_url = f"{EIKON_BASE_URL}{file_url}"
+
+            return {
+                "success": True,
+                "batch_id": batch_id,
+                "variation_id": variation_id,
+                "image_url": image_url,
+                "image_base64": image_base64,
+                "asset_type": asset_type,
+                "message": f"Asset generated successfully. Variation {variation_id} from batch {batch_id}.",
+            }
+
+        except httpx.HTTPError as e:
+            return {
+                "success": False,
+                "error": f"Failed to download image: {e!s}",
             }
 
 
@@ -410,11 +645,22 @@ if USE_FASTMCP:
     async def eikon_generate_asset_tool(
         brand_id: str,
         asset_type: str,
-        content: str,
+        content: str | None = None,
     ) -> str:
-        """Generate a brand asset (image). Content is a JSON string with titulo, subtitulo, copy, url, etc."""
-        content_dict = json.loads(content)
+        """Generate a brand asset via async batch API. Returns batch_id for polling. Content is optional JSON string."""
+        content_dict = json.loads(content) if content else None
         result = await eikon_generate_asset(brand_id, asset_type, content_dict)
+        return json.dumps(result, indent=2)
+
+    @mcp.tool()
+    async def eikon_generate_and_get_tool(
+        brand_id: str,
+        asset_type: str,
+        content: str | None = None,
+    ) -> str:
+        """Generate a brand asset end-to-end (batch → poll → download → return URL + base64). One call does it all."""
+        content_dict = json.loads(content) if content else None
+        result = await eikon_generate_and_get(brand_id, asset_type, content_dict)
         return json.dumps(result, indent=2)
 
     @mcp.tool()
@@ -487,15 +733,28 @@ else:
             ),
             Tool(
                 name="eikon_generate_asset",
-                description="Generate a brand asset (image). Content should include titulo, subtitulo, copy, url, etc.",
+                description="Generate a brand asset via async batch API. Returns batch_id for polling. Use eikon_generate_and_get for one-call convenience.",
                 inputSchema={
                     "type": "object",
                     "properties": {
-                        "brand_id": {"type": "string", "description": "Brand identifier"},
-                        "asset_type": {"type": "string", "description": "Asset type ID (e.g., lockup_horizontal, business_card)"},
-                        "content": {"type": "string", "description": "Content as JSON string (titulo, subtitulo, copy, url, etc.)"},
+                        "brand_id": {"type": "string", "description": "Brand identifier (int or string)"},
+                        "asset_type": {"type": "string", "description": "Asset type ID (e.g., lockup_horizontal, ig_post, business_card)"},
+                        "content": {"type": "string", "description": "Content as JSON string (titulo, subtitulo, copy, url, etc., optional)"},
                     },
-                    "required": ["brand_id", "asset_type", "content"],
+                    "required": ["brand_id", "asset_type"],
+                },
+            ),
+            Tool(
+                name="eikon_generate_and_get",
+                description="Generate a brand asset end-to-end: batch → poll → download → return image URL + base64. One call completes the full cycle.",
+                inputSchema={
+                    "type": "object",
+                    "properties": {
+                        "brand_id": {"type": "string", "description": "Brand identifier (int or string)"},
+                        "asset_type": {"type": "string", "description": "Asset type ID (e.g., lockup_horizontal, ig_post, business_card)"},
+                        "content": {"type": "string", "description": "Content as JSON string (titulo, subtitulo, copy, url, etc., optional)"},
+                    },
+                    "required": ["brand_id", "asset_type"],
                 },
             ),
             Tool(
@@ -537,8 +796,15 @@ else:
         elif name == "eikon_list_asset_types":
             result = await eikon_list_asset_types()
         elif name == "eikon_generate_asset":
-            content = json.loads(arguments["content"])
+            content = json.loads(arguments.get("content", "{}")) if arguments.get("content") else None
             result = await eikon_generate_asset(
+                brand_id=arguments["brand_id"],
+                asset_type=arguments["asset_type"],
+                content=content,
+            )
+        elif name == "eikon_generate_and_get":
+            content = json.loads(arguments.get("content", "{}")) if arguments.get("content") else None
+            result = await eikon_generate_and_get(
                 brand_id=arguments["brand_id"],
                 asset_type=arguments["asset_type"],
                 content=content,
