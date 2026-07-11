@@ -72,6 +72,7 @@ def create_brand_endpoint(
             logo_symbol=payload.logo_symbol,
             logo_style=payload.logo_style,
             logo_seed=payload.logo_seed,
+            logo_asset=payload.logo_asset,
             texts=payload.texts,
         )
     except Exception as e:
@@ -118,6 +119,8 @@ def update_brand_endpoint(
         fields["logo_style"] = payload.logo_style
     if payload.logo_seed is not None:
         fields["logo_seed"] = payload.logo_seed
+    if payload.logo_asset is not None:
+        fields["logo_asset"] = payload.logo_asset
     if payload.texts is not None:
         fields["texts_json"] = json.dumps(payload.texts, sort_keys=True)
     if not fields:
@@ -125,7 +128,7 @@ def update_brand_endpoint(
             status_code=422,
             detail=(
                 "ningún campo actualizable recibido; "
-                "campos permitidos: name, palette, typography, logo_text, logo_symbol, logo_style, logo_seed, texts"
+                "campos permitidos: name, palette, typography, logo_text, logo_symbol, logo_style, logo_seed, logo_asset, texts"
             ),
         )
     try:

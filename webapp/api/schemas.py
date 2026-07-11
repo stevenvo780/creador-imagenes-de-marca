@@ -55,6 +55,7 @@ class BrandCreate(BaseModel):
     logo_symbol: str = ""
     logo_style: str = ""
     logo_seed: int = 0
+    logo_asset: str | None = None
     texts: dict[str, Any] = Field(default_factory=dict)
 
     @field_validator("palette", mode="before")
@@ -75,6 +76,7 @@ class BrandUpdate(BaseModel):
     logo_symbol: str | None = None
     logo_style: str | None = None
     logo_seed: int | None = None
+    logo_asset: str | None = None
     texts: dict[str, Any] | None = None
 
     @field_validator("palette", mode="before")

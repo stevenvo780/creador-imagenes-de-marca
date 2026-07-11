@@ -303,6 +303,7 @@ CREATE TABLE IF NOT EXISTS brands (
   logo_symbol TEXT NOT NULL DEFAULT '',
   logo_style TEXT NOT NULL DEFAULT '',
   logo_seed INTEGER NOT NULL DEFAULT 0,
+  logo_asset TEXT,
   texts_json TEXT NOT NULL DEFAULT '{}',
   created_at INTEGER NOT NULL,
   UNIQUE(tenant_id, slug)
@@ -376,6 +377,7 @@ CREATE INDEX IF NOT EXISTS idx_variations_batch ON variations(batch_id);
     # Migración idempotente: agrega columnas nuevas a DBs ya existentes
     # (CREATE TABLE IF NOT EXISTS no altera tablas que ya existen).
     migrate_add_logo_columns(db_url)
+    migrate_add_logo_asset(db_url)
     migrate_add_api_keys_table(db_url)
 
 
@@ -406,6 +408,32 @@ def migrate_add_logo_columns(db_url: str | None | Path) -> None:
                 for stmt in stmts:
                     with contextlib.suppress(Exception):
                         cur.execute(stmt)  # la columna ya existe
+        finally:
+            pg_con.close()
+
+
+def migrate_add_logo_asset(db_url: str | None | Path) -> None:
+    """Agrega columna logo_asset a la tabla brands si no existe (idempotente)."""
+    dialect, config = parse_db_url(db_url)
+    stmt = "ALTER TABLE brands ADD COLUMN logo_asset TEXT"
+
+    if dialect == "sqlite":
+        con = sqlite3.connect(config["path"])
+        try:
+            with contextlib.suppress(sqlite3.OperationalError):
+                con.execute(stmt)
+            con.commit()
+        finally:
+            con.close()
+    else:
+        import psycopg
+
+        pg_con = psycopg.connect(config["conninfo"])
+        pg_con.autocommit = True
+        try:
+            with pg_con.cursor() as cur:
+                with contextlib.suppress(Exception):
+                    cur.execute(stmt)
         finally:
             pg_con.close()
 

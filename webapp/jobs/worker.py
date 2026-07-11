@@ -696,6 +696,8 @@ class WorkerPool:
                     marca["logo_style"] = str(brand_row.get("logo_style", ""))
                 if brand_row.get("logo_seed") is not None:
                     marca["logo_seed"] = int(brand_row.get("logo_seed") or 0)
+                if brand_row.get("logo_asset"):
+                    marca["logo_asset"] = str(brand_row.get("logo_asset", ""))
             else:
                 marca = {
                     "slug": str(brand_row["slug"]),
@@ -706,6 +708,7 @@ class WorkerPool:
                     "logo_simbolo": str(brand_row.get("logo_symbol", "")),
                     "logo_style": str(brand_row.get("logo_style", "")),
                     "logo_seed": int(brand_row.get("logo_seed") or 0),
+                    "logo_asset": brand_row.get("logo_asset"),
                     "textos": json.loads(str(brand_row.get("texts_json", "{}"))),
                 }
         except Exception as exc:

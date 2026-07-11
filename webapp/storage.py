@@ -262,6 +262,7 @@ def create_brand(
     logo_symbol: str = "",
     logo_style: str = "",
     logo_seed: int = 0,
+    logo_asset: str | None = None,
     texts: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Crea un brand para el tenant. Falla si el slug ya existe en ese tenant."""
@@ -270,8 +271,8 @@ def create_brand(
         con.execute(
             """INSERT INTO brands
                (tenant_id, slug, name, palette_json, typography_json,
-                logo_text, logo_symbol, logo_style, logo_seed, texts_json, created_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                logo_text, logo_symbol, logo_style, logo_seed, logo_asset, texts_json, created_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (
                 tenant_id,
                 slug,
@@ -282,6 +283,7 @@ def create_brand(
                 logo_symbol,
                 logo_style,
                 logo_seed,
+                logo_asset,
                 json.dumps(texts or {}, sort_keys=True),
                 now,
             ),
@@ -303,6 +305,7 @@ def upsert_brand(
     logo_symbol: str = "",
     logo_style: str = "",
     logo_seed: int = 0,
+    logo_asset: str | None = None,
     texts: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Inserta o actualiza un brand por (tenant_id, slug). Idempotente."""
@@ -311,8 +314,8 @@ def upsert_brand(
         con.execute(
             """INSERT INTO brands
                (tenant_id, slug, name, palette_json, typography_json,
-                logo_text, logo_symbol, logo_style, logo_seed, texts_json, created_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                logo_text, logo_symbol, logo_style, logo_seed, logo_asset, texts_json, created_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                ON CONFLICT(tenant_id, slug) DO UPDATE SET
                  name = excluded.name,
                  palette_json = excluded.palette_json,
@@ -321,6 +324,7 @@ def upsert_brand(
                  logo_symbol = excluded.logo_symbol,
                  logo_style = excluded.logo_style,
                  logo_seed = excluded.logo_seed,
+                 logo_asset = excluded.logo_asset,
                  texts_json = excluded.texts_json""",
             (
                 tenant_id,
@@ -332,6 +336,7 @@ def upsert_brand(
                 logo_symbol,
                 logo_style,
                 logo_seed,
+                logo_asset,
                 json.dumps(texts or {}, sort_keys=True),
                 now,
             ),
@@ -380,7 +385,7 @@ def update_brand(
 ) -> dict[str, Any]:
     """Actualiza campos de un brand validando pertenencia al tenant.
 
-    Campos permitidos: name, palette_json, typography_json, logo_text, logo_symbol, logo_style, logo_seed, texts_json.
+    Campos permitidos: name, palette_json, typography_json, logo_text, logo_symbol, logo_style, logo_seed, logo_asset, texts_json.
     """
     allowed = {
         "name",
@@ -390,6 +395,7 @@ def update_brand(
         "logo_symbol",
         "logo_style",
         "logo_seed",
+        "logo_asset",
         "texts_json",
     }
     update_fields = {k: v for k, v in fields.items() if k in allowed}

@@ -71,6 +71,7 @@ COPY eikon_core/       ./eikon_core/
 COPY webapp/           ./webapp/
 COPY templates/        ./templates/
 COPY marcas/           ./marcas/
+COPY assets/           ./assets/
 COPY config/           ./config/
 COPY eikon.py contrast_validator.py gallery.py web_icons.py variations.py ./
 COPY pyproject.toml ./
