@@ -7,72 +7,68 @@
   "tono": "dialéctico, verificador, académico",
   "simbolo": "ε",
   "suite": "agora",
-
   "paleta": {
-    "bg":           "#0b1417",
-    "primario":     "#0F2519",
-    "acento":       "#43b5a6",
-    "acento_2":     "#A3E4D7",
-    "acento_3":     "#2a7a70",
-    "texto":        "#e8e0d4",
-    "texto_muted":  "#8fa3a8",
-    "surface":      "#0d1e12"
+    "bg": "#0b1417",
+    "primario": "#0F2519",
+    "acento": "#43b5a6",
+    "acento_2": "#A3E4D7",
+    "acento_3": "#2a7a70",
+    "texto": "#e8e0d4",
+    "texto_muted": "#8fa3a8",
+    "surface": "#0d1e12"
   },
-
   "gradiente_hero": "linear-gradient(135deg, #43b5a6 0%, #A3E4D7 55%, #0F2519 100%)",
-  "gradiente_bg":   "radial-gradient(ellipse at 20% 65%, #0d1e12 0%, #0b1417 70%)",
-
+  "gradiente_bg": "radial-gradient(ellipse at 20% 65%, #0d1e12 0%, #0b1417 70%)",
   "tipografia": {
     "titulos": "Inter",
-    "cuerpo":  "Inter"
+    "cuerpo": "Inter"
   },
-
   "logo_texto": "Elenxos",
   "logo_simbolo": "ε",
-
   "textos": {
     "linkedin_post": {
-      "titulo":    "Elenxos",
+      "titulo": "Elenxos",
       "subtitulo": "Verificación académica · Agora",
-      "copy":      "La prueba que somete toda afirmación a examen."
+      "copy": "La prueba que somete toda afirmación a examen."
     },
     "linkedin_banner": {
-      "titulo":    "Elenxos",
-      "copy":      "Verifica. Refuta. Publica con rigor. El elenxos socrático hecho software."
+      "titulo": "Elenxos",
+      "copy": "Verifica. Refuta. Publica con rigor. El elenxos socrático hecho software."
     },
     "ig_post": {
-      "titulo":    "ε",
+      "titulo": "ε",
       "subtitulo": "Elenxos",
-      "copy":      "La prueba que somete toda afirmación a examen"
+      "copy": "La prueba que somete toda afirmación a examen"
     },
     "ig_story": {
-      "titulo":    "Elenxos",
-      "copy":      "Nueva verificación ↓"
+      "titulo": "Elenxos",
+      "copy": "Nueva verificación ↓"
     },
     "x_post": {
-      "titulo":    "Elenxos",
-      "copy":      "La prueba que somete toda afirmación a examen"
+      "titulo": "Elenxos",
+      "copy": "La prueba que somete toda afirmación a examen"
     },
     "yt_thumbnail": {
-      "titulo":    "Elenxos",
-      "copy":      "Ver"
+      "titulo": "Elenxos",
+      "copy": "Ver"
     },
     "yt_banner": {
-      "titulo":    "Elenxos",
+      "titulo": "Elenxos",
       "subtitulo": "Verificación académica · Agora"
     },
     "og_general": {
-      "titulo":    "Elenxos",
+      "titulo": "Elenxos",
       "subtitulo": "Verificación académica · Agora",
-      "copy":      "La prueba que somete toda afirmación a examen."
+      "copy": "La prueba que somete toda afirmación a examen."
     },
     "whatsapp_perfil": {
-      "titulo":    "ε",
-      "copy":      "Elenxos"
+      "titulo": "ε",
+      "copy": "Elenxos"
     },
     "contra_cover": {
-      "titulo":    "Elenxos",
-      "copy":      "Verificación académica · Agora"
+      "titulo": "Elenxos",
+      "copy": "Verificación académica · Agora"
     }
-  }
+  },
+  "logo_asset": "assets/logos/agora.png"
 }

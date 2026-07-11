@@ -1,0 +1,14 @@
+<svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Prizma">
+  <defs>
+    <linearGradient id="prizmaG" x1="8" y1="88" x2="88" y2="8" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0A1622"/>
+      <stop offset="0.58" stop-color="#0B8A8F"/>
+      <stop offset="1" stop-color="#2DCBD1"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="92" height="92" rx="24" fill="url(#prizmaG)"/>
+  <circle cx="68" cy="32" r="8" fill="#FF5A2B"/>
+  <path d="M60 44 L88 74 L40 74 Z" fill="#FFFFFF" opacity="0.55"/>
+  <path d="M34 28 L72 74 L6 74 Z" fill="#FFFFFF" opacity="0.95"/>
+  <path d="M34 28 L45 40 L34 48 L26 40 Z" fill="#0B8A8F" opacity="0.18"/>
+</svg>

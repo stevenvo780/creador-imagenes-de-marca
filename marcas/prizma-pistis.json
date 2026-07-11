@@ -86,5 +86,6 @@
     }
   },
   "logo_style": "prisma_refraccion",
-  "logo_seed": 1412926217
+  "logo_seed": 1412926217,
+  "logo_asset": "assets/logos/prizma.svg"
 }

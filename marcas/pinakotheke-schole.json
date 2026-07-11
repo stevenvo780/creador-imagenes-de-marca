@@ -72,5 +72,6 @@
     }
   },
   "logo_style": "orbital",
-  "logo_seed": 130431078
+  "logo_seed": 130431078,
+  "logo_asset": "assets/logos/pinak.svg"
 }

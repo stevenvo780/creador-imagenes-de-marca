@@ -161,5 +161,6 @@
     }
   },
   "logo_style": "lemniscate",
-  "logo_seed": 770077
+  "logo_seed": 770077,
+  "logo_asset": "assets/logos/steven.svg"
 }
