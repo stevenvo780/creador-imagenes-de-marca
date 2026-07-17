@@ -641,7 +641,7 @@ class WorkerPool:
 
     # ── Helpers de _process_batch (extraídos para reducir complejidad) ─────
 
-    def _load_batch_context(
+    def _load_batch_context(  # noqa: C901
         self, batch_id: int, db_url: str | None | Path
     ) -> tuple[int, int, CombinationSpec, dict[str, Any]] | None:
         """Carga batch, spec, brand y devuelve (tenant_id, brand_id, spec, marca)."""

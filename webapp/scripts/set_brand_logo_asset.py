@@ -21,7 +21,7 @@ from pathlib import Path
 repo_root = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(repo_root))
 
-from webapp import storage
+from webapp import storage  # noqa: E402
 
 
 def main() -> None:
@@ -64,7 +64,7 @@ def main() -> None:
             brand_id,
             logo_asset=logo_asset_path,
         )
-        print(f"✓ Brand actualizado")
+        print("✓ Brand actualizado")
         print(f"  logo_asset: {updated.get('logo_asset')}")
     except Exception as e:
         print(f"Error al actualizar brand: {e}", file=sys.stderr)

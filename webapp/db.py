@@ -431,9 +431,8 @@ def migrate_add_logo_asset(db_url: str | None | Path) -> None:
         pg_con = psycopg.connect(config["conninfo"])
         pg_con.autocommit = True
         try:
-            with pg_con.cursor() as cur:
-                with contextlib.suppress(Exception):
-                    cur.execute(stmt)
+            with pg_con.cursor() as cur, contextlib.suppress(Exception):
+                cur.execute(stmt)
         finally:
             pg_con.close()
 

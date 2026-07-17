@@ -96,7 +96,7 @@ def get_brand_endpoint(
 
 
 @router.put("/{brand_id}")
-def update_brand_endpoint(
+def update_brand_endpoint(  # noqa: C901
     brand_id: _BrandId,
     payload: BrandUpdate,
     request: Request,

@@ -484,7 +484,7 @@ def _textos_for_tipo(marca: Mapping[str, Any], tipo: str) -> dict[str, Any]:
     return {str(raw_key): raw_item for raw_key, raw_item in raw_textos.items()}
 
 
-def map_marca_to_vars(
+def map_marca_to_vars(  # noqa: C901
     marca: dict[str, Any],
     tipo: str,
     locale: str = DEFAULT_LOCALE,
