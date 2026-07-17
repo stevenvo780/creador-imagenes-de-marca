@@ -1,33 +1,45 @@
-# Eikón — Motor de generación de assets de marca
+# Eikón — Generador determinista de assets de marca
 
-Núcleo Hi-Res para producir los assets visuales del ecosistema
-Pinakotheke (Cloud Atlas) y Prizma Enterprise.
+Generador de **assets visuales** para el ecosistema Pinakotheke (Cloud Atlas) y suite Prizma Enterprise.  
+**Determinista** (cero IA/GPU), **multi-tenant**, **combinatorial**: 2 fases — IDENTIDAD (logo fijo) → ESTUDIO (batch recurrente).
 
-> Genera **1302 PNG** sobre **34 marcas no-agora** con validación WCAG AA
-> por marca y galería HTML agregada.
+> Produce **~1300 PNG** sobre **34 marcas** con validación **WCAG AA/AAA**  
+> Arquitectura: Python `eikon_core/` + FastAPI `webapp/` + React SPA `frontend/` + MCP `mcp_server/`
 
-## Pipeline (5 fases)
+## Comencemos
 
-1. **Carga de marca** — `marcas/<slug>.json` (colores, tipografía, textos).
-2. **Mapeo a taxonomía** — Cloud Atlas (pinakotheke-*) o Prizma (prizma-*).
-3. **Render Playwright Hi-Res** — `templates/<plantilla>.html` con datos
-   inyectados, `deviceScaleFactor` 3× (logos/print) o 2× (social/web).
-4. **Validación WCAG AA** — `contrast_validator.py` mide luminancia BT.709
-   y ratio entre texto/fondo local.
-5. **CLI robusto** — flags `--marca`, `--all`, `--only-marcas`, `--clean`,
-   `--dry-run`, `--resume`, `--skip-contraste`, `--parallel`.
+**Para documentación completa, leer (en orden):**
+1. **[CLAUDE.md](CLAUDE.md)** — arquitectura, gotchas críticos, capa agéntica (EMPIEZA AQUÍ)
+2. **[AGENTS.md](AGENTS.md)** — comandos rápidos, startup, debugging
+3. **[ARCHITECTURE.md](ARCHITECTURE.md)** — diagramas de módulos + flujos de datos
+4. **Este README** — overview técnico + CLI
 
-## Estructura actual
+---
 
-- `eikon.py`: shim/entrypoint retrocompatible (`python3 eikon.py ...`).
-- `eikon_core/`: motor modular por responsabilidad: taxonomía, mapping,
-  layout, render, manifests, CLI.
-- `taxonomy.json`: taxonomía v1 serializable; se valida con
-  `scripts/eikon_validate_taxonomy.py`.
-- `variations.py`: planner determinístico para batches/variaciones.
-- `webapp/`: MVP FastAPI opcional multi-tenant con JWT cookie, SQLite local
-  y jobs Eikon.
-- `audit/`: metodología, plantilla y reportes de auditoría.
+## ¿Qué es Eikón?
+
+**Generador en 2 fases**:
+
+| Fase | Qué | Ejemplo |
+|------|-----|---------|
+| **1. IDENTIDAD** (fija) | Usuario elige o carga logo (procedural vía seed OR pre-existente SVG/PNG) | `logo_style="pack_brand_geo", logo_seed=42` |
+| **2. ESTUDIO** (recurrente) | Generar batch de assets heredando la identidad fija, variando contenido (textos, colores HSL) | `asset_types=["isotipo", "business_card"], content_overrides={text_marca: "Mi Brand"}` |
+
+**Stack**: Python 3.12 (`eikon_core/`) + FastAPI (`webapp/`) + React+Vite (`frontend/`) + modern-screenshot (client-render) + Playwright (server-render opcional) + SQLite/Postgres + local/GCS storage.
+
+---
+
+## Estructura
+
+- `eikon.py`: shim entrypoint histórico (`python3 eikon.py --marca ...`).
+- **`eikon_core/`**: motor determinista — taxonomía, mapping HSL, isotypes procedurales, combinatorial planner, Playwright render, validación WCAG+layout.
+- **`webapp/`**: FastAPI multi-tenant — auth JWT cookie, CRUD marcas/batches, WorkerPool async, storage backend (local/GCS).
+- **`frontend/`**: React SPA (Vite+TypeScript) — Identity + Studio wizard, **client-render** HTML→PNG via modern-screenshot.
+- **`mcp_server/`**: Servidor MCP FastMCP — tools para agentes (eikon_list_brands, eikon_generate_and_get, etc).
+- **`config/`**: `taxonomy.json` (FUENTE CANÓNICA), `axes.json` (combinatoria).
+- **`templates/`**: HTML plantillas + CSS design tokens + fonts WOFF2.
+- **`marcas/`**: JSON de marcas (colores, tipografía, textos).
+- **`tests/`**: 382+ tests unitarios (templates, WCAG, combinatoria, DB, storage).
 
 ## Uso rápido
 
