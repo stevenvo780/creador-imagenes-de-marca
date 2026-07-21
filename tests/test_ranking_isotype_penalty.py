@@ -64,6 +64,7 @@ def test_ranking_preserves_placeholder_order():
 
     # Load variations from the demo manifest
     import json
+
     manifest_path = test_dir / "_manifest.json"
     if not manifest_path.exists():
         pytest.skip("Manifest not found")
@@ -103,6 +104,7 @@ def test_ranking_scores_reflect_penalty():
         pytest.skip("Demo ranking output not found")
 
     import json
+
     manifest_path = test_dir / "_manifest.json"
     if not manifest_path.exists():
         pytest.skip("Manifest not found")

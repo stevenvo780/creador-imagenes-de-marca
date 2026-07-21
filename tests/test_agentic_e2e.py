@@ -157,10 +157,7 @@ class TestAgenticE2E:
         client.cookies.clear()
 
         # GET /api/v1/asset-types con API-key
-        r = client.get(
-            "/api/v1/asset-types",
-            headers={"Authorization": f"Bearer {api_key}"}
-        )
+        r = client.get("/api/v1/asset-types", headers={"Authorization": f"Bearer {api_key}"})
         assert r.status_code == 200, f"Asset-types failed: {r.text}"
 
         data = r.json()
@@ -199,7 +196,7 @@ class TestAgenticE2E:
             json={
                 "logo_style": "poligono_irregular",
                 "logo_seed": 99,
-            }
+            },
         )
         assert r.status_code == 200, f"Set-identity failed: {r.text}"
 
@@ -246,12 +243,14 @@ class TestAgenticE2E:
             assert r.status_code == 200, f"Generate failed: {r.text}"
 
             # Verificar headers
-            assert r.headers["content-type"].startswith("image/png"), \
+            assert r.headers["content-type"].startswith("image/png"), (
                 f"Content-Type debe ser image/png, got {r.headers.get('content-type')}"
+            )
 
             # Verificar firma PNG
-            assert r.content.startswith(b"\x89PNG\r\n\x1a\n"), \
+            assert r.content.startswith(b"\x89PNG\r\n\x1a\n"), (
                 f"PNG signature invalid, got {r.content[:8]!r}"
+            )
 
             # Verificar contenido no vacío
             assert len(r.content) > 100, f"PNG demasiado pequeño: {len(r.content)} bytes"
@@ -275,10 +274,7 @@ class TestAgenticE2E:
         key_id = key_data["id"]
 
         # Verificar que la key funciona (con cookie de sesión)
-        r_me = client.get(
-            "/auth/me",
-            headers={"Authorization": f"Bearer {api_key}"}
-        )
+        r_me = client.get("/auth/me", headers={"Authorization": f"Bearer {api_key}"})
         assert r_me.status_code == 200, "API-key debe autenticar antes de revoke"
 
         # Revocar la key
@@ -289,12 +285,10 @@ class TestAgenticE2E:
         client.cookies.clear()
 
         # Intentar usar la key revocada → 401
-        r_denied = client.get(
-            "/auth/me",
-            headers={"X-API-Key": api_key}
-        )
-        assert r_denied.status_code == 401, \
+        r_denied = client.get("/auth/me", headers={"X-API-Key": api_key})
+        assert r_denied.status_code == 401, (
             f"Revoked key debe devolver 401, got {r_denied.status_code}: {r_denied.text}"
+        )
 
     @pytest.mark.integration
     @pytest.mark.skipif(not HAS_PLAYWRIGHT, reason="Playwright no instalado")
@@ -320,8 +314,7 @@ class TestAgenticE2E:
 
             # 4. Listar asset-types
             r_types = client.get(
-                "/api/v1/asset-types",
-                headers={"Authorization": f"Bearer {api_key}"}
+                "/api/v1/asset-types", headers={"Authorization": f"Bearer {api_key}"}
             )
             assert r_types.status_code == 200
             asset_types = r_types.json()["asset_types"]
@@ -336,7 +329,7 @@ class TestAgenticE2E:
             r_identity = client.post(
                 f"/api/v1/brands/{brand_id}/set-identity",
                 headers={"X-API-Key": api_key},
-                json={"logo_style": "poligono_irregular", "logo_seed": 777}
+                json={"logo_style": "poligono_irregular", "logo_seed": 777},
             )
             assert r_identity.status_code == 200
             assert r_identity.json()["identity"]["logo_seed"] == 777
@@ -391,15 +384,18 @@ class TestAgenticE2E:
             f"/api/v1/brands/{brand_a_id}",
             headers={"X-API-Key": api_key_b},
         )
-        assert r_cross.status_code == 404, \
+        assert r_cross.status_code == 404, (
             f"API-key from tenant B should not access brand from tenant A, got {r_cross.status_code}: {r_cross.text}"
+        )
 
         # Verificar: API-key_a SÍ puede acceder a brand_a_id
         r_self = client1.get(
             f"/api/v1/brands/{brand_a_id}",
             headers={"X-API-Key": api_key_a},
         )
-        assert r_self.status_code == 200, f"API-key_a should access its own brand, got {r_self.status_code}"
+        assert r_self.status_code == 200, (
+            f"API-key_a should access its own brand, got {r_self.status_code}"
+        )
         assert r_self.json()["id"] == brand_a_id
 
     def test_09_missing_or_invalid_api_key_returns_401(self, client: TestClient) -> None:
@@ -415,11 +411,10 @@ class TestAgenticE2E:
         assert r_no_key.status_code == 401, f"Expected 401, got {r_no_key.status_code}"
 
         # Request con API-key inválida
-        r_bad_key = client.get(
-            "/auth/me",
-            headers={"X-API-Key": "invalid-key-xxx"}
+        r_bad_key = client.get("/auth/me", headers={"X-API-Key": "invalid-key-xxx"})
+        assert r_bad_key.status_code == 401, (
+            f"Expected 401 for invalid key, got {r_bad_key.status_code}"
         )
-        assert r_bad_key.status_code == 401, f"Expected 401 for invalid key, got {r_bad_key.status_code}"
 
     def test_10_api_key_auth_with_x_api_key_header(self, client: TestClient) -> None:
         """X-API-Key header también funciona para autenticación."""

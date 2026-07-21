@@ -258,9 +258,7 @@ def test_update_batch_status(db: Path, two_tenants: tuple[int, int]) -> None:
     brand = create_brand(db, tenant_id=tid_a, slug="kosmos", name="Kósmos")
     batch = create_batch(db, tid_a, brand["id"])
     update_batch_status(db, batch["id"], "running", tenant_id=tid_a)
-    update_batch_status(
-        db, batch["id"], "completed", counts={"ok": 10, "fail": 0}, tenant_id=tid_a
-    )
+    update_batch_status(db, batch["id"], "completed", counts={"ok": 10, "fail": 0}, tenant_id=tid_a)
     row = get_batch(db, tid_a, batch["id"])
     assert row is not None
     assert row["status"] == "completed"

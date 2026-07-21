@@ -223,9 +223,7 @@ def plan_combinations(
         # Generate deterministic seed
         param_str = "|".join(f"{k}={v}" for k, v in sorted(params.items()))
         category = (
-            get_category_for_asset_type(spec.asset_types[0])
-            if spec.asset_types
-            else "logos"
+            get_category_for_asset_type(spec.asset_types[0]) if spec.asset_types else "logos"
         ) or "logos"
         seed = variations.deterministic_seed(
             marca=spec.brand,

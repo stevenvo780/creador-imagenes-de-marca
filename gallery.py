@@ -168,7 +168,7 @@ def make_thumbnail(png_path: Path) -> str:
         return "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='560' height='320'%3E%3Crect fill='%23131e22' width='560' height='320'/%3E%3Ctext fill='%238fa3a8' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-size='16'%3Esin Pillow%3C/text%3E%3C/svg%3E"
 
     try:
-        img = Image.open(png_path)
+        img: Image.Image = Image.open(png_path)
         if img.mode in ("RGBA", "P"):
             img = img.convert("RGBA")
             bg = Image.new("RGBA", img.size, (11, 20, 23, 255))

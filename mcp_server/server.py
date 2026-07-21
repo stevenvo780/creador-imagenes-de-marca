@@ -20,15 +20,16 @@ Tools exposed:
 - eikon_gallery(brand_id?) → list of generated assets with URLs
 """
 
+import asyncio
+import base64
 import json
 import os
-import asyncio
 import time
-import base64
 from typing import Any
 
 try:
     from mcp.server.fastmcp import FastMCP
+
     USE_FASTMCP = True
 except ImportError:
     from mcp.server import Server
@@ -36,6 +37,7 @@ except ImportError:
         TextContent,
         Tool,
     )
+
     USE_FASTMCP = False
 
 import httpx
@@ -43,20 +45,22 @@ from dotenv import load_dotenv
 
 # Configuration
 load_dotenv()
-EIKON_BASE_URL = os.getenv(
-    "EIKON_BASE_URL",
-    "https://eikon-633619052458.us-central1.run.app"
-)
+EIKON_BASE_URL = os.getenv("EIKON_BASE_URL", "https://eikon-633619052458.us-central1.run.app")
 EIKON_API_KEY = os.getenv("EIKON_API_KEY", "")
 
 # Valid palette keys accepted by the API
 VALID_PALETTE_KEYS = {
-    'accent', 'accent_2',
-    'acento', 'acento_2',
-    'background', 'bg',
-    'primario', 'primary',
-    'secondary',
-    'text', 'texto'
+    "accent",
+    "accent_2",
+    "acento",
+    "acento_2",
+    "background",
+    "bg",
+    "primario",
+    "primary",
+    "secondary",
+    "text",
+    "texto",
 }
 
 
@@ -119,16 +123,13 @@ async def eikon_create_brand(
     Raises 422 if palette has invalid keys (after filtering, should be valid).
     """
     async with httpx.AsyncClient() as client:
-        payload = {
+        payload: dict[str, Any] = {
             "name": name,
         }
 
         # Validate and filter palette
         if palette:
-            filtered_palette = {
-                k: v for k, v in palette.items()
-                if k in VALID_PALETTE_KEYS
-            }
+            filtered_palette = {k: v for k, v in palette.items() if k in VALID_PALETTE_KEYS}
             if filtered_palette:
                 payload["palette"] = filtered_palette
             # Log warning if any keys were filtered out
@@ -220,7 +221,7 @@ async def eikon_set_identity(
     Returns confirmation of identity set.
     """
     async with httpx.AsyncClient() as client:
-        payload = {
+        payload: dict[str, Any] = {
             "logo_style": logo_style,
         }
         if logo_seed is not None:
@@ -367,6 +368,133 @@ async def eikon_generate_asset(
             }
 
 
+class EikonRequestError(RuntimeError):
+    """Error controlado al coordinar una generación remota."""
+
+
+async def _create_asset_batch(
+    client: httpx.AsyncClient,
+    brand_id: int,
+    asset_type: str,
+    content: dict[str, Any] | None,
+) -> int | str:
+    payload: dict[str, Any] = {
+        "brand_id": brand_id,
+        "asset_types": [asset_type],
+        "count": 1,
+        "render_mode": "server",
+    }
+    if content:
+        payload["content"] = content
+
+    try:
+        response = await client.post(
+            f"{EIKON_BASE_URL}/api/v1/batches",
+            json=payload,
+            headers=get_headers(),
+            timeout=30.0,
+        )
+        response.raise_for_status()
+    except httpx.HTTPError as exc:
+        raise EikonRequestError(f"Failed to create batch: {exc!s}") from exc
+
+    batch = response.json()
+    batch_id = batch.get("id") if isinstance(batch, dict) else None
+    if not isinstance(batch_id, (int, str)) or not str(batch_id):
+        raise EikonRequestError(f"Failed to get batch ID from response: {batch}")
+    return batch_id
+
+
+async def _wait_for_batch(
+    client: httpx.AsyncClient,
+    batch_id: int | str,
+    timeout_seconds: int,
+    interval_seconds: int,
+) -> None:
+    deadline = time.monotonic() + timeout_seconds
+    last_status = "pending"
+
+    while time.monotonic() <= deadline:
+        try:
+            response = await client.get(
+                f"{EIKON_BASE_URL}/api/v1/batches/{batch_id}",
+                headers=get_headers(),
+                timeout=30.0,
+            )
+            response.raise_for_status()
+        except httpx.HTTPError as exc:
+            raise EikonRequestError(f"Failed to poll batch {batch_id}: {exc!s}") from exc
+
+        batch_status = response.json()
+        last_status = (
+            str(batch_status.get("status", "unknown"))
+            if isinstance(batch_status, dict)
+            else "unknown"
+        )
+        if last_status == "completed":
+            return
+        if last_status == "failed":
+            raise EikonRequestError(f"Batch {batch_id} failed: {batch_status}")
+        await asyncio.sleep(interval_seconds)
+
+    raise EikonRequestError(
+        f"Batch {batch_id} did not complete within {timeout_seconds}s. Last status: {last_status}"
+    )
+
+
+async def _get_first_variation(
+    client: httpx.AsyncClient,
+    batch_id: int | str,
+) -> tuple[int | str, str]:
+    try:
+        response = await client.get(
+            f"{EIKON_BASE_URL}/api/v1/batches/{batch_id}/variations",
+            headers=get_headers(),
+            timeout=30.0,
+        )
+        response.raise_for_status()
+    except httpx.HTTPError as exc:
+        raise EikonRequestError(f"Failed to fetch variations: {exc!s}") from exc
+
+    data = response.json()
+    variations = data.get("variations") or data.get("items") if isinstance(data, dict) else None
+    if not isinstance(variations, list) or not variations:
+        raise EikonRequestError(f"No variations found in batch {batch_id}")
+
+    variation = variations[0]
+    if not isinstance(variation, dict):
+        raise EikonRequestError(f"Invalid variation data: {variation}")
+    variation_id = variation.get("id")
+    file_url = variation.get("file_url")
+    if (
+        not isinstance(variation_id, (int, str))
+        or not str(variation_id)
+        or not isinstance(file_url, str)
+        or not file_url
+    ):
+        raise EikonRequestError(f"Invalid variation data: {variation}")
+    return variation_id, file_url
+
+
+async def _download_image(
+    client: httpx.AsyncClient,
+    file_url: str,
+) -> tuple[str, str]:
+    try:
+        response = await client.get(
+            f"{EIKON_BASE_URL}{file_url}",
+            headers=get_headers(),
+            timeout=30.0,
+        )
+        response.raise_for_status()
+    except httpx.HTTPError as exc:
+        raise EikonRequestError(f"Failed to download image: {exc!s}") from exc
+
+    image_url = f"{EIKON_BASE_URL}{file_url}"
+    image_base64 = base64.b64encode(response.content).decode("utf-8")
+    return image_url, image_base64
+
+
 async def eikon_generate_and_get(
     brand_id: str,
     asset_type: str,
@@ -374,178 +502,45 @@ async def eikon_generate_and_get(
     poll_timeout_seconds: int = 120,
     poll_interval_seconds: int = 3,
 ) -> dict[str, Any]:
-    """
-    Generate a brand asset end-to-end: create batch → poll for completion → fetch variations → download image.
-
-    This is the convenience function for agents: one call does everything and returns the image URL + base64.
-
-    Args:
-        brand_id: Brand identifier (required, must be int or valid string)
-        asset_type: Asset type ID (e.g., 'lockup_horizontal', 'ig_post', 'business_card')
-        content: Content dict with optional fields (titulo, subtitulo, copy, etc.). Defaults to empty dict.
-        poll_timeout_seconds: Max seconds to wait for batch completion (default 120)
-        poll_interval_seconds: Seconds between polls (default 3)
-
-    Returns:
-        On success: {
-            "success": true,
-            "batch_id": <int>,
-            "variation_id": <int>,
-            "image_url": "<absolute_url>",
-            "image_base64": "<base64_png>",
-            "asset_type": "<type>",
-            "message": "..."
+    """Genera un asset end-to-end y devuelve URL y contenido base64."""
+    try:
+        brand_id_int = int(brand_id)
+    except (ValueError, TypeError):
+        return {
+            "success": False,
+            "error": f"Invalid brand_id: {brand_id}. Must be an integer.",
         }
-        On failure: {"success": false, "error": "..."}
-    """
+
     async with httpx.AsyncClient() as client:
-        # Convert brand_id to int
         try:
-            brand_id_int = int(brand_id)
-        except (ValueError, TypeError):
-            return {
-                "success": False,
-                "error": f"Invalid brand_id: {brand_id}. Must be an integer.",
-            }
-
-        # Step 1: Create batch
-        payload = {
-            "brand_id": brand_id_int,
-            "asset_types": [asset_type],
-            "count": 1,
-            "render_mode": "server",
-        }
-        if content:
-            payload["content"] = content
-
-        try:
-            response = await client.post(
-                f"{EIKON_BASE_URL}/api/v1/batches",
-                json=payload,
-                headers=get_headers(),
-                timeout=30.0,
+            batch_id = await _create_asset_batch(
+                client,
+                brand_id_int,
+                asset_type,
+                content,
             )
-            response.raise_for_status()
-            batch = response.json()
-            batch_id = batch.get("id")
-
-            if not batch_id:
-                return {
-                    "success": False,
-                    "error": f"Failed to get batch ID from response: {batch}",
-                }
-
-        except httpx.HTTPError as e:
-            return {
-                "success": False,
-                "error": f"Failed to create batch: {e!s}",
-            }
-
-        # Step 2: Poll for completion
-        start_time = time.time()
-        while True:
-            elapsed = time.time() - start_time
-            if elapsed > poll_timeout_seconds:
-                return {
-                    "success": False,
-                    "error": f"Batch {batch_id} did not complete within {poll_timeout_seconds}s. Last status: running",
-                }
-
-            try:
-                response = await client.get(
-                    f"{EIKON_BASE_URL}/api/v1/batches/{batch_id}",
-                    headers=get_headers(),
-                    timeout=30.0,
-                )
-                response.raise_for_status()
-                batch_status = response.json()
-                status = batch_status.get("status")
-
-                if status == "completed":
-                    break
-                elif status == "failed":
-                    return {
-                        "success": False,
-                        "error": f"Batch {batch_id} failed: {batch_status}",
-                    }
-                else:
-                    # Status is "pending" or "running"; wait and retry
-                    await asyncio.sleep(poll_interval_seconds)
-
-            except httpx.HTTPError as e:
-                return {
-                    "success": False,
-                    "error": f"Failed to poll batch {batch_id}: {e!s}",
-                }
-
-        # Step 3: Fetch variations
-        try:
-            response = await client.get(
-                f"{EIKON_BASE_URL}/api/v1/batches/{batch_id}/variations",
-                headers=get_headers(),
-                timeout=30.0,
+            await _wait_for_batch(
+                client,
+                batch_id,
+                poll_timeout_seconds,
+                poll_interval_seconds,
             )
-            response.raise_for_status()
-            variations_data = response.json()
+            variation_id, file_url = await _get_first_variation(client, batch_id)
+            image_url, image_base64 = await _download_image(client, file_url)
+        except EikonRequestError as exc:
+            return {"success": False, "error": str(exc)}
 
-            # Extract variations list (API returns {"variations": [...], "items": [...]})
-            variations = variations_data.get("variations", [])
-            if not variations:
-                variations = variations_data.get("items", [])
-
-            if not variations:
-                return {
-                    "success": False,
-                    "error": f"No variations found in batch {batch_id}",
-                }
-
-            variation = variations[0]
-            variation_id = variation.get("id")
-            file_url = variation.get("file_url")
-
-            if not variation_id or not file_url:
-                return {
-                    "success": False,
-                    "error": f"Invalid variation data: {variation}",
-                }
-
-        except httpx.HTTPError as e:
-            return {
-                "success": False,
-                "error": f"Failed to fetch variations: {e!s}",
-            }
-
-        # Step 4: Download image file
-        try:
-            response = await client.get(
-                f"{EIKON_BASE_URL}{file_url}",
-                headers=get_headers(),
-                timeout=30.0,
-            )
-            response.raise_for_status()
-            image_bytes = response.content
-
-            # Encode to base64
-            image_base64 = base64.b64encode(image_bytes).decode("utf-8")
-
-            # Construct absolute URL
-            image_url = f"{EIKON_BASE_URL}{file_url}"
-
-            return {
-                "success": True,
-                "batch_id": batch_id,
-                "variation_id": variation_id,
-                "image_url": image_url,
-                "image_base64": image_base64,
-                "asset_type": asset_type,
-                "message": f"Asset generated successfully. Variation {variation_id} from batch {batch_id}.",
-            }
-
-        except httpx.HTTPError as e:
-            return {
-                "success": False,
-                "error": f"Failed to download image: {e!s}",
-            }
+    return {
+        "success": True,
+        "batch_id": batch_id,
+        "variation_id": variation_id,
+        "image_url": image_url,
+        "image_base64": image_base64,
+        "asset_type": asset_type,
+        "message": (
+            f"Asset generated successfully. Variation {variation_id} from batch {batch_id}."
+        ),
+    }
 
 
 async def eikon_gallery(
@@ -692,7 +687,10 @@ else:
                     "properties": {
                         "name": {"type": "string", "description": "Brand name"},
                         "palette": {"type": "string", "description": "Color palette (JSON string)"},
-                        "typography": {"type": "string", "description": "Typography config (JSON string)"},
+                        "typography": {
+                            "type": "string",
+                            "description": "Typography config (JSON string)",
+                        },
                         "description": {"type": "string", "description": "Brand description"},
                     },
                     "required": ["name"],
@@ -705,7 +703,10 @@ else:
                     "type": "object",
                     "properties": {
                         "brand_id": {"type": "string", "description": "Brand identifier"},
-                        "count": {"type": "integer", "description": "Number of variations to return"},
+                        "count": {
+                            "type": "integer",
+                            "description": "Number of variations to return",
+                        },
                     },
                     "required": ["brand_id"],
                 },
@@ -737,9 +738,18 @@ else:
                 inputSchema={
                     "type": "object",
                     "properties": {
-                        "brand_id": {"type": "string", "description": "Brand identifier (int or string)"},
-                        "asset_type": {"type": "string", "description": "Asset type ID (e.g., lockup_horizontal, ig_post, business_card)"},
-                        "content": {"type": "string", "description": "Content as JSON string (titulo, subtitulo, copy, url, etc., optional)"},
+                        "brand_id": {
+                            "type": "string",
+                            "description": "Brand identifier (int or string)",
+                        },
+                        "asset_type": {
+                            "type": "string",
+                            "description": "Asset type ID (e.g., lockup_horizontal, ig_post, business_card)",
+                        },
+                        "content": {
+                            "type": "string",
+                            "description": "Content as JSON string (titulo, subtitulo, copy, url, etc., optional)",
+                        },
                     },
                     "required": ["brand_id", "asset_type"],
                 },
@@ -750,9 +760,18 @@ else:
                 inputSchema={
                     "type": "object",
                     "properties": {
-                        "brand_id": {"type": "string", "description": "Brand identifier (int or string)"},
-                        "asset_type": {"type": "string", "description": "Asset type ID (e.g., lockup_horizontal, ig_post, business_card)"},
-                        "content": {"type": "string", "description": "Content as JSON string (titulo, subtitulo, copy, url, etc., optional)"},
+                        "brand_id": {
+                            "type": "string",
+                            "description": "Brand identifier (int or string)",
+                        },
+                        "asset_type": {
+                            "type": "string",
+                            "description": "Asset type ID (e.g., lockup_horizontal, ig_post, business_card)",
+                        },
+                        "content": {
+                            "type": "string",
+                            "description": "Content as JSON string (titulo, subtitulo, copy, url, etc., optional)",
+                        },
                     },
                     "required": ["brand_id", "asset_type"],
                 },
@@ -774,8 +793,14 @@ else:
         if name == "eikon_list_brands":
             result = await eikon_list_brands()
         elif name == "eikon_create_brand":
-            palette = json.loads(arguments.get("palette", "{}")) if arguments.get("palette") else None
-            typography = json.loads(arguments.get("typography", "{}")) if arguments.get("typography") else None
+            palette = (
+                json.loads(arguments.get("palette", "{}")) if arguments.get("palette") else None
+            )
+            typography = (
+                json.loads(arguments.get("typography", "{}"))
+                if arguments.get("typography")
+                else None
+            )
             result = await eikon_create_brand(
                 name=arguments["name"],
                 palette=palette,
@@ -796,14 +821,18 @@ else:
         elif name == "eikon_list_asset_types":
             result = await eikon_list_asset_types()
         elif name == "eikon_generate_asset":
-            content = json.loads(arguments.get("content", "{}")) if arguments.get("content") else None
+            content = (
+                json.loads(arguments.get("content", "{}")) if arguments.get("content") else None
+            )
             result = await eikon_generate_asset(
                 brand_id=arguments["brand_id"],
                 asset_type=arguments["asset_type"],
                 content=content,
             )
         elif name == "eikon_generate_and_get":
-            content = json.loads(arguments.get("content", "{}")) if arguments.get("content") else None
+            content = (
+                json.loads(arguments.get("content", "{}")) if arguments.get("content") else None
+            )
             result = await eikon_generate_and_get(
                 brand_id=arguments["brand_id"],
                 asset_type=arguments["asset_type"],
@@ -828,10 +857,12 @@ if __name__ == "__main__":
     else:
         # Standard mcp.Server with stdio transport
         import logging
+
         logging.basicConfig(level=logging.INFO)
 
         async def main():
             from mcp.server.stdio import stdio_server
+
             async with stdio_server(server) as streams:
                 await streams.wait_closed()
 

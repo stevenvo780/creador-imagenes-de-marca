@@ -92,10 +92,16 @@ async def render_12_combinations() -> dict:
                     dry_run=False,
                 )
                 if result["status"] != "generated":
-                    print(f"  ✗ combo_{combo.idx:03d} status={result['status']} {result.get('warnings')}")
+                    print(
+                        f"  ✗ combo_{combo.idx:03d} status={result['status']} {result.get('warnings')}"
+                    )
                     continue
                 png_path = (
-                    cfg.OUTPUT_DIR / MARCA_SLUG / "logos" / ASSET_TYPE / f"combo_{combo.idx:03d}.png"
+                    cfg.OUTPUT_DIR
+                    / MARCA_SLUG
+                    / "logos"
+                    / ASSET_TYPE
+                    / f"combo_{combo.idx:03d}.png"
                 )
                 if not png_path.exists():
                     print(f"  ✗ combo_{combo.idx:03d}.png no encontrado tras render")
@@ -138,7 +144,9 @@ def main() -> int:
     """Punto de entrada. Exit 0 solo si hay 12 renders con 12 hashes distintos."""
     result = asyncio.run(render_12_combinations())
     ok = result["rendered"] == 12 and result["distinct"] == 12
-    print(f"\n{'PASS' if ok else 'FAIL'}: rendered={result['rendered']}/12 distinct={result['distinct']}/12")
+    print(
+        f"\n{'PASS' if ok else 'FAIL'}: rendered={result['rendered']}/12 distinct={result['distinct']}/12"
+    )
     return 0 if ok else 1
 
 

@@ -11,7 +11,9 @@ from eikon_core.isotype import IsotypeParams
 from eikon_core.isotypes.pack_espirales import PACK
 
 
-def _run_checks(spiral_id: str, svg1: str, svg2: str, svg3: str, params_base: IsotypeParams, results: dict) -> dict:
+def _run_checks(
+    spiral_id: str, svg1: str, svg2: str, svg3: str, params_base: IsotypeParams, results: dict
+) -> dict:
     """Ejecuta checks de validación individuales."""
     checks = {}
 

@@ -26,6 +26,7 @@ def temp_output_dir() -> Path:
     tmp = Path(tempfile.mkdtemp(prefix="eikon_multitenant_"))
     yield tmp
     import shutil
+
     shutil.rmtree(tmp, ignore_errors=True)
 
 
@@ -43,6 +44,7 @@ def temp_db() -> Path:
     yield tmp_db
 
     import shutil
+
     shutil.rmtree(tmp_db.parent, ignore_errors=True)
 
 
@@ -145,11 +147,7 @@ class TestMultitenantRenderIsolation:
 
         # Sin tenant_id, la ruta no incluye /tenants/
         expected_path = (
-            temp_output_dir
-            / marca_slug
-            / categoria
-            / tipo_spec.name
-            / f"{variant_spec.name}.png"
+            temp_output_dir / marca_slug / categoria / tipo_spec.name / f"{variant_spec.name}.png"
         )
 
         # Verificar que NO tiene /tenants/

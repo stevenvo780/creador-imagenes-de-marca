@@ -12,6 +12,7 @@ Cubre:
 
 Usa servidor propio (puerto 9777) con DB SQLite aislada.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -37,6 +38,7 @@ PNG_SIG = b"\x89PNG\r\n\x1a\n"
 
 
 # ── Server helpers ─────────────────────────────────────────────────────────────
+
 
 def _write_e2e_app(temp_root: Path) -> None:
     """Crea un módulo ASGI mínimo: importa create_app directo, settings propios."""
@@ -101,19 +103,31 @@ def _server(temp_root: Path):
     _write_e2e_app(temp_root)
     env = os.environ.copy()
     pp = env.get("PYTHONPATH", "")
-    env["PYTHONPATH"] = os.pathsep.join(
-        p for p in (str(temp_root), str(REPO_ROOT), pp) if p
-    )
+    env["PYTHONPATH"] = os.pathsep.join(p for p in (str(temp_root), str(REPO_ROOT), pp) if p)
     env["EIKON_E2E_TEMP_ROOT"] = str(temp_root)
     env["PYTHONUNBUFFERED"] = "1"
     cmd = [
-        sys.executable, "-m", "uvicorn", "eikon_ui_e2e_app:app",
-        "--host", HOST, "--port", str(PORT),
-        "--lifespan", "on", "--log-level", "warning", "--no-access-log",
+        sys.executable,
+        "-m",
+        "uvicorn",
+        "eikon_ui_e2e_app:app",
+        "--host",
+        HOST,
+        "--port",
+        str(PORT),
+        "--lifespan",
+        "on",
+        "--log-level",
+        "warning",
+        "--no-access-log",
     ]
     proc = subprocess.Popen(
-        cmd, cwd=REPO_ROOT, env=env,
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+        cmd,
+        cwd=REPO_ROOT,
+        env=env,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
     )
     try:
         _wait_for_health(proc)
@@ -128,6 +142,7 @@ def _server(temp_root: Path):
 
 
 # ── Playwright helpers ─────────────────────────────────────────────────────────
+
 
 async def _screenshot(page: Any, name: str) -> Path:
     SCREENSHOT_DIR.mkdir(parents=True, exist_ok=True)
@@ -152,7 +167,9 @@ async def _api(page: Any, method: str, path: str, *, payload=None, binary=False)
         const txt = await r.text();
         return {status:r.status, data: txt ? JSON.parse(txt) : {}};
     }"""
-    result = await page.evaluate(script, {"method": method, "path": path, "payload": payload, "binary": binary})
+    result = await page.evaluate(
+        script, {"method": method, "path": path, "payload": payload, "binary": binary}
+    )
     return result
 
 
@@ -167,6 +184,7 @@ def _issue(severity: str, area: str, problem: str, hint: str) -> None:
 
 
 # ── FULL FLOW ──────────────────────────────────────────────────────────────────
+
 
 async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo largo por diseño
     from playwright.async_api import async_playwright
@@ -215,12 +233,22 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
             # a11y: main landmark
             main = await page.locator("main").count()
             if main == 0:
-                _issue("minor", "a11y", "No hay elemento <main> en la pantalla de login", "Agregar <main> como landmark")
+                _issue(
+                    "minor",
+                    "a11y",
+                    "No hay elemento <main> en la pantalla de login",
+                    "Agregar <main> como landmark",
+                )
 
             # a11y: tablist con roles
             tablist = await page.locator('[role="tablist"]').count()
             if tablist == 0:
-                _issue("minor", "a11y", "Tablist de login/registro sin role=tablist", "Agregar role=tablist al contenedor")
+                _issue(
+                    "minor",
+                    "a11y",
+                    "Tablist de login/registro sin role=tablist",
+                    "Agregar role=tablist al contenedor",
+                )
 
             # ── 3. Registro ───────────────────────────────────────────────────
             print("\n[3] Registro")
@@ -267,11 +295,21 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
                 await page.wait_for_timeout(300)
                 new_val = await acento_input.input_value()
                 if "#FF6B35" not in new_val.upper() and "FF6B35" not in new_val.upper():
-                    _issue("medium", "ColorPicker", f"El input hex no retuvo el valor: {new_val!r}", "Verificar normalización en ColorPicker.handleTextBlur")
+                    _issue(
+                        "medium",
+                        "ColorPicker",
+                        f"El input hex no retuvo el valor: {new_val!r}",
+                        "Verificar normalización en ColorPicker.handleTextBlur",
+                    )
                 else:
                     print(f"  ✓ Color acento cambiado a {new_val}")
             else:
-                _issue("medium", "ColorPicker", f"Esperaban ≥4 hex inputs, encontrado: {count}", "Verificar que BrandEditorPage renderiza todos los ColorPicker")
+                _issue(
+                    "medium",
+                    "ColorPicker",
+                    f"Esperaban ≥4 hex inputs, encontrado: {count}",
+                    "Verificar que BrandEditorPage renderiza todos los ColorPicker",
+                )
 
             await _screenshot(page, "07_brand_editor_color_changed")
             await page.click('button[type="submit"]:has-text("Guardar")')
@@ -291,15 +329,15 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
             print("\n[7] Wizard — count guard (click-through ingenuo)")
             await page.goto("/batch")
             # Esperar que el wizard cargue (h2 con el título del paso 1)
-            await page.wait_for_selector('h2', timeout=8000)
+            await page.wait_for_selector("h2", timeout=8000)
             await _screenshot(page, "08_wizard_step1_brand")
 
             # Paso 1: Seleccionar marca via <select id="wizard-brand-select">
             # Esperar a que el select aparezca y tenga opciones reales
-            brand_select = page.locator('#wizard-brand-select')
+            brand_select = page.locator("#wizard-brand-select")
             try:
                 # Esperar que el select exista
-                await page.wait_for_selector('#wizard-brand-select', timeout=8000)
+                await page.wait_for_selector("#wizard-brand-select", timeout=8000)
                 # Esperar a que el spinner/loading desaparezca y el select tenga opciones
                 # Usamos evaluate para polling hasta que el select tenga > 1 option
                 for _ in range(30):
@@ -321,16 +359,28 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
                     await brand_select.select_option(first_val)
                     print(f"  ✓ Marca seleccionada (option value={first_val}) en select")
                 else:
-                    _issue("high", "Wizard Step1", "Select sin opciones reales de marca", "Verificar API /api/v1/wizard/brands")
+                    _issue(
+                        "high",
+                        "Wizard Step1",
+                        "Select sin opciones reales de marca",
+                        "Verificar API /api/v1/wizard/brands",
+                    )
             except Exception as e:
-                _issue("high", "Wizard Step1", f"No se pudo seleccionar marca: {type(e).__name__}: {e!s:.100}", "Verificar StepSelectBrand render y API /api/v1/wizard/brands")
+                _issue(
+                    "high",
+                    "Wizard Step1",
+                    f"No se pudo seleccionar marca: {type(e).__name__}: {e!s:.100}",
+                    "Verificar StepSelectBrand render y API /api/v1/wizard/brands",
+                )
 
             await _screenshot(page, "09_wizard_step1_selected")
 
             # "Siguiente →" para ir a assets
             # Esperar que el botón esté habilitado (se habilita cuando brandId != "")
             next_btn = page.locator('button:has-text("Siguiente")')
-            await page.wait_for_selector('button:has-text("Siguiente"):not([disabled])', timeout=5000)
+            await page.wait_for_selector(
+                'button:has-text("Siguiente"):not([disabled])', timeout=5000
+            )
             await next_btn.click()
             await page.wait_for_timeout(800)
             await _screenshot(page, "10_wizard_step2_assets")
@@ -338,7 +388,7 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
             # Paso 2: Seleccionar BANNER (linkedin_header) y TARJETA (stat_card)
             print("\n  Paso 2: seleccionar Banner + Tarjeta")
             # Los checkboxes tienen id="asset-banners-linkedin_header", "asset-cards-stat_card", etc.
-            banner_check = page.locator('#asset-banners-linkedin_header')
+            banner_check = page.locator("#asset-banners-linkedin_header")
             banner_found = await banner_check.count() > 0
             if not banner_found:
                 banner_check = page.locator('input[type="checkbox"][id*="ad_leaderboard"]')
@@ -347,9 +397,14 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
                 await banner_check.first.check()
                 print("  ✓ Banner seleccionado")
             else:
-                _issue("medium", "Wizard", "No se encontró checkbox de banner (linkedin_header/ad_leaderboard)", "Verificar StepAssetTypes")
+                _issue(
+                    "medium",
+                    "Wizard",
+                    "No se encontró checkbox de banner (linkedin_header/ad_leaderboard)",
+                    "Verificar StepAssetTypes",
+                )
 
-            stat_check = page.locator('#asset-cards-stat_card')
+            stat_check = page.locator("#asset-cards-stat_card")
             stat_found = await stat_check.count() > 0
             if not stat_found:
                 stat_check = page.locator('input[type="checkbox"][id*="stat_card"]')
@@ -358,7 +413,12 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
                 await stat_check.first.check()
                 print("  ✓ Tarjeta (stat_card) seleccionada")
             else:
-                _issue("medium", "Wizard", "No se encontró checkbox de stat_card", "Verificar StepAssetTypes")
+                _issue(
+                    "medium",
+                    "Wizard",
+                    "No se encontró checkbox de stat_card",
+                    "Verificar StepAssetTypes",
+                )
 
             await _screenshot(page, "11_wizard_step2_assets_selected")
 
@@ -389,13 +449,20 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
             print("  ✓ En paso de cantidad")
 
             # Count guard: verificar que el slider/count no supera maxFeasible
-            slider = page.locator('#wizard-count-slider')
+            slider = page.locator("#wizard-count-slider")
             if await slider.count() > 0:
                 max_val = await slider.get_attribute("max")
-                cur_val = await slider.get_attribute("value") or await slider.evaluate("el => el.value")
+                cur_val = await slider.get_attribute("value") or await slider.evaluate(
+                    "el => el.value"
+                )
                 print(f"  Count guard: slider max={max_val}, val={cur_val}")
                 if max_val and int(cur_val or 0) > int(max_val):
-                    _issue("high", "Count guard", f"count ({cur_val}) supera maxFeasible ({max_val})", "Verificar clamp en StepCountAndSeed")
+                    _issue(
+                        "high",
+                        "Count guard",
+                        f"count ({cur_val}) supera maxFeasible ({max_val})",
+                        "Verificar clamp en StepCountAndSeed",
+                    )
                 else:
                     print("  ✓ Count guard OK: valor ≤ max")
             else:
@@ -411,7 +478,9 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
                 if await slider.count() > 0:
                     max_v = int(await slider.get_attribute("max") or 4)
                     target = min(4, max_v)
-                    await slider.evaluate(f"el => {{ el.value = '{target}'; el.dispatchEvent(new Event('input', {{bubbles:true}})); }}")
+                    await slider.evaluate(
+                        f"el => {{ el.value = '{target}'; el.dispatchEvent(new Event('input', {{bubbles:true}})); }}"
+                    )
                     print(f"  ✓ Slider ajustado a {target}")
 
             # Siguiente → review
@@ -428,11 +497,18 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
 
             # Verificar que NO hay 422 (conteo guard en backend)
             await page.wait_for_timeout(1500)
-            error_alert = page.locator('[role="alert"]:has-text("422"), [role="alert"]:has-text("Error")')
+            error_alert = page.locator(
+                '[role="alert"]:has-text("422"), [role="alert"]:has-text("Error")'
+            )
             err_count = await error_alert.count()
             if err_count > 0:
                 err_text = await error_alert.first.text_content()
-                _issue("high", "Wizard 422", f"Error al generar: {err_text!r}", "Verificar count guard en backend /api/v1/batches")
+                _issue(
+                    "high",
+                    "Wizard 422",
+                    f"Error al generar: {err_text!r}",
+                    "Verificar count guard en backend /api/v1/batches",
+                )
             else:
                 print("  ✓ Sin error 422 tras click en 'Generar'")
 
@@ -449,10 +525,14 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
                 # Intentar obtener batch del estado
                 batch_r = await _api(page, "GET", f"/api/v1/gallery/{brand_id}")
                 if batch_r["status"] == 200:
-                    gallery_items = batch_r["data"].get("variations", batch_r["data"].get("items", []))
+                    gallery_items = batch_r["data"].get(
+                        "variations", batch_r["data"].get("items", [])
+                    )
                     if gallery_items:
                         batch_id = gallery_items[0].get("batch_id")
-                        print(f"  ✓ Galería tiene {len(gallery_items)} variaciones, batch_id={batch_id}")
+                        print(
+                            f"  ✓ Galería tiene {len(gallery_items)} variaciones, batch_id={batch_id}"
+                        )
                         break
                 await page.wait_for_timeout(2000)
 
@@ -487,15 +567,25 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
             var_count = await var_cards.count()
             print(f"  Variaciones visibles: {var_count}")
             if var_count == 0:
-                _issue("high", "Galería", "Galería vacía tras generar batch", "Verificar worker y almacenamiento de variaciones")
+                _issue(
+                    "high",
+                    "Galería",
+                    "Galería vacía tras generar batch",
+                    "Verificar worker y almacenamiento de variaciones",
+                )
 
             # ── 9a. Orden: Calidad (default) ──
-            sort_select = page.locator('#gallery-sort')
+            sort_select = page.locator("#gallery-sort")
             if await sort_select.count() > 0:
                 sort_val = await sort_select.input_value()
                 print(f"  Orden inicial: {sort_val}")
                 if sort_val != "calidad":
-                    _issue("minor", "Galería sort", f"Orden inicial no es 'calidad', es '{sort_val}'", "Verificar estado inicial de sortBy en GalleryPage")
+                    _issue(
+                        "minor",
+                        "Galería sort",
+                        f"Orden inicial no es 'calidad', es '{sort_val}'",
+                        "Verificar estado inicial de sortBy en GalleryPage",
+                    )
                 else:
                     print("  ✓ Orden inicial = calidad")
 
@@ -511,10 +601,15 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
                 await _screenshot(page, "19_gallery_order_calidad")
                 print("  ✓ Orden restaurado a 'calidad'")
             else:
-                _issue("minor", "Galería sort", "No se encontró selector de orden #gallery-sort (puede que no haya items)", "Verificar que gallery-sort aparece cuando hay items")
+                _issue(
+                    "minor",
+                    "Galería sort",
+                    "No se encontró selector de orden #gallery-sort (puede que no haya items)",
+                    "Verificar que gallery-sort aparece cuando hay items",
+                )
 
             # ── 9b. Filtro por Marca ──
-            brand_filter = page.locator('#gallery-brand')
+            brand_filter = page.locator("#gallery-brand")
             if await brand_filter.count() > 0:
                 try:
                     # Esperar que el select tenga opciones reales (brands cargados async)
@@ -532,21 +627,37 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
                     if first_brand_val:
                         await brand_filter.select_option(first_brand_val)
                         await page.wait_for_timeout(800)
-                        filtered_count = await page.locator('ul[aria-label="Variaciones de marca"] li').count()
-                        print(f"  ✓ Filtro por Marca (value={first_brand_val}): {filtered_count} variaciones")
+                        filtered_count = await page.locator(
+                            'ul[aria-label="Variaciones de marca"] li'
+                        ).count()
+                        print(
+                            f"  ✓ Filtro por Marca (value={first_brand_val}): {filtered_count} variaciones"
+                        )
                         await _screenshot(page, "20_gallery_filter_brand")
                         # Limpiar filtro
                         await brand_filter.select_option("")
                         await page.wait_for_timeout(600)
                     else:
-                        print("  [i] No hay opciones de marca en el filtro (brands no cargados o sin marcas)")
+                        print(
+                            "  [i] No hay opciones de marca en el filtro (brands no cargados o sin marcas)"
+                        )
                 except Exception as e:
-                    _issue("minor", "Galería filtro marca", f"Error al filtrar por marca: {e!s:.80}", "Verificar carga async de brands en GalleryPage")
+                    _issue(
+                        "minor",
+                        "Galería filtro marca",
+                        f"Error al filtrar por marca: {e!s:.80}",
+                        "Verificar carga async de brands en GalleryPage",
+                    )
             else:
-                _issue("minor", "Galería filtro marca", "No se encontró #gallery-brand", "Verificar que el filtro de marca aparece cuando hay items")
+                _issue(
+                    "minor",
+                    "Galería filtro marca",
+                    "No se encontró #gallery-brand",
+                    "Verificar que el filtro de marca aparece cuando hay items",
+                )
 
             # ── 9c. Filtro por Generación (sólo visible si hay >1 batch) ──
-            batch_filter = page.locator('#gallery-batch')
+            batch_filter = page.locator("#gallery-batch")
             if await batch_filter.count() > 0:
                 try:
                     first_batch_val = await page.evaluate(
@@ -561,15 +672,20 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
                         await batch_filter.select_option("")
                         await page.wait_for_timeout(400)
                 except Exception as e:
-                    _issue("minor", "Galería filtro batch", f"Error al filtrar por generación: {e!s:.80}", "Verificar filtro de generación")
+                    _issue(
+                        "minor",
+                        "Galería filtro batch",
+                        f"Error al filtrar por generación: {e!s:.80}",
+                        "Verificar filtro de generación",
+                    )
             else:
                 print("  [i] Filtro por Generación no visible (solo 1 batch — OK)")
 
             # ── 9d. Filtro por Familia ──
-            cat_filter = page.locator('#gallery-category')
+            cat_filter = page.locator("#gallery-category")
             if await cat_filter.count() > 0:
                 try:
-                    options = await cat_filter.locator('option').all_text_contents()
+                    options = await cat_filter.locator("option").all_text_contents()
                     print(f"  Familias disponibles: {options}")
                     first_cat_val = await page.evaluate(
                         "() => { const opts = [...document.querySelectorAll('#gallery-category option')]; "
@@ -578,15 +694,26 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
                     if first_cat_val:
                         await cat_filter.select_option(first_cat_val)
                         await page.wait_for_timeout(600)
-                        cat_count = await page.locator('ul[aria-label="Variaciones de marca"] li').count()
-                        print(f"  ✓ Filtro por Familia ('{first_cat_val}'): {cat_count} variaciones")
+                        cat_count = await page.locator(
+                            'ul[aria-label="Variaciones de marca"] li'
+                        ).count()
+                        print(
+                            f"  ✓ Filtro por Familia ('{first_cat_val}'): {cat_count} variaciones"
+                        )
                         await _screenshot(page, "22_gallery_filter_family")
                         await cat_filter.select_option("")
                         await page.wait_for_timeout(400)
                 except Exception as e:
-                    _issue("minor", "Galería filtro familia", f"Error al filtrar por familia: {e!s:.80}", "Verificar filtro de familia")
+                    _issue(
+                        "minor",
+                        "Galería filtro familia",
+                        f"Error al filtrar por familia: {e!s:.80}",
+                        "Verificar filtro de familia",
+                    )
             else:
-                print("  [i] Filtro por Familia no visible (solo 1 categoría o sin items suficientes)")
+                print(
+                    "  [i] Filtro por Familia no visible (solo 1 categoría o sin items suficientes)"
+                )
 
             # ── 9e. Selección múltiple ──
             print("\n[10] Selección múltiple y descarga ZIP")
@@ -606,13 +733,20 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
                     await select_all_btn.click()
                     await page.wait_for_timeout(500)
                     # La barra flotante debería aparecer
-                    floating_bar = page.locator('[role="region"][aria-label="Acciones sobre la selección"]')
+                    floating_bar = page.locator(
+                        '[role="region"][aria-label="Acciones sobre la selección"]'
+                    )
                     if await floating_bar.count() > 0:
                         sel_text = await floating_bar.text_content()
                         print(f"  ✓ Barra flotante: {sel_text!r}")
                         await _screenshot(page, "23_gallery_multi_selected")
                     else:
-                        _issue("medium", "Selección múltiple", "Barra flotante no aparece tras 'Seleccionar todo'", "Verificar que selected.size > 0 dispara la barra")
+                        _issue(
+                            "medium",
+                            "Selección múltiple",
+                            "Barra flotante no aparece tras 'Seleccionar todo'",
+                            "Verificar que selected.size > 0 dispara la barra",
+                        )
                 else:
                     # Intentar click manual en 2 cards
                     await var_cards2.first.click()
@@ -622,7 +756,9 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
 
                 # ── 9f. Descarga ZIP ──
                 print("\n[11] Descarga ZIP")
-                zip_btn = page.locator('button:has-text("Descargar .zip"), button:has-text("Descargar.zip")')
+                zip_btn = page.locator(
+                    'button:has-text("Descargar .zip"), button:has-text("Descargar.zip")'
+                )
                 if await zip_btn.count() > 0:
                     # Interceptar la descarga
                     async with page.expect_download(timeout=30000) as dl_info:
@@ -639,7 +775,12 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
                         print(f"  Archivos en ZIP: {names}")
                         print(f"  PNGs en ZIP: {len(pngs)}")
                         if len(pngs) == 0:
-                            _issue("high", "ZIP download", "ZIP vacío o sin PNGs", "Verificar endpoint /api/v1/downloads/batch o /api/v1/downloads/selection")
+                            _issue(
+                                "high",
+                                "ZIP download",
+                                "ZIP vacío o sin PNGs",
+                                "Verificar endpoint /api/v1/downloads/batch o /api/v1/downloads/selection",
+                            )
                         else:
                             # Verificar magic bytes
                             bad = []
@@ -650,15 +791,30 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
                                 elif len(data) < 1024:
                                     bad.append(f"{png_name}(tiny)")
                             if bad:
-                                _issue("high", "ZIP PNGs", f"Archivos no son PNGs válidos: {bad}", "Verificar render output")
+                                _issue(
+                                    "high",
+                                    "ZIP PNGs",
+                                    f"Archivos no son PNGs válidos: {bad}",
+                                    "Verificar render output",
+                                )
                             else:
                                 print(f"  ✓ {len(pngs)} PNGs válidos en ZIP")
                     zip_path.unlink(missing_ok=True)
                     await _screenshot(page, "24_gallery_after_zip")
                 else:
-                    _issue("medium", "Descarga ZIP", "Botón de descarga ZIP no encontrado", "Verificar barra flotante con selección activa")
+                    _issue(
+                        "medium",
+                        "Descarga ZIP",
+                        "Botón de descarga ZIP no encontrado",
+                        "Verificar barra flotante con selección activa",
+                    )
             else:
-                _issue("high", "Galería", f"Solo {count2} variaciones en galería — no se puede probar multi-selección", "Verificar que el batch generó suficientes variaciones")
+                _issue(
+                    "high",
+                    "Galería",
+                    f"Solo {count2} variaciones en galería — no se puede probar multi-selección",
+                    "Verificar que el batch generó suficientes variaciones",
+                )
 
             # ── 9g. Descarga individual ──
             print("\n[12] Descarga individual (single)")
@@ -666,7 +822,9 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
             await page.wait_for_selector('h1:has-text("Galería")', timeout=8000)
             await page.wait_for_timeout(1500)
 
-            single_dl_btn = page.locator('button[aria-label*="Descargar"], button:has-text("↓")').first
+            single_dl_btn = page.locator(
+                'button[aria-label*="Descargar"], button:has-text("↓")'
+            ).first
             if await single_dl_btn.count() > 0:
                 async with page.expect_download(timeout=20000) as dl_info2:
                     await single_dl_btn.click()
@@ -675,9 +833,19 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
                 await dl2.save_as(str(png_path))
                 png_data = png_path.read_bytes()
                 if not png_data.startswith(PNG_SIG):
-                    _issue("high", "Descarga single", "El archivo descargado no es PNG válido", "Verificar endpoint /api/v1/downloads/file/{id}")
+                    _issue(
+                        "high",
+                        "Descarga single",
+                        "El archivo descargado no es PNG válido",
+                        "Verificar endpoint /api/v1/downloads/file/{id}",
+                    )
                 elif len(png_data) < 1024:
-                    _issue("medium", "Descarga single", f"PNG descargado pesa solo {len(png_data)} bytes — posible error de render", "Verificar render output")
+                    _issue(
+                        "medium",
+                        "Descarga single",
+                        f"PNG descargado pesa solo {len(png_data)} bytes — posible error de render",
+                        "Verificar render output",
+                    )
                 else:
                     print(f"  ✓ PNG individual descargado ({len(png_data)} bytes)")
                 png_path.unlink(missing_ok=True)
@@ -687,7 +855,9 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
                 if await first_card.count() > 0:
                     await first_card.click()
                     await page.wait_for_timeout(500)
-                    dl_in_lightbox = page.locator('[role="dialog"] button:has-text("Descargar"), [role="dialog"] button[aria-label*="Descargar"]')
+                    dl_in_lightbox = page.locator(
+                        '[role="dialog"] button:has-text("Descargar"), [role="dialog"] button[aria-label*="Descargar"]'
+                    )
                     if await dl_in_lightbox.count() > 0:
                         async with page.expect_download(timeout=20000) as dl_info3:
                             await dl_in_lightbox.first.click()
@@ -698,28 +868,53 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
                         if d3.startswith(PNG_SIG) and len(d3) > 1024:
                             print(f"  ✓ PNG lightbox descargado ({len(d3)} bytes)")
                         else:
-                            _issue("high", "Descarga lightbox", "PNG desde lightbox inválido", "Verificar descarga individual")
+                            _issue(
+                                "high",
+                                "Descarga lightbox",
+                                "PNG desde lightbox inválido",
+                                "Verificar descarga individual",
+                            )
                         png3.unlink(missing_ok=True)
                     else:
-                        _issue("medium", "Descarga single", "Botón descargar no encontrado en lightbox", "Verificar Lightbox.tsx")
+                        _issue(
+                            "medium",
+                            "Descarga single",
+                            "Botón descargar no encontrado en lightbox",
+                            "Verificar Lightbox.tsx",
+                        )
                 else:
-                    _issue("high", "Descarga single", "Sin variaciones disponibles para descarga individual", "")
+                    _issue(
+                        "high",
+                        "Descarga single",
+                        "Sin variaciones disponibles para descarga individual",
+                        "",
+                    )
 
             await _screenshot(page, "25_gallery_final")
 
             # ── 10. a11y básica ────────────────────────────────────────────────
             print("\n[13] a11y básica")
             await page.goto("/brands")
-            await page.wait_for_selector('h1', timeout=5000)
+            await page.wait_for_selector("h1", timeout=5000)
 
             # Landmarks: nav + main
-            nav_count = await page.locator('nav').count()
-            main_count = await page.locator('main').count()
+            nav_count = await page.locator("nav").count()
+            main_count = await page.locator("main").count()
             print(f"  Landmarks: nav={nav_count}, main={main_count}")
             if nav_count == 0:
-                _issue("minor", "a11y landmarks", "Sin elemento <nav> en AppShell", "Agregar <nav> como landmark de navegación")
+                _issue(
+                    "minor",
+                    "a11y landmarks",
+                    "Sin elemento <nav> en AppShell",
+                    "Agregar <nav> como landmark de navegación",
+                )
             if main_count == 0:
-                _issue("minor", "a11y landmarks", "Sin elemento <main> en ruta autenticada", "Agregar <main> en AppShell o pages")
+                _issue(
+                    "minor",
+                    "a11y landmarks",
+                    "Sin elemento <main> en ruta autenticada",
+                    "Agregar <main> en AppShell o pages",
+                )
 
             # Botones sin aria-label
             btns_no_label = await page.evaluate("""() => {
@@ -728,7 +923,12 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
                 return bad.map(b => b.outerHTML.slice(0, 120));
             }""")
             if btns_no_label:
-                _issue("minor", "a11y botones", f"Botones sin texto ni aria-label: {btns_no_label[:3]}", "Agregar aria-label a botones icono")
+                _issue(
+                    "minor",
+                    "a11y botones",
+                    f"Botones sin texto ni aria-label: {btns_no_label[:3]}",
+                    "Agregar aria-label a botones icono",
+                )
 
             # Imágenes sin alt
             imgs_no_alt = await page.evaluate("""() => {
@@ -736,7 +936,12 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
                 return imgs.filter(i => !i.alt && !i.getAttribute('aria-hidden')).map(i => i.src.slice(-40));
             }""")
             if imgs_no_alt:
-                _issue("minor", "a11y imágenes", f"Imágenes sin alt: {imgs_no_alt[:3]}", "Agregar alt o aria-hidden='true' a imágenes decorativas")
+                _issue(
+                    "minor",
+                    "a11y imágenes",
+                    f"Imágenes sin alt: {imgs_no_alt[:3]}",
+                    "Agregar alt o aria-hidden='true' a imágenes decorativas",
+                )
             else:
                 print("  ✓ Sin imágenes con alt faltante")
 
@@ -744,7 +949,7 @@ async def run_full_flow() -> None:  # noqa: C901  # script E2E lineal: flujo lar
             print("  ✓ a11y básica revisada")
 
             # ── Final ─────────────────────────────────────────────────────────
-            print(f"\n{'='*60}")
+            print(f"\n{'=' * 60}")
             print(f"FLOW COMPLETO: OK ({len(ISSUES)} issues encontrados)")
 
         except AssertionError as e:

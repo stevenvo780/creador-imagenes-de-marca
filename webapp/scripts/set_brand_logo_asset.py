@@ -26,9 +26,13 @@ from webapp import storage  # noqa: E402
 
 def main() -> None:
     if len(sys.argv) != 4:
-        print("Uso: python webapp/scripts/set_brand_logo_asset.py <tenant_slug> <brand_slug> <logo_asset_path>")
+        print(
+            "Uso: python webapp/scripts/set_brand_logo_asset.py <tenant_slug> <brand_slug> <logo_asset_path>"
+        )
         print("\nEjemplo:")
-        print("  python webapp/scripts/set_brand_logo_asset.py steven-vallejo agora assets/logos/agora.svg")
+        print(
+            "  python webapp/scripts/set_brand_logo_asset.py steven-vallejo agora assets/logos/agora.svg"
+        )
         sys.exit(1)
 
     tenant_slug = sys.argv[1]
@@ -50,7 +54,9 @@ def main() -> None:
     # Obtener el brand por slug dentro del tenant
     brand = storage.get_brand_by_slug(db_url, tenant_id, brand_slug)
     if brand is None:
-        print(f"Error: brand '{brand_slug}' no encontrado en tenant '{tenant_slug}'", file=sys.stderr)
+        print(
+            f"Error: brand '{brand_slug}' no encontrado en tenant '{tenant_slug}'", file=sys.stderr
+        )
         sys.exit(1)
 
     brand_id = int(brand["id"])

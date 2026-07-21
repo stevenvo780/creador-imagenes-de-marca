@@ -97,9 +97,7 @@ def _wait_for_health(base_url: str, process: subprocess.Popen[str]) -> None:
         while time.monotonic() < deadline:
             if process.poll() is not None:
                 output = _process_output(process)
-                raise RuntimeError(
-                    f"uvicorn e2e termino antes de responder /health\n{output}"
-                )
+                raise RuntimeError(f"uvicorn e2e termino antes de responder /health\n{output}")
             try:
                 response = client.get(f"{base_url}/health")
                 if response.status_code == 200:
@@ -111,9 +109,7 @@ def _wait_for_health(base_url: str, process: subprocess.Popen[str]) -> None:
     process.terminate()
     with contextlib.suppress(subprocess.TimeoutExpired):
         output = _process_output(process)
-        raise RuntimeError(
-            f"uvicorn e2e no respondio /health en 20s: {last_error!r}\n{output}"
-        )
+        raise RuntimeError(f"uvicorn e2e no respondio /health en 20s: {last_error!r}\n{output}")
     process.kill()
     output = _process_output(process)
     raise RuntimeError(f"uvicorn e2e no respondio /health en 20s\n{output}")
@@ -144,9 +140,7 @@ def test_server() -> Iterator[str]:
         env = os.environ.copy()
         existing_pythonpath = env.get("PYTHONPATH")
         env["PYTHONPATH"] = os.pathsep.join(
-            part
-            for part in (str(temp_root), str(REPO_ROOT), existing_pythonpath)
-            if part
+            part for part in (str(temp_root), str(REPO_ROOT), existing_pythonpath) if part
         )
         env["EIKON_E2E_TEMP_ROOT"] = str(temp_root)
         env["PYTHONUNBUFFERED"] = "1"
@@ -210,9 +204,7 @@ def auth_headers(base_url: str) -> Callable[[], dict[str, str]]:
         with httpx.Client(base_url=base_url, timeout=10.0) as client:
             response = client.post("/auth/register", json=payload)
             assert response.status_code == 201, response.text
-            cookie_header = "; ".join(
-                f"{name}={value}" for name, value in client.cookies.items()
-            )
+            cookie_header = "; ".join(f"{name}={value}" for name, value in client.cookies.items())
         return {"Cookie": cookie_header}
 
     return _register_and_headers

@@ -8,7 +8,7 @@
 #   export IMAGE=...                   # opcional, se auto-genera si no se pasa
 #
 #   # Opción A — Secrets en Secret Manager (recomendado para prod):
-#   export WEBAPP_SECRET_NAME=eikon-webapp-secret
+#   export WEBAPP_SECRET_NAME=eikon-jwt-secret
 #   export DATABASE_URL_SECRET_NAME=eikon-database-url
 #   export GCS_BUCKET=nombre-del-bucket
 #
@@ -24,7 +24,7 @@
 #   - Artifact Registry habilitado con repositorio "eikon" en la región
 #   - Cloud Run API habilitada
 #   - Cloud Build API habilitada
-#   - (Para Secret Manager) secrets creados: gcloud secrets create eikon-webapp-secret ...
+#   - (Para Secret Manager) secrets creados: gcloud secrets create eikon-jwt-secret ...
 # ─────────────────────────────────────────────────────────────────────────────
 set -euo pipefail
 
@@ -38,8 +38,13 @@ IMAGE="${IMAGE:-}"
 SECRET_STRATEGY="${SECRET_STRATEGY:-secretmanager}"
 
 # Nombres de secrets en Secret Manager
-WEBAPP_SECRET_NAME="${WEBAPP_SECRET_NAME:-eikon-webapp-secret}"
+WEBAPP_SECRET_NAME="${WEBAPP_SECRET_NAME:-eikon-jwt-secret}"
 DATABASE_URL_SECRET_NAME="${DATABASE_URL_SECRET_NAME:-eikon-database-url}"
+
+# Configuración no sensible de seguridad. Se actualiza de forma incremental
+# para no borrar variables existentes del servicio.
+EIKON_WEBAPP_COOKIE_SECURE="${EIKON_WEBAPP_COOKIE_SECURE:-1}"
+EIKON_WEBAPP_JWT_TTL="${EIKON_WEBAPP_JWT_TTL:-2592000}"
 
 # Env vars directas (Opción B — solo para pruebas)
 EIKON_WEBAPP_SECRET="${EIKON_WEBAPP_SECRET:-}"
@@ -51,6 +56,16 @@ GCS_BUCKET="${GCS_BUCKET:-}"
 # ── Validaciones ──────────────────────────────────────────────────────────────
 if [[ -z "$PROJECT" ]]; then
   echo "ERROR: define PROJECT=<id-proyecto-gcp> antes de correr este script." >&2
+  exit 1
+fi
+
+if [[ "$EIKON_WEBAPP_COOKIE_SECURE" != "0" && "$EIKON_WEBAPP_COOKIE_SECURE" != "1" ]]; then
+  echo "ERROR: EIKON_WEBAPP_COOKIE_SECURE debe ser 0 o 1." >&2
+  exit 1
+fi
+
+if [[ ! "$EIKON_WEBAPP_JWT_TTL" =~ ^[1-9][0-9]*$ ]]; then
+  echo "ERROR: EIKON_WEBAPP_JWT_TTL debe ser un entero positivo en segundos." >&2
   exit 1
 fi
 
@@ -82,8 +97,8 @@ echo "[2/2] Desplegando en Cloud Run..."
 
 # ── Paso 2: Armar flags de env vars y secrets ─────────────────────────────────
 
-# Env vars no sensibles (siempre como --set-env-vars)
-ENV_VARS="EIKON_ENV=production"
+# Env vars no sensibles (actualización incremental con --update-env-vars)
+ENV_VARS="EIKON_ENV=production,EIKON_WEBAPP_COOKIE_SECURE=${EIKON_WEBAPP_COOKIE_SECURE},EIKON_WEBAPP_JWT_TTL=${EIKON_WEBAPP_JWT_TTL}"
 if [[ -n "$GCS_BUCKET" ]]; then
   ENV_VARS="${ENV_VARS},GCS_BUCKET=${GCS_BUCKET}"
 fi
@@ -95,12 +110,12 @@ if [[ "$SECRET_STRATEGY" == "secretmanager" ]]; then
   # ── Recomendado para producción ──────────────────────────────────────────
   # Los secretos se montan como env vars desde Secret Manager.
   # Prerequisito: secret manager API habilitada y secrets creados.
-  #   gcloud secrets create eikon-webapp-secret --replication-policy=automatic
-  #   echo -n "mi-secreto" | gcloud secrets versions add eikon-webapp-secret --data-file=-
+  #   gcloud secrets create eikon-jwt-secret --replication-policy=automatic
+  #   echo -n "mi-secreto" | gcloud secrets versions add eikon-jwt-secret --data-file=-
   #   gcloud secrets create eikon-database-url --replication-policy=automatic
   #   echo -n "postgresql://user:pass@host:5432/eikon" | gcloud secrets versions add eikon-database-url --data-file=-
   SECRET_FLAGS+=(
-    "--set-secrets"
+    "--update-secrets"
     "EIKON_WEBAPP_SECRET=${WEBAPP_SECRET_NAME}:latest,DATABASE_URL=${DATABASE_URL_SECRET_NAME}:latest"
   )
 else
@@ -131,7 +146,7 @@ gcloud run deploy "$SERVICE" \
   --timeout 600s \
   --concurrency 4 \
   --min-instances 1 \
-  --set-env-vars "$ENV_VARS" \
+  --update-env-vars "$ENV_VARS" \
   "${SECRET_FLAGS[@]}"
 
 # NOTA COSTO: --no-cpu-throttling + --min-instances 1 mantienen el worker de

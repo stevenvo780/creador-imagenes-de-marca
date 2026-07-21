@@ -45,7 +45,12 @@ def _get_default_variant_for_asset_type(asset_type: str) -> str:
 
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
-_LOGO_MIME = {".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg"}
+_LOGO_MIME = {
+    ".svg": "image/svg+xml",
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+}
 
 
 def _validate_path_not_traversal(path_str: str) -> bool:
@@ -63,7 +68,9 @@ def _resolve_logo_asset(path_str: str) -> Path | None:
         return None
 
     p = Path(path_str)
-    candidates = [p] if p.is_absolute() else [_REPO_ROOT / p, cfg.MARCAS_DIR / p, cfg.MARCAS_DIR.parent / p]
+    candidates = (
+        [p] if p.is_absolute() else [_REPO_ROOT / p, cfg.MARCAS_DIR / p, cfg.MARCAS_DIR.parent / p]
+    )
     for c in candidates:
         with contextlib.suppress(Exception):
             if c.is_file():
@@ -73,8 +80,10 @@ def _resolve_logo_asset(path_str: str) -> Path | None:
                     # Allow paths within REPO_ROOT, MARCAS_DIR, or their parents
                     repo_root = _REPO_ROOT.resolve()
                     marcas_parent = cfg.MARCAS_DIR.resolve().parent
-                    if not (str(c_resolved).startswith(str(repo_root)) or
-                            str(c_resolved).startswith(str(marcas_parent))):
+                    if not (
+                        str(c_resolved).startswith(str(repo_root))
+                        or str(c_resolved).startswith(str(marcas_parent))
+                    ):
                         continue
                 except Exception:
                     continue
@@ -480,7 +489,9 @@ async def render_asset(  # noqa: C901
 
         # Wait for fonts and stabilize layout (determinism fix)
         await _wait_for_fonts_and_stabilize(page)
-        await page.wait_for_timeout(250)  # Increased wait to ensure layout settles after variant switch
+        await page.wait_for_timeout(
+            250
+        )  # Increased wait to ensure layout settles after variant switch
 
         # Inspect layout warnings
         await _inspect_layout(page, asset_meta)

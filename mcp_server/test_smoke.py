@@ -16,6 +16,7 @@ def test_imports():
 
     try:
         import server  # noqa: F401
+
         print("✓ All modules imported successfully")
         return True
     except ImportError as e:
@@ -159,7 +160,6 @@ def test_mcp_framework():
                 print("⚠ @mcp.tool() decorator not found")
 
         else:
-
             print("✓ Standard MCP Server available")
             # Would need an instance to check methods
 

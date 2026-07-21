@@ -40,9 +40,15 @@ Ejemplos:
         help="Procesa TODAS las marcas registradas (incluye demos no core)",
     )
     parser.add_argument(
-        "--only-marcas", type=str, help="Lista separada por comas de slugs a procesar (ej: pinakotheke-kosmos,prizma-iris)"
+        "--only-marcas",
+        type=str,
+        help="Lista separada por comas de slugs a procesar (ej: pinakotheke-kosmos,prizma-iris)",
     )
-    parser.add_argument("--solo", type=str, help="Filtra por categoría (opciones: logos, banners, social, print, web, cards, og, stationery)")
+    parser.add_argument(
+        "--solo",
+        type=str,
+        help="Filtra por categoría (opciones: logos, banners, social, print, web, cards, og, stationery)",
+    )
     parser.add_argument(
         "--dry-run", action="store_true", help="Enumera assets sin renderizar ni escribir PNGs"
     )
@@ -171,7 +177,9 @@ Ejemplos:
             print(f"  Manifests: {len(result['manifests'])}")
 
         if args.fail_on_layout and totals.get("layout_fails", 0) > 0:
-            print(f"  ERROR: --fail-on-layout: {totals['layout_fails']} assets con layout_status=fail")
+            print(
+                f"  ERROR: --fail-on-layout: {totals['layout_fails']} assets con layout_status=fail"
+            )
             return 1
 
         if args.web_icons and not args.dry_run:

@@ -84,9 +84,7 @@ def _build_isotypes(output_dir: Path) -> list[tuple[str, str]]:
             svg = generate_isotype(params)
             name = f"{brand_short}_{style}"
             (output_dir / f"{name}.svg").write_text(svg, encoding="utf-8")
-            (output_dir / f"{name}.txt").write_text(
-                svg_to_base64_data_uri(svg), encoding="utf-8"
-            )
+            (output_dir / f"{name}.txt").write_text(svg_to_base64_data_uri(svg), encoding="utf-8")
             built.append((name, svg))
             print(f"+ {name}.svg generado")
     return built
@@ -141,7 +139,9 @@ def main() -> int:
     print("-> Generando y renderizando isotipos...")
     result = asyncio.run(render_isotypes())
     ok = result["rendered"] == 8 and result["distinct"] == 8
-    print(f"{'PASS' if ok else 'FAIL'}: rendered={result['rendered']}/8 distinct={result['distinct']}/8")
+    print(
+        f"{'PASS' if ok else 'FAIL'}: rendered={result['rendered']}/8 distinct={result['distinct']}/8"
+    )
     print("Salida en output/_demo_isotype/")
     return 0 if ok else 1
 
