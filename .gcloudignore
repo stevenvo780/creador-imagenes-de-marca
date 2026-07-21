@@ -50,8 +50,13 @@
 **/*~
 **/settings.local.json
 **/*[Cc][Rr][Ee][Dd][Ee][Nn][Tt][Ii][Aa][Ll][Ss]*
-**/*[Cc][Oo][Oo][Kk][Ii][Ee]*
-**/*[Ss][Ee][Ss][Ss][Ii][Oo][Nn]*
+**/cookies.json
+**/cookies.txt
+**/session.json
+**/session.txt
+**/sessions/
+**/*.cookie
+**/*.session
 
 # Artefactos locales y dependencias regenerables.
 .playwright*/
