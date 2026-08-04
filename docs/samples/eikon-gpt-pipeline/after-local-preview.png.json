@@ -1,0 +1,20 @@
+{
+  "source_path": "docs/samples/eikon-gpt-pipeline/before-eikon-mockup.png",
+  "output_path": "docs/samples/eikon-gpt-pipeline/after-local-preview.png",
+  "metadata_path": "docs/samples/eikon-gpt-pipeline/after-local-preview.png.json",
+  "provider": "local-preview",
+  "model": "pillow-deterministic-v1",
+  "source_sha256": "b61bb915232cc273e72d95c92cdff523d1dcea873485e017175489fabe1827a3",
+  "output_sha256": "f3234a723902ba323e84a47d786059373da8bff74715edc7cb77b0421b5c3ea1",
+  "brand_spec_digest": "d4926a01e03c0802f46e8bccac1e4dd26b5e6bd4fcd07b54e4326efc5aa8fc3d",
+  "api_size": "2160x2160",
+  "gate": {
+    "structure_score": 0.995695,
+    "palette_adherence": 0.98329,
+    "passed": true,
+    "reasons": []
+  },
+  "request_id": null,
+  "asset_type": "ig_post",
+  "quality": "high"
+}

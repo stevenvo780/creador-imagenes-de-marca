@@ -4,6 +4,7 @@ playwright>=1.40
 # Utilidades base
 Pillow>=10.0
 numpy>=1.24
+httpx>=0.26
 
 # Base de datos: SQLite (default) o Postgres (via DATABASE_URL)
 psycopg[binary]>=3.1

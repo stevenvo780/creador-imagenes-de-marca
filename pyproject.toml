@@ -13,6 +13,7 @@ dependencies = [
   "playwright>=1.40",
   "Pillow>=10.0",
   "numpy>=1.24",
+  "httpx>=0.26",
 ]
 
 [project.optional-dependencies]

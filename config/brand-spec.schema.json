@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eikon.stevenvallejo.com/schemas/brand-spec-1.0.json",
+  "title": "Eikón BrandSpec",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "slug",
+    "name",
+    "corporate_name",
+    "tagline",
+    "tone",
+    "symbol",
+    "family",
+    "front",
+    "urls",
+    "palette",
+    "typography",
+    "gradients",
+    "identity",
+    "assets"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "slug": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,80}$" },
+    "name": { "type": "string", "minLength": 1 },
+    "corporate_name": { "type": "string", "minLength": 1 },
+    "tagline": { "type": "string" },
+    "tone": { "type": "string" },
+    "symbol": { "type": "string" },
+    "family": { "enum": ["cloud_atlas", "prizma"] },
+    "front": { "type": "string" },
+    "urls": { "$ref": "#/$defs/stringMap" },
+    "palette": {
+      "allOf": [
+        { "$ref": "#/$defs/stringMap" },
+        {
+          "required": ["background", "primary", "accent", "accent_secondary", "text"],
+          "propertyNames": {
+            "enum": [
+              "background",
+              "primary",
+              "accent",
+              "accent_secondary",
+              "accent_tertiary",
+              "text",
+              "text_muted",
+              "surface"
+            ]
+          },
+          "additionalProperties": { "type": "string", "pattern": "^#[0-9a-f]{6}$" }
+        }
+      ]
+    },
+    "typography": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["display", "body"],
+      "properties": {
+        "display": { "type": "string", "minLength": 1 },
+        "body": { "type": "string", "minLength": 1 }
+      }
+    },
+    "gradients": { "$ref": "#/$defs/stringMap" },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["logo_text", "logo_symbol", "logo_style", "logo_seed", "logo_asset"],
+      "properties": {
+        "logo_text": { "type": "string" },
+        "logo_symbol": { "type": "string" },
+        "logo_style": { "type": "string" },
+        "logo_seed": { "type": "integer" },
+        "logo_asset": { "type": ["string", "null"] }
+      }
+    },
+    "assets": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/stringMap" }
+    }
+  },
+  "$defs": {
+    "stringMap": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}
