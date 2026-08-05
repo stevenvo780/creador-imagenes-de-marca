@@ -53,6 +53,16 @@ BrandSpec, proveedor/modelo, tamaño enviado, request id si existe y resultados 
 los quality gates. Las escrituras son atómicas, no se sobrescribe por defecto y
 una respuesta que altera demasiado la composición o deriva de paleta se rechaza.
 
+Una carpeta de resultados se consolida en una biblioteca verificable con:
+
+```bash
+python3 scripts/eikon_refinement_library.py output/mi-lote-refinado
+```
+
+El archivo `_library.json` enumera cada par maqueta/refinado, proveedor, modelo,
+BrandSpec, quality gates y hashes SHA-256. El comando vuelve a calcular los hashes
+y falla si falta un archivo o si cualquier asset fue modificado fuera del flujo.
+
 ## Escala y seguridad operacional
 
 - Una entrada puede ser un PNG o un directorio; `--glob` y `--max-assets`

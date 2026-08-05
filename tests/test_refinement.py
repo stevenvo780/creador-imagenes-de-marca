@@ -17,6 +17,10 @@ from eikon_core.refinement import (
     gpt_edit_size,
     refine_asset,
 )
+from eikon_core.refinement_library import (
+    build_refinement_library,
+    write_refinement_library,
+)
 from eikon_core.refinement_providers import (
     LocalPreviewProvider,
     OpenAIImageEditProvider,
@@ -29,6 +33,7 @@ def brand_spec():
 
 
 def _mockup(path: Path, *, color: str = "#0b1417") -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
     image = Image.new("RGB", (1024, 1024), color)
     draw = ImageDraw.Draw(image)
     draw.rectangle((64, 64, 960, 280), fill="#43b5a6")
@@ -147,3 +152,45 @@ def test_openai_provider_error_does_not_echo_secret() -> None:
     assert "never-echo-me" not in str(captured.value)
     assert "invalid_api_key" in str(captured.value)
     client.close()
+
+
+def test_refinement_library_indexes_and_verifies_assets(tmp_path, brand_spec) -> None:
+    root = tmp_path / "samples"
+    source = _mockup(root / "square" / "before.png")
+    output = root / "square" / "after.png"
+    refine_asset(
+        source_path=source,
+        output_path=output,
+        spec=brand_spec,
+        asset_type="ig_post",
+        provider=LocalPreviewProvider(),
+    )
+
+    payload = build_refinement_library(root, base_dir=tmp_path)
+    assert payload["asset_count"] == 1
+    assert payload["providers"] == ["local-preview"]
+    assert payload["assets"][0]["source"] == "square/before.png"
+    assert payload["assets"][0]["output"] == "square/after.png"
+    assert payload["assets"][0]["gate"]["passed"] is True
+    assert len(payload["content_sha256"]) == 64
+
+    library_path = write_refinement_library(root, base_dir=tmp_path)
+    assert library_path == root / "_library.json"
+    assert json.loads(library_path.read_text())["content_sha256"] == payload["content_sha256"]
+
+
+def test_refinement_library_rejects_modified_asset(tmp_path, brand_spec) -> None:
+    root = tmp_path / "samples"
+    source = _mockup(root / "before.png")
+    output = root / "after.png"
+    refine_asset(
+        source_path=source,
+        output_path=output,
+        spec=brand_spec,
+        asset_type="ig_post",
+        provider=LocalPreviewProvider(),
+    )
+    output.write_bytes(_png_bytes("#ffffff"))
+
+    with pytest.raises(RefinementError, match="Hash invalido"):
+        build_refinement_library(root, base_dir=tmp_path)
