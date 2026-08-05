@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "brand": "Steven Vallejo",
+  "brand_spec_digest": "2dc24c1ea1c31275449ff88ea5ed7e017ab83241f6de5e136742bec730acf543",
+  "visual_pipeline": "eikon/local-preview -> deterministic resize",
+  "copy_provider": "minimax/MiniMax-M3",
+  "publication_mode": "manual_only",
+  "published": false,
+  "pieces": [
+    {
+      "id": "square_intro",
+      "path": "01-square-intro.png",
+      "sha256": "3d179a40768956574074890ccb941ee4809ddf2f7f4ad960e3bcd2a1f316e295",
+      "dimensions": [1080, 1080],
+      "source": "../eikon-gpt-pipeline-steven/v1-square/after-local-preview.png",
+      "source_sha256": "d0834ebf1f0e46a0e4582cd1aea8948ae95a834a1260e5f442ffd6e428b0c6f9"
+    },
+    {
+      "id": "story_clarity",
+      "path": "02-story-clarity.png",
+      "sha256": "9f35f6a06137adf725136b5bb849cdc87d4b590fb6ad3a4e07bc7ae9f5291f26",
+      "dimensions": [1080, 1920],
+      "source": "../eikon-gpt-pipeline-steven/ig-story/after-local-preview.png",
+      "source_sha256": "a77d18c3a9ae31315fd6b82a47bb4d901a69b6f735ed2dab00cc98ce6b4cb419"
+    },
+    {
+      "id": "landscape_principle",
+      "path": "03-landscape-principle.png",
+      "sha256": "2c32872f50621b568f6c68d53d7f8cd891020ec6917f556dc51aeaeed2dde384",
+      "dimensions": [1080, 567],
+      "source": "../eikon-gpt-pipeline-steven/og-general/after-local-preview.png",
+      "source_sha256": "71241514ca94a31252823102ab6df5f299342b00721e9634890dda17f3a46095"
+    },
+    {
+      "id": "portrait_about",
+      "path": "04-portrait-about.png",
+      "sha256": "a74faea4d60e8852e24a541b92e0a3ceb795b18df7322efcc65fdb1a0ee15237",
+      "dimensions": [1080, 1350],
+      "source": "../eikon-gpt-pipeline-steven/poster-a4/after-local-preview.png",
+      "source_sha256": "7504dc967b57f8bd3bdb6f189cc2f13fb2f1524a9d90655c239cdb732e4f9799"
+    }
+  ],
+  "supporting_files": [
+    {
+      "path": "captions.json",
+      "sha256": "07476fc06eaedc03ed12e73456e1dcf11183aa5bc5e310fc4362d5c25ccd95db"
+    },
+    {
+      "path": "PUBLICATION-CHECKLIST.md",
+      "sha256": "9ac807787ad162ff7c254621613046a1acacab0dab23ef8da56d65a8a464048b"
+    },
+    {
+      "path": "PREVIEW-CONTACT-SHEET.png",
+      "sha256": "f3eec1975647dd80cdd537f4247f51c6455f079826fc2ce10e4c25a32dac8cf2"
+    }
+  ]
+}

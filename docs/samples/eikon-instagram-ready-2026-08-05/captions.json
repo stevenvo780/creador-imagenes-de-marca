@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "brand": "Steven Vallejo",
+  "copy_provider": "minimax/MiniMax-M3",
+  "visual_provider": "eikon/local-preview",
+  "publication_mode": "manual_only",
+  "pieces": [
+    {
+      "id": "square_intro",
+      "file": "01-square-intro.png",
+      "suggested_order": 1,
+      "usage": "feed_square",
+      "caption": "Empiezo este espacio con una idea simple: los sistemas importan. Soy Steven Vallejo, ingeniero de software y filósofo, y durante 12+ años he trabajado en backend, lógica formal y devtools open source. Aquí escribo sobre arquitectura de software, IA agéntica y filosofía, sin hype y con precisión. El infinito no es solo un símbolo: las ideas buenas se iteran, se vuelven a leer, se mejoran. Sistemas claros para problemas reales, ese es el oficio y el método. Si te interesa el trabajo serio, sin fórmulas mágicas, nos leemos.",
+      "hashtags": [
+        "#StevenVallejo",
+        "#IngenieríaDeSoftware",
+        "#Filosofía",
+        "#SistemasClaros",
+        "#DevTools",
+        "#OpenSource"
+      ],
+      "alt_text": "Fondo casi negro con el símbolo de infinito multicolor al centro. Arriba aparece SV y debajo Steven Vallejo, Ingeniero de software y Filósofo, en tipografía clara."
+    },
+    {
+      "id": "story_clarity",
+      "file": "02-story-clarity.png",
+      "suggested_order": 2,
+      "usage": "story",
+      "caption": "Sistemas claros para problemas reales. Nuevo post en el feed: ingeniería, filosofía y oficio.",
+      "hashtags": [],
+      "alt_text": "Historia vertical de fondo oscuro con el símbolo infinito, el nombre Steven Vallejo, la frase sistemas claros para problemas reales y el aviso Nuevo post."
+    },
+    {
+      "id": "landscape_principle",
+      "file": "03-landscape-principle.png",
+      "suggested_order": 3,
+      "usage": "feed_landscape",
+      "caption": "Pensar antes de construir. Es la frase que repito en voz baja antes de abrir el editor. Antes de una arquitectura, un modelo o una línea de código, está la pregunta: ¿qué problema estamos resolviendo realmente y para quién? Cuando esa respuesta es honesta, el sistema se vuelve más pequeño, más legible y más durable. La complejidad aparece sola; la claridad hay que buscarla con método. Escribo sobre esto desde la ingeniería y la filosofía, sin frases de coach. Te dejo el enlace en la bio.",
+      "hashtags": [
+        "#PensarAntesDeConstruir",
+        "#ArquitecturaDeSoftware",
+        "#Filosofía",
+        "#SistemasClaros",
+        "#Ingeniería",
+        "#Método"
+      ],
+      "alt_text": "Imagen horizontal en tonos oscuros con el símbolo infinito, la frase Pensar antes de construir: sistemas claros para problemas reales y stevenvallejo.com/es."
+    },
+    {
+      "id": "portrait_about",
+      "file": "04-portrait-about.png",
+      "suggested_order": 4,
+      "usage": "feed_portrait",
+      "caption": "Soy Steven Vallejo, ingeniero-filósofo con 12+ años en backend, lógica formal y devtools open source. Mi trabajo conecta dos cosas que a veces se ignoran entre sí: el rigor técnico y la pregunta de fondo. Diseño arquitectura de software, exploro IA agéntica y vuelvo una y otra vez a la filosofía para sostener las decisiones. Construyo sistemas que piensan y explico sistemas que duran. Si te interesa el oficio serio, sin frases vacías, este es un buen lugar para empezar. Encuéntrame en stevenvallejo.com/es.",
+      "hashtags": [
+        "#StevenVallejo",
+        "#ArquitecturaDeSoftware",
+        "#IAAgéntica",
+        "#Filosofía",
+        "#LógicaFormal",
+        "#DevTools"
+      ],
+      "alt_text": "Pieza vertical oscura con el símbolo infinito y Steven Vallejo. Enumera Arquitectura de software, IA agéntica y Filosofía, con una breve descripción profesional."
+    }
+  ]
+}
