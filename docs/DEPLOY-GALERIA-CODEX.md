@@ -1,6 +1,6 @@
 # Runbook de release: galería privada y Codex MCP
 
-Estado verificado al **2026-10-09 UTC**; timestamps de cada recibo abajo: código **`03550de240b0ce816bcb7513ebc379981ddd1c2a`** aprobado en re-review Astra Spec/Quality, F-I1–F-I4 y T8-M1 resueltos, sin nuevos Critical/Important en el delta. Replay nativo local y build/runtime Docker actuales PASS; **release no ejecutado**. GUI sigue bloqueada por panel de extensión Brave. Producción conserva código anterior `6fe3ad5`, revisión **`eikon-00056-jjs` al100%, cero tags**; metadata saneada del controlador **16:58:46Z**, sin nueva emisión de keys. SHA de release, digest publicado e IDs de producción están pendientes. Esto no completa Task7/Task8.
+Estado verificado al **2026-10-09 UTC**; releasefinal **19:42:39Z** y timers≈19:46Z: código **`2ee2ca2349098991e09ac30e919a2aafeb577873`** en **`eikon-00058-t9n` al100%, cero tags**, configuración salvoimagen/IAMservicio-bucket preservados. MCP nativo persistente, privacidad simétrica, ownerreview, business_cardcliente y ajustevisualmóvil verificados. **Primera entrega desplegada con límitesQA explícitos**: descarga del botónGUI no confirmada/otrosformatos y matrizGUI completa no certificados. Sin mainmerge ni publicaciónsocial.
 
 Este runbook prevalece para esta entrega sobre los ejemplos de provisionamiento de [DEPLOY.md](DEPLOY.md). Destino existente: proyecto **`emergent-enterprises`**, Cloud Run **`eikon`**, región **`us-central1`**; frontend/proxy Vercel existente **`eikon-proxy`**, con rewrite hacia Cloud Run. Se conserva la cuenta autorizada actual, sin copiar sesiones, cambiar perfil ni crear recursos externos. Producción requiere Postgres y almacenamiento persistente privado.
 
@@ -9,7 +9,7 @@ Este runbook prevalece para esta entrega sobre los ejemplos de provisionamiento 
 El controlador opera cuenta/vault/inventario real, backups privados, conexión nativa Codex, `image_gen`, Cloud Run/Vercel y los recibos reales. Task7 opera GUI; Task8 escribe estas guías y el ledger de evidencia. Un solo escritor por área. Ante defecto de producto, volver al escritor asignado y revisar el delta antes de avanzar.
 
 1. Código y pruebas con SHA exacto; gate independiente de código/re-review035 aprobado. Conservar alcance/SHA de pruebas anteriores y cobertura enfocada035; no inferir una corrida global nueva.
-2. GUI real, logo/font/renderer cliente, revisión humana y sesión/tenant. El bloqueo GUI actual impide cerrar aceptación.
+2. GUI real, logo/font/renderer cliente, revisión humana y sesión/tenant. El release parcial fue autorizado por el usuario; la aceptación completa GUI/Estudio sigue pendiente del recibo final.
 3. Preflight real de cuenta/servicio/DB/bucket/proxy, copia recuperable y ensayo aislado de migración/compatibilidad.
 4. Build saneado y actualización **sólo de imagen** en el servicio existente, preservando configuración/recursos/costos/IAM/red.
 5. Prueba funcional acotada desplegada; recibo SHA/digest/revisión, autenticación/proxy/MCP/privacidad, timers/cola; actualización de evidencia documental.
@@ -23,13 +23,13 @@ Guardar configuración completa, referencias a secrets, DB dump, metadatos/hash 
 | Comprobación | Estado recibido | Siguiente evidencia |
 |---|---|---|
 | Cuenta/service/region/proyecto | Cuenta actual autorizada, servicio existente ready | Revalidar justo antes de mutación, sin login alternativo |
-| Recursos actuales | CPU2/memoria2Gi del recibo anterior; metadata16:58:46Z: eikon-00056-jjs al100%, cero tags, sin nueva key ni release | Capturar y comparar configuración privada completa antes/después; conservar escalado/IAM/red/secrets; comprobar inaccesibilidad legacy antes de primera key scoped |
-| PostgreSQL backup/restauración | PG17 restaurado sin red/puertos, Python final 259101b `init_db` dos veces; datos originales idénticos | Confirmar que DB/migration/schema no cambiaron desde el recibo; backup actual antes de release |
+| Recursos actuales | Final2ee/eikon-00058-t9n al100%, cero tags,19:42:39Z; config completa salvoimagen/IAMservicio-bucket preservados | Conservar comparación privada; ninguna nueva modificación de recursos/costos/IAM autorizada por este recibo |
+| PostgreSQL backup/restauración | Backup fresco 19:12:22Z PG17 restaurado aislado, init_db dos veces y columnas originales iguales: snapshot: 4 tenants / 4 users / 62 brands / 6 keys | Sin fence live ni migración destructiva; renovar backup antes de cambios posteriores que alteren el alcance |
 | Rollback compatible | Código anterior 6fe3ad5: startup y lecturas `/auth/me`, `/api/v1/brands`, `/health`200, anónimo brands401 en clon migrado | No extrapolar a worker/escrituras ni borrar tablas/historia |
-| Bucket real | IAM sin allUsers/allAuthenticatedUsers; objeto anterior anónimo403 | Confirmar ACL/política de objetos nuevos, persistencia y descarga autenticada por backend |
-| Vercel proxy | Proyecto existente con rewriteall al servicio | Probar rutas profundas, cookies y multipart realmente; no inferirlo del archivo de configuración |
-| Sesión propia/inventario | Login API propio 16:24:04Z por proxy HTTPS: /auth/login200, /auth/me200, owner, cookie Secure/HttpOnly/SameSiteLax. Systems/News sólo importadas localmente | Sin key nueva ni release; inventario propio de producción pendiente |
-| Humanizar | Controlador≈17:12Z SSHserver2: humanizar-publicaciones.timer y humanizar-publicaciones-plan-daily.timer ambosactive, sin mutación | Confirmar estado/cola antes/después sin iniciar worker nuevo |
+| Bucket real | IAM sin cambios; cuatro objetos nuevos con HEAD anónimo403, originales/thumbnail propios privados por API | No extender el recibo a todaACLlegacy o datos ajenos |
+| Vercel proxy | Tres orígenes finalhealth200/proyectos-mediaSPAexactbundle; proxyexistentehttps://eikon-proxy.vercel.app, originalbyteexacto/no-store | Otrosformatos y matrizGUI completa no verificados; lecturaAPI no sustituye descargaGUI |
+| Sesión propia/inventario | Owner y nativeCLI de producción reales; Systems proyecto 4/marca 106, News proyecto 5/marca 107, identidad v2/logo original; importación idempotente | Sólo identidades autorizadas, sin importar56legacy a Humanizar; recarga del chat para MCP global pendiente |
+| Humanizar | SSHserver2≈19:46Z: ambos timers existentes active exit0, sin mutacionesworkers/cola/timers | No iniciar publicador/redes/calendario; conservar alcance de primera entrega |
 
 Lecturas CLI de preflight sugeridas, **a ejecutar sólo por el controlador**, con cuenta actual explícita y salida saneada:
 
@@ -45,13 +45,13 @@ Si el bucket comparte objetos públicos con otra aplicación, documentar la depe
 
 ## Ensayo de migración y recuperación
 
-Usar dump privado restaurado en instancia aislada sin red/puertos. Ejecutar `init_db` dos veces y comparar columnas originales contra otra restauración limpia del mismo dump; no aceptar sólo que arranque. El recibo actual conservó4 tenants / 4 users / 62 brands / 6 keys y cuatro tablas nuevas vacías. SQLite/PG16 sintéticos cubren las pruebas; PG17 privado prueba compatibilidad con el snapshot real. Mantener estos alcances separados.
+Usar dump privado restaurado en instancia aislada sin red/puertos. Ejecutar `init_db` dos veces y comparar columnas originales contra otra restauración limpia del mismo dump; no aceptar sólo que arranque. El backup fresco 19:12:22Z conservó 4 tenants / 4 users / 62 brands / 6 keys antes de las importaciones/revisiones del release; init_db dos veces y columnas originales iguales en restorePG17aislado. El recibo anterior259101b incluía cuatro tablas nuevas vacías: no describe el contenido live posterior. SQLite/PG16 sintéticos cubren las pruebas; PG17 privado prueba compatibilidad con el snapshot real. Mantener estos alcances separados.
 
 No hay downgrade destructivo aprobado. La reversión conserva esquema aditivo, assets e historial. **No devolver tráfico a `6fe3ad5` hasta completar el fence de autorización siguiente**: su resolver ignora `scopes_json`/`expires_at` y convertiría una key scoped incluso vacía o expirada en una key legacy amplia. Startup y lecturas sobre el clon migrado no probaron esta propiedad. No eliminar filas, reseedear producción, perder revisiones o restaurar un dump sobre escrituras nuevas. El worker y el rollback general de escrituras siguen sin certificación; un flujo afectado exige ensayo adicional aislado.
 
 ### Rollback seguro de autorización (F-I2; absorbe T8-M1)
 
-**Ningún `arm`, `disarm` ni revocación se ha ejecutado ahora en producción.** El helper es una herramienta administrativa PostgreSQL independiente, nunca un hook de release/startup. Su acción por defecto `audit` es de sólo lectura y devuelve únicamente contadores agregados; rechaza SQLite. El schema explícito debe coincidir con el utilizado por el servicio. El operador obtiene `DATABASE_URL` por su canal privado: no pasar DSN como argumento, no imprimirlo, no usar `set -x` ni adjuntarlo a recibos.
+**Ningún `arm`, `disarm` ni revocación global del fence se ha ejecutado en producción.** La revocación del probe read-only individual está documentada como prueba normal de keys, sin activar el helper administrativo. El helper es una herramienta administrativa PostgreSQL independiente, nunca un hook de release/startup. Su acción por defecto `audit` es de sólo lectura y devuelve únicamente contadores agregados; rechaza SQLite. El schema explícito debe coincidir con el utilizado por el servicio. El operador obtiene `DATABASE_URL` por su canal privado: no pasar DSN como argumento, no imprimirlo, no usar `set -x` ni adjuntarlo a recibos.
 
 Armar afecta **todas las claves scoped de todos los tenants**, incluidas concesiones vacías y expiradas. Debe revisarse como revocación de grants externa en el momento del rollback. Conserva las claves legacy con `scopes_json IS NULL`, sesiones owner, registros e historial. Las claves ya revocadas conservan su fecha. La restricción vive sólo mientras el operador mantenga armado el rollback; no cambia las migraciones ni el arranque normal.
 
@@ -172,27 +172,33 @@ No cerrar release con `/health`200. Ejecutar en la URL HTTPS real del proxy y, c
 
 Si el proxy trunca multipart, la cookie se pierde, GCS expone objetos o aparece una diferencia de configuración, preservar evidencia negativa y detener aceptación. Corregir por el escritor asignado y repetir sólo los checks afectados; no saltar al backend directo para declarar el proxy PASS.
 
-## Recibo de release y pendientes
+## Recibo de release y aceptación restante
 
-Completar sin secretos ni datos de otros clientes:
+Recibos reales del controlador; sin secretos ni datos de otros clientes. El writer documental no ejecutó estas operaciones.
 
-| Campo | Valor actual |
+| Campo | Valor comprobado / límite |
 |---|---|
-| Estado Task8/release | Documentación con reservas; release pendiente |
-| SHA de código revisado | 03550de240b0ce816bcb7513ebc379981ddd1c2a; SHA de release final pendiente, la actualización documental es posterior |
-| Gate de código | Astra re-review Spec/Quality APPROVED; F-I1–F-I4 y T8-M1 resueltos; GUI/release pendientes |
-| SHA desplegado anterior / revisión | 6fe3ad5 / eikon-00056-jjs, metadata16:58:46Z, tráfico100%, cero tags, sin nueva emisión de keys |
-| SHA/digest/revisión nueva | PENDIENTE |
-| Build/runtime local actual | 03550de exact git archive/etiqueta SHA, UID1001/sin red/SQLite sintético/lifespanoff/ASGI PASS; ImageID sha256:a3679e070fc3f01662e4d0f10345fb51d04054ee94e2d72e58be78b91e467e00; no digest publicado ni GUI/React, /media200 sólo fallbackSPA |
-| Proyecto/región/servicio/proxy | emergent-enterprises / us-central1 / eikon / eikon-proxy |
-| Copia/migración/rollback | Recibos privados PG17; sólo compatibilidad startup/lecturas legacy comprobada |
-| Codex nativo local | Recibo17:10:55Z código035: import/listmedia CLI real GPT6.1Sol, replay asset3/brief1 approved1024×1024; SHA aa58e57f036e6f979616301fd1fed07c346891b7f6c7e4c74451fbb4b44f7255; original exacto/no-store/thumb200, ajeno404×3/anónimo401×3, review2 única/historia intacta; key POSTreference-logo403/snapshot-storage intactos |
-| Auth/MCP/UI de producción | Auth API por proxy HTTPS verificada las 16:24:04Z con credencial original propia; cookie Secure/HttpOnly/SameSiteLax. MCP y UI siguen PENDIENTES. Bridge clipboard fallido preservado como negativo |
-| IDs/hash/upload/review/aislamiento de producción | PENDIENTE; los IDs locales no se trasladan al entorno desplegado |
-| GUI | BLOCKED panel extensión Brave, GET /auth/me401 en servidor sintético |
-| Cookie/proxy/multipart/GCS nuevo real | Cookie login en proxy verificada; rutas profundas/multipart/objetos nuevos GCS PENDIENTES |
-| Timers/cola | Ambos timers existentes active/sin mutación, lectura SSHserver2≈17:12Z; recibo posterior al release y cola pendientes |
-| Hallazgos anteriores | Gitleaks historia 1 hallazgo comentado; delta4fc..035 exit0/cero. Npm lock 5 vulnerabilidades heredadas. Sin ocultarlos ni marcar whole-lint limpio |
-| PR draft | La prepara el controlador; URL aún no suministrada |
+| Estado Task8/release | Release final2ee ejecutado; entrega con límitesGUI/descarga y otrosformatos documentados. SHA documental posterior no desplegado |
+| SHA desplegado | `2ee2ca2349098991e09ac30e919a2aafeb577873` |
+| Gate de código | Astra035 Spec/Quality APPROVED/F-I1–F-I4/T8-M1 resueltos; R-STUDIO/R-MOBILE2ee aprobadoindependiente sin hallazgos. Guard/all47frontendPASS, npmTS/VitePASS,2reglasCSSbuild/reviewPASS; sin duplicar suitePython |
+| Revisión/tráfico | eikon-00058-t9n al100%, cero tags,19:42:39Z. Releases00056/00057 son antecedentes |
+| OCI index | `sha256:d98b8d31568ca9b495d3a954aa88f7f9584794c2e560d7eecb1c6a00a9a52a66` |
+| Manifest linux/amd64 | `sha256:129219b1b9e9112e047c71ddb0ce1a50ff5b5693cc9666421777a4be9aaf04fc`, membershipdelindex verificada |
+| Config/IAM | Config completa exceptoimagen e IAM bucket-servicio sin cambios |
+| Proyecto/región/servicio/proxy | emergent-enterprises/us-central1/eikon / [proxy existente](https://eikon-proxy.vercel.app); tres orígenes health200/proyectos-mediaSPAexactfinalbundle |
+| Copia/migración/rollback | Backup 19:12:22Z PG17 restore aislado/init_db×2/columnas originales iguales; snapshot: 4 tenants / 4 users / 62 brands / 6 keys; sin fence live/downgrade destructivo, worker/escrituras generales sin certificación |
+| Inventario propio | Systems proyecto 4/marca 106, News proyecto 5/marca 107, v2/idempotente; logo original SHA 31d8d267ea1db2af060c77fe42be2375a4f15102028b7e9a199774c0a28cd343 |
+| Gate antes primera key | Antes key 7: revisionslist completo name/statusURL, revisiones anteriores sin statusURL; tráfico100%00057/cero tags y sin revision/tagURL published en config. Tres orígenes conocidos del servicio/proxy sirvieronSPA bytes exactos de imagen nueva. Sin eliminar revisiones |
+| Codex producción | CLI 0.160.1 real, listprojects/getbrandbrief/createbrief/importimage/listmedia; dos importsreales conreplay, asset 1/brief 1 1024×1024; SHA aa58e57f036e6f979616301fd1fed07c346891b7f6c7e4c74451fbb4b44f7255 |
+| Privacidad/autorización | Original proxy byte exacto/no-store, thumbnail propio200; anónimo401×3, empresa QA404×3 ambos sentidos, cuatro objetos GCS HEAD anónimo403; key-review/key-identity403; probe read-only revocado401 |
+| GUI verificada parcial | Ownerasset1/history1/currentv2 approved19:22:48Z, conservadospostrelease; captura19:48 muestra original/encargo/logo/historyAprobado sinerror. Rechazovacíoalert/sinreview; filtroAprobado/mobile390×844detalle/Escape/foco y desktop1440×900 verificados |
+| GUI desktop/recuperación | Desktop1440×900 modal original/snapshot/historia verificados con screenshot real; errores intermitentes conexión/thumbnail/brief al abrir y recuperación visible «Actualizar detalle» completó original+encargo+logo+history sin mutación; causa sin concluir |
+| GUI límites/negativos | MatrizGUI completa/otrosformatos/textosespecíficos no verificados. ClickDescargarPNG EVENTdownload15s timeout: descargaGUI no confirmada, archivoAPI200byteintacto separado. Erroresintermitentes conexión/thumb/brief recuperados con Actualizar detalle, causa sin concluir |
+| Estudio final | HumanizarSystems reference-only sinwarning/Tipoenabled; nativeFontFace/modern-screenshot clientbusiness_card Generado, variation3047/filepropio200; layout1050×600/PNG2100×1200/scale2, SHAbf4d2ec3132df31a882f40a50e26d82cd8793600f489b6575dbd88b6e4ff43f1, logooficialsinwarp pequeñoenlayout. v1_front sinclaim de payloadtextos/otrosformatos; legacyDBasset-only nohabilitado/backendreadonly |
+| Móvil final |390×844 navright363/documentwidth375 (antes632), linksaccesibles2filas/viewportreset/capturasguardadas; no toda matrizdesktop/mobile |
+| MCP del chat | Global eikon agregado sin secret config/otros settings preservados; CLI real persistente listprojects4/5 PASS≈19:37Z, misma cuenta. Chat actual requiere reload. CLIprodreal no prueba tool ya invocada desde este chat |
+| Timers/cola | Ambos timers existentes active≈19:46Z exit0, sin mutacionesworkers/cola/timers |
+| PR/CI | [PR2 draft](https://github.com/stevenvo780/creador-imagenes-de-marca/pull/2), sin main merge. Job GitHubActions no iniciado por restricción administrativa, no fallo de suite ni CIgreen |
+| Hallazgos anteriores | Gitleakshistoria1ejemplocomentado, delta188..2eePASS/cero (ademásdedeltasprevios); npm5 vulnerabilidadesheredadas y skips/RUF036/notatyping conservados. Sin whole-lint/history limpio |
 
-La evidencia completa queda fuera de Git. El recibo saneado registra timestamp, origen de evidencia, SHA/digest, IDs autorizados, hashes, HTTP/resultados y límites. Una omisión mantiene `PENDIENTE/BLOCKED`; no es PASS. Tras el release, Task8 actualiza estas guías y recibe revisión del delta documental. Redes sociales/calendario/publicador diario tienen entregas separadas.
+El release final2ee tiene index y manifest separados/verificados y no reutiliza el digest188 como prueba del ajuste. Releaseinicial188/00057 queda como antecedente: index8fc4ec86a95f4a9f69a87eddd189703ea5aea3a33a4347a64287ca1d114778aa/manifestf9aaba26c69434a840d833387927665836e1d2af35befbea424e17f2425ea30d. Evidencia completa fuera deGit; negativos preservados. Entrega desplegada con límites explícitos: no afirmar matrizTask7/Task8 íntegramente ejecutada, descargaGUI confirmada, todosformatos ni publicaciónsocial. Publicador/redes/calendario tienen entregas separadas.
