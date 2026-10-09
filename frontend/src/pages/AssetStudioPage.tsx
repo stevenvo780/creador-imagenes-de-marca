@@ -226,9 +226,17 @@ export function AssetStudioPage() {
     void loadBrands();
   }, []);
 
-  const selectedBrand = brands.find((b) => b.id === selectedBrandId) ?? null;
+  const selectedBrand: (Brand & { logo_asset?: string | null }) | null =
+    brands.find((b) => b.id === selectedBrandId) ?? null;
+  // El renderer prioriza el original; seed 0 también fija identidad procedural.
   const brandHasLogo = selectedBrand
-    ? Boolean(selectedBrand.logo_style && selectedBrand.logo_style.length > 0 && selectedBrand.logo_seed)
+    ? Boolean(
+        selectedBrand.reference_logo_sha256 ||
+          selectedBrand.logo_asset ||
+          (selectedBrand.logo_style &&
+            selectedBrand.logo_style !== "none" &&
+            Number.isInteger(selectedBrand.logo_seed)),
+      )
     : false;
 
   // ── Handlers ────────────────────────────────────────────────────────────
