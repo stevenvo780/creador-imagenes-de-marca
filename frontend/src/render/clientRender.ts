@@ -239,6 +239,8 @@ function createAndMountContainer(
     img.style.width = "100%";
     img.style.height = "100%";
     img.style.display = "block";
+    img.style.objectFit = "contain";
+    img.style.objectPosition = "center";
     // Limpiar y reemplazar contenido
     isotopeContainer.textContent = "";
     isotopeContainer.appendChild(img);

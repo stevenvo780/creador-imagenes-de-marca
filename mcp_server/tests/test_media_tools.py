@@ -290,3 +290,67 @@ def test_png_bad_idat_crc_returns_safe_error_without_http(tmp_path):
             "IDAT",
         ]
     )
+
+
+@pytest.mark.parametrize("method", ["list_projects", "list_media"])
+@pytest.mark.parametrize(
+    "args",
+    [
+        {"cursor": -1},
+        {"cursor": True},
+        {"cursor": "5"},
+        {"cursor": 1.5},
+        {"cursor": 2**63},
+        {"limit": 0},
+        {"limit": 101},
+        {"limit": False},
+        {"limit": "50"},
+        {"limit": []},
+    ],
+)
+def test_pagination_invalid_without_network(method, args):
+    async def invoke():
+        async with httpx.AsyncClient(
+            transport=httpx.MockTransport(lambda r: pytest.fail("network"))
+        ) as client:
+            return await getattr(MediaTools("https://example.invalid", "key", client), method)(
+                **args
+            )
+
+    assert asyncio.run(invoke())["error_code"] == "invalid_request"
+
+
+@pytest.mark.parametrize(
+    "method,resource", [("list_projects", "projects"), ("list_media", "media")]
+)
+def test_pagination_two_pages_preserves_filters(method, resource):
+    def handle(request):
+        params = dict(request.url.params)
+        if resource == "media":
+            assert {k: params[k] for k in ("project_id", "brand_id", "status")} == {
+                "project_id": "7",
+                "brand_id": "9",
+                "status": "pending_review",
+            }
+        start = int(params.get("cursor", 0))
+        limit = int(params.get("limit", 50))
+        rows = [{"id": i} for i in range(start + 1, min(start + limit, 51) + 1)]
+        return httpx.Response(
+            200, json={"items": rows, "next_cursor": rows[-1]["id"] if start + limit < 51 else None}
+        )
+
+    async def invoke():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(handle)) as client:
+            call = getattr(MediaTools("https://example.invalid", "key", client), method)
+            filters = (
+                {"project_id": 7, "brand_id": 9, "status": "pending_review"}
+                if resource == "media"
+                else {}
+            )
+            first = (await call(**filters))[resource]
+            second = (await call(**filters, cursor=first["next_cursor"], limit=50))[resource]
+            assert len(first["items"]) == 50 and len(second["items"]) == 1
+            assert {x["id"] for x in first["items"]}.isdisjoint(x["id"] for x in second["items"])
+            assert second["next_cursor"] is None
+
+    asyncio.run(invoke())

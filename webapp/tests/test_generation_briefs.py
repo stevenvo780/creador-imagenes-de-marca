@@ -215,7 +215,7 @@ def test_scoped_keys_and_legacy_do_not_inherit_new_routes(media_clients):
                 headers=headers,
                 files={"file": ("logo.png", image_bytes(100, 50), "image/png")},
             ).status_code
-            == 201
+            == 403
         )
     finally:
         client.close()
@@ -386,3 +386,87 @@ def test_raster_decoder_warning_rejected_without_emitting_warning(
     assert response.status_code == 422
     assert emitted == []
     assert media_clients.a.get(f"/api/v1/brands/{b['id']}/reference-logo").status_code == 404
+
+
+@pytest.mark.parametrize("credential", ["writer", "all", "legacy", "member", "demoted"])
+def test_reference_logo_owner_only_no_rejected_mutation(media_clients, credential):
+    from webapp.api.permissions import API_KEY_SCOPES
+
+    b = brand(media_clients.a, project(media_clients.a, "own")["id"], "own")
+    original = image_bytes(300, 80)
+    route = f"/api/v1/brands/{b['id']}/reference-logo"
+    assert media_clients.a.post(route, files={"file": ("logo.png", original)}).status_code == 201
+    before = media_clients.a.get(f"/api/v1/brands/{b['id']}/brief").json()
+    files_before = {
+        str(p): p.read_bytes() for p in media_clients.output_root.rglob("*") if p.is_file()
+    }
+    owner = media_clients.a.get("/auth/me").json()
+    tid = owner["tenant"]["id"]
+    agent = TestClient(media_clients.a.app)
+    try:
+        if credential in {"member", "demoted"}:
+            agent.cookies.update(media_clients.a.cookies)
+            if credential == "demoted":
+                assert agent.get(route).status_code == 200
+            with db.connect(media_clients.db_path) as con:
+                con.execute("UPDATE users SET role = 'member' WHERE tenant_id = ?", (tid,))
+        else:
+            key, _ = (
+                create_api_key(media_clients.db_path, tid)
+                if credential == "legacy"
+                else create_scoped_api_key(
+                    media_clients.db_path,
+                    tid,
+                    "test",
+                    list(API_KEY_SCOPES) if credential == "all" else ["media:write"],
+                )
+            )
+            agent.headers["Authorization"] = f"Bearer {key}"
+        assert (
+            agent.post(
+                route, files={"file": ("other.png", image_bytes(80, 300, "red"))}
+            ).status_code
+            == 403
+        )
+        with db.connect(media_clients.db_path) as con:
+            con.execute("UPDATE users SET role = 'owner' WHERE tenant_id = ?", (tid,))
+        assert media_clients.a.get(f"/api/v1/brands/{b['id']}/brief").json() == before
+        assert media_clients.a.get(route).content == original
+        assert {
+            str(p): p.read_bytes() for p in media_clients.output_root.rglob("*") if p.is_file()
+        } == files_before
+        assert (
+            media_clients.b.post(route, files={"file": ("other.png", original)}).status_code == 404
+        )
+        reader, _ = create_scoped_api_key(media_clients.db_path, tid, "reader", ["brands:read"])
+        agent.cookies.clear()
+        agent.headers["Authorization"] = f"Bearer {reader}"
+        assert agent.get(before["reference_logo"]["url"]).content == original
+    finally:
+        agent.close()
+
+
+@pytest.mark.parametrize("layer", ["matrix", "endpoint"])
+@pytest.mark.parametrize("legacy", [False, True])
+def test_reference_logo_each_guard_rejects_even_all_scopes(layer, legacy):
+    import asyncio
+
+    from fastapi import HTTPException
+
+    from webapp.api.generation_briefs import upload_logo
+    from webapp.api.permissions import API_KEY_SCOPES, require_legacy_route_scope
+
+    principal = {
+        "auth_method": "api_key",
+        "role": "owner",
+        "scopes": API_KEY_SCOPES,
+        "legacy_api_key": legacy,
+    }
+    with pytest.raises(HTTPException) as error:
+        if layer == "matrix":
+            require_legacy_route_scope(
+                principal, "POST", "/api/v1/brands/{brand_id}/reference-logo"
+            )
+        else:
+            asyncio.run(upload_logo(1, None, None, principal))
+    assert error.value.status_code == 403

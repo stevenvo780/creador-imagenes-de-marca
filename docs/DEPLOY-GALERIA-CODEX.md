@@ -47,7 +47,98 @@ Si el bucket comparte objetos públicos con otra aplicación, documentar la depe
 
 Usar dump privado restaurado en instancia aislada sin red/puertos. Ejecutar `init_db` dos veces y comparar columnas originales contra otra restauración limpia del mismo dump; no aceptar sólo que arranque. El recibo actual conservó4 tenants / 4 users / 62 brands / 6 keys y cuatro tablas nuevas vacías. SQLite/PG16 sintéticos cubren las pruebas; PG17 privado prueba compatibilidad con el snapshot real. Mantener estos alcances separados.
 
-No hay downgrade destructivo aprobado. La reversión de aplicación conserva esquema aditivo, assets e historial. Si las lecturas legacy dejan de funcionar o la imagen nueva falla, usar el digest/revisión anterior capturado para revertir tráfico o imagen, preservando configuración. No eliminar filas, reseedear producción, perder revisiones o restaurar un dump sobre escrituras nuevas para ocultar fallos. El recibo actual no demuestra todo el worker ni el rollback de escrituras; un flujo afectado exigiría ensayo adicional aislado.
+No hay downgrade destructivo aprobado. La reversión conserva esquema aditivo, assets e historial. **No devolver tráfico a `6fe3ad5` hasta completar el fence de autorización siguiente**: su resolver ignora `scopes_json`/`expires_at` y convertiría una key scoped incluso vacía o expirada en una key legacy amplia. Startup y lecturas sobre el clon migrado no probaron esta propiedad. No eliminar filas, reseedear producción, perder revisiones o restaurar un dump sobre escrituras nuevas. El worker y el rollback general de escrituras siguen sin certificación; un flujo afectado exige ensayo adicional aislado.
+
+### Rollback seguro de autorización (F-I2; absorbe T8-M1)
+
+**Ningún `arm`, `disarm` ni revocación se ha ejecutado ahora en producción.** El helper es una herramienta administrativa PostgreSQL independiente, nunca un hook de release/startup. Su acción por defecto `audit` es de sólo lectura y devuelve únicamente contadores agregados; rechaza SQLite. El schema explícito debe coincidir con el utilizado por el servicio. El operador obtiene `DATABASE_URL` por su canal privado: no pasar DSN como argumento, no imprimirlo, no usar `set -x` ni adjuntarlo a recibos.
+
+Armar afecta **todas las claves scoped de todos los tenants**, incluidas concesiones vacías y expiradas. Debe revisarse como revocación de grants externa en el momento del rollback. Conserva las claves legacy con `scopes_json IS NULL`, sesiones owner, registros e historial. Las claves ya revocadas conservan su fecha. La restricción vive sólo mientras el operador mantenga armado el rollback; no cambia las migraciones ni el arranque normal.
+
+1. Preparar desde el respaldo privado vigente las revisiones anteriores **resueltas**, sus digest exactos, porcentajes y tags. Quiescer la emisión y drenar requests antes de recuperar cualquier ruta legacy, incluidos URLs de revisión/tag; ningún request antiguo ya autenticado debe quedar en vuelo. No confiar únicamente en el porcentaje principal. Una revisión vieja accesible por tag es una ruta legacy aunque tenga 0% del reparto principal.
+2. Ejecutar auditoría y revisar el alcance agregado; después armar explícitamente:
+
+```bash
+# DATABASE_URL ya está disponible mediante canal privado; no se muestra.
+# EIKON_DB_SCHEMA: schema real verificado por el operador (habitualmente public).
+.venv/bin/python scripts/rollback_scoped_keys.py --schema "$EIKON_DB_SCHEMA"
+.venv/bin/python scripts/rollback_scoped_keys.py arm --schema "$EIKON_DB_SCHEMA"
+.venv/bin/python scripts/rollback_scoped_keys.py audit --schema "$EIKON_DB_SCHEMA"
+```
+
+`arm` toma primero `ACCESS EXCLUSIVE` sobre `api_keys`, espera las escrituras anteriores, revoca toda fila `scopes_json IS NOT NULL AND revoked_at IS NULL` e instala en la **misma transacción** el CHECK validado `eikon_rollback_no_active_scoped_keys`: `scopes_json IS NULL OR revoked_at IS NOT NULL`. Las emisiones anteriores al lock se revocan; las que esperan o llegan después no pueden insertar una key scoped activa, aun si otra revisión nueva sigue atendiendo. También queda bloqueada la reactivación de esas filas. Un UPDATE aislado no proporciona esta garantía. El helper tiene límites de espera y falla sin recibo de éxito ante error; ante resultado ambiguo, volver a auditar antes de actuar. Detecta colisiones con restricciones diferentes y no las sustituye.
+
+3. Exigir `fence_active: true` **y** `unrevoked_scoped: 0`; conservar contadores antes/después y comprobar que las claves legacy autorizadas permanecen. Si falta cualquiera, no mover tráfico. La receta siguiente vuelve a exigir ambas condiciones y compara los digest antes de restaurar el reparto exacto.
+4. El operador normaliza su respaldo real en un JSON privado indicado por `EIKON_ROLLBACK_PLAN`, con `project`, `region`, `service`; `traffic` como mapa revisión→porcentaje; `tags` como mapa tag→revisión; `revision_images` como mapa de **cada** revisión referida→imagen completa `@sha256`. Usar nombres resueltos, nunca `LATEST`. Conservar incluso revisiones que sólo tenían tags. No rellenar con un supuesto 100% a una revisión. `EIKON_OPERATOR_ACCOUNT` identifica explícitamente la cuenta ya autorizada, sin cambio de sesión.
+
+Receta ejecutable desde este checkout, **sólo por el controlador después de revisar revocación/quiesce y el plan privado**:
+
+```bash
+.venv/bin/python - <<'ROLLBACK_TRAFFIC'
+import json
+import os
+import re
+import subprocess
+import sys
+from pathlib import Path
+from scripts.rollback_scoped_keys import operate
+
+def require(condition, message):
+    if not condition:
+        raise RuntimeError(message)
+
+def restore_traffic():
+    plan = json.loads(Path(os.environ["EIKON_ROLLBACK_PLAN"]).read_text())
+    require((plan["project"], plan["region"], plan["service"]) == ("emergent-enterprises", "us-central1", "eikon"), "plan privado o resultado de tráfico inválido")
+    traffic, tags, images = plan["traffic"], plan["tags"], plan["revision_images"]
+    require(isinstance(traffic, dict) and traffic and isinstance(tags, dict), "plan privado o resultado de tráfico inválido")
+    require(all(type(percent) is int and 0 <= percent <= 100 for percent in traffic.values()), "plan privado o resultado de tráfico inválido")
+    require(sum(traffic.values()) == 100, "plan privado o resultado de tráfico inválido")
+    revisions = set(traffic) | set(tags.values())
+    require(all(re.fullmatch(r"[a-z][a-z0-9-]*", revision) for revision in revisions), "plan privado o resultado de tráfico inválido")
+    require(all(re.fullmatch(r"[a-z][a-z0-9-]*", tag) for tag in tags), "plan privado o resultado de tráfico inválido")
+    require(all(re.fullmatch(r"[^\s]+@sha256:[a-f0-9]{64}", images[revision]) for revision in revisions), "plan privado o resultado de tráfico inválido")
+    common = ["--project", plan["project"], "--region", plan["region"], "--account", os.environ["EIKON_OPERATOR_ACCOUNT"]]
+    for revision in sorted(revisions):
+        actual = subprocess.check_output(["gcloud", "run", "revisions", "describe", revision, *common, "--format=value(status.imageDigest)"], text=True).strip()
+        require(actual == images[revision], "digest anterior no coincide: no restaurar tráfico")
+    audit = operate(os.environ["DATABASE_URL"], schema=os.environ["EIKON_DB_SCHEMA"])
+    require(audit["fence_active"] and audit["unrevoked_scoped"] == 0, "fence incompleto: no restaurar tráfico")
+    cmd = ["gcloud", "run", "services", "update-traffic", plan["service"], *common,
+           "--to-revisions", ",".join(f"{revision}={percent}" for revision, percent in sorted(traffic.items()) if percent)]
+    cmd += ["--set-tags", ",".join(f"{tag}={revision}" for tag, revision in sorted(tags.items()))] if tags else ["--clear-tags"]
+    subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL)
+    state = json.loads(subprocess.check_output(["gcloud", "run", "services", "describe", plan["service"], *common, "--format=json(status.traffic)"], text=True))["status"]["traffic"]
+    actual_traffic = {}
+    for entry in state:
+        if entry.get("percent", 0):
+            revision = entry["revisionName"]
+            actual_traffic[revision] = actual_traffic.get(revision, 0) + entry["percent"]
+    actual_tags = {entry["tag"]: entry["revisionName"] for entry in state if entry.get("tag")}
+    require(actual_traffic == {revision: percent for revision, percent in traffic.items() if percent}, "plan privado o resultado de tráfico inválido")
+    require(actual_tags == tags, "plan privado o resultado de tráfico inválido")
+    print("Reparto y tags anteriores verificados; fence permanece armado.")
+
+try:
+    restore_traffic()
+except Exception:
+    print("Rollback no confirmado; revisar en privado plan, digest, fence y tráfico. No continuar.", file=sys.stderr)
+    raise SystemExit(1) from None
+ROLLBACK_TRAFFIC
+```
+
+La receta reutiliza las revisiones existentes y verifica su imagen inmutable: no crea una revisión alternativa con porcentaje adivinado ni sustituye recursos/configuración. Si falta una revisión/digest o la verificación posterior falla, detener aceptación y conservar evidencia; no improvisar otro destino. Esta receta y el JSON son instrucciones, **no evidencia de una operación ya realizada**.
+
+5. Con fence armado, probar autenticación legacy conservada y sesiones owner; probar que claves scoped de lectura, vacías, expiradas y revocadas devuelven 401, incluida emisión de claves y mutación de identidad. No reactivar una key revocada para obtener un PASS. El ensayo sintético automatizado ejecuta el resolver, dependencia y endpoints de `6fe3ad5`, además de carreras reales de emisión PostgreSQL; no sustituye comprobaciones privadas del operador ni certifica todo el worker.
+6. Al retornar al código nuevo, mantener fence hasta verificar **todas** las rutas, tags, URLs directas y reparto: ninguna debe alcanzar código legacy. Antes de habilitar inicialmente nuevas keys scoped en cualquier release, también debe cumplirse esa inaccesibilidad. Sólo entonces desarmar explícitamente:
+
+```bash
+.venv/bin/python scripts/rollback_scoped_keys.py disarm \
+  --schema "$EIKON_DB_SCHEMA" --legacy-unreachable-confirmed
+.venv/bin/python scripts/rollback_scoped_keys.py audit --schema "$EIKON_DB_SCHEMA"
+```
+
+El flag declara una comprobación del operador, no la ejecuta. `disarm` elimina exclusivamente el fence; no restaura grants ni cambia `revoked_at`. Las keys scoped anteriores **siguen revocadas** y necesitan una emisión nueva explícita mediante sesión owner. La política legacy NULL anterior se conserva deliberadamente durante rollback; no se presenta como la política scoped del código nuevo.
 
 ## Build y actualización de imagen
 

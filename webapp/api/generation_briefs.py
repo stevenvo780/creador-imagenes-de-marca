@@ -20,7 +20,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from webapp import brand_briefs
 from webapp.api.deps import current_user, get_settings, get_storage
-from webapp.api.permissions import require_scope
+from webapp.api.permissions import require_owner_session, require_scope
 from webapp.api.schemas import _SQLITE_INT_MAX
 
 router = APIRouter(prefix="/api/v1", tags=["generation-briefs"])
@@ -113,7 +113,7 @@ async def upload_logo(
     file: UploadFile = File(...),
     user: dict[str, Any] = Depends(current_user),
 ) -> dict[str, Any]:
-    require_scope(user, "media:write")
+    require_owner_session(user)
     content = await file.read(brand_briefs.LOGO_MAX_BYTES + 1)
     if len(content) > brand_briefs.LOGO_MAX_BYTES:
         raise HTTPException(413, "logo excede 5 MiB")

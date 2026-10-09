@@ -53,3 +53,14 @@ MCP no pide una clave de imágenes ni ejecuta remotamente `image_gen`.
 
 Consulte [README](README.md) para la tabla de tools, permisos, compatibilidad
 FastMCP/MCPServer y el fallback. Se conservan las ocho herramientas anteriores.
+
+
+### Continuación de catálogos
+
+`eikon_list_projects(cursor=None, limit=None)` y
+`eikon_list_media(project_id=None, brand_id=None, status=None, cursor=None, limit=None)`
+conservan las llamadas anteriores. Si `projects.next_cursor` o `media.next_cursor`
+no es null, pásalo como `cursor` en la siguiente llamada y conserva los mismos
+filtros. `limit` admite enteros 1–100 (omitido: default API 50); `cursor` admite
+enteros 0–9223372036854775807. Booleanos, strings y valores fuera de rango se
+rechazan. Cada llamada devuelve una página, nunca acumula todo el catálogo.

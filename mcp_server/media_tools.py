@@ -99,8 +99,24 @@ class MediaTools:
             return failure("invalid_response", "Formato de respuesta inválido de Eikón.")
         return {"success": True, resource: data}
 
-    async def list_projects(self) -> dict[str, Any]:
-        return await self._request("GET", "/api/v1/projects", "projects")
+    @staticmethod
+    def _pagination(cursor: int | None, limit: int | None) -> dict[str, int]:
+        params = {}
+        for name, value, low, high in (("cursor", cursor, 0, 2**63 - 1), ("limit", limit, 1, 100)):
+            if value is not None:
+                if type(value) is not int or not low <= value <= high:
+                    raise ValueError("paginación inválida")
+                params[name] = value
+        return params
+
+    async def list_projects(
+        self, cursor: int | None = None, limit: int | None = None
+    ) -> dict[str, Any]:
+        try:
+            params = self._pagination(cursor, limit)
+        except ValueError:
+            return failure("invalid_request", "Cursor o límite inválidos.")
+        return await self._request("GET", "/api/v1/projects", "projects", params=params)
 
     async def create_project(self, name: str, slug: str, description: str = "") -> dict[str, Any]:
         return await self._request(
@@ -135,8 +151,17 @@ class MediaTools:
         )
 
     async def list_media(
-        self, project_id: int | None = None, brand_id: int | None = None, status: str | None = None
+        self,
+        project_id: int | None = None,
+        brand_id: int | None = None,
+        status: str | None = None,
+        cursor: int | None = None,
+        limit: int | None = None,
     ) -> dict[str, Any]:
+        try:
+            pagination = self._pagination(cursor, limit)
+        except ValueError:
+            return failure("invalid_request", "Cursor o límite inválidos.")
         params = {
             key: value
             for key, value in {
@@ -146,7 +171,7 @@ class MediaTools:
             }.items()
             if value is not None
         }
-        return await self._request("GET", "/api/v1/media", "media", params=params)
+        return await self._request("GET", "/api/v1/media", "media", params={**params, **pagination})
 
     @staticmethod
     def _read_image(file_path: str) -> tuple[bytes, str, str]:

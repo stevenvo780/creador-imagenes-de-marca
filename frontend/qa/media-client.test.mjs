@@ -198,7 +198,7 @@ const rendererSource = readFileSync(
     `import(${JSON.stringify(screenshotUrl)})`,
   );
 const renderer = await import(moduleUrl(rendererSource));
-function rendererFixture() {
+function rendererFixture(logo = "") {
   const saved = {
     document: globalThis.document,
     DOMParser: globalThis.DOMParser,
@@ -228,14 +228,17 @@ function rendererFixture() {
     remove() {
       this.parentNode?.removeChild(this);
     }
-    querySelector() {
-      return null;
+    querySelector(selector) {
+      return selector === "[data-isotype-container]" ? logoSlot : null;
     }
     querySelectorAll() {
       return [];
     }
     setAttribute() {}
   }
+  const logoSlot = new Node();
+  logoSlot.style.width = "100px";
+  logoSlot.style.height = "100px";
   const body = new Node(),
     fonts = [];
   globalThis.document = {
@@ -272,7 +275,7 @@ function rendererFixture() {
             vars: { font_titulo: "Manrope", font_cuerpo: "Manrope" },
             data_attrs: {},
             texts: {},
-            isotype_data_uri: "",
+            isotype_data_uri: logo,
           },
         ],
       });
@@ -286,6 +289,7 @@ function rendererFixture() {
   };
   return {
     body,
+    logoSlot,
     fonts,
     uploads,
     restore() {
@@ -338,3 +342,32 @@ test("normal client render still uploads and removes staging DOM", async () => {
     fixture.restore();
   }
 });
+
+
+const rasterLogos = {
+  "300x80": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAABQCAIAAAAsiN8sAAAA+UlEQVR4nO3VMREAMAwDsbTIAz0wfpEIePrzm90BOj/cBkQIPU8IMRFCTIQQEyHERAgxEUJMhBATIcRECDERQkyEEBMhxEQIMRFCTIQQEyHERAgxEUJMhBATIcRECDERQkyEEBMhxEQIMRFCTIQQEyHERAgxEUJMhBATIcRECDERQkyEEBMhxEQIMRFCTIQQEyHERAgxEUJMhBATIcRECDERQkyEEBMhxEQIMRFCTIQQEyHERAgxEUJMhBATIcRECDERQkyEEBMhxEQIMRFCTIQQEyHERAgxEUJMhBATIcRECDERQkyEEBMhxEQIMRFCTIQQEyHERAjTOrm+AaBspO5yAAAAAElFTkSuQmCC",
+  "80x300": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAEsCAIAAADb5KP0AAAB30lEQVR4nO3PAQ0AIBCAQCT5R7eFbuIlgMUMJRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMX/4dRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMRIjMd4OOG0DnnYDWB18dlMAAAAASUVORK5CYII=",
+  "100x100": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAIAAAD/gAIDAAAA5klEQVR4nO3SsREAIAwDscDkjM4K+V6qXf35zHvDzl3uEKvxrECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArECsQKxArNn7/nEByH6uSUQAAAAASUVORK5CYII="
+};
+for (const [width, height] of [[300, 80], [80, 300], [100, 100]]) {
+  test(`official raster ${width}x${height} stays contained and centered in a square slot`, async () => {
+    // Synthetic raster bytes; the actual renderer injects this exact source.
+    const logo = rasterLogos[`${width}x${height}`];
+    const png = Buffer.from(logo.split(",")[1], "base64");
+    assert.equal(png.readUInt32BE(16), width);
+    assert.equal(png.readUInt32BE(20), height);
+    const fixture = rendererFixture(logo);
+    globalThis.qaRasterize = async () => {
+      const img = fixture.logoSlot.children.at(-1);
+      assert.equal(img.src, logo);
+      assert.equal(img.style.objectFit, "contain");
+      assert.equal(img.style.objectPosition, "center");
+      assert.equal(img.style.width, "100%");
+      assert.equal(img.style.height, "100%");
+      return "data:image/png;base64,aW1hZ2U=";
+    };
+    try {
+      assert.deepEqual(await renderer.renderBatchClientSide(11), { uploaded: 1, failed: 0 });
+    } finally { fixture.restore(); }
+  });
+}

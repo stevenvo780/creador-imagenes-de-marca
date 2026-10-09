@@ -27,10 +27,11 @@ import json
 import os
 import time
 from collections.abc import Awaitable, Callable
-from typing import Any, cast
+from typing import Annotated, Any, cast
 
 import httpx
 from dotenv import load_dotenv
+from pydantic import Field
 
 try:
     # Import dinámico: las dos generaciones del SDK tienen módulos distintos.
@@ -47,6 +48,10 @@ media_module = importlib.import_module(
 )
 MediaTools = media_module.MediaTools
 failure = media_module.failure
+
+# La firma compartida publica límites y evita coerción bool/string en FastMCP.
+Cursor = Annotated[int, Field(strict=True, ge=0, le=2**63 - 1)]
+PageLimit = Annotated[int, Field(strict=True, ge=1, le=100)]
 
 # Configuration
 load_dotenv()
@@ -588,9 +593,11 @@ async def eikon_gallery(
             }
 
 
-async def eikon_list_projects() -> dict[str, Any]:
+async def eikon_list_projects(
+    cursor: Cursor | None = None, limit: PageLimit | None = None
+) -> dict[str, Any]:
     async with httpx.AsyncClient() as client:
-        return await MediaTools(EIKON_BASE_URL, EIKON_API_KEY, client).list_projects()
+        return await MediaTools(EIKON_BASE_URL, EIKON_API_KEY, client).list_projects(cursor, limit)
 
 
 async def eikon_create_project(name: str, slug: str, description: str = "") -> dict[str, Any]:
@@ -624,11 +631,15 @@ async def eikon_import_image(
 
 
 async def eikon_list_media(
-    project_id: int | None = None, brand_id: int | None = None, status: str | None = None
+    project_id: int | None = None,
+    brand_id: int | None = None,
+    status: str | None = None,
+    cursor: Cursor | None = None,
+    limit: PageLimit | None = None,
 ) -> dict[str, Any]:
     async with httpx.AsyncClient() as client:
         return await MediaTools(EIKON_BASE_URL, EIKON_API_KEY, client).list_media(
-            project_id, brand_id, status
+            project_id, brand_id, status, cursor, limit
         )
 
 
@@ -709,9 +720,11 @@ async def eikon_gallery_tool(brand_id: str | None = None) -> str:
     return json.dumps(result, indent=2)
 
 
-async def eikon_list_projects_tool() -> str:
+async def eikon_list_projects_tool(
+    cursor: Cursor | None = None, limit: PageLimit | None = None
+) -> str:
     """Lista proyectos privados con projects:read."""
-    return json.dumps(await eikon_list_projects())
+    return json.dumps(await eikon_list_projects(cursor, limit))
 
 
 async def eikon_create_project_tool(name: str, slug: str, description: str = "") -> str:
@@ -739,10 +752,14 @@ async def eikon_import_image_tool(
 
 
 async def eikon_list_media_tool(
-    project_id: int | None = None, brand_id: int | None = None, status: str | None = None
+    project_id: int | None = None,
+    brand_id: int | None = None,
+    status: str | None = None,
+    cursor: Cursor | None = None,
+    limit: PageLimit | None = None,
 ) -> str:
     """Lista medios privados y estado efectivo con media:read; descarga autenticada."""
-    return json.dumps(await eikon_list_media(project_id, brand_id, status))
+    return json.dumps(await eikon_list_media(project_id, brand_id, status, cursor, limit))
 
 
 # Un registro compartido evita divergencias entre alto nivel y fallback.

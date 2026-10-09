@@ -64,7 +64,6 @@ _SCOPED_ROUTE_SCOPES = {
     ("GET", "/api/v1/media/{media_id}"): "media:read",
     ("GET", "/api/v1/brands/{brand_id}/brief"): "brands:read",
     ("GET", "/api/v1/brands/{brand_id}/reference-logo"): "brands:read",
-    ("POST", "/api/v1/brands/{brand_id}/reference-logo"): "media:write",
     ("POST", "/api/v1/generation-briefs"): "briefs:write",
     ("GET", "/api/v1/generation-briefs"): "brands:read",
     ("GET", "/api/v1/generation-briefs/{brief_id}"): "brands:read",
@@ -93,6 +92,8 @@ _LEGACY_OWNER_ROUTES = frozenset(
 
 
 _REVIEW_ROUTES = frozenset({("POST", "/api/v1/media/{media_id}/reviews")})
+
+_IDENTITY_ROUTES = frozenset({("POST", "/api/v1/brands/{brand_id}/reference-logo")})
 
 _KEY_ADMIN_ROUTES = frozenset(
     {
@@ -149,7 +150,10 @@ def require_legacy_route_scope(user: dict[str, Any], method: str, route: str) ->
     scope = _SCOPED_ROUTE_SCOPES.get((method, route))
     if scope is not None:
         require_scope(user, scope)
-    elif (method, route) in _LEGACY_OWNER_ROUTES | _KEY_ADMIN_ROUTES | _REVIEW_ROUTES:
+    elif (
+        method,
+        route,
+    ) in _LEGACY_OWNER_ROUTES | _KEY_ADMIN_ROUTES | _REVIEW_ROUTES | _IDENTITY_ROUTES:
         require_owner_session(user)
     elif (method, route) not in _AUTHENTICATED_CATALOG_ROUTES:
         raise HTTPException(status_code=403, detail="Ruta no autorizada para esta API key")
