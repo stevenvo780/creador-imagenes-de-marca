@@ -56,6 +56,12 @@ _LEGACY_READ_SCOPES = {
     ("POST", "/api/v1/downloads/zip"): "media:read",
 }
 _SCOPED_ROUTE_SCOPES = {
+    ("GET", "/api/v1/brands/{brand_id}/brief"): "brands:read",
+    ("GET", "/api/v1/brands/{brand_id}/reference-logo"): "brands:read",
+    ("POST", "/api/v1/brands/{brand_id}/reference-logo"): "media:write",
+    ("POST", "/api/v1/generation-briefs"): "briefs:write",
+    ("GET", "/api/v1/generation-briefs"): "brands:read",
+    ("GET", "/api/v1/generation-briefs/{brief_id}"): "brands:read",
     ("GET", "/api/v1/projects"): "projects:read",
     ("GET", "/api/v1/projects/{project_id}"): "projects:read",
     ("POST", "/api/v1/projects"): "projects:write",

@@ -74,7 +74,12 @@ def create_brand_endpoint(
             logo_seed=payload.logo_seed,
             logo_asset=payload.logo_asset,
             texts=payload.texts,
+            project_id=payload.project_id,
         )
+    except KeyError as e:
+        raise HTTPException(status_code=404, detail="proyecto no encontrado") from e
+    except ValueError as e:
+        raise HTTPException(status_code=409, detail=str(e)) from e
     except Exception as e:
         # UNIQUE(tenant_id, slug) violado: no filtrar mensaje de SQLite al cliente.
         raise HTTPException(status_code=409, detail="slug ya existe en este tenant") from e
@@ -105,6 +110,8 @@ def update_brand_endpoint(  # noqa: C901
     """Actualiza campos de un brand del tenant. 404 si no pertenece."""
     settings = get_settings(request)
     fields: dict[str, Any] = {}
+    if payload.project_id is not None:
+        fields["project_id"] = payload.project_id
     if payload.name is not None:
         fields["name"] = payload.name
     if payload.palette is not None:

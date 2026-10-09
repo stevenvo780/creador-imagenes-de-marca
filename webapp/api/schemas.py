@@ -83,6 +83,7 @@ def _normalize_palette(palette: dict[str, Any]) -> dict[str, Any]:
 class BrandCreate(BaseModel):
     """Payload para crear un brand del tenant."""
 
+    project_id: int | None = Field(default=None, ge=1, le=_SQLITE_INT_MAX)
     slug: str = Field(min_length=2, max_length=80)
     name: str = Field(min_length=1, max_length=120)
     palette: dict[str, Any] = Field(default_factory=dict)
@@ -105,6 +106,7 @@ class BrandCreate(BaseModel):
 class BrandUpdate(BaseModel):
     """Payload de actualización parcial de un brand (campos opcionales)."""
 
+    project_id: int | None = Field(default=None, ge=1, le=_SQLITE_INT_MAX)
     name: str | None = Field(default=None, min_length=1, max_length=120)
     palette: dict[str, Any] | None = None
     typography: dict[str, Any] | None = None

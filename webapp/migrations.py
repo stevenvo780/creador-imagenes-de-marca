@@ -133,3 +133,55 @@ def migrate_api_key_scopes(db_url: str | Path | None) -> None:
             "ON CONFLICT(version) DO NOTHING",
             ("api_key_scopes_v1", int(time.time())),
         )
+
+
+def migrate_brand_briefs(db_url: str | Path | None) -> None:
+    """Identidad monotónica y originales/referencias inmutables por empresa."""
+    with db.connect(db_url) as con:
+        if con.dialect == "sqlite":
+            con.execute("BEGIN IMMEDIATE")
+        else:
+            con.execute("SELECT pg_advisory_xact_lock(?)", (2026100801,))
+        columns = _brand_columns(con)
+        for name, definition in (
+            ("brand_version", "INTEGER NOT NULL DEFAULT 1"),
+            ("reference_logo_sha256", "TEXT"),
+        ):
+            if name not in columns:
+                con.execute(f"ALTER TABLE brands ADD COLUMN {name} {definition}")
+        schema = """
+CREATE TABLE IF NOT EXISTS brand_logo_versions (
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ brand_id INTEGER NOT NULL,
+ sha256 TEXT NOT NULL,
+ storage_key TEXT NOT NULL,
+ content_type TEXT NOT NULL,
+ created_at BIGINT NOT NULL,
+ PRIMARY KEY(tenant_id, brand_id, sha256)
+);
+CREATE TABLE IF NOT EXISTS generation_briefs (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ brand_id INTEGER NOT NULL,
+ project_id INTEGER NOT NULL,
+ brand_version INTEGER NOT NULL,
+ prompt TEXT NOT NULL,
+ width INTEGER NOT NULL,
+ height INTEGER NOT NULL,
+ snapshot_json TEXT NOT NULL,
+ snapshot_hash TEXT NOT NULL,
+ created_at BIGINT NOT NULL,
+ expires_at BIGINT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_briefs_tenant_id ON generation_briefs(tenant_id, id);
+"""
+        if con.dialect == "postgres":
+            schema = db._schema_for_postgres(schema)
+        for statement in schema.split(";"):
+            if statement.strip():
+                con.execute(statement)
+        con.execute(
+            "INSERT INTO schema_migrations(version, applied_at) VALUES (?, ?) "
+            "ON CONFLICT(version) DO NOTHING",
+            ("brand_briefs_v1", int(time.time())),
+        )

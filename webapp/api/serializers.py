@@ -24,6 +24,9 @@ def brand_to_dict(row: dict[str, Any]) -> dict[str, Any]:
     """Serializa una fila de brands a JSON con los *_json ya parseados."""
     return {
         "id": row["id"],
+        "project_id": row.get("project_id"),
+        "brand_version": row.get("brand_version", 1),
+        "reference_logo_sha256": row.get("reference_logo_sha256"),
         "slug": row["slug"],
         "name": row["name"],
         "palette": _loads(row.get("palette_json"), {}),

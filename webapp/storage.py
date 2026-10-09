@@ -307,6 +307,28 @@ def create_tenant(db_url: str | None | Path, slug: str, name: str) -> dict[str, 
 # ---------------------------------------------------------------------------
 
 
+def _brand_project(con: db.DualConnection, tenant_id: int, project_id: int | None) -> int:
+    """Asocia proyectos propios activos; omitirlo crea General de la empresa."""
+    if project_id is None:
+        con.execute(
+            "INSERT INTO projects(tenant_id, slug, name, description, created_at) "
+            "VALUES (?, 'general', 'General', '', ?) ON CONFLICT(tenant_id, slug) DO NOTHING",
+            (tenant_id, int(time.time())),
+        )
+        row = con.execute(
+            "SELECT * FROM projects WHERE tenant_id = ? AND slug = 'general'", (tenant_id,)
+        ).fetchone()
+    else:
+        row = con.execute(
+            "SELECT * FROM projects WHERE tenant_id = ? AND id = ?", (tenant_id, project_id)
+        ).fetchone()
+    if row is None:
+        raise KeyError("proyecto no encontrado")
+    if row["archived"]:
+        raise ValueError("proyecto archivado")
+    return int(row["id"])
+
+
 def create_brand(
     db_url: str | None | Path,
     tenant_id: int,
@@ -320,10 +342,17 @@ def create_brand(
     logo_seed: int = 0,
     logo_asset: str | None = None,
     texts: dict[str, Any] | None = None,
+    project_id: int | None = None,
 ) -> dict[str, Any]:
     """Crea un brand para el tenant. Falla si el slug ya existe en ese tenant."""
     now = int(time.time())
     with connect(db_url) as con:
+        # Compatibilidad del helper con schemas heredados usados por migración.
+        from webapp.migrations import _brand_columns
+
+        has_project = "project_id" in _brand_columns(con)
+        if has_project:
+            project_id = _brand_project(con, tenant_id, project_id)
         con.execute(
             """INSERT INTO brands
                (tenant_id, slug, name, palette_json, typography_json,
@@ -345,7 +374,14 @@ def create_brand(
             ),
         )
         brand_id = db.get_last_insert_id(db_url, con, "brands")
-        row = con.execute("SELECT * FROM brands WHERE id = ?", (brand_id,)).fetchone()
+        if has_project:
+            con.execute(
+                "UPDATE brands SET project_id = ? WHERE tenant_id = ? AND id = ?",
+                (project_id, tenant_id, brand_id),
+            )
+        row = con.execute(
+            "SELECT * FROM brands WHERE tenant_id = ? AND id = ?", (tenant_id, brand_id)
+        ).fetchone()
         assert row is not None
     return dict(row)
 
@@ -367,6 +403,12 @@ def upsert_brand(
     """Inserta o actualiza un brand por (tenant_id, slug). Idempotente."""
     now = int(time.time())
     with connect(db_url) as con:
+        from webapp.migrations import _brand_columns
+
+        columns = _brand_columns(con)
+        version_update = (
+            ", brand_version = brands.brand_version + 1" if "brand_version" in columns else ""
+        )
         con.execute(
             """INSERT INTO brands
                (tenant_id, slug, name, palette_json, typography_json,
@@ -381,7 +423,8 @@ def upsert_brand(
                  logo_style = excluded.logo_style,
                  logo_seed = excluded.logo_seed,
                  logo_asset = excluded.logo_asset,
-                 texts_json = excluded.texts_json""",
+                 texts_json = excluded.texts_json"""
+            + version_update,
             (
                 tenant_id,
                 slug,
@@ -397,6 +440,17 @@ def upsert_brand(
                 now,
             ),
         )
+        if "project_id" in columns:
+            existing = con.execute(
+                "SELECT project_id FROM brands WHERE tenant_id = ? AND slug = ?", (tenant_id, slug)
+            ).fetchone()
+            assert existing is not None
+            if existing["project_id"] is None:
+                pid = _brand_project(con, tenant_id, None)
+                con.execute(
+                    "UPDATE brands SET project_id = ? WHERE tenant_id = ? AND slug = ?",
+                    (pid, tenant_id, slug),
+                )
         row = con.execute(
             "SELECT * FROM brands WHERE tenant_id = ? AND slug = ?", (tenant_id, slug)
         ).fetchone()
@@ -444,6 +498,7 @@ def update_brand(
     Campos permitidos: name, palette_json, typography_json, logo_text, logo_symbol, logo_style, logo_seed, logo_asset, texts_json.
     """
     allowed = {
+        "project_id",
         "name",
         "palette_json",
         "typography_json",
@@ -464,10 +519,17 @@ def update_brand(
         ).fetchone()
         if row is None:
             raise KeyError(f"brand {brand_id} no pertenece al tenant {tenant_id}")
+        if "project_id" in update_fields:
+            update_fields["project_id"] = _brand_project(con, tenant_id, update_fields["project_id"])
+        from webapp.migrations import _brand_columns
+
+        version = ", brand_version = brand_version + 1" if "brand_version" in _brand_columns(con) else ""
         set_clause = ", ".join(f"{k} = ?" for k in update_fields)
-        values = [*list(update_fields.values()), brand_id]
-        con.execute(f"UPDATE brands SET {set_clause} WHERE id = ?", values)
-        updated = con.execute("SELECT * FROM brands WHERE id = ?", (brand_id,)).fetchone()
+        values = [*list(update_fields.values()), tenant_id, brand_id]
+        con.execute(f"UPDATE brands SET {set_clause}{version} WHERE tenant_id = ? AND id = ?", values)
+        updated = con.execute(
+            "SELECT * FROM brands WHERE tenant_id = ? AND id = ?", (tenant_id, brand_id)
+        ).fetchone()
         assert updated is not None
     return dict(updated)
 
