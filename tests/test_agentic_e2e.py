@@ -2,7 +2,8 @@
 
 Cubre el flujo completo de la capa agéntica:
 1. Registrar tenant
-2. Crear API-key (POST /api/v1/auth/api-keys)
+2. Crear clave scoped por sesión owner (test 01), o fixture legacy NULL
+   para conservar explícitamente el workflow anterior de identidad
 3. Usar SOLO Authorization: Bearer <key> (sin cookie) para:
    - Crear marca (POST /api/v1/brands)
    - Listar tipos de asset (GET /api/v1/asset-types)
@@ -27,6 +28,7 @@ from PIL import Image
 from eikon_core.constants import ROOT
 from webapp.app import create_app
 from webapp.config import Settings
+from webapp.storage import create_api_key, resolve_api_key
 
 AXES_PATH = ROOT / "config" / "axes.json"
 PASSWORD = "supersecret1"
@@ -71,6 +73,14 @@ def _register(client: TestClient, tenant_slug: str, email: str) -> dict[str, Any
     )
     assert r.status_code == 201, f"Register failed: {r.text}"
     return r.json()
+
+
+def _legacy_key(client: TestClient) -> dict[str, Any]:
+    """Fixture heredada real; el endpoint humano ya no emite claves legacy."""
+    tenant_id = client.get("/auth/me").json()["tenant"]["id"]
+    key, row = create_api_key(client.app.state.settings.db_url, tenant_id)
+    assert resolve_api_key(client.app.state.settings.db_url, key)["legacy"] is True
+    return {**row, "key": key}
 
 
 def _create_brand_with_identity(
@@ -131,8 +141,8 @@ class TestAgenticE2E:
         """Paso 2: Crear marca usando SOLO Authorization: Bearer <key> (sin cookie)."""
         # Registrar y crear API-key
         _register(client, "agentic-test", "agent@test.com")
-        r_key = client.post("/api/v1/auth/api-keys")
-        api_key = r_key.json()["key"]
+        r_key = _legacy_key(client)
+        api_key = r_key["key"]
 
         # Limpiar cookies para asegurar que SOLO se usa API-key
         client.cookies.clear()
@@ -179,8 +189,8 @@ class TestAgenticE2E:
         """Paso 4: POST /brands/{id}/set-identity usando API-key."""
         # Registrar y crear API-key
         _register(client, "agentic-test", "agent@test.com")
-        r_key = client.post("/api/v1/auth/api-keys")
-        api_key = r_key.json()["key"]
+        r_key = _legacy_key(client)
+        api_key = r_key["key"]
 
         # Limpiar cookies
         client.cookies.clear()
@@ -218,8 +228,8 @@ class TestAgenticE2E:
         with TestClient(app) as client:
             # Registrar y crear API-key
             _register(client, "agentic-test", "agent@test.com")
-            r_key = client.post("/api/v1/auth/api-keys")
-            api_key = r_key.json()["key"]
+            r_key = _legacy_key(client)
+            api_key = r_key["key"]
 
             # Limpiar cookies
             client.cookies.clear()
@@ -305,9 +315,9 @@ class TestAgenticE2E:
             assert reg["tenant"]["slug"] == "full-workflow"
 
             # 2. Crear API-key
-            r_key = client.post("/api/v1/auth/api-keys")
-            assert r_key.status_code == 201
-            api_key = r_key.json()["key"]
+            r_key = _legacy_key(client)
+            assert r_key["id"] > 0
+            api_key = r_key["key"]
 
             # 3. Limpiar cookies → solo API-key de aquí en adelante
             client.cookies.clear()
@@ -349,7 +359,7 @@ class TestAgenticE2E:
             assert len(r_gen.content) > 100
 
             # 8. Revocar key y verificar 401
-            key_id = r_key.json()["id"]
+            key_id = r_key["id"]
             r_revoke = client.post("/api/v1/auth/api-keys")  # Necesita cookie de sesión
             # (No tenemos cookie después de limpiar, así que saltamos este paso de revoke en flujo sin cookie)
             # En un flujo real, se usaría otra sesión o se guardaría la cookie antes de limpiar
@@ -361,13 +371,13 @@ class TestAgenticE2E:
 
         # Tenant A: registrar y crear API-key
         _register(client1, "tenant-a", "owner-a@test.com")
-        r_key_a = client1.post("/api/v1/auth/api-keys")
-        api_key_a = r_key_a.json()["key"]
+        r_key_a = _legacy_key(client1)
+        api_key_a = r_key_a["key"]
 
         # Tenant B: registrar y crear API-key
         _register(client2, "tenant-b", "owner-b@test.com")
-        r_key_b = client2.post("/api/v1/auth/api-keys")
-        api_key_b = r_key_b.json()["key"]
+        r_key_b = _legacy_key(client2)
+        api_key_b = r_key_b["key"]
 
         # Tenant A: crear marca
         client1.cookies.clear()
@@ -420,8 +430,8 @@ class TestAgenticE2E:
         """X-API-Key header también funciona para autenticación."""
         # Registrar y crear API-key
         _register(client, "agentic-test", "agent@test.com")
-        r_key = client.post("/api/v1/auth/api-keys")
-        api_key = r_key.json()["key"]
+        r_key = _legacy_key(client)
+        api_key = r_key["key"]
 
         # Limpiar cookies
         client.cookies.clear()

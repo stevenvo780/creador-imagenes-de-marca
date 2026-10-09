@@ -168,9 +168,11 @@ def _hash_api_key(key: str) -> str:
 
 
 def create_api_key(db_url: str | None | Path, tenant_id: int) -> tuple[str, dict[str, Any]]:
-    """Genera una API key nueva y guarda solo su hash.
+    """Compatibilidad de utilidades heredadas: emite una clave legacy.
 
-    Devuelve el plaintext una sola vez junto con metadata no sensible.
+    Las nuevas concesiones HTTP usan create_scoped_api_key. Este helper conserva
+    las fixtures/operaciones heredadas y guarda sólo el hash. Devuelve el
+    plaintext una sola vez junto con metadata no sensible.
     """
     now = int(time.time())
     key = secrets.token_urlsafe(32)
@@ -184,30 +186,83 @@ def create_api_key(db_url: str | None | Path, tenant_id: int) -> tuple[str, dict
     return key, {"id": key_id, "tenant_id": tenant_id, "created_at": now}
 
 
-def get_tenant_id_from_api_key(db_url: str | None | Path, key: str) -> int | None:
-    """Resuelve tenant_id desde una API key en plaintext, si existe y no está revocada."""
-    key_hash = _hash_api_key(key)
+def create_scoped_api_key(
+    db_url: str | Path | None,
+    tenant_id: int,
+    name: str,
+    scopes: list[str],
+    expires_at: int | None = None,
+) -> tuple[str, dict[str, Any]]:
+    """Guarda sólo hash y metadata validada; revela el valor una sola vez."""
+    from .api.permissions import validate_scopes
+
+    granted = validate_scopes(scopes)
+    if not isinstance(name, str) or not name.strip() or len(name.strip()) > 100:
+        raise ValueError("nombre de clave inválido")
+    now = int(time.time())
+    if expires_at is None:
+        expires_at = now + 30 * 86400
+    if type(expires_at) is not int or not now < expires_at <= now + 365 * 86400:
+        raise ValueError("caducidad debe ser futura y no superar 365 días")
+    key = secrets.token_urlsafe(32)
+    with connect(db_url) as con:
+        con.execute(
+            "INSERT INTO api_keys(tenant_id, key_hash, created_at, name, scopes_json, expires_at) "
+            "VALUES (?, ?, ?, ?, ?, ?)",
+            (tenant_id, _hash_api_key(key), now, name.strip(), json.dumps(sorted(granted)), expires_at),
+        )
+        key_id = db.get_last_insert_id(db_url, con, "api_keys")
+    return key, {
+        "id": key_id, "tenant_id": tenant_id, "created_at": now, "name": name.strip(),
+        "scopes": sorted(granted), "expires_at": expires_at, "revoked_at": None,
+    }
+
+
+def _api_key_metadata(row: dict[str, Any]) -> dict[str, Any]:
+    """Deserializa la lista cerrada; metadata corrupta nunca otorga permisos."""
+    from .api.permissions import validate_scopes
+
+    raw = row.pop("scopes_json")
+    row["legacy"] = raw is None
+    scopes = [] if raw is None else json.loads(raw)
+    if not isinstance(scopes, list):
+        raise ValueError("scopes inválidos")
+    row["scopes"] = sorted(validate_scopes(scopes))
+    return row
+
+
+def resolve_api_key(db_url: str | Path | None, key: str) -> dict[str, Any] | None:
+    """Lee el principal vigente por request sin devolver su hash."""
     with connect(db_url) as con:
         row = con.execute(
-            "SELECT tenant_id FROM api_keys WHERE key_hash = ? AND revoked_at IS NULL",
-            (key_hash,),
+            "SELECT id, tenant_id, name, scopes_json, created_at, expires_at, revoked_at "
+            "FROM api_keys WHERE key_hash = ? AND revoked_at IS NULL "
+            "AND (expires_at IS NULL OR expires_at > ?)",
+            (_hash_api_key(key), int(time.time())),
         ).fetchone()
     if row is None:
         return None
-    return int(row["tenant_id"])
+    try:
+        return _api_key_metadata(row)
+    except (ValueError, TypeError):
+        return None
 
 
-def list_api_keys(db_url: str | None | Path, tenant_id: int) -> list[dict[str, Any]]:
-    """Lista las API keys del tenant sin revelar secretos."""
+def get_tenant_id_from_api_key(db_url: str | Path | None, key: str) -> int | None:
+    """Compatibilidad: también rechaza claves caducadas o revocadas."""
+    row = resolve_api_key(db_url, key)
+    return int(row["tenant_id"]) if row is not None else None
+
+
+def list_api_keys(db_url: str | Path | None, tenant_id: int) -> list[dict[str, Any]]:
+    """Lista metadata por empresa sin revelar hashes ni valores de clave."""
     with connect(db_url) as con:
         rows: list[dict[str, Any]] = con.execute(
-            """SELECT id, tenant_id, created_at, revoked_at
-               FROM api_keys
-               WHERE tenant_id = ?
-               ORDER BY created_at DESC, id DESC""",
+            "SELECT id, tenant_id, name, scopes_json, created_at, expires_at, revoked_at "
+            "FROM api_keys WHERE tenant_id = ? ORDER BY created_at DESC, id DESC",
             (tenant_id,),
         ).fetchall()
-    return rows
+    return [_api_key_metadata(row) for row in rows]
 
 
 def revoke_api_key(db_url: str | None | Path, tenant_id: int, key_id: int) -> bool:

@@ -99,3 +99,37 @@ def migrate_projects(db_url: str | Path | None) -> None:
             "ON CONFLICT(version) DO NOTHING",
             (_PROJECTS_VERSION, int(time.time())),
         )
+
+
+def migrate_api_key_scopes(db_url: str | Path | None) -> None:
+    """Añade metadata de claves sin otorgar scopes ni caducar las heredadas."""
+    with db.connect(db_url) as con:
+        if con.dialect == "sqlite":
+            con.execute("BEGIN IMMEDIATE")
+            columns = {row["name"] for row in con.execute("PRAGMA table_info(api_keys)").fetchall()}
+        else:
+            con.execute("SELECT pg_advisory_xact_lock(?)", (2026100801,))
+            columns = {
+                row["column_name"]
+                for row in con.execute(
+                    "SELECT column_name FROM information_schema.columns "
+                    "WHERE table_schema = current_schema() AND table_name = ?",
+                    ("api_keys",),
+                ).fetchall()
+            }
+        for name, definition in (
+            ("name", "TEXT NOT NULL DEFAULT ''"),
+            ("scopes_json", "TEXT"),
+            ("expires_at", "BIGINT"),
+        ):
+            if name not in columns:
+                con.execute(f"ALTER TABLE api_keys ADD COLUMN {name} {definition}")
+        con.execute(
+            "CREATE TABLE IF NOT EXISTS schema_migrations "
+            "(version TEXT PRIMARY KEY, applied_at BIGINT NOT NULL)"
+        )
+        con.execute(
+            "INSERT INTO schema_migrations(version, applied_at) VALUES (?, ?) "
+            "ON CONFLICT(version) DO NOTHING",
+            ("api_key_scopes_v1", int(time.time())),
+        )

@@ -18,7 +18,7 @@ from webapp import db
 from webapp.app import create_app
 from webapp.config import Settings
 from webapp.security import create_jwt
-from webapp.storage import connect
+from webapp.storage import connect, create_api_key
 
 AXES_PATH = ROOT / "config" / "axes.json"
 PASSWORD = "supersecret1"
@@ -108,6 +108,11 @@ def test_api_key_auth_headers_and_revoke(app: FastAPI) -> None:
             assert "last_used_at" not in listed_key
             assert api_key not in listed.text
 
+            # La compatibilidad de mutaciones legacy usa una clave heredada
+            # real (NULL scopes), no una clave nueva sin concesiones explícitas.
+            tenant = (await client.get("/auth/me")).json()["tenant"]["id"]
+            api_key, legacy_row = create_api_key(settings.db_url, tenant)
+            api_key_body = legacy_row
             client.cookies.clear()
             me = await client.get("/auth/me", headers={"Authorization": f"Bearer {api_key}"})
             assert me.status_code == 200, me.text
@@ -142,7 +147,7 @@ def test_api_key_creates_brand_and_generate_returns_png(app: FastAPI) -> None:
     with TestClient(app) as client:
         _register(client)
 
-        created_key = client.post("/api/v1/auth/api-keys")
+        created_key = client.post("/api/v1/auth/api-keys", json={"scopes": ["media:write"]})
         assert created_key.status_code == 201, created_key.text
         api_key_body = created_key.json()
         api_key = api_key_body["key"]
@@ -153,7 +158,6 @@ def test_api_key_creates_brand_and_generate_returns_png(app: FastAPI) -> None:
         assert listed.json()["keys"][0]["id"] == api_key_body["id"]
         assert "key" not in listed.json()["keys"][0]
 
-        client.cookies.clear()
         bearer_headers = {"Authorization": f"Bearer {api_key}"}
         brand_response = client.post(
             "/api/v1/brands",
@@ -178,6 +182,8 @@ def test_api_key_creates_brand_and_generate_returns_png(app: FastAPI) -> None:
         assert brand_response.status_code == 201, brand_response.text
         brand_id = int(brand_response.json()["id"])
 
+        # La identidad la fija la sesión owner; el agente sólo produce medios.
+        client.cookies.clear()
         generated = client.post(
             "/api/v1/generate",
             headers={"X-API-Key": api_key},
