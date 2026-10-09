@@ -246,3 +246,47 @@ def test_invalid_metadata_and_ids_do_not_open_file_or_network(changes, tmp_path)
             return await MediaTools("https://example.invalid", "key", client).import_image(**values)
 
     assert asyncio.run(invoke())["error_code"] == "invalid_request"
+
+
+def test_png_bad_idat_crc_returns_safe_error_without_http(tmp_path):
+    content = bytearray(image_bytes())
+    offset = 8  # Firma PNG; recorrer chunks para alterar sólo el CRC IDAT.
+    while offset < len(content):
+        chunk_size = int.from_bytes(content[offset : offset + 4], "big")
+        if content[offset + 4 : offset + 8] == b"IDAT":
+            crc_offset = offset + 8 + chunk_size
+            content[crc_offset] ^= 1
+            break
+        offset += chunk_size + 12
+    else:
+        pytest.fail("PNG sintético sin chunk IDAT")
+
+    # Pillow real reconoce PNG y dimensiones; verify detecta CRC, no un MIME falso.
+    with Image.open(io.BytesIO(content)) as image:
+        assert image.format == "PNG" and image.size == (512, 512)
+        with pytest.raises(SyntaxError, match="bad header checksum"):
+            image.verify()
+
+    path = tmp_path / "private-corrupt-client-image.png"
+    path.write_bytes(content)
+    requests = []
+
+    def handle(request):
+        requests.append(request)
+        return httpx.Response(201, json={"id": 9, "status": "pending_review"})
+
+    result = run_import(path, handle)
+    assert result["success"] is False and result["error_code"] == "invalid_image"
+    assert requests == []
+    encoded = json.dumps(result)
+    assert not any(
+        value in encoded
+        for value in [
+            str(path),
+            path.name,
+            "synthetic-key",
+            "SyntaxError",
+            "checksum",
+            "IDAT",
+        ]
+    )

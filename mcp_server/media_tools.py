@@ -214,6 +214,7 @@ class MediaTools:
             ValueError,
             TypeError,
             UnidentifiedImageError,
+            SyntaxError,  # Pillow verify() rechaza CRC PNG corrupto con esta excepción.
             Image.DecompressionBombWarning,
             Image.DecompressionBombError,
         ):
