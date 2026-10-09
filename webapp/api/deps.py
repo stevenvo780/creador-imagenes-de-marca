@@ -60,6 +60,13 @@ async def current_user(request: Request, response: Response) -> dict[str, Any]:
         user = get_user(settings.db_url, user_id)
         if user is None:
             raise HTTPException(status_code=401, detail="usuario no encontrado")
+        principal: dict[str, Any] = {
+            **user,
+            "auth_method": "session",
+            "api_key_id": None,
+            "scopes": frozenset(),
+        }
+        require_legacy_route_scope(principal, request.method, request.scope["route"].path)
         refreshed_token = create_jwt(
             {"sub": user["user_id"], "tenant_id": user["tenant_id"]},
             settings.jwt_secret,
@@ -73,12 +80,16 @@ async def current_user(request: Request, response: Response) -> dict[str, Any]:
             samesite="lax",
             max_age=settings.jwt_ttl_seconds,
         )
-        return {**user, "auth_method": "session", "api_key_id": None, "scopes": frozenset()}
+        return principal
 
     api_key = ""
-    auth_header = request.headers.get("Authorization", "")
-    if auth_header.lower().startswith("bearer "):
-        api_key = auth_header[7:].strip()
+    auth_header = request.headers.get("Authorization")
+    if auth_header is not None:
+        if not auth_header.lower().startswith("bearer "):
+            raise HTTPException(status_code=401, detail="Authorization Bearer malformado")
+        api_key = auth_header[7:].strip(" ")
+        if not api_key or any(char.isspace() for char in api_key):
+            raise HTTPException(status_code=401, detail="Authorization Bearer malformado")
     else:
         api_key = request.headers.get("X-API-Key", "").strip()
 
@@ -86,7 +97,7 @@ async def current_user(request: Request, response: Response) -> dict[str, Any]:
         key = resolve_api_key(settings.db_url, api_key)
         if key is None:
             raise HTTPException(status_code=401, detail="API key inválida, expirada o revocada")
-        principal: dict[str, Any] = {
+        principal = {
             "user_id": None,
             "tenant_id": key["tenant_id"],
             "email": None,

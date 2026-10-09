@@ -121,6 +121,15 @@ def require_legacy_route_scope(user: dict[str, Any], method: str, route: str) ->
     además de usar su helper. Rutas desconocidas fallan cerradas. Los catálogos
     sin datos de empresa y /auth/me únicamente requieren autenticación.
     """
+    if user.get("auth_method") == "session":
+        # Una degradación de rol conserva las lecturas heredadas, pero revoca
+        # las mutaciones. El principal ya trae el rol vigente de la BD.
+        if (method, route) not in _LEGACY_READ_SCOPES and (
+            method,
+            route,
+        ) not in _AUTHENTICATED_CATALOG_ROUTES:
+            require_owner_session(user)
+        return
     if user.get("legacy_api_key") and (method, route) in _LEGACY_ROUTES:
         return
     scope = _SCOPED_ROUTE_SCOPES.get((method, route))

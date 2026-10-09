@@ -504,3 +504,117 @@ def test_future_route_requires_explicit_scoped_registration(media_clients, agent
     legacy_key, _ = create_api_key(media_clients.db_path, tenant_id)
     agent.headers["Authorization"] = f"Bearer {legacy_key}"
     assert agent.get("/api/v1/_future-private").status_code == 403
+
+
+@pytest.fixture
+def permission_db_clients(isolated_db, tmp_path, monkeypatch):
+    """Reutiliza la BD aislada de Task1 para HTTP real en ambos dialectos."""
+    import secrets
+
+    from webapp.app import create_app
+    from webapp.config import Settings
+
+    monkeypatch.delenv("DATABASE_URL", raising=False)
+    monkeypatch.delenv("GCS_BUCKET", raising=False)
+    settings = Settings(
+        data_root=tmp_path,
+        sqlite_path=tmp_path / "http-permissions.db",
+        db_url=str(isolated_db),
+        jwt_secret=secrets.token_urlsafe(48),
+    )
+    app = create_app(settings, output_root=tmp_path / "output")
+    a, b = TestClient(app), TestClient(app)
+    try:
+        for client, slug in ((a, "alpha"), (b, "beta")):
+            response = client.post(
+                "/auth/register",
+                json={
+                    "tenant_slug": slug,
+                    "tenant_name": slug,
+                    "email": f"{slug}@example.test",
+                    "password": "test-password-123",
+                },
+            )
+            assert response.status_code == 201
+        assert app.state.worker is None
+        yield a, b, isolated_db
+    finally:
+        a.close()
+        b.close()
+
+
+@pytest.mark.parametrize("operation", ["create", "update", "delete", "set-identity"])
+def test_member_session_cannot_mutate_identity_after_db_role_change(
+    permission_db_clients, operation
+):
+    owner, other, url = permission_db_clients
+    response = owner.post(
+        "/api/v1/brands", json={"slug": "original", "name": "Original", "logo_seed": 1}
+    )
+    assert response.status_code == 201
+    original = response.json()
+    user = owner.get("/auth/me").json()["user"]
+    tenant_id = owner.get("/auth/me").json()["tenant"]["id"]
+    foreign_key = mint(other, list(API_KEY_SCOPES))
+    owner.headers["Authorization"] = f"Bearer {foreign_key['key']}"
+    with db.connect(url) as con:
+        con.execute(
+            "UPDATE users SET role = ? WHERE tenant_id = ? AND id = ?",
+            ("member", tenant_id, user["id"]),
+        )
+    me = owner.get("/auth/me").json()
+    assert me["user"]["role"] == "member"
+    assert me["tenant"]["id"] == tenant_id
+    assert owner.get(f"/api/v1/brands/{original['id']}").json() == original
+    assert owner.get("/api/v1/brands").json()["items"] == [original]
+    assert owner.get("/api/v1/wizard/brands").status_code == 200
+    assert owner.get("/api/v1/gallery").status_code == 200
+    mutations = {
+        "create": ("POST", "/api/v1/brands", {"slug": "blocked", "name": "Blocked"}, 201),
+        "update": ("PUT", f"/api/v1/brands/{original['id']}", {"logo_seed": 99}, 200),
+        "delete": ("DELETE", f"/api/v1/brands/{original['id']}", None, 204),
+        "set-identity": (
+            "POST",
+            f"/api/v1/brands/{original['id']}/set-identity",
+            {"logo_seed": 99},
+            200,
+        ),
+    }
+    method, path, payload, owner_status = mutations[operation]
+    assert owner.request(method, path, json=payload).status_code == 403
+    assert owner.get(f"/api/v1/brands/{original['id']}").json() == original
+    assert owner.get("/api/v1/brands").json()["items"] == [original]
+    with db.connect(url) as con:
+        con.execute(
+            "UPDATE users SET role = ? WHERE tenant_id = ? AND id = ?",
+            ("owner", tenant_id, user["id"]),
+        )
+    assert owner.request(method, path, json=payload).status_code == owner_status
+
+
+@pytest.mark.parametrize(
+    "authorization",
+    [
+        "Bearer",
+        "Bearer\tinvalid",
+        "",
+        "Basic invalid",
+        "Bearer invalid extra",
+        "Bearer \tinvalid",
+        "Bearer invalid\t",
+    ],
+)
+def test_malformed_bearer_never_falls_back_to_x_api_key(permission_db_clients, authorization):
+    owner, _, _ = permission_db_clients
+    row = mint(owner, ["projects:read"])
+    agent = TestClient(owner.app)
+    try:
+        agent.headers["X-API-Key"] = row["key"]
+        assert agent.get("/api/v1/projects").status_code == 200
+        agent.headers["Authorization"] = authorization
+        assert agent.get("/api/v1/projects").status_code == 401
+        # La cookie válida mantiene prioridad sobre el header malformado.
+        owner.headers["Authorization"] = authorization
+        assert owner.get("/api/v1/projects").status_code == 200
+    finally:
+        agent.close()
