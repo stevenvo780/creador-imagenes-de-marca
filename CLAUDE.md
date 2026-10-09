@@ -2,7 +2,7 @@
 
 > Repositorio: `/workspace/Pinakotheke/eikon/`  
 > Sistema: Pinakotheke / Mouseîon (producto independiente)  
-> Modo: Generador DETERMINISTA (cero IA/GPU). Motor Python + FastAPI multi-tenant + React SPA.  
+> Modo: Motor DETERMINISTA + galería privada con importación de imágenes del cliente Codex. Python + FastAPI multi-tenant + React SPA.
 > Producción: Cloud Run GCP (`eikon-633619052458.us-central1.run.app`)
 
 ---
@@ -14,7 +14,9 @@ Eikón es un **generador de assets de marca en 2 fases** para el ecosistema Pina
 1. **IDENTIDAD** (fija): elegir o fijar un logo (procedural vía `logo_style`/`logo_seed`, O pre-existente vía `logo_asset` SVG/PNG)
 2. **ESTUDIO** (recurrente): generar batches de assets visuales (logos, cards, social, stationery, og tags) heredando la identidad fija, variando solo contenido (textos, colores HSL)
 
-**No** renderizan con IA, no entrenan. El motor es **combinatorial + procedural** (isotypes SVG precompilados, mapeo marca→CSS vars, Playwright para rasterizar HTML→PNG server-side).
+El motor es **combinatorial + procedural** (isotypes SVG precompilados, mapeo marca→CSS vars, Playwright para rasterizar HTML→PNG server-side). La galería admite además imágenes generadas por `image_gen` integrado en el cliente Codex e importadas por MCP; el servidor MCP transmite bytes, no ejecuta remotamente la herramienta de imágenes.
+
+Flujo nuevo: proyecto/marca del tenant → logo oficial versionado y encargo congelado → importación privada PNG/JPEG → `pending_review` → revisión append-only por sesión `owner`. Seis scopes cerrados permiten lectura/encargo/importación; las keys no aprueban, administran claves ni escriben identidad. Original y hash son inmutables, las nuevas URLs son relativas autenticadas y cambiar identidad/texto/archivo exige nueva revisión. El renderer cliente incorpora el logo original exacto y Manrope; el generador anterior se conserva. Ver [QA y estado de aceptación](docs/QA-GALERIA-CODEX.md), [release del servicio existente](docs/DEPLOY-GALERIA-CODEX.md) y [MCP](mcp_server/QUICKSTART.md). El recibo diferencia SDK, cliente Codex local, GUI y producción; esta entrega no habilita publicación social.
 
 Productos: **34 marcas no-agora** genera **~1300 PNGs** con validación WCAG AA/AAA.
 
@@ -165,7 +167,7 @@ pytest webapp/tests/test_*.py -v      # DB, storage, auth, combinatoria
 
 ### Deployment a Cloud Run (GCP)
 
-Ver `/workspace/Pinakotheke/eikon/docs/DEPLOY.md` para detalles.
+Para galería/Codex, seguir [DEPLOY-GALERIA-CODEX.md](docs/DEPLOY-GALERIA-CODEX.md): revisar los gates y actualizar sólo la imagen del servicio existente preservando configuración. El script general siguiente también cambia recursos/IAM y no se ejecuta ciegamente para esta entrega. [DEPLOY.md](docs/DEPLOY.md) conserva los ejemplos generales.
 
 ```bash
 # Desde raíz del repo

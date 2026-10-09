@@ -1,10 +1,14 @@
 # Eikón — Generador determinista de assets de marca
 
 Generador de **assets visuales** para el ecosistema Pinakotheke (Cloud Atlas) y suite Prizma Enterprise.  
-**Determinista** (cero IA/GPU), **multi-tenant**, **combinatorial**: 2 fases — IDENTIDAD (logo fijo) → ESTUDIO (batch recurrente).
+Motor **determinista**, **multi-tenant**, **combinatorial**: IDENTIDAD (logo fijo) → ESTUDIO (batch recurrente). La galería privada admite además imágenes generadas en el cliente Codex e importadas por MCP.
 
 > Produce **~1300 PNG** sobre **34 marcas** con validación **WCAG AA/AAA**  
 > Arquitectura: Python `eikon_core/` + FastAPI `webapp/` + React SPA `frontend/` + MCP `mcp_server/`
+
+La primera entrega de galería/Codex añade proyectos por empresa, encargos con identidad congelada, originales privados inmutables y revisión humana con sesión `owner`. Cada empresa conecta su propio Codex mediante key scoped; subir una imagen o puntuarla la deja pendiente de revisión. Los logos oficiales se incorporan desde los archivos originales. El motor y el renderer cliente existentes se conservan.
+
+Estado de aceptación y límites: [QA de galería/Codex](docs/QA-GALERIA-CODEX.md). Flujo nativo local comprobado; GUI y release siguen abiertos según ese recibo fechado. [Runbook de release](docs/DEPLOY-GALERIA-CODEX.md) y [conexión MCP](mcp_server/QUICKSTART.md). Conexiones sociales, calendario y publicación diaria tienen entregas separadas.
 
 ## Comencemos
 

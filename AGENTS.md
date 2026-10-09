@@ -15,6 +15,8 @@ Generador determinista de **assets de marca** en 2 fases:
 
 **Arquitectura**: `eikon_core/` (Python) + `webapp/` (FastAPI) + `frontend/` (React SPA) + `mcp_server/` (MCP para agentes)
 
+Galería/Codex añade proyecto por empresa → encargo congelado → PNG/JPEG privado importado → `pending_review` → revisión de sesión `owner`. Keys scoped no revisan ni administran identidad/claves; los originales/logos oficiales se conservan y las URLs nuevas requieren autenticación. Cada empresa conecta su propio Codex. Consultar [QA vigente](docs/QA-GALERIA-CODEX.md), [runbook del release](docs/DEPLOY-GALERIA-CODEX.md) y [MCP](mcp_server/QUICKSTART.md); un PASS de SDK o preview local no cierra GUI/producción. No se habilita un nuevo publicador.
+
 ---
 
 ## Startup rápido (desarrollo local)
@@ -242,6 +244,8 @@ pytest tests/test_eikon_checks.py::test_brand_loading -v
 ---
 
 ## Deployment
+
+La entrega galería/Codex usa el servicio y proxy existentes y cambia sólo la imagen después de los gates. Seguir [DEPLOY-GALERIA-CODEX.md](docs/DEPLOY-GALERIA-CODEX.md); el script general mostrado abajo modifica recursos/IAM y requiere revisar su alcance antes de ejecutarlo.
 
 ```bash
 # Local Docker
