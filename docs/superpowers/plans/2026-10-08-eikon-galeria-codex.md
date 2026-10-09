@@ -61,7 +61,7 @@ Tipos públicos: `Project{id,slug,name,description,archived}`, `GenerationBrief{
 
 Los helpers de pruebas de la tarea 1 expondrán `MediaClients(a, b, db_path, output_root)`, `project(client, slug) -> dict`, `brand(client, project_id, slug) -> dict`, `brief(client, brand_id, width=512, height=512) -> dict`, `image_bytes(width=512, height=512, color='teal') -> bytes` y `upload(client, brief_id, key, data) -> Response`. Todos usan rutas públicas y datos sintéticos; `brief` se empieza a usar cuando la tarea 3 implementa su ruta.
 
-## Tarea 1: proyectos y migración sin pérdida de marcas
+## Task 1: proyectos y migración sin pérdida de marcas
 
 **Files:** Crear `webapp/project_storage.py`, `webapp/migrations.py`, `webapp/api/projects.py`, `webapp/tests/media_helpers.py`, `webapp/tests/test_projects.py`. Modificar `webapp/db.py`, `webapp/app.py`, `webapp/api/schemas.py`, `.gitignore` solo para excluir el entorno local si hace falta.
 
@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS projects (
 - [ ] Probar migración sobre BD con marcas existentes, dos ejecuciones seguidas y ambos dialectos; una transacción fallida no marca la migración como completada. Usar Postgres efímero de pruebas si Docker está disponible; si no, registrar la prueba de Postgres pendiente y no desplegar migración como validada.
 - [ ] Ejecutar pruebas nuevas y línea base relevante; commit `feat: añadir proyectos privados y migración de marcas`.
 
-## Tarea 2: scopes y administración humana de claves
+## Task 2: scopes y administración humana de claves
 
 **Files:** Crear `webapp/api/permissions.py`, `webapp/tests/test_media_permissions.py`. Modificar `webapp/api/deps.py`, `webapp/api/auth_api.py`, `webapp/storage.py`, `webapp/migrations.py` y la protección de rutas nuevas de proyectos.
 
@@ -139,7 +139,7 @@ def require_owner_session(user):
 - [ ] Probar también que una key legacy sigue listando marcas por su ruta anterior y falla en rutas nuevas; que una cookie inválida no se sustituye silenciosamente por otro principal; que una cookie válida de A con Bearer B nunca procesa recursos de B bajo A.
 - [ ] Ejecutar tests de autenticación existentes y nuevos; documentar el cambio intencional de administración de claves; commit `feat: limitar claves MCP por permisos y propietario`.
 
-## Tarea 3: identidad versionada, encargos e inventario privado
+## Task 3: identidad versionada, encargos e inventario privado
 
 **Files:** Crear `webapp/brand_briefs.py`, `webapp/api/generation_briefs.py`, `scripts/import_brand_inventory.py`, `webapp/tests/test_generation_briefs.py`, `webapp/tests/test_brand_inventory.py`. Modificar marcas, schemas, serializadores, migraciones y registro de routers en `webapp/app.py`.
 
@@ -173,7 +173,7 @@ snapshot_hash = hashlib.sha256(snapshot_json.encode('utf-8')).hexdigest()
 Contrato de logo nuevo: POST multipart `/api/v1/brands/{id}/reference-logo` con scope `media:write` y marca propia; máximo 5 MiB, PNG/JPEG decodificado o SVG saneado por el código existente. Guarda bytes originales en storage, versión y SHA-256; no recibe `logo_asset` como path externo. GET `/api/v1/brands/{id}/reference-logo` requiere sesión o `brands:read`, devuelve bytes y `Cache-Control: private, no-store`. La referencia del snapshot usa esa ruta y el hash. El importador transmite el archivo desde su máquina mediante estos endpoints.
 - [ ] Tests de encargos, inventario y regresión de marcas; commit `feat: crear encargos Codex e importar identidad por proyecto`.
 
-## Tarea 4: importación de imágenes inmutables
+## Task 4: importación de imágenes inmutables
 
 **Files:** Crear `webapp/media_validation.py`, `webapp/media_storage.py`, `webapp/api/media.py`, `webapp/tests/test_media_ingest.py`, `webapp/tests/test_media_concurrency.py`. Modificar migraciones y app.
 
@@ -214,7 +214,7 @@ with Image.open(io.BytesIO(content)) as image:
 - [ ] Prueba de carrera con dos conexiones a la BD y barrera, fallo de storage antes de la miniatura, fallo del commit final, archivo PNG truncado, exceso de bytes/píxeles, EXIF rotado y MIME fingido. Comprobar que no aparece una pieza lista incompleta y que no cambia un original previo.
 - [ ] Tests de ingest y storage; commit `feat: importar imágenes Codex con validación e idempotencia`.
 
-## Tarea 5: descargas privadas y revisión de versiones
+## Task 5: descargas privadas y revisión de versiones
 
 **Files:** Crear `webapp/api/media_reviews.py`, `webapp/tests/test_media_reviews.py`, `webapp/tests/test_media_downloads.py`. Modificar API/storage de media, migraciones, serializadores y app; conservar los downloads de variaciones existentes.
 
@@ -250,7 +250,7 @@ INSERT INTO asset_reviews(tenant_id, media_id, sha256, brand_version,
 - [ ] Probar variación legacy seleccionada/score positivo: copia aparece pendiente; verificar igualdad de hash del original. Probar downgrade de owner antes de revisión, lectura cruzada, caché tras logout y mock GCS sin URL pública. Auditar configuración real del bucket antes de afirmar privacidad de objetos antiguos; no cambiar permisos globales sin conocer qué aplicaciones comparten bucket.
 - [ ] Tests de revisión, descargas, aislamiento y regresión legacy; commit `feat: revisar assets inmutables y servir galería privada`.
 
-## Tarea 6: herramientas MCP de encargos e importación
+## Task 6: herramientas MCP de encargos e importación
 
 **Files:** Crear `mcp_server/media_tools.py`, `mcp_server/tests/test_media_tools.py`. Modificar `mcp_server/server.py`, `mcp_server/README.md`, `mcp_server/QUICKSTART.md`.
 
@@ -291,7 +291,7 @@ response = await self.client.post(
 - [ ] Probar listado real de tools en sesión MCP stdio y una llamada autenticada contra servidor local con tenant sintético; no basta importar el módulo. Verificar revocación con una segunda llamada. Documentar: obtener kit → generar con herramienta del cliente → importar → revisión humana; nunca prometer que MCP genera por sí mismo ni pedir una key de API de imágenes.
 - [ ] Ejecutar pruebas MCP y registrar recibo sin secretos; commit `feat: conectar Codex a encargos y galería por MCP`.
 
-## Tarea 7: proyectos, galería y revisión en React
+## Task 7: proyectos, galería y revisión en React
 
 **Files:** Crear `frontend/src/api/media.ts`, `frontend/src/pages/ProjectsPage.tsx`, `frontend/src/pages/Media/MediaCard.tsx`, `frontend/src/pages/Media/MediaDetail.tsx`, `frontend/src/pages/Media/ApiKeysPanel.tsx`. Modificar `App.tsx`, `AppShell.tsx`, galería y editor de marcas; estilos en un archivo de Media propio.
 
@@ -323,7 +323,7 @@ export const mediaLabels: Record<MediaStatus, string> = {
 - [ ] `npm ci` y `npm run build` desde frontend; ejecutar recorrido real de Estudio cliente y upload para comprobar regresión, diferenciándolo del batch server. Inspeccionar píxeles de capturas y guardar artefactos fuera de Git privado cuando tengan datos reales.
 - [ ] Commit `feat: organizar proyectos y revisar imágenes en galería`.
 
-## Tarea 8: imagen real de Codex, privacidad de producción y cierre
+## Task 8: imagen real de Codex, privacidad de producción y cierre
 
 **Files:** Crear `docs/QA-GALERIA-CODEX.md`, `docs/DEPLOY-GALERIA-CODEX.md`. Modificar README/CLAUDE/AGENTS solo donde cambia el comportamiento. Evidencia privada en una carpeta externa al repo; no fixtures con marca/contactos de clientes.
 
