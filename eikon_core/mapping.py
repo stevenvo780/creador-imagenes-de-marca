@@ -15,6 +15,7 @@ FONT_FALLBACK = "Inter"
 FONT_WHITELIST = frozenset(
     {
         "Inter",
+        "Manrope",
         "Playfair Display",
         "Space Grotesk",
         "JetBrains Mono",

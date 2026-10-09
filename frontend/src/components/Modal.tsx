@@ -3,7 +3,7 @@
  * Cierra con Escape. Bloquea scroll del body mientras está abierto.
  * No requiere un portal; usa position:fixed para salir del flujo normal.
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useId, useRef } from "react";
 
 export interface ModalProps {
   open: boolean;
@@ -22,15 +22,18 @@ export function Modal({
   onClose,
   title,
   children,
-  maxWidth = '520px',
+  maxWidth = "520px",
 }: ModalProps) {
+  const titleId = useId();
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
   const dialogRef = useRef<HTMLDivElement>(null);
 
   // Bloquear scroll del body
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = prev;
     };
@@ -40,23 +43,26 @@ export function Modal({
   useEffect(() => {
     if (!open || !dialogRef.current) return;
     const dialog = dialogRef.current;
+    const previousFocus = document.activeElement as HTMLElement | null;
 
     // Mover el foco al diálogo al abrir
     const firstFocusable = dialog.querySelector<HTMLElement>(FOCUSABLE);
     firstFocusable?.focus();
 
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
-        onClose();
+      if (e.key === "Escape") {
+        closeRef.current();
         return;
       }
-      if (e.key !== 'Tab') return;
+      if (e.key !== "Tab") return;
 
-      const focusable = Array.from(dialog.querySelectorAll<HTMLElement>(FOCUSABLE));
+      const focusable = Array.from(
+        dialog.querySelectorAll<HTMLElement>(FOCUSABLE),
+      );
       if (focusable.length === 0) return;
 
       const first = focusable[0];
-      const last  = focusable[focusable.length - 1];
+      const last = focusable[focusable.length - 1];
 
       if (e.shiftKey) {
         if (document.activeElement === first) {
@@ -71,9 +77,12 @@ export function Modal({
       }
     }
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [open, onClose]);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      previousFocus?.focus();
+    };
+  }, [open]);
 
   if (!open) return null;
 
@@ -84,11 +93,11 @@ export function Modal({
         aria-hidden="true"
         onClick={onClose}
         style={{
-          position: 'fixed',
+          position: "fixed",
           inset: 0,
-          background: 'rgba(0, 0, 0, 0.64)',
+          background: "rgba(0, 0, 0, 0.64)",
           zIndex: 200,
-          backdropFilter: 'blur(2px)',
+          backdropFilter: "blur(2px)",
         }}
       />
 
@@ -97,49 +106,49 @@ export function Modal({
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
-        aria-labelledby="modal-title"
+        aria-labelledby={titleId}
         style={{
-          position: 'fixed',
+          position: "fixed",
           inset: 0,
           zIndex: 201,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: 'var(--space-4)',
-          pointerEvents: 'none',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "var(--space-4)",
+          pointerEvents: "none",
         }}
       >
         <div
           style={{
-            background: 'var(--surface)',
-            border: '1px solid var(--border-strong)',
-            borderRadius: 'var(--r-lg)',
-            boxShadow: 'var(--shadow-lg)',
-            width: '100%',
+            background: "var(--surface)",
+            border: "1px solid var(--border-strong)",
+            borderRadius: "var(--r-lg)",
+            boxShadow: "var(--shadow-lg)",
+            width: "100%",
             maxWidth,
-            maxHeight: 'calc(100vh - var(--space-8))',
-            overflowY: 'auto',
-            pointerEvents: 'all',
-            animation: 'eikon-fadein 180ms ease',
+            maxHeight: "calc(100vh - var(--space-8))",
+            overflowY: "auto",
+            pointerEvents: "all",
+            animation: "eikon-fadein 180ms ease",
           }}
         >
           {/* Cabecera */}
           <div
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: 'var(--space-5) var(--space-6)',
-              borderBottom: '1px solid var(--border)',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "var(--space-5) var(--space-6)",
+              borderBottom: "1px solid var(--border)",
             }}
           >
             <h2
-              id="modal-title"
+              id={titleId}
               style={{
                 margin: 0,
-                fontFamily: 'var(--font-display)',
-                fontSize: 'var(--font-size-xl)',
-                color: 'var(--text)',
+                fontFamily: "var(--font-display)",
+                fontSize: "var(--font-size-xl)",
+                color: "var(--text)",
               }}
             >
               {title}
@@ -149,31 +158,31 @@ export function Modal({
               onClick={onClose}
               aria-label="Cerrar"
               style={{
-                background: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                color: 'var(--text-muted)',
-                fontSize: 'var(--font-size-xl)',
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                color: "var(--text-muted)",
+                fontSize: "var(--font-size-xl)",
                 lineHeight: 1,
                 // Tap target mínimo 44×44 (WCAG 2.5.5) — el contenido (✕)
                 // queda centrado dentro del área interactiva.
                 minWidth: 44,
                 minHeight: 44,
-                padding: 'var(--space-2)',
-                borderRadius: 'var(--r-sm)',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                padding: "var(--space-2)",
+                borderRadius: "var(--r-sm)",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
                 transition:
-                  'color var(--transition-fast), background var(--transition-fast)',
+                  "color var(--transition-fast), background var(--transition-fast)",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--text)';
-                e.currentTarget.style.background = 'var(--surface-2)';
+                e.currentTarget.style.color = "var(--text)";
+                e.currentTarget.style.background = "var(--surface-2)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--text-muted)';
-                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = "var(--text-muted)";
+                e.currentTarget.style.background = "transparent";
               }}
             >
               ✕
@@ -181,7 +190,7 @@ export function Modal({
           </div>
 
           {/* Contenido */}
-          <div style={{ padding: 'var(--space-6)' }}>{children}</div>
+          <div style={{ padding: "var(--space-6)" }}>{children}</div>
         </div>
       </div>
     </>

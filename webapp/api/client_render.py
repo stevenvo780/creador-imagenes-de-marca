@@ -11,13 +11,15 @@ Scoped por tenant multi-tenant. NO renderiza nada (cero Playwright server-side).
 
 from __future__ import annotations
 
+import base64
+import hashlib
 import json
 import logging
 import time
 from pathlib import Path
 from typing import Any
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, Response, UploadFile
 from fastapi.responses import FileResponse
 
 from eikon_core.brand import load_json
@@ -29,6 +31,7 @@ from eikon_core.render import (
     _extract_data_attrs_from_combination,
 )
 from eikon_core.taxonomy import CLOUD_ATLAS_TAXONOMIA, PRIZMA_TAXONOMIA, get_category_for_asset_type
+from webapp import brand_briefs
 from webapp.db import get_last_insert_id
 from webapp.storage import (
     connect,
@@ -79,6 +82,7 @@ _TEMPLATE_WHITELIST = {
 async def get_batch_plan(  # noqa: C901
     batch_id: int,
     request: Request,
+    response: Response,
     user: dict[str, Any] = Depends(current_user),
 ) -> dict[str, Any]:
     """Devuelve el render-spec (plan) para un batch.
@@ -95,6 +99,8 @@ async def get_batch_plan(  # noqa: C901
 
     El cliente usa esto para renderizar sin tocar el servidor.
     """
+    response.headers["Cache-Control"] = "private, no-store"
+    response.headers["X-Content-Type-Options"] = "nosniff"
     settings = get_settings(request)
     axes_config = get_axes_config(request)
     db = settings.db_url
@@ -133,6 +139,25 @@ async def get_batch_plan(  # noqa: C901
             "logo_simbolo": str(brand.get("logo_symbol", "")),
             "textos": json.loads(str(brand.get("texts_json", "{}"))),
         }
+
+    reference_uri = None
+    reference_sha = brand.get("reference_logo_sha256")
+    if reference_sha:
+        reference = brand_briefs.get_reference_logo(db, tenant_id, brand_id, str(reference_sha))
+        if reference is None:
+            raise HTTPException(409, "Logo oficial no disponible; restablecé el original.")
+        try:
+            content = get_storage(request).open(tenant_id, reference["storage_key"])
+            if hashlib.sha256(content).hexdigest() != reference_sha:
+                raise ValueError("hash mismatch")
+            mime = brand_briefs.validate_reference_logo(content)
+            if mime != reference["content_type"]:
+                raise ValueError("MIME mismatch")
+        except (OSError, ValueError) as error:
+            raise HTTPException(
+                409, "Logo oficial no disponible o dañado; restablecé el original."
+            ) from error
+        reference_uri = f"data:{mime};base64,{base64.b64encode(content).decode('ascii')}"
 
     # Reconstruye el spec como CombinationSpec (para plan_combinations)
     combo_spec = CombinationSpec(
@@ -206,7 +231,9 @@ async def get_batch_plan(  # noqa: C901
             isotype_style = params.get("isotype_style", "orbital")
             isotype_seed = seed_hex
 
-        isotype_data_uri = _build_isotype_data_uri(isotype_style, isotype_seed, marca, vars_dict)
+        isotype_data_uri = reference_uri or _build_isotype_data_uri(
+            isotype_style, isotype_seed, marca, vars_dict
+        )
 
         # Textos, aplicando content overrides. El headline de varias plantillas usa
         # data-logo-texto (nombre de marca): lo llenamos con el título del usuario si

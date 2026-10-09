@@ -4,7 +4,12 @@
  * usando modern-screenshot y la FontFace API.
  */
 
-import { clientRender, RenderSpec, RenderCombination } from "../api/client";
+import {
+  clientRender,
+  beginSessionWork,
+  RenderSpec,
+  RenderCombination,
+} from "../api/client";
 
 interface FontLoadConfig {
   family: string;
@@ -21,6 +26,11 @@ function loadFontsFromSpec(): FontFace[] {
   // Mapa de fuentes: (family, weight) -> archivo woff2
   // Basado en templates/eikon-system.css
   const fontConfigs: FontLoadConfig[] = [
+    {
+      family: "Manrope",
+      weight: "200 800",
+      url: "/static/fonts/Manrope-wght.ttf",
+    },
     { family: "Inter", weight: 400, url: "/static/fonts/Inter-400.woff2" },
     { family: "Inter", weight: 700, url: "/static/fonts/Inter-700.woff2" },
     {
@@ -54,20 +64,16 @@ function loadFontsFromSpec(): FontFace[] {
 
   for (const config of fontConfigs) {
     try {
-      const fontFace = new FontFace(
-        config.family,
-        `url('${config.url}')`,
-        {
-          weight: String(config.weight),
-          style: config.style || "normal",
-        }
-      );
+      const fontFace = new FontFace(config.family, `url('${config.url}')`, {
+        weight: String(config.weight),
+        style: config.style || "normal",
+      });
 
       document.fonts.add(fontFace);
       loadedFonts.push(fontFace);
     } catch (e) {
       console.warn(
-        `Failed to add font ${config.family} ${config.weight}: ${e}`
+        `Failed to add font ${config.family} ${config.weight}: ${e}`,
       );
     }
   }
@@ -80,32 +86,44 @@ function loadFontsFromSpec(): FontFace[] {
  * Si falla, continúa sin abortar.
  */
 async function preloadFonts(): Promise<{ success: number; failed: number }> {
-  const initialSize = document.fonts.size;
-  loadFontsFromSpec();
-
+  const fonts = loadFontsFromSpec();
+  let timeout: ReturnType<typeof setTimeout> | undefined;
   try {
-    const fontPromise = document.fonts.ready;
-    const timeoutPromise = new Promise<void>((_, reject) =>
-      setTimeout(() => reject(new Error("Font loading timeout")), 3000)
-    );
-
-    await Promise.race([fontPromise, timeoutPromise]);
-    return { success: document.fonts.size - initialSize, failed: 0 };
-  } catch (e) {
-    console.warn("Font preload timeout or error:", e);
-    return { success: 0, failed: document.fonts.size - initialSize };
+    const loaded = await Promise.race([
+      Promise.allSettled(fonts.map((font) => font.load())),
+      new Promise<never>((_, reject) => {
+        timeout = setTimeout(
+          () => reject(new Error("Font loading timeout")),
+          3000,
+        );
+      }),
+    ]);
+    return {
+      success: loaded.filter((r) => r.status === "fulfilled").length,
+      failed: loaded.filter((r) => r.status === "rejected").length,
+    };
+  } catch {
+    return { success: 0, failed: fonts.length };
+  } finally {
+    if (timeout !== undefined) clearTimeout(timeout);
   }
 }
 
 /**
  * Fetchea el HTML de la plantilla desde /api/v1/templates/{name}
  */
-async function fetchTemplateHtml(templateName: string): Promise<string> {
+async function fetchTemplateHtml(
+  templateName: string,
+  signal: AbortSignal,
+): Promise<string> {
   const res = await fetch(`/api/v1/templates/${templateName}`, {
     credentials: "include",
+    signal,
   });
   if (!res.ok) {
-    throw new Error(`Failed to fetch template '${templateName}': ${res.status}`);
+    throw new Error(
+      `Failed to fetch template '${templateName}': ${res.status}`,
+    );
   }
   return res.text();
 }
@@ -114,14 +132,15 @@ async function fetchTemplateHtml(templateName: string): Promise<string> {
  * Fetchea y procesa el CSS del sistema (eikon-system.css).
  * Reescribe rutas de fuentes para que resuelvan correctamente desde /static/fonts/.
  */
-async function fetchSystemCss(): Promise<string> {
+async function fetchSystemCss(signal: AbortSignal): Promise<string> {
   try {
     const res = await fetch("/static/css/eikon-system.css", {
       credentials: "include",
+      signal,
     });
     if (!res.ok) {
       console.warn(
-        `Failed to fetch eikon-system.css: ${res.status}, continuando sin estilos externos`
+        `Failed to fetch eikon-system.css: ${res.status}, continuando sin estilos externos`,
       );
       return "";
     }
@@ -143,7 +162,7 @@ function createAndMountContainer(
   templateHtml: string,
   combination: RenderCombination,
   viewport: { w: number; h: number },
-  systemCss: string
+  systemCss: string,
 ): HTMLDivElement {
   // Crear contenedor oculto
   const container = document.createElement("div");
@@ -170,12 +189,27 @@ function createAndMountContainer(
   styleContent += "\n}";
   styleElement.textContent = styleContent;
 
+  // Python uses underscore keys; templates consume hyphenated font tokens.
+  // Set them on the template body so its own defaults cannot hide brand typography.
+  for (const [key, cssKey] of [
+    ["font_titulo", "--font-titulo"],
+    ["font_cuerpo", "--font-cuerpo"],
+  ]) {
+    if (combination.vars[key])
+      bodyContent.style.setProperty(cssKey, combination.vars[key]);
+  }
+
   // Setear data-* DIRECTAMENTE sobre el body de la plantilla.
   // Crítico: los selectores CSS esperan body[data-variant="..."], etc.
   for (const [attr, value] of Object.entries(combination.data_attrs)) {
     const attrKey = attr.replace("data-", "");
     const parts = attrKey.split("-");
-    const camelKey = parts[0] + parts.slice(1).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join("");
+    const camelKey =
+      parts[0] +
+      parts
+        .slice(1)
+        .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+        .join("");
     bodyContent.dataset[camelKey] = value;
     bodyContent.setAttribute(attr, value);
   }
@@ -198,9 +232,7 @@ function createAndMountContainer(
   container.appendChild(bodyContent);
 
   // Inyectar isotipo como <img> en [data-isotype-container]
-  const isotopeContainer = container.querySelector(
-    "[data-isotype-container]"
-  );
+  const isotopeContainer = container.querySelector("[data-isotype-container]");
   if (isotopeContainer && combination.isotype_data_uri) {
     const img = document.createElement("img");
     img.src = combination.isotype_data_uri;
@@ -237,7 +269,7 @@ async function rasterizeToPng(
   node: HTMLElement,
   width: number,
   height: number,
-  pixelRatio: number
+  pixelRatio: number,
 ): Promise<Blob> {
   const { domToPng } = await import("modern-screenshot");
 
@@ -270,29 +302,45 @@ async function renderAndUploadCombination(
   viewport: { w: number; h: number },
   deviceScaleFactor: number,
   assetType: string,
-  systemCss: string
+  systemCss: string,
+  work: ReturnType<typeof beginSessionWork>,
 ): Promise<{ success: boolean; error?: string }> {
   let container: HTMLDivElement | null = null;
+  let unregister: (() => void) | undefined;
 
   try {
+    work.check();
     // Montar container con el CSS del sistema
-    container = createAndMountContainer(templateHtml, combination, viewport, systemCss);
+    container = createAndMountContainer(
+      templateHtml,
+      combination,
+      viewport,
+      systemCss,
+    );
+
+    unregister = work.onCancel(() => container?.remove());
 
     // Esperar a que las fuentes estén listas
     await document.fonts.ready;
+
+    await Promise.all(
+      Array.from(container.querySelectorAll("img")).map((img) => img.decode()),
+    );
 
     // Doble requestAnimationFrame para asegurar que el render haya completado
     await new Promise((resolve) => requestAnimationFrame(resolve));
     await new Promise((resolve) => requestAnimationFrame(resolve));
 
+    work.check();
     // Rasterizar
     const pngBlob = await rasterizeToPng(
       container,
       viewport.w,
       viewport.h,
-      deviceScaleFactor
+      deviceScaleFactor,
     );
 
+    work.check();
     // Preparar FormData para upload
     const formData = new FormData();
     formData.append("combo_idx", String(combination.idx));
@@ -305,10 +353,12 @@ async function renderAndUploadCombination(
     let lastErr: unknown = null;
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
-        await clientRender.upload(batchId, formData);
+        work.check();
+        await clientRender.upload(batchId, formData, work.signal);
         lastErr = null;
         break;
       } catch (e) {
+        work.check();
         lastErr = e;
         await new Promise((r) => setTimeout(r, 400 * (attempt + 1)));
       }
@@ -317,11 +367,13 @@ async function renderAndUploadCombination(
 
     return { success: true };
   } catch (e) {
+    work.check();
     return {
       success: false,
       error: e instanceof Error ? e.message : String(e),
     };
   } finally {
+    unregister?.();
     // Limpiar
     if (container && container.parentNode) {
       container.parentNode.removeChild(container);
@@ -341,24 +393,29 @@ async function renderAndUploadCombination(
  */
 export async function renderBatchClientSide(
   batchId: number,
-  onProgress?: (done: number, total: number) => void
+  onProgress?: (done: number, total: number) => void,
 ): Promise<{ uploaded: number; failed: number }> {
+  const work = beginSessionWork();
   let uploaded = 0;
   let failed = 0;
 
   try {
     // 1. Fetch render-spec
-    const spec: RenderSpec = await clientRender.plan(batchId);
+    const spec: RenderSpec = await clientRender.plan(batchId, work.signal);
 
     // 2. Precargar fuentes
     await preloadFonts();
 
     // 3. Fetch CSS del sistema (eikon-system.css) una sola vez
-    const systemCss = await fetchSystemCss();
+    const systemCss = await fetchSystemCss(work.signal);
 
     // 4. Fetch plantilla HTML una sola vez
-    const templateHtml = await fetchTemplateHtml(spec.template_name);
+    const templateHtml = await fetchTemplateHtml(
+      spec.template_name,
+      work.signal,
+    );
 
+    work.check();
     // 5. Procesar combinaciones
     const total = spec.combinations.length;
     for (let i = 0; i < total; i++) {
@@ -371,29 +428,29 @@ export async function renderBatchClientSide(
         spec.viewport,
         spec.device_scale_factor,
         spec.asset_type,
-        systemCss
+        systemCss,
+        work,
       );
 
       if (result.success) {
         uploaded++;
       } else {
         failed++;
-        console.warn(
-          `Combo ${combo.idx} failed:`,
-          result.error
-        );
+        console.warn(`Combo ${combo.idx} failed:`, result.error);
       }
 
+      work.check();
       // Reportar progreso
       if (onProgress) {
         onProgress(uploaded + failed, total);
       }
     }
   } catch (e) {
-    console.error("renderBatchClientSide error:", e);
+    if (!work.signal.aborted) console.error("renderBatchClientSide error:", e);
     // Si falla el plan/plantilla, no podemos saber el total
     // Reportar error pero no crashear
   }
 
+  work.finish();
   return { uploaded, failed };
 }
