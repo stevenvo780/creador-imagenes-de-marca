@@ -125,7 +125,7 @@ def test_key_cannot_mint_keys(media_clients):
     assert agent.post('/api/v1/auth/api-keys', json={}).status_code == 403
     assert agent.get('/api/v1/projects').status_code == 403
     assert media_clients.a.delete(f'/api/v1/auth/api-keys/{r.json()["id"]}').status_code == 204
-    assert agent.get('/api/v1/media').status_code == 401
+    assert agent.get('/api/v1/projects').status_code == 401
 ```
 
 - [ ] Ejecutar test y comprobar fallo funcional. Implementar scopes como lista JSON validada contra la lista cerrada; rechazar desconocidos, no aceptar `tenant_id`; no guardar el valor de la key. Owner session puede usar rutas nuevas y administrar claves; API keys no pueden crear/listar/revocar otras claves ni revisar assets.
