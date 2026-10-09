@@ -247,3 +247,42 @@ CREATE TABLE IF NOT EXISTS media_cleanup_attempts (
             "ON CONFLICT(version) DO NOTHING",
             ("media_cleanup_attempts_v1", int(time.time())),
         )
+
+
+def migrate_media_reviews(db_url: str | Path | None) -> None:
+    """Historial de revisión y vínculo durable de promociones; sin alterar originales."""
+    with db.connect(db_url) as con:
+        if con.dialect == "sqlite":
+            con.execute("BEGIN IMMEDIATE")
+        else:
+            con.execute("SELECT pg_advisory_xact_lock(?)", (2026100801,))
+        schema = """
+CREATE TABLE IF NOT EXISTS asset_reviews (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ media_id INTEGER NOT NULL REFERENCES media_assets(id),
+ sha256 TEXT NOT NULL,
+ brand_version INTEGER NOT NULL,
+ decision TEXT NOT NULL CHECK(decision IN ('approved', 'rejected')),
+ reason TEXT NOT NULL,
+ reviewer_id INTEGER NOT NULL REFERENCES users(id),
+ created_at BIGINT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_reviews_tenant_media ON asset_reviews(tenant_id, media_id, id);
+CREATE TABLE IF NOT EXISTS media_variation_origins (
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ variation_id INTEGER NOT NULL,
+ brief_id INTEGER NOT NULL REFERENCES generation_briefs(id),
+ PRIMARY KEY(tenant_id, variation_id)
+);
+"""
+        if con.dialect == "postgres":
+            schema = db._schema_for_postgres(schema)
+        for statement in schema.split(";"):
+            if statement.strip():
+                con.execute(statement)
+        con.execute(
+            "INSERT INTO schema_migrations(version, applied_at) VALUES (?, ?) "
+            "ON CONFLICT(version) DO NOTHING",
+            ("media_reviews_v1", int(time.time())),
+        )

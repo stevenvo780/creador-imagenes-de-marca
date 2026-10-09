@@ -400,6 +400,7 @@ CREATE INDEX IF NOT EXISTS idx_variations_batch ON variations(batch_id);
         migrate_api_key_scopes,
         migrate_brand_briefs,
         migrate_media,
+        migrate_media_reviews,
         migrate_projects,
     )
 
@@ -407,6 +408,7 @@ CREATE INDEX IF NOT EXISTS idx_variations_batch ON variations(batch_id);
     migrate_api_key_scopes(db_url)
     migrate_brand_briefs(db_url)
     migrate_media(db_url)
+    migrate_media_reviews(db_url)
 
 
 def migrate_add_logo_columns(db_url: str | None | Path) -> None:

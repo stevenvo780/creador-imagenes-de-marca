@@ -52,6 +52,54 @@ class MediaStorageError(RuntimeError):
 def _public(row: dict[str, Any]) -> dict[str, Any]:
     result = {key: row[key] for key in _PUBLIC_FIELDS}
     result["provenance"] = json.loads(row["provenance_json"])
+    result["download_url"] = f"/api/v1/media/{row['id']}/download"
+    result["thumbnail_url"] = f"/api/v1/media/{row['id']}/thumbnail"
+    result["approval_current"] = row["status"] == "approved"
+    result["reviews"] = []
+    return result
+
+
+def _current_public(con: db.DualConnection, row: dict[str, Any]) -> dict[str, Any]:
+    # Orden compatible con el escritor: identidad antes del media. El lock
+    # SHARE de media mantiene estado e historial coherentes hasta terminar lectura.
+    try:
+        snapshot = brand_briefs._snapshot(con, row["tenant_id"], row["brand_id"])
+        raw = json.dumps(snapshot, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+        current = (
+            not snapshot["project"]["archived"]
+            and hashlib.sha256(raw.encode()).hexdigest() == row["snapshot_hash"]
+        )
+    except KeyError:
+        current = False
+    locked = con.execute(
+        "SELECT * FROM media_assets WHERE tenant_id = ? AND id = ?"
+        + (" FOR SHARE" if con.dialect == "postgres" else ""),
+        (row["tenant_id"], row["id"]),
+    ).fetchone()
+    if locked is not None:
+        row = locked
+    result = _public(row)
+    result["approval_current"] = row["status"] == "approved" and current
+    if row["status"] == "approved" and not current:
+        result["status"] = "pending_review"
+    result["reviews"] = [
+        {
+            key: review[key]
+            for key in (
+                "id",
+                "sha256",
+                "brand_version",
+                "decision",
+                "reason",
+                "reviewer_id",
+                "created_at",
+            )
+        }
+        for review in con.execute(
+            "SELECT * FROM asset_reviews WHERE tenant_id = ? AND media_id = ? ORDER BY id",
+            (row["tenant_id"], row["id"]),
+        ).fetchall()
+    ]
     return result
 
 
@@ -398,7 +446,7 @@ def _recover_rejected_reservation(
     _compensate(db_url, storage, row)
 
 
-def import_media(
+def _import_media(
     db_url: str | Path | None,
     storage: StorageBackend,
     tenant_id: int,
@@ -407,9 +455,11 @@ def import_media(
     content: bytes,
     source: str,
     provenance: dict[str, Any],
+    *,
+    legacy: bool = False,
 ) -> dict[str, Any]:
     """Importa o reintenta exactamente la misma solicitud; nunca sobrescribe otra pieza."""
-    raw = _request_metadata(idempotency_key, source, provenance)
+    raw = _request_metadata(idempotency_key, "codex" if legacy else source, provenance)
     brief = brand_briefs.get_generation_brief(db_url, tenant_id, brief_id)
     if brief is None:
         raise KeyError("encargo no encontrado")
@@ -425,7 +475,7 @@ def import_media(
         raise
     if replayed:
         _drain_cleanup(db_url, storage, row)
-        return {**_public(row), "_replayed": True}
+        return {**(get_media(db_url, tenant_id, row["id"]) or _public(row)), "_replayed": True}
     try:
         failed = _delete_objects(storage, tenant_id, old_keys)
         _record_cleanup(db_url, row, failed)
@@ -436,11 +486,11 @@ def import_media(
         storage.save(tenant_id, row["thumbnail_key"], metadata["thumbnail_bytes"])
         ready = _finalize(db_url, row)
         _drain_cleanup(db_url, storage, row)
-        return {**ready, "_replayed": False}
+        return {**(get_media(db_url, tenant_id, row["id"]) or ready), "_replayed": False}
     except Exception as error:
         committed = _compensate(db_url, storage, row)
         if committed is not None:
-            return {**committed, "_replayed": False}
+            return {**(get_media(db_url, tenant_id, row["id"]) or committed), "_replayed": False}
         logger.error("media_ingest_failed tenant_id=%s media_id=%s", tenant_id, row["id"])
         if isinstance(error, MediaConflict):
             raise
@@ -451,11 +501,29 @@ def import_media(
 
 def get_media(db_url: str | Path | None, tenant_id: int, media_id: int) -> dict[str, Any] | None:
     with db.connect(db_url) as con:
+        _begin(con)
         row = con.execute(
             "SELECT * FROM media_assets WHERE tenant_id = ? AND id = ? AND status IN ('pending_review', 'approved', 'rejected', 'archived')",
             (tenant_id, media_id),
         ).fetchone()
-        return _public(row) if row else None
+        return _current_public(con, row) if row else None
+
+
+def _media_filters(
+    filters: dict[str, Any], clauses: list[str], params: list[Any]
+) -> tuple[list[str], list[Any]]:
+    if "status" in filters and filters["status"] not in PUBLIC_MEDIA_STATUSES:
+        raise ValueError("Estado no admitido")
+    for key, value in filters.items():
+        if key not in {"brand_id", "project_id", "brief_id", "source", "status"}:
+            raise ValueError("Filtro no admitido")
+        if key == "status":
+            continue  # filtrar el estado efectivo, incluida aprobación revocada
+        if key == "source" and value not in {"codex", "legacy"}:
+            raise ValueError("Origen no admitido")
+        clauses.append(f"{key} = ?")
+        params.append(value)
+    return clauses, params
 
 
 def list_media(
@@ -473,15 +541,44 @@ def list_media(
         "status IN ('pending_review', 'approved', 'rejected', 'archived')",
     ]
     params: list[Any] = [tenant_id, cursor or 0]
-    for key, value in filters.items():
-        if key not in {"brand_id", "project_id", "brief_id"}:
-            raise ValueError("Filtro no admitido")
-        clauses.append(f"{key} = ?")
-        params.append(value)
-    params.append(limit)
+    clauses, params = _media_filters(filters, clauses, params)
     with db.connect(db_url) as con:
-        rows = con.execute(
-            "SELECT * FROM media_assets WHERE " + " AND ".join(clauses) + " ORDER BY id LIMIT ?",
-            params,
-        ).fetchall()
-    return [_public(row) for row in rows]
+        _begin(con)
+        results: list[dict[str, Any]] = []
+        # Batches acotados también con filtro de aprobación efectiva: no cargar
+        # el catálogo entero cuando muchas revisiones quedaron obsoletas.
+        while len(results) < limit:
+            rows = con.execute(
+                "SELECT * FROM media_assets WHERE "
+                + " AND ".join(clauses)
+                + " ORDER BY id LIMIT ?",
+                [*params, 101],
+            ).fetchall()
+            if not rows:
+                break
+            for row in rows:
+                result = _current_public(con, row)
+                if "status" not in filters or result["status"] == filters["status"]:
+                    results.append(result)
+                    if len(results) == limit:
+                        break
+            params[1] = rows[-1]["id"]
+            if len(rows) < 101:
+                break
+        return results
+
+
+def import_media(
+    db_url: str | Path | None,
+    storage: StorageBackend,
+    tenant_id: int,
+    brief_id: int,
+    idempotency_key: str,
+    content: bytes,
+    source: str,
+    provenance: dict[str, Any],
+) -> dict[str, Any]:
+    """Upload externo limitado a Codex; los orígenes legacy se resuelven internamente."""
+    return _import_media(
+        db_url, storage, tenant_id, brief_id, idempotency_key, content, source, provenance
+    )

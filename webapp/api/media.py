@@ -110,6 +110,8 @@ def read_media_list(
     brand_id: int | None = Query(None, ge=1, le=_SQLITE_INT_MAX),
     project_id: int | None = Query(None, ge=1, le=_SQLITE_INT_MAX),
     brief_id: int | None = Query(None, ge=1, le=_SQLITE_INT_MAX),
+    source: str | None = Query(None, pattern="^(codex|legacy)$"),
+    status: str | None = Query(None, pattern="^(pending_review|approved|rejected|archived)$"),
     user: dict[str, Any] = Depends(current_user),
 ) -> dict[str, Any]:
     require_scope(user, "media:read")
@@ -119,6 +121,8 @@ def read_media_list(
             "brand_id": brand_id,
             "project_id": project_id,
             "brief_id": brief_id,
+            "source": source,
+            "status": status,
         }.items()
         if value is not None
     }

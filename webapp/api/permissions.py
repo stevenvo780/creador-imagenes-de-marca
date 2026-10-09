@@ -57,6 +57,9 @@ _LEGACY_READ_SCOPES = {
 }
 _SCOPED_ROUTE_SCOPES = {
     ("POST", "/api/v1/media"): "media:write",
+    ("POST", "/api/v1/media/from-variation"): "media:write",
+    ("GET", "/api/v1/media/{media_id}/download"): "media:read",
+    ("GET", "/api/v1/media/{media_id}/thumbnail"): "media:read",
     ("GET", "/api/v1/media"): "media:read",
     ("GET", "/api/v1/media/{media_id}"): "media:read",
     ("GET", "/api/v1/brands/{brand_id}/brief"): "brands:read",
@@ -88,6 +91,8 @@ _LEGACY_OWNER_ROUTES = frozenset(
     }
 )
 
+
+_REVIEW_ROUTES = frozenset({("POST", "/api/v1/media/{media_id}/reviews")})
 
 _KEY_ADMIN_ROUTES = frozenset(
     {
@@ -144,7 +149,7 @@ def require_legacy_route_scope(user: dict[str, Any], method: str, route: str) ->
     scope = _SCOPED_ROUTE_SCOPES.get((method, route))
     if scope is not None:
         require_scope(user, scope)
-    elif (method, route) in _LEGACY_OWNER_ROUTES | _KEY_ADMIN_ROUTES:
+    elif (method, route) in _LEGACY_OWNER_ROUTES | _KEY_ADMIN_ROUTES | _REVIEW_ROUTES:
         require_owner_session(user)
     elif (method, route) not in _AUTHENTICATED_CATALOG_ROUTES:
         raise HTTPException(status_code=403, detail="Ruta no autorizada para esta API key")

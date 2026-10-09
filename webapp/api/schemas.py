@@ -168,3 +168,20 @@ class DeleteVariationsRequest(BaseModel):
     """Lista de IDs de variaciones a borrar."""
 
     ids: list[int] = Field(min_length=1, max_length=200)
+
+
+class MediaReviewRequest(BaseModel):
+    """El revisor identifica explícitamente el original y su identidad congelada."""
+
+    model_config = ConfigDict(extra="forbid")
+    decision: Literal["approved", "rejected"]
+    expected_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
+    expected_brand_version: int = Field(ge=1, le=_SQLITE_INT_MAX, strict=True)
+    reason: str = Field(default="", max_length=4000)
+
+
+class MediaPromotionRequest(BaseModel):
+    """El origen se resuelve en la empresa autenticada, nunca mediante una ruta."""
+
+    model_config = ConfigDict(extra="forbid")
+    variation_id: int = Field(ge=1, le=_SQLITE_INT_MAX, strict=True)
