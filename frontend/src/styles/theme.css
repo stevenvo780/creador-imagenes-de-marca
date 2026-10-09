@@ -461,6 +461,7 @@ textarea:focus {
 
 @media (max-width: 760px) {
   .eikon-appbar-inner {
+    flex-wrap: wrap;
     min-height: var(--nav-height) !important;
     height: auto !important;
     gap: var(--space-3) !important;
@@ -470,6 +471,7 @@ textarea:focus {
   .eikon-appbar-nav {
     order: 3;
     flex-basis: 100% !important;
+    min-width: 0;
   }
 
   .eikon-appbar-nav ul {
