@@ -1,12 +1,15 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import ts from "typescript";
 
 // Ejecuta el guard y sus consumidores reales, como el harness AST de task7-fix1.
 const source = ts.createSourceFile(
   "AssetStudioPage.tsx",
-  readFileSync(new URL("../src/pages/AssetStudioPage.tsx", import.meta.url), "utf8"),
+  process.env.EIKON_STUDIO_BASE
+    ? execFileSync("git", ["show", `${process.env.EIKON_STUDIO_BASE}:frontend/src/pages/AssetStudioPage.tsx`], { encoding: "utf8" })
+    : readFileSync(new URL("../src/pages/AssetStudioPage.tsx", import.meta.url), "utf8"),
   ts.ScriptTarget.Latest,
   true,
   ts.ScriptKind.TSX,
@@ -47,7 +50,7 @@ const baseBrand = {
 };
 for (const [name, identity, ready] of [
   ["referencia original sin estilo procedural", { reference_logo_sha256: "a".repeat(64) }, true],
-  ["archivo legado sin estilo procedural", { logo_asset: "marcas/qa/logo.svg" }, true],
+  ["archivo legado exclusivo en DB sin ruta resuelta", { logo_asset: "marcas/qa/logo.svg" }, false],
   ["procedural con seed positivo", { logo_style: "orbital", logo_seed: 7 }, true],
   ["procedural con seed cero válido", { logo_style: "orbital", logo_seed: 0 }, true],
   ["marca sin identidad", {}, false],
