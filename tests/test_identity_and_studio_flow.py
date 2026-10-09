@@ -139,9 +139,9 @@ class TestIdentityAndStudioFlow:
 
             # Validar que svg_data_uri no esté vacío y sea válido
             assert len(opt["svg_data_uri"]) > 0, "svg_data_uri vacío"
-            assert opt["svg_data_uri"].startswith(
-                "data:image/svg+xml;base64,"
-            ), f"svg_data_uri inválido: {opt['svg_data_uri'][:50]}"
+            assert opt["svg_data_uri"].startswith("data:image/svg+xml;base64,"), (
+                f"svg_data_uri inválido: {opt['svg_data_uri'][:50]}"
+            )
 
     def test_03_update_brand_with_logo_style_and_seed(self, client: TestClient) -> None:
         """Paso 3: PUT /api/v1/brands/{id} con logo_style y logo_seed."""
@@ -233,7 +233,9 @@ class TestIdentityAndStudioFlow:
         assert r.status_code == 202, r.text
         batch_data = r.json()
         # Status puede ser "pending" o "running" (worker puede procesar inmediatamente)
-        assert batch_data["status"] in ("pending", "running"), f"Unexpected status: {batch_data['status']}"
+        assert batch_data["status"] in ("pending", "running"), (
+            f"Unexpected status: {batch_data['status']}"
+        )
         assert "id" in batch_data
 
     def test_06_get_batch_plan_with_content_overrides(self, client: TestClient) -> None:
@@ -314,9 +316,9 @@ class TestIdentityAndStudioFlow:
             # isotype_data_uri debe ser un data URI válido (refleja el logo guardado)
             isotype_uri = combo["isotype_data_uri"]
             assert len(isotype_uri) > 0, "isotype_data_uri vacío"
-            assert isotype_uri.startswith(
-                "data:image/svg+xml"
-            ), f"isotype_data_uri inválido: {isotype_uri[:50]}"
+            assert isotype_uri.startswith("data:image/svg+xml"), (
+                f"isotype_data_uri inválido: {isotype_uri[:50]}"
+            )
 
     def test_07_batch_plan_reflects_brand_logo_style(self, client: TestClient) -> None:
         """Paso 7: Validar que el plan refleja el logo_style guardado en la marca."""

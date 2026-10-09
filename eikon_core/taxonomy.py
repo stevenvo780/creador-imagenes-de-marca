@@ -130,6 +130,12 @@ def _legacy_python_taxonomia(is_prizma: bool) -> dict[str, list[TypeSpec]]:
             ],
             "social": [
                 TypeSpec(
+                    "social_4x5",
+                    1080,
+                    1350,
+                    (VariantSpec("v1_house", "House"),),
+                ),
+                TypeSpec(
                     "ig_post",
                     1080,
                     1080,

@@ -28,9 +28,7 @@ if TYPE_CHECKING:
 
 
 def _wrap(p: IsotypeParams, parts: list[str]) -> str:
-    return wrap_svg(
-        "\n".join(parts), viewbox=f"0 0 {p.size} {p.size}", width=p.size, height=p.size
-    )
+    return wrap_svg("\n".join(parts), viewbox=f"0 0 {p.size} {p.size}", width=p.size, height=p.size)
 
 
 def _lerp_hex(a: str, b: str, t: float) -> str:
@@ -51,7 +49,7 @@ def gen_prisma_refraccion(p: IsotypeParams) -> str:
     R = s * 0.30
     v = create_regular_polygon(cx, cy, R, 3, rotation_deg=-90)  # apex arriba
     by_x = sorted(v, key=lambda q: q[0])
-    left_face = (by_x[0], by_x[1])   # dos vértices más a la izquierda
+    left_face = (by_x[0], by_x[1])  # dos vértices más a la izquierda
     right_face = (by_x[1], by_x[2])  # dos vértices más a la derecha
     lm = ((left_face[0][0] + left_face[1][0]) / 2, (left_face[0][1] + left_face[1][1]) / 2)
     rm = ((right_face[0][0] + right_face[1][0]) / 2, (right_face[0][1] + right_face[1][1]) / 2)
@@ -61,12 +59,14 @@ def gen_prisma_refraccion(p: IsotypeParams) -> str:
     ]
     # rayo de luz entrante (desde el borde izquierdo hasta la cara izquierda)
     parts.append(
-        create_svg_line(s * 0.03, lm[1], lm[0], lm[1], stroke=p.primary_color, stroke_width=s * 0.02)
+        create_svg_line(
+            s * 0.03, lm[1], lm[0], lm[1], stroke=p.primary_color, stroke_width=s * 0.02
+        )
     )
     # abanico espectral saliente desde la cara derecha
     nb = 6
     spread = 34 + seeded_random(p.seed, 1, 26)  # 34..60 grados
-    tilt = seeded_random(p.seed, 2, 16) - 8      # ligera inclinación
+    tilt = seeded_random(p.seed, 2, 16) - 8  # ligera inclinación
     L = s * 0.36
     for i in range(nb):
         t = i / (nb - 1)
@@ -75,7 +75,11 @@ def gen_prisma_refraccion(p: IsotypeParams) -> str:
         y2 = rm[1] + L * math.sin(ang)
         parts.append(
             create_svg_line(
-                rm[0], rm[1], x2, y2, stroke=_lerp_hex(p.primary_color, p.accent_color, t),
+                rm[0],
+                rm[1],
+                x2,
+                y2,
+                stroke=_lerp_hex(p.primary_color, p.accent_color, t),
                 stroke_width=s * 0.024,
             )
         )
@@ -138,8 +142,12 @@ def gen_prisma_haz(p: IsotypeParams) -> str:
         y2 = apex_bottom[1] + L * math.sin(ang)
         parts.append(
             create_svg_line(
-                apex_bottom[0], apex_bottom[1], x2, y2,
-                stroke=_lerp_hex(p.primary_color, p.accent_color, t), stroke_width=s * 0.02,
+                apex_bottom[0],
+                apex_bottom[1],
+                x2,
+                y2,
+                stroke=_lerp_hex(p.primary_color, p.accent_color, t),
+                stroke_width=s * 0.02,
             )
         )
     return _wrap(p, parts)

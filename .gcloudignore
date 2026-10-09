@@ -1,0 +1,74 @@
+# Contexto mínimo y explícito para `gcloud builds submit`.
+#
+# La regla base niega todo. Solo se admiten los archivos que el Dockerfile
+# necesita para construir la imagen de producción. Las denegaciones finales
+# son defensa en profundidad y prevalecen sobre las inclusiones de directorios.
+**
+
+!.gcloudignore
+!.dockerignore
+!Dockerfile
+!requirements.txt
+!pyproject.toml
+!eikon.py
+!contrast_validator.py
+!gallery.py
+!web_icons.py
+!variations.py
+
+!frontend/
+!frontend/**
+!eikon_core/
+!eikon_core/**
+!webapp/
+!webapp/**
+!templates/
+!templates/**
+!marcas/
+!marcas/**
+!assets/
+!assets/**
+!config/
+!config/**
+
+# Secretos, sesiones y estado local: nunca se envían a Cloud Build.
+.git/
+**/.git/**
+.env
+.env.*
+**/.env
+**/.env.*
+**/*.local
+**/*.local.*
+**/*.token
+**/*.key
+**/*.pem
+**/*.bak
+**/*.bak-*
+**/*.tmp
+**/*.tmp.*
+**/*~
+**/settings.local.json
+**/*[Cc][Rr][Ee][Dd][Ee][Nn][Tt][Ii][Aa][Ll][Ss]*
+**/*[Cc][Oo][Oo][Kk][Ii][Ee]*
+**/*[Ss][Ee][Ss][Ss][Ii][Oo][Nn]*
+
+# Artefactos locales y dependencias regenerables.
+.playwright*/
+**/.playwright*/**
+.agents/
+.claude/
+.venv/
+venv*/
+**/__pycache__/
+**/*.py[cod]
+node_modules/
+**/node_modules/**
+frontend/dist/
+output/
+output_*/
+data/
+audit/
+e2e/
+tests/
+webapp/tests/

@@ -89,7 +89,7 @@ schema en la BD apuntada por `DATABASE_URL`.
 ```bash
 # EIKON_WEBAPP_SECRET
 echo -n "EL-SECRET-JWT-GENERADO-ARRIBA" \
-  | gcloud secrets create eikon-webapp-secret \
+  | gcloud secrets create eikon-jwt-secret \
       --replication-policy=automatic \
       --data-file=-
 
@@ -103,7 +103,7 @@ echo -n "postgresql://user:pass@host:5432/eikon?sslmode=require" \
 Para actualizar un secret existente (nueva versión):
 ```bash
 echo -n "NUEVO-VALOR" \
-  | gcloud secrets versions add eikon-webapp-secret --data-file=-
+  | gcloud secrets versions add eikon-jwt-secret --data-file=-
 ```
 
 ---
@@ -129,7 +129,7 @@ export GCS_BUCKET=eikon-assets-mi-proyecto
 
 # Usar secrets en Secret Manager (recomendado para producción)
 export SECRET_STRATEGY=secretmanager
-export WEBAPP_SECRET_NAME=eikon-webapp-secret
+export WEBAPP_SECRET_NAME=eikon-jwt-secret
 export DATABASE_URL_SECRET_NAME=eikon-database-url
 
 # Correr desde la raíz del repo
@@ -139,6 +139,14 @@ bash deploy/cloud-run.sh
 El script hace:
 1. `gcloud builds submit --tag IMAGE .` — build remoto en Cloud Build (más rápido que local).
 2. `gcloud run deploy ...` — despliega el servicio con los parámetros de producción.
+
+El contexto de Cloud Build está limitado por la allowlist de `.gcloudignore`.
+Antes de publicar, verifica que la lista no contenga credenciales, sesiones, `.env`,
+tokens, datos locales ni dependencias instaladas:
+
+```bash
+gcloud meta list-files-for-upload
+```
 
 Al terminar imprime la URL del servicio y el endpoint `/health`.
 
@@ -169,9 +177,12 @@ gcloud run deploy eikon \
   --timeout 600s \
   --concurrency 4 \
   --min-instances 1 \
-  --set-env-vars "EIKON_ENV=production,GCS_BUCKET=eikon-assets-mi-proyecto" \
-  --set-secrets "EIKON_WEBAPP_SECRET=eikon-webapp-secret:latest,DATABASE_URL=eikon-database-url:latest"
+  --update-env-vars "EIKON_ENV=production,GCS_BUCKET=eikon-assets-mi-proyecto,EIKON_WEBAPP_COOKIE_SECURE=1,EIKON_WEBAPP_JWT_TTL=2592000" \
+  --update-secrets "EIKON_WEBAPP_SECRET=eikon-jwt-secret:latest,DATABASE_URL=eikon-database-url:latest"
 ```
+
+Se usan `--update-env-vars` y `--update-secrets` deliberadamente: las variantes
+`--set-*` eliminan primero la configuración existente del servicio.
 
 ---
 
@@ -215,7 +226,7 @@ curl http://localhost:8080/health
 ## Notas de seguridad
 
 - **Nunca** pases `EIKON_WEBAPP_SECRET` o `DATABASE_URL` como env vars directas en producción.
-  Usa siempre Secret Manager (`--set-secrets`).
+  Usa siempre Secret Manager (`--update-secrets`).
 - La cookie JWT usa `httpOnly=True` y `samesite=lax`. En producción, Cloud Run sirve HTTPS
   automáticamente, pero asegurate de setear `EIKON_WEBAPP_COOKIE_SECURE=1` si el servicio
   es accedido exclusivamente por HTTPS.
@@ -259,7 +270,7 @@ entorno GCP del owner:
 - [ ] **Bucket GCS** creado (`GCS_BUCKET`) + rol `roles/storage.objectAdmin` para
       la service account de Cloud Run.
 - [ ] **Secreto JWT** (`EIKON_WEBAPP_SECRET`, >= 32 chars) en Secret Manager
-      (`eikon-webapp-secret`).
+      (`eikon-jwt-secret`).
 - [ ] Confirmar `EIKON_ENV=production` y, si todo es HTTPS, `EIKON_WEBAPP_COOKIE_SECURE=1`.
 
 Con esos valores: `bash deploy/cloud-run.sh` (build remoto en Cloud Build + deploy).

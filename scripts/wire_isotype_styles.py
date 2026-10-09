@@ -10,6 +10,7 @@
 
 Corré: ./.venv/bin/python scripts/wire_isotype_styles.py
 """
+
 from __future__ import annotations
 
 import json
@@ -38,7 +39,9 @@ BUILTIN = [
 
 def main() -> None:
     cov = catalog_coverage()
-    print(f"catálogo={cov['catalog_total']} implementados={cov['implemented']} faltan={len(cov['missing'])}")
+    print(
+        f"catálogo={cov['catalog_total']} implementados={cov['implemented']} faltan={len(cov['missing'])}"
+    )
     if cov["missing"]:
         print("  faltan:", ", ".join(cov["missing"][:30]))
 

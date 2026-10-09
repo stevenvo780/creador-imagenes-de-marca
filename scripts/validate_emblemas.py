@@ -45,13 +45,13 @@ def validate_pack() -> bool:
             svg3 = fn(PARAMS_ALT)
 
             checks = {
-                "svg_valid":     svg1.startswith("<svg") and svg1.endswith("</svg>"),
-                "non_empty":     len(svg1) > 80,
+                "svg_valid": svg1.startswith("<svg") and svg1.endswith("</svg>"),
+                "non_empty": len(svg1) > 80,
                 "deterministic": svg1 == svg2,
-                "seed_varies":   svg1 != svg3,
+                "seed_varies": svg1 != svg3,
                 "primary_color": PARAMS_BASE.primary_color in svg1,
-                "accent_color":  PARAMS_BASE.accent_color in svg1,
-                "viewbox":       'viewBox="0 0 100 100"' in svg1,
+                "accent_color": PARAMS_BASE.accent_color in svg1,
+                "viewbox": 'viewBox="0 0 100 100"' in svg1,
             }
             if all(checks.values()):
                 valid += 1
@@ -64,7 +64,7 @@ def validate_pack() -> bool:
             print(f"ERROR: {exc}")
             errors.append(f"{eid}: {type(exc).__name__}: {exc}")
 
-    print(f"\n{'='*50}")
+    print(f"\n{'=' * 50}")
     print(f"RESULTADO: {valid}/{len(PACK)} generadores válidos")
     if errors:
         print("ERRORES:")

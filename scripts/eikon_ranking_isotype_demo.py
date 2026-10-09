@@ -73,12 +73,14 @@ async def render_and_rank() -> dict:
                     dry_run=False,
                 )
                 if result["status"] != "generated":
-                    print(
-                        f"  ✗ combo_{combo.idx:03d} status={result['status']}"
-                    )
+                    print(f"  ✗ combo_{combo.idx:03d} status={result['status']}")
                     continue
                 png_path = (
-                    cfg.OUTPUT_DIR / MARCA_SLUG / "logos" / ASSET_TYPE / f"combo_{combo.idx:03d}.png"
+                    cfg.OUTPUT_DIR
+                    / MARCA_SLUG
+                    / "logos"
+                    / ASSET_TYPE
+                    / f"combo_{combo.idx:03d}.png"
                 )
                 if not png_path.exists():
                     print(f"  ✗ combo_{combo.idx:03d}.png not found after render")
@@ -86,6 +88,7 @@ async def render_and_rank() -> dict:
 
                 # Copy to demo dir
                 import shutil
+
                 demo_path = output_dir / f"combo_{combo.idx:03d}.png"
                 shutil.copy(png_path, demo_path)
 
@@ -115,9 +118,7 @@ async def render_and_rank() -> dict:
             f"palette_scheme='{palette:6s}' final_score={score.final_score:.3f}"
         )
         for sig in score.signals:
-            print(
-                f"      - {sig.name:20s} w={sig.weight:.2f} val={sig.value:.2f} | {sig.reason}"
-            )
+            print(f"      - {sig.name:20s} w={sig.weight:.2f} val={sig.value:.2f} | {sig.reason}")
 
     # Validate: 'none' should appear LAST (indices >= real ones)
     none_indices = [i for i, s in enumerate(ranked) if s.params.get("isotype_style") == "none"]
@@ -131,9 +132,8 @@ async def render_and_rank() -> dict:
         "validation": {
             "none_ranks": none_indices,
             "real_ranks": real_indices,
-            "pass": (not none_indices) or (
-                max(none_indices) > max(real_indices) if real_indices else True
-            ),
+            "pass": (not none_indices)
+            or (max(none_indices) > max(real_indices) if real_indices else True),
         },
     }
 

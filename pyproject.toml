@@ -19,6 +19,7 @@ dependencies = [
 dev = [
   "pytest>=7.4",
   "pytest-cov>=4.1",
+  "httpx2>=2.7",
 ]
 webapp = [
   "fastapi>=0.110",
@@ -59,6 +60,17 @@ quote-style = "double"
 
 [tool.mypy]
 python_version = "3.12"
+files = [
+  "eikon_core",
+  "webapp",
+  "mcp_server",
+  "eikon.py",
+  "variations.py",
+  "contrast_validator.py",
+  "gallery.py",
+]
+explicit_package_bases = true
+exclude = "(?x)(^tests/|^webapp/tests/|^e2e/|^scripts/|^\\.venv/|^venv/)"
 check_untyped_defs = true
 warn_redundant_casts = true
 warn_unused_ignores = true

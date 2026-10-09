@@ -433,7 +433,6 @@ def _generate_lemniscate(params: IsotypeParams) -> str:
     return _wrap(params, parts)
 
 
-
 _GENERATORS = {
     "lettermark": _generate_lettermark,
     "geometric": _generate_geometric,

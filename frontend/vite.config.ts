@@ -8,6 +8,10 @@ export default defineConfig({
   build: {
     outDir: "dist",
     emptyOutDir: true,
+    // modern-screenshot is intentionally lazy-loaded only while exporting an
+    // asset. Keep the initial application split, while failing the build if
+    // this isolated renderer grows materially beyond its current ~589 kB.
+    chunkSizeWarningLimit: 650,
   },
   server: {
     port: 5173,

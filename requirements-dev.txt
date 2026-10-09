@@ -1,5 +1,6 @@
 pytest>=7.4
 pytest-cov>=4.1
+httpx2>=2.7
 ruff>=0.15
 mypy>=1.0
 pre-commit>=3.0

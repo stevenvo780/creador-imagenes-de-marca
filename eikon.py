@@ -101,14 +101,14 @@ __all__ = [
 # This replaces the previous metaclass implementation for cleaner architecture.
 
 
-def __getattr__(name: str):  # type: ignore[no-untyped-def]
+def __getattr__(name: str) -> object:
     """Module-level attribute access for OUTPUT_DIR."""
     if name == "OUTPUT_DIR":
         return _constants.OUTPUT_DIR
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
-def __dir__():  # type: ignore[no-untyped-def]
+def __dir__() -> list[str]:
     """Include OUTPUT_DIR in module directory."""
     import types
 
