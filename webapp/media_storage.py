@@ -117,12 +117,102 @@ def _delete_objects(storage: StorageBackend, tenant_id: int, keys: list[str]) ->
 
 
 def _record_cleanup(db_url: str | Path | None, row: dict[str, Any], keys: list[str]) -> None:
+    """Journal durable por intento, aunque otro token ya sea el ganador."""
     with db.connect(db_url) as con:
+        _begin(con)
+        suffix = " FOR UPDATE" if con.dialect == "postgres" else ""
+        current = con.execute(
+            "SELECT * FROM media_assets WHERE tenant_id = ? AND id = ?" + suffix,
+            (row["tenant_id"], row["id"]),
+        ).fetchone()
+        if current is None:
+            return
+        protected = (
+            {current["original_key"], current["thumbnail_key"]}
+            if current["status"] in PUBLIC_MEDIA_STATUSES
+            else set()
+        )
+        pending = [key for key in dict.fromkeys(keys) if key and key not in protected]
+        # Sólo reemplaza el journal propio; nunca el de otro intento.
+        con.execute(
+            "DELETE FROM media_cleanup_attempts WHERE tenant_id = ? AND media_id = ? "
+            "AND attempt_token = ?",
+            (row["tenant_id"], row["id"], row["attempt_token"]),
+        )
+        if pending:
+            con.execute(
+                "INSERT INTO media_cleanup_attempts(tenant_id, media_id, attempt_token, keys_json, cleanup_token) "
+                "VALUES (?, ?, ?, ?, ?)",
+                (
+                    row["tenant_id"],
+                    row["id"],
+                    row["attempt_token"],
+                    json.dumps(pending),
+                    uuid.uuid4().hex,
+                ),
+            )
+        # Metadata de compatibilidad del intento activo; no es el journal autoritativo.
         con.execute(
             "UPDATE media_assets SET cleanup_keys_json = ? WHERE tenant_id = ? AND id = ? "
             "AND attempt_token = ?",
-            (json.dumps(keys), row["tenant_id"], row["id"], row["attempt_token"]),
+            (json.dumps(pending), row["tenant_id"], row["id"], row["attempt_token"]),
         )
+
+
+def _drain_cleanup(db_url: str | Path | None, storage: StorageBackend, row: dict[str, Any]) -> None:
+    """Replays listos también recuperan intentos viejos, sin borrar keys activas."""
+    with db.connect(db_url) as con:
+        _begin(con)
+        suffix = " FOR UPDATE" if con.dialect == "postgres" else ""
+        current = con.execute(
+            "SELECT * FROM media_assets WHERE tenant_id = ? AND id = ?" + suffix,
+            (row["tenant_id"], row["id"]),
+        ).fetchone()
+        if current is None:
+            return
+        protected = {current["original_key"], current["thumbnail_key"]}
+        journals = con.execute(
+            "SELECT * FROM media_cleanup_attempts WHERE tenant_id = ? AND media_id = ?",
+            (row["tenant_id"], row["id"]),
+        ).fetchall()
+    # Storage fuera de locks; nonce evita borrar un journal que se volvió a registrar.
+    for journal in journals:
+        keys = json.loads(journal["keys_json"])
+        pending = [key for key in keys if key in protected]
+        pending.extend(
+            _delete_objects(
+                storage, row["tenant_id"], [key for key in keys if key not in protected]
+            )
+        )
+        with db.connect(db_url) as con:
+            _begin(con)
+            # Mismo orden que recorder/reserva: media antes del journal en PG.
+            con.execute(
+                "SELECT id FROM media_assets WHERE tenant_id = ? AND id = ?" + suffix,
+                (row["tenant_id"], row["id"]),
+            )
+            sql = (
+                "UPDATE media_cleanup_attempts SET keys_json = ? WHERE tenant_id = ? AND media_id = ? "
+                "AND attempt_token = ? AND cleanup_token = ?"
+                if pending
+                else "DELETE FROM media_cleanup_attempts WHERE tenant_id = ? AND media_id = ? "
+                "AND attempt_token = ? AND cleanup_token = ?"
+            )
+            params: list[Any] = [
+                row["tenant_id"],
+                row["id"],
+                journal["attempt_token"],
+                journal["cleanup_token"],
+            ]
+            if pending:
+                params.insert(0, json.dumps(pending))
+            changed = con.execute(sql, params).rowcount
+            if changed:
+                con.execute(
+                    "UPDATE media_assets SET cleanup_keys_json = ? WHERE tenant_id = ? AND id = ? "
+                    "AND attempt_token = ?",
+                    (json.dumps(pending), row["tenant_id"], row["id"], journal["attempt_token"]),
+                )
 
 
 def _reserve(
@@ -186,6 +276,11 @@ def _reserve(
                 row["original_key"],
                 row["thumbnail_key"],
             ]
+            for journal in con.execute(
+                "SELECT keys_json FROM media_cleanup_attempts WHERE tenant_id = ? AND media_id = ?",
+                (tenant_id, row["id"]),
+            ).fetchall():
+                old_keys.extend(json.loads(journal["keys_json"]))
             con.execute(
                 "UPDATE media_assets SET status = 'ingesting', attempt_token = ?, updated_at = ?, "
                 "failure_code = NULL WHERE tenant_id = ? AND id = ?",
@@ -329,6 +424,7 @@ def import_media(
         _recover_rejected_reservation(db_url, storage, tenant_id, idempotency_key, request_hash)
         raise
     if replayed:
+        _drain_cleanup(db_url, storage, row)
         return {**_public(row), "_replayed": True}
     try:
         failed = _delete_objects(storage, tenant_id, old_keys)
@@ -338,7 +434,9 @@ def import_media(
             raise MediaStorageError("Limpieza pendiente; reintente la misma solicitud")
         storage.save(tenant_id, row["original_key"], content)
         storage.save(tenant_id, row["thumbnail_key"], metadata["thumbnail_bytes"])
-        return {**_finalize(db_url, row), "_replayed": False}
+        ready = _finalize(db_url, row)
+        _drain_cleanup(db_url, storage, row)
+        return {**ready, "_replayed": False}
     except Exception as error:
         committed = _compensate(db_url, storage, row)
         if committed is not None:

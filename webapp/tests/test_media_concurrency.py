@@ -292,3 +292,181 @@ def test_failed_cleanup_is_retained_and_recovered(media_clients, job, monkeypatc
     result = media_storage.import_media(*args)
     assert result["status"] == "pending_review"
     assert len(media_clients.storage.list_files(args[2], "media")) == 2
+
+
+def test_late_replaced_attempt_cleanup_survives_and_ready_replay_drains(
+    media_clients, job, monkeypatch
+):
+    """A escribe después de B listo; deleteA falla sin perder evidencia durable."""
+    import json
+
+    args = _args(media_clients, job, "late-cleanup")
+    blocked = threading.Barrier(2)
+    release = threading.Event()
+    save, delete = media_clients.storage.save, media_clients.storage.delete
+    old_key = None
+    failed_once = False
+
+    def delayed_save(tenant, key, content):
+        nonlocal old_key
+        if old_key is None and key.endswith("/original"):
+            old_key = key
+            blocked.wait(timeout=10)
+            assert release.wait(timeout=10)
+        return save(tenant, key, content)
+
+    def temporary_delete_failure(tenant, key):
+        nonlocal failed_once
+        if key == old_key and release.is_set() and not failed_once:
+            failed_once = True
+            raise OSError("fallo temporal sintético de deleteA")
+        return delete(tenant, key)
+
+    monkeypatch.setattr(media_clients.storage, "save", delayed_save)
+    monkeypatch.setattr(media_clients.storage, "delete", temporary_delete_failure)
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        old = pool.submit(media_storage.import_media, *args)
+        try:
+            blocked.wait(timeout=10)
+            with db.connect(args[0]) as con:
+                con.execute(
+                    "UPDATE media_assets SET updated_at = 0 WHERE tenant_id = ? AND idempotency_key = ?",
+                    (args[2], args[4]),
+                )
+            winner = media_storage.import_media(*args)
+            assert winner["status"] == "pending_review"
+            with db.connect(args[0]) as con:
+                current = con.execute(
+                    "SELECT * FROM media_assets WHERE tenant_id = ? AND id = ?",
+                    (args[2], winner["id"]),
+                ).fetchone()
+            winner_original = media_clients.storage.open(args[2], current["original_key"])
+            winner_thumbnail = media_clients.storage.open(args[2], current["thumbnail_key"])
+            assert winner_original == args[5]
+        finally:
+            release.set()
+        with pytest.raises(media_storage.MediaConflict, match="reservation_lost"):
+            old.result(timeout=10)
+    assert failed_once
+    assert media_clients.storage.open(args[2], old_key) == args[5]
+    # El journal de A debe existir aun cuando la fila activa ahora es de B.
+    with db.connect(args[0]) as con:
+        pending = con.execute(
+            "SELECT keys_json FROM media_cleanup_attempts WHERE tenant_id = ? AND media_id = ?",
+            (args[2], winner["id"]),
+        ).fetchall()
+    assert any(old_key in json.loads(row["keys_json"]) for row in pending)
+    replay = media_storage.import_media(*args)
+    assert replay["_replayed"] and replay["id"] == winner["id"]
+    with pytest.raises(FileNotFoundError):
+        media_clients.storage.open(args[2], old_key)
+    assert media_clients.storage.open(args[2], current["original_key"]) == winner_original
+    assert media_clients.storage.open(args[2], current["thumbnail_key"]) == winner_thumbnail
+    assert media_clients.storage.list_files(args[2], "media") == sorted(
+        [current["original_key"], current["thumbnail_key"]]
+    )
+    with db.connect(args[0]) as con:
+        assert (
+            con.execute(
+                "SELECT * FROM media_cleanup_attempts WHERE tenant_id = ? AND media_id = ?",
+                (args[2], winner["id"]),
+            ).fetchall()
+            == []
+        )
+
+
+def test_cleanup_nonce_preserves_requeued_object_during_drain(media_clients, job, monkeypatch):
+    """Un delete viejo no puede confirmar el journal nuevo del mismo intento."""
+    import json
+
+    args = _args(media_clients, job, "cleanup-nonce")
+    ready = media_storage.import_media(*args)
+    with db.connect(args[0]) as con:
+        current = con.execute(
+            "SELECT * FROM media_assets WHERE tenant_id = ? AND id = ?", (args[2], ready["id"])
+        ).fetchone()
+    original = media_clients.storage.open(args[2], current["original_key"])
+    thumbnail = media_clients.storage.open(args[2], current["thumbnail_key"])
+    old_key = f"media/{ready['id']}/old-attempt/original"
+    old = dict(current, attempt_token="old-attempt", original_key=old_key)
+    media_clients.storage.save(args[2], old_key, b"old synthetic bytes")
+    # El recorder excluye siempre las dos keys del ganador público.
+    media_storage._record_cleanup(
+        args[0], old, [old_key, current["original_key"], current["thumbnail_key"]]
+    )
+    delete = media_clients.storage.delete
+    requeued = False
+
+    def late_requeue(tenant, key):
+        nonlocal requeued
+        result = delete(tenant, key)
+        if key == old_key and not requeued:
+            requeued = True
+            media_clients.storage.save(tenant, key, b"late synthetic bytes")
+            media_storage._record_cleanup(args[0], old, [old_key])
+        return result
+
+    with monkeypatch.context() as patch:
+        patch.setattr(media_clients.storage, "delete", late_requeue)
+        assert media_storage.import_media(*args)["_replayed"]
+    with db.connect(args[0]) as con:
+        journals = con.execute(
+            "SELECT keys_json FROM media_cleanup_attempts WHERE tenant_id = ? AND media_id = ?",
+            (args[2], ready["id"]),
+        ).fetchall()
+    assert [json.loads(row["keys_json"]) for row in journals] == [[old_key]]
+    assert media_clients.storage.open(args[2], old_key) == b"late synthetic bytes"
+    assert media_storage.import_media(*args)["_replayed"]
+    with pytest.raises(FileNotFoundError):
+        media_clients.storage.open(args[2], old_key)
+    assert media_clients.storage.open(args[2], current["original_key"]) == original
+    assert media_clients.storage.open(args[2], current["thumbnail_key"]) == thumbnail
+    with db.connect(args[0]) as con:
+        assert (
+            con.execute(
+                "SELECT * FROM media_cleanup_attempts WHERE tenant_id = ? AND media_id = ?",
+                (args[2], ready["id"]),
+            ).fetchall()
+            == []
+        )
+
+
+def test_cleanup_migration_upgrades_media_v1_without_changing_originals(media_clients, job):
+    from webapp.migrations import migrate_media
+
+    args = _args(media_clients, job, "upgrade")
+    ready = media_storage.import_media(*args)
+    with db.connect(args[0]) as con:
+        before = con.execute(
+            "SELECT * FROM media_assets WHERE tenant_id = ? AND id = ?", (args[2], ready["id"])
+        ).fetchone()
+        # Estado sintético exacto previo al fix: media_v1 y tabla original existen.
+        con.execute("DROP TABLE media_cleanup_attempts")
+        con.execute(
+            "DELETE FROM schema_migrations WHERE version = ?", ("media_cleanup_attempts_v1",)
+        )
+        assert con.execute(
+            "SELECT version FROM schema_migrations WHERE version = ?", ("media_v1",)
+        ).fetchone()
+    original = media_clients.storage.open(args[2], before["original_key"])
+    thumbnail = media_clients.storage.open(args[2], before["thumbnail_key"])
+    for _ in range(2):
+        migrate_media(args[0])
+        with db.connect(args[0]) as con:
+            assert (
+                con.execute(
+                    "SELECT * FROM media_assets WHERE tenant_id = ? AND id = ?",
+                    (args[2], ready["id"]),
+                ).fetchone()
+                == before
+            )
+            assert con.execute("SELECT * FROM media_cleanup_attempts").fetchall() == []
+            assert (
+                con.execute(
+                    "SELECT COUNT(*) AS n FROM schema_migrations WHERE version = ?",
+                    ("media_cleanup_attempts_v1",),
+                ).fetchone()["n"]
+                == 1
+            )
+        assert media_clients.storage.open(args[2], before["original_key"]) == original
+        assert media_clients.storage.open(args[2], before["thumbnail_key"]) == thumbnail

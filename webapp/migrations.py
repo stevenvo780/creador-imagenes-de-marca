@@ -223,6 +223,14 @@ CREATE TABLE IF NOT EXISTS media_assets (
  UNIQUE(tenant_id, idempotency_key)
 );
 CREATE INDEX IF NOT EXISTS idx_media_tenant_id ON media_assets(tenant_id, id);
+CREATE TABLE IF NOT EXISTS media_cleanup_attempts (
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ media_id INTEGER NOT NULL REFERENCES media_assets(id) ON DELETE CASCADE,
+ attempt_token TEXT NOT NULL,
+ keys_json TEXT NOT NULL,
+ cleanup_token TEXT NOT NULL,
+ PRIMARY KEY(tenant_id, media_id, attempt_token)
+);
 """
         if con.dialect == "postgres":
             schema = db._schema_for_postgres(schema)
@@ -231,5 +239,11 @@ CREATE INDEX IF NOT EXISTS idx_media_tenant_id ON media_assets(tenant_id, id);
                 con.execute(statement)
         con.execute(
             "INSERT INTO schema_migrations(version, applied_at) VALUES (?, ?) "
-            "ON CONFLICT(version) DO NOTHING", ("media_v1", int(time.time())),
+            "ON CONFLICT(version) DO NOTHING",
+            ("media_v1", int(time.time())),
+        )
+        con.execute(
+            "INSERT INTO schema_migrations(version, applied_at) VALUES (?, ?) "
+            "ON CONFLICT(version) DO NOTHING",
+            ("media_cleanup_attempts_v1", int(time.time())),
         )
