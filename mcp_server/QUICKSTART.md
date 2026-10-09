@@ -1,152 +1,55 @@
-# Eikón MCP Server — Quick Start
+# Eikón MCP — Inicio rápido
 
-## 1. First-time setup (5 min)
+Cada empresa conecta su propio cliente Codex y una clave Eikón con scopes
+explícitos. Su cliente genera la imagen; MCP entrega bytes a la galería privada.
+
+1. Desde el checkout, instale el entorno MCP:
+
+   ```bash
+   python3 -m venv .venv
+   .venv/bin/python -m pip install -r mcp_server/requirements.txt
+   ```
+
+2. El owner crea una clave mediante la administración de Eikón, con
+   `projects:read`, `projects:write`, `brands:read`, `briefs:write`,
+   `media:read` y `media:write` según las operaciones necesarias. Conserve la
+   clave en el entorno privado del proceso; no la pegue en prompts ni Git.
+
+3. En su host MCP configure el Python de `.venv`, el script absoluto
+   `mcp_server/server.py`, `EIKON_BASE_URL` (origen HTTPS) y `EIKON_API_KEY`.
+   Para desarrollo se admite HTTP sólo en localhost. No copie sesiones ni
+   cambie de cuenta por un fallo de autorización.
+
+4. Desde el cliente, compruebe el listado de tools y llame
+   `eikon_list_projects`. Una importación Python no verifica esta conexión.
+
+5. Obtenga `eikon_get_brand_brief(brand_id)`, conserve el logo oficial,
+   cree `eikon_create_generation_brief(brand_id, prompt, width, height)` y
+   genere la imagen con la herramienta propia del cliente.
+
+6. Llame `eikon_import_image(brief_id, file_path, idempotency_key, provenance)`.
+   `file_path` debe existir en el equipo del proceso MCP. Sólo se transmiten
+   los bytes PNG/JPEG, máximo 20 MiB y 40 millones de píxeles, 256–8192 por eje,
+   con las dimensiones exigidas por el encargo.
+
+7. Consulte `eikon_list_media(project_id?, brand_id?, status?)`. El nuevo medio
+   está `pending_review`. El owner revisa logo, texto e identidad en Eikón;
+   ninguna API key aprueba piezas ni administra claves. Descargas requieren
+   autenticación y no constituyen enlaces públicos permanentes.
+
+HTTP 401 exige comprobar la clave o su caducidad/revocación; 403 indica scopes
+insuficientes; 409 exige revisar encargo, identidad o idempotencia. No se siguen
+redirecciones de herramientas nuevas ni se imprime el cuerpo remoto del error.
+
+La prueba sintética de desarrollo usa stdio real contra un backend aislado:
 
 ```bash
-cd /workspace/Pinakotheke/eikon/mcp_server
-
-# Create Python virtual environment
-python3 -m venv venv
-source venv/bin/activate  # or: venv\Scripts\activate (Windows)
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Create .env file with your API key
-cp .env.example .env
-nano .env  # Edit with your EIKON_API_KEY
+.venv/bin/python -m pytest mcp_server/tests tests/test_mcp_generate_and_get.py
 ```
 
-## 2. Test the server locally
+La prueba SDK verifica transporte y API. La conexión nativa de Codex y la
+herramienta integrada de imágenes deben verificarse por separado en el cliente.
+MCP no pide una clave de imágenes ni ejecuta remotamente `image_gen`.
 
-```bash
-# Activate venv
-source venv/bin/activate
-
-# Run smoke test
-python3 << 'EOF'
-from server import eikon_list_brands
-import asyncio
-result = asyncio.run(eikon_list_brands())
-print(result)
-EOF
-```
-
-Expected output (if backend is running):
-```json
-{
-  "success": true,
-  "brands": [...],
-  "count": N
-}
-```
-
-Or (if backend is not available):
-```json
-{
-  "success": false,
-  "error": "Failed to list brands: ..."
-}
-```
-
-## 3. Configure in Claude Desktop
-
-Edit `~/.config/Claude/claude_desktop_config.json` (Linux) or equivalent:
-
-```json
-{
-  "mcpServers": {
-    "eikon": {
-      "command": "python3",
-      "args": ["/workspace/Pinakotheke/eikon/mcp_server/server.py"],
-      "env": {
-        "EIKON_BASE_URL": "https://eikon-633619052458.us-central1.run.app",
-        "EIKON_API_KEY": "your-key-here"
-      }
-    }
-  }
-}
-```
-
-Then restart Claude Desktop.
-
-## 4. Try in Claude
-
-Once configured, you should see `eikon` tools available. Example prompt:
-
-```
-I want to create a brand called "TechCorp" and generate business cards for it.
-
-Steps:
-1. Create the brand
-2. Show me available logo styles
-3. Set one as the identity
-4. Generate a business card asset
-```
-
-Claude will use the eikon tools to accomplish this.
-
-## 5. Verify tools are available
-
-In Claude Desktop or Claude Code, you should see these tools listed:
-- `eikon_list_brands`
-- `eikon_create_brand`
-- `eikon_logo_options`
-- `eikon_set_identity`
-- `eikon_list_asset_types`
-- `eikon_generate_asset`
-- `eikon_gallery`
-
-## Troubleshooting
-
-### "Command not found: python3"
-Use full path: `/usr/bin/python3` or set `PATH` correctly.
-
-### "ModuleNotFoundError: mcp"
-Ensure you activated the venv:
-```bash
-source /workspace/Pinakotheke/eikon/mcp_server/venv/bin/activate
-```
-
-### "Connection refused" when calling tools
-Backend may not be running. Check:
-```bash
-curl -H "Authorization: Bearer $EIKON_API_KEY" \
-  https://eikon-633619052458.us-central1.run.app/api/v1/brands
-```
-
-### Tools don't appear in Claude
-1. Restart Claude Desktop completely
-2. Check config file syntax (valid JSON)
-3. Verify venv path exists
-4. Check logs: `tail -f ~/.claude/logs` or similar
-
-## File Structure
-
-```
-mcp_server/
-├── server.py              # Main MCP server (FastMCP)
-├── requirements.txt       # Python dependencies
-├── .env.example           # Config template (COPY to .env)
-├── .env                   # Your config (git-ignored, never commit)
-├── README.md              # Full documentation
-├── QUICKSTART.md          # This file
-└── venv/                  # Python virtual environment (git-ignored)
-```
-
-## Next Steps
-
-1. **Create a brand**: Ask Claude to create a new brand with colors
-2. **Generate assets**: Request business cards, social headers, OG images
-3. **View gallery**: Ask Claude to list all generated assets for a brand
-4. **Set identity**: Lock in a logo style and seed for consistency
-
-## Security Reminder
-
-- ⚠️ Never commit `.env` file (contains API key)
-- ⚠️ Rotate keys regularly
-- ⚠️ MCP server is local-only (stdio transport, no network exposure)
-
----
-
-**Need help?** Check `README.md` for full documentation or the parent Eikón project.
+Consulte [README](README.md) para la tabla de tools, permisos, compatibilidad
+FastMCP/MCPServer y el fallback. Se conservan las ocho herramientas anteriores.

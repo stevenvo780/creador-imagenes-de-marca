@@ -19,7 +19,8 @@ dependencies = [
 dev = [
   "pytest>=7.4",
   "pytest-cov>=4.1",
-  "httpx2>=2.7",
+  "pytest-asyncio>=1.0,<2",
+  "httpx>=0.26",
 ]
 webapp = [
   "fastapi>=0.110",
@@ -100,7 +101,7 @@ fail_under = 46
 # ratchet target: 80
 
 [tool.pytest.ini_options]
-testpaths = ["tests", "webapp/tests"]
+testpaths = ["tests", "webapp/tests", "mcp_server/tests"]
 addopts = "-ra -q --strict-markers --strict-config"
 markers = [
   "slow: checks que pueden tardar o invocar suites completas",

@@ -22,26 +22,31 @@ Tools exposed:
 
 import asyncio
 import base64
+import importlib
 import json
 import os
 import time
-from typing import Any
-
-try:
-    from mcp.server.fastmcp import FastMCP
-
-    USE_FASTMCP = True
-except ImportError:
-    from mcp.server import Server
-    from mcp.types import (
-        TextContent,
-        Tool,
-    )
-
-    USE_FASTMCP = False
+from collections.abc import Awaitable, Callable
+from typing import Any, cast
 
 import httpx
 from dotenv import load_dotenv
+
+try:
+    # Import dinámico: las dos generaciones del SDK tienen módulos distintos.
+    FastMCP: Any = importlib.import_module("mcp.server").MCPServer
+except (ImportError, AttributeError):
+    try:
+        FastMCP = importlib.import_module("mcp.server.fastmcp").FastMCP
+    except (ImportError, AttributeError):
+        FastMCP = None
+
+USE_FASTMCP = FastMCP is not None and os.getenv("EIKON_MCP_LOWLEVEL") != "1"
+media_module = importlib.import_module(
+    f"{__package__}.media_tools" if __package__ else "media_tools"
+)
+MediaTools = media_module.MediaTools
+failure = media_module.failure
 
 # Configuration
 load_dotenv()
@@ -583,287 +588,253 @@ async def eikon_gallery(
             }
 
 
-# Initialize MCP Server
+async def eikon_list_projects() -> dict[str, Any]:
+    async with httpx.AsyncClient() as client:
+        return await MediaTools(EIKON_BASE_URL, EIKON_API_KEY, client).list_projects()
+
+
+async def eikon_create_project(name: str, slug: str, description: str = "") -> dict[str, Any]:
+    async with httpx.AsyncClient() as client:
+        return await MediaTools(EIKON_BASE_URL, EIKON_API_KEY, client).create_project(
+            name, slug, description
+        )
+
+
+async def eikon_get_brand_brief(brand_id: int) -> dict[str, Any]:
+    async with httpx.AsyncClient() as client:
+        return await MediaTools(EIKON_BASE_URL, EIKON_API_KEY, client).get_brand_brief(brand_id)
+
+
+async def eikon_create_generation_brief(
+    brand_id: int, prompt: str, width: int, height: int
+) -> dict[str, Any]:
+    async with httpx.AsyncClient() as client:
+        return await MediaTools(EIKON_BASE_URL, EIKON_API_KEY, client).create_generation_brief(
+            brand_id, prompt, width, height
+        )
+
+
+async def eikon_import_image(
+    brief_id: int, file_path: str, idempotency_key: str, provenance: dict[str, Any] | None = None
+) -> dict[str, Any]:
+    async with httpx.AsyncClient() as client:
+        return await MediaTools(EIKON_BASE_URL, EIKON_API_KEY, client).import_image(
+            brief_id, file_path, idempotency_key, provenance
+        )
+
+
+async def eikon_list_media(
+    project_id: int | None = None, brand_id: int | None = None, status: str | None = None
+) -> dict[str, Any]:
+    async with httpx.AsyncClient() as client:
+        return await MediaTools(EIKON_BASE_URL, EIKON_API_KEY, client).list_media(
+            project_id, brand_id, status
+        )
+
+
+async def eikon_list_brands_tool() -> str:
+    """List all brands in the Eikón system (id, name, has_fixed_identity)."""
+    result = await eikon_list_brands()
+    return json.dumps(result, indent=2)
+
+
+async def eikon_create_brand_tool(
+    name: str,
+    palette: str | None = None,
+    typography: str | None = None,
+    description: str | None = None,
+) -> str:
+    """Create a new brand. Palette and typography are JSON strings."""
+    palette_dict = json.loads(palette) if palette else None
+    typography_dict = json.loads(typography) if typography else None
+    result = await eikon_create_brand(
+        name=name,
+        palette=palette_dict,
+        typography=typography_dict,
+        description=description,
+    )
+    return json.dumps(result, indent=2)
+
+
+async def eikon_logo_options_tool(
+    brand_id: str,
+    count: int | None = None,
+) -> str:
+    """Get logo variation options for a brand."""
+    result = await eikon_logo_options(brand_id, count)
+    return json.dumps(result, indent=2)
+
+
+async def eikon_set_identity_tool(
+    brand_id: str,
+    logo_style: str,
+    logo_seed: int | None = None,
+) -> str:
+    """Set the fixed identity (logo style and seed) for a brand."""
+    result = await eikon_set_identity(brand_id, logo_style, logo_seed)
+    return json.dumps(result, indent=2)
+
+
+async def eikon_list_asset_types_tool() -> str:
+    """List all available asset types with dimensions (redes/web/anuncios/impresión)."""
+    result = await eikon_list_asset_types()
+    return json.dumps(result, indent=2)
+
+
+async def eikon_generate_asset_tool(
+    brand_id: str,
+    asset_type: str,
+    content: str | None = None,
+) -> str:
+    """Generate a brand asset via async batch API. Returns batch_id for polling. Content is optional JSON string."""
+    content_dict = json.loads(content) if content else None
+    result = await eikon_generate_asset(brand_id, asset_type, content_dict)
+    return json.dumps(result, indent=2)
+
+
+async def eikon_generate_and_get_tool(
+    brand_id: str,
+    asset_type: str,
+    content: str | None = None,
+) -> str:
+    """Generate a brand asset end-to-end (batch → poll → download → return URL + base64). One call does it all."""
+    content_dict = json.loads(content) if content else None
+    result = await eikon_generate_and_get(brand_id, asset_type, content_dict)
+    return json.dumps(result, indent=2)
+
+
+async def eikon_gallery_tool(brand_id: str | None = None) -> str:
+    """List all generated assets (gallery). Optionally filter by brand_id."""
+    result = await eikon_gallery(brand_id)
+    return json.dumps(result, indent=2)
+
+
+async def eikon_list_projects_tool() -> str:
+    """Lista proyectos privados con projects:read."""
+    return json.dumps(await eikon_list_projects())
+
+
+async def eikon_create_project_tool(name: str, slug: str, description: str = "") -> str:
+    """Crea un proyecto con projects:write."""
+    return json.dumps(await eikon_create_project(name, slug, description))
+
+
+async def eikon_get_brand_brief_tool(brand_id: int) -> str:
+    """Obtiene el kit de marca y referencias originales con brands:read."""
+    return json.dumps(await eikon_get_brand_brief(brand_id))
+
+
+async def eikon_create_generation_brief_tool(
+    brand_id: int, prompt: str, width: int, height: int
+) -> str:
+    """Crea un encargo inmutable con briefs:write; genera la imagen en el cliente."""
+    return json.dumps(await eikon_create_generation_brief(brand_id, prompt, width, height))
+
+
+async def eikon_import_image_tool(
+    brief_id: int, file_path: str, idempotency_key: str, provenance: dict[str, Any] | None = None
+) -> str:
+    """Lee un PNG/JPEG explícito en el equipo del cliente MCP y sube bytes con media:write. Requiere revisión humana."""
+    return json.dumps(await eikon_import_image(brief_id, file_path, idempotency_key, provenance))
+
+
+async def eikon_list_media_tool(
+    project_id: int | None = None, brand_id: int | None = None, status: str | None = None
+) -> str:
+    """Lista medios privados y estado efectivo con media:read; descarga autenticada."""
+    return json.dumps(await eikon_list_media(project_id, brand_id, status))
+
+
+# Un registro compartido evita divergencias entre alto nivel y fallback.
+_OLD_HANDLERS: list[Callable[..., Awaitable[str]]] = [
+    eikon_list_brands_tool,
+    eikon_create_brand_tool,
+    eikon_logo_options_tool,
+    eikon_set_identity_tool,
+    eikon_list_asset_types_tool,
+    eikon_generate_asset_tool,
+    eikon_generate_and_get_tool,
+    eikon_gallery_tool,
+]
+_NEW_HANDLERS: list[Callable[..., Awaitable[str]]] = [
+    eikon_list_projects_tool,
+    eikon_create_project_tool,
+    eikon_get_brand_brief_tool,
+    eikon_create_generation_brief_tool,
+    eikon_import_image_tool,
+    eikon_list_media_tool,
+]
+_HANDLERS = {
+    function.__name__.removesuffix("_tool"): function for function in _OLD_HANDLERS + _NEW_HANDLERS
+}
+# FastMCP anterior publicaba también estos nombres; preservar sus clientes.
+_HANDLERS.update({function.__name__: function for function in _OLD_HANDLERS})
+
+
 if USE_FASTMCP:
     mcp = FastMCP("Eikón")
-
-    @mcp.tool()
-    async def eikon_list_brands_tool() -> str:
-        """List all brands in the Eikón system (id, name, has_fixed_identity)."""
-        result = await eikon_list_brands()
-        return json.dumps(result, indent=2)
-
-    @mcp.tool()
-    async def eikon_create_brand_tool(
-        name: str,
-        palette: str | None = None,
-        typography: str | None = None,
-        description: str | None = None,
-    ) -> str:
-        """Create a new brand. Palette and typography are JSON strings."""
-        palette_dict = json.loads(palette) if palette else None
-        typography_dict = json.loads(typography) if typography else None
-        result = await eikon_create_brand(
-            name=name,
-            palette=palette_dict,
-            typography=typography_dict,
-            description=description,
-        )
-        return json.dumps(result, indent=2)
-
-    @mcp.tool()
-    async def eikon_logo_options_tool(
-        brand_id: str,
-        count: int | None = None,
-    ) -> str:
-        """Get logo variation options for a brand."""
-        result = await eikon_logo_options(brand_id, count)
-        return json.dumps(result, indent=2)
-
-    @mcp.tool()
-    async def eikon_set_identity_tool(
-        brand_id: str,
-        logo_style: str,
-        logo_seed: int | None = None,
-    ) -> str:
-        """Set the fixed identity (logo style and seed) for a brand."""
-        result = await eikon_set_identity(brand_id, logo_style, logo_seed)
-        return json.dumps(result, indent=2)
-
-    @mcp.tool()
-    async def eikon_list_asset_types_tool() -> str:
-        """List all available asset types with dimensions (redes/web/anuncios/impresión)."""
-        result = await eikon_list_asset_types()
-        return json.dumps(result, indent=2)
-
-    @mcp.tool()
-    async def eikon_generate_asset_tool(
-        brand_id: str,
-        asset_type: str,
-        content: str | None = None,
-    ) -> str:
-        """Generate a brand asset via async batch API. Returns batch_id for polling. Content is optional JSON string."""
-        content_dict = json.loads(content) if content else None
-        result = await eikon_generate_asset(brand_id, asset_type, content_dict)
-        return json.dumps(result, indent=2)
-
-    @mcp.tool()
-    async def eikon_generate_and_get_tool(
-        brand_id: str,
-        asset_type: str,
-        content: str | None = None,
-    ) -> str:
-        """Generate a brand asset end-to-end (batch → poll → download → return URL + base64). One call does it all."""
-        content_dict = json.loads(content) if content else None
-        result = await eikon_generate_and_get(brand_id, asset_type, content_dict)
-        return json.dumps(result, indent=2)
-
-    @mcp.tool()
-    async def eikon_gallery_tool(brand_id: str | None = None) -> str:
-        """List all generated assets (gallery). Optionally filter by brand_id."""
-        result = await eikon_gallery(brand_id)
-        return json.dumps(result, indent=2)
-
+    for tool_name, handler in _HANDLERS.items():
+        mcp.tool(name=tool_name)(handler)
 else:
-    # Fallback: use mcp.Server directly (if FastMCP not available)
-    server = Server("Eikón")
+    import inspect
 
-    @server.list_tools()
-    async def list_tools():
-        return [
-            Tool(
-                name="eikon_list_brands",
-                description="List all brands in the Eikón system (id, name, has_fixed_identity)",
-                inputSchema={
-                    "type": "object",
-                    "properties": {},
-                },
-            ),
-            Tool(
-                name="eikon_create_brand",
-                description="Create a new brand",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "name": {"type": "string", "description": "Brand name"},
-                        "palette": {"type": "string", "description": "Color palette (JSON string)"},
-                        "typography": {
-                            "type": "string",
-                            "description": "Typography config (JSON string)",
-                        },
-                        "description": {"type": "string", "description": "Brand description"},
-                    },
-                    "required": ["name"],
-                },
-            ),
-            Tool(
-                name="eikon_logo_options",
-                description="Get logo variation options for a brand",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "brand_id": {"type": "string", "description": "Brand identifier"},
-                        "count": {
-                            "type": "integer",
-                            "description": "Number of variations to return",
-                        },
-                    },
-                    "required": ["brand_id"],
-                },
-            ),
-            Tool(
-                name="eikon_set_identity",
-                description="Set the fixed identity (logo style and seed) for a brand",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "brand_id": {"type": "string", "description": "Brand identifier"},
-                        "logo_style": {"type": "string", "description": "Logo style ID"},
-                        "logo_seed": {"type": "integer", "description": "Logo generation seed"},
-                    },
-                    "required": ["brand_id", "logo_style"],
-                },
-            ),
-            Tool(
-                name="eikon_list_asset_types",
-                description="List all available asset types with dimensions (redes/web/anuncios/impresión)",
-                inputSchema={
-                    "type": "object",
-                    "properties": {},
-                },
-            ),
-            Tool(
-                name="eikon_generate_asset",
-                description="Generate a brand asset via async batch API. Returns batch_id for polling. Use eikon_generate_and_get for one-call convenience.",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "brand_id": {
-                            "type": "string",
-                            "description": "Brand identifier (int or string)",
-                        },
-                        "asset_type": {
-                            "type": "string",
-                            "description": "Asset type ID (e.g., lockup_horizontal, ig_post, business_card)",
-                        },
-                        "content": {
-                            "type": "string",
-                            "description": "Content as JSON string (titulo, subtitulo, copy, url, etc., optional)",
-                        },
-                    },
-                    "required": ["brand_id", "asset_type"],
-                },
-            ),
-            Tool(
-                name="eikon_generate_and_get",
-                description="Generate a brand asset end-to-end: batch → poll → download → return image URL + base64. One call completes the full cycle.",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "brand_id": {
-                            "type": "string",
-                            "description": "Brand identifier (int or string)",
-                        },
-                        "asset_type": {
-                            "type": "string",
-                            "description": "Asset type ID (e.g., lockup_horizontal, ig_post, business_card)",
-                        },
-                        "content": {
-                            "type": "string",
-                            "description": "Content as JSON string (titulo, subtitulo, copy, url, etc., optional)",
-                        },
-                    },
-                    "required": ["brand_id", "asset_type"],
-                },
-            ),
-            Tool(
-                name="eikon_gallery",
-                description="List all generated assets (gallery). Optionally filter by brand_id.",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "brand_id": {"type": "string", "description": "Brand ID (optional)"},
-                    },
-                },
-            ),
-        ]
+    from mcp.server import Server
+    from mcp.types import CallToolResult, ListToolsResult, TextContent, Tool
+    from pydantic import create_model
 
-    @server.call_tool()
-    async def call_tool(name: str, arguments: dict):
-        if name == "eikon_list_brands":
-            result = await eikon_list_brands()
-        elif name == "eikon_create_brand":
-            palette = (
-                json.loads(arguments.get("palette", "{}")) if arguments.get("palette") else None
+    async def list_tools() -> list[Any]:
+        result = []
+        for name, function in _HANDLERS.items():
+            fields: dict[str, Any] = {
+                param.name: (
+                    param.annotation,
+                    ... if param.default is inspect.Parameter.empty else param.default,
+                )
+                for param in inspect.signature(function).parameters.values()
+            }
+            schema = create_model(name + "Arguments", **fields).model_json_schema()
+            # SDK v2 usa snake_case; v1 conserva inputSchema.
+            schema_key = "input_schema" if "input_schema" in Tool.model_fields else "inputSchema"
+            result.append(
+                Tool(name=name, description=function.__doc__ or name, **{schema_key: schema})
             )
-            typography = (
-                json.loads(arguments.get("typography", "{}"))
-                if arguments.get("typography")
-                else None
-            )
-            result = await eikon_create_brand(
-                name=arguments["name"],
-                palette=palette,
-                typography=typography,
-                description=arguments.get("description"),
-            )
-        elif name == "eikon_logo_options":
-            result = await eikon_logo_options(
-                brand_id=arguments["brand_id"],
-                count=arguments.get("count"),
-            )
-        elif name == "eikon_set_identity":
-            result = await eikon_set_identity(
-                brand_id=arguments["brand_id"],
-                logo_style=arguments["logo_style"],
-                logo_seed=arguments.get("logo_seed"),
-            )
-        elif name == "eikon_list_asset_types":
-            result = await eikon_list_asset_types()
-        elif name == "eikon_generate_asset":
-            content = (
-                json.loads(arguments.get("content", "{}")) if arguments.get("content") else None
-            )
-            result = await eikon_generate_asset(
-                brand_id=arguments["brand_id"],
-                asset_type=arguments["asset_type"],
-                content=content,
-            )
-        elif name == "eikon_generate_and_get":
-            content = (
-                json.loads(arguments.get("content", "{}")) if arguments.get("content") else None
-            )
-            result = await eikon_generate_and_get(
-                brand_id=arguments["brand_id"],
-                asset_type=arguments["asset_type"],
-                content=content,
-            )
-        elif name == "eikon_gallery":
-            result = await eikon_gallery(
-                brand_id=arguments.get("brand_id"),
-            )
+        return result
+
+    async def call_tool(name: str, arguments: dict[str, Any]) -> list[Any]:
+        handler = _HANDLERS.get(name)
+        if handler is None:
+            result = json.dumps(failure("unknown_tool", "Herramienta desconocida."))
         else:
-            return TextContent(type="text", text=f"Unknown tool: {name}")
+            try:
+                result = await handler(**arguments)
+            except (ValueError, TypeError, KeyError):
+                result = json.dumps(failure("invalid_request", "Argumentos inválidos."))
+        return [TextContent(type="text", text=result)]
 
-        return TextContent(type="text", text=json.dumps(result, indent=2))
+    if hasattr(Server, "list_tools"):
+        server = Server("Eikón")
+        cast(Any, server).list_tools()(list_tools)
+        cast(Any, server).call_tool()(call_tool)
+    else:
+
+        async def _on_list_tools(context: Any, params: Any) -> Any:
+            return ListToolsResult(tools=await list_tools())
+
+        async def _on_call_tool(context: Any, params: Any) -> Any:
+            return CallToolResult(content=await call_tool(params.name, params.arguments or {}))
+
+        server = Server("Eikón", on_list_tools=_on_list_tools, on_call_tool=_on_call_tool)
 
 
 if __name__ == "__main__":
-    import asyncio
-
     if USE_FASTMCP:
-        # FastMCP runs via CLI
         mcp.run()
     else:
-        # Standard mcp.Server with stdio transport
-        import logging
 
-        logging.basicConfig(level=logging.INFO)
-
-        async def main():
+        async def main() -> None:
             from mcp.server.stdio import stdio_server
 
-            async with stdio_server(server) as streams:
-                await streams.wait_closed()
+            async with stdio_server() as (read_stream, write_stream):
+                await server.run(read_stream, write_stream, server.create_initialization_options())
 
         asyncio.run(main())
