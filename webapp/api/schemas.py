@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 # Claves válidas de paleta que el motor lee (en español).
 VALID_PALETTE_KEYS: frozenset[str] = frozenset({"bg", "primario", "acento", "acento_2", "texto"})
@@ -21,6 +21,42 @@ _EN_TO_ES_PALETTE: dict[str, str] = {
 
 # Límite de entero compatible con SQLite INTEGER (int64 con signo).
 _SQLITE_INT_MAX: int = 2**63 - 1
+
+
+class ProjectCreate(BaseModel):
+    """La empresa y el estado de archivo siempre proceden del servidor."""
+
+    model_config = ConfigDict(extra="forbid")
+    slug: str = Field(min_length=1, max_length=80)
+    name: str = Field(min_length=1, max_length=120)
+    description: str = Field(default="", max_length=4000)
+
+    @field_validator("slug")
+    @classmethod
+    def valid_slug(cls, value: str) -> str:
+        from webapp.services.eikon_runner import validate_slug
+
+        return validate_slug(value)
+
+    @field_validator("name")
+    @classmethod
+    def nonempty_name(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("nombre vacío")
+        return value
+
+
+class ProjectUpdate(ProjectCreate):
+    """PATCH exige al menos un campo editable, sin nulls explícitos."""
+
+    slug: str = Field(default="", min_length=1, max_length=80)
+    name: str = Field(default="", min_length=1, max_length=120)
+
+    @model_validator(mode="after")
+    def require_changes(self) -> ProjectUpdate:
+        if not self.model_fields_set:
+            raise ValueError("ningún campo actualizable recibido")
+        return self
 
 
 def _normalize_palette(palette: dict[str, Any]) -> dict[str, Any]:

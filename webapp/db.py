@@ -21,6 +21,7 @@ from __future__ import annotations
 import contextlib
 import os
 import sqlite3
+import time
 from collections.abc import Generator, Sequence
 from contextlib import contextmanager
 from pathlib import Path
@@ -354,8 +355,21 @@ CREATE INDEX IF NOT EXISTS idx_variations_batch ON variations(batch_id);
         path = config["path"]
         path.parent.mkdir(parents=True, exist_ok=True)
         con = sqlite3.connect(path)
-        con.executescript(SCHEMA)
-        con.close()
+        try:
+            deadline = time.monotonic() + 5
+            while True:
+                try:
+                    con.executescript(SCHEMA)
+                    break
+                except sqlite3.OperationalError as exc:
+                    # PRAGMA journal_mode puede devolver BUSY sin esperar el
+                    # timeout durante el primer startup simultáneo. El schema
+                    # es idempotente; otros errores se propagan sin reintento.
+                    if exc.sqlite_errorcode != sqlite3.SQLITE_BUSY or time.monotonic() >= deadline:
+                        raise
+                    time.sleep(0.05)
+        finally:
+            con.close()
     else:
         # Postgres: ejecutar statement por statement, ignorando PRAGMA
         import psycopg
@@ -364,6 +378,9 @@ CREATE INDEX IF NOT EXISTS idx_variations_batch ON variations(batch_id);
         # Nombre distinto al `con` de SQLite para no unificar tipos en mypy.
         pg_con = psycopg.connect(conninfo)
         with pg_con.cursor() as cur:
+            # CREATE IF NOT EXISTS no evita carreras del catálogo en startup.
+            # Comparte el bloqueo transaccional con la migración de proyectos.
+            cur.execute("SELECT pg_advisory_xact_lock(%s)", (2026100801,))
             # Traducir DDL a Postgres (AUTOINCREMENT→SERIAL) y filtrar PRAGMA
             # (SQLite-only). Ejecutar statement por statement.
             statements = _schema_for_postgres(SCHEMA).split(";")
@@ -379,6 +396,9 @@ CREATE INDEX IF NOT EXISTS idx_variations_batch ON variations(batch_id);
     migrate_add_logo_columns(db_url)
     migrate_add_logo_asset(db_url)
     migrate_add_api_keys_table(db_url)
+    from webapp.migrations import migrate_projects
+
+    migrate_projects(db_url)
 
 
 def migrate_add_logo_columns(db_url: str | None | Path) -> None:
