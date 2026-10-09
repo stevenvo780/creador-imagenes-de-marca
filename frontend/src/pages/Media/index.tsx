@@ -1,5 +1,4 @@
-import { usePrivateOperation } from "./usePrivateOperation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { brands, type Brand } from "../../api/client";
 import {
@@ -32,7 +31,12 @@ export function MediaGallery({ owner }: { owner: boolean }) {
     [refresh, setRefresh] = useState(0),
     [next, setNext] = useState<number | null>(null),
     [moreBusy, setMoreBusy] = useState(false);
-  const controller = usePrivateOperation();
+  const queryKey = JSON.stringify([filters, refresh, legacy]);
+  const queryKeyRef = useRef(queryKey);
+  queryKeyRef.current = queryKey;
+  const query = useRef<{ controller: AbortController; key: string } | null>(
+    null,
+  );
 
   useEffect(() => {
     let active = true;
@@ -62,42 +66,87 @@ export function MediaGallery({ owner }: { owner: boolean }) {
     };
   }, []);
   useEffect(() => {
-    if (legacy) return;
-    const c = new AbortController();
+    query.current?.controller.abort();
+    const current = { controller: new AbortController(), key: queryKey };
+    query.current = current;
+    setNext(null);
+    setMoreBusy(false);
+    setLoading(!legacy);
     setItems([]);
-    setLoading(true);
     setError("");
-    void listMedia(filters, c.signal)
-      .then((r) => {
-        setItems(r.items);
-        setNext(r.next_cursor);
-      })
-      .catch((e) => {
-        if (!isAbort(e)) setError(mediaError(e));
-      })
-      .finally(() => {
-        if (!c.signal.aborted) setLoading(false);
-      });
-    return () => c.abort();
+    if (!legacy)
+      void listMedia(filters, current.controller.signal)
+        .then((r) => {
+          if (
+            queryKeyRef.current !== current.key ||
+            query.current !== current ||
+            current.controller.signal.aborted
+          )
+            return;
+          setItems(r.items);
+          setNext(r.next_cursor);
+        })
+        .catch((e) => {
+          if (
+            queryKeyRef.current === current.key &&
+            query.current === current &&
+            !current.controller.signal.aborted &&
+            !isAbort(e)
+          )
+            setError(mediaError(e));
+        })
+        .finally(() => {
+          if (
+            queryKeyRef.current === current.key &&
+            query.current === current &&
+            !current.controller.signal.aborted
+          )
+            setLoading(false);
+        });
+    return () => current.controller.abort();
   }, [filters, refresh, legacy]);
   async function more() {
-    if (next === null) return;
+    const current = query.current;
+    if (
+      next === null ||
+      !current ||
+      queryKeyRef.current !== current.key ||
+      current.controller.signal.aborted ||
+      moreBusy
+    )
+      return;
     setMoreBusy(true);
     try {
       const r = await listMedia(
         { ...filters, cursor: next },
-        controller.current.signal,
+        current.controller.signal,
       );
-      if (!controller.current.signal.aborted) {
-        setItems((i) => [...i, ...r.items]);
-        setNext(r.next_cursor);
-      }
+      if (
+        queryKeyRef.current !== current.key ||
+        query.current !== current ||
+        current.controller.signal.aborted
+      )
+        return;
+      setItems((i) => [...i, ...r.items]);
+      setNext(r.next_cursor);
     } catch (e) {
-      if (!isAbort(e)) setError(mediaError(e));
+      if (
+        queryKeyRef.current === current.key &&
+        query.current === current &&
+        !current.controller.signal.aborted &&
+        !isAbort(e)
+      )
+        setError(mediaError(e));
     } finally {
-      if (!controller.current.signal.aborted) setMoreBusy(false);
+      if (
+        queryKeyRef.current === current.key &&
+        query.current === current &&
+        !current.controller.signal.aborted
+      )
+        setMoreBusy(false);
     }
   }
+
   return (
     <section className="media-page">
       <div
@@ -228,7 +277,7 @@ export function MediaGallery({ owner }: { owner: boolean }) {
               </Button>
             </div>
           )}
-          {loading ? (
+          {loading || query.current?.key !== queryKey ? (
             <p role="status">Cargando imágenes…</p>
           ) : !error && items.length === 0 ? (
             <div className="media-empty">
@@ -260,7 +309,7 @@ export function MediaGallery({ owner }: { owner: boolean }) {
               ))}
             </div>
           )}
-          {next !== null && !loading && (
+          {next !== null && !loading && query.current?.key === queryKey && (
             <Button
               variant="secondary"
               busy={moreBusy}

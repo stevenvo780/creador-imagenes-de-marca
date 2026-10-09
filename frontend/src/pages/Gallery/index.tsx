@@ -21,6 +21,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import {
+  beginSessionWork,
   brands as brandsApi,
   downloads,
   gallery,
@@ -31,6 +32,8 @@ import {
   type Variation,
 } from '../../api/client';
 import { Button, EmptyState, SkeletonCard } from '../../components';
+import { usePrivateOperation } from '../Media/usePrivateOperation';
+import { isAbort } from '../../api/media';
 import { VariationCard } from './VariationCard';
 import { Lightbox } from './Lightbox';
 
@@ -51,6 +54,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 // ── Componente principal ──────────────────────────────────────────────────────
 
 export function GalleryPage() {
+  const downloadController = usePrivateOperation();
   // ── Datos ─────────────────────────────────────────────────────────────────
   const [items, setItems] = useState<Variation[]>([]);
   const [brandList, setBrandList] = useState<Brand[]>([]);
@@ -175,7 +179,8 @@ export function GalleryPage() {
   // aquí sólo aplicamos el filtro de categoría adicional.
   const visibleItems = useMemo<Variation[]>(() => {
     if (filterCategory === '') return items;
-    if (filterCategory === 'otros') return items.filter((v) => v.category === null);
+    if (filterCategory === 'otros')
+      return items.filter((v) => v.category === null);
     return items.filter((v) => v.category === filterCategory);
   }, [items, filterCategory]);
 
@@ -197,7 +202,9 @@ export function GalleryPage() {
   // ── Variación del lightbox ─────────────────────────────────────────────────
   const lightboxVariation = useMemo<Variation | null>(
     () =>
-      lightboxId !== null ? (items.find((v) => v.id === lightboxId) ?? null) : null,
+      lightboxId !== null
+        ? (items.find((v) => v.id === lightboxId) ?? null)
+        : null,
     [lightboxId, items],
   );
 
@@ -244,21 +251,29 @@ export function GalleryPage() {
 
   const handleZip = useCallback(async () => {
     if (selected.size === 0) return;
+    const work = beginSessionWork(downloadController.current.signal);
+    let url = '';
     setZipping(true);
     try {
-      const blob = await downloads.zip([...selected]);
-      const url = URL.createObjectURL(blob);
+      const blob = await downloads.zip([...selected], work.signal);
+      work.check();
+      url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = 'eikon-variaciones.zip';
+      work.check();
       a.click();
-      URL.revokeObjectURL(url);
     } catch (err) {
-      alert(err instanceof ApiError ? err.detail : 'Error al generar el ZIP.');
+      if (!isAbort(err) && !work.signal.aborted)
+        alert(
+          err instanceof ApiError ? err.detail : 'Error al generar el ZIP.',
+        );
     } finally {
-      setZipping(false);
+      if (url) URL.revokeObjectURL(url);
+      work.finish();
+      if (!work.signal.aborted) setZipping(false);
     }
-  }, [selected]);
+  }, [selected, downloadController]);
 
   const handleDeleteBulk = useCallback((ids: number[]) => {
     if (ids.length === 0) return;
@@ -294,60 +309,65 @@ export function GalleryPage() {
     }
   }, [deleteConfirm.ids, filterBrand, filterBatch, sortBy]);
 
-  const handleDeleteSingle = useCallback(async (id: number) => {
-    setDeleting((prev) => new Set([...prev, id]));
-    try {
-      await variations.delete(id);
-      setSelected((prev) => {
-        const next = new Set(prev);
-        next.delete(id);
-        return next;
-      });
-      const res = await gallery.list({
-        brandId: filterBrand !== '' ? filterBrand : undefined,
-        batchId: filterBatch !== '' ? filterBatch : undefined,
-        order: sortBy,
-      });
-      setItems(res.items);
-    } catch (err) {
-      alert(err instanceof ApiError ? err.detail : 'Error al eliminar.');
-    } finally {
-      setDeleting((prev) => {
-        const next = new Set(prev);
-        next.delete(id);
-        return next;
-      });
-    }
-  }, [filterBrand, filterBatch, sortBy]);
-
-  const handleDownloadOne = useCallback(async (id: number) => {
-    setDownloading((prev) => new Set(prev).add(id));
-    try {
-      const res = await fetch(downloads.fileUrl(id), { credentials: 'include' });
-      if (!res.ok) {
-        const json = await res.json().catch(() => ({ detail: res.statusText }));
-        throw new ApiError(
-          res.status,
-          (json as { detail?: string })?.detail ?? 'Error al descargar.',
-        );
+  const handleDeleteSingle = useCallback(
+    async (id: number) => {
+      setDeleting((prev) => new Set([...prev, id]));
+      try {
+        await variations.delete(id);
+        setSelected((prev) => {
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
+        const res = await gallery.list({
+          brandId: filterBrand !== '' ? filterBrand : undefined,
+          batchId: filterBatch !== '' ? filterBatch : undefined,
+          order: sortBy,
+        });
+        setItems(res.items);
+      } catch (err) {
+        alert(err instanceof ApiError ? err.detail : 'Error al eliminar.');
+      } finally {
+        setDeleting((prev) => {
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
       }
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `variacion-${id}.png`;
-      a.click();
-      URL.revokeObjectURL(url);
-    } catch (err) {
-      alert(err instanceof ApiError ? err.detail : 'Error al descargar.');
-    } finally {
-      setDownloading((prev) => {
-        const next = new Set(prev);
-        next.delete(id);
-        return next;
-      });
-    }
-  }, []);
+    },
+    [filterBrand, filterBatch, sortBy],
+  );
+
+  const handleDownloadOne = useCallback(
+    async (id: number) => {
+      const work = beginSessionWork(downloadController.current.signal);
+      let url = '';
+      setDownloading((prev) => new Set(prev).add(id));
+      try {
+        const blob = await downloads.file(id, work.signal);
+        work.check();
+        url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `variacion-${id}.png`;
+        work.check();
+        a.click();
+      } catch (err) {
+        if (!isAbort(err) && !work.signal.aborted)
+          alert(err instanceof ApiError ? err.detail : 'Error al descargar.');
+      } finally {
+        if (url) URL.revokeObjectURL(url);
+        work.finish();
+        if (!work.signal.aborted)
+          setDownloading((prev) => {
+            const next = new Set(prev);
+            next.delete(id);
+            return next;
+          });
+      }
+    },
+    [downloadController],
+  );
 
   // ── Render: cargando ──────────────────────────────────────────────────────
 
@@ -431,7 +451,9 @@ export function GalleryPage() {
         >
           <div className="eikon-page-intro" style={{ marginBottom: 0 }}>
             <h1>Galería</h1>
-            <p>Revisá, descargá y limpiá las variaciones generadas por familia.</p>
+            <p>
+              Revisá, descargá y limpiá las variaciones generadas por familia.
+            </p>
           </div>
 
           {hasItems && (
@@ -478,7 +500,9 @@ export function GalleryPage() {
                 id="gallery-brand"
                 value={filterBrand}
                 onChange={(e) =>
-                  handleBrandChange(e.target.value === '' ? '' : Number(e.target.value))
+                  handleBrandChange(
+                    e.target.value === '' ? '' : Number(e.target.value),
+                  )
                 }
                 aria-label="Filtrar por marca"
                 style={selectStyle}
@@ -577,7 +601,9 @@ export function GalleryPage() {
         )}
 
         {/* ── Chips de filtros activos ── */}
-        {(filterBrand !== '' || filterBatch !== '' || filterCategory !== '') && (
+        {(filterBrand !== '' ||
+          filterBatch !== '' ||
+          filterCategory !== '') && (
           <div
             style={{
               display: 'flex',
@@ -657,7 +683,10 @@ export function GalleryPage() {
         {groupedVisibleItems.length > 0 && (
           <div style={{ display: 'grid', gap: 'var(--space-8)' }}>
             {groupedVisibleItems.map(([category, group]) => (
-              <section key={category} aria-labelledby={`gallery-group-${category}`}>
+              <section
+                key={category}
+                aria-labelledby={`gallery-group-${category}`}
+              >
                 <div
                   style={{
                     display: 'flex',
@@ -693,7 +722,8 @@ export function GalleryPage() {
                 <ul
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+                    gridTemplateColumns:
+                      'repeat(auto-fill, minmax(240px, 1fr))',
                     gap: 'var(--space-5)',
                     listStyle: 'none',
                     margin: 0,
@@ -706,7 +736,11 @@ export function GalleryPage() {
                       <VariationCard
                         variation={v}
                         brandName={brandMap.get(v.brand_id)}
-                        categoryLabel={v.category ? (CATEGORY_LABELS[v.category] ?? v.category) : CATEGORY_LABELS['otros']}
+                        categoryLabel={
+                          v.category
+                            ? (CATEGORY_LABELS[v.category] ?? v.category)
+                            : CATEGORY_LABELS['otros']
+                        }
                         isSelected={selected.has(v.id)}
                         onToggleSelect={() => toggleSelect(v.id)}
                         onOpenLightbox={() => setLightboxId(v.id)}
@@ -755,7 +789,9 @@ export function GalleryPage() {
             }}
           >
             {selected.size}{' '}
-            {selected.size === 1 ? 'variación seleccionada' : 'variaciones seleccionadas'}
+            {selected.size === 1
+              ? 'variación seleccionada'
+              : 'variaciones seleccionadas'}
           </span>
 
           <Button
@@ -851,8 +887,8 @@ export function GalleryPage() {
               }}
             >
               ¿Estás seguro de que querés borrar {deleteConfirm.ids.length}{' '}
-              {deleteConfirm.ids.length === 1 ? 'variación' : 'variaciones'}? No se puede
-              deshacer.
+              {deleteConfirm.ids.length === 1 ? 'variación' : 'variaciones'}? No
+              se puede deshacer.
             </p>
             <div
               style={{
@@ -890,16 +926,27 @@ export function GalleryPage() {
       <Lightbox
         variation={lightboxVariation}
         brandName={
-          lightboxVariation ? brandMap.get(lightboxVariation.brand_id) : undefined
+          lightboxVariation
+            ? brandMap.get(lightboxVariation.brand_id)
+            : undefined
         }
         categoryLabel={
           lightboxVariation?.category
-            ? (CATEGORY_LABELS[lightboxVariation.category] ?? lightboxVariation.category)
+            ? (CATEGORY_LABELS[lightboxVariation.category] ??
+              lightboxVariation.category)
             : undefined
         }
-        onClose={() => setLightboxId(null)}
+        onClose={() => {
+          downloadController.current.abort();
+          downloadController.current = new AbortController();
+          setDownloading(new Set());
+          setZipping(false);
+          setLightboxId(null);
+        }}
         onDownload={() =>
-          lightboxId !== null ? handleDownloadOne(lightboxId) : Promise.resolve()
+          lightboxId !== null
+            ? handleDownloadOne(lightboxId)
+            : Promise.resolve()
         }
         downloading={lightboxId !== null && downloading.has(lightboxId)}
         onDelete={async () => {
@@ -930,7 +977,13 @@ function FilterGroup({
   children: React.ReactNode;
 }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 'var(--space-1)',
+      }}
+    >
       <label
         htmlFor={id}
         style={{
@@ -953,7 +1006,13 @@ function FilterGroup({
  * FilterChip — pastilla removible que indica un filtro activo.
  * Accesible: botón con aria-label descriptivo.
  */
-function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
+function FilterChip({
+  label,
+  onRemove,
+}: {
+  label: string;
+  onRemove: () => void;
+}) {
   return (
     <span
       style={{

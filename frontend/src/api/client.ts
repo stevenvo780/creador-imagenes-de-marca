@@ -366,23 +366,55 @@ export const gallery = {
 
 // ── Downloads ────────────────────────────────────────────────────────────────
 
+async function downloadBlob(
+  path: string,
+  init: RequestInit,
+  signal?: AbortSignal,
+): Promise<Blob> {
+  const work = beginSessionWork(signal);
+  try {
+    work.check();
+    const res = await fetch(path, {
+      ...init,
+      credentials: "include",
+      cache: "no-store",
+      signal: work.signal,
+    });
+    work.check();
+    if (!res.ok) {
+      const json = await res.json().catch(() => null);
+      work.check();
+      throw new ApiError(
+        res.status,
+        typeof json?.detail === "string"
+          ? json.detail
+          : friendlyError(res.status),
+      );
+    }
+    const blob = await res.blob();
+    work.check();
+    return blob;
+  } finally {
+    work.finish();
+  }
+}
+
 export const downloads = {
   /** URL directa para img src — incluye cookie automáticamente al ser same-origin. */
   fileUrl: (variationId: number) => `/api/v1/variations/${variationId}/file`,
 
-  zip: async (ids: number[]): Promise<Blob> => {
-    const res = await fetch("/api/v1/downloads/zip", {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ids }),
-    });
-    if (!res.ok) {
-      const json = await res.json().catch(() => ({ detail: res.statusText }));
-      throw new ApiError(res.status, json?.detail ?? "zip error");
-    }
-    return res.blob();
-  },
+  zip: (ids: number[], signal?: AbortSignal) =>
+    downloadBlob(
+      "/api/v1/downloads/zip",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids }),
+      },
+      signal,
+    ),
+  file: (id: number, signal?: AbortSignal) =>
+    downloadBlob(`/api/v1/variations/${id}/file`, {}, signal),
 };
 
 // ── Variations ───────────────────────────────────────────────────────────────

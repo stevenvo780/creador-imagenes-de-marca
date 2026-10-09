@@ -1,4 +1,4 @@
-import { ApiError, cancelApiRequests } from "./client";
+import { ApiError, beginSessionWork, cancelApiRequests } from "./client";
 export type MediaStatus =
   | "pending_review"
   | "approved"
@@ -27,7 +27,8 @@ export interface Review {
 }
 export interface Media {
   id: number;
-  brief_id: number;
+  brief_id: number | null;
+  snapshot_hash: string;
   project_id: number;
   brand_id: number;
   brand_version: number;
@@ -120,7 +121,9 @@ async function privateRequest<T>(
       ...(body === undefined ? {} : { body: JSON.stringify(body) }),
     });
     if (res.status === 204) return undefined as T;
+    controller.signal.throwIfAborted();
     const json = await res.json();
+    controller.signal.throwIfAborted();
     if (!res.ok)
       throw new ApiError(
         res.status,
@@ -134,14 +137,25 @@ async function privateRequest<T>(
     signal?.removeEventListener("abort", abort);
   }
 }
-export async function privateImage(path: string, signal: AbortSignal) {
+export async function privateImage(
+  path: string,
+  signal: AbortSignal,
+  expectedSha256?: string,
+) {
   // The API contract provides relative authenticated paths. Never transmit cookies to arbitrary links.
-  if (
-    !/^\/api\/v1\/(media\/\d+\/(download|thumbnail)|variations\/\d+\/file)(\?.*)?$/.test(
+  const mediaPath =
+    /^\/api\/v1\/(media\/\d+\/(download|thumbnail)|variations\/\d+\/file)(\?.*)?$/.test(
       path,
-    )
-  )
+    );
+  const referencePath =
+    /^\/api\/v1\/brands\/\d+\/reference-logo\?sha256=[a-f0-9]{64}$/.test(path);
+  if (!mediaPath && !referencePath)
     throw new Error("Ruta de imagen privada inválida");
+  if (
+    referencePath &&
+    (!expectedSha256 || !path.endsWith(`sha256=${expectedSha256}`))
+  )
+    throw new Error("Referencia de logo inválida");
   const c = new AbortController();
   pending.add(c);
   const abort = () => c.abort();
@@ -156,6 +170,21 @@ export async function privateImage(path: string, signal: AbortSignal) {
     if (!res.ok) throw new ApiError(res.status, "No se pudo cargar la imagen.");
     const blob = await res.blob();
     if (c.signal.aborted) throw new DOMException("Aborted", "AbortError");
+    if (expectedSha256) {
+      const hash = Array.from(
+        new Uint8Array(
+          await crypto.subtle.digest("SHA-256", await blob.arrayBuffer()),
+        ),
+      )
+        .map((value) => value.toString(16).padStart(2, "0"))
+        .join("");
+      c.signal.throwIfAborted();
+      if (hash !== expectedSha256)
+        throw new ApiError(
+          422,
+          "El logo de referencia no coincide con el encargo original.",
+        );
+    }
     const url = URL.createObjectURL(blob);
     objectUrls.add(url);
     return url;
@@ -239,3 +268,138 @@ export const revokeCodexKey = (id: number, signal?: AbortSignal) =>
     undefined,
     signal,
   );
+
+export interface BrandSnapshot {
+  brand_id: number;
+  brand_version: number;
+  project: {
+    id: number;
+    name: string;
+    description: string;
+    archived: number | boolean;
+  };
+  identity: {
+    name: string;
+    palette: Record<string, unknown>;
+    typography: Record<string, unknown>;
+    texts: Record<string, unknown>;
+    logo_style?: string;
+    logo_seed?: number;
+    logo_text?: string;
+  };
+  reference_logo: { sha256: string; url: string } | null;
+}
+export interface GenerationBrief {
+  id: number;
+  brand_id: number;
+  project_id: number;
+  brand_version: number;
+  snapshot_hash: string;
+  prompt: string;
+  width: number;
+  height: number;
+  expires_at: number;
+  snapshot: BrandSnapshot;
+}
+export interface MediaReviewContext {
+  brief: GenerationBrief | null;
+  logoUrl: string | null;
+  ready: boolean;
+  warning: string;
+}
+export const getGenerationBrief = (id: number, signal?: AbortSignal) =>
+  privateRequest<GenerationBrief>(
+    `/api/v1/generation-briefs/${id}`,
+    "GET",
+    undefined,
+    signal,
+  );
+function canonical(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`;
+  if (value && typeof value === "object")
+    return `{${Object.keys(value)
+      .sort()
+      .map(
+        (key) =>
+          `${JSON.stringify(key)}:${canonical((value as Record<string, unknown>)[key])}`,
+      )
+      .join(",")}}`;
+  return JSON.stringify(value);
+}
+/** Freeze review evidence from its original brief; current identity is only a readiness check. */
+export async function loadMediaReviewContext(
+  item: Media,
+  signal: AbortSignal,
+): Promise<MediaReviewContext> {
+  const work = beginSessionWork(signal);
+  let logoUrl: string | null = null;
+  try {
+    work.check();
+    if (!item.brief_id) {
+      if (item.source !== "legacy")
+        throw new ApiError(409, "La imagen no tiene un encargo asociado.");
+      return {
+        brief: null,
+        logoUrl: null,
+        ready: false,
+        warning:
+          "Esta pieza del generador no tiene un encargo de revisión. Incorporala mediante Enviar a revisión antes de aprobar.",
+      };
+    }
+    const brief = await getGenerationBrief(item.brief_id, work.signal);
+    work.check();
+    if (
+      brief.id !== item.brief_id ||
+      brief.brand_id !== item.brand_id ||
+      brief.project_id !== item.project_id ||
+      brief.brand_version !== item.brand_version ||
+      brief.snapshot_hash !== item.snapshot_hash ||
+      brief.width !== item.width ||
+      brief.height !== item.height ||
+      brief.snapshot.brand_id !== item.brand_id ||
+      brief.snapshot.brand_version !== item.brand_version
+    )
+      throw new ApiError(
+        409,
+        "El encargo no coincide con la versión original de la imagen.",
+      );
+    const current = await privateRequest<BrandSnapshot>(
+      `/api/v1/brands/${item.brand_id}/brief`,
+      "GET",
+      undefined,
+      work.signal,
+    );
+    work.check();
+    const reference = brief.snapshot.reference_logo;
+    if (reference) {
+      if (
+        !/^[a-f0-9]{64}$/.test(reference.sha256) ||
+        reference.url !==
+          `/api/v1/brands/${item.brand_id}/reference-logo?sha256=${reference.sha256}`
+      )
+        throw new ApiError(422, "La referencia del encargo es inválida.");
+      logoUrl = await privateImage(
+        reference.url,
+        work.signal,
+        reference.sha256,
+      );
+      work.check();
+    }
+    const ready =
+      canonical(current) === canonical(brief.snapshot) &&
+      !current.project.archived;
+    return {
+      brief,
+      logoUrl,
+      ready,
+      warning: ready
+        ? ""
+        : "La identidad o el proyecto cambió desde este encargo. Se conserva la referencia original; necesitás una pieza con un encargo vigente antes de aprobar.",
+    };
+  } catch (error) {
+    if (logoUrl) releasePrivateUrl(logoUrl);
+    throw error;
+  } finally {
+    work.finish();
+  }
+}

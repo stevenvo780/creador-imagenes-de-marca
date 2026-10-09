@@ -2,12 +2,16 @@ import { usePrivateOperation } from "./usePrivateOperation";
 import { useEffect, useState } from "react";
 import {
   getMedia,
+  loadMediaReviewContext,
+  releasePrivateUrl,
+  type MediaReviewContext,
   isAbort,
   mediaError,
   mediaLabels,
   reviewMedia,
   type Media,
 } from "../../api/media";
+import { ApiError } from "../../api/client";
 import { Button, Modal } from "../../components";
 import { PrivateImage } from "./PrivateImage";
 export function MediaDetail({
@@ -22,6 +26,8 @@ export function MediaDetail({
   onReviewed: () => void;
 }) {
   const [item, setItem] = useState<Media | null>(null),
+    [context, setContext] = useState<MediaReviewContext | null>(null),
+    [contextLoading, setContextLoading] = useState(true),
     [error, setError] = useState(""),
     [reason, setReason] = useState(""),
     [busy, setBusy] = useState(false),
@@ -29,19 +35,41 @@ export function MediaDetail({
     [message, setMessage] = useState("");
   useEffect(() => {
     const c = new AbortController();
+    let logoUrl: string | null = null;
     setItem(null);
+    setContext(null);
+    setContextLoading(true);
     setError("");
-    void getMedia(id, c.signal)
-      .then(setItem)
+    async function load() {
+      const media = await getMedia(id, c.signal);
+      if (c.signal.aborted) return;
+      setItem(media);
+      const evidence = await loadMediaReviewContext(media, c.signal);
+      logoUrl = evidence.logoUrl;
+      if (c.signal.aborted) {
+        if (logoUrl) releasePrivateUrl(logoUrl);
+        return;
+      }
+      setContext(evidence);
+    }
+    void load()
       .catch((e) => {
-        if (!isAbort(e)) setError(mediaError(e));
+        if (!c.signal.aborted && !isAbort(e)) setError(mediaError(e));
+      })
+      .finally(() => {
+        if (!c.signal.aborted) setContextLoading(false);
       });
-    return () => c.abort();
+    return () => {
+      c.abort();
+      if (logoUrl) releasePrivateUrl(logoUrl);
+    };
   }, [id, reload]);
   const operation = usePrivateOperation();
 
   async function review(decision: "approved" | "rejected") {
-    if (!item) return;
+    const controller = operation.current;
+    if (!item || !context?.ready || contextLoading || controller.signal.aborted)
+      return;
     if (decision === "rejected" && !reason.trim()) {
       setError("Escribí un motivo para rechazar la imagen.");
       return;
@@ -58,19 +86,36 @@ export function MediaDetail({
           expected_brand_version: item.brand_version,
           reason: reason.trim(),
         },
-        operation.current.signal,
+        controller.signal,
       );
-      if (operation.current.signal.aborted) return;
-      setItem(await getMedia(id, operation.current.signal));
+      if (controller.signal.aborted) return;
+      setItem(await getMedia(id, controller.signal));
       setReason("");
       setMessage(
         decision === "approved" ? "Imagen aprobada." : "Imagen rechazada.",
       );
       onReviewed();
     } catch (e) {
-      if (!isAbort(e)) setError(mediaError(e));
+      if (!isAbort(e) && !controller.signal.aborted) {
+        setError(mediaError(e));
+        if (e instanceof ApiError && (e.status === 401 || e.status === 403)) {
+          if (context.logoUrl) releasePrivateUrl(context.logoUrl);
+          setContext(null);
+        } else {
+          setContext((current) =>
+            current
+              ? {
+                  ...current,
+                  ready: false,
+                  warning:
+                    "La revisión no se completó. Actualizá el encargo y sus referencias antes de volver a revisar.",
+                }
+              : null,
+          );
+        }
+      }
     } finally {
-      if (!operation.current.signal.aborted) setBusy(false);
+      if (!controller.signal.aborted) setBusy(false);
     }
   }
   return (
@@ -116,6 +161,64 @@ export function MediaDetail({
                 <p className="media-hash">SHA256: {item.sha256}</p>
                 <pre>{JSON.stringify(item.provenance, null, 2)}</pre>
               </details>
+              {contextLoading && (
+                <p role="status">Cargando encargo y referencias de marca…</p>
+              )}
+              {context?.warning && <p role="status">{context.warning}</p>}
+              {context?.brief && (
+                <section aria-label="Encargo original">
+                  <h3>Encargo original</h3>
+                  <p style={{ whiteSpace: "pre-wrap" }}>
+                    {context.brief.prompt}
+                  </p>
+                  <p>
+                    {context.brief.snapshot.project.name} · Versión de marca{" "}
+                    {context.brief.snapshot.brand_version} ·{" "}
+                    {context.brief.width} × {context.brief.height}
+                  </p>
+                  <h4>Identidad del encargo</h4>
+                  <p>{context.brief.snapshot.identity.name}</p>
+                  {context.logoUrl ? (
+                    <img
+                      className="media-image"
+                      style={{ maxHeight: 180 }}
+                      src={context.logoUrl}
+                      alt="Logo original del encargo"
+                    />
+                  ) : (
+                    <p>
+                      Logo del generador:{" "}
+                      {context.brief.snapshot.identity.logo_style ||
+                        "Identidad sin referencia oficial"}{" "}
+                      · Semilla{" "}
+                      {context.brief.snapshot.identity.logo_seed ??
+                        "no indicada"}
+                    </p>
+                  )}
+                  <details>
+                    <summary>Colores, tipografía y textos originales</summary>
+                    <pre>
+                      {JSON.stringify(
+                        {
+                          palette: context.brief.snapshot.identity.palette,
+                          typography:
+                            context.brief.snapshot.identity.typography,
+                          texts: context.brief.snapshot.identity.texts,
+                          logo_text: context.brief.snapshot.identity.logo_text,
+                        },
+                        null,
+                        2,
+                      )}
+                    </pre>
+                  </details>
+                </section>
+              )}
+              {!contextLoading && !context && (
+                <p>
+                  No se pudo verificar el encargo y sus referencias. Actualizá
+                  el detalle antes de revisar.
+                </p>
+              )}
               <h3>Historial de revisión</h3>
               {item.reviews.length === 0 ? (
                 <p>
@@ -148,11 +251,16 @@ export function MediaDetail({
                     onChange={(e) => setReason(e.target.value)}
                   />
                   <div className="media-actions">
-                    <Button busy={busy} onClick={() => void review("approved")}>
+                    <Button
+                      busy={busy}
+                      disabled={contextLoading || !context?.ready}
+                      onClick={() => void review("approved")}
+                    >
                       Aprobar
                     </Button>
                     <Button
                       variant="danger"
+                      disabled={contextLoading || !context?.ready}
                       busy={busy}
                       onClick={() => void review("rejected")}
                     >
