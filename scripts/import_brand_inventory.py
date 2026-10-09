@@ -24,7 +24,7 @@ _REPO = Path(__file__).resolve().parents[1]
 if str(_REPO) not in sys.path:
     sys.path.insert(0, str(_REPO))
 
-from webapp.api.schemas import VALID_PALETTE_KEYS, BrandCreate  # noqa: E402
+from webapp.api.schemas import _EN_TO_ES_PALETTE, VALID_PALETTE_KEYS, BrandCreate  # noqa: E402
 from webapp.brand_briefs import LOGO_MAX_BYTES, validate_reference_logo  # noqa: E402
 from webapp.services.eikon_runner import PROTECTED_BRAND_SLUGS, validate_slug  # noqa: E402
 
@@ -92,9 +92,9 @@ def _payload(source: dict, project: dict) -> dict:
         "slug": slug,
         "name": source.get("nombre_producto") or source.get("nombre_corporativo") or original_slug,
         "palette": {
-            key: value
+            _EN_TO_ES_PALETTE.get(key, key): value
             for key, value in source.get("paleta", {}).items()
-            if key in VALID_PALETTE_KEYS
+            if _EN_TO_ES_PALETTE.get(key, key) in VALID_PALETTE_KEYS
         },
         "typography": source.get("tipografia", {}),
         "logo_text": source.get("logo_texto", ""),

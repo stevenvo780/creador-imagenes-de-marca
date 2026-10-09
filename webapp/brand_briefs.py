@@ -7,6 +7,7 @@ import io
 import json
 import re
 import time
+import warnings
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any
@@ -151,12 +152,25 @@ def validate_reference_logo(content: bytes) -> str:
     if not content or len(content) > LOGO_MAX_BYTES:
         raise ValueError("tamaño de logo inválido")
     try:
-        with Image.open(io.BytesIO(content)) as image:
-            if image.format not in {"PNG", "JPEG"} or image.width * image.height > 40_000_000:
-                raise ValueError("imagen de logo inválida")
-            image.verify()
-            return "image/png" if image.format == "PNG" else "image/jpeg"
-    except (OSError, Image.DecompressionBombError):
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", Image.DecompressionBombWarning)
+            with Image.open(io.BytesIO(content)) as image:
+                if image.format not in {"PNG", "JPEG"} or image.width * image.height > 40_000_000:
+                    raise ValueError("imagen de logo inválida")
+                content_type = "image/png" if image.format == "PNG" else "image/jpeg"
+                image.verify()
+            # verify() inspecciona la estructura; JPEG necesita además load().
+            # Reabrir evita usar el decoder descartado por verify(), sin recodificar.
+            with Image.open(io.BytesIO(content)) as decoded:
+                decoded.load()
+            return content_type
+    except (
+        OSError,
+        SyntaxError,
+        ValueError,
+        Image.DecompressionBombError,
+        Image.DecompressionBombWarning,
+    ):
         pass
     return _validate_reference_svg(content)
 

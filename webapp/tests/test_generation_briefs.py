@@ -315,3 +315,74 @@ def test_local_xlink_svg_retains_original_bytes(media_clients):
     )
     assert r.status_code == 201, r.text
     assert media_clients.a.get(r.json()["url"]).content == data
+
+
+@pytest.mark.parametrize("format_name", ["PNG", "JPEG"])
+def test_truncated_raster_logo_rejected(media_clients, format_name):
+    import io
+
+    from PIL import Image
+
+    b = brand(media_clients.a, project(media_clients.a, "own")["id"], "own")
+    stream = io.BytesIO()
+    Image.new("RGB", (300, 90), "red").save(stream, format=format_name)
+    content_type = "image/png" if format_name == "PNG" else "image/jpeg"
+    truncated = stream.getvalue()[:-100]
+    response = media_clients.a.post(
+        f"/api/v1/brands/{b['id']}/reference-logo",
+        files={"file": ("logo", truncated, content_type)},
+    )
+    assert response.status_code == 422
+    assert media_clients.a.get(f"/api/v1/brands/{b['id']}/reference-logo").status_code == 404
+    assert (
+        media_clients.a.get(f"/api/v1/brands/{b['id']}").json()["brand_version"]
+        == b["brand_version"]
+    )
+
+
+@pytest.mark.parametrize("format_name", ["PNG", "JPEG"])
+def test_fully_decoded_raster_logo_preserves_original(media_clients, format_name):
+    import io
+
+    from PIL import Image
+
+    b = brand(media_clients.a, project(media_clients.a, "own")["id"], "own")
+    stream = io.BytesIO()
+    Image.new("RGB", (300, 90), "red").save(stream, format=format_name)
+    data = stream.getvalue()
+    content_type = "image/png" if format_name == "PNG" else "image/jpeg"
+    response = media_clients.a.post(
+        f"/api/v1/brands/{b['id']}/reference-logo", files={"file": ("logo", data, content_type)}
+    )
+    assert response.status_code == 201
+    assert response.json()["sha256"] == hashlib.sha256(data).hexdigest()
+    downloaded = media_clients.a.get(response.json()["url"])
+    assert downloaded.content == data
+    with Image.open(io.BytesIO(downloaded.content)) as image:
+        image.load()
+        assert image.size == (300, 90)
+
+
+@pytest.mark.parametrize("format_name", ["PNG", "JPEG"])
+def test_raster_decoder_warning_rejected_without_emitting_warning(
+    media_clients, monkeypatch, format_name
+):
+    import io
+    import warnings
+
+    from PIL import Image
+
+    b = brand(media_clients.a, project(media_clients.a, "own")["id"], "own")
+    stream = io.BytesIO()
+    Image.new("RGB", (300, 90), "red").save(stream, format=format_name)
+    # Umbral artificial aislado: abre una imagen pequeña que dispara la advertencia.
+    monkeypatch.setattr(Image, "MAX_IMAGE_PIXELS", 20_000)
+    with warnings.catch_warnings(record=True) as emitted:
+        warnings.simplefilter("always")
+        response = media_clients.a.post(
+            f"/api/v1/brands/{b['id']}/reference-logo",
+            files={"file": ("logo", stream.getvalue(), "image/png")},
+        )
+    assert response.status_code == 422
+    assert emitted == []
+    assert media_clients.a.get(f"/api/v1/brands/{b['id']}/reference-logo").status_code == 404

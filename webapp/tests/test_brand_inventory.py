@@ -156,3 +156,31 @@ def test_reserved_combined_slug_and_data_uri(media_clients, tmp_path, monkeypatc
     b = media_clients.a.get("/api/v1/brands").json()["items"][0]
     assert b["slug"] == "prizma-import-pistis"
     assert b["reference_logo_sha256"] == hashlib.sha256(logo.read_bytes()).hexdigest()
+
+
+@pytest.mark.parametrize("alias_palette", [True, False])
+def test_import_preserves_schema_palette_aliases_two_tenants(
+    media_clients, tmp_path, monkeypatch, alias_palette
+):
+    from scripts.import_brand_inventory import _payload
+
+    source, _ = inventory(tmp_path)
+    expected = {"bg": "#123456", "acento": "#abcdef", "primario": "#543210", "acento_2": "#fedcba"}
+    palette = (
+        {"bg": "#123456", "accent": "#abcdef", "primary": "#543210", "secondary": "#fedcba"}
+        if alias_palette
+        else expected
+    )
+    data = json.loads(source.read_text())
+    data["paleta"] = {**palette, "surface": "#333333"}
+    source.write_text(json.dumps(data))
+    for client in [media_clients.a, media_clients.b]:
+        p = project(client, "campaign")
+        assert _payload(data, p)["palette"] == expected
+        assert run(client, p, source, monkeypatch)["counts"]["create"] == 1
+        assert client.get("/api/v1/brands").json()["items"] == []
+        assert run(client, p, source, monkeypatch, True)["counts"]["create"] == 1
+        first = client.get("/api/v1/brands").json()["items"][0]
+        assert first["palette"] == expected
+        assert run(client, p, source, monkeypatch, True)["counts"]["skip_identical"] == 1
+        assert client.get("/api/v1/brands").json()["items"] == [first]
