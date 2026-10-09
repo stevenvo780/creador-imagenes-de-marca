@@ -34,6 +34,7 @@ from webapp.api import (
 from webapp.api.batches import _validate_asset_types
 from webapp.api.deps import current_user, get_axes_config
 from webapp.api.generation_briefs import router as generation_briefs_router
+from webapp.api.media import router as media_router
 from webapp.api.projects import router as projects_router
 from webapp.config import Settings, get_settings
 from webapp.jobs import WorkerPool, enqueue_batch, get_worker, set_worker
@@ -206,6 +207,7 @@ def create_app(
     app.include_router(brands_router)
     app.include_router(projects_router)
     app.include_router(generation_briefs_router)
+    app.include_router(media_router)
     app.include_router(wizard_router)
     app.include_router(batches_router)
     app.include_router(client_render_router)

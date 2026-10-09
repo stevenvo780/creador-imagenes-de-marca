@@ -396,11 +396,17 @@ CREATE INDEX IF NOT EXISTS idx_variations_batch ON variations(batch_id);
     migrate_add_logo_columns(db_url)
     migrate_add_logo_asset(db_url)
     migrate_add_api_keys_table(db_url)
-    from webapp.migrations import migrate_api_key_scopes, migrate_brand_briefs, migrate_projects
+    from webapp.migrations import (
+        migrate_api_key_scopes,
+        migrate_brand_briefs,
+        migrate_media,
+        migrate_projects,
+    )
 
     migrate_projects(db_url)
     migrate_api_key_scopes(db_url)
     migrate_brand_briefs(db_url)
+    migrate_media(db_url)
 
 
 def migrate_add_logo_columns(db_url: str | None | Path) -> None:

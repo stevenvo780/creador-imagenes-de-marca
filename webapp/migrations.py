@@ -185,3 +185,51 @@ CREATE INDEX IF NOT EXISTS idx_briefs_tenant_id ON generation_briefs(tenant_id, 
             "ON CONFLICT(version) DO NOTHING",
             ("brand_briefs_v1", int(time.time())),
         )
+
+
+def migrate_media(db_url: str | Path | None) -> None:
+    """Reserva única de importación y originales privados inmutables."""
+    with db.connect(db_url) as con:
+        if con.dialect == "sqlite":
+            con.execute("BEGIN IMMEDIATE")
+        else:
+            con.execute("SELECT pg_advisory_xact_lock(?)", (2026100801,))
+        schema = """
+CREATE TABLE IF NOT EXISTS media_assets (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ brief_id INTEGER NOT NULL,
+ project_id INTEGER NOT NULL,
+ brand_id INTEGER NOT NULL,
+ brand_version INTEGER NOT NULL,
+ snapshot_hash TEXT NOT NULL,
+ idempotency_key TEXT NOT NULL,
+ request_hash TEXT NOT NULL,
+ sha256 TEXT NOT NULL,
+ mime TEXT NOT NULL,
+ width INTEGER NOT NULL,
+ height INTEGER NOT NULL,
+ byte_size INTEGER NOT NULL,
+ source TEXT NOT NULL,
+ provenance_json TEXT NOT NULL,
+ status TEXT NOT NULL CHECK(status IN ('ingesting', 'pending_review', 'approved', 'rejected', 'archived', 'failed')),
+ original_key TEXT NOT NULL DEFAULT '',
+ thumbnail_key TEXT NOT NULL DEFAULT '',
+ cleanup_keys_json TEXT NOT NULL DEFAULT '[]',
+ attempt_token TEXT NOT NULL,
+ created_at BIGINT NOT NULL,
+ updated_at BIGINT NOT NULL,
+ failure_code TEXT,
+ UNIQUE(tenant_id, idempotency_key)
+);
+CREATE INDEX IF NOT EXISTS idx_media_tenant_id ON media_assets(tenant_id, id);
+"""
+        if con.dialect == "postgres":
+            schema = db._schema_for_postgres(schema)
+        for statement in schema.split(";"):
+            if statement.strip():
+                con.execute(statement)
+        con.execute(
+            "INSERT INTO schema_migrations(version, applied_at) VALUES (?, ?) "
+            "ON CONFLICT(version) DO NOTHING", ("media_v1", int(time.time())),
+        )
