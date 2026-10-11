@@ -187,3 +187,16 @@ Los tres destinos Meta se comprobaron por GET con permisos exactos a las20:08 UT
 La preparación del historial incluye tres bases: nueve envíos, ocho pendientes
 y cuatro retiradas, sin modificación. Las pruebas manuales web todavía requieren
 conciliación. Ver docs/PREPARACION-CONEXIONES-HUMANIZAR-20261011.md.
+
+## Corrección del Estudio desplegada, 20:19 UTC
+
+SHA e956d37 en eikon-00060-kkl al100%, sin tags; imagen y SPA cotejadas,
+configuración y permisos conservados. Respaldo fresco restaurado en clon sin
+red, con doble init_db que mantiene filas/columnas. Las quince marcas y doce
+referencias siguen iguales por API. Frontend 78 pruebas, build correcto,
+revisión independiente y análisis de secretos aprobados. Prueba local de los
+PNG completos Aletheia/Prizma terminada. Ver el recibo
+`docs/RELEASE-ESTUDIO-HUMANIZAR-20261011.md`.
+
+La meta permanece activa. La revisión escrita para módulos nuevos y el login
+GUI de producción están pendientes; los temporizadores viejos siguen detenidos.

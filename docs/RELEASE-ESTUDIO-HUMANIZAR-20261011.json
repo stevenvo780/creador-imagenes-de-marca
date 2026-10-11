@@ -1,0 +1,165 @@
+{
+  "release": {
+    "captured_at": "2026-10-11T20:18:57.934453+00:00",
+    "code_sha": "e956d37eba50291f7a07838d0fddebbff5ca436b",
+    "image": "us-central1-docker.pkg.dev/emergent-enterprises/eikon/eikon@sha256:a4ba5ff8d89030569967cad0f418aaadeb813a9f282d26c5a8f5cc2947d5d4a3",
+    "linux_amd64_manifest": "sha256:a3199ab424897f16fa5e5011361e5cd404e247d6774e98678027bd5a82c5dc04",
+    "runtime_image": "us-central1-docker.pkg.dev/emergent-enterprises/eikon/eikon@sha256:a3199ab424897f16fa5e5011361e5cd404e247d6774e98678027bd5a82c5dc04",
+    "revision": "eikon-00060-kkl",
+    "traffic_percent": 100,
+    "tags": 0,
+    "configuration_preserved_except_image": true,
+    "service_and_bucket_iam_preserved": true,
+    "origins": [
+      {
+        "origin": "https://eikon-633619052458.us-central1.run.app",
+        "health": 200,
+        "spa_matches_image": true
+      },
+      {
+        "origin": "https://eikon-6dalnsowyq-uc.a.run.app",
+        "health": 200,
+        "spa_matches_image": true
+      },
+      {
+        "origin": "https://eikon-proxy.vercel.app",
+        "health": 200,
+        "spa_matches_image": true
+      }
+    ],
+    "native_local_visual_verified": true,
+    "native_production_visual_verified": false,
+    "social_publishing_enabled": false
+  },
+  "api": {
+    "captured_at": "2026-10-11T20:19:54.318289+00:00",
+    "tenant_id": 17,
+    "owner_auth": 200,
+    "references": [
+      {
+        "brand_id": 109,
+        "version": 5,
+        "sha256": "107bb83a6d2e6e51dc07bfa558e0774c239599bd97c7e76bcd61c1a65e01e355",
+        "retrieved_bytes_match": true
+      },
+      {
+        "brand_id": 111,
+        "version": 4,
+        "sha256": "3a04c3660690cebbb6cc86c4c8ab49f2bc36da73a79838931b9707e22604faca",
+        "retrieved_bytes_match": true
+      },
+      {
+        "brand_id": 112,
+        "version": 4,
+        "sha256": "678a81447a64e2d9d305b300e07227b194c99f9ae9dc6147b7c5f8a88ef51b12",
+        "retrieved_bytes_match": true
+      },
+      {
+        "brand_id": 113,
+        "version": 4,
+        "sha256": "8d77813e14fd79067771cbd6ed77d69d256367248360b33f9c5d63c0739faa38",
+        "retrieved_bytes_match": true
+      },
+      {
+        "brand_id": 114,
+        "version": 4,
+        "sha256": "bfd3d17cfefa5666a1ff397d0f65e5063fe09bc68f4e4ead7789382a19ffe0fc",
+        "retrieved_bytes_match": true
+      },
+      {
+        "brand_id": 115,
+        "version": 4,
+        "sha256": "d86f747d80f6513191c21b67767948fd620a451e5e7332691c94ead4aac262b2",
+        "retrieved_bytes_match": true
+      },
+      {
+        "brand_id": 116,
+        "version": 4,
+        "sha256": "678a81447a64e2d9d305b300e07227b194c99f9ae9dc6147b7c5f8a88ef51b12",
+        "retrieved_bytes_match": true
+      },
+      {
+        "brand_id": 117,
+        "version": 4,
+        "sha256": "d782c4cd0f19e772c37038fa7f2286cc2c1aa4795d3e6ab9694df4e58510da6c",
+        "retrieved_bytes_match": true
+      },
+      {
+        "brand_id": 118,
+        "version": 4,
+        "sha256": "678a81447a64e2d9d305b300e07227b194c99f9ae9dc6147b7c5f8a88ef51b12",
+        "retrieved_bytes_match": true
+      },
+      {
+        "brand_id": 120,
+        "version": 5,
+        "sha256": "1972d07aa3c96ccd3925580271b514ed187599fc1fc8d16c0fb50df95d3dc9c1",
+        "retrieved_bytes_match": true
+      },
+      {
+        "brand_id": 122,
+        "version": 4,
+        "sha256": "678a81447a64e2d9d305b300e07227b194c99f9ae9dc6147b7c5f8a88ef51b12",
+        "retrieved_bytes_match": true
+      },
+      {
+        "brand_id": 123,
+        "version": 4,
+        "sha256": "59ab5fa0fc8c47fb27933c71023de2d1f10a9b7bd9172e1a0cf0161f7476f9e9",
+        "retrieved_bytes_match": true
+      }
+    ],
+    "products_preserved": 15,
+    "fixed_references": 12,
+    "anonymous_brands": 401
+  },
+  "backup": {
+    "created_at_utc": "2026-10-11T20:13:11.702661+00:00",
+    "dump_bytes": 112504,
+    "dump_sha256": "b1c179b51c86e12f679c59df0681a8a1d6d033eb8dbbce5f7e725d7d83080948",
+    "restore_verified": true
+  },
+  "native_local_visual": [
+    {
+      "product": "aletheia",
+      "brand_id": 115,
+      "png_dimensions": [
+        2160,
+        2700
+      ],
+      "png_bytes": 378020,
+      "png_sha256": "485749a891ebe00d07ce1d5321bfa7defb3d15cd5248008c49b392eacf9c4db9",
+      "original_logo_preserved": true,
+      "full_footer_visible": true,
+      "scope": "native browser; local synthetic owner; social_4x5; not editorial approval or production GUI"
+    },
+    {
+      "product": "prizma",
+      "brand_id": 120,
+      "png_dimensions": [
+        2160,
+        2700
+      ],
+      "png_bytes": 399719,
+      "png_sha256": "64e19f75ff2e8e409d6f4c8c9a879608e2a740b0d78cd498712815f7199c04c1",
+      "original_logo_preserved": true,
+      "full_footer_visible": true,
+      "scope": "native browser; local synthetic owner; social_4x5; not editorial approval or production GUI"
+    }
+  ],
+  "checks": {
+    "frontend_tests_passed": 78,
+    "typescript_vite_build": true,
+    "independent_review": "approved, no remaining blockers",
+    "delta_secret_scan": "passed"
+  },
+  "studio_behavior": {
+    "brand_change_clears_copy_and_preview": true,
+    "content_edit_invalidates_png": true,
+    "render_locks_context_controls": true
+  },
+  "social_posts_created": 0,
+  "media_approved": false,
+  "legacy_timers_reenabled": false,
+  "new_publication_modules_implemented": false
+}

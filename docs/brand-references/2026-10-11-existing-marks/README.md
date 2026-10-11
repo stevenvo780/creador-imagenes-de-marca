@@ -4,8 +4,10 @@ Exportados el 11 de octubre de 2026. Cauce fue comprobado visualmente en
 Estudio local y fijado como referencia en Eikón (marca 113, v4), conservando sus
 trazos y gradiente. Después se recuperaron el símbolo completo de Aletheia y
 el icono vigente del encabezado de Prizma. Ambos fueron fijados en Eikón tras
-comparación visual local de las fuentes; la vista del Estudio quedó detenida
-por un panel de extensión. No se han aprobado medios ni publicado contenido social.
+comparación visual local de las fuentes. Tras cerrar el panel de extensión,
+el Estudio generó y descargó ambos PNG completos con originales, texto y pie
+(2160×2700). Es QA local con cuenta sintética; no se han aprobado medios ni
+publicado contenido social. Ver `docs/RELEASE-ESTUDIO-HUMANIZAR-20261011.md`.
 
 | Producto | Archivo | Qué conserva | Qué no acredita |
 |---|---|---|---|

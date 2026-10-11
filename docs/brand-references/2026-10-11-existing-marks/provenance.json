@@ -76,7 +76,14 @@
       "tenant_id": 17,
       "brand_id": 115,
       "brand_version": 4,
-      "native_studio_visual_verified": false
+      "native_studio_visual_verified": true,
+      "native_studio_visual_scope": "local synthetic owner; social_4x5; full downloaded PNG and footer; not production GUI or editorial approval",
+      "native_studio_png_sha256": "485749a891ebe00d07ce1d5321bfa7defb3d15cd5248008c49b392eacf9c4db9",
+      "native_studio_png_dimensions": [
+        2160,
+        2700
+      ],
+      "native_studio_verified_on": "2026-10-11"
     },
     {
       "file": "prizma-icono-existente.svg",
@@ -101,7 +108,14 @@
       "tenant_id": 17,
       "brand_id": 120,
       "brand_version": 5,
-      "native_studio_visual_verified": false
+      "native_studio_visual_verified": true,
+      "native_studio_visual_scope": "local synthetic owner; social_4x5; full downloaded PNG and footer; not production GUI or editorial approval",
+      "native_studio_png_sha256": "64e19f75ff2e8e409d6f4c8c9a879608e2a740b0d78cd498712815f7199c04c1",
+      "native_studio_png_dimensions": [
+        2160,
+        2700
+      ],
+      "native_studio_verified_on": "2026-10-11"
     }
   ]
 }
