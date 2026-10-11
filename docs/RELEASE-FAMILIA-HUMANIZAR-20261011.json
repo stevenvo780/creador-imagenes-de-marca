@@ -195,5 +195,50 @@
     "humanizar-publicaciones.timer": "disabled/inactive",
     "humanizar-publicaciones-plan-daily.timer": "disabled/inactive"
   },
-  "scope": "Existing identity/render flow; new campaigns/calendar/connections not implemented"
+  "scope": "Existing identity/render flow; new campaigns/calendar/connections not implemented",
+  "final_status": {
+    "captured_at": "2026-10-11T19:56:31.903326+00:00",
+    "product_count": 15,
+    "family_selected": 15,
+    "original_reference_count": 12,
+    "missing_references": [
+      "demeter",
+      "gravitatoria",
+      "praxis"
+    ],
+    "cauce_mcp_native_read_verified": true,
+    "aletheia_mcp_native_read_verified": true,
+    "prizma_mcp_native_read_verified": true,
+    "approved_new_media": 0,
+    "social_posts_sent": 0
+  },
+  "recovered_references": {
+    "captured_at": "2026-10-11T19:55:37.289385+00:00",
+    "tenant_id": 17,
+    "native_source_visual_verified": true,
+    "native_studio_visual_verified": false,
+    "native_studio_blocker": "extension_panel",
+    "media_approved": false,
+    "social_posts_created": 0,
+    "applied": [
+      {
+        "brand_id": 115,
+        "slug": "producto-aletheia",
+        "previous_version": 3,
+        "current_version": 4,
+        "sha256": "d86f747d80f6513191c21b67767948fd620a451e5e7332691c94ead4aac262b2",
+        "retrieved_bytes_match": true,
+        "other_fields_preserved": true
+      },
+      {
+        "brand_id": 120,
+        "slug": "producto-prizma",
+        "previous_version": 4,
+        "current_version": 5,
+        "sha256": "1972d07aa3c96ccd3925580271b514ed187599fc1fc8d16c0fb50df95d3dc9c1",
+        "retrieved_bytes_match": true,
+        "other_fields_preserved": true
+      }
+    ]
+  }
 }

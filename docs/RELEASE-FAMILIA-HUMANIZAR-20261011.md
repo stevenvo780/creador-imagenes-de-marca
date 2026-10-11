@@ -73,3 +73,21 @@ Campañas, revisión completa, conexiones sociales multiempresa, calendario y
 panel operativo siguen sin implementar. Su diseño escrito del 11 de octubre
 está pendiente de aprobación antes de preparar el plan. La meta del chat
 permanece activa; este recibo acredita sólo la entrega de identidad existente.
+
+## Referencias recuperadas después del despliegue
+
+El 11 de octubre, 19:56 UTC, se fijaron Aletheia115/v4 y Prizma120/v5 en la
+empresa Humanizar. La primera exporta el cuadro y glifo del componente original
+(SHA `d86f747d80f6513191c21b67767948fd620a451e5e7332691c94ead4aac262b2`);
+la segunda copia el master exacto del Header actual
+(SHA `1972d07aa3c96ccd3925580271b514ed187599fc1fc8d16c0fb50df95d3dc9c1`).
+La API devuelve los mismos bytes y conserva todos los otros campos. MCP nativo
+confirma ambas versiones y hashes. Hay doce referencias fijadas; quedan
+Deméter, Gravitatoria y Práxis. Sus fuentes no justifican fijar un signo propio
+inequívoco: dos usan Lucide y la otra comparte marca con Mouseîon/personal.
+
+La comparación de fuentes se vio en navegador local; la prueba del Estudio
+quedó interrumpida por un panel de extensión. No es una prueba GUI de producción
+ni una aprobación editorial. El delta del exportador tiene revisión independiente,
+16 pruebas; junto al core de familia pasan 47. No hubo nuevo despliegue runtime:
+las referencias son datos atendidos por la revisión `eikon-00059-9h5` existente.

@@ -39,6 +39,69 @@
           "sha256": "6d1f2902af22e36e5d873ac9354475cc72af4365d5a5c3f0538abbcfffdecc23"
         }
       ]
+    },
+    {
+      "source_fragment_sha256": "a884e6f65b403001a51d3301038f359e92821d4355bd3cc170475fc371c53614",
+      "export_sha256": "d86f747d80f6513191c21b67767948fd620a451e5e7332691c94ead4aac262b2",
+      "role": "existing_product_symbol",
+      "state": "fixed_reference_in_eikon_after_local_source_visual_review",
+      "production_mutated": true,
+      "full_wordmark": false,
+      "resolved_tokens": {
+        "--measure": "#4338ca",
+        "--rule": "#dfe3ea",
+        "--measure-soft": "#eef0fe"
+      },
+      "geometry": {
+        "outer_px": 28,
+        "glyph_px": 12,
+        "border_px": 1,
+        "radius_px": 4
+      },
+      "scale_assumptions": {
+        "root_rem_px": 16,
+        "tailwind_spacing_px": 4
+      },
+      "file": "aletheia-simbolo-existente-claro.svg",
+      "sources": [
+        {
+          "path": "/datos/workspaces/personal/aletheia/apps/web/src/components/AppShell.tsx",
+          "sha256": "4e628bfe63ca344686002da779f7f2d442da03dc7fd9f459b2471df25c68582a"
+        },
+        {
+          "path": "/datos/workspaces/personal/aletheia/apps/web/src/app/globals.css",
+          "sha256": "6d1f2902af22e36e5d873ac9354475cc72af4365d5a5c3f0538abbcfffdecc23"
+        }
+      ],
+      "tenant_id": 17,
+      "brand_id": 115,
+      "brand_version": 4,
+      "native_studio_visual_verified": false
+    },
+    {
+      "file": "prizma-icono-existente.svg",
+      "export_sha256": "1972d07aa3c96ccd3925580271b514ed187599fc1fc8d16c0fb50df95d3dc9c1",
+      "source_fragment_sha256": "1972d07aa3c96ccd3925580271b514ed187599fc1fc8d16c0fb50df95d3dc9c1",
+      "role": "existing_product_symbol",
+      "state": "fixed_reference_in_eikon_after_local_source_visual_review",
+      "production_mutated": true,
+      "sources": [
+        {
+          "path": "/datos/workspaces/personal/prizma/_brand-truth/prizma/icon.svg",
+          "sha256": "1972d07aa3c96ccd3925580271b514ed187599fc1fc8d16c0fb50df95d3dc9c1"
+        },
+        {
+          "path": "/datos/workspaces/personal/prizma/Prizma/apps/web/public/icon.svg",
+          "sha256": "1972d07aa3c96ccd3925580271b514ed187599fc1fc8d16c0fb50df95d3dc9c1"
+        }
+      ],
+      "source_commit": "a354dbcece27745651a0587f0e88a861fd2aa283",
+      "variant": "current_header_gold_prism",
+      "legacy_variants_preserved": true,
+      "tenant_id": 17,
+      "brand_id": 120,
+      "brand_version": 5,
+      "native_studio_visual_verified": false
     }
   ]
 }

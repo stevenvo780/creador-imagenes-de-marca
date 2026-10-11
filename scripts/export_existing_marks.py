@@ -72,6 +72,79 @@ def export_aletheia_glyph(source: str, css: str) -> dict[str, Any]:
     return receipt
 
 
+def export_aletheia_symbol(source: str, css: str) -> dict[str, Any]:
+    """Recupera el cuadro y glifo actuales; rechaza geometrías distintas.
+
+    La escala es la del componente con Tailwind estándar: rem=16, spacing=4,
+    border=1. No reconstruye el nombre ni supone una marca nueva.
+    """
+    glyph = export_aletheia_glyph(source, css)
+    start = re.search(r"\bfunction Wordmark\(\)", source)
+    assert start is not None  # comprobado por el exportador del glifo
+    body = re.split(r"\nfunction\s+\w+\(", source[start.end() :], maxsplit=1)[0]
+    fragment = _SVGS.findall(body)[0]
+    prefix = body[: body.index(fragment)]
+    containers = re.findall(r"<span\b[^>]*className=\"([^\"]+)\"[^>]*>", prefix)
+    expected = {
+        "flex",
+        "h-7",
+        "w-7",
+        "shrink-0",
+        "items-center",
+        "justify-center",
+        "rounded-[var(--radius-sm)]",
+        "border",
+    }
+    if not containers or set(containers[-1].split()) != expected:
+        raise ValueError("Contenedor Aletheia distinto del símbolo revisado")
+    container = re.findall(r"<span\b([^>]*)>", prefix)[-1]
+    style = re.search(r"style=\{\{([^{}]+)\}\}", container)
+    if style is None or not re.fullmatch(
+        r"\s*borderColor:\s*'var\(--rule\)'\s*,\s*"
+        r"backgroundColor:\s*'var\(--measure-soft\)'\s*,?\s*",
+        style.group(1),
+    ):
+        raise ValueError("Estilo del contenedor Aletheia sin resolver")
+    if re.search(r"\bfont-size\s*:|--spacing\s*:", css):
+        raise ValueError("Escala CSS modificada: requiere revisar geometría")
+    radius = re.findall(r"--radius-sm:\s*([^;]+);", css)
+    if radius != ["0.25rem"]:
+        raise ValueError("Radio del símbolo Aletheia sin resolver")
+    root = re.search(r":root\s*\{([^}]+)\}", css)
+    tokens = dict(glyph["resolved_tokens"])
+    for token in ("--rule", "--measure-soft"):
+        value = re.search(rf"{token}:\s*(#[0-9a-fA-F]{{6}})\s*;", root.group(1)) if root else None
+        if value is None:
+            raise ValueError(f"Token {token} claro no resuelto")
+        tokens[token] = value.group(1)
+    tree = ET.fromstring(glyph["svg"])
+    if any(
+        tree.attrib.get(k) != v
+        for k, v in {
+            "viewBox": "0 0 16 16",
+            "width": "12",
+            "height": "12",
+            "fill": "none",
+        }.items()
+    ):
+        raise ValueError("Geometría del glifo Aletheia distinta")
+    inner = glyph["svg"].replace("<svg ", '<svg x="8" y="8" ', 1)
+    svg = (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" width="28" height="28">'
+        '<rect x="0.5" y="0.5" width="27" height="27" rx="3.5" '
+        f'fill="{tokens["--measure-soft"]}" stroke="{tokens["--rule"]}" stroke-width="1"/>'
+        f"{inner}</svg>"
+    )
+    result = _receipt(body, _self_contained(svg), "existing_product_symbol")
+    result.update(
+        full_wordmark=False,
+        resolved_tokens=tokens,
+        geometry={"outer_px": 28, "glyph_px": 12, "border_px": 1, "radius_px": 4},
+        scale_assumptions={"root_rem_px": 16, "tailwind_spacing_px": 4},
+    )
+    return result
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cauce-source", type=Path, required=True)
@@ -87,6 +160,11 @@ def main() -> None:
         (
             "aletheia-glifo-existente-claro.svg",
             export_aletheia_glyph(aletheia_text, css_text),
+            [args.aletheia_source, args.aletheia_css],
+        ),
+        (
+            "aletheia-simbolo-existente-claro.svg",
+            export_aletheia_symbol(aletheia_text, css_text),
             [args.aletheia_source, args.aletheia_css],
         ),
     ]

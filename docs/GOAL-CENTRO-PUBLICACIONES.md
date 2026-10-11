@@ -145,3 +145,23 @@ posts. Ambos temporizadores antiguos permanecen deshabilitados e inactivos.
 Recibo y límites en `docs/RELEASE-FAMILIA-HUMANIZAR-20261011.md` y su JSON.
 La meta sigue activa: módulos nuevos pendientes de revisión del diseño escrito
 y del plan; no se presentan como implementados por esta entrega.
+
+## Recuperación de referencias, 19:56 UTC
+
+Aletheia115/v4 conserva ahora el cuadro del componente Wordmark y su glifo,
+no sólo las barras. El exportador rechaza estilos o dimensiones distintas y
+documenta escala rem16/Tailwind estándar. Prizma120/v5 recibió el master exacto
+del encabezado actual, con hash idéntico entre `_brand-truth` y `public/icon.svg`.
+No se alteraron las variantes antiguas de su repositorio.
+
+Se comprobaron fuentes, comparación visual local, escritura y recuperación
+byte exacta mediante API owner de Humanizar, y lectura nativa MCP de ambas
+versiones. Otros campos se conservaron; no se aprobaron medios ni se enviaron
+posts. La prueba del Estudio se interrumpió por otro panel de extensión; la
+GUI de producción sigue esperando acceso del operador. Pruebas focales: 47
+aprobadas y Ruff correcto; revisión independiente sin bloqueantes restantes.
+
+Quedan tres referencias: Deméter (lockup con Lucide Sprout; F es Ficadirecta),
+Gravitatoria (Lucide Package) y Práxis (marca compartida con Mouseîon/personal).
+No se presentan iconos genéricos o de cliente como masters exclusivos.
+La revisión de fuentes fue local y no acredita los encabezados públicos actuales.

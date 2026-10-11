@@ -2,13 +2,17 @@
 
 Exportados el 11 de octubre de 2026. Cauce fue comprobado visualmente en
 Estudio local y fijado como referencia en Eikón (marca 113, v4), conservando sus
-trazos y gradiente. El glifo de Aletheia sigue pendiente; no se han aprobado
-medios ni publicado contenido social.
+trazos y gradiente. Después se recuperaron el símbolo completo de Aletheia y
+el icono vigente del encabezado de Prizma. Ambos fueron fijados en Eikón tras
+comparación visual local de las fuentes; la vista del Estudio quedó detenida
+por un panel de extensión. No se han aprobado medios ni publicado contenido social.
 
 | Producto | Archivo | Qué conserva | Qué no acredita |
 |---|---|---|---|
 | Cauce V3 | `cauce-simbolo-existente.svg` | Los dos trazados ondulados y su gradiente en la cabecera de la landing local | No es una firma con texto ni una comprobación del despliegue público actual |
 | Aletheia | `aletheia-glifo-existente-claro.svg` | Las cuatro barras del componente Wordmark; atributos XML y color claro resuelto desde su CSS | No incluye la caja externa ni el nombre; no se presenta como firma completa |
+| Aletheia | `aletheia-simbolo-existente-claro.svg` | Cuadro de 28 px, borde de 1 px, radio exterior de 4 px y glifo original de 12 px centrado; colores del tema claro | No incluye el nombre; escala basada en rem16 y Tailwind estándar. Marca115/v4, bytes recuperados por API iguales |
+| Prizma | `prizma-icono-existente.svg` | Copia byte exacta del master `_brand-truth/prizma/icon.svg`, idéntica a la referencia del Header actual | No unifica las variantes antiguas del pie/grafo ni acredita su despliegue público. Marca120/v5 |
 
 `provenance.json` registra archivos fuente, hashes completos, hashes de los
 fragmentos y hashes de los SVG resultantes. La geometría no se ha redibujado.
@@ -21,14 +25,17 @@ si hay tokens no resueltos o si el fragmento contiene contenido dinámico.
 Es un extractor específico para estas dos fuentes; no es un parser JSX
 general ni un sanitizador para subir SVG arbitrarios.
 
-Cinco pruebas pasaron después de comprobar su fallo inicial. La revisión
+Dieciséis pruebas del exportador pasaron después de comprobar su fallo inicial. La revisión
 independiente volvió a extraer las fuentes actuales: todos los hashes y bytes
 coinciden. Esta comprobación no sustituye revisión visual ni aprobación de
 marca. El glifo de Aletheia requiere conservar su contexto al componer una firma.
 
-No se seleccionó una variante arbitraria de Prizma, un logo de cliente para
-Deméter, el icono genérico de caja de Gravitatoria ni una marca personal para
-Práxis. Sus decisiones de referencia siguen visibles como pendientes.
+Prizma se seleccionó por coincidencia entre master y encabezado actual; no se
+redibujó. Deméter conserva una composición Sprout + nombre en el código, pero
+el asset con F corresponde a Ficadirecta. Gravitatoria utiliza Lucide Package
+en un cuadro azul; no se elevó el sprite de la maqueta a master propio.
+Práxis comparte cabecera con Mouseîon y marca personal. Esas tres decisiones de
+referencia siguen pendientes; no se fijaron signos de cliente o UI como logos propios.
 
 ## Aplicación preparada a las quince marcas
 
@@ -46,6 +53,6 @@ El archivo conserva la preparación anterior a la aplicación; sus versiones
 y hashes no deben usarse para repetir las escrituras. `slug` identifica el
 producto y `expected_remote_slug` identifica la marca persistida en Eikón.
 Tras desplegar y verificar, se aplicaron los quince perfiles conservando otros
-campos. Cauce recibió después su símbolo original recuperado: ahora hay diez
-referencias fijadas y cinco pendientes. Deben emitirse nuevos briefs/revisiones
+campos. Cauce, Aletheia y Prizma recibieron después sus símbolos originales:
+ahora hay doce referencias fijadas y tres pendientes. Deben emitirse nuevos briefs/revisiones
 para las versiones actuales. Ver `docs/RELEASE-FAMILIA-HUMANIZAR-20261011.json`.

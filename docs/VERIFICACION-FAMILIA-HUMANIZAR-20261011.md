@@ -18,7 +18,7 @@ con un archivo histórico. Otros perfiles conservan su ruta anterior.
 | Suite Python completa, PostgreSQL 16 sintético y SQLite | 867 aprobadas, 2 omitidas | Las dos omisiones requieren outputs de demostración ausentes |
 | Familia y plan HTTP finales, con PostgreSQL | 45 aprobadas | No es inspección de píxeles |
 | Frontend Node final, consumidores TS reales y geometría | 75 aprobadas | No sustituye comprobación de píxeles después de las últimas correcciones |
-| Core de familia y exportaciones finales | 36 aprobadas | Deltas posteriores a la suite general; no sustituye inspección visual |
+| Core de familia y exportaciones finales | 47 aprobadas | Incluye 16 del exportador; deltas posteriores a la suite general, sin nueva corrida global |
 | TypeScript y Vite | Correcto | Build local |
 | Ruff de archivos cambiados nuevos y mypy focal | Correcto | Worker conserva diez RUF036 preexistentes |
 | Revisión independiente, cinco rondas | Aprobado sin bloqueantes nuevos | Retícula 12 real sólo en social_4x5 |
@@ -36,8 +36,10 @@ de cuatro y ocho columnas no se presentan como layouts responsive terminados.
 1. Completar el recorrido GUI autenticado en producción; el operador tiene la
    pestaña preparada en /brands. La prueba local y la API desplegada están
    verificadas; no sustituyen ese acceso.
-2. Resolver cinco referencias de producto pendientes. Los quince perfiles
-   están aplicados y diez logos fijados, incluido Cauce; conservar procedencia.
+2. Resolver tres referencias: Deméter, Gravitatoria y Práxis. Los quince perfiles
+   están aplicados y doce logos fijados, incluidos Cauce, Aletheia y Prizma.
+   Aletheia/Prizma tienen comparación local de fuentes y lectura API/MCP; su
+   vista del Estudio quedó pendiente al abrirse un panel de extensión.
 3. Emitir nuevos briefs y revisar piezas contra las versiones actuales;
    no aprobar automáticamente borradores ni borrar versiones previas.
 
