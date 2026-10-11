@@ -1,0 +1,171 @@
+{
+  "status": "draft_not_publishable",
+  "tenant_id": 17,
+  "items": [
+    {
+      "slug": "sinergia-pos",
+      "brand_id": 109,
+      "brand_version": 5,
+      "caption": "Tu mostrador, en orden.\n\nVentas, caja e inventario en un mismo lugar.\n\nConoce más: https://pos.saldantia.cloud",
+      "status": "draft_pending_editorial_review",
+      "source_url": "https://pos.saldantia.cloud",
+      "source": "briefs-identidad revision2; no cifras o promesas adicionales",
+      "destination_selected": false,
+      "scheduled_at": null
+    },
+    {
+      "slug": "demeter",
+      "brand_id": 110,
+      "brand_version": 4,
+      "caption": "Del pedido a la ruta.\n\nUna operación clara para distribuir alimentos.\n\nConoce más: https://demeter.humanizar.cloud",
+      "status": "draft_pending_editorial_review",
+      "source_url": "https://demeter.humanizar.cloud",
+      "source": "briefs-identidad revision2; no cifras o promesas adicionales",
+      "destination_selected": false,
+      "scheduled_at": null
+    },
+    {
+      "slug": "graf-commerce",
+      "brand_id": 111,
+      "brand_version": 4,
+      "caption": "Tu tienda, conectada.\n\nCatálogo, pedidos y ventas de cada comercio.\n\nConoce más: https://admin.graf.com.co",
+      "status": "draft_pending_editorial_review",
+      "source_url": "https://admin.graf.com.co",
+      "source": "briefs-identidad revision2; no cifras o promesas adicionales",
+      "destination_selected": false,
+      "scheduled_at": null
+    },
+    {
+      "slug": "xenia",
+      "brand_id": 112,
+      "brand_version": 4,
+      "caption": "Cada relación cuenta.\n\nContactos y oportunidades con seguimiento.\n\nConoce más: https://xenia.stevenvallejo.com",
+      "status": "draft_pending_editorial_review",
+      "source_url": "https://xenia.stevenvallejo.com",
+      "source": "briefs-identidad revision2; no cifras o promesas adicionales",
+      "destination_selected": false,
+      "scheduled_at": null
+    },
+    {
+      "slug": "cauce",
+      "brand_id": 113,
+      "brand_version": 4,
+      "caption": "Coordinar con criterio.\n\nAgentes, tareas y decisiones bajo control humano.\n\nConoce más: https://cauce.humanizar.tech",
+      "status": "draft_pending_editorial_review",
+      "source_url": "https://cauce.humanizar.tech",
+      "source": "briefs-identidad revision2; no cifras o promesas adicionales",
+      "destination_selected": false,
+      "scheduled_at": null
+    },
+    {
+      "slug": "agora",
+      "brand_id": 114,
+      "brand_version": 4,
+      "caption": "Investigar. Formalizar. Compartir.\n\nEscritura académica y formalización de argumentos.\n\nConoce más: https://agora.elenxos.com",
+      "status": "draft_pending_editorial_review",
+      "source_url": "https://agora.elenxos.com",
+      "source": "briefs-identidad revision2; no cifras o promesas adicionales",
+      "destination_selected": false,
+      "scheduled_at": null
+    },
+    {
+      "slug": "aletheia",
+      "brand_id": 115,
+      "brand_version": 4,
+      "caption": "Cada tarea necesita evidencia.\n\nMétricas, ventanas y veredictos con límites claros.\n\nConoce más: https://aletheia.humanizar.tech",
+      "status": "draft_pending_editorial_review",
+      "source_url": "https://aletheia.humanizar.tech",
+      "source": "briefs-identidad revision2; no cifras o promesas adicionales",
+      "destination_selected": false,
+      "scheduled_at": null
+    },
+    {
+      "slug": "apotheke",
+      "brand_id": 116,
+      "brand_version": 4,
+      "caption": "El almacén, a la vista.\n\nExistencias y pedidos para pequeños equipos.\n\nConoce más: https://apotheke.stevenvallejo.com",
+      "status": "draft_pending_editorial_review",
+      "source_url": "https://apotheke.stevenvallejo.com",
+      "source": "briefs-identidad revision2; no cifras o promesas adicionales",
+      "destination_selected": false,
+      "scheduled_at": null
+    },
+    {
+      "slug": "koinonia",
+      "brand_id": 117,
+      "brand_version": 4,
+      "caption": "Pensar juntos, encontrarse.\n\nComunidad, lecturas, debates y eventos.\n\nConoce más: https://koinonia.stevenvallejo.com",
+      "status": "draft_pending_editorial_review",
+      "source_url": "https://koinonia.stevenvallejo.com",
+      "source": "briefs-identidad revision2; no cifras o promesas adicionales",
+      "destination_selected": false,
+      "scheduled_at": null
+    },
+    {
+      "slug": "chronos",
+      "brand_id": 118,
+      "brand_version": 4,
+      "caption": "Tu tiempo tiene un lugar.\n\nHoras, proyectos y cuentas de cobro.\n\nConoce más: https://chronos.stevenvallejo.com",
+      "status": "draft_pending_editorial_review",
+      "source_url": "https://chronos.stevenvallejo.com",
+      "source": "briefs-identidad revision2; no cifras o promesas adicionales",
+      "destination_selected": false,
+      "scheduled_at": null
+    },
+    {
+      "slug": "gravitatoria",
+      "brand_id": 119,
+      "brand_version": 4,
+      "caption": "Comercios que se encuentran.\n\nPublica lo que ofreces y encuentra lo que necesitas.\n\nConoce más: https://gravitatoria.humanizar.tech",
+      "status": "draft_pending_editorial_review",
+      "source_url": "https://gravitatoria.humanizar.tech",
+      "source": "briefs-identidad revision2; no cifras o promesas adicionales",
+      "destination_selected": false,
+      "scheduled_at": null
+    },
+    {
+      "slug": "prizma",
+      "brand_id": 120,
+      "brand_version": 5,
+      "caption": "Una operación, muchas piezas.\n\nComercio, caja, cartera y entregas en una suite.\n\nConoce más: https://prisma-enterprice.cloud",
+      "status": "draft_pending_editorial_review",
+      "source_url": "https://prisma-enterprice.cloud",
+      "source": "briefs-identidad revision2; no cifras o promesas adicionales",
+      "destination_selected": false,
+      "scheduled_at": null
+    },
+    {
+      "slug": "praxis",
+      "brand_id": 121,
+      "brand_version": 4,
+      "caption": "De la idea a un sistema operable.\n\nSoftware, automatización y piezas visuales a medida.\n\nConoce más: https://praxis.stevenvallejo.com",
+      "status": "draft_pending_editorial_review",
+      "source_url": "https://praxis.stevenvallejo.com",
+      "source": "briefs-identidad revision2; no cifras o promesas adicionales",
+      "destination_selected": false,
+      "scheduled_at": null
+    },
+    {
+      "slug": "ergon",
+      "brand_id": 122,
+      "brand_version": 4,
+      "caption": "Una base para tu forma de trabajar.\n\nSoftware a medida desde kits reutilizables.\n\nConoce más: https://ergon.stevenvallejo.com",
+      "status": "draft_pending_editorial_review",
+      "source_url": "https://ergon.stevenvallejo.com",
+      "source": "briefs-identidad revision2; no cifras o promesas adicionales",
+      "destination_selected": false,
+      "scheduled_at": null
+    },
+    {
+      "slug": "agentes",
+      "brand_id": 123,
+      "brand_version": 4,
+      "caption": "Tu proceso, con un equipo nuevo.\n\nAgentes a la medida sobre tus herramientas.\n\nConoce más: https://agentes.humanizar.tech/",
+      "status": "draft_pending_editorial_review",
+      "source_url": "https://agentes.humanizar.tech/",
+      "source": "briefs-identidad revision2; no cifras o promesas adicionales",
+      "destination_selected": false,
+      "scheduled_at": null
+    }
+  ]
+}

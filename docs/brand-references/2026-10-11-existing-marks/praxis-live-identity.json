@@ -1,0 +1,13 @@
+{
+  "href": "https://stevenvallejo.com",
+  "images": [],
+  "label": "Práxis — Mouseîon",
+  "style": {
+    "color": "rgb(232, 224, 212)",
+    "font": "16px / 25.6px Geist, \"Geist Fallback\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+  },
+  "svgs": [
+    "<svg class=\"brand-logo\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 64 64\" width=\"30\" height=\"30\" aria-hidden=\"true\" focusable=\"false\"><defs><linearGradient id=\"sv-sig-nav\" x1=\"12\" y1=\"16\" x2=\"52\" y2=\"50\" gradientUnits=\"userSpaceOnUse\"><stop offset=\"0\" stop-color=\"#e0a85e\"></stop><stop offset=\"0.35\" stop-color=\"#c0522a\"></stop><stop offset=\"1\" stop-color=\"#43b5a6\"></stop></linearGradient><radialGradient id=\"sv-cosmos-nav\" cx=\"0.32\" cy=\"0.26\" r=\"0.95\"><stop offset=\"0\" stop-color=\"#0f1c20\"></stop><stop offset=\"0.55\" stop-color=\"#0b1417\"></stop><stop offset=\"1\" stop-color=\"#091012\"></stop></radialGradient><radialGradient id=\"sv-core-nav\" cx=\"0.5\" cy=\"0.42\" r=\"0.6\"><stop offset=\"0\" stop-color=\"#f0c887\"></stop><stop offset=\"1\" stop-color=\"#e0a85e\"></stop></radialGradient></defs><rect x=\"2\" y=\"2\" width=\"60\" height=\"60\" rx=\"15\" fill=\"url(#sv-cosmos-nav)\"></rect><rect x=\"2.5\" y=\"2.5\" width=\"59\" height=\"59\" rx=\"14.5\" fill=\"none\" stroke=\"#43b5a6\" stroke-opacity=\"0.22\" stroke-width=\"1\"></rect><path d=\"M32 32 C 24 22, 14 24, 14 32 C 14 40, 24 42, 32 32 C 40 22, 50 24, 50 32 C 50 40, 40 42, 32 32 Z\" fill=\"none\" stroke=\"url(#sv-sig-nav)\" stroke-width=\"3.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path><circle cx=\"32\" cy=\"32\" r=\"3\" fill=\"url(#sv-core-nav)\"></circle></svg>"
+  ],
+  "text": "PráxisMouseîon"
+}

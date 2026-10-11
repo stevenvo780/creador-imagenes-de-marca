@@ -39,8 +39,15 @@ La ausencia de símbolo exclusivo no impide conservar la composición que el
 producto ya utiliza; se corrigió ese criterio anterior. No son masters
 históricos encontrados ni acreditan exclusividad o registro. El asset F sigue
 siendo de Ficadirecta; el sprite de la maqueta no sustituyó al Package actual.
-Práxis comparte cabecera con Mouseîon y marca personal: esa referencia sigue
-pendiente de decisión, sin apropiarse de un signo compartido.
+Práxis121/v4 conserva después el símbolo compartido de Mouseîon/personal que
+su cabecera vigente asocia expresamente a «Práxis — Mouseîon». Se conserva el
+fragmento SVG exacto del DOM, sin salto añadido ni cambios de trazo/gradientes.
+CSS calculado confirma tamaño30×30, opacity1, sin filter o transform. El enlace
+original apunta a stevenvallejo.com; se documenta como signo compartido usado
+en Práxis, sin atribuir exclusividad ni un master independiente histórico.
+La comparación visual y revisión independiente aprobaron conservar esta fuente.
+El original importado en la pieza43 aparece en galería real y snapshotv4,
+pendiente de revisión editorial.
 
 Deméter110/v4 conserva tema claro: glifo verde, fondo transparente y anillo
 azul50%, tal como se verificó por CSS calculado en la landing publicada.
@@ -74,5 +81,5 @@ y hashes no deben usarse para repetir las escrituras. `slug` identifica el
 producto y `expected_remote_slug` identifica la marca persistida en Eikón.
 Tras desplegar y verificar, se aplicaron los quince perfiles conservando otros
 campos. Cauce, Aletheia y Prizma recibieron después sus símbolos originales:
-ahora hay catorce referencias fijadas y sólo Práxis pendiente. Deben emitirse nuevos briefs/revisiones
+ahora hay quince referencias de producto fijadas. Deben emitirse nuevos briefs/revisiones
 para las versiones actuales. Ver `docs/RELEASE-FAMILIA-HUMANIZAR-20261011.json`.

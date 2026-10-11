@@ -1,7 +1,7 @@
 # Meta: Eikón como centro de marca y publicaciones
 
 Creada por instrucción del operador el **11 de octubre de 2026**, America/Bogota.
-Estado: **bloqueada por revisión escrita pendiente**, para los
+Estado: **activa tras reanudación**, con revisión escrita pendiente para los
 módulos nuevos. La meta del chat es el seguimiento principal; este documento
 conserva requisitos, avances y evidencia del repositorio.
 
@@ -242,3 +242,31 @@ Este cambio es de datos y documentación: conserva runtimee956d37/revisión60.
 La revisión escrita de los nuevos módulos sigue pendiente tras tres turnos
 reanudados. Cerrados estos trabajos independientes, la meta queda bloqueada
 por esa revisión, no completada; falta el plan y la implementación del centro.
+
+
+## Continuación: Práxis y quince piezas completas, 23:20 UTC
+
+Se revalidó la cabecera de Práxis: aria-label «Práxis — Mouseîon», enlace personal
+original y SVG exacto sin efectos CSS externos. El criterio de conservación
+no exige exclusividad: se fija como signo compartido vigente, sin presentar
+un logo propio exclusivo Humanizar. Referencia121/v3null→v4, bytes recuperados
+iguales y otros campos conservados; revisión independiente aprobada.
+Las quince marcas de producto tienen ahora referencia, sin alterar originales.
+
+Las quince ilustraciones Codex del9 de octubre se conservaron y compusieron
+con los logos/versiones actuales, Manrope y layout común4x5, sin redibujar logos
+ni generar imágenes nuevas con otro proveedor. Canvas en navegador produjo
+PNG1080×1350 con fit/contain/márgenes; revisión visual independiente15/15 sin
+bloqueantes. El rótulo textual HUMANIZAR del pie no es el archivo oficial de firma.
+
+Tools MCP nativos crearon briefs30–44 e importaron medios31–45. API owner17
+comprueba PNG descargado igual al local para los quince, snapshot actual,
+pending_review, sin reviews y approval_currentfalse. GUI real abre pieza43,
+original, snapshot Práxisv4 e historial vacío. Conteos actuales:30pending,
+12rejected,1approved conservado. No se eliminaron versiones ni aprobaron piezas.
+También se prepararon quince captions en borrador, sin destino/horario elegido.
+
+No se cambió código runtime ni se desplegó una funcionalidad de campañas.
+La meta sigue activa; es el primer turno reanudado tras el bloqueo. El diseño
+escrito para módulos nuevos sigue pendiente de revisión; no se ha creado su
+plan ni implementación. No hubo nuevas publicaciones o activación de timers.

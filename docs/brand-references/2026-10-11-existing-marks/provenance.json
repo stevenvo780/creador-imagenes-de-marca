@@ -210,6 +210,45 @@
         2160,
         2700
       ]
+    },
+    {
+      "file": "praxis-simbolo-compartido-mouseion.svg",
+      "export_sha256": "4b8e036a93de9508b0681a0a9f49a99af5c201bb42fb4774033a64d5fa08ad67",
+      "source_fragment_sha256": "4b8e036a93de9508b0681a0a9f49a99af5c201bb42fb4774033a64d5fa08ad67",
+      "role": "shared_personal_mouseion_symbol_used_in_praxis_lockup",
+      "state": "fixed_shared_reference_after_live_header_and_visual_review",
+      "production_mutated": true,
+      "full_wordmark": false,
+      "exclusive_symbol_claimed": false,
+      "tenant_id": 17,
+      "brand_id": 121,
+      "live_source_url": "https://praxis.stevenvallejo.com",
+      "brand_link_label": "Práxis — Mouseîon",
+      "brand_link_href": "https://stevenvallejo.com",
+      "source_revision_known": false,
+      "captured_on": "2026-10-11",
+      "normalization": "none; exact UTF-8 DOM fragment without appended newline",
+      "computed_style": {
+        "color": "rgb(232, 224, 212)",
+        "filter": "none",
+        "height": "30px",
+        "opacity": "1",
+        "transform": "none",
+        "width": "30px"
+      },
+      "sources": [
+        {
+          "path": "/datos/workspaces/personal/eikon-codex-publicaciones/docs/brand-references/2026-10-11-existing-marks/praxis-live-identity.json",
+          "sha256": "356084fc85d8727cf9126b4ae1b39609e9815969b59e7c01482110062b3bee79"
+        },
+        {
+          "path": "/datos/workspaces/personal/eikon-codex-publicaciones/docs/brand-references/2026-10-11-existing-marks/praxis-live-symbol-style.json",
+          "sha256": "23554ef7152b710d8823e39bb811d07f1ce407a04389df976213bc1709b9ed04"
+        }
+      ],
+      "brand_version": 4,
+      "native_gallery_visual_verified": true,
+      "native_gallery_scope": "Humanizar owner browser; completed product media43 in original/snapshot/review detail, not editorial approval"
     }
   ]
 }

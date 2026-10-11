@@ -34,17 +34,19 @@ de cuatro y ocho columnas no se presentan como layouts responsive terminados.
 
 ## Pendientes de aceptación
 
-1. Resolver la referencia de Práxis. Los quince perfiles están aplicados y
-   catorce logos fijados, incluidos Deméter y Gravitatoria110/119v4. Sus lockups
-   UI existentes se verificaron en páginas vigentes; ambos PNG2160×2700 fueron
-   generados, descargados e inspeccionados en producción.
-   Aletheia/Prizma tienen comparación local de fuentes, lectura API/MCP y PNG
-   final descargado e inspeccionado en Estudio local.
-2. Emitir nuevos briefs y revisar piezas contra las versiones actuales;
-   no aprobar automáticamente borradores ni borrar versiones previas.
+1. Referencias cerradas: quince marcas de producto tienen logo conservado.
+   Práxis121/v4 utiliza el símbolo compartido de su cabecera Mouseîon/personal,
+   con procedencia y límite de exclusividad explícitos. API/MCP devuelven los
+   bytes/hash actuales; galería GUI muestra su snapshot originalv4.
+2. Revisar editorialmente las quince piezas completas1080×1350 nuevas,
+   medios31–45/briefs30–44, ya importadas por tools MCP nativos contra las
+   versiones actuales. Las quince ilustraciones fuente se conservan; nuevas
+   piezas pending_review, sin reviews ni aprobación actual. Ver recibo
+   RELEASE-PIEZAS-PRODUCTO-HUMANIZAR-20261011.json. No hay autorización social.
+
 
 Los nuevos módulos del centro se describen en el diseño del 11 de octubre y
-requieren su revisión escrita antes del plan. La meta permanece activa.
+requieren su revisión escrita antes del plan. La meta permanece activa tras reanudación; revisión del diseño aún pendiente.
 
 La prueba GUI de producción se cerró el 11 de octubre usando la sesión que ya
 estaba abierta en eikon.humanizar.cloud. Se recargó la pestaña antigua y mostró
