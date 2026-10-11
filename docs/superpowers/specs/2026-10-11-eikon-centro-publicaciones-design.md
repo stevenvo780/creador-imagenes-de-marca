@@ -223,8 +223,10 @@ real exige una pieza final revisada por el owner, una reserva y un envío por
 cuenta autorizada, con recibo y lectura posterior. Cada prueba registra SHA de
 código y pieza, cuenta, fecha, contrato y resultado; sin tokens en evidencia.
 
-El despliegue reutiliza servicio/proxy/worker existentes, con respaldo privado de
-configuración y datos. Los nuevos timers empiezan deshabilitados. El calendario
+El despliegue reutiliza el servicio y proxy existentes, con respaldo privado de
+configuración y datos. El trabajador de publicaciones es un proceso duradero
+separado en server2 que reutiliza los adaptadores Humanizar; el WorkerPool de
+Eikón sigue dedicado a renderizar y no recibe permisos de publicación. Los nuevos timers empiezan deshabilitados. El calendario
 antiguo permanece apagado; su reactivación no forma parte de la migración. No se
 retrocede a una revisión que ignore grants nuevos o lea credenciales sin sus guards.
 

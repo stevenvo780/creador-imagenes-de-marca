@@ -33,7 +33,10 @@
       "source_url": "https://admin.graf.com.co",
       "source": "briefs-identidad revision2; no cifras o promesas adicionales",
       "destination_selected": false,
-      "scheduled_at": null
+      "scheduled_at": null,
+      "editorial_notes": [
+        "La URL de origen es el panel de administración Graf. Revisar si es el destino adecuado para este texto «Conoce más»; no se ha elegido ni supuesto una página comercial alternativa."
+      ]
     },
     {
       "slug": "xenia",
@@ -167,5 +170,12 @@
       "destination_selected": false,
       "scheduled_at": null
     }
-  ]
+  ],
+  "link_precheck": {
+    "evidence": "VERIFICACION-ENLACES-BORRADORES-20261011.json",
+    "captured_at": "2026-10-11T23:26:20.330813+00:00",
+    "reachable_html_responses": 15,
+    "editorial_approval": false,
+    "functional_test": false
+  }
 }

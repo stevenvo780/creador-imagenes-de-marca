@@ -270,3 +270,25 @@ No se cambió código runtime ni se desplegó una funcionalidad de campañas.
 La meta sigue activa; es el primer turno reanudado tras el bloqueo. El diseño
 escrito para módulos nuevos sigue pendiente de revisión; no se ha creado su
 plan ni implementación. No hubo nuevas publicaciones o activación de timers.
+
+
+## Revalidación previa a la siguiente fase
+
+El segundo turno de continuación conserva la revisión escrita pendiente.
+La entrega anterior fue progreso: importó quince medios completos y fijó la
+referencia de Práxis. No hay un proceso de implementación esperando ni se
+considera una conversación un trabajo en ejecución.
+
+Se contrastaron los routers montados, MediaReviewRequest, permisos y rutas React
+con el diseño: la revisión actual congela archivo e identidad, pero no caption,
+cuenta o fecha; los seis scopes Codex no conceden publicaciones; WorkerPool
+renderiza. Se aclaró en el diseño que el publicador duradero de server2 será
+separado del renderizador existente. No se creó un plan ni código de subsistemas.
+
+Los quince enlaces de los borradores respondieron HTTP 200 por GET público
+sin autenticación desde este host. El recibo guarda fecha, título y SHA del HTML.
+Es evidencia de transporte, no de función, identidad, consentimiento ni
+aprobación comercial. El enlace de Graf sigue siendo el panel administrativo;
+se añadió esta observación al borrador para la revisión del CTA. No se inventó
+una URL comercial alternativa ni se modificaron medios, cuentas o horarios.
+Ver VERIFICACION-ENLACES-BORRADORES-20261011.json.
