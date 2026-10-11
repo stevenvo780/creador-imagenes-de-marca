@@ -13,6 +13,8 @@ manifest linux/amd64 efectivo
 `sha256:a3199ab424897f16fa5e5011361e5cd404e247d6774e98678027bd5a82c5dc04`,
 comprobado como miembro del index. Nueve archivos runtime coinciden con el
 checkout; los dos orígenes Cloud Run y Vercel sirven la SPA exacta de la imagen.
+El JS principal y CSS publicados en los tres orígenes coinciden byte a byte
+con el build, incluyendo la corrección de handlers y controles.
 Recursos, variables, secretos, red, permisos del servicio y bucket se conservaron.
 
 El Estudio limpiaba la pieza previa al cambiar de marca, pero mantenía los

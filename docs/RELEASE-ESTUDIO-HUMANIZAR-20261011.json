@@ -14,17 +14,47 @@
       {
         "origin": "https://eikon-633619052458.us-central1.run.app",
         "health": 200,
-        "spa_matches_image": true
+        "spa_matches_image": true,
+        "frontend_assets_match_checkout": [
+          {
+            "path": "/assets/index-UtUBVgYW.js",
+            "sha256": "414a6f3ed65efae80d90397c502a658e94b9ee5f61dea9b1e221e5e4cbaa1057"
+          },
+          {
+            "path": "/assets/index-Co9mG5BH.css",
+            "sha256": "76345eb77e0b76b04e07ae615b088ba925b6dc703691acdd57c0be9a73b57858"
+          }
+        ]
       },
       {
         "origin": "https://eikon-6dalnsowyq-uc.a.run.app",
         "health": 200,
-        "spa_matches_image": true
+        "spa_matches_image": true,
+        "frontend_assets_match_checkout": [
+          {
+            "path": "/assets/index-UtUBVgYW.js",
+            "sha256": "414a6f3ed65efae80d90397c502a658e94b9ee5f61dea9b1e221e5e4cbaa1057"
+          },
+          {
+            "path": "/assets/index-Co9mG5BH.css",
+            "sha256": "76345eb77e0b76b04e07ae615b088ba925b6dc703691acdd57c0be9a73b57858"
+          }
+        ]
       },
       {
         "origin": "https://eikon-proxy.vercel.app",
         "health": 200,
-        "spa_matches_image": true
+        "spa_matches_image": true,
+        "frontend_assets_match_checkout": [
+          {
+            "path": "/assets/index-UtUBVgYW.js",
+            "sha256": "414a6f3ed65efae80d90397c502a658e94b9ee5f61dea9b1e221e5e4cbaa1057"
+          },
+          {
+            "path": "/assets/index-Co9mG5BH.css",
+            "sha256": "76345eb77e0b76b04e07ae615b088ba925b6dc703691acdd57c0be9a73b57858"
+          }
+        ]
       }
     ],
     "native_local_visual_verified": true,
