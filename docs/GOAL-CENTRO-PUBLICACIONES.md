@@ -1,8 +1,8 @@
 # Meta: Eikón como centro de marca y publicaciones
 
 Creada por instrucción del operador el **11 de octubre de 2026**, America/Bogota.
-Estado: **activa tras reanudación**, con revisión escrita pendiente para los
-módulos nuevos. La meta del chat es el seguimiento principal; este documento
+Estado: **bloqueada por revisión escrita pendiente** de los módulos nuevos.
+La entrega de identidad y galería se conserva; el objetivo completo sigue pendiente. La meta del chat es el seguimiento principal; este documento
 conserva requisitos, avances y evidencia del repositorio.
 
 ## Resultado esperado
@@ -292,3 +292,22 @@ aprobación comercial. El enlace de Graf sigue siendo el panel administrativo;
 se añadió esta observación al borrador para la revisión del CTA. No se inventó
 una URL comercial alternativa ni se modificaron medios, cuentas o horarios.
 Ver VERIFICACION-ENLACES-BORRADORES-20261011.json.
+
+
+## Bloqueo confirmado tras tres turnos de continuación
+
+La revisión humana del diseño escrito sigue pendiente en tres turnos consecutivos
+del tramo reanudado. Los dos primeros completaron trabajo independiente: quince
+referencias y composiciones, luego enlaces y aclaración del contrato del trabajador.
+La comprobación siguiente encontró el repositorio limpio en 37fb01e y el diseño
+todavía marcado para revisión. Los cuatro subagentes de esta entrega están
+completados; no hay un trabajo vivo que justifique esperar su resultado.
+
+La regla explícita de brainstorming exige aprobación del documento antes de
+preparar el plan, y revisión del plan antes de implementación. No hay trabajo
+independiente adicional necesario que permita completar campañas, conexiones,
+calendario y publicación sin esa revisión. La meta se marca bloqueada, no
+completada. El alcance, piezas, historial y restricciones permanecen íntegros.
+
+Para desbloquear: el operador revisa y aprueba, o solicita cambios concretos en
+`docs/superpowers/specs/2026-10-11-eikon-centro-publicaciones-design.md`.
