@@ -643,14 +643,12 @@ export function AssetStudioPage() {
             >
               {resultVariation ? (
                 <img
+                  className="eikon-preview-image"
                   src={resultVariation.file_url}
                   alt="Vista previa del activo generado"
                   style={{
-                    maxWidth: "100%",
-                    maxHeight: "100%",
                     borderRadius: "var(--r-sm)",
                     boxShadow: "var(--shadow-2)",
-                    objectFit: "contain",
                   }}
                 />
               ) : (

@@ -179,6 +179,13 @@ function createAndMountContainer(
 
   // Copiar el body al contenedor
   const bodyContent = doc.body;
+  // El body importado también recibe el CSS de la SPA (p. ej. min-height:100vh).
+  // Fijar su caja al lienzo evita recortar el footer o ensanchar formatos pequeños.
+  bodyContent.style.width = `${viewport.w}px`;
+  bodyContent.style.height = `${viewport.h}px`;
+  bodyContent.style.minWidth = `${viewport.w}px`;
+  bodyContent.style.minHeight = `${viewport.h}px`;
+  bodyContent.style.boxSizing = "border-box";
 
   // Vars de la marca como CSS custom properties (:root)
   const styleElement = document.createElement("style");

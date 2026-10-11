@@ -17,12 +17,14 @@ con un archivo histórico. Otros perfiles conservan su ruta anterior.
 |---|---|---|
 | Suite Python completa, PostgreSQL 16 sintético y SQLite | 867 aprobadas, 2 omitidas | Las dos omisiones requieren outputs de demostración ausentes |
 | Familia y plan HTTP finales, con PostgreSQL | 45 aprobadas | No es inspección de píxeles |
-| Frontend Node, consumidores TS reales | 67 aprobadas | No sustituye generación en navegador |
+| Frontend Node final, consumidores TS reales y geometría | 75 aprobadas | No sustituye comprobación de píxeles después de las últimas correcciones |
+| Core final tras corrección de tamaño del logo | 24 aprobadas | No acredita por sí solo legibilidad visual |
 | TypeScript y Vite | Correcto | Build local |
 | Ruff de archivos cambiados nuevos y mypy focal | Correcto | Worker conserva diez RUF036 preexistentes |
-| Revisión independiente, tres rondas | Aprobado sin bloqueantes nuevos | Retícula 12 real sólo en social_4x5 |
-| Navegador, cuenta sintética local | Acceso y badges de tres marcas correctos | Generación y descarga pendientes por panel de extensión |
-| Respaldo privado de producción | Dump fresco, 112053 bytes, configuración e IAM preservados | Restauración no ensayada; no acredita despliegue |
+| Revisión independiente, cinco rondas | Aprobado sin bloqueantes nuevos | Retícula 12 real sólo en social_4x5 |
+| Navegador, cuenta sintética local | Acceso, badges, generación y PNG descargado 2160×2700 | La inspección encontró defectos; QA de sus correcciones pendiente por panel de extensión |
+| Respaldo privado de producción | Dump fresco, 112053 bytes, restauración en clon sin red y doble init_db sin modificar filas/columnas | No acredita despliegue |
+| Imagen Docker local | Build correcto | Aún no enviada al registro ni desplegada |
 
 La prueba HTTP final comprueba creación 202, plan 200, formato 1080×1350,
 plantilla accesible con autenticación y otro tenant rechazado con 404. También
@@ -31,9 +33,11 @@ de cuatro y ocho columnas no se presentan como layouts responsive terminados.
 
 ## Pendientes de aceptación
 
-1. Reanudar CUA al cerrar el panel de la extensión; generar la pieza vertical,
-   comprobar fuente, retícula, ausencia de desbordamientos y logo horizontal,
-   y descargar su PNG.
+1. Reanudar CUA al cerrar el panel de la extensión; regenerar la pieza vertical
+   tras las correcciones de preview, ancho de logo y mínimos del body importado.
+   Comprobar fuente, retícula, pie visible, ausencia de desbordamientos y logo
+   horizontal, y descargar su PNG. La descarga anterior existió aunque el
+   observador de eventos del navegador agotó su tiempo de espera.
 2. Sólo tras ese gate, actualizar la imagen del servicio existente y comprobar
    SHA/digest, configuración, API y recorrido real. Mantener cola antigua parada.
 3. Aplicar el perfil a las marcas Humanizar con nuevas revisiones de piezas;

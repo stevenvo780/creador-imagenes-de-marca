@@ -82,11 +82,16 @@ entregas antiguas repetidas retenidas. Ver el informe canónico en ComercialHuma
   ausentes; PostgreSQL de prueba aislado habilitado. Pruebas finales añadidas:
   **45 aprobadas**, incluyendo PostgreSQL. Frontend: **67 aprobadas** y build
   TypeScript/Vite correcto. Ruff de archivos nuevos y mypy focal pasan.
-- Navegador local: acceso y los tres estados de marca verificados. La prueba
-  visual de generación/descarga se detuvo por un panel de otra extensión;
-  se pidió al operador cerrarlo. Esa parte no se declara aprobada.
-- Respaldo privado fresco de producción creado; restauración de ese respaldo
-  aún no ensayada. No se ha desplegado esta entrega ni cambiado marcas reales.
+- Navegador local: acceso, tres estados de marca y generación vertical
+  verificados. Se descargó PNG 2160×2700, pero la inspección descubrió recorte
+  en preview, logo demasiado pequeño y pie fuera del PNG. Corregidos con TDD:
+  marco de preview, ancho útil de logo 231 px y mínimos del body fijados al
+  viewport. Frontend final: **75 aprobadas**, build correcto; core final:
+  **24 aprobadas**. Revisión independiente aprobada. La comprobación visual
+  posterior a esos cambios se detuvo otra vez por panel de extensión.
+- Respaldo privado fresco de producción restaurado en un clon sin red:
+  init_db dos veces conserva filas y columnas. Imagen Docker local construida.
+  No se ha desplegado esta entrega ni cambiado marcas reales.
 
 La meta permanece activa. Campañas, revisión completa, conexiones, calendario
 y panel siguen pendientes del diseño escrito y posterior plan de ejecución.

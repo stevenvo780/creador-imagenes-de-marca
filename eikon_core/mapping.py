@@ -451,6 +451,7 @@ def _apply_humanizar_profile(result: dict[str, str], scheme: str = "") -> None:
             "grid_gutter": f"{spacing_unit * 8}px",
             "logo_clearance_ratio": "0.125",
             "logo_clearance": f"{social_logo_box / 8:g}px",
+            "logo_tile_width": f"{social_logo_box * 2}px",
             "text_secondary": ink,
             "composition_background": "none",
             "wordmark_gradient": "none",

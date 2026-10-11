@@ -139,6 +139,12 @@ def test_social_template_consumes_render_profile_and_retains_legacy_fallbacks():
     assert css["--content_grid_span"] == "1 / -1"
     assert resolved(r"\.tile img[^}]*object-fit:([^}]+)") == "contain"
     assert css["--logo_clearance"] == "16.5px"
+    # La firma horizontal tiene al menos 220 px útiles, además del área libre.
+    tile_width = float(resolved(r"\.tile\{\s*width:([^;]+)").removesuffix("px"))
+    clearance = float(css["--logo_clearance"].removesuffix("px"))
+    assert tile_width - 2 * clearance >= 220
+    assert "height:132px" in style
+    assert "width:var(--logo_tile_width,132px)" in style
     assert css["--display_weight"] == "720"
     assert "font-weight:var(--display_weight,900)" in style
     assert "padding:var(--logo_clearance,0px)" in style

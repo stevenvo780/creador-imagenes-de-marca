@@ -403,6 +403,16 @@ textarea:focus {
   min-height: 360px;
 }
 
+/* Una caja definida permite ver completos los PNG verticales y horizontales. */
+.eikon-preview-image {
+  position: absolute;
+  inset: var(--space-6);
+  width: calc(100% - 2 * var(--space-6));
+  height: calc(100% - 2 * var(--space-6));
+  display: block;
+  object-fit: contain;
+}
+
 .eikon-brand-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

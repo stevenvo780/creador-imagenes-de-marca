@@ -29,6 +29,7 @@ _CSS_MAP = {
             "grid_gutter",
             "logo_clearance_ratio",
             "logo_clearance",
+            "logo_tile_width",
             "text_secondary",
             "display_weight",
             "composition_background",
