@@ -27,15 +27,19 @@ function visit(node) {
          "currentFields", "selectedAssetLabel", "selectedDimensions"].includes(name))
       expressions.set(name, node.initializer);
   }
-  if (ts.isFunctionDeclaration(node) && node.name?.text === "extractAssetDimensions")
-    expressions.set("extractAssetDimensions", node);
+  if (ts.isFunctionDeclaration(node) && ["extractAssetDimensions", "handleBrandChange", "handleContentChange"].includes(node.name?.text))
+    expressions.set(node.name.text, node);
   if (ts.isJsxOpeningElement(node) && node.tagName.getText(source) === "SelectField") {
     const attributes = node.attributes.properties;
     const id = attributes.find((attr) => attr.name?.getText(source) === "id");
-    if (id?.initializer && ts.isStringLiteral(id.initializer) && id.initializer.text === "asset-type-select") {
+    if (id?.initializer && ts.isStringLiteral(id.initializer) && ["brand-select", "asset-type-select"].includes(id.initializer.text)) {
       const disabled = attributes.find((attr) => attr.name?.getText(source) === "disabled");
-      expressions.set("typeDisabled", disabled?.initializer?.expression);
+      expressions.set(id.initializer.text === "brand-select" ? "brandDisabled" : "typeDisabled", disabled?.initializer?.expression);
     }
+  }
+  if (ts.isJsxSelfClosingElement(node) && node.tagName.getText(source) === "input") {
+    const disabled = node.attributes.properties.find(attr => attr.name?.getText(source) === "disabled");
+    expressions.set("contentDisabled", disabled?.initializer?.expression);
   }
   ts.forEachChild(node, visit);
 }
@@ -71,7 +75,7 @@ for (const [name, identity, ready] of [
     const selectedBrand = { ...baseBrand, ...identity };
     const brandHasLogo = evaluate("brandHasLogo", { selectedBrand });
     assert.equal(brandHasLogo, ready, "El guard debe reconocer únicamente identidad disponible");
-    assert.equal(evaluate("typeDisabled", { selectedBrand, brandHasLogo }), !ready);
+    assert.equal(evaluate("typeDisabled", { selectedBrand, brandHasLogo, generating: false }), !ready);
     assert.equal(evaluate("canGenerate", {
       selectedBrand, brandHasLogo, selectedAssetType: "ig_post",
       generating: false, resultVariation: null,
@@ -82,11 +86,49 @@ test("Studio sin marca seleccionada mantiene ambos controles deshabilitados", ()
   const selectedBrand = null;
   const brandHasLogo = evaluate("brandHasLogo", { selectedBrand });
   assert.equal(brandHasLogo, false);
-  assert.equal(evaluate("typeDisabled", { selectedBrand, brandHasLogo }), true);
+  assert.equal(evaluate("typeDisabled", { selectedBrand, brandHasLogo, generating: false }), true);
   assert.equal(evaluate("canGenerate", {
     selectedBrand, brandHasLogo, selectedAssetType: "ig_post",
     generating: false, resultVariation: null,
   }), false);
+});
+
+test("Cambiar producto elimina copy y URL anteriores e invalida su vista previa", () => {
+  const state = {brandId: 115, content: {titulo: "Aletheia", url: "aletheia.humanizar.tech"}, result: {id: 1}, progress: {done: 1, total: 1}, error: "anterior"};
+  evaluate("handleBrandChange", {
+    setSelectedBrandId: value => state.brandId = value,
+    setContentValues: value => state.content = value,
+    setResultVariation: value => state.result = value,
+    setProgress: value => state.progress = value,
+    setGenerateError: value => state.error = value,
+  })(120);
+  assert.equal(state.brandId, 120);
+  assert.deepEqual(state.content, {}, "Prizma no puede heredar la URL ni el copy de Aletheia");
+  assert.equal(state.result, null);
+  assert.equal(state.error, "");
+  assert.equal(state.progress, null);
+});
+
+test("Editar el contenido invalida el PNG anterior antes de poder descargarlo", () => {
+  const state = {content: {titulo: "Anterior", url: "producto.example.test"}, result: {id: 1}, error: "anterior", progress: {done: 1, total: 1}};
+  evaluate("handleContentChange", {
+    setContentValues: update => state.content = update(state.content),
+    setResultVariation: value => state.result = value,
+    setGenerateError: value => state.error = value,
+    setProgress: value => state.progress = value,
+  })("titulo", "Nuevo");
+  assert.deepEqual(state.content, {titulo: "Nuevo", url: "producto.example.test"});
+  assert.equal(state.result, null, "La vista previa descargable debe corresponder al contenido actual");
+  assert.equal(state.error, "");
+  assert.equal(state.progress, null);
+});
+
+test("La generación pendiente mantiene estable la marca, formato y contenido", () => {
+  const bindings = {selectedBrand: baseBrand, brandHasLogo: true, generating: true};
+  for (const consumer of ["brandDisabled", "typeDisabled", "contentDisabled"])
+    assert.equal(evaluate(consumer, bindings), true, `${consumer}: no cambiar el contrato del render en curso`);
+  assert.equal(evaluate("brandDisabled", {...bindings, generating: false}), false);
+  assert.equal(evaluate("contentDisabled", {...bindings, generating: false}), false);
 });
 
 test("Studio ofrece la publicación vertical con dimensiones visibles y campos de la plantilla", () => {

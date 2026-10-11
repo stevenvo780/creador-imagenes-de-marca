@@ -1,8 +1,8 @@
 # Meta: Eikón como centro de marca y publicaciones
 
 Creada por instrucción del operador el **11 de octubre de 2026**, America/Bogota.
-Estado: **bloqueada por revisión escrita pendiente** tras completar la recuperación
-de fuentes inequívocas. La meta del chat es el seguimiento principal; este documento
+Estado: **activa tras reanudación**, con revisión escrita pendiente para los
+módulos nuevos. La meta del chat es el seguimiento principal; este documento
 conserva requisitos, avances y evidencia del repositorio.
 
 ## Resultado esperado
@@ -172,3 +172,18 @@ desde varios turnos. La recuperación independiente de fuentes inequívocas qued
 cerrada; se espera la aprobación del documento antes de preparar el plan. También
 están pendientes el acceso GUI de producción y cerrar el nuevo panel de extensión
 que detuvo la prueba local. La meta no está completa ni pausada por decisión propia.
+
+## Continuación: Estudio y preparación social
+
+El navegador volvió a responder. Aletheia y Prizma generaron PNGs de 2160×2700
+completos con sus originales y contenido de cada producto. Se localizó el PNG
+de Aletheia producido por el clic aunque el observador de descarga agotó su
+tiempo. La prueba nueva detectó copy/URL de otro producto al cambiar marca y
+PNG previo aún descargable tras editar. Se corrigieron y el navegador confirma
+limpieza e invalidación; campos, marca y formato no cambian durante generación.
+Frontend: 78 pruebas aprobadas, build TS/Vite y revisión independiente correctos.
+
+Los tres destinos Meta se comprobaron por GET con permisos exactos a las20:08 UTC.
+La preparación del historial incluye tres bases: nueve envíos, ocho pendientes
+y cuatro retiradas, sin modificación. Las pruebas manuales web todavía requieren
+conciliación. Ver docs/PREPARACION-CONEXIONES-HUMANIZAR-20261011.md.

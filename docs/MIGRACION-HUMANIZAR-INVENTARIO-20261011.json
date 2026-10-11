@@ -1,0 +1,339 @@
+{
+  "captured_at": "2026-10-11T20:11:42.773359+00:00",
+  "source": "humanizar-publicaciones/server2",
+  "tenant_mapping_candidate": 17,
+  "read_only": true,
+  "import_executed": false,
+  "sources": [
+    {
+      "queue": "daily-queue",
+      "database_sha256": "0e4967218cd45bf0ea559bbc09d9553cf37eb034ba9c254c66b3ed7aabc21896",
+      "database_bytes_unchanged": true
+    },
+    {
+      "queue": "facebook-api-test-20261008",
+      "database_sha256": "846ea6416b212c830746509e47ae63c9c71f7c285f0c75150550d79911dbccd9",
+      "database_bytes_unchanged": true
+    },
+    {
+      "queue": "instagram-api-test-20261008",
+      "database_sha256": "1e0c9617be9ef662260efbf554afed474ffd8af89fbfcccf2c3d597fe0800892",
+      "database_bytes_unchanged": true
+    }
+  ],
+  "legacy_rows": [
+    {
+      "source_queue": "daily-queue",
+      "source_delivery_id": 1,
+      "source_post_id": 1,
+      "canonical_destination": "facebook:1045986888587355",
+      "legacy_status": "publicado",
+      "due_at": "2026-10-09T14:00:00.000000+00:00",
+      "claimed_at": "2026-10-09T14:00:08.221041+00:00",
+      "completed_at": "2026-10-09T14:00:16.960675+00:00",
+      "image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "editorial_contract_sha256": "acbbc49bf6b14658313b1a17728158844847e4ad5ef42d824661e760a3c90efe",
+      "editorial_contract_hash_matches_current_code": true,
+      "receipt": {
+        "photo_id": "122127124359283523",
+        "success": true
+      }
+    },
+    {
+      "source_queue": "daily-queue",
+      "source_delivery_id": 2,
+      "source_post_id": 1,
+      "canonical_destination": "facebook:110421192090737",
+      "legacy_status": "publicado",
+      "due_at": "2026-10-09T14:00:00.000000+00:00",
+      "claimed_at": "2026-10-09T14:00:08.221041+00:00",
+      "completed_at": "2026-10-09T14:00:21.171935+00:00",
+      "image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "editorial_contract_sha256": "acbbc49bf6b14658313b1a17728158844847e4ad5ef42d824661e760a3c90efe",
+      "editorial_contract_hash_matches_current_code": true,
+      "receipt": {
+        "photo_id": "1006526332484308",
+        "success": true
+      }
+    },
+    {
+      "source_queue": "daily-queue",
+      "source_delivery_id": 3,
+      "source_post_id": 2,
+      "canonical_destination": "facebook:1045986888587355",
+      "legacy_status": "publicado",
+      "due_at": "2026-10-10T14:00:00.000000+00:00",
+      "claimed_at": "2026-10-11T04:33:43.098586+00:00",
+      "completed_at": "2026-10-11T04:34:04.895771+00:00",
+      "image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "editorial_contract_sha256": "4d4d30017d067242e45cb2c8a0e9abd3866d69b6b76b18306828077828c4afcf",
+      "editorial_contract_hash_matches_current_code": true,
+      "receipt": {
+        "photo_id": "122127282687283523",
+        "success": true
+      }
+    },
+    {
+      "source_queue": "daily-queue",
+      "source_delivery_id": 4,
+      "source_post_id": 2,
+      "canonical_destination": "facebook:110421192090737",
+      "legacy_status": "publicado",
+      "due_at": "2026-10-10T14:00:00.000000+00:00",
+      "claimed_at": "2026-10-11T04:33:43.098586+00:00",
+      "completed_at": "2026-10-11T04:34:15.225850+00:00",
+      "image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "editorial_contract_sha256": "4d4d30017d067242e45cb2c8a0e9abd3866d69b6b76b18306828077828c4afcf",
+      "editorial_contract_hash_matches_current_code": true,
+      "receipt": {
+        "photo_id": "1007965595673715",
+        "success": true
+      }
+    },
+    {
+      "source_queue": "daily-queue",
+      "source_delivery_id": 5,
+      "source_post_id": 3,
+      "canonical_destination": "facebook:1045986888587355",
+      "legacy_status": "publicado",
+      "due_at": "2026-10-11T14:00:00.000000+00:00",
+      "claimed_at": "2026-10-11T14:00:07.940806+00:00",
+      "completed_at": "2026-10-11T14:00:15.299241+00:00",
+      "image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "editorial_contract_sha256": "dba9d214cd10ec654e573d9f645e6051f183ee3cf5fc8983ed0cfd2b950375bb",
+      "editorial_contract_hash_matches_current_code": true,
+      "receipt": {
+        "photo_id": "122127327441283523",
+        "success": true
+      }
+    },
+    {
+      "source_queue": "daily-queue",
+      "source_delivery_id": 6,
+      "source_post_id": 3,
+      "canonical_destination": "facebook:110421192090737",
+      "legacy_status": "publicado",
+      "due_at": "2026-10-11T14:00:00.000000+00:00",
+      "claimed_at": "2026-10-11T14:00:07.940806+00:00",
+      "completed_at": "2026-10-11T14:00:19.988066+00:00",
+      "image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "editorial_contract_sha256": "dba9d214cd10ec654e573d9f645e6051f183ee3cf5fc8983ed0cfd2b950375bb",
+      "editorial_contract_hash_matches_current_code": true,
+      "receipt": {
+        "photo_id": "1008358252301116",
+        "success": true
+      }
+    },
+    {
+      "source_queue": "daily-queue",
+      "source_delivery_id": 7,
+      "source_post_id": 4,
+      "canonical_destination": "facebook:1045986888587355",
+      "legacy_status": "pendiente",
+      "due_at": "2026-10-12T14:00:00.000000+00:00",
+      "claimed_at": null,
+      "completed_at": null,
+      "image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "editorial_contract_sha256": "f9b071699e1c2280812c9fc1854d2c88dbb7f8041c98056aa6ead68af039d73c",
+      "editorial_contract_hash_matches_current_code": true,
+      "receipt": {}
+    },
+    {
+      "source_queue": "daily-queue",
+      "source_delivery_id": 8,
+      "source_post_id": 4,
+      "canonical_destination": "facebook:110421192090737",
+      "legacy_status": "pendiente",
+      "due_at": "2026-10-12T14:00:00.000000+00:00",
+      "claimed_at": null,
+      "completed_at": null,
+      "image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "editorial_contract_sha256": "f9b071699e1c2280812c9fc1854d2c88dbb7f8041c98056aa6ead68af039d73c",
+      "editorial_contract_hash_matches_current_code": true,
+      "receipt": {}
+    },
+    {
+      "source_queue": "daily-queue",
+      "source_delivery_id": 9,
+      "source_post_id": 5,
+      "canonical_destination": "facebook:1045986888587355",
+      "legacy_status": "pendiente",
+      "due_at": "2026-10-13T14:00:00.000000+00:00",
+      "claimed_at": null,
+      "completed_at": null,
+      "image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "editorial_contract_sha256": "4e2686bce590030b53f6c8cc7de0d6b10034dd677e7a78ab06f49c8bb8a07c4f",
+      "editorial_contract_hash_matches_current_code": true,
+      "receipt": {}
+    },
+    {
+      "source_queue": "daily-queue",
+      "source_delivery_id": 10,
+      "source_post_id": 5,
+      "canonical_destination": "facebook:110421192090737",
+      "legacy_status": "pendiente",
+      "due_at": "2026-10-13T14:00:00.000000+00:00",
+      "claimed_at": null,
+      "completed_at": null,
+      "image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "editorial_contract_sha256": "4e2686bce590030b53f6c8cc7de0d6b10034dd677e7a78ab06f49c8bb8a07c4f",
+      "editorial_contract_hash_matches_current_code": true,
+      "receipt": {}
+    },
+    {
+      "source_queue": "daily-queue",
+      "source_delivery_id": 11,
+      "source_post_id": 6,
+      "canonical_destination": "facebook:1045986888587355",
+      "legacy_status": "pendiente",
+      "due_at": "2026-10-14T14:00:00.000000+00:00",
+      "claimed_at": null,
+      "completed_at": null,
+      "image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "editorial_contract_sha256": "803b5a8716f94de0be7021ad1f1b8f54751d075bfa803f07a4420c672d289b67",
+      "editorial_contract_hash_matches_current_code": true,
+      "receipt": {}
+    },
+    {
+      "source_queue": "daily-queue",
+      "source_delivery_id": 12,
+      "source_post_id": 6,
+      "canonical_destination": "facebook:110421192090737",
+      "legacy_status": "pendiente",
+      "due_at": "2026-10-14T14:00:00.000000+00:00",
+      "claimed_at": null,
+      "completed_at": null,
+      "image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "editorial_contract_sha256": "803b5a8716f94de0be7021ad1f1b8f54751d075bfa803f07a4420c672d289b67",
+      "editorial_contract_hash_matches_current_code": true,
+      "receipt": {}
+    },
+    {
+      "source_queue": "daily-queue",
+      "source_delivery_id": 13,
+      "source_post_id": 7,
+      "canonical_destination": "facebook:1045986888587355",
+      "legacy_status": "pendiente",
+      "due_at": "2026-10-15T14:00:00.000000+00:00",
+      "claimed_at": null,
+      "completed_at": null,
+      "image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "editorial_contract_sha256": "b0c9184b912947a9307cbc9b98ad94381f41e606cc4afa675aaaef4f3168664a",
+      "editorial_contract_hash_matches_current_code": true,
+      "receipt": {}
+    },
+    {
+      "source_queue": "daily-queue",
+      "source_delivery_id": 14,
+      "source_post_id": 7,
+      "canonical_destination": "facebook:110421192090737",
+      "legacy_status": "pendiente",
+      "due_at": "2026-10-15T14:00:00.000000+00:00",
+      "claimed_at": null,
+      "completed_at": null,
+      "image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "editorial_contract_sha256": "b0c9184b912947a9307cbc9b98ad94381f41e606cc4afa675aaaef4f3168664a",
+      "editorial_contract_hash_matches_current_code": true,
+      "receipt": {}
+    },
+    {
+      "source_queue": "facebook-api-test-20261008",
+      "source_delivery_id": 1,
+      "source_post_id": 1,
+      "canonical_destination": "facebook:1045986888587355",
+      "legacy_status": "publicado",
+      "due_at": "2026-10-08T22:58:16.321338+00:00",
+      "claimed_at": "2026-10-08T22:58:17.321338+00:00",
+      "completed_at": "2026-10-08T22:58:25.048858+00:00",
+      "image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "editorial_contract_sha256": "6aaa2e17901548e91bd5e9f92442f9dde90d9a8bb909188e9b3f19e94e99a3e2",
+      "editorial_contract_hash_matches_current_code": true,
+      "receipt": {
+        "photo_id": "122127057723283523",
+        "success": true
+      }
+    },
+    {
+      "source_queue": "facebook-api-test-20261008",
+      "source_delivery_id": 2,
+      "source_post_id": 1,
+      "canonical_destination": "facebook:110421192090737",
+      "legacy_status": "publicado",
+      "due_at": "2026-10-08T22:58:16.321338+00:00",
+      "claimed_at": "2026-10-08T22:58:17.321338+00:00",
+      "completed_at": "2026-10-08T22:58:30.955015+00:00",
+      "image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "editorial_contract_sha256": "6aaa2e17901548e91bd5e9f92442f9dde90d9a8bb909188e9b3f19e94e99a3e2",
+      "editorial_contract_hash_matches_current_code": true,
+      "receipt": {
+        "photo_id": "1005976015872673",
+        "success": true
+      }
+    },
+    {
+      "source_queue": "instagram-api-test-20261008",
+      "source_delivery_id": 1,
+      "source_post_id": 1,
+      "canonical_destination": "instagram:17841434345672986",
+      "legacy_status": "publicado",
+      "due_at": "2026-10-08T23:03:38.893044+00:00",
+      "claimed_at": "2026-10-08T23:03:39.893044+00:00",
+      "completed_at": "2026-10-08T23:03:54.455868+00:00",
+      "image_sha256": "4d76a4b8cd789ac2c24e225036708bfc2c27cb1c3e0260002d4530d08fa461a1",
+      "editorial_contract_sha256": "673d48ebfdb4f96caf812cddf0cc1f7dfc4447ae76c3859f3d5f8fccdd53c7a2",
+      "editorial_contract_hash_matches_current_code": true,
+      "receipt": {
+        "media_id": "17884589313625508",
+        "success": true
+      }
+    }
+  ],
+  "withdrawals": [
+    {
+      "source_queue": "daily-queue",
+      "source_delivery_id": 3,
+      "canonical_destination": "facebook:1045986888587355",
+      "photo_id": "122127282687283523",
+      "accepted": true,
+      "lookup_after": {
+        "http_status": 400,
+        "error_code": 100
+      }
+    },
+    {
+      "source_queue": "daily-queue",
+      "source_delivery_id": 4,
+      "canonical_destination": "facebook:110421192090737",
+      "photo_id": "1007965595673715",
+      "accepted": true,
+      "lookup_after": {
+        "http_status": 400,
+        "error_code": 100
+      }
+    },
+    {
+      "source_queue": "daily-queue",
+      "source_delivery_id": 5,
+      "canonical_destination": "facebook:1045986888587355",
+      "photo_id": "122127327441283523",
+      "accepted": true,
+      "lookup_after": {
+        "http_status": 400,
+        "error_code": 100
+      }
+    },
+    {
+      "source_queue": "daily-queue",
+      "source_delivery_id": 6,
+      "canonical_destination": "facebook:110421192090737",
+      "photo_id": "1008358252301116",
+      "accepted": true,
+      "lookup_after": {
+        "http_status": 400,
+        "error_code": 100
+      }
+    }
+  ],
+  "complete_history_claimed": false,
+  "outside_queue_receipts_still_to_include": "Five manually published browser test posts documented in PUBLICACIONES-PRUEBA-20261008.md; destination aliases must be reconciled before the first new claim"
+}

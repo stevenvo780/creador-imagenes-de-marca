@@ -242,6 +242,7 @@ export function AssetStudioPage() {
 
   function handleBrandChange(id: number) {
     setSelectedBrandId(id);
+    setContentValues({});
     setGenerateError("");
     setResultVariation(null);
     setProgress(null);
@@ -257,6 +258,9 @@ export function AssetStudioPage() {
 
   function handleContentChange(key: string, value: string) {
     setContentValues((prev) => ({ ...prev, [key]: value }));
+    setResultVariation(null);
+    setGenerateError("");
+    setProgress(null);
   }
 
   // ── Generar ─────────────────────────────────────────────────────────────
@@ -400,6 +404,7 @@ export function AssetStudioPage() {
                   hint="Seleccioná la identidad visual que querés usar."
                   value={selectedBrandId ?? ""}
                   onChange={(e) => handleBrandChange(Number(e.target.value))}
+                  disabled={generating}
                 >
                   <option value="" disabled>
                     Seleccioná una marca
@@ -467,7 +472,7 @@ export function AssetStudioPage() {
                   hint="Cada tipo define formato y campos de contenido."
                   value={selectedAssetType}
                   onChange={(e) => handleAssetTypeChange(e.target.value)}
-                  disabled={!selectedBrand || !brandHasLogo}
+                  disabled={!selectedBrand || !brandHasLogo || generating}
                 >
                   <option value="" disabled>
                     Seleccioná un tipo
@@ -531,6 +536,7 @@ export function AssetStudioPage() {
                             id={`content-${f.key}`}
                             type="text"
                             value={contentValues[f.key] ?? ""}
+                            disabled={generating}
                             onChange={(e) => handleContentChange(f.key, e.target.value)}
                             placeholder={f.placeholder}
                             style={inputStyle}
