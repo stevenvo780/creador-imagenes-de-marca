@@ -1,0 +1,139 @@
+{
+  "captured_at": "2026-10-11T20:34:24.762210+00:00",
+  "read_only": true,
+  "source_document": "ComercialHumanizar/docs/PUBLICACIONES-PRUEBA-20261008.md",
+  "source_document_sha256": "99bb62b27770860a4d173e18223050a347aa1e8fc570a7afeccdc822b096e486",
+  "import_executed": false,
+  "documented_manual_web_posts": [
+    {
+      "source_queue": "manual-web-test-20261008",
+      "source_image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "source_image_sha256_basis": "contemporaneous publication document and rehashed canonical source file; not provider-compressed bytes",
+      "current_remote_visibility_verified": true,
+      "editorial_reapproval_granted": false,
+      "platform": "facebook",
+      "source_delivery_id": "122127053271283523",
+      "canonical_destination": "facebook:1045986888587355",
+      "canonical_destination_verified": true,
+      "remote_photo_id": "122127053271283523",
+      "remote_created_at": "2026-10-08T21:52:00+0000",
+      "caption": "Humanizar Systems conecta personas, trabajo y tecnología con criterio humano. Esta es nuestra publicación de prueba con la identidad visual vigente. Conócenos en https://humanizar.tech",
+      "evidence_kind": "GET photo id/from/name/link; owner ID exact",
+      "verified_at_utc": "2026-10-11T20:25:32Z"
+    },
+    {
+      "source_queue": "manual-web-test-20261008",
+      "source_image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "source_image_sha256_basis": "contemporaneous publication document and rehashed canonical source file; not provider-compressed bytes",
+      "current_remote_visibility_verified": true,
+      "editorial_reapproval_granted": false,
+      "platform": "facebook",
+      "source_delivery_id": "1005944669209141",
+      "canonical_destination": "facebook:110421192090737",
+      "canonical_destination_verified": true,
+      "remote_post_id": "110421192090737_1005944669209141",
+      "remote_photo_id": "1005943012542640",
+      "remote_created_at": "2026-10-08T21:58:35+0000",
+      "caption": "Humanizar Systems conecta personas, trabajo y tecnología con criterio humano. Esta es nuestra publicación de prueba con la identidad visual vigente. Conócenos en https://humanizar.tech",
+      "permalink": "https://www.facebook.com/1008644758939132/posts/1005944669209141",
+      "public_profile_aliases": [
+        "100093808513344",
+        "1008644758939132"
+      ],
+      "evidence_kind": "GET exact composite post and photo from page; native original public permalink links same photo and profile",
+      "verified_on": "2026-10-11"
+    },
+    {
+      "source_queue": "manual-web-test-20261008",
+      "source_image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "source_image_sha256_basis": "contemporaneous publication document and rehashed canonical source file; not provider-compressed bytes",
+      "current_remote_visibility_verified": true,
+      "editorial_reapproval_granted": false,
+      "platform": "instagram",
+      "source_delivery_id": "DeP8ICgD-ZA",
+      "canonical_destination": "instagram:17841434345672986",
+      "canonical_destination_verified": true,
+      "remote_media_id": "18129180077493917",
+      "remote_created_at": "2026-10-08T21:50:31+0000",
+      "permalink": "https://www.instagram.com/p/DeP8ICgD-ZA/",
+      "media_type": "IMAGE",
+      "evidence_kind": "GET authorized user media edge; permalink and caption exact",
+      "verified_at_utc": "2026-10-11T20:25:32Z"
+    },
+    {
+      "source_queue": "manual-web-test-20261008",
+      "source_image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "source_image_sha256_basis": "contemporaneous publication document and rehashed canonical source file; not provider-compressed bytes",
+      "current_remote_visibility_verified": true,
+      "editorial_reapproval_granted": false,
+      "platform": "x",
+      "source_delivery_id": "2108313824004911324",
+      "canonical_destination": null,
+      "canonical_destination_candidate": "x:2107177185962299392",
+      "canonical_destination_verified": false,
+      "remote_post_id": "2108313824004911324",
+      "remote_username": "HumanizarSystem",
+      "remote_created_at": "2026-10-08T21:49:20.000Z",
+      "permalink": "https://x.com/HumanizarSystem/status/2108313824004911324",
+      "evidence_kind": "native public post author, caption, image and DOM datetime; numeric user ID remains prior configured assertion",
+      "api_spend": false,
+      "business_publish_session_verified": false,
+      "verified_on": "2026-10-11"
+    },
+    {
+      "source_queue": "manual-web-test-20261008",
+      "source_image_sha256": "0484a5bb0259f2c78d2b9a7d8871d7e925863507fbb11a1899373a3ebcec7580",
+      "source_image_sha256_basis": "contemporaneous publication document and rehashed canonical source file; not provider-compressed bytes",
+      "current_remote_visibility_verified": true,
+      "editorial_reapproval_granted": false,
+      "platform": "tiktok",
+      "source_delivery_id": "7694418267057802514",
+      "canonical_destination": null,
+      "canonical_destination_verified": false,
+      "remote_photo_id": "7694418267057802514",
+      "remote_username": "user3217463593302",
+      "permalink": "https://www.tiktok.com/@user3217463593302/photo/7694418267057802514",
+      "evidence_kind": "native public photo post with author, title and caption; no stable OAuth open_id verified",
+      "needs_oauth_identity_mapping": true,
+      "business_publish_session_verified": false,
+      "verified_on": "2026-10-11"
+    }
+  ],
+  "documented_posts_currently_visible": 5,
+  "meta_canonical_destinations_verified": 3,
+  "stable_identity_mapping_pending": [
+    "x",
+    "tiktok"
+  ],
+  "full_remote_history_claimed": false,
+  "new_social_posts_created": 0,
+  "facebook_alias_proof": {
+    "canonical_destination": "facebook:110421192090737",
+    "api_post_id": "110421192090737_1005944669209141",
+    "api_photo_attachment": "1005943012542640",
+    "api_photo_from_page_id": "110421192090737",
+    "native_original_permalink_profile_id": "100093808513344",
+    "native_original_permalink_photo_id": "1005943012542640",
+    "provider_post_permalink_profile_id": "1008644758939132",
+    "same_photo_proves_alias": true
+  },
+  "read_failures_preserved": [
+    {
+      "request": "public profile100093808513344 via Graph",
+      "http_status": 400,
+      "error_code": 100,
+      "error_subcode": 33
+    },
+    {
+      "request": "unqualified Business Suite record1005944669209141 as Photo",
+      "http_status": 400,
+      "error_code": 12
+    },
+    {
+      "request": "page feed edge",
+      "http_status": 400,
+      "error_code": 10
+    }
+  ],
+  "corrected_read_path": "exact composite Page_Post ID and uploaded photo edge; no permissions expanded"
+}

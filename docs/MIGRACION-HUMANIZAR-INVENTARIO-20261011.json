@@ -335,5 +335,15 @@
     }
   ],
   "complete_history_claimed": false,
-  "outside_queue_receipts_still_to_include": "Five manually published browser test posts documented in PUBLICACIONES-PRUEBA-20261008.md; destination aliases must be reconciled before the first new claim"
+  "outside_queue_receipts_still_to_include": "Five manually published browser test posts documented in PUBLICACIONES-PRUEBA-20261008.md; destination aliases must be reconciled before the first new claim",
+  "manual_web_reconciliation": {
+    "receipt": "MIGRACION-HUMANIZAR-MANUALES-20261011.json",
+    "visible_documented_posts": 5,
+    "meta_destinations_verified": 3,
+    "stable_identity_mapping_pending": [
+      "x",
+      "tiktok"
+    ],
+    "import_executed": false
+  }
 }

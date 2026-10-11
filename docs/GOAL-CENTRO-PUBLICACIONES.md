@@ -200,3 +200,23 @@ PNG completos Aletheia/Prizma terminada. Ver el recibo
 
 La meta permanece activa. La revisión escrita para módulos nuevos y el login
 GUI de producción están pendientes; los temporizadores viejos siguen detenidos.
+
+## GUI de producción y pruebas manuales conciliadas
+
+Se encontró la sesión existente de Humanizar en eikon.humanizar.cloud. Tras
+recargar su SPA anterior, los estados de marcas son correctos. Prizma generó
+y descargó una pieza completa por UI: lote2495, variación3048, tenant17;
+el archivo persistido coincide por SHA con el PNG2160×2700 descargado. La
+variación queda sin seleccionar; su score legacy0.5 no es aprobación editorial.
+El bloqueo de acceso GUI se cerró sin copiar sesiones ni emitir credenciales.
+
+Las cinco pruebas web del 8 de octubre siguen visibles. Se conciliaron los tres
+destinos Meta por GET y el alias del perfil antiguo de Facebook por una misma
+foto comprobada en UI y API. X/TikTok se leyeron públicamente sin gasto; su
+mapping de ID estable todavía necesita evidencia de proveedor. Se conservaron
+errores GET iniciales y el procedimiento corregido; no se ampliaron permisos.
+El inventario no se importó y no afirma historial remoto completo.
+
+La meta sigue activa. Campañas/conexiones/calendario/worker/panel requieren
+revisión escrita del diseño y posterior plan; tres referencias y revisión de
+piezas actuales también siguen pendientes. No se envió contenido social nuevo.

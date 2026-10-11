@@ -60,3 +60,27 @@ No hubo nuevos medios aprobados, envíos sociales, importación del historial,
 reactivación de timers ni cambios de credenciales. Campañas, conexiones
 multiempresa, revisión completa, calendario, worker y panel aún no se implementan;
 siguen pendientes de revisar el diseño escrito y preparar el plan.
+
+## Seguimiento GUI de producción y conciliación histórica
+
+Después del recibo de despliegue se localizó una sesión Humanizar ya abierta
+en `https://eikon.humanizar.cloud/brands`. Conservaba la SPA anterior en memoria;
+recargar mostró los logos fijados y tres identidades pendientes. El dominio
+sirve el HTML, JS y CSS exactos del build desplegado. No se trasladaron sesiones.
+
+El Estudio de Prizma creó por UI el lote2495 y la variación3048. Se observaron
+controles bloqueados durante render, preview terminado y descarga real del PNG
+2160×2700 completo. SHA `24015a78a79bcaf9d81bb99a5861974fca30c8018bcb2f6ce32b12cb93cbd6fa`;
+los bytes guardados para tenant17 coinciden con esa descarga. Lote completed,
+expected1/received1, selected=false. El score legacy0.5 del uploader no se
+interpreta como crítica o aprobación editorial. No se aprobaron medios Codex.
+
+Así se cierra el acceso GUI pendiente descrito al terminar el despliegue. La
+prueba cubre desktop y social_4x5 para Prizma; no todos los formatos, móvil en
+producción ni el recorrido nuevo campaña/calendario/publicación.
+
+También se conciliaron las cinco pruebas manuales del 8 de octubre: tres Meta
+por GET y X/TikTok por navegador sin gasto. El perfil Facebook antiguo y el ID
+API se ligaron por su misma foto. X/TikTok aún requieren mapping de identidad
+estable; no se presume autorización de publicación por poder leer un post.
+Recibo `MIGRACION-HUMANIZAR-MANUALES-20261011.json`, importación sin ejecutar.

@@ -191,5 +191,40 @@
   "social_posts_created": 0,
   "media_approved": false,
   "legacy_timers_reenabled": false,
-  "new_publication_modules_implemented": false
+  "new_publication_modules_implemented": false,
+  "production_gui_followup": {
+    "captured_at": "2026-10-11T20:32:40.998714+00:00",
+    "domain": "https://eikon.humanizar.cloud",
+    "tenant_id": 17,
+    "brand_id": 120,
+    "brand_version": 5,
+    "native_production_visual_verified": true,
+    "native_scope": "real Humanizar browser session; social_4x5; generating disabled context controls; preview and downloaded complete PNG visually checked",
+    "png_dimensions": [
+      2160,
+      2700
+    ],
+    "png_sha256": "24015a78a79bcaf9d81bb99a5861974fca30c8018bcb2f6ce32b12cb93cbd6fa",
+    "persisted_variation": {
+      "id": 3048,
+      "batch_id": 2495,
+      "brand_id": 120,
+      "selected": false,
+      "legacy_score": 0.5
+    },
+    "legacy_score_is_editorial_approval": false,
+    "persisted_bytes_match_download": true,
+    "batch_status": "completed",
+    "batch_counts": {
+      "expected": 1,
+      "received": 1
+    },
+    "editorial_approval": false,
+    "social_posts_created": 0,
+    "custom_domain_serves_deployed_build": true,
+    "frontend_assets_sha256": {
+      "/assets/index-UtUBVgYW.js": "414a6f3ed65efae80d90397c502a658e94b9ee5f61dea9b1e221e5e4cbaa1057",
+      "/assets/index-Co9mG5BH.css": "76345eb77e0b76b04e07ae615b088ba925b6dc703691acdd57c0be9a73b57858"
+    }
+  }
 }

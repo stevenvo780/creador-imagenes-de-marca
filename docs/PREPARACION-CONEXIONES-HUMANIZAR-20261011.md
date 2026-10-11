@@ -44,14 +44,37 @@ el contrato almacenado contra content_digest_with_image_hash del publicador
 instalado; no se confundieron esas huellas. Cambiar caption no elimina la
 guardia histórica para la misma imagen y cuenta.
 
+## Conciliación posterior de las cinco pruebas manuales
+
+Las cinco publicaciones documentadas siguen visibles. Tres destinos Meta se
+conciliaron por GET: foto Systems122127053271283523, medio News18129180077493917
+y post Humanizar110421192090737_1005944669209141. El registro de Business Suite
+es un post; su foto adjunta es1005943012542640, no el mismo ID.
+
+El enlace original del perfil100093808513344 abre en navegador una publicación
+de Humanizar con esa foto exacta. Graph devuelve la misma foto con propietario
+110421192090737 y un permalink del post bajo1008644758939132. Estos tres IDs
+quedan ligados por el medio compartido, no por el nombre de la página. Un GET
+directo al antiguo profile_id falla y no invalida esa evidencia de alias.
+
+X y TikTok muestran los posts públicos originales con autor, imagen y caption.
+La sesión del navegador en ambos sitios pertenece al operador personal: esta
+lectura pública no acredita sesión de publicación Humanizar. X conserva su ID
+numérico configurado como candidato sin nueva consulta de pago; TikTok todavía
+requiere vincular open_id por OAuth. No se cambió la cuenta del navegador.
+
+Recibo saneado: `MIGRACION-HUMANIZAR-MANUALES-20261011.json`. El SHA del logo
+original se volvió a calcular y coincide con el documento contemporáneo; no
+se afirma que los bytes recomprimidos de las redes tengan ese mismo SHA.
+
 ## Corte de migración todavía incompleto
 
 Las cinco pruebas manuales web del 8 de octubre están documentadas en
 ComercialHumanizar, docs/PUBLICACIONES-PRUEBA-20261008.md. No están en estas
-bases y deben conciliarse antes del primer claim nuevo. La URL antigua de
-Humanizar no se da por equivalente a un ID API por parecido del nombre;
-se necesita evidencia de alias/destino.
+bases. Ahora tienen comprobación de visibilidad actual y mapeo confirmado de
+los tres destinos Meta; los IDs estables de X/TikTok siguen pendientes.
 
 El inventario conserva complete_history_claimed=false e import_executed=false.
-No prueba un ledger instalado, aprobación nueva ni visibilidad actual de todos
-los recibos. Las retiradas conservan el hecho de envío y su guardia histórica.
+No prueba un ledger instalado, aprobación nueva ni un inventario remoto completo.
+El alcance es las tres bases y cinco pruebas propias documentadas; las retiradas
+conservan el hecho de envío y su guardia histórica.
