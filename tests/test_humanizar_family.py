@@ -184,3 +184,31 @@ def test_partial_override_retains_previous_dark_family_mode():
     updated = apply_combination_overrides(result, {"typography_pairing": "display"})
     assert updated["bg"] == "#111319"
     assert updated["font_titulo"] == "Manrope"
+
+
+@pytest.mark.parametrize("metadata_key", ["texts", "textos"])
+def test_explicit_dark_family_default_survives_client_double_application(metadata_key):
+    marca = _brand(metadata_key)
+    marca[metadata_key]["family_mode"] = "dark"
+    original = deepcopy(marca)
+    result = map_marca_to_vars(marca, "social_4x5")
+    assert result["family_mode"] == "dark"
+    assert result["bg"] == "#111319"
+    assert result["texto"] == "#fcfafd"
+    assert wcag_contrast_ratio("#fcfafd", result["bg"]) >= 4.5
+    assert apply_combination_overrides(result, {"palette_scheme": "brand"})["bg"] == "#111319"
+    assert apply_combination_overrides(result, {"typography_pairing": "display"})["bg"] == "#111319"
+    assert apply_combination_overrides(result, {"palette_scheme": "light"})["bg"] == "#fcfafd"
+    assert apply_combination_overrides(result, {"palette_scheme": "dark"})["bg"] == "#111319"
+    assert marca == original
+
+
+@pytest.mark.parametrize("mode", ["light", "invalid", None, ["dark"], {"dark": True}])
+def test_only_explicit_valid_dark_selects_dark_default(mode):
+    marca = _brand()
+    marca["textos"]["family_mode"] = mode
+    assert map_marca_to_vars(marca, "social_4x5")["bg"] == "#fcfafd"
+    legacy = {"slug": "prizma-iris", "textos": {"family_mode": "dark"}}
+    result = map_marca_to_vars(legacy, "social_4x5")
+    assert "family_mode" not in result
+    assert "brand_family" not in result

@@ -669,6 +669,11 @@ def map_marca_to_vars(  # noqa: C901
     vars_dict = apply_text_limits(tipo, vars_dict)
 
     if family == "humanizar":
+        # El modo inicial se elige explícitamente para originales claros/oscuros;
+        # no recolorear sus bytes ni inferir el fondo a partir del slug/tenant.
+        metadata = marca.get("textos", marca.get("texts"))
+        if isinstance(metadata, dict) and metadata.get("family_mode") in ("light", "dark"):
+            vars_dict["family_mode"] = metadata["family_mode"]
         # Único color propio permitido en nuevas composiciones comunes. Se
         # normaliza aquí sin mutar ni transformar el logo original del producto.
         vars_dict["product_accent"] = str(

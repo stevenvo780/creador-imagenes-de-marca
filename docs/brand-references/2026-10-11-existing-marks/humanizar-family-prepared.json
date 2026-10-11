@@ -1,0 +1,452 @@
+{
+  "captured_at": "2026-10-11T19:12:31.522014+00:00",
+  "tenant_id": 17,
+  "tenant": "Humanizar",
+  "state": "prepared_not_applied",
+  "production_mutated": false,
+  "scope": "existing_brand_family_delivery",
+  "preconditions": [
+    "deploy_verified_family_code",
+    "native_visual_review_passed",
+    "fresh_owner_tenant_17_check",
+    "expected_versions_and_reference_hashes_match",
+    "merge_texts_and_typography_preserving_other_fields",
+    "new_briefs_and_media_reviews_after_brand_version_change"
+  ],
+  "items": [
+    {
+      "slug": "sinergia-pos",
+      "brand_id": 109,
+      "expected_brand_version": 4,
+      "expected_reference_logo_sha256": "107bb83a6d2e6e51dc07bfa558e0774c239599bd97c7e76bcd61c1a65e01e355",
+      "original": {
+        "path": "/datos/workspaces/humanizar/HumanizarDocs/Imagen de marca/logos/sinergia/sinergia-icono.svg",
+        "sha256": "107bb83a6d2e6e51dc07bfa558e0774c239599bd97c7e76bcd61c1a65e01e355",
+        "preserve": true
+      },
+      "state": "prepared_not_applied",
+      "texts_merge": {
+        "brand_family": "humanizar",
+        "family_mode": "light",
+        "social_4x5": {
+          "titulo": "Tu mostrador, en orden.",
+          "subtitulo": "Ventas, caja e inventario en un mismo lugar.",
+          "copy": "",
+          "etiqueta": "Por Humanizar Systems",
+          "url": "https://pos.saldantia.cloud"
+        }
+      },
+      "typography_merge": {
+        "titulos": "Manrope",
+        "cuerpo": "Manrope"
+      },
+      "existing_reference_status": "archivo_independiente_localizado",
+      "requires_new_media_revision": true,
+      "studio_identity_state": "original_reference_present"
+    },
+    {
+      "slug": "demeter",
+      "brand_id": 110,
+      "expected_brand_version": 2,
+      "expected_reference_logo_sha256": null,
+      "original": null,
+      "state": "prepared_not_applied",
+      "texts_merge": {
+        "brand_family": "humanizar",
+        "family_mode": "light",
+        "social_4x5": {
+          "titulo": "Del pedido a la ruta.",
+          "subtitulo": "Una operación clara para distribuir alimentos.",
+          "copy": "",
+          "etiqueta": "Por Humanizar Systems",
+          "url": "https://demeter.humanizar.cloud"
+        }
+      },
+      "typography_merge": {
+        "titulos": "Manrope",
+        "cuerpo": "Manrope"
+      },
+      "existing_reference_status": "no_localizado",
+      "requires_new_media_revision": true,
+      "studio_identity_state": "missing_fixed_reference"
+    },
+    {
+      "slug": "graf-commerce",
+      "brand_id": 111,
+      "expected_brand_version": 3,
+      "expected_reference_logo_sha256": "3a04c3660690cebbb6cc86c4c8ab49f2bc36da73a79838931b9707e22604faca",
+      "original": {
+        "path": "/datos/workspaces/humanizar/HumanizarDocs/Imagen de marca/logos/graf/graf-icono.svg",
+        "sha256": "3a04c3660690cebbb6cc86c4c8ab49f2bc36da73a79838931b9707e22604faca",
+        "preserve": true
+      },
+      "state": "prepared_not_applied",
+      "texts_merge": {
+        "brand_family": "humanizar",
+        "family_mode": "light",
+        "social_4x5": {
+          "titulo": "Tu tienda, conectada.",
+          "subtitulo": "Catálogo, pedidos y ventas de cada comercio.",
+          "copy": "",
+          "etiqueta": "Por Humanizar Systems",
+          "url": "https://admin.graf.com.co"
+        }
+      },
+      "typography_merge": {
+        "titulos": "Manrope",
+        "cuerpo": "Manrope"
+      },
+      "existing_reference_status": "archivo_independiente_localizado",
+      "requires_new_media_revision": true,
+      "studio_identity_state": "original_reference_present"
+    },
+    {
+      "slug": "xenia",
+      "brand_id": 112,
+      "expected_brand_version": 3,
+      "expected_reference_logo_sha256": "678a81447a64e2d9d305b300e07227b194c99f9ae9dc6147b7c5f8a88ef51b12",
+      "original": {
+        "path": "/datos/workspaces/personal/devkits-crm/public/icon.svg",
+        "sha256": "678a81447a64e2d9d305b300e07227b194c99f9ae9dc6147b7c5f8a88ef51b12",
+        "preserve": true
+      },
+      "state": "prepared_not_applied",
+      "texts_merge": {
+        "brand_family": "humanizar",
+        "family_mode": "light",
+        "social_4x5": {
+          "titulo": "Cada relación cuenta.",
+          "subtitulo": "Contactos y oportunidades con seguimiento.",
+          "copy": "",
+          "etiqueta": "Por Humanizar Systems",
+          "url": "https://xenia.stevenvallejo.com"
+        }
+      },
+      "typography_merge": {
+        "titulos": "Manrope",
+        "cuerpo": "Manrope"
+      },
+      "existing_reference_status": "archivo_independiente_localizado",
+      "requires_new_media_revision": true,
+      "studio_identity_state": "original_reference_present"
+    },
+    {
+      "slug": "cauce",
+      "brand_id": 113,
+      "expected_brand_version": 2,
+      "expected_reference_logo_sha256": null,
+      "original": null,
+      "state": "prepared_not_applied",
+      "texts_merge": {
+        "brand_family": "humanizar",
+        "family_mode": "light",
+        "social_4x5": {
+          "titulo": "Coordinar con criterio.",
+          "subtitulo": "Agentes, tareas y decisiones bajo control humano.",
+          "copy": "",
+          "etiqueta": "Por Humanizar Systems",
+          "url": "https://cauce.humanizar.tech"
+        }
+      },
+      "typography_merge": {
+        "titulos": "Manrope",
+        "cuerpo": "Manrope"
+      },
+      "existing_reference_status": "marca_implementada_sin_maestro",
+      "requires_new_media_revision": true,
+      "studio_identity_state": "missing_fixed_reference",
+      "reference_candidate": {
+        "file": "cauce-simbolo-existente.svg",
+        "state": "pending_visual_review"
+      }
+    },
+    {
+      "slug": "agora",
+      "brand_id": 114,
+      "expected_brand_version": 3,
+      "expected_reference_logo_sha256": "bfd3d17cfefa5666a1ff397d0f65e5063fe09bc68f4e4ead7789382a19ffe0fc",
+      "original": {
+        "path": "/datos/workspaces/humanizar/HumanizarDocs/Imagen de marca/logos/agora/agora-favicon.svg",
+        "sha256": "bfd3d17cfefa5666a1ff397d0f65e5063fe09bc68f4e4ead7789382a19ffe0fc",
+        "preserve": true
+      },
+      "state": "prepared_not_applied",
+      "texts_merge": {
+        "brand_family": "humanizar",
+        "family_mode": "light",
+        "social_4x5": {
+          "titulo": "Investigar. Formalizar. Compartir.",
+          "subtitulo": "Escritura académica y formalización de argumentos.",
+          "copy": "",
+          "etiqueta": "Por Humanizar Systems",
+          "url": "https://agora.elenxos.com"
+        }
+      },
+      "typography_merge": {
+        "titulos": "Manrope",
+        "cuerpo": "Manrope"
+      },
+      "existing_reference_status": "archivo_independiente_localizado",
+      "requires_new_media_revision": true,
+      "studio_identity_state": "original_reference_present"
+    },
+    {
+      "slug": "aletheia",
+      "brand_id": 115,
+      "expected_brand_version": 2,
+      "expected_reference_logo_sha256": null,
+      "original": null,
+      "state": "prepared_not_applied",
+      "texts_merge": {
+        "brand_family": "humanizar",
+        "family_mode": "light",
+        "social_4x5": {
+          "titulo": "Cada tarea necesita evidencia.",
+          "subtitulo": "Métricas, ventanas y veredictos con límites claros.",
+          "copy": "",
+          "etiqueta": "Por Humanizar Systems",
+          "url": "https://aletheia.humanizar.tech"
+        }
+      },
+      "typography_merge": {
+        "titulos": "Manrope",
+        "cuerpo": "Manrope"
+      },
+      "existing_reference_status": "marca_implementada_sin_maestro",
+      "requires_new_media_revision": true,
+      "studio_identity_state": "missing_fixed_reference",
+      "reference_candidate": {
+        "file": "aletheia-glifo-existente-claro.svg",
+        "state": "glyph_only_not_full_wordmark"
+      }
+    },
+    {
+      "slug": "apotheke",
+      "brand_id": 116,
+      "expected_brand_version": 3,
+      "expected_reference_logo_sha256": "678a81447a64e2d9d305b300e07227b194c99f9ae9dc6147b7c5f8a88ef51b12",
+      "original": {
+        "path": "/datos/workspaces/personal/prizma/Pinakotheke/apotheke/public/icon.svg",
+        "sha256": "678a81447a64e2d9d305b300e07227b194c99f9ae9dc6147b7c5f8a88ef51b12",
+        "preserve": true
+      },
+      "state": "prepared_not_applied",
+      "texts_merge": {
+        "brand_family": "humanizar",
+        "family_mode": "light",
+        "social_4x5": {
+          "titulo": "El almacén, a la vista.",
+          "subtitulo": "Existencias y pedidos para pequeños equipos.",
+          "copy": "",
+          "etiqueta": "Por Humanizar Systems",
+          "url": "https://apotheke.stevenvallejo.com"
+        }
+      },
+      "typography_merge": {
+        "titulos": "Manrope",
+        "cuerpo": "Manrope"
+      },
+      "existing_reference_status": "archivo_independiente_localizado",
+      "requires_new_media_revision": true,
+      "studio_identity_state": "original_reference_present"
+    },
+    {
+      "slug": "koinonia",
+      "brand_id": 117,
+      "expected_brand_version": 3,
+      "expected_reference_logo_sha256": "d782c4cd0f19e772c37038fa7f2286cc2c1aa4795d3e6ab9694df4e58510da6c",
+      "original": {
+        "path": "/datos/workspaces/personal/koinonia/apps/web/public/icono.svg",
+        "sha256": "d782c4cd0f19e772c37038fa7f2286cc2c1aa4795d3e6ab9694df4e58510da6c",
+        "preserve": true
+      },
+      "state": "prepared_not_applied",
+      "texts_merge": {
+        "brand_family": "humanizar",
+        "family_mode": "light",
+        "social_4x5": {
+          "titulo": "Pensar juntos, encontrarse.",
+          "subtitulo": "Comunidad, lecturas, debates y eventos.",
+          "copy": "",
+          "etiqueta": "Por Humanizar Systems",
+          "url": "https://koinonia.stevenvallejo.com"
+        }
+      },
+      "typography_merge": {
+        "titulos": "Manrope",
+        "cuerpo": "Manrope"
+      },
+      "existing_reference_status": "archivo_independiente_localizado",
+      "requires_new_media_revision": true,
+      "studio_identity_state": "original_reference_present"
+    },
+    {
+      "slug": "chronos",
+      "brand_id": 118,
+      "expected_brand_version": 3,
+      "expected_reference_logo_sha256": "678a81447a64e2d9d305b300e07227b194c99f9ae9dc6147b7c5f8a88ef51b12",
+      "original": {
+        "path": "/datos/workspaces/personal/prizma/Pinakotheke/chronos/public/icon.svg",
+        "sha256": "678a81447a64e2d9d305b300e07227b194c99f9ae9dc6147b7c5f8a88ef51b12",
+        "preserve": true
+      },
+      "state": "prepared_not_applied",
+      "texts_merge": {
+        "brand_family": "humanizar",
+        "family_mode": "light",
+        "social_4x5": {
+          "titulo": "Tu tiempo tiene un lugar.",
+          "subtitulo": "Horas, proyectos y cuentas de cobro.",
+          "copy": "",
+          "etiqueta": "Por Humanizar Systems",
+          "url": "https://chronos.stevenvallejo.com"
+        }
+      },
+      "typography_merge": {
+        "titulos": "Manrope",
+        "cuerpo": "Manrope"
+      },
+      "existing_reference_status": "archivo_independiente_localizado",
+      "requires_new_media_revision": true,
+      "studio_identity_state": "original_reference_present"
+    },
+    {
+      "slug": "gravitatoria",
+      "brand_id": 119,
+      "expected_brand_version": 2,
+      "expected_reference_logo_sha256": null,
+      "original": null,
+      "state": "prepared_not_applied",
+      "texts_merge": {
+        "brand_family": "humanizar",
+        "family_mode": "light",
+        "social_4x5": {
+          "titulo": "Comercios que se encuentran.",
+          "subtitulo": "Publica lo que ofreces y encuentra lo que necesitas.",
+          "copy": "",
+          "etiqueta": "Por Humanizar Systems",
+          "url": "https://gravitatoria.humanizar.tech"
+        }
+      },
+      "typography_merge": {
+        "titulos": "Manrope",
+        "cuerpo": "Manrope"
+      },
+      "existing_reference_status": "marca_implementada_sin_maestro",
+      "requires_new_media_revision": true,
+      "studio_identity_state": "missing_fixed_reference"
+    },
+    {
+      "slug": "prizma",
+      "brand_id": 120,
+      "expected_brand_version": 3,
+      "expected_reference_logo_sha256": null,
+      "original": null,
+      "state": "prepared_not_applied",
+      "texts_merge": {
+        "brand_family": "humanizar",
+        "family_mode": "light",
+        "social_4x5": {
+          "titulo": "Una operación, muchas piezas.",
+          "subtitulo": "Comercio, caja, cartera y entregas en una suite.",
+          "copy": "",
+          "etiqueta": "Por Humanizar Systems",
+          "url": "https://prisma-enterprice.cloud"
+        }
+      },
+      "typography_merge": {
+        "titulos": "Manrope",
+        "cuerpo": "Manrope"
+      },
+      "existing_reference_status": "variantes_pendientes_de_conciliar",
+      "requires_new_media_revision": true,
+      "studio_identity_state": "missing_fixed_reference"
+    },
+    {
+      "slug": "praxis",
+      "brand_id": 121,
+      "expected_brand_version": 2,
+      "expected_reference_logo_sha256": null,
+      "original": null,
+      "state": "prepared_not_applied",
+      "texts_merge": {
+        "brand_family": "humanizar",
+        "family_mode": "light",
+        "social_4x5": {
+          "titulo": "De la idea a un sistema operable.",
+          "subtitulo": "Software, automatización y piezas visuales a medida.",
+          "copy": "",
+          "etiqueta": "Por Humanizar Systems",
+          "url": "https://praxis.stevenvallejo.com"
+        }
+      },
+      "typography_merge": {
+        "titulos": "Manrope",
+        "cuerpo": "Manrope"
+      },
+      "existing_reference_status": "origen_y_variante_de_referencia_pendientes",
+      "requires_new_media_revision": true,
+      "studio_identity_state": "missing_fixed_reference"
+    },
+    {
+      "slug": "ergon",
+      "brand_id": 122,
+      "expected_brand_version": 3,
+      "expected_reference_logo_sha256": "678a81447a64e2d9d305b300e07227b194c99f9ae9dc6147b7c5f8a88ef51b12",
+      "original": {
+        "path": "/datos/workspaces/personal/prizma/Pinakotheke/ergon/apps/landing/public/icon.svg",
+        "sha256": "678a81447a64e2d9d305b300e07227b194c99f9ae9dc6147b7c5f8a88ef51b12",
+        "preserve": true
+      },
+      "state": "prepared_not_applied",
+      "texts_merge": {
+        "brand_family": "humanizar",
+        "family_mode": "light",
+        "social_4x5": {
+          "titulo": "Una base para tu forma de trabajar.",
+          "subtitulo": "Software a medida desde kits reutilizables.",
+          "copy": "",
+          "etiqueta": "Por Humanizar Systems",
+          "url": "https://ergon.stevenvallejo.com"
+        }
+      },
+      "typography_merge": {
+        "titulos": "Manrope",
+        "cuerpo": "Manrope"
+      },
+      "existing_reference_status": "archivo_independiente_localizado",
+      "requires_new_media_revision": true,
+      "studio_identity_state": "original_reference_present"
+    },
+    {
+      "slug": "agentes",
+      "brand_id": 123,
+      "expected_brand_version": 3,
+      "expected_reference_logo_sha256": "59ab5fa0fc8c47fb27933c71023de2d1f10a9b7bd9172e1a0cf0161f7476f9e9",
+      "original": {
+        "path": "/datos/workspaces/humanizar/HumanizarComercial/apps/agentes/brand/firma-horizontal-papel.svg",
+        "sha256": "59ab5fa0fc8c47fb27933c71023de2d1f10a9b7bd9172e1a0cf0161f7476f9e9",
+        "preserve": true
+      },
+      "state": "prepared_not_applied",
+      "texts_merge": {
+        "brand_family": "humanizar",
+        "family_mode": "dark",
+        "social_4x5": {
+          "titulo": "Tu proceso, con un equipo nuevo.",
+          "subtitulo": "Agentes a la medida sobre tus herramientas.",
+          "copy": "",
+          "etiqueta": "Por Humanizar Systems",
+          "url": "https://agentes.humanizar.tech/"
+        }
+      },
+      "typography_merge": {
+        "titulos": "Manrope",
+        "cuerpo": "Manrope"
+      },
+      "existing_reference_status": "firma_empresa_sin_logo_independiente",
+      "requires_new_media_revision": true,
+      "studio_identity_state": "original_reference_present"
+    }
+  ]
+}

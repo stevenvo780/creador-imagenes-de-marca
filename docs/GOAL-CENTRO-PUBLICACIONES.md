@@ -95,3 +95,24 @@ entregas antiguas repetidas retenidas. Ver el informe canónico en ComercialHuma
 
 La meta permanece activa. Campañas, revisión completa, conexiones, calendario
 y panel siguen pendientes del diseño escrito y posterior plan de ejecución.
+
+## Continuación: referencias y preparación de las marcas
+
+La lectura fresca por API vuelve a confirmar quince marcas de producto, nueve
+referencias originales y cero perfiles Humanizar seleccionados. Se verificaron
+los nueve hashes locales contra las referencias remotas.
+
+Se exportaron desde código existente el símbolo de Cauce y el glifo de Aletheia,
+con hashes de archivos/fragmentos y revisión independiente. Aletheia no se
+presenta como firma completa: el glifo no incluye nombre ni caja externa.
+Ambos permanecen pendientes de revisión visual. Ver
+`docs/brand-references/2026-10-11-existing-marks/README.md`.
+
+El perfil admite ahora un modo inicial explícito `texts.family_mode` para
+conservar visible una firma clara, como la de Agentes, en fondo oscuro. La
+selección no cambia los bytes originales. Siete casos nuevos revisados pasan;
+core completo de familia y exportaciones: **36 aprobados**. Se prepararon
+los cambios de metadata para las quince marcas, sin aplicarlos ni aprobar medios.
+
+Siguen pendientes la comprobación visual final, el despliegue de esta entrega
+y la revisión del diseño escrito para preparar el plan de los módulos nuevos.

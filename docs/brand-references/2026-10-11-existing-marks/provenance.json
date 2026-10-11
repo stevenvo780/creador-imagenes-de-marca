@@ -1,0 +1,41 @@
+{
+  "production_mutated": false,
+  "items": [
+    {
+      "source_fragment_sha256": "718053ed9fe5b600f81d190c5b16b58a8a6400adb3d59cf15274ebf5c29c9b15",
+      "export_sha256": "8d77813e14fd79067771cbd6ed77d69d256367248360b33f9c5d63c0739faa38",
+      "role": "existing_product_symbol",
+      "state": "pending_visual_review",
+      "production_mutated": false,
+      "file": "cauce-simbolo-existente.svg",
+      "sources": [
+        {
+          "path": "/datos/workspaces/humanizar/HumanizarComercial/apps/cauce/index.html",
+          "sha256": "c3def0ea6b670930de6da2eb16a7dffe20ee5388db4966a1ec406862ca51d5b9"
+        }
+      ]
+    },
+    {
+      "source_fragment_sha256": "ea2e5e799d308fc604c5b1b595bd4be32b3dab4e566607ee342346c5f6001f0a",
+      "export_sha256": "65aa2693e72ddbb8879dc7ed66ae885c1d40e5dd359ebc8428d6e964fd1d0a52",
+      "role": "existing_ui_glyph_only",
+      "state": "pending_visual_review",
+      "production_mutated": false,
+      "full_wordmark": false,
+      "resolved_tokens": {
+        "--measure": "#4338ca"
+      },
+      "file": "aletheia-glifo-existente-claro.svg",
+      "sources": [
+        {
+          "path": "/datos/workspaces/personal/aletheia/apps/web/src/components/AppShell.tsx",
+          "sha256": "4e628bfe63ca344686002da779f7f2d442da03dc7fd9f459b2471df25c68582a"
+        },
+        {
+          "path": "/datos/workspaces/personal/aletheia/apps/web/src/app/globals.css",
+          "sha256": "6d1f2902af22e36e5d873ac9354475cc72af4365d5a5c3f0538abbcfffdecc23"
+        }
+      ]
+    }
+  ]
+}
