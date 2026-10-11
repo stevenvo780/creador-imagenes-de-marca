@@ -1,7 +1,8 @@
 # Meta: Eikón como centro de marca y publicaciones
 
 Creada por instrucción del operador el **11 de octubre de 2026**, America/Bogota.
-Estado: **activa**. La meta del chat es el seguimiento principal; este documento
+Estado: **bloqueada por revisión escrita pendiente** tras completar la recuperación
+de fuentes inequívocas. La meta del chat es el seguimiento principal; este documento
 conserva requisitos, avances y evidencia del repositorio.
 
 ## Resultado esperado
@@ -165,3 +166,9 @@ Quedan tres referencias: Deméter (lockup con Lucide Sprout; F es Ficadirecta),
 Gravitatoria (Lucide Package) y Práxis (marca compartida con Mouseîon/personal).
 No se presentan iconos genéricos o de cliente como masters exclusivos.
 La revisión de fuentes fue local y no acredita los encabezados públicos actuales.
+
+El bloqueo de revisión del diseño para campañas/conexiones/calendario persiste
+desde varios turnos. La recuperación independiente de fuentes inequívocas quedó
+cerrada; se espera la aprobación del documento antes de preparar el plan. También
+están pendientes el acceso GUI de producción y cerrar el nuevo panel de extensión
+que detuvo la prueba local. La meta no está completa ni pausada por decisión propia.
