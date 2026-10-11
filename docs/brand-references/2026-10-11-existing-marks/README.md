@@ -33,11 +33,29 @@ coinciden. Esta comprobación no sustituye revisión visual ni aprobación de
 marca. El glifo de Aletheia requiere conservar su contexto al componer una firma.
 
 Prizma se seleccionó por coincidencia entre master y encabezado actual; no se
-redibujó. Deméter conserva una composición Sprout + nombre en el código, pero
-el asset con F corresponde a Ficadirecta. Gravitatoria utiliza Lucide Package
-en un cuadro azul; no se elevó el sprite de la maqueta a master propio.
-Práxis comparte cabecera con Mouseîon y marca personal. Esas tres decisiones de
-referencia siguen pendientes; no se fijaron signos de cliente o UI como logos propios.
+redibujó. Deméter y Gravitatoria recibieron después símbolos y encuadres
+extraídos de sus lockups UI existentes, con procedencia Lucide explícita.
+La ausencia de símbolo exclusivo no impide conservar la composición que el
+producto ya utiliza; se corrigió ese criterio anterior. No son masters
+históricos encontrados ni acreditan exclusividad o registro. El asset F sigue
+siendo de Ficadirecta; el sprite de la maqueta no sustituyó al Package actual.
+Práxis comparte cabecera con Mouseîon y marca personal: esa referencia sigue
+pendiente de decisión, sin apropiarse de un signo compartido.
+
+Deméter110/v4 conserva tema claro: glifo verde, fondo transparente y anillo
+azul50%, tal como se verificó por CSS calculado en la landing publicada.
+No se inventó el fondo verde15% que pretendían clases no compiladas.
+Gravitatoria119/v4 conserva la variante oscura observada: cuadro azul claro,
+Package exacto del DOM actual y trazo oscuro. Sus paths coinciden con las
+capturas guardadas; el renderer usa el SVG como referencia autónoma.
+Sólo se resuelve currentColor y se serializa XML; la caja Deméter normaliza
+medidas subpíxel a38/22 nominales. El nombre no forma parte de estos SVG.
+
+Las dos referencias y todos los campos conservados se verificaron por API
+owner17. El navegador real de Humanizar generó PNG2160×2700 para ambos:
+lotes2496/2497, variaciones3049/3050, bytes descargados iguales a los persistidos.
+Los originales, textos y pies están visibles; no hay aprobación editorial ni
+publicación. Ver `docs/RELEASE-REFERENCIAS-DEMETER-GRAVITATORIA-20261011.json`.
 
 ## Aplicación preparada a las quince marcas
 
@@ -56,5 +74,5 @@ y hashes no deben usarse para repetir las escrituras. `slug` identifica el
 producto y `expected_remote_slug` identifica la marca persistida en Eikón.
 Tras desplegar y verificar, se aplicaron los quince perfiles conservando otros
 campos. Cauce, Aletheia y Prizma recibieron después sus símbolos originales:
-ahora hay doce referencias fijadas y tres pendientes. Deben emitirse nuevos briefs/revisiones
+ahora hay catorce referencias fijadas y sólo Práxis pendiente. Deben emitirse nuevos briefs/revisiones
 para las versiones actuales. Ver `docs/RELEASE-FAMILIA-HUMANIZAR-20261011.json`.

@@ -116,6 +116,100 @@
         2700
       ],
       "native_studio_verified_on": "2026-10-11"
+    },
+    {
+      "file": "demeter-simbolo-existente-claro.svg",
+      "export_sha256": "12427db66ab674aef5b61112b0a2be1af15926731664e07b8d5043db054652d4",
+      "source_fragment_sha256": "66cce3c6dbc4165342d72a9b89a3f5e7bda0c3d81ebc200b2ae809a25d77ba1e",
+      "role": "existing_ui_marketing_symbol_with_frame",
+      "full_wordmark": false,
+      "state": "fixed_reference_in_eikon_after_live_source_and_production_studio_review",
+      "production_mutated": true,
+      "tenant_id": 17,
+      "brand_id": 110,
+      "theme": "claro",
+      "glyph_origin": "Lucide Sprout",
+      "exclusive_symbol_claimed": false,
+      "sources": [
+        {
+          "path": "/datos/workspaces/personal/eikon-codex-publicaciones/docs/brand-references/2026-10-11-existing-marks/demeter-live-source.json",
+          "sha256": "249c86b7a6c505f4fd9b59e04d733057202ca81afba5a45870e7cd9c1bdb3891"
+        },
+        {
+          "path": "/datos/workspaces/humanizar/Demeter/apps/dashboard/components/marketing/Brand.tsx",
+          "sha256": "c2c6395d1507842126eb7dfbdaeee4b16fbb63546b439e972182469f15b28aa6"
+        },
+        {
+          "path": "/datos/workspaces/humanizar/Demeter/apps/dashboard/app/globals.css",
+          "sha256": "fd08c09110f219b8cfd7da15916cb47cbba60281288666e35b009407b828652f"
+        }
+      ],
+      "live_source_url": "https://demeter.humanizar.cloud/",
+      "captured_on": "2026-10-11",
+      "source_revision_known": false,
+      "paths_match_live_dom": true,
+      "normalization": "XML serialization and currentColor resolution; original paths retained; frame reconstructed from computed appearance and nominal component dimensions; name not included",
+      "frame": {
+        "size": 38,
+        "glyph_size": 22,
+        "radius": 12
+      },
+      "dependency_version": "0.460.0 installed source matches live paths",
+      "brand_version": 4,
+      "native_studio_visual_verified": true,
+      "native_studio_visual_scope": "real Humanizar browser session; social_4x5 desktop; complete downloaded PNG visually inspected; no editorial approval",
+      "native_studio_png_sha256": "2a2dc7d2384ffd2a7679871a6d5b10d93fb9d1a7239768dad28ad81181c482bc",
+      "native_studio_png_dimensions": [
+        2160,
+        2700
+      ]
+    },
+    {
+      "file": "gravitatoria-simbolo-existente-oscuro.svg",
+      "export_sha256": "ba1f7c04b5802561772735d350fb7817c6e22d236871b889f34f455c740c3786",
+      "source_fragment_sha256": "83a13c7b536d5ffb1979bf6f53cc49321e8962dabdd377b97db3110c64b018ca",
+      "role": "existing_ui_marketing_symbol_with_frame",
+      "full_wordmark": false,
+      "state": "fixed_reference_in_eikon_after_live_source_and_production_studio_review",
+      "production_mutated": true,
+      "tenant_id": 17,
+      "brand_id": 119,
+      "theme": "oscuro",
+      "glyph_origin": "Lucide Package",
+      "exclusive_symbol_claimed": false,
+      "sources": [
+        {
+          "path": "/datos/workspaces/personal/eikon-codex-publicaciones/docs/brand-references/2026-10-11-existing-marks/gravitatoria-live-source.json",
+          "sha256": "2b4fb7629d028cfe29dad721721461390d9db5b2e07058ff085dfc68a12cee6e"
+        },
+        {
+          "path": "/datos/workspaces/humanizar/gravitatoria/src/app/components/cascaron/cabecera-app.tsx",
+          "sha256": "1e965680ccd56a6b1d51ceae84057a12f6723f196195bf5b76e3e6bcc922655b"
+        },
+        {
+          "path": "/datos/workspaces/humanizar/gravitatoria/src/app/styles.css",
+          "sha256": "7dac23f7548bf7275044d24a0cab0d1da89d82f4c872b70ccada04fe237684d3"
+        }
+      ],
+      "live_source_url": "https://gravitatoria.humanizar.tech/inicio",
+      "captured_on": "2026-10-11",
+      "source_revision_known": false,
+      "paths_match_live_dom": true,
+      "normalization": "XML serialization and currentColor resolution; original paths retained; frame reconstructed from computed appearance and nominal component dimensions; name not included",
+      "frame": {
+        "size": 28,
+        "glyph_size": 17,
+        "radius": 8
+      },
+      "dependency_version": "1.43.0 local lockfile; live DOM geometry authoritative, deployed dependency version unverified",
+      "brand_version": 4,
+      "native_studio_visual_verified": true,
+      "native_studio_visual_scope": "real Humanizar browser session; social_4x5 desktop; complete downloaded PNG visually inspected; no editorial approval",
+      "native_studio_png_sha256": "e3fb13203dc0767d42a05b062b6258197e83cf1168b2c69f6c8bde35a35d0306",
+      "native_studio_png_dimensions": [
+        2160,
+        2700
+      ]
     }
   ]
 }

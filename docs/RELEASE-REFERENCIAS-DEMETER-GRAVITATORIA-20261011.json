@@ -1,0 +1,72 @@
+{
+  "captured_at": "2026-10-11T20:46:42.199699+00:00",
+  "tenant_id": 17,
+  "native_source_visual_verified": true,
+  "native_studio_visual_verified": true,
+  "native_studio_blocker": null,
+  "media_approved": false,
+  "social_posts_created": 0,
+  "applied": [
+    {
+      "brand_id": 110,
+      "slug": "producto-demeter",
+      "previous_version": 3,
+      "current_version": 4,
+      "sha256": "12427db66ab674aef5b61112b0a2be1af15926731664e07b8d5043db054652d4",
+      "retrieved_bytes_match": true,
+      "other_fields_preserved": true
+    },
+    {
+      "brand_id": 119,
+      "slug": "producto-gravitatoria",
+      "previous_version": 3,
+      "current_version": 4,
+      "sha256": "ba1f7c04b5802561772735d350fb7817c6e22d236871b889f34f455c740c3786",
+      "retrieved_bytes_match": true,
+      "other_fields_preserved": true
+    }
+  ],
+  "production_gui_followup": {
+    "captured_at": "2026-10-11T20:48:38.977642+00:00",
+    "domain": "https://eikon.humanizar.cloud",
+    "scope": "real Humanizar browser session; social_4x5 desktop; complete downloaded PNG visually inspected; no editorial approval",
+    "download_event_demeter": "observer timeout; actual new file recovered and matched against persisted bytes",
+    "items": [
+      {
+        "brand_id": 110,
+        "brand_version": 4,
+        "png_dimensions": [
+          2160,
+          2700
+        ],
+        "png_sha256": "2a2dc7d2384ffd2a7679871a6d5b10d93fb9d1a7239768dad28ad81181c482bc",
+        "persisted_variation_id": 3049,
+        "batch_id": 2496,
+        "persisted_bytes_match_download": true,
+        "selected": false,
+        "legacy_score": 0.5,
+        "legacy_score_is_editorial_approval": false,
+        "native_production_visual_verified": true
+      },
+      {
+        "brand_id": 119,
+        "brand_version": 4,
+        "png_dimensions": [
+          2160,
+          2700
+        ],
+        "png_sha256": "e3fb13203dc0767d42a05b062b6258197e83cf1168b2c69f6c8bde35a35d0306",
+        "persisted_variation_id": 3050,
+        "batch_id": 2497,
+        "persisted_bytes_match_download": true,
+        "selected": false,
+        "legacy_score": 0.5,
+        "legacy_score_is_editorial_approval": false,
+        "native_production_visual_verified": true
+      }
+    ]
+  },
+  "current_product_reference_count": 14,
+  "remaining_identity_reference": "praxis",
+  "new_editorial_approvals": 0
+}

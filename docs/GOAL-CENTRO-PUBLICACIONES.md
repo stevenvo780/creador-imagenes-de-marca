@@ -1,7 +1,7 @@
 # Meta: Eikón como centro de marca y publicaciones
 
 Creada por instrucción del operador el **11 de octubre de 2026**, America/Bogota.
-Estado: **activa tras reanudación**, con revisión escrita pendiente para los
+Estado: **bloqueada por revisión escrita pendiente**, para los
 módulos nuevos. La meta del chat es el seguimiento principal; este documento
 conserva requisitos, avances y evidencia del repositorio.
 
@@ -220,3 +220,25 @@ El inventario no se importó y no afirma historial remoto completo.
 La meta sigue activa. Campañas/conexiones/calendario/worker/panel requieren
 revisión escrita del diseño y posterior plan; tres referencias y revisión de
 piezas actuales también siguen pendientes. No se envió contenido social nuevo.
+
+
+## Referencias vigentes y prueba de producción, 20:49 UTC
+
+Deméter110 y Gravitatoria119 pasan de v3/sin referencia a v4 con símbolos y
+encuadres extraídos de sus lockups UI actuales. Se corrigió la exigencia anterior
+de master exclusivo: preservar el uso vigente con origen Lucide documentado
+cumple conservar logos sin atribuir exclusividad ni apropiarse de Ficadirecta.
+Capturas DOM y apariencia calculada, paths exactos, comparación visual y revisión
+independiente respaldan ambos SVG. Otros campos, familia y modo se conservaron.
+
+El Estudio de producción de la cuenta Humanizar generó y descargó dos PNG
+2160×2700 completos: Deméter2496/3049 y Gravitatoria2497/3050. API confirma bytes
+idénticos a los descargados, lotes completados y selected=false. Score0.5 es
+baseline legacy, no aprobación editorial. No se aprobaron medios ni publicaron
+posts nuevos. Hay catorce referencias de producto; Práxis sigue compartiendo
+marca con Mouseîon/personal y requiere decisión de referencia.
+
+Este cambio es de datos y documentación: conserva runtimee956d37/revisión60.
+La revisión escrita de los nuevos módulos sigue pendiente tras tres turnos
+reanudados. Cerrados estos trabajos independientes, la meta queda bloqueada
+por esa revisión, no completada; falta el plan y la implementación del centro.

@@ -34,8 +34,10 @@ de cuatro y ocho columnas no se presentan como layouts responsive terminados.
 
 ## Pendientes de aceptación
 
-1. Resolver tres referencias: Deméter, Gravitatoria y Práxis. Los quince perfiles
-   están aplicados y doce logos fijados, incluidos Cauce, Aletheia y Prizma.
+1. Resolver la referencia de Práxis. Los quince perfiles están aplicados y
+   catorce logos fijados, incluidos Deméter y Gravitatoria110/119v4. Sus lockups
+   UI existentes se verificaron en páginas vigentes; ambos PNG2160×2700 fueron
+   generados, descargados e inspeccionados en producción.
    Aletheia/Prizma tienen comparación local de fuentes, lectura API/MCP y PNG
    final descargado e inspeccionado en Estudio local.
 2. Emitir nuevos briefs y revisar piezas contra las versiones actuales;
