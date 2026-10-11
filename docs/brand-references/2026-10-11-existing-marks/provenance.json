@@ -1,19 +1,22 @@
 {
-  "production_mutated": false,
+  "production_mutated": true,
   "items": [
     {
       "source_fragment_sha256": "718053ed9fe5b600f81d190c5b16b58a8a6400adb3d59cf15274ebf5c29c9b15",
       "export_sha256": "8d77813e14fd79067771cbd6ed77d69d256367248360b33f9c5d63c0739faa38",
       "role": "existing_product_symbol",
-      "state": "pending_visual_review",
-      "production_mutated": false,
+      "state": "fixed_reference_in_eikon_after_local_visual_review",
+      "production_mutated": true,
       "file": "cauce-simbolo-existente.svg",
       "sources": [
         {
           "path": "/datos/workspaces/humanizar/HumanizarComercial/apps/cauce/index.html",
           "sha256": "c3def0ea6b670930de6da2eb16a7dffe20ee5388db4966a1ec406862ca51d5b9"
         }
-      ]
+      ],
+      "tenant_id": 17,
+      "brand_id": 113,
+      "brand_version": 4
     },
     {
       "source_fragment_sha256": "ea2e5e799d308fc604c5b1b595bd4be32b3dab4e566607ee342346c5f6001f0a",

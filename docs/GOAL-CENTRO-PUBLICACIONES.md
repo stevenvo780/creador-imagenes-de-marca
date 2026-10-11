@@ -116,3 +116,32 @@ los cambios de metadata para las quince marcas, sin aplicarlos ni aprobar medios
 
 Siguen pendientes la comprobación visual final, el despliegue de esta entrega
 y la revisión del diseño escrito para preparar el plan de los módulos nuevos.
+
+## Entrega de identidad desplegada, 19:36 UTC
+
+Se cerró la comprobación visual local del PNG vertical, pie, logo horizontal
+y vista móvil. Se comprobaron además Agentes con fondo oscuro y Cauce con su
+símbolo original recuperado. El observador de descarga agotó su tiempo, pero
+el archivo nuevo descargado fue localizado y verificado por píxeles y SHA.
+
+Código `0d1a9bc7bef918a619cf06896dd9cc4d68c80727` desplegado en
+`eikon-00059-9h5`, tráfico 100%, sin tags; configuración y permisos conservados.
+Tres orígenes sirven el frontend exacto de la imagen; owner17 funciona y el
+acceso anónimo a marcas continúa rechazado. La GUI de producción sigue
+pendiente del acceso del operador en la pestaña preparada.
+
+Los quince perfiles fueron aplicados con respaldos, comprobaciones frescas y
+revisión independiente del procedimiento. Se preservaron los nueve originales,
+otros textos y campos; no se cambiaron nombres, slugs o proyectos. Cauce recibió
+su símbolo existente tras verificación visual y de procedencia. Ahora hay diez
+referencias de logo fijadas; quedan Deméter, Aletheia, Gravitatoria, Prizma y
+Práxis. MCP nativo confirma Cauce113/v4 y su nuevo hash de referencia.
+
+La API de producción devolvió planes correctos para Sinergia, Agentes y Deméter,
+incluyendo originales byte exactos, modo oscuro y ausencia de logo sin inventar
+un símbolo, respectivamente. No se aprobaron nuevos medios ni se publicaron
+posts. Ambos temporizadores antiguos permanecen deshabilitados e inactivos.
+
+Recibo y límites en `docs/RELEASE-FAMILIA-HUMANIZAR-20261011.md` y su JSON.
+La meta sigue activa: módulos nuevos pendientes de revisión del diseño escrito
+y del plan; no se presentan como implementados por esta entrega.

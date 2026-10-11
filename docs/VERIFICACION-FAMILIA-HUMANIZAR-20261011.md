@@ -18,13 +18,13 @@ con un archivo histórico. Otros perfiles conservan su ruta anterior.
 | Suite Python completa, PostgreSQL 16 sintético y SQLite | 867 aprobadas, 2 omitidas | Las dos omisiones requieren outputs de demostración ausentes |
 | Familia y plan HTTP finales, con PostgreSQL | 45 aprobadas | No es inspección de píxeles |
 | Frontend Node final, consumidores TS reales y geometría | 75 aprobadas | No sustituye comprobación de píxeles después de las últimas correcciones |
-| Core final tras corrección de tamaño del logo | 24 aprobadas | No acredita por sí solo legibilidad visual |
+| Core de familia y exportaciones finales | 36 aprobadas | Deltas posteriores a la suite general; no sustituye inspección visual |
 | TypeScript y Vite | Correcto | Build local |
 | Ruff de archivos cambiados nuevos y mypy focal | Correcto | Worker conserva diez RUF036 preexistentes |
 | Revisión independiente, cinco rondas | Aprobado sin bloqueantes nuevos | Retícula 12 real sólo en social_4x5 |
-| Navegador, cuenta sintética local | Acceso, badges, generación y PNG descargado 2160×2700 | La inspección encontró defectos; QA de sus correcciones pendiente por panel de extensión |
+| Navegador, cuenta sintética local | Acceso, badges, PNG final 2160×2700 completo, móvil390×844, casos Agentes/Cauce | GUI de producción aún requiere acceso del operador; no todos los formatos |
 | Respaldo privado de producción | Dump fresco, 112053 bytes, restauración en clon sin red y doble init_db sin modificar filas/columnas | No acredita despliegue |
-| Imagen Docker local | Build correcto | Aún no enviada al registro ni desplegada |
+| Imagen y servicio desplegado | 0d1a9bc / eikon-00059-9h5 al100%, configuración y permisos conservados | Recibo completo y alcances en RELEASE-FAMILIA-HUMANIZAR-20261011.md |
 
 La prueba HTTP final comprueba creación 202, plan 200, formato 1080×1350,
 plantilla accesible con autenticación y otro tenant rechazado con 404. También
@@ -33,14 +33,12 @@ de cuatro y ocho columnas no se presentan como layouts responsive terminados.
 
 ## Pendientes de aceptación
 
-1. Reanudar CUA al cerrar el panel de la extensión; regenerar la pieza vertical
-   tras las correcciones de preview, ancho de logo y mínimos del body importado.
-   Comprobar fuente, retícula, pie visible, ausencia de desbordamientos y logo
-   horizontal, y descargar su PNG. La descarga anterior existió aunque el
-   observador de eventos del navegador agotó su tiempo de espera.
-2. Sólo tras ese gate, actualizar la imagen del servicio existente y comprobar
-   SHA/digest, configuración, API y recorrido real. Mantener cola antigua parada.
-3. Aplicar el perfil a las marcas Humanizar con nuevas revisiones de piezas;
+1. Completar el recorrido GUI autenticado en producción; el operador tiene la
+   pestaña preparada en /brands. La prueba local y la API desplegada están
+   verificadas; no sustituyen ese acceso.
+2. Resolver cinco referencias de producto pendientes. Los quince perfiles
+   están aplicados y diez logos fijados, incluido Cauce; conservar procedencia.
+3. Emitir nuevos briefs y revisar piezas contra las versiones actuales;
    no aprobar automáticamente borradores ni borrar versiones previas.
 
 Los nuevos módulos del centro se describen en el diseño del 11 de octubre y

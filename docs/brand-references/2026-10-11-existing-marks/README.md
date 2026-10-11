@@ -1,7 +1,9 @@
 # Signos existentes recuperados del código
 
-Exportados el 11 de octubre de 2026. **Referencias locales pendientes de
-revisión visual**; no se han cambiado logos, briefs ni medios en producción.
+Exportados el 11 de octubre de 2026. Cauce fue comprobado visualmente en
+Estudio local y fijado como referencia en Eikón (marca 113, v4), conservando sus
+trazos y gradiente. El glifo de Aletheia sigue pendiente; no se han aprobado
+medios ni publicado contenido social.
 
 | Producto | Archivo | Qué conserva | Qué no acredita |
 |---|---|---|---|
@@ -40,8 +42,10 @@ Agentes conserva su firma original clara y propone `family_mode="dark"`;
 las otras catorce proponen `light`. El mapper respeta el modo explícito del
 producto y las selecciones de tema de cada combinación. No recolorea logos.
 
-El archivo no se ha aplicado: primero hay que desplegar y verificar el código,
-revalidar empresa/versiones/hashes, mezclar campos conservando los existentes
-y emitir nuevos briefs y revisiones de medios. Los seis productos sin una
-referencia fija siguen identificados como tales. Las dos exportaciones no se
-cuentan como identidades aprobadas por estar pendientes de revisión visual.
+El archivo conserva la preparación anterior a la aplicación; sus versiones
+y hashes no deben usarse para repetir las escrituras. `slug` identifica el
+producto y `expected_remote_slug` identifica la marca persistida en Eikón.
+Tras desplegar y verificar, se aplicaron los quince perfiles conservando otros
+campos. Cauce recibió después su símbolo original recuperado: ahora hay diez
+referencias fijadas y cinco pendientes. Deben emitirse nuevos briefs/revisiones
+para las versiones actuales. Ver `docs/RELEASE-FAMILIA-HUMANIZAR-20261011.json`.

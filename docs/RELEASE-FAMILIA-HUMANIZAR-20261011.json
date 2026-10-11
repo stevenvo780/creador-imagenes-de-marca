@@ -1,0 +1,199 @@
+{
+  "release": {
+    "captured_at": "2026-10-11T19:24:12.749647+00:00",
+    "code_sha": "0d1a9bc7bef918a619cf06896dd9cc4d68c80727",
+    "image": "us-central1-docker.pkg.dev/emergent-enterprises/eikon/eikon@sha256:16ceb5983dd2cc178014d284b1159ebd16d8ec79126fe2833b4ab3d0a6cef1ea",
+    "linux_amd64_manifest": "sha256:ad4872c0038c9f9326baa821ac9c4297ce6b333ced2c8c23e7441cb83ead491a",
+    "runtime_image": "us-central1-docker.pkg.dev/emergent-enterprises/eikon/eikon@sha256:ad4872c0038c9f9326baa821ac9c4297ce6b333ced2c8c23e7441cb83ead491a",
+    "revision": "eikon-00059-9h5",
+    "traffic_percent": 100,
+    "tags": 0,
+    "configuration_preserved_except_image": true,
+    "service_and_bucket_iam_preserved": true,
+    "native_local_visual_verified": true,
+    "native_production_visual_verified": false,
+    "social_publishing_enabled": false
+  },
+  "family_application": {
+    "captured_at": "2026-10-11T19:30:21.143480+00:00",
+    "tenant_id": 17,
+    "applied": [
+      {
+        "brand_id": 109,
+        "product_slug": "sinergia-pos",
+        "remote_slug": "producto-sinergia-pos",
+        "previous_version": 4,
+        "current_version": 5,
+        "reference_sha256_preserved": "107bb83a6d2e6e51dc07bfa558e0774c239599bd97c7e76bcd61c1a65e01e355",
+        "family_mode": "light"
+      },
+      {
+        "brand_id": 110,
+        "product_slug": "demeter",
+        "remote_slug": "producto-demeter",
+        "previous_version": 2,
+        "current_version": 3,
+        "reference_sha256_preserved": null,
+        "family_mode": "light"
+      },
+      {
+        "brand_id": 111,
+        "product_slug": "graf-commerce",
+        "remote_slug": "producto-graf-commerce",
+        "previous_version": 3,
+        "current_version": 4,
+        "reference_sha256_preserved": "3a04c3660690cebbb6cc86c4c8ab49f2bc36da73a79838931b9707e22604faca",
+        "family_mode": "light"
+      },
+      {
+        "brand_id": 112,
+        "product_slug": "xenia",
+        "remote_slug": "producto-xenia",
+        "previous_version": 3,
+        "current_version": 4,
+        "reference_sha256_preserved": "678a81447a64e2d9d305b300e07227b194c99f9ae9dc6147b7c5f8a88ef51b12",
+        "family_mode": "light"
+      },
+      {
+        "brand_id": 113,
+        "product_slug": "cauce",
+        "remote_slug": "producto-cauce",
+        "previous_version": 2,
+        "current_version": 3,
+        "reference_sha256_preserved": null,
+        "family_mode": "light"
+      },
+      {
+        "brand_id": 114,
+        "product_slug": "agora",
+        "remote_slug": "producto-agora",
+        "previous_version": 3,
+        "current_version": 4,
+        "reference_sha256_preserved": "bfd3d17cfefa5666a1ff397d0f65e5063fe09bc68f4e4ead7789382a19ffe0fc",
+        "family_mode": "light"
+      },
+      {
+        "brand_id": 115,
+        "product_slug": "aletheia",
+        "remote_slug": "producto-aletheia",
+        "previous_version": 2,
+        "current_version": 3,
+        "reference_sha256_preserved": null,
+        "family_mode": "light"
+      },
+      {
+        "brand_id": 116,
+        "product_slug": "apotheke",
+        "remote_slug": "producto-apotheke",
+        "previous_version": 3,
+        "current_version": 4,
+        "reference_sha256_preserved": "678a81447a64e2d9d305b300e07227b194c99f9ae9dc6147b7c5f8a88ef51b12",
+        "family_mode": "light"
+      },
+      {
+        "brand_id": 117,
+        "product_slug": "koinonia",
+        "remote_slug": "producto-koinonia",
+        "previous_version": 3,
+        "current_version": 4,
+        "reference_sha256_preserved": "d782c4cd0f19e772c37038fa7f2286cc2c1aa4795d3e6ab9694df4e58510da6c",
+        "family_mode": "light"
+      },
+      {
+        "brand_id": 118,
+        "product_slug": "chronos",
+        "remote_slug": "producto-chronos",
+        "previous_version": 3,
+        "current_version": 4,
+        "reference_sha256_preserved": "678a81447a64e2d9d305b300e07227b194c99f9ae9dc6147b7c5f8a88ef51b12",
+        "family_mode": "light"
+      },
+      {
+        "brand_id": 119,
+        "product_slug": "gravitatoria",
+        "remote_slug": "producto-gravitatoria",
+        "previous_version": 2,
+        "current_version": 3,
+        "reference_sha256_preserved": null,
+        "family_mode": "light"
+      },
+      {
+        "brand_id": 120,
+        "product_slug": "prizma",
+        "remote_slug": "producto-prizma",
+        "previous_version": 3,
+        "current_version": 4,
+        "reference_sha256_preserved": null,
+        "family_mode": "light"
+      },
+      {
+        "brand_id": 121,
+        "product_slug": "praxis",
+        "remote_slug": "producto-praxis",
+        "previous_version": 2,
+        "current_version": 3,
+        "reference_sha256_preserved": null,
+        "family_mode": "light"
+      },
+      {
+        "brand_id": 122,
+        "product_slug": "ergon",
+        "remote_slug": "producto-ergon",
+        "previous_version": 3,
+        "current_version": 4,
+        "reference_sha256_preserved": "678a81447a64e2d9d305b300e07227b194c99f9ae9dc6147b7c5f8a88ef51b12",
+        "family_mode": "light"
+      },
+      {
+        "brand_id": 123,
+        "product_slug": "agentes",
+        "remote_slug": "producto-agentes",
+        "previous_version": 3,
+        "current_version": 4,
+        "reference_sha256_preserved": "59ab5fa0fc8c47fb27933c71023de2d1f10a9b7bd9172e1a0cf0161f7476f9e9",
+        "family_mode": "dark"
+      }
+    ],
+    "other_brands_untouched": true,
+    "original_logo_bytes_untouched": true,
+    "media_approved": false,
+    "social_posts_sent": false,
+    "atomic_multi_brand_transaction": false
+  },
+  "cauce_reference": {
+    "captured_at": "2026-10-11T19:35:12.005173+00:00",
+    "tenant_id": 17,
+    "brand_id": 113,
+    "reference_sha256": "8d77813e14fd79067771cbd6ed77d69d256367248360b33f9c5d63c0739faa38",
+    "source": "existing landing inline SVG",
+    "previous_reference": null,
+    "previous_version": 3,
+    "current_version": 4,
+    "other_fields_preserved": true,
+    "native_visual_review_local": true,
+    "media_approved": false,
+    "social_posts_sent": false
+  },
+  "current_product_status": {
+    "captured_at": "2026-10-11T19:36:01.304832+00:00",
+    "tenant_id": 17,
+    "product_count": 15,
+    "family_selected": 15,
+    "original_reference_count": 10,
+    "missing_references": [
+      "demeter",
+      "aletheia",
+      "gravitatoria",
+      "prizma",
+      "praxis"
+    ],
+    "cauce_mcp_native_read_verified": true,
+    "approved_new_media": 0,
+    "social_posts_sent": 0
+  },
+  "old_timers": {
+    "humanizar-publicaciones.timer": "disabled/inactive",
+    "humanizar-publicaciones-plan-daily.timer": "disabled/inactive"
+  },
+  "scope": "Existing identity/render flow; new campaigns/calendar/connections not implemented"
+}
