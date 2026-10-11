@@ -4,6 +4,11 @@ import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import ts from "typescript";
 
+const identityHelper = await import("data:text/javascript;base64," + Buffer.from(ts.transpile(
+  readFileSync(new URL("../src/utils/brandIdentity.ts", import.meta.url), "utf8"),
+  { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 },
+)).toString("base64"));
+
 // Ejecuta el guard y sus consumidores reales, como el harness AST de task7-fix1.
 const source = ts.createSourceFile(
   "AssetStudioPage.tsx",
@@ -18,9 +23,12 @@ const expressions = new Map();
 function visit(node) {
   if (ts.isVariableDeclaration(node) && node.initializer) {
     const name = node.name.getText(source);
-    if (name === "brandHasLogo" || name === "canGenerate")
+    if (["brandHasLogo", "canGenerate", "ASSET_TYPES_GROUPED", "CONTENT_FIELDS", "ASSET_LABEL",
+         "currentFields", "selectedAssetLabel", "selectedDimensions"].includes(name))
       expressions.set(name, node.initializer);
   }
+  if (ts.isFunctionDeclaration(node) && node.name?.text === "extractAssetDimensions")
+    expressions.set("extractAssetDimensions", node);
   if (ts.isJsxOpeningElement(node) && node.tagName.getText(source) === "SelectField") {
     const attributes = node.attributes.properties;
     const id = attributes.find((attr) => attr.name?.getText(source) === "id");
@@ -33,6 +41,7 @@ function visit(node) {
 }
 visit(source);
 function evaluate(name, bindings) {
+  bindings = { ...identityHelper, ...bindings };
   const expression = expressions.get(name);
   assert.ok(expression, `Studio debe exponer el consumidor ${name}`);
   const compiled = ts.transpile(`const observed = ${expression.getText(source)};`, {
@@ -78,4 +87,20 @@ test("Studio sin marca seleccionada mantiene ambos controles deshabilitados", ()
     selectedBrand, brandHasLogo, selectedAssetType: "ig_post",
     generating: false, resultVariation: null,
   }), false);
+});
+
+test("Studio ofrece la publicación vertical con dimensiones visibles y campos de la plantilla", () => {
+  const ASSET_TYPES_GROUPED = evaluate("ASSET_TYPES_GROUPED", {});
+  const ASSET_LABEL = evaluate("ASSET_LABEL", { ASSET_TYPES_GROUPED });
+  const CONTENT_FIELDS = evaluate("CONTENT_FIELDS", {});
+  const selectedAssetType = "social_4x5";
+  assert.ok(ASSET_TYPES_GROUPED.flatMap((group) => group.types)
+    .some((type) => type.value === selectedAssetType), "El usuario puede seleccionar social_4x5");
+  const selectedAssetLabel = evaluate("selectedAssetLabel", { ASSET_LABEL, selectedAssetType });
+  assert.match(selectedAssetLabel, /Publicación vertical/);
+  const extractAssetDimensions = evaluate("extractAssetDimensions", {});
+  assert.equal(evaluate("selectedDimensions", { extractAssetDimensions, selectedAssetLabel }), "1080×1350");
+  const currentFields = evaluate("currentFields", { CONTENT_FIELDS, selectedAssetType });
+  assert.deepEqual(currentFields.map((field) => field.key), ["titulo", "subtitulo", "copy", "etiqueta", "url"]);
+  assert.ok(currentFields.every((field) => field.label && field.placeholder), "Los campos tienen ayudas visibles");
 });

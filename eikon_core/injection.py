@@ -13,6 +13,40 @@ _CSS_MAP = {
     "--font-size-scale": "font_size_scale",
     "--space-scale": "space_scale",
     "--corner-radius": "corner_radius",
+    # El cliente emite estos keys con underscore; mantener paridad en el worker.
+    **{
+        f"--{key}": key
+        for key in (
+            "brand_coral",
+            "surface_secondary",
+            "product_accent_text",
+            "grid_columns_mobile",
+            "grid_columns_tablet",
+            "grid_columns_desktop",
+            "spacing_unit",
+            "safe_margin_y",
+            "safe_margin_x",
+            "grid_gutter",
+            "logo_clearance_ratio",
+            "logo_clearance",
+            "text_secondary",
+            "display_weight",
+            "composition_background",
+            "wordmark_gradient",
+            "wordmark_color",
+            "title_gradient",
+            "title_accent_color",
+            "tile_shadow",
+            "tile_radius",
+            "empty_logo_display",
+            "logo_object_fit",
+            "canvas_display",
+            "grid_template_columns",
+            "grid_template_rows",
+            "content_grid_span",
+            "canvas_row_gap",
+        )
+    },
 }
 _ATTR_MAP = {
     "data-logo-simbolo": "logo_simbolo",

@@ -22,7 +22,7 @@ from typing import Any
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, Response, UploadFile
 from fastapi.responses import FileResponse
 
-from eikon_core.brand import load_json
+from eikon_core.brand import humanizar_marca_from_row, load_json
 from eikon_core.combinatorial import CombinationSpec, plan_combinations
 from eikon_core.constants import MARCAS_DIR
 from eikon_core.mapping import apply_combination_overrides, map_marca_to_vars
@@ -59,6 +59,7 @@ _TEMPLATE_WHITELIST = {
     "fb_cover",
     "ig_carousel",
     "ig_post",
+    "social_4x5",
     "ig_reel_cover",
     "ig_story",
     "linkedin_banner",
@@ -127,7 +128,10 @@ async def get_batch_plan(  # noqa: C901
     # primario==bg → los símbolos de línea salían invisibles (negros).
     brand_slug = brand.get("slug", "")
     marca_path = MARCAS_DIR / f"{brand_slug}.json"
-    if marca_path.exists():
+    profile_marca = humanizar_marca_from_row(brand)
+    if profile_marca is not None:
+        marca = profile_marca
+    elif marca_path.exists():
         marca = load_json(marca_path)
     else:
         marca = {
@@ -139,6 +143,12 @@ async def get_batch_plan(  # noqa: C901
             "logo_simbolo": str(brand.get("logo_symbol", "")),
             "textos": json.loads(str(brand.get("texts_json", "{}"))),
         }
+
+    # El helper común distingue identidad fijada de un eje procedural del plan.
+    # Conservar el seed 0, y no inventar una identidad a partir del fallback.
+    if brand.get("logo_style"):
+        marca["logo_style"] = str(brand["logo_style"])
+        marca["logo_seed"] = brand.get("logo_seed")
 
     reference_uri = None
     reference_sha = brand.get("reference_logo_sha256")

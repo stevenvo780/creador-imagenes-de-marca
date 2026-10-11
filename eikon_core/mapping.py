@@ -404,6 +404,73 @@ def _apply_typography_pairing(result: dict[str, str], pairing: str) -> None:
         result["font_cuerpo"] = "Inter"
 
 
+def _apply_humanizar_profile(result: dict[str, str], scheme: str = "") -> None:
+    """Mantiene la familia madre; el color propio queda en roles secundarios.
+
+    Tokens del manual vigente, no un redibujo del símbolo. Los márgenes sociales
+    son una regla de composición del motor; el área libre del logo sí es 1/8 del
+    diámetro según el manual. El acento decorativo no se considera texto legible.
+    """
+    normalized_scheme = scheme.strip().lower()
+    dark = normalized_scheme in {"dark", "deep"}
+    if not normalized_scheme or normalized_scheme == "brand":
+        variant = result.get("variant", "").lower()
+        dark = result.get("family_mode") == "dark" or "dark" in variant or "inverse" in variant
+    bg = "#111319" if dark else "#fcfafd"
+    ink = "#fcfafd" if dark else "#29252d"
+    spacing_unit = 4
+    social_logo_box = 132
+    product_accent = _normalize_color_value(result.get("product_accent", ""), "#eae1f5")
+    result.update(
+        {
+            "brand_family": "humanizar",
+            "family_mode": "dark" if dark else "light",
+            "bg": bg,
+            "primario": ink,
+            "texto": ink,
+            "acento": "#f46f65" if dark else "#a63836",
+            "acento_2": product_accent,
+            "brand_coral": "#f46f65",
+            "surface_secondary": "#eae1f5",
+            "product_accent": product_accent,
+            "product_accent_text": wcag_adjust_luminosity(
+                ink if product_accent == "#eae1f5" else product_accent, bg
+            ),
+            "font_titulo": "Manrope",
+            "font_cuerpo": "Manrope",
+            "display_weight": "720",
+            "font_size_scale": "1",
+            "space_scale": "1",
+            "corner_radius": "20px",
+            "grid_columns_mobile": "4",
+            "grid_columns_tablet": "8",
+            "grid_columns_desktop": "12",
+            "spacing_unit": f"{spacing_unit}px",
+            "safe_margin_y": f"{spacing_unit * 24}px",
+            "safe_margin_x": f"{spacing_unit * 24}px",
+            "grid_gutter": f"{spacing_unit * 8}px",
+            "logo_clearance_ratio": "0.125",
+            "logo_clearance": f"{social_logo_box / 8:g}px",
+            "text_secondary": ink,
+            "composition_background": "none",
+            "wordmark_gradient": "none",
+            "wordmark_color": ink,
+            "title_gradient": "none",
+            "title_accent_color": ink,
+            "tile_shadow": "none",
+            "tile_radius": "0px",
+            "empty_logo_display": "none",
+            "logo_object_fit": "contain",
+            "canvas_display": "grid",
+            "grid_template_columns": "repeat(12,minmax(0,1fr))",
+            "grid_template_rows": "auto minmax(0,1fr) auto",
+            "content_grid_span": "1 / -1",
+            "canvas_row_gap": "calc(var(--spacing_unit) * 6)",
+        }
+    )
+    result.pop("grad_hero", None)
+
+
 def apply_combination_overrides(
     vars_dict: dict[str, str],
     combination_params: dict[str, str] | None = None,
@@ -421,6 +488,12 @@ def apply_combination_overrides(
         return vars_dict
 
     result = dict(vars_dict)
+
+    # El plan cliente vuelve a aplicar overrides después del mapeo; preservar
+    # la misma política en ambas entradas evita perder la familia en ese paso.
+    if result.get("brand_family") == "humanizar":
+        _apply_humanizar_profile(result, combination_params.get("palette_scheme", ""))
+        return result
 
     # Apply palette_scheme overrides
     if "palette_scheme" in combination_params:
@@ -506,7 +579,9 @@ def map_marca_to_vars(  # noqa: C901
 
     tipografia = _dict_value(marca, "tipografia")
     logo_simbolo = str(
-        marca.get("logo_simbolo") or marca.get("simbolo") or ("⚡" if family == "prizma" else "∞")
+        marca.get("logo_simbolo")
+        or marca.get("simbolo")
+        or ("" if family == "humanizar" else "⚡" if family == "prizma" else "∞")
     ).strip()
     logo_texto = str(
         marca.get("logo_texto")
@@ -536,10 +611,16 @@ def map_marca_to_vars(  # noqa: C901
         "copy": copy,
         "url": url,
         "variant": variant_name,
-        "numero": str(textos.get("numero", "22")),
-        "etiqueta": str(textos.get("etiqueta", "Simulaciones")),
-        "numero_2": str(textos.get("numero_2", "16")),
-        "etiqueta_2": str(textos.get("etiqueta_2", "Repositorios")),
+        "numero": str(textos.get("numero", "" if family == "humanizar" else "22")),
+        "etiqueta": str(
+            textos.get(
+                "etiqueta", "de Humanizar Systems" if family == "humanizar" else "Simulaciones"
+            )
+        ),
+        "numero_2": str(textos.get("numero_2", "" if family == "humanizar" else "16")),
+        "etiqueta_2": str(
+            textos.get("etiqueta_2", "" if family == "humanizar" else "Repositorios")
+        ),
     }
 
     _vl = variant_name.lower()
@@ -557,7 +638,7 @@ def map_marca_to_vars(  # noqa: C901
         elif any(k in _vl for k in ("light",)):
             vars_dict["bg"] = str(paleta.get("texto") or defaults["texto"])
             vars_dict["texto"] = str(paleta.get("primario") or defaults["primario"])
-        if "stat_card" in tipo:
+        if "stat_card" in tipo and family != "humanizar":
             # Cloud Atlas stat_card variants
             if "v1_hero_num" in _vl:
                 pass
@@ -585,6 +666,14 @@ def map_marca_to_vars(  # noqa: C901
                 vars_dict["etiqueta_2"] = "días"
 
     vars_dict = apply_text_limits(tipo, vars_dict)
+
+    if family == "humanizar":
+        # Único color propio permitido en nuevas composiciones comunes. Se
+        # normaliza aquí sin mutar ni transformar el logo original del producto.
+        vars_dict["product_accent"] = str(
+            paleta.get("product_accent") or paleta.get("acento") or "#eae1f5"
+        )
+        _apply_humanizar_profile(vars_dict)
 
     # Apply combination overrides last (highest priority)
     if combination_params:

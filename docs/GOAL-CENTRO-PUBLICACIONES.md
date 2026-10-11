@@ -64,3 +64,29 @@ Facebook: cuatro repeticiones retiradas por autorización del operador; las dos
 originales permanecen. Los dos timers de server2 están deshabilitados y las ocho
 entregas antiguas repetidas retenidas. Ver el informe canónico en ComercialHumanizar:
 `docs/INCIDENTE-PUBLICACIONES-REPETIDAS-20261011.md`.
+
+## Avance verificado: primera entrega, 11 de octubre
+
+- Frontend distingue logo original, procedural e identidad pendiente; la
+  fijación de logo no equivale a aprobación editorial de las piezas.
+- Perfil Humanizar explícito, Manrope, contraste y espaciado común. Las marcas
+  de otra familia conservan su comportamiento. La fila de la empresa prevalece
+  sobre archivos antiguos cuando el perfil está seleccionado, incluso con
+  slugs coincidentes.
+- Publicación vertical 1080×1350 disponible en Estudio y catálogo, con retícula
+  efectiva de doce columnas y logos originales sin recorte. Las variantes de
+  cuatro y ocho columnas siguen siendo metadata, no layouts implementados.
+- Revisión independiente aprobó las correcciones y el recorrido HTTP
+  `202 → plan 200`, con respuesta 404 para otra empresa.
+- Suite completa: **867 aprobadas, dos omitidas** por artefactos de demostración
+  ausentes; PostgreSQL de prueba aislado habilitado. Pruebas finales añadidas:
+  **45 aprobadas**, incluyendo PostgreSQL. Frontend: **67 aprobadas** y build
+  TypeScript/Vite correcto. Ruff de archivos nuevos y mypy focal pasan.
+- Navegador local: acceso y los tres estados de marca verificados. La prueba
+  visual de generación/descarga se detuvo por un panel de otra extensión;
+  se pidió al operador cerrarlo. Esa parte no se declara aprobada.
+- Respaldo privado fresco de producción creado; restauración de ese respaldo
+  aún no ensayada. No se ha desplegado esta entrega ni cambiado marcas reales.
+
+La meta permanece activa. Campañas, revisión completa, conexiones, calendario
+y panel siguen pendientes del diseño escrito y posterior plan de ejecución.

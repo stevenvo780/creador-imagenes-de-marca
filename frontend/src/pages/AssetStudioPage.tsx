@@ -8,6 +8,7 @@ import {
   ApiError,
 } from "../api/client";
 import { Button, Card, EmptyState, SelectField, Spinner } from "../components";
+import { getBrandIdentity } from "../utils/brandIdentity";
 
 // ── Tipos de asset curados ──────────────────────────────────────────────────
 
@@ -26,6 +27,7 @@ const ASSET_TYPES_GROUPED: AssetTypeGroup[] = [
     category: "Redes sociales",
     types: [
       { value: "ig_post", label: "Instagram Post (1080×1080)" },
+      { value: "social_4x5", label: "Publicación vertical (1080×1350)" },
       { value: "ig_story", label: "Instagram Story (1080×1920)" },
       { value: "ig_carousel", label: "Instagram Carousel (1080×1350)" },
       { value: "ig_reel_cover", label: "Instagram Reel Cover (1080×1920)" },
@@ -113,6 +115,13 @@ const CONTENT_FIELDS: Record<string, ContentField[]> = {
     { key: "titulo", label: "Título/Headline", placeholder: "Ej.: Nuevo artículo publicado" },
     { key: "copy", label: "Copy/Caption", placeholder: "Ej.: Lee nuestro último análisis..." },
     { key: "etiqueta", label: "Hashtag principal", placeholder: "Ej.: #filosofia" },
+  ],
+  social_4x5: [
+    { key: "titulo", label: "Titular", placeholder: "Ej.: Novedades del producto" },
+    { key: "subtitulo", label: "Subtítulo", placeholder: "Ej.: Una mejora para tu equipo" },
+    { key: "copy", label: "Descripción", placeholder: "Ej.: Conoce las nuevas funciones" },
+    { key: "etiqueta", label: "Etiqueta de marca", placeholder: "Ej.: Tecnología para tu negocio" },
+    { key: "url", label: "Sitio del producto", placeholder: "Ej.: ejemplo.com/producto" },
   ],
   ig_story: [
     { key: "titulo", label: "Titular", placeholder: "Ej.: Pregunta del día" },
@@ -227,15 +236,7 @@ export function AssetStudioPage() {
   }, []);
 
   const selectedBrand = brands.find((b) => b.id === selectedBrandId) ?? null;
-  // El renderer prioriza el original; seed 0 también fija identidad procedural.
-  const brandHasLogo = selectedBrand
-    ? Boolean(
-        selectedBrand.reference_logo_sha256 ||
-          (selectedBrand.logo_style &&
-            selectedBrand.logo_style !== "none" &&
-            Number.isInteger(selectedBrand.logo_seed)),
-      )
-    : false;
+  const brandHasLogo = getBrandIdentity(selectedBrand).configured;
 
   // ── Handlers ────────────────────────────────────────────────────────────
 

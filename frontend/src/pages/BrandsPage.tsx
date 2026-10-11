@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { brands as brandsApi, type Brand, ApiError } from "../api/client";
 import { Button, EmptyState, Modal, SkeletonCard } from "../components";
 import { formatDate, slugify } from "../utils/format";
+import { getBrandIdentity } from "../utils/brandIdentity";
 
 export function BrandsPage() {
   const navigate = useNavigate();
@@ -308,7 +309,8 @@ function BrandCard({
     .charAt(0)
     .toUpperCase();
   const paletteEntries = getPaletteEntries(brand.palette);
-  const hasLogo = Boolean(brand.logo_style);
+  const identity = getBrandIdentity(brand);
+  const hasLogo = identity.configured;
 
   return (
     <article
@@ -383,6 +385,7 @@ function BrandCard({
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "var(--space-3)" }}>
           <span
+            title="El logo fijado no implica que las piezas de la galería estén aprobadas."
             style={{
               fontSize: "var(--font-size-xs)",
               color: hasLogo ? "var(--ok)" : "var(--amber)",
@@ -392,7 +395,7 @@ function BrandCard({
               fontWeight: 700,
             }}
           >
-            {hasLogo ? "Identidad lista" : "Identidad pendiente"}
+            {identity.label}
           </span>
           <span
             style={{

@@ -175,6 +175,22 @@ def _build_isotype_data_uri(
         uri = _load_logo_asset_data_uri(asset)
         if uri:
             return uri
+        if vars_dict.get("brand_family") == "humanizar":
+            return None
+    if vars_dict.get("brand_family") == "humanizar":
+        # Las escenas y los ejes de variación no autorizan un nuevo logo. Solo
+        # adoptar un original o una identidad procedural explícitamente fijada.
+        fixed_style = str(marca.get("logo_style") or "").strip()
+        fixed_seed = marca.get("logo_seed")
+        if (
+            not fixed_style
+            or fixed_style == "none"
+            or not isinstance(fixed_seed, int)
+            or isinstance(fixed_seed, bool)
+        ):
+            return None
+        style = fixed_style
+        seed_hex = _brand_isotype_seed_hex(marca, seed_hex)
     if not style or style == "none":
         return None
     try:

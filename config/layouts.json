@@ -33,6 +33,14 @@
       "descripcion": "Instagram story (9:16)"
     },
     {
+      "id": "social_4x5",
+      "template": "social_4x5.html",
+      "ancho": 1080,
+      "alto": 1350,
+      "plataforma": "instagram",
+      "descripcion": "Publicación vertical (4:5)"
+    },
+    {
       "id": "x_post",
       "template": "x_post.html",
       "ancho": 1200,

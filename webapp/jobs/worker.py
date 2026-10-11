@@ -19,7 +19,7 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Any, TypeVar
 
-from eikon_core.brand import brand_family, load_json
+from eikon_core.brand import brand_family, humanizar_marca_from_row, load_json
 from eikon_core.combinatorial import (
     AxesConfig,
     CombinationSpec,
@@ -686,7 +686,10 @@ class WorkerPool:
 
         try:
             marca_path = MARCAS_DIR / f"{spec.brand}.json"
-            if marca_path.exists():
+            profile_marca = humanizar_marca_from_row(brand_row)
+            if profile_marca is not None:
+                marca = profile_marca
+            elif marca_path.exists():
                 marca = load_json(marca_path)
                 if brand_row.get("logo_text"):
                     marca["logo_texto"] = str(brand_row.get("logo_text", ""))
