@@ -52,6 +52,7 @@ failure = media_module.failure
 # La firma compartida publica límites y evita coerción bool/string en FastMCP.
 Cursor = Annotated[int, Field(strict=True, ge=0, le=2**63 - 1)]
 PageLimit = Annotated[int, Field(strict=True, ge=1, le=100)]
+HistoryCursor = Annotated[str, Field(strict=True, pattern=r"^(?:[a-f0-9]{64})?$")]
 
 # Configuration
 load_dotenv()
@@ -779,6 +780,18 @@ async def _publication_call(method: str, *args: Any) -> dict:
         return await getattr(tools, method)(*args)
 
 
+async def eikon_get_publication_inbox_tool(
+    stock_target: PageLimit = 1,
+    cursor: Cursor = 0,
+    limit: PageLimit = 50,
+    history_cursor: HistoryCursor = "",
+) -> str:
+    """Planner propio: stock autorizado y déficit del día local; lectura sin evaluación ni despacho."""
+    return json.dumps(
+        await _publication_call("get_inbox", stock_target, cursor, limit, history_cursor)
+    )
+
+
 async def eikon_list_publication_candidates_tool(cursor: Cursor = 0, limit: PageLimit = 50) -> str:
     """Bandeja reviewer propia: sin herencia de scopes de galería."""
     return json.dumps(await _publication_call("list_candidates", cursor, limit))
@@ -881,6 +894,7 @@ _NEW_HANDLERS: list[Callable[..., Awaitable[Any]]] = [
     eikon_create_generation_brief_tool,
     eikon_import_image_tool,
     eikon_list_media_tool,
+    eikon_get_publication_inbox_tool,
     eikon_list_publication_candidates_tool,
     eikon_get_publication_candidate_tool,
     eikon_submit_publication_evaluation_tool,

@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib
 import json
 import os
+import re
 import stat
 from typing import Any
 
@@ -44,6 +45,27 @@ class PublicationTools:
                 f"Configure EIKON_PUBLICATION_{role.upper()}_TOKEN propio y una base segura.",
             )
         return await tools._request(method, route, resource, **kwargs)
+
+    async def get_inbox(
+        self, stock_target: int = 1, cursor: int = 0, limit: int = 50, history_cursor: str = ""
+    ) -> dict:
+        try:
+            params = MediaTools._pagination(cursor, limit)
+            if not isinstance(history_cursor, str) or (
+                history_cursor and not re.fullmatch("[a-f0-9]{64}", history_cursor)
+            ):
+                raise ValueError
+            if type(stock_target) is not int or not 1 <= stock_target <= 100:
+                raise ValueError
+        except ValueError:
+            return failure("invalid_request", "Stock, cursor o límite inválidos.")
+        return await self._request(
+            "planner",
+            "GET",
+            "/api/v1/publications/planner/inbox",
+            "inbox",
+            params={**params, "stock_target": stock_target, "history_cursor": history_cursor},
+        )
 
     async def list_candidates(self, cursor: int = 0, limit: int = 50) -> dict:
         try:

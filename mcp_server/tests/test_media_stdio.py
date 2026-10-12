@@ -131,7 +131,27 @@ def test_stdio_authenticated_flow_and_revocation(isolated_db, tmp_path, monkeypa
                         "eikon_prepare_publication_candidate",
                         "eikon_import_publication_video",
                     } <= names
-                    assert len(names) == 27  # 22 anteriores y 5 de publicaciones.
+                    assert len(names) == 28  # 27 anteriores y bandeja diaria planner.
+                    assert names == CANONICAL | {
+                        name + "_tool"
+                        for name in (
+                            "eikon_list_brands",
+                            "eikon_create_brand",
+                            "eikon_logo_options",
+                            "eikon_set_identity",
+                            "eikon_list_asset_types",
+                            "eikon_generate_asset",
+                            "eikon_generate_and_get",
+                            "eikon_gallery",
+                        )
+                    } | {
+                        "eikon_list_publication_candidates",
+                        "eikon_get_publication_candidate",
+                        "eikon_submit_publication_evaluation",
+                        "eikon_prepare_publication_candidate",
+                        "eikon_import_publication_video",
+                        "eikon_get_publication_inbox",
+                    }
 
                     async def call(tool_name, **arguments):
                         result = await session.call_tool(tool_name, arguments)

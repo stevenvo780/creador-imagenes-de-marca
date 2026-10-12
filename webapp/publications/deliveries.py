@@ -321,20 +321,20 @@ def _attempt_times(row: dict, zone: str) -> tuple[list[int], bool]:
     return stamps, ambiguous
 
 
-def _limits(con: db.DualConnection, row: dict, snapshot: dict, now: int) -> list[str]:
-    tenant, destination = row["tenant_id"], row["normalized_destination"]
-    policy = con.execute(
-        "SELECT payload_json FROM publication_policies WHERE tenant_id=? AND version=?",
-        (tenant, snapshot["policy_version"]),
-    ).fetchone()
-    if policy is None:
-        raise Conflict("policy_required")
-    rules = json.loads(policy["payload_json"])
-    zone, day = rules["timezone"], _date(now, rules["timezone"])
+def _destination_usage(
+    con: db.DualConnection,
+    tenant: int,
+    destination: str,
+    zone: str,
+    day: str,
+    now: int,
+    exclude_delivery_id: int = -1,
+) -> tuple[int, list[int], list[str]]:
+    """Lectura común del consumo real; el llamador conserva el lock tenant."""
     count, times, reasons = _history_limits(con, tenant, destination, zone, day)
     others = con.execute(
         "SELECT * FROM publication_deliveries WHERE tenant_id=? AND normalized_destination=? AND id<>?",
-        (tenant, destination, row.get("id", -1)),
+        (tenant, destination, exclude_delivery_id),
     ).fetchall()
     for other in others:
         if other["state"] in ("attempt_started", "uncertain"):
@@ -355,6 +355,22 @@ def _limits(con: db.DualConnection, row: dict, snapshot: dict, now: int) -> list
             if claim is None:
                 raise Conflict("claim_missing")
             times.append(claim["claimed_at"])
+    return count, times, reasons
+
+
+def _limits(con: db.DualConnection, row: dict, snapshot: dict, now: int) -> list[str]:
+    tenant, destination = row["tenant_id"], row["normalized_destination"]
+    policy = con.execute(
+        "SELECT payload_json FROM publication_policies WHERE tenant_id=? AND version=?",
+        (tenant, snapshot["policy_version"]),
+    ).fetchone()
+    if policy is None:
+        raise Conflict("policy_required")
+    rules = json.loads(policy["payload_json"])
+    zone, day = rules["timezone"], _date(now, rules["timezone"])
+    count, times, reasons = _destination_usage(
+        con, tenant, destination, zone, day, now, row.get("id", -1)
+    )
     if count >= rules["max_daily_per_destination"]:
         reasons.append("daily_quota_reached")
     if any(now - stamp < rules["frequency_minutes"] * 60 for stamp in times):

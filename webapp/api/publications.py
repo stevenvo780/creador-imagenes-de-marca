@@ -6,7 +6,7 @@ import secrets
 import time
 from typing import Annotated, Any, cast
 
-from fastapi import APIRouter, Depends, HTTPException, Path, Request, Response
+from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request, Response
 from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr, ValidationError
 
 from webapp import db
@@ -311,6 +311,28 @@ async def create_campaign_endpoint(
     request: Request, user: dict = Depends(publication_owner)
 ) -> dict:
     return await _create_campaign(request, user["tenant_id"], user["user_id"])
+
+
+@router.get("/planner/inbox")
+def planner_inbox_endpoint(
+    request: Request,
+    response: Response,
+    stock_target: int = Query(1, ge=1, le=100),
+    history_cursor: str = Query("", pattern=r"^(?:[a-f0-9]{64})?$"),
+    cursor: int = Query(0, ge=0, le=2**63 - 1),
+    limit: int = Query(50, ge=1, le=100),
+    principal: dict = Depends(publication_planner),
+) -> dict:
+    from webapp.publications.inbox import daily_inbox
+
+    response.headers["Cache-Control"] = "private, no-store"
+    response.headers["Referrer-Policy"] = "no-referrer"
+    try:
+        return daily_inbox(
+            get_settings(request).db_url, principal, stock_target, cursor, limit, history_cursor
+        )
+    except PublicationError as exc:
+        raise HTTPException(exc.status_code, detail=exc.code) from exc
 
 
 @router.post("/planner/campaigns", status_code=201)

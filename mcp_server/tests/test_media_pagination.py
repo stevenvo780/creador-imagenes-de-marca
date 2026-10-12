@@ -82,7 +82,8 @@ def test_stdio_two_pages_filters_and_tenant_isolation(permission_db_clients, tmp
                         "eikon_prepare_publication_candidate",
                         "eikon_import_publication_video",
                     } <= set(tools)
-                    assert len(tools) == 27
+                    assert len(tools) == 28
+                    assert "eikon_get_publication_inbox" in tools
                     for resource, expected, filters in [
                         ("projects", projects, {}),
                         (
