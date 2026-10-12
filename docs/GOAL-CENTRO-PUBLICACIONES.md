@@ -539,3 +539,34 @@ instalación real y diagnósticos pendientes se conservan para tarea10.
 No se instalaron ni activaron timers, no hubo publicaciones reales. Panel y
 consentimiento/backend TikTok (8), operación Codex (9), gates integrados y
 despliegue/aceptación por canal (10) siguen pendientes.
+
+
+## Tarea 8 completada y revisada: panel y consentimiento por pieza
+
+Código hasta `0bb3e53395179830a24011fb42cab405d5a5b2fc`: recorrido de
+producto, campaña, revisión, decisión IA, calendario y recibo en la SPA
+existente. La política es editable por owner; las conexiones pertenecen a
+la empresa y admiten varios productos. Preview privado verifica el SHA y
+la sesión; editar crea una revisión nueva, pendiente de evaluación IA.
+
+TikTok congela privacidad y divulgaciones. Evidencia externa se importa
+por un controlador privado; el owner confirma la pieza exacta. El primer
+GET válido fija su recibo al claim y el inicio revalida bajo lock. El
+reintento idéntico conserva recibo y expiración; rotación real o revocación
+retienen el inicio. Creator_info debe estar fresco al confirmar y el
+trabajador vuelve a consultarlo antes de iniciar una pieza programada.
+
+La revisión independiente detectó la rotación accidental del recibo al
+repetir el mismo POST; quedó corregida y aprobada en revisión acotada.
+Pruebas iniciales finales: 604 backend y 4 focales adicionales; 12 DOM,
+78 QA y build. Corrección: 66 casos del módulo, después 14 focales y dos
+de lease en ambos motores; no se afirma una ejecución conjunta final de
+68 ni repetición de los 604. Ruff y tipos frontend focales pasan.
+
+Quedan 34 diagnósticos OAuth en el gate global, cinco avisos audit de
+versiones BASE y una deprecación transitoria del runner. Historial y
+previews de campañas no tienen límite; se conserva este límite para la
+aceptación real. GUI, Docker, pruebas de proveedor, consentimiento real,
+MCP nativo y ejecución diaria siguen pendientes. No se desplegó ni publicó
+esta entrega. Las decisiones y sus costes constan en
+`docs/DECISIONES-CENTRO-PUBLICACIONES-20261012.md`.

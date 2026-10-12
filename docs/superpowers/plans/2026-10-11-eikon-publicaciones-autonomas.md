@@ -372,7 +372,7 @@ client.report_attempt(claim, result)
 
 **Interfaces:** cliente tipado consume solo metadatos públicos; `GET /api/v1/publications/overview`, `/campaigns`, `/calendar`, `/connections`, `/deliveries/{id}` y política. La API de overview devuelve decisiones/policy y estados por cuenta, sin tokens ni secretos.
 
-- [ ] Tests de interfaz: empresa activa, candidato retenido por IA, fecha expirada, post confirmado con enlace, resultado incierto y TikTok requiere consentimiento. Las etiquetas distinguen evaluación IA y revisión humana visual.
+- [x] Tests de interfaz: empresa activa, candidato retenido por IA, fecha expirada, post confirmado con enlace, resultado incierto y TikTok requiere consentimiento. Las etiquetas distinguen evaluación IA y revisión humana visual.
 
 ```tsx
 it("no muestra publicado para un intento incierto", () => {
@@ -382,9 +382,12 @@ it("no muestra publicado para un intento incierto", () => {
 });
 ```
 
-- [ ] Ejecutar `npm test -- --run` y registrar el fallo focal. Implementar vista de producto→campaña→candidato→decisión→calendario→recibo, política editable solo owner y botón detener autonomía. Permitir revisar razones/fuentes/archivo exacto sin aprobar manualmente por defecto.
-- [ ] En TikTok mostrar cuenta, preview editable, selector de privacidad sin default y controles de divulgación/consentimiento requeridos; guardar evidencia del paso externo contra la revisión exacta. Editar texto/privacidad crea nueva revisión y evaluación, no altera una decisión ya congelada.
-- [ ] Mobile/desktop por navegador cliente real, sin usar screenshots de una maqueta como resultado de producción. Revisión de accesibilidad y copy; commit `feat: connect autonomous campaigns calendar and operational status`.
+- [x] Ejecutar `npm test -- --run` y registrar el fallo focal. Implementar vista de producto→campaña→candidato→decisión→calendario→recibo, política editable solo owner y botón detener autonomía. Permitir revisar razones/fuentes/archivo exacto sin aprobar manualmente por defecto.
+- [x] En TikTok mostrar cuenta, preview editable, selector de privacidad sin default y controles de divulgación/consentimiento requeridos; guardar evidencia del paso externo contra la revisión exacta. Editar texto/privacidad crea nueva revisión y evaluación, no altera una decisión ya congelada.
+- [x] Commit local `feat: connect autonomous campaigns calendar and operational status`, seguido de corrección revisada del replay de consentimiento.
+- [ ] Mobile/desktop por navegador cliente real, accesibilidad y copy finales: aceptación obligatoria en Task 10, sin sustituirla por DOM o maqueta.
+
+**Recibo local:** panel y autoridad TikTok revisados hasta `0bb3e53395179830a24011fb42cab405d5a5b2fc`, con replay exacto que conserva recibo y expiración. GUI, evidencias externas y operación diaria reales siguen en Task 10. Historial/previews sin límite y deprecación del runner están documentados para el cierre.
 
 ## Task 9: funcionamiento diario del cliente Codex
 
