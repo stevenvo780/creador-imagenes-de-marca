@@ -359,7 +359,8 @@ client.report_attempt(claim, result)
 ```
 
 - [x] Facebook: portar contrato foto/feed conservador; añadir vídeo/reels mediante adaptador independiente y tests de recibo/procesamiento, sin usar módulos de anuncios. Instagram: foto JPEG exacta y vídeo/reels con contenedor/status/publish. No afirmar que PNG recibido por un test simulado es formato aceptado por Meta.
-- [x] `media_delivery` emite URL HTTPS temporal del único archivo autorizado, sin cookies/token de redes en URL, sin publicar galería; registrar key/TTL/SHA y revocar tras procesamiento o vencimiento. Verificar dominio/método de entrega antes de TikTok.
+- [x] Contrato local y tests de `media_delivery`: URL HTTPS temporal del único archivo autorizado, sin cookies/token de redes en URL, sin publicar galería; key/TTL/SHA y revocación tras procesamiento o vencimiento.
+- [ ] Verificar entrega, revocación, logs y dominio reales antes de activar URLs o TikTok: aceptación obligatoria en Task 10.
 - [x] X: conservar contrato v2 imagen y vídeo por fases y guardia económica antes de cualquier endpoint facturable. TikTok: implementar creator_info, OAuth scopes reales, init foto/vídeo, dominio verificado, commercial/AIGC/privacidad y status final; si falta consentimiento no iniciar transferencia. Las pruebas privadas no se presentan como publicación pública. No asumir que las cards de marca existentes cumplen las reglas TikTok: evaluar una variante específica y comprobar restricciones de branding/agua añadida, sin alterar ni redibujar logos oficiales para pasar la prueba.
 - [x] Añadir matriz explícita `unknown|verified|requires_auth|requires_provider_review|requires_post_consent|blocked_by_budget|unsupported_media|rate_limited`. Los fallos por destino no detienen el barrido de otras cuentas. Timer nuevo inicialmente disabled, red de prueba sin proveedores reales.
 - [x] Revisión del paquete/concurrencia y commit `feat: add isolated publisher worker and channel adapters`.
@@ -395,7 +396,7 @@ it("no muestra publicado para un intento incierto", () => {
 
 **Interfaces:** bandeja por política expone candidatos pendientes y déficit de stock. El cliente planner crea encargo/candidato; el reviewer concede decisión dentro de política. Worker solo consume entregas vigentes.
 
-- [ ] Test stdio real con grants de prueba prueba aislamiento, respuesta tipada e invalidación; no requiere herramientas de imágenes remotas.
+- [x] Test stdio real con grants de prueba prueba aislamiento, respuesta tipada e invalidación; no requiere herramientas de imágenes remotas.
 
 ```python
 def test_disconnected_reviewer_does_not_authorize_candidate(candidate_without_decision):
@@ -406,10 +407,12 @@ def test_disconnected_reviewer_does_not_authorize_candidate(candidate_without_de
     assert "evaluation_missing" in result["reasons"]
 ```
 
-- [ ] Escribir instrucciones del agente diario con política/cuentas/fuentes y reglas de evaluación. No guardar auth.json ni tokens en prompt/docs. Seleccionar producto/variante sin repetir medios históricos, producir con image_gen integrado y componer con logo exacto si falta stock; evaluar realmente, conservar respuesta y entregar por MCP.
+- [x] Escribir instrucciones del agente diario con política/cuentas/fuentes y reglas de evaluación. No guardar auth.json ni tokens en prompt/docs. Seleccionar producto/variante sin repetir medios históricos, producir con image_gen integrado y componer con logo exacto si falta stock; evaluar realmente, conservar respuesta y entregar por MCP.
 - [ ] En el cliente Humanizar configurar automatización mediante herramientas oficiales de la app (heartbeat para este chat), no editar RRULE/crontab como sustituto. Cada empresa configura su propio cliente/automatización. El worker server2 no utiliza la suscripción de otra empresa.
 - [ ] Ejecutar una vez en cliente real; conservar correlación candidato→archivo→modelo→decisión→entrega, no solo registro de automation. Desconectar cliente en prueba controlada: déficit visible, ninguna evaluación inventada; las entregas autorizadas vigentes siguen su curso.
-- [ ] Revisión y commit `docs: validate daily tenant Codex production and evaluation`.
+- [x] Revisión y commit `docs: validate daily tenant Codex production and evaluation`.
+
+**Recibo local:** bandeja planner y MCP28 revisados en `93d1d73d678eb8bac29d5fa075f4c8e45c816d97`, sin hallazgos Critical/Important. Pruebas de consumidores afectados: 713 aprobadas; refuerzo final: 34 aprobadas. Modelo, imagen, conexión nativa, ejecución diaria y publicaciones reales siguen pendientes de Task10; stdio con evaluación sintética no los acredita. El motivo contractual vigente es `ai_decision_required`; `evaluation_missing` del snippet es ilustrativo.
 
 ## Task 10: despliegue y aceptación completa por canal
 

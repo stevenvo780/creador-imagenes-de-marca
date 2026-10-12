@@ -570,3 +570,22 @@ aceptación real. GUI, Docker, pruebas de proveedor, consentimiento real,
 MCP nativo y ejecución diaria siguen pendientes. No se desplegó ni publicó
 esta entrega. Las decisiones y sus costes constan en
 `docs/DECISIONES-CENTRO-PUBLICACIONES-20261012.md`.
+
+
+## Bandeja diaria local revisada, 12 de octubre
+
+Código `93d1d73d678eb8bac29d5fa075f4c8e45c816d97`: lectura planner de política,
+cuentas, stock y déficit por día; herramienta MCP número28 e historial de hashes
+paginado por destino. La cuota utiliza el mismo cálculo que el trabajador.
+Revisión independiente conforme y aprobada, sin Critical/Important.
+
+Pruebas de consumidores afectados:713 aprobadas en SQLite/PostgreSQL;
+34 finales refuerzan la desconexión del cliente con snapshot sin escrituras
+inventadas. Ruff y cinco fuentes de tipos pasan, con nota heredada de jinja2.
+No se ejecutó una nueva suite global ni se cambió producción.
+
+Las tareas1–9 están cerradas en su alcance local revisado. La tarea10 conserva
+la revisión integrada, despliegue respaldado, cliente/modelo/imagen reales,
+GUI Humanizar, pruebas por cuenta/formato y segunda ejecución sin duplicados.
+X mantiene la restricción de gasto; TikTok requiere evidencias y consentimiento
+reales. La meta completa continúa pendiente.
