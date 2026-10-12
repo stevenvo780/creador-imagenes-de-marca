@@ -227,7 +227,7 @@ def normalize_schedule(value):
 - `history_ready(db_url, tenant_id, normalized_destination) -> bool`.
 - `seen_media(db_url, tenant_id, normalized_destination, image_sha256) -> bool`.
 
-- [ ] Tests incluyen dos bases con delivery_id=1, cuatro retiradas, medio igual/caption distinto, intento incierto y mapping remoto desconocido. Una retirada conserva guardia y recibo.
+- [x] Tests incluyen dos bases con delivery_id=1, cuatro retiradas, medio igual/caption distinto, intento incierto y mapping remoto desconocido. Una retirada conserva guardia y recibo.
 
 ```python
 def test_withdrawal_does_not_clear_media_guard(history_db):
@@ -240,7 +240,7 @@ def test_withdrawal_does_not_clear_media_guard(history_db):
 
 El fixture `history_db` crea DB aislada, política/conexión Facebook7 y evento publicado con hash `a*64` mediante `import_history`; nunca usa producción ni auth real.
 
-- [ ] Ejecutar tests fallidos. Implementar unicidad `(tenant_id,source_id,source_delivery_id)` y mapping documentado de alias a destino. Un ID no comprobado impide cerrar el corte de ese destino; no inventar equivalencia por nombre.
+- [x] Ejecutar tests fallidos. Implementar unicidad `(tenant_id,source_id,source_delivery_id)` y mapping documentado de alias a destino. Un ID no comprobado impide cerrar el corte de ese destino; no inventar equivalencia por nombre.
 
 ```sql
 CREATE UNIQUE INDEX publication_history_origin
@@ -249,9 +249,11 @@ CREATE UNIQUE INDEX publication_event_idempotency
 ON publication_events(tenant_id, attempt_id, event_key);
 ```
 
-- [ ] Importar las tres bases y las cinco pruebas manuales inventariadas. Incluir enviados, retirados, fallidos, inciertos y en vuelo. Los ocho pendientes retenidos se conservan como historia sin autorización nueva. Registrar hashes de fuente/recibo y conteos; dry-run antes de apply, repetir apply demuestra mismos IDs/eventos.
-- [ ] Cerrar migración por destino solo con todo su historial conocido conciliado. Conexiones X/TikTok con mapping pendiente siguen retenidas, sin frenar destinos Meta cuyo corte sí está acreditado. No declarar historial remoto universal a partir de las fuentes inventariadas.
-- [ ] Revisión de integridad/duplicados y commit `feat: preserve publication history and destination media guards`.
+- [x] Importar las tres bases y las cinco pruebas manuales inventariadas. Incluir enviados, retirados, fallidos, inciertos y en vuelo. Los ocho pendientes retenidos se conservan como historia sin autorización nueva. Registrar hashes de fuente/recibo y conteos; dry-run antes de apply, repetir apply demuestra mismos IDs/eventos.
+- [x] Cerrar migración por destino solo con todo su historial conocido conciliado. Conexiones X/TikTok con mapping pendiente siguen retenidas, sin frenar destinos Meta cuyo corte sí está acreditado. No declarar historial remoto universal a partir de las fuentes inventariadas.
+- [x] Revisión de integridad/duplicados y commit `feat: preserve publication history and destination media guards`.
+
+Tarea4 cerrada como implementación/local: importación y apply repetido verificados en clones SQLite/PostgreSQL; importación productiva y pruebas de identidad externas permanecen obligatorias en Task10 según ruling. No se activó despacho.
 
 ## Task 5: evaluación IA real y herramientas MCP
 

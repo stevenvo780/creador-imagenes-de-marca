@@ -424,3 +424,28 @@ Esto acredita código local revisado. La imagen Docker, inspección IA real,
 cliente MCP nativo, panel y publicaciones por canal se probarán en la aceptación
 integrada. Ningún timer ni runtime productivo se activó aquí. La tarea siguiente
 conserva historial y guardias contra duplicados por destino.
+
+
+## Tarea 4 completada y revisada: historial y guardias por cuenta
+
+Código hasta `084ec051944b3231e8a674dfdf7e813fdc379b09`: historial y eventos
+inmutables, importación idempotente de fuentes completas y guardias por empresa,
+cuenta canónica y SHA exacto. Las retiradas conservan la guardia; un caption
+distinto no habilita la repetición. La conciliación de identidad añade evidencia
+ligada a fuente/ítem/cuenta sin reescribir el recibo original.
+
+Dry-run y dos aplicaciones en clones SQLite/PostgreSQL conservan 22 registros
+de historia, 26 eventos, cuatro retiradas y ocho retenciones. Tres destinos Meta
+cierran su corte conocido; X/TikTok siguen sin mapping comprobado. Esto describe
+el inventario conocido y la prueba aislada, sin afirmar historial remoto universal
+ni importación productiva.
+
+La revisión independiente encontró dos defectos: aceptar evidencia escalar para
+cerrar incertidumbre y retener una cuenta ajena tras conciliar un mapping. Ambos
+se corrigieron; revisión final de especificación y calidad aprobada. Archivo
+final: **114 casos correctos en ambos motores**, sin skips; lint/tipos propios
+correctos. La suite anterior de 415 casos conserva su atribución a su commit.
+
+La siguiente tarea añade evaluación/decisión IA y herramientas MCP. La aceptación
+real del cliente, importación productiva y publicaciones siguen en tarea10; el
+calendario debe demostrar primero su autoridad y CAS transaccionales en tarea6.
