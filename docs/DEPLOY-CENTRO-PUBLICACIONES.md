@@ -177,9 +177,20 @@ aplicación y vigencia. Facebook Systems (cuenta 1) y Facebook Humanizar
 `public_profile`. Se guardaron cifradas en el vault después del respaldo y de
 un dry-run satisfactorio; GET `overview` y `connections` respondieron 200 con
 ese estado. No hubo POST de publicación ni modificación de política.
-Instagram News (cuenta 3) conserva `held`: su credencial existente no aporta
-una vigencia acreditada por intercambio oficial; `token_expiry_unknown` fue
-el resultado del dry-run, sin inventar fechas ni activar esa conexión.
+El primer dry-run retuvo Instagram News (cuenta 3) con
+`token_expiry_unknown`. Task10E añadió la renovación oficial de Instagram en
+`0ae3e79fc5ded17e37007926f68cd44717661a97`, con revisión independiente
+aprobada, 43 pruebas nuevas y 1358 aprobadas/618 omitidas en la suite completa.
+Las omisiones de PostgreSQL no se cuentan como aceptación. Después de un
+respaldo nuevo se verificó la cuenta antigua, se renovó una sola vez mediante
+`refresh_access_token` y se verificó la credencial devuelta dentro del importador
+con CAS de owner/versión. El vault guarda la conexión `active`, versión 2,
+`humanizar.news`, ID `17841434345672986`, vencimiento oficial `1797027639` y
+sólo `instagram_business_basic`/`instagram_business_content_publish`.
+La evidencia de scopes es `capability_probe`; no se afirma introspección de
+Meta. GET `overview` y `connections` respondió 200 después de la renovación,
+confirmando las tres conexiones activas y política versión 0 deshabilitada.
+No hubo POST de publicación ni cambios en otras conexiones, política o cola.
 
 El navegador solicitado es Brave, perfil Personal. La sesión de Humanizar
 está autenticada en `https://eikon.humanizar.cloud/publications`; Meta y X
@@ -222,11 +233,18 @@ Los hashes de políticas, grants, campañas, revisiones, entregas, conexiones y
 vault se mantuvieron iguales antes/después/replay. No se afirma inventario
 remoto completo ni autorización editorial por importar esta historia.
 
-Pendientes: vigencia oficial de Instagram, OAuth/revisión de TikTok, política y
+Pendientes: OAuth/revisión de TikTok, política y
 grants, reconexión del cliente a las herramientas nuevas, evaluación editorial real,
 instalación del servicio aislado y pruebas de envío/segunda ejecución diaria.
 No hay nuevo servicio o timer activado ni recurrencia nueva acreditada.
 TikTok conserva requisitos externos; X conserva la decisión de no gasto.
+
+La conexión MCP nativa actual listó proyectos de Humanizar (tenant 17).
+Se amplió únicamente su allowlist local de seis herramientas de galería a
+doce, añadiendo bandeja, candidatos, evaluación, preparación y vídeo.
+El cliente aún no ha acreditado la recarga de esas herramientas y el launcher
+conserva sólo la clave de galería: faltan los grants planner/reviewer dedicados.
+Este cambio local no habilita publicación ni sustituye las pruebas reales.
 
 La app de TikTok continúa en borrador. Se prepararon descripción y plataforma
 web, pero Save exige icono, categoría, términos, privacidad y URL de servicio;
