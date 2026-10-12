@@ -151,3 +151,53 @@ reabrir rutas antiguas probar que respetan grants/guards nuevos o mantenerlas
 cerradas por un fence propio revisado. Fallo de vault o conexión bloquea, no cambia
 cuenta. Registrar negativos y paso exacto pendiente; no cerrar meta por rollback,
 instalación, health o ACK.
+
+## Runtime y preflight del 12 de octubre: continuación
+
+Cloud Run quedó en `eikon-00062-jg9`, tráfico 100 %, código
+`a5dc64c8e755f59e7c81134d3a9aacdd993ba13d`, imagen fijada por digest
+`sha256:386c16a05eaea396863be1e98bd3755c2d46f88e2009c080b97ebd7215c1036c`.
+Se preservaron cuenta de servicio, recursos y variables previas. La configuración
+OAuth y clave independiente del vault usan dos secretos nominados con versión 1;
+un bootstrap privado revisado materializa el archivo OAuth con permisos 0600.
+No hay credenciales en la imagen, Git ni este documento.
+
+La corrección del logger fue revisada y las consultas gestionadas mostraron
+cero coincidencias del marcador sintético, tres eventos JSON seguros y un
+control positivo ordinario. Los casos fueron callback 401, media 409 y Referer
+sensible 200. Son pruebas sintéticas acotadas: no acreditan todavía OAuth real,
+revocación, descarga real del proveedor ni errores 500/timeouts gestionados.
+
+Humanizar, tenant 17, tiene tres conexiones de metadata con sus 17 proyectos:
+Facebook Systems, Facebook Humanizar e Instagram News. Las tres siguen `held`,
+con `authorization_required`, sin scopes acreditados ni vencimiento conocido
+en el nuevo vault. No se copiaron tokens legacy como autoridad de Eikón.
+La sesión del dominio público no autentica el origen directo de Cloud Run.
+El callback permitido corresponde exclusivamente al origen directo; allí quedó
+preparado el login normal, sin transferir cookies entre orígenes.
+
+Server2 recibió `ffmpeg` y `python3-venv` mediante un cuadro privado de sudo;
+la contraseña se utilizó en memoria para SSH y no se guardó ni imprimió.
+FFmpeg/ffprobe 8.0.1 están disponibles. Se codificó y comprobó un vídeo
+sintético H.264, 1080×1920, yuv420p, un segundo; no se publicó esa prueba.
+
+El preflight detectó que `_save_report` cargaba API/storage/renderer. Task10C,
+commit `958e6d471d93161d1dfa42ff3ff7b6af751dc37e`, extrajo literalmente el
+normalizador compartido sin cambiar contratos. Revisión independiente aprobada,
+cero hallazgos; tres pruebas nuevas aprobadas. Suite focal del implementador:
+176 aprobadas y 98 omitidas por falta de Postgres de prueba, que no se cuentan
+como éxitos. La API conserva el alias y la dependencia previa db/policies del
+arranque del worker permanece.
+
+En server2 se preparó un staging nuevo de ese commit, archivo de fuente SHA256
+`cce40c9d4d2180588d029f02a849e3a748f6f82260cd070cc67e002822a2748d`, y un
+venv independiente con httpx 0.28.1, Pillow 12.3.0 y Pydantic 2.14.1.
+El entrypoint deshabilitado y siete casos de registro real en Outbox con
+MockTransport pasaron sin importar API/storage/renderer. El transporte simulado
+no acredita ningún POST de proveedor ni una publicación remota.
+
+Pendientes: OAuth real, corte de historial productivo, política y grants,
+reconexión del cliente a las herramientas nuevas, evaluación editorial real,
+instalación del servicio aislado y pruebas de envío/segunda ejecución diaria.
+No hay nuevo servicio o timer activado ni recurrencia nueva acreditada.
+TikTok conserva requisitos externos; X conserva la decisión de no gasto.
