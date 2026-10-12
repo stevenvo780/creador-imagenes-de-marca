@@ -52,35 +52,42 @@ body { background: var(--bg); color: var(--texto); font-family: var(--font-cuerp
 }
 
 .container {
-  display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-  gap: var(--space-4); text-align: center;
-  padding: var(--space-6) var(--space-8); position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  gap: 8px; text-align: center;
+  padding: 24px 80px; position: relative; z-index: 1;
   width: 100%; height: 100%;
+  overflow: hidden;
 }
 
 .top-section {
-  display: flex; flex-direction: column; align-items: center; gap: var(--space-3);
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  overflow: hidden;
 }
 
 .symbol {
-  font-size: var(--type-4xl); font-weight: 900; line-height: 1;
+  font-size: 20px; font-weight: 900; line-height: 1; padding: 0; margin: 0;
   background: linear-gradient(135deg, var(--acento), var(--acento-2));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  min-height: 56px;
+  height: 23px; display: block; overflow: hidden;
+  flex-shrink: 0;
 }
 
 .titulo {
-  font-family: var(--font-titulo); font-size: 92px; font-weight: 900;
-  line-height: var(--leading-tight); letter-spacing: var(--tracking-tight);
-  color: var(--texto); max-width: 1100px; min-height: 110px;
+  font-family: var(--font-titulo); font-size: 56px; font-weight: 900;
+  line-height: 1.0; letter-spacing: var(--tracking-tight);
+  color: var(--texto); max-width: 1000px; height: 115px; display: block; overflow: hidden;
   background: linear-gradient(135deg, var(--acento-2), var(--acento));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;
+  flex-shrink: 0;
 }
 
 .copy {
-  font-size: var(--type-4xl); font-weight: 600;
-  line-height: var(--leading-normal); color: var(--texto);
-  max-width: 1000px; min-height: 56px;
+  font-size: 28px; font-weight: 600;
+  line-height: 1.08; color: var(--texto);
+  max-width: 1000px; height: 32px; display: block; overflow: hidden;
+  word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;
+  flex-shrink: 0;
 }
 
 .etiqueta {
@@ -96,7 +103,7 @@ body[data-variant="v1_bold"] { border: var(--space-1) solid var(--acento-2); }
 body[data-variant="v2_clean"] { border-bottom: var(--space-2) solid var(--acento-2); }
 body[data-variant="v3_face"] .symbol { font-size: calc(var(--type-4xl) + 20px); }
 
-.contract-fields { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
+.contract-fields { display: none; }
 </style>
 </head>
 <body data-variant="v1_bold" class="depth-radial">
