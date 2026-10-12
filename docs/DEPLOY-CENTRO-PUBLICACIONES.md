@@ -168,13 +168,29 @@ control positivo ordinario. Los casos fueron callback 401, media 409 y Referer
 sensible 200. Son pruebas sintéticas acotadas: no acreditan todavía OAuth real,
 revocación, descarga real del proveedor ni errores 500/timeouts gestionados.
 
-Humanizar, tenant 17, tiene tres conexiones de metadata con sus 17 proyectos:
-Facebook Systems, Facebook Humanizar e Instagram News. Las tres siguen `held`,
-con `authorization_required`, sin scopes acreditados ni vencimiento conocido
-en el nuevo vault. No se copiaron tokens legacy como autoridad de Eikón.
-La sesión del dominio público no autentica el origen directo de Cloud Run.
-El callback permitido corresponde exclusivamente al origen directo; allí quedó
-preparado el login normal, sin transferir cookies entre orígenes.
+Humanizar, tenant 17 y owner 4, conserva tres conexiones con sus 17 proyectos.
+El 12 de octubre se verificaron otra vez las credenciales existentes mediante
+el importador privado revisado, con comprobación real de identidad, scopes,
+aplicación y vigencia. Facebook Systems (cuenta 1) y Facebook Humanizar
+(cuenta 2) quedaron `active`, versión 2, vencimiento conocido y scopes
+`pages_manage_posts`, `pages_read_engagement`, `pages_show_list` y
+`public_profile`. Se guardaron cifradas en el vault después del respaldo y de
+un dry-run satisfactorio; GET `overview` y `connections` respondieron 200 con
+ese estado. No hubo POST de publicación ni modificación de política.
+Instagram News (cuenta 3) conserva `held`: su credencial existente no aporta
+una vigencia acreditada por intercambio oficial; `token_expiry_unknown` fue
+el resultado del dry-run, sin inventar fechas ni activar esa conexión.
+
+El navegador solicitado es Brave, perfil Personal. La sesión de Humanizar
+está autenticada en `https://eikon.humanizar.cloud/publications`; Meta y X
+@HumanizarSystem también tienen sesión y TikTok Developers abre la aplicación
+Humanizar Publicaciones. La consulta de overview desde Brave produjo
+`ERR_BLOCKED_BY_CLIENT`; el panel muestra error aunque la API respondió 200
+en la sesión privada original del operador. Se pidió al usuario resolver el
+bloqueo local, sin cambiar protecciones mediante automatización ni transferir
+cookies entre navegadores u orígenes. El callback configurado sigue siendo
+del origen directo de Cloud Run: la retención segura del query OAuth en el
+proxy canónico aún no está acreditada; cero coincidencias de logs no bastan.
 
 Server2 recibió `ffmpeg` y `python3-venv` mediante un cuadro privado de sudo;
 la contraseña se utilizó en memoria para SSH y no se guardó ni imprimió.
@@ -196,8 +212,25 @@ El entrypoint deshabilitado y siete casos de registro real en Outbox con
 MockTransport pasaron sin importar API/storage/renderer. El transporte simulado
 no acredita ningún POST de proveedor ni una publicación remota.
 
-Pendientes: OAuth real, corte de historial productivo, política y grants,
-reconexión del cliente a las herramientas nuevas, evaluación editorial real,
+El corte `humanizar-known-inventory-20261011` se importó en producción tras
+un dry-run transaccional y un respaldo nuevo posterior a las conexiones de
+Facebook. Manifest SHA256
+`8389c03c9d2035634a07b6d15c26fb0546d77be867469807a2f80d236bfad92f`:
+22 registros, 14 publicados históricos, 8 retenidos, 4 retiradas y 2 destinos
+sin mapping acreditado. El replay produjo el mismo recibo, sin duplicados.
+Los hashes de políticas, grants, campañas, revisiones, entregas, conexiones y
+vault se mantuvieron iguales antes/después/replay. No se afirma inventario
+remoto completo ni autorización editorial por importar esta historia.
+
+Pendientes: vigencia oficial de Instagram, OAuth/revisión de TikTok, política y
+grants, reconexión del cliente a las herramientas nuevas, evaluación editorial real,
 instalación del servicio aislado y pruebas de envío/segunda ejecución diaria.
 No hay nuevo servicio o timer activado ni recurrencia nueva acreditada.
 TikTok conserva requisitos externos; X conserva la decisión de no gasto.
+
+La app de TikTok continúa en borrador. Se prepararon descripción y plataforma
+web, pero Save exige icono, categoría, términos, privacidad y URL de servicio;
+no se confirmó el guardado. Products/scopes y demo de extremo a extremo
+siguen pendientes. No se envió a revisión ni se afirma permiso de publicación
+pública. La sesión de Instagram en Brave quedó en la pantalla de carga, sin
+prueba nueva de acceso social. X mantiene la restricción expresa de no gasto.
