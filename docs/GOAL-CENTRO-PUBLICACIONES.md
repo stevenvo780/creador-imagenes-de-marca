@@ -1,16 +1,18 @@
 # Meta: Eikón como centro de marca y publicaciones
 
 Creada por instrucción del operador el **11 de octubre de 2026**, America/Bogota.
-Estado de trabajo: **diseño aprobado con enmiendas; plan escrito pendiente de revisión**.
+Estado de trabajo: **plan aprobado; implementación con subagentes en curso**.
 La entrega de identidad y galería se conserva; el objetivo completo sigue pendiente. La meta del chat es el seguimiento principal; este documento
 conserva requisitos, avances y evidencia del repositorio.
 
 ## Resultado esperado
 
-Cada empresa organiza sus productos, conserva sus logos, conecta su propio
-Codex y sus redes, prepara campañas, revisa las piezas completas y publica
-desde un calendario. El panel muestra pendientes, bloqueos y resultados reales.
-Humanizar es la primera empresa; Facebook es el primer recorrido de publicación.
+Cada empresa organiza sus productos, conserva sus logos y conecta su propio
+Codex y sus redes. Una IA evalúa las piezas completas y decide su publicación
+dentro de la política autorizada por empresa. El calendario y panel muestran
+pendientes, bloqueos y resultados reales. Humanizar es la primera empresa;
+Facebook, Instagram, TikTok y X forman parte de la aceptación por canal, con
+las restricciones de consentimiento y gasto indicadas abajo.
 
 ## Requisitos y aceptación
 
@@ -370,3 +372,28 @@ política o grant productivo, no cambió el significado de revisión humana de
 medios y no se publicó contenido. Las pruebas reales de cliente/UI/operación
 mencionadas en tareas 5, 8 y 9 se conservan para la aceptación integrada de
 tarea 10, después del despliegue; no cuentan como aprobadas por pruebas locales.
+
+
+## Tarea 2 completada y revisada: conexiones y credenciales
+
+Código hasta `b092912487d1c2498051dc6a84e6cbc533d1f1c9`: conexiones aisladas
+por empresa, cifrado AES-GCM con clave independiente, OAuth ligado a
+propietario/empresa/navegador y transporte configurado por proveedor. El script
+de importación usa archivos privados y dry-run; no se aplicó a producción.
+
+La revisión independiente encontró dos defectos: catálogo antiguo sin detalles
+y filtrado que perdía el token anterior al cambiarlo. Se corrigieron con
+regresiones; una regresión de clasificación del código de éxito TikTok también
+se corrigió. La revisión final confirmó todos los hallazgos resueltos y ningún
+rompimiento nuevo dentro del alcance.
+
+Suite completa previa a las correcciones: **1.110 correctas y 2 omisiones
+previas**. Pruebas finales de los módulos afectados: **115 correctas en SQLite
+y PostgreSQL**, incluidas todas las regresiones, sin skips; lint/diff limpios.
+No se atribuye la suite completa histórica al commit final sin haberla repetido.
+
+OAuth real, vigencia de las cuentas Humanizar, instalación privada de claves
+e importación efectiva se comprobarán en tarea 10. X conserva bloqueo de gasto;
+una vigencia o permiso no comprobable mantiene la conexión retenida. La próxima
+tarea congela campañas/revisiones y añade entrada privada validada de vídeo;
+la ruta anterior PNG/JPEG y revisión humana de galería conservan su significado.

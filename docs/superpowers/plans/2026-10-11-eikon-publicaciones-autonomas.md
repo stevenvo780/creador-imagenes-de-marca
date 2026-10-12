@@ -151,7 +151,7 @@ def canonical_hash(payload):
 - `seal(key: bytes, key_id: str, tenant_id: int, connection_id: int, secret: bytes) -> dict` / `unseal(key: bytes, tenant_id: int, connection_id: int, envelope: dict) -> bytes`, en vault.
 - `start_oauth(db_url, tenant_id, owner_id, platform, redirect_uri, now) -> dict` y `finish_oauth(db_url, session_owner, state, code, now, client) -> dict`.
 
-- [ ] Escribir pruebas de secreto de otra empresa/conexión, AAD alterado, state repetido/ajeno/vencido, ID remoto distinto y scopes insuficientes. No hacer llamadas reales en tests.
+- [x] Escribir pruebas de secreto de otra empresa/conexión, AAD alterado, state repetido/ajeno/vencido, ID remoto distinto y scopes insuficientes. No hacer llamadas reales en tests.
 
 ```python
 def test_ciphertext_cannot_cross_tenant():
@@ -164,8 +164,8 @@ def test_ciphertext_cannot_cross_tenant():
         unseal(key, 2, 8, envelope)
 ```
 
-- [ ] Ejecutar los tests y registrar el fallo por módulo ausente. Implementar AES-GCM con nonce aleatorio de 12 bytes y AAD canónica `{tenant_id,connection_id,key_id}`. Una clave ausente o incorrecta retiene, sin fallback JWT. El material privado se entrega mediante configuración privada y se respalda fuera de Git.
-- [ ] Migrar metadatos y cifrado; crear relación explícita proyecto/conexión. OAuth solo guarda conexión activa después de comprobar cuenta y permisos reales; no seguir redirects autenticados fuera de hosts oficiales. Reservar state con una transición atómica y borrar uso, no el historial.
+- [x] Ejecutar los tests y registrar el fallo por módulo ausente. Implementar AES-GCM con nonce aleatorio de 12 bytes y AAD canónica `{tenant_id,connection_id,key_id}`. Una clave ausente o incorrecta retiene, sin fallback JWT. La interfaz de material privado utiliza configuración protegida fuera de Git; su instalación y respaldo productivos se realizan en Task 10.
+- [x] Migrar metadatos y cifrado; crear relación explícita proyecto/conexión. OAuth solo guarda conexión activa después de comprobar cuenta y permisos reales; no seguir redirects autenticados fuera de hosts oficiales. Reservar state con una transición atómica y borrar uso, no el historial.
 
 ```sql
 UPDATE publication_oauth_states
@@ -174,12 +174,14 @@ WHERE tenant_id = ? AND owner_id = ? AND state_hash = ?
   AND consumed_at IS NULL AND expires_at > ?;
 ```
 
-- [ ] Conservar en el test que `rowcount != 1` impide intercambiar el código. Importar credenciales existentes Humanizar mediante script privado guardado, sin emitir nuevos scopes ni tokens de otro perfil.
-- [ ] Correr tests con red simulada y ambos motores; revisar que JSON/logs no contienen token/ciphertext. Revisión independiente y commit `feat: isolate social connections and OAuth credentials`.
+- [x] Conservar en el test que `rowcount != 1` impide intercambiar el código. Preparar y probar el script privado de importación de credenciales existentes Humanizar, sin emitir nuevos scopes ni tokens de otro perfil. La aplicación real con respaldos y comprobación de identidad corresponde a Task 10.
+- [x] Correr tests con red simulada y ambos motores; revisar que JSON/logs no contienen token/ciphertext. Revisión independiente y commit `feat: isolate social connections and OAuth credentials`.
+
+**Recibo local:** conexiones/OAuth/vault revisados en `b092912487d1c2498051dc6a84e6cbc533d1f1c9`, tras dos rondas de corrección. Ningún hallazgo local abierto. Integración e importación reales permanecen pendientes de Task 10.
 
 ## Task 3: campañas y revisiones exactas para todos los canales
 
-**Files:** crear `webapp/publications/campaigns.py`, `webapp/tests/test_publication_campaigns.py`; ampliar contratos, migraciones y router owner/planner.
+**Files:** crear `webapp/publications/campaigns.py`, `webapp/publications/media.py`, `webapp/api/publication_media.py`, `webapp/tests/test_publication_campaigns.py` y `webapp/tests/test_publication_video_media.py`; ampliar contratos, migraciones y router owner/planner. Modificar `Dockerfile` solo para la dependencia ffmpeg/ffprobe necesaria para validar vídeo.
 
 **Interfaces:**
 - `create_campaign(db_url, tenant_id, actor, project_id, brand_id, objective) -> dict`.
@@ -209,6 +211,8 @@ def normalize_schedule(value):
         raise InvalidInput("timezone_required")
     return int(dt.timestamp())
 ```
+
+- [ ] Añadir ingreso privado de MP4 validado y acotado, con hash, metadatos reales, procedencia e identidad congelada en un catálogo separado de vídeos. Referencia explícita `media_kind`/ID distingue imagen de galería y vídeo. El endpoint y MCP de imagen existentes mantienen PNG/JPEG y sus permisos. Verificar un MP4 real, corrupción, límites, aislamiento, replay idempotente y compensación de storage. Esta ampliación corrige la ausencia de entrada de vídeo del plan original, necesaria para el alcance aprobado.
 
 - [ ] Una edición inserta revisión nueva; no actualiza bytes o contrato anterior. Variante JPEG, vídeo o canal con otro texto tiene medio/hash y decisión propios. Conectar candidatos a `generation_briefs` existentes sin cambiar retroactivamente encargos.
 - [ ] Probar fechas equivalentes con offsets distintos, cambios de día local y separación de plataformas; comprobar que imagen importada sigue pendiente de revisión humana aunque pueda entrar a evaluación autónoma. Revisión y commit `feat: freeze autonomous publication candidates`.
@@ -286,6 +290,7 @@ if response["outcome"] == "approve" and (
 ```
 
 - [ ] La concesión autoriza confiar en un evaluador específico, no en indicadores arbitrarios. El cliente debe mostrar que el modelo recibió el PNG exacto y devolver un recibo correlacionado con request/modelo/proveedor, hashes y respuesta; no afirmar atestación criptográfica inexistente. Las fuentes se delimitan como datos no confiables en el prompt.
+- [ ] Añadir herramienta planner de importación privada de vídeo; la evaluación conserva hash original y evidencia de lo realmente inspeccionado, incluidos contexto de audio cuando exista. No heredar una evaluación de imagen ni declarar inspección de vídeo completo a partir de una sola captura.
 - [ ] No alterar `asset_reviews`, `approval_current` o tests owner. Revalidar política/grant/media/conexión en transacción y crear entrega solo si `approve` vigente. Probar revocación antes del commit de decisión y mismo receipt aplicado idempotentemente.
 - [ ] Ejecutar stdio MCP con grant de prueba, luego cliente Codex real contra un candidato Humanizar cuando el runtime esté desplegado: inspección de archivo, razones, decisión y lectura posterior con el mismo hash. Dobles no cierran este gate. Revisión y commit `feat: authorize publications through tenant AI decisions`.
 
