@@ -677,20 +677,87 @@ def reconciliation_credential(
         return {"purpose": "reconcile_only", "post_permitted": False, "credential": credential}
 
 
+_EVIDENCE_ERRORS = (
+    "network_timeout",
+    "connection_error",
+    "rate_limited",
+    "authorization_failed",
+    "provider_rejected",
+    "processing_failed",
+    "processing_pending",
+    "status_unavailable",
+)
+
+
+def _safe_evidence(value: object, platform: str) -> dict:
+    """Sólo comprobantes tipados: jamás texto de excepciones, URLs o JSON remoto."""
+    allowed = {
+        "receipt_sha256",
+        "published_at",
+        "published_at_source",
+        "processing_kind",
+        "processing_id",
+        "http_status",
+        "error_code",
+    }
+    if not isinstance(value, dict) or set(value) - allowed:
+        raise InvalidInput("invalid_evidence")
+    receipt = value.get("receipt_sha256")
+    if "receipt_sha256" in value and (
+        not isinstance(receipt, str) or not re.fullmatch(r"[0-9a-f]{64}", receipt)
+    ):
+        raise InvalidInput("invalid_evidence")
+    if "error_code" in value and value["error_code"] not in _EVIDENCE_ERRORS:
+        raise InvalidInput("invalid_evidence")
+    if "http_status" in value and (
+        type(value["http_status"]) is not int or not 100 <= value["http_status"] <= 599
+    ):
+        raise InvalidInput("invalid_evidence")
+    _evidence_time(value)
+    _evidence_processing(value, platform)
+    return dict(value)
+
+
+def _evidence_time(value: dict) -> None:
+    if not {"published_at", "published_at_source"}.intersection(value):
+        return
+    if (
+        value.get("published_at_source") != "provider"
+        or not value.get("receipt_sha256")
+        or not isinstance(value.get("published_at"), str)
+    ):
+        raise InvalidInput("invalid_evidence")
+    normalize_schedule(value["published_at"])
+
+
+def _evidence_processing(value: dict, platform: str) -> None:
+    if not {"processing_kind", "processing_id"}.intersection(value):
+        return
+    kinds = {"facebook": "facebook_upload", "instagram": "instagram_container", "x": "x_upload"}
+    identifier = value.get("processing_id")
+    if (
+        platform not in kinds
+        or value.get("processing_kind") != kinds[platform]
+        or not isinstance(identifier, str)
+        or not re.fullmatch(r"[1-9][0-9]{0,31}", identifier)
+    ):
+        # IDs opacos de otros contratos necesitan una gramática revisada explícita.
+        raise InvalidInput("invalid_evidence")
+
+
 def _provider_result(value: ProviderResult, platform: str) -> dict:
     if not isinstance(value, dict) or set(value) != {"state", "remote_id", "permalink", "evidence"}:
         raise InvalidInput("invalid_provider_result")
     state = value["state"]
     if not isinstance(state, str) or state not in ("published", "failed", "uncertain", "held"):
         raise InvalidInput("invalid_provider_result")
-    if not isinstance(value["evidence"], dict) or len(canonical_json(value["evidence"])) > 16000:
-        raise InvalidInput("invalid_evidence")
+    evidence = _safe_evidence(value["evidence"], platform)
     rid = value["remote_id"]
     if rid is not None and (
         not isinstance(rid, str) or not re.fullmatch(r"[A-Za-z0-9_.:-]{1,256}", rid)
     ):
         raise InvalidInput("invalid_remote_id")
-    if state == "published" and (not rid or not value["evidence"]):
+    if state == "published" and (not rid or not evidence.get("receipt_sha256")):
         raise InvalidInput("publication_receipt_required")
     link = value["permalink"]
     if link is not None:
@@ -717,13 +784,7 @@ def _provider_result(value: ProviderResult, platform: str) -> dict:
                 raise ValueError
         except ValueError as exc:
             raise InvalidInput("invalid_permalink") from exc
-    # No registra payloads arbitrarios con credenciales devueltos por la red.
-    raw = canonical_json(dict(value))
-    if re.search(
-        r'"[^" ]*(?:token|secret|authorization|cookie|ciphertext|ticket)[^" ]*"\s*:', raw, re.I
-    ):
-        raise InvalidInput("sensitive_evidence")
-    return dict(value)
+    return dict(value) | {"evidence": evidence}
 
 
 def _validate_confirmation(
@@ -828,6 +889,13 @@ def _report(
         return answer
     if row["started_at"] is None or row["attempt_id"] != attempt_id:
         raise Conflict("attempt_not_started")
+    previous = json.loads(row["result_json"]) if row["result_json"] else {}
+    if (
+        previous.get("remote_id")
+        and value["remote_id"]
+        and value["remote_id"] != previous["remote_id"]
+    ):
+        raise Conflict("remote_receipt_mismatch")
     remote_time = _publication_time(value, row, now)
     target = _report_target(row, value, confirmed, withdrawn, remote_time)
     if confirmed is not None:
@@ -846,7 +914,6 @@ def _report(
         result=value,
         confirmation=confirmed,
     )
-    previous = json.loads(row["result_json"]) if row["result_json"] else {}
     stored = value | {
         "remote_id": value["remote_id"] or previous.get("remote_id"),
         "recorded_at": now,

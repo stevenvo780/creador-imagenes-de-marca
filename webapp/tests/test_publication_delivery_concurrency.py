@@ -1554,3 +1554,215 @@ def test_owner_worker_concurrent_confirmations_cannot_overwrite_terminal(deliver
             ).fetchone()["n"]
             == 1
         )
+
+
+@pytest.mark.parametrize(
+    "evidence",
+    [
+        {"error": "GET https://graph.facebook.com/v1?access_token=FAKE_REVIEW_SECRET failed"},
+        {"access token": "FAKE_REVIEW_SECRET"},
+        {"receipt": {"message": "Bearer FAKE_REVIEW_SECRET"}},
+        {"error_code": "FAKE_REVIEW_SECRET"},
+        {"published_at": "2026-10-11T10:00:00Z FAKE_REVIEW_SECRET"},
+        {"receipt_sha256": "FAKE_REVIEW_SECRET"},
+    ],
+)
+def test_report_evidence_never_persists_arbitrary_sensitive_text(
+    delivery_case, monkeypatch, evidence
+):
+    from fastapi.testclient import TestClient
+
+    from webapp.publications import deliveries
+
+    c = delivery_case
+    claim = prepared(c)
+    deliveries.start_attempt(
+        c["url"], c["worker"], claim["claim_id"], claim["contract_hash"], c["now"]
+    )
+    monkeypatch.setattr("webapp.api.publication_worker.time.time", lambda: c["now"])
+    with TestClient(c["app"], base_url="https://testserver") as client:
+        response = client.post(
+            "/api/v1/publications/worker/attempts/" + claim["attempt_id"] + "/reports",
+            headers={"Authorization": "Bearer " + c["worker_token"]},
+            json={
+                "event_key": "unsafe-evidence",
+                "result": result("uncertain") | {"evidence": evidence},
+            },
+        )
+        assert response.status_code == 422
+        assert "FAKE_REVIEW_SECRET" not in response.text
+    with db.connect(c["url"]) as con:
+        assert "FAKE_REVIEW_SECRET" not in json.dumps(
+            con.execute(
+                "SELECT payload_json FROM publication_events WHERE tenant_id=?", (c["a"]["tenant"],)
+            ).fetchall()
+        )
+        row = con.execute(
+            "SELECT * FROM publication_deliveries WHERE tenant_id=?", (c["a"]["tenant"],)
+        ).fetchone()
+        assert row["result_json"] is None
+        assert row["state"] == "attempt_started"
+    assert "FAKE_REVIEW_SECRET" not in json.dumps(
+        deliveries.get_claim(c["url"], c["worker"], claim["claim_id"], c["now"])
+    )
+    assert "FAKE_REVIEW_SECRET" not in json.dumps(
+        deliveries.list_calendar(c["url"], c["a"]["tenant"], c["a"]["owner"])
+    )
+
+
+@pytest.mark.parametrize("intermediate", ["uncertain", "held"])
+def test_intermediate_report_cannot_replace_known_canonical_remote_id(delivery_case, intermediate):
+    from webapp.publications import deliveries
+
+    c = delivery_case
+    claim = uncertain_attempt(c)
+    known = result("uncertain") | {"remote_id": "canonical-A"}
+    deliveries.report_attempt(
+        c["url"], c["worker"], claim["attempt_id"], "known-A", known, c["now"] + 2
+    )
+    with pytest.raises(Conflict, match="remote_receipt_mismatch"):
+        deliveries.report_attempt(
+            c["url"],
+            c["worker"],
+            claim["attempt_id"],
+            "replace-B",
+            result(intermediate) | {"remote_id": "canonical-B"},
+            c["now"] + 3,
+        )
+    with pytest.raises(Conflict, match="remote_receipt_mismatch"):
+        deliveries.report_attempt(
+            c["url"],
+            c["worker"],
+            claim["attempt_id"],
+            "confirm-B",
+            result() | {"remote_id": "canonical-B"},
+            c["now"] + 4,
+            confirmation=confirmation(claim, "canonical-B"),
+        )
+    with db.connect(c["url"]) as con:
+        row = con.execute(
+            "SELECT * FROM publication_deliveries WHERE tenant_id=?", (c["a"]["tenant"],)
+        ).fetchone()
+        assert json.loads(row["result_json"])["remote_id"] == "canonical-A"
+        assert row["state"] == "uncertain"
+        assert (
+            con.execute(
+                "SELECT count(*) AS n FROM publication_events WHERE tenant_id=? AND event_key IN ('report:replace-B','report:confirm-B')",
+                (c["a"]["tenant"],),
+            ).fetchone()["n"]
+            == 0
+        )
+    good = deliveries.report_attempt(
+        c["url"],
+        c["worker"],
+        claim["attempt_id"],
+        "confirm-A",
+        result() | {"remote_id": "canonical-A"},
+        c["now"] + 5,
+        confirmation=confirmation(claim, "canonical-A"),
+    )
+    assert good["state"] == "published"
+
+
+@pytest.mark.parametrize(
+    "extra",
+    [
+        {"http_status": True},
+        {"http_status": 600},
+        {"error_code": {"message": "secret"}},
+        {
+            "processing_kind": "facebook_upload",
+            "processing_id": "https://graph.facebook.com?access_token=FAKE_REVIEW_SECRET",
+        },
+        {"processing_kind": "facebook_upload", "processing_id": "FAKE_REVIEW_SECRET"},
+        {"processing_kind": "instagram_container", "processing_id": "123"},
+        {"processing_id": "123"},
+        {"published_at_source": "provider"},
+    ],
+)
+def test_safe_evidence_rejects_invalid_typed_fields(delivery_case, extra):
+    from webapp.publications import deliveries
+
+    c = delivery_case
+    claim = prepared(c)
+    deliveries.start_attempt(
+        c["url"], c["worker"], claim["claim_id"], claim["contract_hash"], c["now"]
+    )
+    with pytest.raises(PublicationError):
+        deliveries.report_attempt(
+            c["url"],
+            c["worker"],
+            claim["attempt_id"],
+            "bad-fields",
+            result("uncertain") | {"evidence": extra},
+            c["now"],
+        )
+    with db.connect(c["url"]) as con:
+        assert (
+            con.execute(
+                "SELECT result_json FROM publication_deliveries WHERE tenant_id=?",
+                (c["a"]["tenant"],),
+            ).fetchone()["result_json"]
+            is None
+        )
+
+
+def test_safe_evidence_preserves_receipt_time_and_separate_processing_id(delivery_case):
+    from webapp.publications import deliveries
+
+    c = delivery_case
+    claim = prepared(c)
+    deliveries.start_attempt(
+        c["url"], c["worker"], claim["claim_id"], claim["contract_hash"], c["now"]
+    )
+    safe = {
+        "receipt_sha256": "d" * 64,
+        "processing_kind": "facebook_upload",
+        "processing_id": "123",
+        "http_status": 202,
+        "error_code": "processing_pending",
+    }
+    deliveries.report_attempt(
+        c["url"],
+        c["worker"],
+        claim["attempt_id"],
+        "processing",
+        result("uncertain") | {"remote_id": "canonical-A", "evidence": safe},
+        c["now"],
+    )
+    deliveries.report_attempt(
+        c["url"],
+        c["worker"],
+        claim["attempt_id"],
+        "processing-next",
+        result("uncertain") | {"remote_id": None, "evidence": safe | {"processing_id": "456"}},
+        c["now"] + 1,
+    )
+    stamp = datetime.fromtimestamp(c["now"], UTC).isoformat()
+    evidence = {
+        "receipt_sha256": "e" * 64,
+        "published_at": stamp,
+        "published_at_source": "provider",
+        "http_status": 200,
+    }
+    deliveries.report_attempt(
+        c["url"],
+        c["worker"],
+        claim["attempt_id"],
+        "published",
+        result() | {"remote_id": "canonical-A", "evidence": evidence},
+        c["now"] + 2,
+        confirmation=confirmation(claim, "canonical-A"),
+    )
+    row = deliveries.get_claim(c["url"], c["worker"], claim["claim_id"], c["now"] + 2)
+    assert row["result"]["remote_id"] == "canonical-A"
+    assert row["result"]["evidence"] == evidence
+    assert row["result"]["published_at_utc"] == c["now"]
+    with db.connect(c["url"]) as con:
+        event = con.execute(
+            "SELECT payload_json FROM publication_events WHERE tenant_id=? AND event_key='report:processing-next'",
+            (c["a"]["tenant"],),
+        ).fetchone()
+        assert json.loads(event["payload_json"])["result"]["evidence"] == safe | {
+            "processing_id": "456"
+        }
