@@ -11,6 +11,7 @@ from typing import Literal, TypedDict
 Outcome = Literal["approve", "reject", "hold"]
 GrantRole = Literal["planner", "reviewer", "worker"]
 Platform = Literal["facebook", "instagram", "tiktok", "x"]
+MediaKind = Literal["gallery_image", "publication_video"]
 
 
 class Principal(TypedDict):

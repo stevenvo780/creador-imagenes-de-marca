@@ -325,6 +325,9 @@ def test_publication_migration_is_idempotent_and_rolls_back(isolated_db, monkeyp
     db.init_db(isolated_db)
     with db.connect(isolated_db) as con:
         for table in (
+            "publication_revisions",
+            "publication_video_media",
+            "publication_campaigns",
             "publication_oauth_states",
             "publication_connection_vault",
             "publication_project_connections",

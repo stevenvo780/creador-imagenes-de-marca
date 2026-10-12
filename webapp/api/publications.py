@@ -10,7 +10,7 @@ from fastapi import APIRouter, Depends, HTTPException, Path, Request, Response
 from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr, ValidationError
 
 from webapp import db
-from webapp.publications.auth import issue_grant, list_grants, revoke_grant
+from webapp.publications.auth import issue_grant, list_grants, publication_planner, revoke_grant
 from webapp.publications.connections import list_connections, put_connection
 from webapp.publications.contracts import (
     Conflict,
@@ -264,3 +264,130 @@ def finish_oauth_endpoint(
     finally:
         if isinstance(client, OfficialOAuthClient):
             client.close()
+
+
+class CampaignInput(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    project_id: StrictInt
+    brand_id: StrictInt
+    objective: StrictStr
+
+
+class RevisionInput(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    media_id: StrictInt
+    media_kind: StrictStr = "gallery_image"
+    caption: StrictStr
+    connection_id: StrictInt
+    scheduled_at: StrictStr
+    policy_version: StrictInt
+    channel_metadata: dict
+
+
+async def _create_campaign(request: Request, tenant_id: int, actor: int | dict) -> dict:
+    from webapp.publications.campaigns import create_campaign
+
+    try:
+        payload = CampaignInput.model_validate(await _body(request))
+        return create_campaign(
+            get_settings(request).db_url, tenant_id, actor, **payload.model_dump()
+        )
+    except ValidationError as exc:
+        raise HTTPException(422, detail="invalid_campaign") from exc
+    except PublicationError as exc:
+        raise HTTPException(exc.status_code, detail=exc.code) from exc
+
+
+@router.post("/campaigns", status_code=201)
+async def create_campaign_endpoint(
+    request: Request, user: dict = Depends(publication_owner)
+) -> dict:
+    return await _create_campaign(request, user["tenant_id"], user["user_id"])
+
+
+@router.post("/planner/campaigns", status_code=201)
+async def planner_create_campaign_endpoint(
+    request: Request, principal: dict = Depends(publication_planner)
+) -> dict:
+    return await _create_campaign(request, principal["tenant_id"], principal)
+
+
+@router.post("/campaigns/{campaign_id}/archive")
+def archive_campaign_endpoint(
+    campaign_id: Annotated[int, Path(ge=1, le=2**63 - 1)],
+    request: Request,
+    user: dict = Depends(publication_owner),
+) -> dict:
+    from webapp.publications.campaigns import archive_campaign
+
+    try:
+        return archive_campaign(
+            get_settings(request).db_url, user["tenant_id"], user["user_id"], campaign_id
+        )
+    except PublicationError as exc:
+        raise HTTPException(exc.status_code, detail=exc.code) from exc
+
+
+async def _freeze(request: Request, campaign_id: int, tenant: int, *, actor: int | dict) -> dict:
+    from webapp.publications.campaigns import freeze_revision
+
+    try:
+        payload = RevisionInput.model_validate(await _body(request))
+        return freeze_revision(
+            get_settings(request).db_url, tenant, campaign_id, **payload.model_dump(), actor=actor
+        )
+    except ValidationError as exc:
+        raise HTTPException(422, detail="invalid_revision") from exc
+    except PublicationError as exc:
+        raise HTTPException(exc.status_code, detail=exc.code) from exc
+
+
+@router.post("/campaigns/{campaign_id}/revisions", status_code=201)
+async def freeze_revision_endpoint(
+    campaign_id: Annotated[int, Path(ge=1, le=2**63 - 1)],
+    request: Request,
+    user: dict = Depends(publication_owner),
+) -> dict:
+    return await _freeze(request, campaign_id, user["tenant_id"], actor=user["user_id"])
+
+
+@router.post("/planner/campaigns/{campaign_id}/revisions", status_code=201)
+async def planner_freeze_revision_endpoint(
+    campaign_id: Annotated[int, Path(ge=1, le=2**63 - 1)],
+    request: Request,
+    principal: dict = Depends(publication_planner),
+) -> dict:
+    return await _freeze(request, campaign_id, principal["tenant_id"], actor=principal)
+
+
+@router.get("/revisions/{revision_id}")
+def get_revision_endpoint(
+    revision_id: Annotated[int, Path(ge=1, le=2**63 - 1)],
+    request: Request,
+    response: Response,
+    user: dict = Depends(publication_owner),
+) -> dict:
+    from webapp.publications.campaigns import get_revision
+
+    try:
+        response.headers["Cache-Control"] = "private, no-store"
+        return get_revision(get_settings(request).db_url, user["tenant_id"], revision_id)
+    except PublicationError as exc:
+        raise HTTPException(exc.status_code, detail=exc.code) from exc
+
+
+@router.get("/planner/candidates")
+def list_candidates_endpoint(
+    request: Request,
+    response: Response,
+    cursor: int = 0,
+    limit: int = 50,
+    principal: dict = Depends(publication_planner),
+) -> dict:
+    from webapp.publications.campaigns import list_candidates
+
+    try:
+        response.headers["Cache-Control"] = "private, no-store"
+        return list_candidates(get_settings(request).db_url, principal, cursor, limit)
+    except PublicationError as exc:
+        raise HTTPException(exc.status_code, detail=exc.code) from exc
