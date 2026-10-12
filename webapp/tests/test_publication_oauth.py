@@ -1148,3 +1148,122 @@ def test_instagram_rejects_reflection_of_private_material_before_long_token(
             )
     finally:
         client.close()
+
+
+@pytest.mark.parametrize(
+    "name,active", [("TikTok Test", True), ("Reflected fake-tiktok-code", False)]
+)
+def test_tiktok_success_status_code_is_public_but_oauth_code_remains_private(
+    publication_db, name, active
+):
+    from urllib.parse import parse_qs
+
+    import httpx
+
+    from webapp.publications.connections import list_connections, put_connection
+    from webapp.publications.oauth import OAuthConfig, finish_oauth, start_oauth
+    from webapp.publications.oauth_providers import OfficialOAuthClient
+    from webapp.publications.vault import unseal
+
+    url, owners, payloads = publication_db
+    remote = "open-42"
+    row = put_connection(
+        url,
+        *owners[0],
+        {
+            **connection_payload(payloads[0]),
+            "platform": "tiktok",
+            "api_mode": "oauth2",
+            "remote_id": remote,
+        },
+    )
+    config = OAuthConfig(
+        "tiktok", "oauth2", "fake-app", "fake-secret", ("https://eikon.example.test/callback",)
+    )
+    flow = start_oauth(
+        url,
+        *owners[0],
+        "tiktok",
+        config.redirect_uris[0],
+        NOW,
+        session_binding=BINDING,
+        connection_id=row["id"],
+        config=config,
+    )
+    calls = []
+
+    def tiktok_network_double(request):
+        calls.append(request.url.path)
+        assert request.url.host == "open.tiktokapis.com"
+        if request.url.path == "/v2/oauth/token/":
+            assert parse_qs(request.content.decode())["code"] == ["fake-tiktok-code"]
+            return httpx.Response(
+                200,
+                json={
+                    "access_token": "fake-tiktok-token",
+                    "refresh_token": "fake-tiktok-refresh",
+                    "open_id": remote,
+                    "expires_in": 7200,
+                    "scope": "user.info.basic,video.publish",
+                },
+            )
+        assert request.url.path == "/v2/user/info/"
+        assert request.headers["Authorization"] == "Bearer fake-tiktok-token"
+        return httpx.Response(
+            200,
+            json={
+                "data": {"user": {"open_id": remote, "display_name": name}},
+                "error": {"code": "ok", "message": "", "log_id": "test-only"},
+            },
+        )
+
+    client = OfficialOAuthClient(config, httpx.MockTransport(tiktok_network_double))
+    try:
+        result = finish_oauth(
+            url,
+            {
+                "tenant_id": owners[0][0],
+                "user_id": owners[0][1],
+                "session_binding": BINDING,
+                "auth_method": "session",
+            },
+            flow["state"],
+            "fake-tiktok-code",
+            NOW + 10,
+            client,
+            key=b"k" * 32,
+            key_id="test",
+        )
+        assert calls == ["/v2/oauth/token/", "/v2/user/info/"]
+        assert "fake-tiktok-code" not in json.dumps(result)
+        assert "fake-tiktok-token" not in json.dumps(result)
+        if active:
+            assert result["status"] == "active" and result["hold_reason"] is None
+            assert result["remote_name"] == name and result["remote_id"] == remote
+            assert result["scopes"] == ["user.info.basic", "video.publish"]
+            assert result["scope_evidence"] == "token_exchange"
+            assert result["expiry_state"] == "known" and result["expires_at"] == NOW + 7210
+            with db.connect(url) as con:
+                stored = con.execute(
+                    "SELECT envelope_json FROM publication_connection_vault WHERE tenant_id=? AND connection_id=?",
+                    (owners[0][0], row["id"]),
+                ).fetchone()
+                assert json.loads(
+                    unseal(b"k" * 32, owners[0][0], row["id"], json.loads(stored["envelope_json"]))
+                ) == {
+                    "access_token": "fake-tiktok-token",
+                    "refresh_token": "fake-tiktok-refresh",
+                }
+            assert (
+                next(item for item in list_connections(url, *owners[0]) if item["id"] == row["id"])
+                == result
+            )
+        else:
+            assert (
+                result["status"] == "held"
+                and result["hold_reason"] == "provider_verification_failed"
+            )
+            with db.connect(url) as con:
+                assert con.execute("SELECT * FROM publication_connection_vault").fetchall() == []
+    finally:
+        client.close()

@@ -89,35 +89,27 @@ class OfficialOAuthClient:
     def close(self) -> None:
         self.transport.close()
 
-    def _remember_secrets(self, value: dict | list) -> None:
+    def _remember_secrets(self, value: dict | list, *, request_fields: bool = False) -> None:
         """Retiene material confidencial aunque luego se sustituya la credencial.
 
         El conjunto nunca forma parte de JSON, metadatos ni del vault. También
-        cubre respuestas anidadas (IG corto y las páginas de Meta).
+        cubre respuestas anidadas (IG corto y las páginas de Meta). `code`
+        es confidencial al enviarlo en OAuth; en respuestas puede ser un estado
+        público como el `error.code="ok"` de TikTok.
         """
+        sensitive_fields = {"access_token", "refresh_token", "id_token"}
+        if request_fields:
+            sensitive_fields.update({"client_secret", "code", "code_verifier", "input_token"})
         if isinstance(value, dict):
             for key, item in value.items():
-                if (
-                    key
-                    in {
-                        "access_token",
-                        "refresh_token",
-                        "id_token",
-                        "client_secret",
-                        "code",
-                        "code_verifier",
-                        "input_token",
-                    }
-                    and isinstance(item, str)
-                    and item
-                ):
+                if key in sensitive_fields and isinstance(item, str) and item:
                     self._sensitive_material.add(item)
                 elif isinstance(item, (dict, list)):
-                    self._remember_secrets(item)
+                    self._remember_secrets(item, request_fields=request_fields)
         elif isinstance(value, list):
             for item in value:
                 if isinstance(item, (dict, list)):
-                    self._remember_secrets(item)
+                    self._remember_secrets(item, request_fields=request_fields)
 
     def _request(
         self,
@@ -146,8 +138,8 @@ class OfficialOAuthClient:
             headers["Authorization"] = (
                 "Basic " + base64.b64encode((basic[0] + ":" + basic[1]).encode()).decode()
             )
-        self._remember_secrets(params or {})
-        self._remember_secrets(data or {})
+        self._remember_secrets(params or {}, request_fields=True)
+        self._remember_secrets(data or {}, request_fields=True)
         if token:
             self._sensitive_material.add(token)
         if headers.get("Authorization"):
