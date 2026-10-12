@@ -409,6 +409,9 @@ CREATE INDEX IF NOT EXISTS idx_variations_batch ON variations(batch_id);
     migrate_brand_briefs(db_url)
     migrate_media(db_url)
     migrate_media_reviews(db_url)
+    from webapp.publications.migrations import migrate_publications
+
+    migrate_publications(db_url)
 
 
 def migrate_add_logo_columns(db_url: str | None | Path) -> None:
