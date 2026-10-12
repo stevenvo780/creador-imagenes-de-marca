@@ -737,6 +737,11 @@ def test_evaluation_schema_rolls_back_without_seeds_and_is_idempotent(isolated_d
 
     db.init_db(isolated_db)
     tables = (
+        "publication_claim_consents",
+        "publication_post_consents",
+        "publication_creator_receipts",
+        "publication_provider_proofs",
+        "publication_consent_revocations",
         "publication_media_tickets",
         "publication_claim_materials",
         "publication_claims",

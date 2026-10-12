@@ -500,6 +500,89 @@ def _immutable_claims(con: db.DualConnection) -> None:
             )
 
 
+_CONSENT_SCHEMA = """
+CREATE TABLE IF NOT EXISTS publication_provider_proofs (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ revision_id INTEGER NOT NULL,
+ owner_id INTEGER NOT NULL,
+ proof_key TEXT NOT NULL,
+ payload_json TEXT NOT NULL,
+ payload_hash TEXT NOT NULL,
+ created_at BIGINT NOT NULL,
+ UNIQUE(tenant_id,id), UNIQUE(tenant_id,proof_key),
+ FOREIGN KEY(tenant_id,revision_id) REFERENCES publication_revisions(tenant_id,id),
+ FOREIGN KEY(tenant_id,owner_id) REFERENCES users(tenant_id,id)
+);
+CREATE TABLE IF NOT EXISTS publication_creator_receipts (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ revision_id INTEGER NOT NULL,
+ owner_id INTEGER NOT NULL,
+ payload_json TEXT NOT NULL,
+ created_at BIGINT NOT NULL,
+ UNIQUE(tenant_id,id),
+ FOREIGN KEY(tenant_id,revision_id) REFERENCES publication_revisions(tenant_id,id),
+ FOREIGN KEY(tenant_id,owner_id) REFERENCES users(tenant_id,id)
+);
+CREATE TABLE IF NOT EXISTS publication_post_consents (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ revision_id INTEGER NOT NULL,
+ owner_id INTEGER NOT NULL,
+ creator_id INTEGER NOT NULL,
+ proof_id INTEGER NOT NULL,
+ payload_json TEXT NOT NULL,
+ created_at BIGINT NOT NULL,
+ UNIQUE(tenant_id,id),
+ FOREIGN KEY(tenant_id,revision_id) REFERENCES publication_revisions(tenant_id,id),
+ FOREIGN KEY(tenant_id,owner_id) REFERENCES users(tenant_id,id),
+ FOREIGN KEY(tenant_id,creator_id) REFERENCES publication_creator_receipts(tenant_id,id),
+ FOREIGN KEY(tenant_id,proof_id) REFERENCES publication_provider_proofs(tenant_id,id)
+);
+CREATE TABLE IF NOT EXISTS publication_claim_consents (
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ claim_id TEXT NOT NULL,
+ receipt_id INTEGER NOT NULL,
+ created_at BIGINT NOT NULL,
+ PRIMARY KEY(tenant_id,claim_id),
+ FOREIGN KEY(tenant_id,claim_id) REFERENCES publication_claims(tenant_id,claim_id),
+ FOREIGN KEY(tenant_id,receipt_id) REFERENCES publication_post_consents(tenant_id,id)
+);
+CREATE TABLE IF NOT EXISTS publication_consent_revocations (
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ kind TEXT NOT NULL CHECK(kind IN ('proof','consent')),
+ record_id INTEGER NOT NULL,
+ created_at BIGINT NOT NULL,
+ PRIMARY KEY(tenant_id,kind,record_id)
+);
+"""
+
+
+def _immutable_consents(con: db.DualConnection) -> None:
+    if con.dialect == "postgres":
+        con.execute(
+            "CREATE OR REPLACE FUNCTION publication_consent_immutable() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'immutable_consent'; END $$"
+        )
+    for table in (
+        "publication_provider_proofs",
+        "publication_creator_receipts",
+        "publication_post_consents",
+        "publication_consent_revocations",
+        "publication_claim_consents",
+    ):
+        if con.dialect == "sqlite":
+            for operation in ("UPDATE", "DELETE"):
+                con.execute(
+                    f"CREATE TRIGGER IF NOT EXISTS {table}_no_{operation.lower()} BEFORE {operation} ON {table} BEGIN SELECT RAISE(ABORT, 'immutable_consent'); END"
+                )
+        else:
+            con.execute(f"DROP TRIGGER IF EXISTS {table}_immutable ON {table}")
+            con.execute(
+                f"CREATE TRIGGER {table}_immutable BEFORE UPDATE OR DELETE ON {table} FOR EACH ROW EXECUTE FUNCTION publication_consent_immutable()"
+            )
+
+
 def migrate_publications(db_url: str | Path | None) -> None:
     """Sin seeds: una instalación nueva no recibe autorización autónoma."""
     with db.connect(db_url) as con:
@@ -517,6 +600,7 @@ def migrate_publications(db_url: str | Path | None) -> None:
             + _HISTORY_SCHEMA
             + _EVALUATION_SCHEMA
             + _DELIVERY_SCHEMA
+            + _CONSENT_SCHEMA
         )
         schema = db._schema_for_postgres(source) if con.dialect == "postgres" else source
         for statement in schema.split(";"):
@@ -552,4 +636,10 @@ def migrate_publications(db_url: str | Path | None) -> None:
         con.execute(
             "INSERT INTO schema_migrations(version,applied_at) VALUES (?,?) ON CONFLICT(version) DO NOTHING",
             ("publication_deliveries_v1", int(time.time())),
+        )
+
+        _immutable_consents(con)
+        con.execute(
+            "INSERT INTO schema_migrations(version,applied_at) VALUES (?,?) ON CONFLICT(version) DO NOTHING",
+            ("publication_consents_v1", int(time.time())),
         )

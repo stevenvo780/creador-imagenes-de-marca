@@ -4,7 +4,7 @@ import json
 import os
 import secrets
 import time
-from typing import Annotated, Any
+from typing import Annotated, Any, cast
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Request, Response
 from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr, ValidationError
@@ -20,7 +20,7 @@ from webapp.publications.contracts import (
     PublicationError,
     positive_integer,
 )
-from webapp.publications.oauth import finish_oauth, start_oauth
+from webapp.publications.oauth import OAuthConfig, finish_oauth, start_oauth
 from webapp.publications.oauth_providers import OfficialOAuthClient, load_provider_configs
 from webapp.publications.policies import get_policy, set_policy
 from webapp.publications.vault import service_key
@@ -56,7 +56,10 @@ class GrantInput(BaseModel):
 
 
 @router.get("/policy")
-def get_policy_endpoint(request: Request, user: dict = Depends(publication_owner)) -> dict:
+def get_policy_endpoint(
+    request: Request, response: Response, user: dict = Depends(publication_owner)
+) -> dict:
+    response.headers["Cache-Control"] = "private, no-store"
     try:
         return get_policy(get_settings(request).db_url, user["tenant_id"], user["user_id"])
     except PublicationError as exc:
@@ -115,7 +118,10 @@ def revoke_grant_endpoint(
 
 
 @router.get("/connections")
-def list_connections_endpoint(request: Request, user: dict = Depends(publication_owner)) -> dict:
+def list_connections_endpoint(
+    request: Request, response: Response, user: dict = Depends(publication_owner)
+) -> dict:
+    response.headers["Cache-Control"] = "private, no-store"
     try:
         return {
             "items": list_connections(
@@ -149,7 +155,9 @@ def _oauth_cookie(request: Request) -> tuple[str, bool]:
     return ("__Host-eikon_publication_oauth" if secure else "eikon_publication_oauth_dev"), secure
 
 
-def _oauth_runtime(request: Request, platform: str, mode: str):
+def _oauth_runtime(
+    request: Request, platform: str, mode: str
+) -> tuple[OAuthConfig, OfficialOAuthClient]:
     configs = getattr(request.app.state, "publication_oauth_configs", None)
     if configs is None:
         configs = load_provider_configs(get_settings(request).publication_oauth_config_file)
@@ -389,5 +397,176 @@ def list_candidates_endpoint(
     try:
         response.headers["Cache-Control"] = "private, no-store"
         return list_candidates(get_settings(request).db_url, principal, cursor, limit)
+    except PublicationError as exc:
+        raise HTTPException(exc.status_code, detail=exc.code) from exc
+
+
+def _view(request: Request, response: Response, user: dict, name: str, *args: Any) -> dict:
+    from webapp.publications import views
+
+    response.headers["Cache-Control"] = "private, no-store"
+    response.headers["Referrer-Policy"] = "no-referrer"
+    try:
+        return cast(
+            dict,
+            getattr(views, name)(
+                get_settings(request).db_url, user["tenant_id"], user["user_id"], *args
+            ),
+        )
+    except PublicationError as exc:
+        raise HTTPException(exc.status_code, detail=exc.code) from exc
+
+
+@router.get("/overview")
+def overview_endpoint(
+    request: Request, response: Response, user: dict = Depends(publication_owner)
+) -> dict:
+    return _view(request, response, user, "overview")
+
+
+@router.get("/campaigns")
+def campaigns_endpoint(
+    request: Request,
+    response: Response,
+    cursor: int = 0,
+    limit: int = 50,
+    user: dict = Depends(publication_owner),
+) -> dict:
+    return _view(request, response, user, "campaigns", cursor, limit)
+
+
+@router.get("/deliveries/{delivery_id}")
+def delivery_endpoint(
+    delivery_id: Annotated[int, Path(ge=1)],
+    request: Request,
+    response: Response,
+    user: dict = Depends(publication_owner),
+) -> dict:
+    return _view(request, response, user, "delivery", delivery_id)
+
+
+@router.get("/revisions/{revision_id}/preview")
+def preview_endpoint(
+    revision_id: Annotated[int, Path(ge=1)],
+    contract_hash: str,
+    request: Request,
+    user: dict = Depends(publication_owner),
+) -> Response:
+    from webapp.api.deps import get_storage
+    from webapp.publications.views import original
+
+    try:
+        content, mime = original(
+            get_settings(request).db_url,
+            get_storage(request),
+            user["tenant_id"],
+            user["user_id"],
+            revision_id,
+            contract_hash,
+        )
+        return Response(
+            content,
+            media_type=mime,
+            headers={
+                "Cache-Control": "private, no-store",
+                "Referrer-Policy": "no-referrer",
+                "X-Content-Type-Options": "nosniff",
+            },
+        )
+    except PublicationError as exc:
+        raise HTTPException(exc.status_code, detail=exc.code) from exc
+
+
+@router.get("/revisions/{revision_id}/consent")
+def consent_status_endpoint(
+    revision_id: Annotated[int, Path(ge=1)],
+    request: Request,
+    response: Response,
+    user: dict = Depends(publication_owner),
+) -> dict:
+    from webapp.publications.consent import status
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return status(get_settings(request).db_url, user["tenant_id"], user["user_id"], revision_id)
+    except PublicationError as exc:
+        raise HTTPException(exc.status_code, detail=exc.code) from exc
+
+
+class CreatorInput(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    contract_hash: StrictStr
+
+
+@router.post("/revisions/{revision_id}/creator-info")
+async def creator_info_endpoint(
+    revision_id: Annotated[int, Path(ge=1)],
+    request: Request,
+    response: Response,
+    user: dict = Depends(publication_owner),
+) -> dict:
+    from starlette.concurrency import run_in_threadpool
+
+    from webapp.publications.consent import creator_preflight
+
+    response.headers["Cache-Control"] = "private, no-store"
+    client = None
+    try:
+        body = CreatorInput.model_validate(await _body(request))
+        _, client = _oauth_runtime(request, "tiktok", "oauth2")
+        return await run_in_threadpool(
+            creator_preflight,
+            get_settings(request).db_url,
+            user["tenant_id"],
+            user["user_id"],
+            revision_id,
+            body.contract_hash,
+            client,
+            service_key(get_settings(request).publication_vault_key),
+        )
+    except ValidationError as exc:
+        raise HTTPException(422, detail="invalid_creator_request") from exc
+    except PublicationError as exc:
+        raise HTTPException(exc.status_code, detail=exc.code) from exc
+    finally:
+        if isinstance(client, OfficialOAuthClient):
+            client.close()
+
+
+@router.post("/revisions/{revision_id}/consent", status_code=201)
+async def consent_endpoint(
+    revision_id: Annotated[int, Path(ge=1)],
+    request: Request,
+    response: Response,
+    user: dict = Depends(publication_owner),
+) -> dict:
+    from webapp.publications.consent import record_consent
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return record_consent(
+            get_settings(request).db_url,
+            user["tenant_id"],
+            user["user_id"],
+            revision_id,
+            await _body(request),
+        )
+    except PublicationError as exc:
+        raise HTTPException(exc.status_code, detail=exc.code) from exc
+
+
+@router.delete("/consents/{receipt_id}", status_code=204)
+def revoke_consent_endpoint(
+    receipt_id: Annotated[int, Path(ge=1)],
+    request: Request,
+    user: dict = Depends(publication_owner),
+) -> Response:
+    from webapp.publications.consent import revoke
+
+    try:
+        revoke(
+            get_settings(request).db_url, user["tenant_id"], user["user_id"], "consent", receipt_id
+        )
+        return Response(status_code=204, headers={"Cache-Control": "private, no-store"})
     except PublicationError as exc:
         raise HTTPException(exc.status_code, detail=exc.code) from exc

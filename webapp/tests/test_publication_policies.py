@@ -325,6 +325,11 @@ def test_publication_migration_is_idempotent_and_rolls_back(isolated_db, monkeyp
     db.init_db(isolated_db)
     with db.connect(isolated_db) as con:
         for table in (
+            "publication_claim_consents",
+            "publication_post_consents",
+            "publication_creator_receipts",
+            "publication_provider_proofs",
+            "publication_consent_revocations",
             "publication_media_tickets",
             "publication_claim_materials",
             "publication_claims",

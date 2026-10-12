@@ -566,6 +566,18 @@ def start_attempt(
         else:
             bound_claim(con, principal, claim_id, now, active=True)
             reasons, eligibility = _reasons(con, row, now)
+            if row["normalized_destination"].startswith("tiktok:"):
+                from .consent import claim_authority
+
+                try:
+                    consent = claim_authority(con, row, now)
+                    if any(
+                        consent[k] != row[k]
+                        for k in ("contract_hash", "normalized_destination", "media_sha256")
+                    ):
+                        reasons.append("consent_binding_mismatch")
+                except (Conflict, Forbidden, NotFound, InvalidInput):
+                    reasons.append("needs_platform_consent")
             material = con.execute(
                 "SELECT media_sha256 FROM publication_claim_materials WHERE tenant_id=? AND claim_id=?",
                 (row["tenant_id"], claim_id),

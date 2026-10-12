@@ -13,7 +13,7 @@ from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr, ValidationErro
 
 from webapp.api.deps import get_settings, get_storage
 from webapp.api.publications import _body, publication_owner
-from webapp.publications import deliveries, media_delivery
+from webapp.publications import deliveries, media_delivery, views
 from webapp.publications.auth import publication_worker
 from webapp.publications.contracts import Conflict, ProviderResult, PublicationError
 from webapp.publications.vault import service_key
@@ -360,7 +360,7 @@ def calendar(
 ) -> dict:
     _private(response)
     return _call(
-        deliveries.list_calendar,
+        views.calendar,
         get_settings(request).db_url,
         user["tenant_id"],
         user["user_id"],
@@ -437,3 +437,16 @@ async def withdrawal(
         int(time.time()),
         withdrawn=True,
     )
+
+
+@router.get("/claims/{claim_id}/post-consent")
+def post_consent(
+    claim_id: str,
+    request: Request,
+    response: Response,
+    principal: dict = Depends(publication_worker),
+) -> dict | None:
+    from webapp.publications.consent import claim_consent
+
+    _private(response)
+    return _call(claim_consent, get_settings(request).db_url, principal, claim_id, int(time.time()))

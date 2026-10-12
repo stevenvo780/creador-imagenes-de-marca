@@ -1,0 +1,213 @@
+/* Conserva el atelier editorial Eikón: Cormorant/Inter, carbón/teal/ámbar. */
+.publications {
+  color: var(--text);
+  max-width: 1360px;
+  margin: auto;
+  padding: var(--space-6);
+  font-family: var(--font-body);
+}
+.publications h1,
+.publications h2,
+.publications h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.15;
+}
+.publications h1 {
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  margin: 0;
+}
+.publications h2 {
+  font-size: 1.9rem;
+  margin: 0 0 var(--space-4);
+}
+.publications h3 {
+  font-size: 1.5rem;
+}
+.publications h4 {
+  font-size: 1rem;
+}
+.publications p {
+  max-width: 75ch;
+  line-height: 1.6;
+}
+.pub-heading {
+  border-bottom: 2px solid var(--teal);
+  padding-bottom: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+.pub-tenant {
+  font-size: 1.1rem;
+}
+.publications section {
+  margin-bottom: var(--space-8);
+}
+.publications a {
+  color: var(--teal);
+  text-underline-offset: 4px;
+}
+.publications button {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md, 6px);
+  padding: 12px 16px;
+  cursor: pointer;
+  font: inherit;
+  min-height: 44px;
+  margin: 4px 8px 4px 0;
+}
+.publications button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.publications .pub-stop {
+  border-color: var(--danger);
+}
+.publications :focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 3px;
+}
+.publications label {
+  display: block;
+  margin: var(--space-4) 0;
+  line-height: 1.5;
+}
+.publications input:not([type="checkbox"]),
+.publications textarea,
+.publications select {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm, 4px);
+  background: var(--bg);
+  color: var(--text);
+  padding: 10px;
+  font: inherit;
+  box-sizing: border-box;
+}
+.publications input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 8px;
+  accent-color: var(--teal);
+}
+.publications textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+.publications fieldset {
+  border: 1px solid var(--border);
+  padding: 16px;
+  min-width: 0;
+}
+.publications summary {
+  cursor: pointer;
+  min-height: 44px;
+  line-height: 44px;
+}
+.publications [role="alert"],
+.pub-hold {
+  color: var(--amber);
+}
+.pub-workspace {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 32px;
+}
+.pub-workspace aside {
+  border-right: 1px solid var(--border);
+  padding-right: 20px;
+}
+.pub-workspace aside ul,
+.pub-connections,
+.pub-agenda {
+  list-style: none;
+  padding: 0;
+}
+.pub-workspace aside li {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.pub-workspace [aria-current="page"] {
+  color: var(--text);
+  font-weight: 700;
+}
+.pub-candidate {
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border-strong);
+}
+.pub-candidate-grid {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.85fr) minmax(0, 1.15fr);
+  gap: 24px;
+}
+.pub-preview {
+  align-self: start;
+  position: sticky;
+  top: 90px;
+}
+.pub-preview img,
+.pub-preview video {
+  width: 100%;
+  max-height: 560px;
+  object-fit: contain;
+  background: var(--surface);
+}
+.pub-hash {
+  overflow-wrap: anywhere;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.pub-agenda li {
+  border-top: 1px solid var(--border);
+  padding: 20px 0;
+}
+.pub-attempt strong {
+  display: block;
+}
+.pub-connections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+.pub-connections li {
+  border-left: 3px solid var(--teal);
+  padding: 0 16px;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 850px) {
+  .pub-workspace {
+    grid-template-columns: 1fr;
+  }
+  .pub-workspace aside {
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .pub-candidate-grid {
+    grid-template-columns: 1fr;
+  }
+  .pub-preview {
+    position: static;
+  }
+}
+@media (max-width: 560px) {
+  .publications {
+    padding: 16px;
+  }
+  .pub-tenant {
+    display: block;
+  }
+  .publications button {
+    width: 100%;
+  }
+  .pub-connections {
+    grid-template-columns: 1fr;
+  }
+  .pub-agenda li {
+    overflow-wrap: anywhere;
+  }
+}

@@ -13,6 +13,7 @@ import { BrandEditorPage } from "./pages/Brands/BrandEditorPage";
 import BrandIdentityPage from "./pages/BrandIdentityPage";
 import { AssetStudioPage } from "./pages/AssetStudioPage";
 import { MediaGallery } from "./pages/Media";
+import { PublicationsPage } from "./pages/Publications/PublicationsPage";
 import { ProjectsPage } from "./pages/ProjectsPage";
 import { clearPrivateMedia } from "./api/media";
 import { createContext, useContext, useState } from "react";
@@ -24,6 +25,15 @@ import { AppShell } from "./components/AppShell";
 import { Spinner } from "./components/Spinner";
 
 const OwnerContext = createContext(false);
+const TenantContext = createContext("");
+function PublicationsRoute() {
+  return (
+    <PublicationsPage
+      owner={useContext(OwnerContext)}
+      tenant={useContext(TenantContext)}
+    />
+  );
+}
 function GalleryRoute() {
   return <MediaGallery owner={useContext(OwnerContext)} />;
 }
@@ -75,9 +85,11 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
     >
       {!exiting && (
         <OwnerContext.Provider value={session.user.role === "owner"}>
-          <div key={`${session.tenant?.slug}:${session.user.email}`}>
-            {children}
-          </div>
+          <TenantContext.Provider value={session.tenant?.slug || ""}>
+            <div key={`${session.tenant?.slug}:${session.user.email}`}>
+              {children}
+            </div>
+          </TenantContext.Provider>
         </OwnerContext.Provider>
       )}
     </AppShell>
@@ -104,6 +116,11 @@ export default function App() {
           <Route path="/studio" element={<AssetStudioPage />} />
           <Route path="/batch" element={<BatchWizardPage />} />
           <Route path="/batch/:batchId" element={<BatchProgressPage />} />
+          <Route path="/publications" element={<PublicationsRoute />} />
+          <Route
+            path="/publications/campaigns/:campaignId"
+            element={<PublicationsRoute />}
+          />
           <Route path="/gallery" element={<GalleryRoute />} />
           <Route path="*" element={<Navigate to="/brands" replace />} />
         </Routes>

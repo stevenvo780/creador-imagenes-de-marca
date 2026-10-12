@@ -43,6 +43,10 @@ class ChannelMetadata(BaseModel):
     context: StrictStr = Field(default="", max_length=12000)
     rights: StrictStr = Field(default="", max_length=2000)
     privacy: StrictStr | None = Field(default=None, max_length=80)
+    disable_comment: StrictBool | None = None
+    disable_duet: StrictBool | None = None
+    disable_stitch: StrictBool | None = None
+    is_aigc: StrictBool | None = None
     commercial_content: StrictBool | None = None
     branded_content: StrictBool | None = None
     platform_consent_receipt: StrictStr | None = Field(default=None, max_length=2000)
@@ -379,7 +383,9 @@ def _eligibility(con: db.DualConnection, snapshot: dict, now: int | None = None)
         reasons.append("blocked_budget")
     if platform == "tiktok":
         # El texto del planner no acredita consentimiento ni auditoría externa.
-        reasons.extend(("needs_platform_consent", "needs_platform_audit"))
+        from .consent import eligibility_reasons
+
+        reasons.extend(eligibility_reasons(con, snapshot, now))
     return list(dict.fromkeys(reasons))
 
 

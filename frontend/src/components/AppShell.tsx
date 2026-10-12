@@ -22,6 +22,7 @@ const NAV_LINKS: Array<{ to: string; label: string }> = [
   { to: "/batch", label: "Crear" },
   { to: "/gallery", label: "Galería" },
   { to: "/projects", label: "Proyectos" },
+  { to: "/publications", label: "Publicaciones" },
 ];
 
 export function AppShell({
