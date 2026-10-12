@@ -34,6 +34,13 @@ class InstagramAdapter(Adapter):
             return {"state": "unsupported_media"}
         return super().preflight(connection, variant, now)
 
+    def _processed(self, container, status, digest):
+        # Recibo local durable para limpiar el ticket tras una caída; no prueba publicación.
+        if self.journal.read("container_processed") is None:
+            self.journal.begin("container_processed")
+            self.receipt("container_processed", digest, id=container, status=status)
+        self.processing_complete = True
+
     def publish(self, connection, variant, attempt_id):
         if variant["media"]["mime"] not in {"image/jpeg", "video/mp4"}:
             return outcome("held", code="provider_rejected")
@@ -71,7 +78,7 @@ class InstagramAdapter(Adapter):
                 )
                 status = body.get("status_code")
                 if status == "FINISHED":
-                    self.processing_complete = True
+                    self._processed(container, status, digest)
                     break
                 if status in {"ERROR", "EXPIRED"}:
                     return outcome(code="processing_failed", digest=digest)
@@ -96,6 +103,15 @@ class InstagramAdapter(Adapter):
 
     def reconcile(self, connection, result):
         try:
+            partial = self.journal.read("container")
+            processed = self.journal.read("container_processed")
+            if (
+                partial
+                and processed
+                and processed.get("id") == partial["id"]
+                and processed.get("status") in {"FINISHED", "PUBLISHED"}
+            ):
+                self.processing_complete = True
             known = self.journal.read("publish") or {}
             base, remote = self.base(connection), result.get("remote_id") or known.get("remote_id")
             if remote:
@@ -109,12 +125,17 @@ class InstagramAdapter(Adapter):
                             published_at=body["timestamp"], published_at_source="provider"
                         )
                     return proven
-            partial = self.journal.read("container")
             if partial:
-                _, digest = self.request(
+                body, digest = self.request(
                     connection, "GET", f"{base}/{partial['id']}", params={"fields": "status_code"}
                 )
-                pending = outcome(digest=digest, code="processing_pending")
+                status = body.get("status_code")
+                if status in {"FINISHED", "PUBLISHED"}:
+                    self._processed(partial["id"], status, digest)
+                pending = outcome(
+                    digest=digest,
+                    code="status_unavailable" if self.processing_complete else "processing_pending",
+                )
                 pending["evidence"].update(
                     processing_kind="instagram_container", processing_id=partial["id"]
                 )

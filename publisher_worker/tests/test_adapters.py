@@ -147,14 +147,15 @@ def test_instagram_video_is_explicit_reels_not_standalone_video(tmp_path, mode):
     assert transport.calls[0][2]["data"]["share_to_feed"] == "true"
 
 
-def test_instagram_in_progress_does_not_publish_on_restart(tmp_path):
+@pytest.mark.parametrize("status", ["FINISHED", "PUBLISHED"])
+def test_instagram_in_progress_does_not_publish_on_restart(tmp_path, status):
     from publisher_worker.adapters.instagram import InstagramAdapter
 
     transport = Transport(
         [
             Response({"id": "100"}),
             Response({"status_code": "IN_PROGRESS"}),
-            Response({"status_code": "FINISHED"}),
+            Response({"status_code": status}),
         ]
     )
     adapter = InstagramAdapter(transport, graph_version="v26.0", poll_attempts=1).bind(
@@ -162,7 +163,18 @@ def test_instagram_in_progress_does_not_publish_on_restart(tmp_path):
     )
     result = adapter.publish(account("instagram", "instagram_login"), variant(), "a")
     assert result["state"] == "uncertain"
-    adapter.reconcile(account("instagram", "instagram_login"), result)
+    recovered = InstagramAdapter(transport, graph_version="v26.0").bind(adapter.journal)
+    result = recovered.reconcile(account("instagram", "instagram_login"), result)
+    assert result["state"] == "uncertain" and result["remote_id"] is None
+    assert recovered.processing_complete is True
+    receipt = recovered.journal.read("container_processed")
+    assert receipt["id"] == "100" and receipt["status"] == status
+    import hashlib
+
+    assert (
+        receipt["receipt_sha256"]
+        == hashlib.sha256(Response({"status_code": status}).content).hexdigest()
+    )
     assert [c[0] for c in transport.calls] == ["POST", "GET", "GET"]
 
 

@@ -380,4 +380,109 @@ def test_real_preflight_hold_visible_no_repeat_claim(delivery_case, tmp_path, mo
         assert rows["items"][0]["hold_reasons"] == ["unsupported_media"]
 
 
+@pytest.mark.parametrize(
+    ("body", "complete"),
+    [
+        ({"status_code": "FINISHED"}, True),
+        ({"status_code": "PUBLISHED"}, True),
+        ({"status_code": "IN_PROGRESS"}, False),
+        ({"status_code": "UNKNOWN"}, False),
+        ({}, False),
+        ({"status_code": "ERROR"}, False),
+        ({"status_code": "EXPIRED"}, False),
+        ({"error": {"code": 190}}, False),
+    ],
+)
+def test_instagram_restart_revokes_only_completed_container(tmp_path, body, complete):
+    from publisher_worker.adapters.instagram import InstagramAdapter
+    from publisher_worker.client import run_once
+    from publisher_worker.outbox import Outbox
+    from publisher_worker.tests.test_adapters import Response, Transport, account
+    from webapp.publications.contracts import canonical_hash
+
+    client = FakeClient()
+    client.snapshot["connection"] = account("instagram", "instagram_login")
+    client.snapshot["connection"].pop("credential")
+    client.snapshot["destination"] = "instagram:42"
+    client.claim["contract_hash"] = canonical_hash(client.snapshot)
+    client.state, client.claimed = "uncertain", True
+    path = tmp_path / "restart.db"
+    box = Outbox(path, tenant_id=7)
+    box.reserve(client.claim, client.snapshot)
+    attempt = client.claim["attempt_id"]
+    for old, new in [
+        ("reserved", "start_requested"),
+        ("start_requested", "start_confirmed"),
+        ("start_confirmed", "dispatching"),
+    ]:
+        assert box.stage(attempt, old, new)
+    journal = box.journal(attempt)
+    assert journal.begin("container")
+    journal.complete("container", {"id": "100", "receipt_sha256": "a" * 64})
+    box.record_ticket(
+        attempt, {"id": 1, "media_sha256": client.snapshot["media"]["sha256"], "expires_at": 4600}
+    )
+    revoked = []
+    client.revoke_ticket = lambda claim, ticket: revoked.append((claim, ticket))
+    transport = Transport([Response(body)])
+    adapter = InstagramAdapter(transport, graph_version="v26.0")
+    reopened = Outbox(path, tenant_id=7)
+    run_once(client, reopened, {"instagram": adapter}, 1600)
+    assert client.reports[-1][0]["state"] == "uncertain"
+    assert client.reports[-1][0]["remote_id"] is None
+    assert client.reports[-1][2] is None
+    assert client.start_count == 0
+    assert [c[0] for c in transport.calls] == ["GET"]
+    assert bool(revoked) is complete
+    assert bool(reopened.tickets()) is not complete
+    assert bool(reopened.journal(attempt).read("container_processed")) is complete
+
+
+@pytest.mark.parametrize("interrupted_receipt", [False, True])
+def test_instagram_completion_survives_crash_before_ticket_revocation(
+    tmp_path, interrupted_receipt
+):
+    from publisher_worker.adapters.instagram import InstagramAdapter
+    from publisher_worker.client import run_once
+    from publisher_worker.outbox import Outbox
+    from publisher_worker.tests.test_adapters import Response, Transport, account
+    from webapp.publications.contracts import canonical_hash
+
+    client = FakeClient()
+    client.snapshot["connection"] = account("instagram", "instagram_login")
+    client.snapshot["connection"].pop("credential")
+    client.snapshot["destination"] = "instagram:42"
+    client.claim["contract_hash"] = canonical_hash(client.snapshot)
+    client.state, client.claimed = "uncertain", True
+    path = tmp_path / "crash.db"
+    box = Outbox(path, tenant_id=7)
+    box.reserve(client.claim, client.snapshot)
+    attempt = client.claim["attempt_id"]
+    journal = box.journal(attempt)
+    assert journal.begin("container")
+    journal.complete("container", {"id": "100", "receipt_sha256": "a" * 64})
+    if interrupted_receipt:
+        assert journal.begin("container_processed")
+    box.record_ticket(
+        attempt, {"id": 1, "media_sha256": client.snapshot["media"]["sha256"], "expires_at": 4600}
+    )
+    transport = Transport([Response({"status_code": "FINISHED"}), TimeoutError()])
+    adapter = InstagramAdapter(transport, graph_version="v26.0").bind(journal)
+    connection = client.snapshot["connection"] | {"credential": client.credential(client.claim)}
+    # Caída después de persistir el estado, antes de informar/revocar.
+    result = adapter.reconcile(connection, {"remote_id": None})
+    assert result["state"] == "uncertain"
+    revoked = []
+    client.revoke_ticket = lambda claim, ticket: revoked.append((claim, ticket))
+    reopened = Outbox(path, tenant_id=7)
+    run_once(
+        client, reopened, {"instagram": InstagramAdapter(transport, graph_version="v26.0")}, 1600
+    )
+    assert revoked == [(attempt, 1)]
+    assert reopened.tickets() == []
+    assert client.start_count == 0
+    assert client.reports[-1][0]["state"] == "uncertain"
+    assert [c[0] for c in transport.calls] == ["GET", "GET"]
+
+
 __all__ = ["campaign_case", "campaign_clients", "delivery_case", "isolated_db"]
