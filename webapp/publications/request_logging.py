@@ -58,8 +58,13 @@ class PublicationAccessFilter(logging.Filter):
         if isinstance(args, tuple) and len(args) == 5:
             method = args[1] if isinstance(args[1], str) and args[1] in _METHODS else "UNKNOWN"
             status = args[4] if type(args[4]) is int and 100 <= args[4] <= 599 else 0
-        record.msg = "publication_request route=%s method=%s status=%s"
-        record.args = (category, method, status)
+        if record.name == "uvicorn.access":
+            # AccessFormatter consume siempre cinco valores, también tras redacción.
+            record.msg = '%s - "%s %s HTTP/%s" %d'
+            record.args = ("[redacted]", method, "/publication/" + category, "1.1", status)
+        else:
+            record.msg = "publication_request route=%s method=%s status=%s"
+            record.args = (category, method, status)
         record.exc_info, record.exc_text, record.stack_info = None, None, None
         for key in set(record.__dict__) - _STANDARD:
             record.__dict__[key] = "[publication-sensitive-redacted]"
@@ -86,16 +91,19 @@ class PublicationRequestMiddleware:
         category = route_class(scope.get("path")) or route_class(
             scope.get("raw_path", b"").decode("latin1")
         )
+        sensitive_route = category is not None
         for name, value in scope.get("headers", []):
             if name.lower() == b"referer" and route_class(value.decode("latin1")):
                 category = category or "sensitive_referer"
         if category is None:
             await self.app(scope, receive, send)
             return
-        await self._sensitive_request(scope, receive, send, category)
+        await self._sensitive_request(
+            scope, receive, send, category, sanitize_errors=sensitive_route
+        )
 
     async def _sensitive_request(
-        self, scope: Scope, receive: Receive, send: Send, category: str
+        self, scope: Scope, receive: Receive, send: Send, category: str, *, sanitize_errors: bool
     ) -> None:
         started, status, error = False, 0, "none"
         began = time.monotonic()
@@ -124,6 +132,8 @@ class PublicationRequestMiddleware:
             await self.app(scope, receive, safe_send)
         except Exception:
             error = "response_interrupted" if started else "internal_error"
+            if not sanitize_errors:
+                raise
             if started:
                 raise RuntimeError("publication_request_failed") from None
             await safe_send(

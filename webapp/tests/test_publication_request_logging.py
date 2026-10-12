@@ -6,6 +6,7 @@ import logging
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+from uvicorn.logging import AccessFormatter
 
 
 @pytest.mark.parametrize(
@@ -31,7 +32,9 @@ def test_source_access_log_preserves_status_without_raw_path(path):
         None,
     )
     assert PublicationAccessFilter().filter(record)
-    rendered = record.getMessage()
+    rendered = AccessFormatter(
+        fmt='%(client_addr)s - "%(request_line)s" %(status_code)s', use_colors=False
+    ).format(record)
     assert "404" in rendered and "GET" in rendered
     assert "NOCODE" not in rendered and "NOSTATE" not in rendered and "NOTICKET" not in rendered
 
@@ -65,9 +68,14 @@ def test_safe_access_log_is_preserved_byte_for_byte():
         ("127.0.0.1", "GET", "/health", "1.1", 200),
         None,
     )
-    before = record.getMessage()
+    formatter = AccessFormatter(
+        fmt='%(client_addr)s - "%(request_line)s" %(status_code)s', use_colors=False
+    )
+    before = formatter.format(record)
+    original_args = record.args
     PublicationAccessFilter().filter(record)
-    assert record.getMessage() == before
+    assert formatter.format(record) == before
+    assert record.args == original_args
 
 
 @pytest.mark.parametrize("status", [200, 404, 422, 500])
@@ -186,3 +194,75 @@ async def test_normal_route_exception_and_cancellation_are_preserved():
 
 
 media_clients = _media_clients
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("started", [False, True])
+async def test_normal_route_with_sensitive_referer_preserves_original_exception(started, caplog):
+    from webapp.publications.request_logging import (
+        PublicationAccessFilter,
+        PublicationRequestMiddleware,
+    )
+
+    failure = ValueError("normal-route-error")
+    messages = []
+
+    async def normal(scope, receive, send):
+        if started:
+            await send({"type": "http.response.start", "status": 202, "headers": []})
+            await send({"type": "http.response.body", "body": b"part", "more_body": True})
+        raise failure
+
+    async def receive():
+        return {"type": "http.request", "body": b""}
+
+    async def send(message):
+        messages.append(message)
+
+    referer = b"https://host/api/v1/publications/oauth/callback?code=NOCODE"
+    with (
+        caplog.at_level(logging.INFO, logger="eikon.publication_requests"),
+        pytest.raises(ValueError) as caught,
+    ):
+        await PublicationRequestMiddleware(normal)(
+            {
+                "type": "http",
+                "path": "/health",
+                "method": "GET",
+                "headers": [(b"referer", referer)],
+            },
+            receive,
+            send,
+        )
+    assert caught.value is failure
+    assert [m["type"] for m in messages] == (
+        ["http.response.start", "http.response.body"] if started else []
+    )
+    if started:
+        assert messages[0]["status"] == 202
+        assert (b"cache-control", b"private, no-store") in messages[0]["headers"]
+        assert (b"referrer-policy", b"no-referrer") in messages[0]["headers"]
+    events = [
+        json.loads(r.getMessage()) for r in caplog.records if r.name == "eikon.publication_requests"
+    ]
+    assert events[-1]["route_class"] == "sensitive_referer"
+    assert events[-1]["status"] == (202 if started else 0)
+    assert events[-1]["error_class"] == ("response_interrupted" if started else "internal_error")
+    assert "NOCODE" not in caplog.text
+
+    record = logging.LogRecord(
+        "uvicorn.access",
+        logging.INFO,
+        __file__,
+        1,
+        '%s - "%s %s HTTP/%s" %d',
+        ("127.0.0.1", "GET", "/health", "1.1", 202 if started else 500),
+        None,
+    )
+    record.referer = referer.decode()
+    PublicationAccessFilter().filter(record)
+    rendered = AccessFormatter(fmt="%(request_line)s %(status_code)s", use_colors=False).format(
+        record
+    )
+    assert "GET" in rendered and str(202 if started else 500) in rendered
+    assert "NOCODE" not in rendered and "NOCODE" not in str(record.__dict__)
