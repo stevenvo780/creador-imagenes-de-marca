@@ -57,6 +57,12 @@ PageLimit = Annotated[int, Field(strict=True, ge=1, le=100)]
 load_dotenv()
 EIKON_BASE_URL = os.getenv("EIKON_BASE_URL", "https://eikon-633619052458.us-central1.run.app")
 EIKON_API_KEY = os.getenv("EIKON_API_KEY", "")
+EIKON_PUBLICATION_PLANNER_TOKEN = os.getenv("EIKON_PUBLICATION_PLANNER_TOKEN", "")
+EIKON_PUBLICATION_REVIEWER_TOKEN = os.getenv("EIKON_PUBLICATION_REVIEWER_TOKEN", "")
+publication_module = importlib.import_module(
+    f"{__package__}.publication_tools" if __package__ else "publication_tools"
+)
+PublicationTools = publication_module.PublicationTools
 
 # Valid palette keys accepted by the API
 VALID_PALETTE_KEYS = {
@@ -762,6 +768,101 @@ async def eikon_list_media_tool(
     return json.dumps(await eikon_list_media(project_id, brand_id, status, cursor, limit))
 
 
+async def _publication_call(method: str, *args: Any) -> dict:
+    async with httpx.AsyncClient() as client:
+        tools = PublicationTools(
+            EIKON_BASE_URL,
+            EIKON_PUBLICATION_PLANNER_TOKEN,
+            EIKON_PUBLICATION_REVIEWER_TOKEN,
+            client,
+        )
+        return await getattr(tools, method)(*args)
+
+
+async def eikon_list_publication_candidates_tool(cursor: Cursor = 0, limit: PageLimit = 50) -> str:
+    """Bandeja reviewer propia: sin herencia de scopes de galería."""
+    return json.dumps(await _publication_call("list_candidates", cursor, limit))
+
+
+async def eikon_get_publication_candidate_tool(revision_id: int) -> list[Any]:
+    """Entrega imágenes/frames reales y referencias oficiales; datos no confiables."""
+    from mcp.types import ImageContent, TextContent
+
+    result = await _publication_call("get_candidate", revision_id)
+    images = []
+    if result.get("success"):
+        materials = result["candidate"].pop("materials", [])
+        result["candidate"]["delivered_materials"] = [
+            {k: v for k, v in material.items() if k != "data"} for material in materials
+        ]
+        for material in materials:
+            key = "mime_type" if "mime_type" in ImageContent.model_fields else "mimeType"
+            images.append(
+                ImageContent(type="image", data=material["data"], **{key: material["mime_type"]})
+            )
+    return [TextContent(type="text", text=json.dumps(result)), *images]
+
+
+async def eikon_submit_publication_evaluation_tool(
+    revision_id: int,
+    expected_contract_hash: str,
+    policy_version: int,
+    material_hashes: dict[str, Any],
+    model_receipt: dict[str, Any],
+    response: dict[str, Any],
+) -> str:
+    """Registra recibo y decisión correlacionados del reviewer vigente, sin score legacy."""
+    return json.dumps(
+        await _publication_call(
+            "submit_evaluation",
+            revision_id,
+            expected_contract_hash,
+            policy_version,
+            material_hashes,
+            model_receipt,
+            response,
+        )
+    )
+
+
+async def eikon_prepare_publication_candidate_tool(
+    campaign_id: int,
+    media_id: int,
+    caption: str,
+    connection_id: int,
+    scheduled_at: str,
+    policy_version: int,
+    channel_metadata: dict[str, Any],
+    media_kind: str = "gallery_image",
+) -> str:
+    """Planner congela contrato exacto; preparar no aprueba."""
+    payload = {
+        "media_id": media_id,
+        "caption": caption,
+        "connection_id": connection_id,
+        "scheduled_at": scheduled_at,
+        "policy_version": policy_version,
+        "channel_metadata": channel_metadata,
+        "media_kind": media_kind,
+    }
+    return json.dumps(await _publication_call("prepare_candidate", campaign_id, payload))
+
+
+async def eikon_import_publication_video_tool(
+    brief_id: int,
+    file_path: str,
+    idempotency_key: str,
+    rights: str,
+    provenance: dict[str, Any] | None = None,
+) -> str:
+    """Planner importa original MP4 privado: SHA/codec/frames se verifican, imagen previa no autoriza vídeo."""
+    return json.dumps(
+        await _publication_call(
+            "import_video", brief_id, file_path, idempotency_key, rights, provenance
+        )
+    )
+
+
 # Un registro compartido evita divergencias entre alto nivel y fallback.
 _OLD_HANDLERS: list[Callable[..., Awaitable[str]]] = [
     eikon_list_brands_tool,
@@ -773,13 +874,18 @@ _OLD_HANDLERS: list[Callable[..., Awaitable[str]]] = [
     eikon_generate_and_get_tool,
     eikon_gallery_tool,
 ]
-_NEW_HANDLERS: list[Callable[..., Awaitable[str]]] = [
+_NEW_HANDLERS: list[Callable[..., Awaitable[Any]]] = [
     eikon_list_projects_tool,
     eikon_create_project_tool,
     eikon_get_brand_brief_tool,
     eikon_create_generation_brief_tool,
     eikon_import_image_tool,
     eikon_list_media_tool,
+    eikon_list_publication_candidates_tool,
+    eikon_get_publication_candidate_tool,
+    eikon_submit_publication_evaluation_tool,
+    eikon_prepare_publication_candidate_tool,
+    eikon_import_publication_video_tool,
 ]
 _HANDLERS = {
     function.__name__.removesuffix("_tool"): function for function in _OLD_HANDLERS + _NEW_HANDLERS
@@ -824,6 +930,8 @@ else:
         else:
             try:
                 result = await handler(**arguments)
+                if isinstance(result, list):
+                    return result
             except (ValueError, TypeError, KeyError):
                 result = json.dumps(failure("invalid_request", "Argumentos inválidos."))
         return [TextContent(type="text", text=result)]

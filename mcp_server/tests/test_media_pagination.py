@@ -75,7 +75,14 @@ def test_stdio_two_pages_filters_and_tenant_isolation(permission_db_clients, tmp
                 ):
                     await session.initialize()
                     tools = {tool.name: tool for tool in (await session.list_tools()).tools}
-                    assert len(tools) == 22
+                    assert {
+                        "eikon_list_publication_candidates",
+                        "eikon_get_publication_candidate",
+                        "eikon_submit_publication_evaluation",
+                        "eikon_prepare_publication_candidate",
+                        "eikon_import_publication_video",
+                    } <= set(tools)
+                    assert len(tools) == 27
                     for resource, expected, filters in [
                         ("projects", projects, {}),
                         (

@@ -38,6 +38,7 @@ from webapp.api.media import router as media_router
 from webapp.api.media_reviews import router as media_reviews_router
 from webapp.api.projects import router as projects_router
 from webapp.api.publication_media import router as publication_media_router
+from webapp.api.publication_reviewer import router as publication_reviewer_router
 from webapp.api.publications import router as publications_router
 from webapp.config import Settings, get_settings
 from webapp.jobs import WorkerPool, enqueue_batch, get_worker, set_worker
@@ -211,6 +212,7 @@ def create_app(
     app.include_router(projects_router)
     app.include_router(publications_router)
     app.include_router(publication_media_router)
+    app.include_router(publication_reviewer_router)
     app.include_router(generation_briefs_router)
     app.include_router(media_reviews_router)
     app.include_router(media_router)

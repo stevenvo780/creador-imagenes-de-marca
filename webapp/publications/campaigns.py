@@ -331,7 +331,8 @@ def freeze_revision(
         return _revision(con, tenant_id, rid)
 
 
-def _eligibility(con: db.DualConnection, snapshot: dict) -> list[str]:
+def _eligibility(con: db.DualConnection, snapshot: dict, now: int | None = None) -> list[str]:
+    now = int(time.time()) if now is None else now
     tenant = snapshot["tenant_id"]
     reasons = []
     campaign = _campaign(con, tenant, snapshot["campaign_id"])
@@ -365,12 +366,12 @@ def _eligibility(con: db.DualConnection, snapshot: dict) -> list[str]:
         or account["verified_at"] is None
         or account["scope_evidence"] == "unverified"
         or account["expiry_state"] == "unknown"
-        or (account["expires_at"] is not None and account["expires_at"] <= int(time.time()))
+        or (account["expires_at"] is not None and account["expires_at"] <= now)
     ):
         reasons.append("connection_unavailable")
     if account and snapshot["project_id"] not in account["project_ids"]:
         reasons.append("connection_project_unavailable")
-    reasons.extend(_policy_reasons(con, snapshot))
+    reasons.extend(_policy_reasons(con, snapshot, now=now))
     platform = snapshot["connection"]["platform"]
     if platform == "x":
         reasons.append("blocked_budget")
@@ -380,7 +381,8 @@ def _eligibility(con: db.DualConnection, snapshot: dict) -> list[str]:
     return list(dict.fromkeys(reasons))
 
 
-def _policy_reasons(con: db.DualConnection, snapshot: dict) -> list[str]:
+def _policy_reasons(con: db.DualConnection, snapshot: dict, now: int | None = None) -> list[str]:
+    now = int(time.time()) if now is None else now
     tenant = snapshot["tenant_id"]
     reasons = []
     policy = latest_policy(con, tenant)
@@ -393,7 +395,7 @@ def _policy_reasons(con: db.DualConnection, snapshot: dict) -> list[str]:
     if policy:
         rules = json.loads(policy["payload_json"])
         try:
-            require_active_policy(con, tenant, policy["version"], int(time.time()))
+            require_active_policy(con, tenant, policy["version"], now)
         except (Conflict, Forbidden):
             reasons.append("policy_unavailable")
         if (
@@ -411,7 +413,7 @@ def _policy_reasons(con: db.DualConnection, snapshot: dict) -> list[str]:
     return reasons
 
 
-def _revision(con: db.DualConnection, tenant: int, rid: int) -> dict:
+def _revision(con: db.DualConnection, tenant: int, rid: int, now: int | None = None) -> dict:
     row = con.execute(
         "SELECT * FROM publication_revisions WHERE tenant_id=? AND id=?", (tenant, rid)
     ).fetchone()
@@ -426,7 +428,7 @@ def _revision(con: db.DualConnection, tenant: int, rid: int) -> dict:
         "contract_hash": row["contract_hash"],
         "frozen_json": row["frozen_json"],
         "snapshot": snapshot,
-        "eligibility_reasons": _eligibility(con, snapshot),
+        "eligibility_reasons": _eligibility(con, snapshot, now=now),
     }
 
 

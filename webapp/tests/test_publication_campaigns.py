@@ -544,7 +544,14 @@ def test_campaign_schema_migration_rollback_no_seeds_and_idempotency(isolated_db
 
     db.init_db(isolated_db)
     with db.connect(isolated_db) as con:
-        for table in ("publication_revisions", "publication_video_media", "publication_campaigns"):
+        for table in (
+            "publication_ai_decisions",
+            "publication_evaluations",
+            "publication_material_deliveries",
+            "publication_revisions",
+            "publication_video_media",
+            "publication_campaigns",
+        ):
             con.execute(f"DROP TABLE {table}")
         con.execute("DELETE FROM schema_migrations WHERE version='publication_campaigns_v1'")
     execute = db.DualConnection.execute

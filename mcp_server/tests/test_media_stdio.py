@@ -124,7 +124,14 @@ def test_stdio_authenticated_flow_and_revocation(isolated_db, tmp_path, monkeypa
                     tools = (await session.list_tools()).tools
                     names = {tool.name for tool in tools}
                     assert names >= CANONICAL
-                    assert len(names) == 22  # 14 canónicas y 8 aliases históricos FastMCP.
+                    assert {
+                        "eikon_list_publication_candidates",
+                        "eikon_get_publication_candidate",
+                        "eikon_submit_publication_evaluation",
+                        "eikon_prepare_publication_candidate",
+                        "eikon_import_publication_video",
+                    } <= names
+                    assert len(names) == 27  # 22 anteriores y 5 de publicaciones.
 
                     async def call(tool_name, **arguments):
                         result = await session.call_tool(tool_name, arguments)

@@ -44,7 +44,7 @@ def lock_tenant(con: db.DualConnection, tenant_id: int) -> None:
     if con.dialect == "sqlite":
         con.execute("BEGIN IMMEDIATE")
     else:
-        con.execute("SELECT id FROM tenants WHERE id=? FOR UPDATE", (tenant_id,))
+        con.execute("SELECT id FROM tenants WHERE id=? FOR NO KEY UPDATE", (tenant_id,))
 
 
 def require_owner(con: db.DualConnection, tenant_id: int, owner_id: int) -> None:

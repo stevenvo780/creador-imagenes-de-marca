@@ -332,6 +332,90 @@ def _immutable_videos(con: db.DualConnection) -> None:
         )
 
 
+_EVALUATION_SCHEMA = """
+CREATE TABLE IF NOT EXISTS publication_material_deliveries (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ revision_id INTEGER NOT NULL,
+ grant_id INTEGER NOT NULL,
+ request_id TEXT NOT NULL,
+ contract_hash TEXT NOT NULL,
+ material_hashes_json TEXT NOT NULL,
+ review_mode TEXT NOT NULL CHECK(review_mode IN ('exact_image','frames_only_silent')),
+ evidence_json TEXT NOT NULL,
+ prompt_hash TEXT NOT NULL,
+ created_at BIGINT NOT NULL,
+ UNIQUE(tenant_id,id),
+ UNIQUE(tenant_id,grant_id,request_id),
+ FOREIGN KEY(tenant_id,revision_id) REFERENCES publication_revisions(tenant_id,id),
+ FOREIGN KEY(tenant_id,grant_id) REFERENCES publication_grants(tenant_id,id)
+);
+CREATE TABLE IF NOT EXISTS publication_evaluations (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ revision_id INTEGER NOT NULL,
+ grant_id INTEGER NOT NULL,
+ delivery_id INTEGER NOT NULL,
+ request_id TEXT NOT NULL,
+ policy_version INTEGER NOT NULL,
+ contract_hash TEXT NOT NULL,
+ material_hashes_json TEXT NOT NULL,
+ model_receipt_json TEXT NOT NULL,
+ response_json TEXT NOT NULL,
+ request_hash TEXT NOT NULL,
+ created_at BIGINT NOT NULL,
+ UNIQUE(tenant_id,id),
+ UNIQUE(tenant_id,grant_id,request_id),
+ FOREIGN KEY(tenant_id,revision_id) REFERENCES publication_revisions(tenant_id,id),
+ FOREIGN KEY(tenant_id,grant_id) REFERENCES publication_grants(tenant_id,id),
+ FOREIGN KEY(tenant_id,delivery_id) REFERENCES publication_material_deliveries(tenant_id,id),
+ FOREIGN KEY(tenant_id,policy_version) REFERENCES publication_policies(tenant_id,version)
+);
+CREATE TABLE IF NOT EXISTS publication_ai_decisions (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ revision_id INTEGER NOT NULL,
+ grant_id INTEGER NOT NULL,
+ evaluation_receipt_id INTEGER NOT NULL,
+ policy_version INTEGER NOT NULL,
+ contract_hash TEXT NOT NULL,
+ outcome TEXT NOT NULL CHECK(outcome IN ('approve','reject','hold')),
+ reason TEXT NOT NULL,
+ created_at BIGINT NOT NULL,
+ UNIQUE(tenant_id,id),
+ UNIQUE(tenant_id,evaluation_receipt_id),
+ FOREIGN KEY(tenant_id,revision_id) REFERENCES publication_revisions(tenant_id,id),
+ FOREIGN KEY(tenant_id,grant_id) REFERENCES publication_grants(tenant_id,id),
+ FOREIGN KEY(tenant_id,evaluation_receipt_id) REFERENCES publication_evaluations(tenant_id,id),
+ FOREIGN KEY(tenant_id,policy_version) REFERENCES publication_policies(tenant_id,version)
+);
+CREATE INDEX IF NOT EXISTS idx_publication_ai_decisions_revision ON publication_ai_decisions(tenant_id,revision_id,id);
+"""
+
+
+def _immutable_evaluations(con: db.DualConnection) -> None:
+    tables = (
+        "publication_material_deliveries",
+        "publication_evaluations",
+        "publication_ai_decisions",
+    )
+    if con.dialect == "postgres":
+        con.execute(
+            "CREATE OR REPLACE FUNCTION publication_evaluation_immutable() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'immutable_evaluation'; END $$"
+        )
+    for table in tables:
+        if con.dialect == "sqlite":
+            for operation in ("UPDATE", "DELETE"):
+                con.execute(
+                    f"CREATE TRIGGER IF NOT EXISTS {table}_no_{operation.lower()} BEFORE {operation} ON {table} BEGIN SELECT RAISE(ABORT, 'immutable_evaluation'); END"
+                )
+        else:
+            con.execute(f"DROP TRIGGER IF EXISTS {table}_immutable ON {table}")
+            con.execute(
+                f"CREATE TRIGGER {table}_immutable BEFORE UPDATE OR DELETE ON {table} FOR EACH ROW EXECUTE FUNCTION publication_evaluation_immutable()"
+            )
+
+
 def migrate_publications(db_url: str | Path | None) -> None:
     """Sin seeds: una instalación nueva no recibe autorización autónoma."""
     with db.connect(db_url) as con:
@@ -342,7 +426,9 @@ def migrate_publications(db_url: str | Path | None) -> None:
         con.execute(
             "CREATE TABLE IF NOT EXISTS schema_migrations(version TEXT PRIMARY KEY,applied_at BIGINT NOT NULL)"
         )
-        source = _SCHEMA + _CONNECTION_SCHEMA + _CAMPAIGN_SCHEMA + _HISTORY_SCHEMA
+        source = (
+            _SCHEMA + _CONNECTION_SCHEMA + _CAMPAIGN_SCHEMA + _HISTORY_SCHEMA + _EVALUATION_SCHEMA
+        )
         schema = db._schema_for_postgres(source) if con.dialect == "postgres" else source
         for statement in schema.split(";"):
             if statement.strip():
@@ -367,4 +453,9 @@ def migrate_publications(db_url: str | Path | None) -> None:
         con.execute(
             "INSERT INTO schema_migrations(version,applied_at) VALUES (?,?) ON CONFLICT(version) DO NOTHING",
             ("publication_history_v1", int(time.time())),
+        )
+        _immutable_evaluations(con)
+        con.execute(
+            "INSERT INTO schema_migrations(version,applied_at) VALUES (?,?) ON CONFLICT(version) DO NOTHING",
+            ("publication_evaluations_v1", int(time.time())),
         )
