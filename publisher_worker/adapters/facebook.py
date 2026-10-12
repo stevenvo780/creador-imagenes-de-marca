@@ -1,6 +1,8 @@
 """Foto/feed legado 3639fc80; Reels Meta/Postman, sin módulos Ads."""
 
 import re
+from datetime import datetime
+from urllib.parse import urlsplit
 
 from .base import Adapter, ProviderFailure, numeric, outcome, require_upload_url
 
@@ -125,6 +127,7 @@ class FacebookAdapter(Adapter):
 
     def reconcile(self, connection, result):
         try:
+            self.attempt_guard(connection, self.journal.attempt)
             known = self.journal.read("photo") or self.journal.read("feed") or {}
             remote = result.get("remote_id") or known.get("remote_id")
             if remote:
@@ -142,11 +145,7 @@ class FacebookAdapter(Adapter):
             if partial:
                 edge = "video_reels" if self.journal.read("reel_init") else "videos"
                 if edge == "videos":
-                    pending = outcome(digest=partial["receipt_sha256"], code="status_unavailable")
-                    pending["evidence"].update(
-                        processing_kind="facebook_upload", processing_id=partial["id"]
-                    )
-                    return pending
+                    return self._feed_video_lookup(connection, partial, remote)
                 body, digest = self.request(
                     connection,
                     "GET",
@@ -167,3 +166,73 @@ class FacebookAdapter(Adapter):
         except ProviderFailure as exc:
             return exc.result
         return outcome(remote_id=result.get("remote_id"), code="status_unavailable")
+
+    def _feed_video_lookup(self, connection, partial, known_remote):
+        """Unión documental exacta; ausencia en los últimos100 conserva incertidumbre."""
+        page, video = connection.get("remote_id"), partial.get("id")
+        if connection.get("platform") != "facebook" or not numeric(page) or not numeric(video):
+            return outcome(code="authorization_failed")
+        body, digest = self.request(
+            connection,
+            "GET",
+            f"{self.base}/{page}/published_posts",
+            params={
+                "fields": "id,from,is_published,permalink_url,created_time,attachments{media_type,target{id}}",
+                "limit": 100,
+            },
+        )
+        data = body.get("data")
+        matches = []
+        if isinstance(data, list) and len(data) <= 100:
+            matches = [post for post in data if self._video_post(post, page, video)]
+        if len(matches) == 1 and (not known_remote or matches[0]["id"] == known_remote):
+            post = matches[0]
+            proven = self.canonical(post["id"], digest, reconciled=True)
+            proven["permalink"] = post["permalink_url"]
+            proven["evidence"].update(
+                published_at=post["created_time"], published_at_source="provider"
+            )
+            return proven
+        pending = outcome(remote_id=known_remote, digest=digest, code="processing_pending")
+        pending["evidence"].update(processing_kind="facebook_upload", processing_id=video)
+        return pending
+
+    @staticmethod
+    def _video_post(post, page, video):
+        if not isinstance(post, dict):
+            return False
+        owner, attachments = post.get("from"), post.get("attachments")
+        if not isinstance(owner, dict) or not isinstance(attachments, dict):
+            return False
+        if owner.get("id") != page or post.get("is_published") is not True:
+            return False
+        remote = post.get("id")
+        if not isinstance(remote, str) or not re.fullmatch(
+            re.escape(page) + r"_[1-9][0-9]{0,31}", remote
+        ):
+            return False
+        try:
+            when = datetime.fromisoformat(post["created_time"].replace("Z", "+00:00"))
+            url = urlsplit(post["permalink_url"])
+            if (
+                when.tzinfo is None
+                or url.scheme != "https"
+                or url.hostname not in {"www.facebook.com", "facebook.com"}
+                or url.username
+                or url.password
+                or url.query
+                or url.fragment
+                or url.port not in (None, 443)
+                or not url.path
+            ):
+                return False
+        except (KeyError, ValueError, TypeError, AttributeError):
+            return False
+        data = attachments.get("data")
+        return isinstance(data, list) and any(
+            isinstance(item, dict)
+            and item.get("media_type") == "video"
+            and isinstance(item.get("target"), dict)
+            and item["target"].get("id") == video
+            for item in data
+        )

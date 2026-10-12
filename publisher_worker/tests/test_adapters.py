@@ -561,3 +561,109 @@ def test_transport_log_filter_never_contains_upload_url_secret():
     )
     assert _TransportLogFilter().filter(record)
     assert "SECRET" not in record.getMessage()
+
+
+def feed_video_post(**changes):
+    body = dict(
+        id="42_99",
+        **{"from": {"id": "42"}},
+        is_published=True,
+        permalink_url="https://www.facebook.com/42/posts/99",
+        created_time="2026-10-12T11:11:00+00:00",
+        attachments={"data": [{"media_type": "video", "target": {"id": "100"}}]},
+    )
+    body.update(changes)
+    return body
+
+
+def test_facebook_feed_video_recovers_exact_attachment_target(tmp_path):
+    import hashlib
+
+    from publisher_worker.adapters.facebook import FacebookAdapter
+
+    phase = journal(tmp_path)
+    assert phase.begin("video")
+    phase.complete("video", {"id": "100", "receipt_sha256": "a" * 64})
+    response = Response({"data": [feed_video_post()]})
+    transport = Transport([response])
+    adapter = FacebookAdapter(transport, graph_version="v26.0").bind(phase)
+    result = adapter.reconcile(account(), {"remote_id": None})
+    assert result["state"] == "published" and result["remote_id"] == "42_99"
+    assert result["permalink"] == "https://www.facebook.com/42/posts/99"
+    assert result["evidence"]["published_at"] == "2026-10-12T11:11:00+00:00"
+    assert adapter.proof == {
+        "remote_id": "42_99",
+        "sha256": hashlib.sha256(response.content).hexdigest(),
+        "operation": "remote_lookup",
+    }
+    assert [c[0] for c in transport.calls] == ["GET"]
+    assert transport.calls[0][1].endswith("/42/published_posts")
+    assert transport.calls[0][2]["params"]["limit"] == 100
+    assert "attachments{media_type,target{id}}" in transport.calls[0][2]["params"]["fields"]
+    assert "object_id" not in transport.calls[0][2]["params"]["fields"]
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"from": {"id": "43"}},
+        {"id": "43_99"},
+        {"id": "100"},
+        {"is_published": False},
+        {"is_published": "true"},
+        {"attachments": {"data": [{"media_type": "video", "target": {"id": "101"}}]}},
+        {"attachments": {"data": [{"media_type": "photo", "target": {"id": "100"}}]}},
+        {"attachments": {"data": "malformed"}},
+        {"created_time": "2026-10-12T11:00:00"},
+        {"permalink_url": "https://evil.example/post"},
+        {"permalink_url": "https://www.facebook.com/post?access_token=private"},
+    ],
+)
+def test_facebook_feed_video_misbound_or_malformed_stays_uncertain(tmp_path, changes):
+    from publisher_worker.adapters.facebook import FacebookAdapter
+
+    phase = journal(tmp_path)
+    assert phase.begin("video")
+    phase.complete("video", {"id": "100", "receipt_sha256": "a" * 64})
+    transport = Transport([Response({"data": [feed_video_post(**changes)]})])
+    adapter = FacebookAdapter(transport, graph_version="v26.0").bind(phase)
+    result = adapter.reconcile(account(), {"remote_id": None})
+    assert result["state"] == "uncertain" and result["remote_id"] is None
+    assert adapter.proof is None
+    assert [c[0] for c in transport.calls] == ["GET"]
+
+
+@pytest.mark.parametrize(
+    "response",
+    [
+        Response({"data": []}),
+        Response({"data": "wrong"}),
+        TimeoutError(),
+        Response(status=403),
+        Response({"data": [feed_video_post(), feed_video_post(id="42_88")]}),
+    ],
+)
+def test_facebook_feed_video_absence_timeout_or_ambiguous_never_reposts(tmp_path, response):
+    from publisher_worker.adapters.facebook import FacebookAdapter
+
+    phase = journal(tmp_path)
+    assert phase.begin("video")
+    phase.complete("video", {"id": "100", "receipt_sha256": "a" * 64})
+    transport = Transport([response])
+    adapter = FacebookAdapter(transport, graph_version="v26.0").bind(phase)
+    assert adapter.reconcile(account(), {"remote_id": None})["state"] == "uncertain"
+    assert [c[0] for c in transport.calls] == ["GET"]
+
+
+def test_facebook_feed_video_foreign_tenant_cannot_read_journal(tmp_path):
+    from publisher_worker.adapters.facebook import FacebookAdapter
+
+    phase = journal(tmp_path)
+    assert phase.begin("video")
+    phase.complete("video", {"id": "100", "receipt_sha256": "a" * 64})
+    transport = Transport([])
+    adapter = FacebookAdapter(transport, graph_version="v26.0").bind(phase)
+    conn = account()
+    conn["tenant_id"] = 8
+    assert adapter.reconcile(conn, {"remote_id": None})["state"] != "published"
+    assert transport.calls == []

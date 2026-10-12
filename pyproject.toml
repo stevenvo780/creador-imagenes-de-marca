@@ -72,7 +72,7 @@ files = [
   "gallery.py",
 ]
 explicit_package_bases = true
-exclude = "(?x)(^tests/|^webapp/tests/|^e2e/|^scripts/|^\\.venv/|^venv/)"
+exclude = "(?x)(^tests/|^webapp/tests/|^mcp_server/tests/|^publisher_worker/tests/|^e2e/|^scripts/|^\\.venv/|^venv/)"
 check_untyped_defs = true
 warn_redundant_casts = true
 warn_unused_ignores = true

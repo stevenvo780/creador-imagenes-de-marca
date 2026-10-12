@@ -486,3 +486,65 @@ def test_instagram_completion_survives_crash_before_ticket_revocation(
 
 
 __all__ = ["campaign_case", "campaign_clients", "delivery_case", "isolated_db"]
+
+
+def test_facebook_feed_video_durable_restart_confirms_without_new_start_or_post(tmp_path):
+    from publisher_worker.adapters.facebook import FacebookAdapter
+    from publisher_worker.client import run_once
+    from publisher_worker.outbox import Outbox
+    from publisher_worker.tests.test_adapters import Response, Transport, account, feed_video_post
+    from webapp.publications.contracts import canonical_hash
+
+    client = FakeClient()
+    client.snapshot["connection"] = account()
+    client.snapshot["connection"].pop("credential")
+    client.claim["contract_hash"] = canonical_hash(client.snapshot)
+    client.state, client.claimed = "uncertain", True
+    path = tmp_path / "restart.db"
+    box = Outbox(path, tenant_id=7)
+    box.reserve(client.claim, client.snapshot)
+    attempt = client.claim["attempt_id"]
+    phase = box.journal(attempt)
+    assert phase.begin("video")
+    phase.complete("video", {"id": "100", "receipt_sha256": "a" * 64})
+    transport = Transport([Response({"data": [feed_video_post()]})])
+    reopened = Outbox(path, tenant_id=7)
+    run_once(
+        client, reopened, {"facebook": FacebookAdapter(transport, graph_version="v26.0")}, 1600
+    )
+    result, _, confirmation = client.reports[-1]
+    assert result["state"] == "published" and result["remote_id"] == "42_99"
+    assert confirmation["remote_id"] == "42_99"
+    assert confirmation["normalized_destination"] == "facebook:42"
+    assert confirmation["attempt_id"] == attempt
+    assert confirmation["receipt"]["operation"] == "remote_lookup"
+    run_once(
+        client, reopened, {"facebook": FacebookAdapter(transport, graph_version="v26.0")}, 1700
+    )
+    assert client.start_count == 0
+    assert [c[0] for c in transport.calls] == ["GET"]
+    assert reopened.active() == []
+
+
+def test_facebook_feed_video_revoked_recovery_authority_never_reads_provider(tmp_path):
+    from publisher_worker.adapters.facebook import FacebookAdapter
+    from publisher_worker.client import run_once
+    from publisher_worker.outbox import Outbox
+    from publisher_worker.tests.test_adapters import Transport
+
+    client = FakeClient()
+    client.state, client.claimed = "uncertain", True
+    box = Outbox(tmp_path / "revoked.db", tenant_id=7)
+    box.reserve(client.claim, client.snapshot)
+    phase = box.journal(client.claim["attempt_id"])
+    assert phase.begin("video")
+    phase.complete("video", {"id": "100", "receipt_sha256": "a" * 64})
+
+    def revoked(claim):
+        raise PermissionError("grant_revoked")
+
+    client.reconciliation_credential = revoked
+    transport = Transport([])
+    run_once(client, box, {"facebook": FacebookAdapter(transport, graph_version="v26.0")}, 1600)
+    assert client.start_count == 0 and transport.calls == []
+    assert box.active()

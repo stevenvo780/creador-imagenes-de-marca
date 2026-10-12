@@ -5,7 +5,7 @@ from __future__ import annotations
 import io
 import json
 import warnings
-from typing import Annotated, Any, cast
+from typing import Annotated, Any
 
 from fastapi import (
     APIRouter,
@@ -86,7 +86,7 @@ async def upload_media(
         )
         response.status_code = 200 if result.pop("_replayed") else 201
         response.headers["Cache-Control"] = "private, no-store"
-        return cast(dict[str, Any], result)
+        return result
     except media_storage.MediaConflict as error:
         raise HTTPException(409, {"code": error.code, "retryable": error.retryable}) from error
     except KeyError as error:

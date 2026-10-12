@@ -143,6 +143,9 @@ def create_app(
             app.state.worker = None
 
     app = FastAPI(title="Eikon API", version="1.0.0", lifespan=lifespan)
+    from webapp.publications.request_logging import PublicationRequestMiddleware
+
+    app.add_middleware(PublicationRequestMiddleware)
     settings.data_root.mkdir(parents=True, exist_ok=True)
     init_db(settings.db_url)
 

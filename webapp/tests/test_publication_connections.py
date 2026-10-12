@@ -434,3 +434,41 @@ def test_import_upgrades_legacy_catalog_with_owner_scoped_evidence(publication_d
             assert con.execute("SELECT * FROM publication_connection_vault").fetchall() == []
     assert next(row for row in list_connections(url, *owners[0]) if row["id"] == cid) == result
     assert all(row["id"] != cid for row in list_connections(url, *owners[1]))
+
+
+@pytest.mark.parametrize("value", [None, True, "17", 0])
+def test_oauth_callback_invalid_tenant_fails_before_provider(publication_db, value):
+    from webapp.publications.contracts import Forbidden
+    from webapp.publications.oauth import finish_oauth
+
+    calls = []
+
+    class Client:
+        def exchange(self, *args):
+            calls.append(args)
+            raise AssertionError("must_not_reach_provider")
+
+    with pytest.raises(Forbidden):
+        finish_oauth(
+            publication_db[0],
+            {
+                "auth_method": "session",
+                "tenant_id": value,
+                "user_id": 1,
+                "session_binding": "own-session",
+            },
+            "state",
+            "code",
+            1000,
+            Client(),
+        )
+    assert calls == []
+
+
+@pytest.mark.parametrize("key,key_id", [(None, "key:1"), (b"a" * 32, None), (b"a", "key:1")])
+def test_nullable_oauth_vault_inputs_fail_closed(key, key_id):
+    from webapp.publications.contracts import Conflict, InvalidInput
+    from webapp.publications.oauth import _seal
+
+    with pytest.raises((Conflict, InvalidInput)):
+        _seal(key, key_id, 7, 3, b"private")

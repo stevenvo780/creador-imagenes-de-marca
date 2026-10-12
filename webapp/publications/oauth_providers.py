@@ -8,6 +8,7 @@ import re
 import stat
 from dataclasses import replace
 from pathlib import Path
+from typing import Literal
 
 import httpx
 
@@ -252,7 +253,9 @@ class OfficialOAuthClient:
         self._exchange_result = result
         return result
 
-    def _expiry_from_exchange(self, credential: dict, now: int) -> tuple[int | None, str]:
+    def _expiry_from_exchange(
+        self, credential: dict, now: int
+    ) -> tuple[int | None, Literal["known", "non_expiring", "unknown"]]:
         if credential is not getattr(self, "_exchange_result", None):
             return None, "unknown"
         expires = credential.get("expires_in")
@@ -275,7 +278,9 @@ class OfficialOAuthClient:
             raise Conflict("provider_verification_failed")
         return result
 
-    def _meta_expiry(self, debug: dict) -> tuple[int | None, str]:
+    def _meta_expiry(
+        self, debug: dict
+    ) -> tuple[int | None, Literal["known", "non_expiring", "unknown"]]:
         expiry = debug.get("expires_at")
         access = debug.get("data_access_expires_at")
         if type(expiry) is not int or expiry < 0:

@@ -91,10 +91,27 @@ class VerificationClient(Protocol):
     def verify(self, flow: dict, credential: dict, now: int) -> VerifiedAccount: ...
 
 
-def _hash(value: str) -> str:
+def _hash(value: object) -> str:
     if not isinstance(value, str) or not value or len(value) > 512 or not value.isascii():
         raise InvalidInput("invalid_oauth_binding")
     return hashlib.sha256(value.encode("ascii")).hexdigest()
+
+
+def _seal(
+    key: bytes | None, key_id: str | None, tenant_id: int, connection_id: int, secret: bytes
+) -> dict:
+    """Valida las entradas opcionales antes del contrato estricto del vault."""
+    if not isinstance(key, bytes):
+        raise Conflict("vault_key_unavailable")
+    if not isinstance(key_id, str):
+        raise InvalidInput("invalid_key_id")
+    return seal(key, key_id, tenant_id, connection_id, secret)
+
+
+def _unseal(key: bytes | None, tenant_id: int, connection_id: int, envelope: dict) -> bytes:
+    if not isinstance(key, bytes):
+        raise Conflict("vault_key_unavailable")
+    return unseal(key, tenant_id, connection_id, envelope)
 
 
 def authorization_url(
@@ -153,14 +170,15 @@ def start_oauth(
             raise InvalidInput("invalid_redirect_uri")
         session_hash = _hash(session_binding)
         positive_integer(now, "invalid_time", allow_zero=True)
-        row = _connection(con, tenant_id, connection_id)
+        cid = positive_integer(connection_id, "invalid_connection")
+        row = _connection(con, tenant_id, cid)
         if row["platform"] != config.platform or row["api_mode"] != config.api_mode:
             raise InvalidInput("invalid_oauth_mode")
         verifier = None
         verifier_envelope = None
         if platform == "x":
             verifier = secrets.token_urlsafe(48)
-            verifier_envelope = seal(key, key_id, tenant_id, row["id"], verifier.encode())
+            verifier_envelope = _seal(key, key_id, tenant_id, row["id"], verifier.encode())
         state = secrets.token_urlsafe(32)
         flow = {
             **public,
@@ -198,7 +216,7 @@ def start_oauth(
     }
 
 
-def _evidence_reason(row: dict, account: VerifiedAccount, now: int) -> str | None:
+def _evidence_reason(row: dict, account: VerifiedAccount | None, now: int) -> str | None:
     if not isinstance(account, VerifiedAccount) or not _public_evidence_safe(account):
         return "provider_verification_failed"
     official = {
@@ -258,13 +276,14 @@ def _public_evidence_safe(account: VerifiedAccount) -> bool:
 
 
 def _expiry_reason(account: VerifiedAccount, now: int) -> str | None:
+    expires_at = account.expires_at
     if account.expiry_state == "unknown":
         return "token_expiry_unknown"
     if account.expiry_state == "known" and (
-        type(account.expires_at) is not int or not 0 < account.expires_at <= 2**63 - 1
+        type(expires_at) is not int or not 0 < expires_at <= 2**63 - 1
     ):
         return "token_expiry_unknown"
-    if account.expiry_state == "known" and account.expires_at <= now:
+    if account.expiry_state == "known" and expires_at is not None and expires_at <= now:
         return "token_expired"
     if account.expiry_state == "non_expiring" and account.expires_at is not None:
         return "token_expiry_unknown"
@@ -293,16 +312,15 @@ def _store_verified(
         if row["version"] != expected_version:
             raise Conflict("connection_version_conflict")
         reason = reason or _evidence_reason(row, account, now)
-        envelope = None
-        if reason is None:
-            try:
-                envelope = seal(
-                    key, key_id, tenant_id, cid, canonical_json(account.credential).encode()
-                )
-            except (Conflict, InvalidInput):
-                reason = "vault_key_unavailable"
-        if reason:
+        if reason or not isinstance(account, VerifiedAccount):
+            reason = reason or "provider_verification_failed"
             return hold_connection(con, tenant_id, owner_id, cid, reason)
+        try:
+            envelope = _seal(
+                key, key_id, tenant_id, cid, canonical_json(account.credential).encode()
+            )
+        except (Conflict, InvalidInput):
+            return hold_connection(con, tenant_id, owner_id, cid, "vault_key_unavailable")
         scopes = sorted(set(account.scopes))
         capabilities = {"publish": True, "image": row["platform"] != "tiktok", "video": True}
         con.execute(
@@ -341,10 +359,11 @@ def finish_oauth(
     key_id: str | None = None,
     provider_error: bool = False,
 ) -> dict:
-    tenant_id, owner_id = session_owner.get("tenant_id"), session_owner.get("user_id")
     if session_owner.get("auth_method") != "session":
         raise Forbidden()
     try:
+        tenant_id = positive_integer(session_owner.get("tenant_id"), "invalid_tenant")
+        owner_id = positive_integer(session_owner.get("user_id"), "invalid_owner")
         state_hash = _hash(state)
         session_hash = _hash(session_owner.get("session_binding"))
     except InvalidInput as exc:
@@ -390,7 +409,7 @@ def finish_oauth(
     account = None
     try:
         verifier = (
-            unseal(
+            _unseal(
                 key, tenant_id, row["connection_id"], json.loads(row["verifier_envelope_json"])
             ).decode()
             if row["verifier_envelope_json"]
@@ -457,9 +476,11 @@ def import_credential(
     except Exception:
         reason = "provider_verification_failed"
     reason = reason or _evidence_reason(row, account, now)
-    if reason is None:
+    if reason is None and isinstance(account, VerifiedAccount):
         try:
-            seal(key, key_id, tenant_id, connection_id, canonical_json(account.credential).encode())
+            _seal(
+                key, key_id, tenant_id, connection_id, canonical_json(account.credential).encode()
+            )
         except (Conflict, InvalidInput):
             reason = "vault_key_unavailable"
     if dry_run:

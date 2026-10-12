@@ -1,6 +1,5 @@
 """Worker separado: claims acotados y capacidades exactas, sin cookies owner."""
 
-import logging
 import os
 import time
 from collections.abc import Callable, Iterator
@@ -16,6 +15,7 @@ from webapp.api.publications import _body, publication_owner
 from webapp.publications import deliveries, media_delivery, views
 from webapp.publications.auth import publication_worker
 from webapp.publications.contracts import Conflict, ProviderResult, PublicationError
+from webapp.publications.request_logging import PublicationAccessFilter, install_request_log_filters
 from webapp.publications.vault import service_key
 
 
@@ -36,27 +36,11 @@ media_router = APIRouter(
 _Id = Annotated[int, Path(ge=1, le=2**63 - 1)]
 
 
-class CapabilityAccessFilter(logging.Filter):
-    """Redacción de access log local. No certifica logs administrados/proxy."""
-
-    def filter(self, record: logging.LogRecord) -> bool:
-        if isinstance(record.args, tuple):
-            record.args = tuple(
-                "[publication-media-redacted]"
-                if isinstance(arg, str) and "/publications/delivery-media/" in arg
-                else arg
-                for arg in record.args
-            )
-        if isinstance(record.msg, str) and "/publications/delivery-media/" in record.msg:
-            record.msg = "[publication-media-redacted]"
-            record.args = ()
-        return True
+CapabilityAccessFilter = PublicationAccessFilter
 
 
 def install_capability_log_filter() -> None:
-    logger = logging.getLogger("uvicorn.access")
-    if not any(isinstance(item, CapabilityAccessFilter) for item in logger.filters):
-        logger.addFilter(CapabilityAccessFilter())
+    install_request_log_filters()
 
 
 def _call[T](fn: Callable[..., T], *args: Any, **kwargs: Any) -> T:

@@ -53,6 +53,9 @@
 **/*[Cc][Oo][Oo][Kk][Ii][Ee]*
 **/*[Ss][Ee][Ss][Ss][Ii][Oo][Nn]*
 
+# Única fuente pública requerida por el build; no admite sesiones privadas.
+!frontend/src/auth/useSession.ts
+
 # Artefactos locales y dependencias regenerables.
 .playwright*/
 **/.playwright*/**
