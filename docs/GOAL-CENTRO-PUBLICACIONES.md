@@ -504,5 +504,38 @@ sin omisiones. Lint/formato y tipos focales pasan; el aviso jinja2 y los tipos
 pendientes de tarea2 mantienen su atribución. No se repitió la suite anterior
 como prueba del nuevo commit.
 
-Faltan trabajador/adaptadores (7), panel integrado (8), operación Codex (9) y
-aceptación/despliegue (10). La automatización productiva sigue pendiente.
+En ese corte faltaban trabajador/adaptadores (7), panel integrado (8), operación
+Codex (9) y aceptación/despliegue (10). La automatización productiva sigue pendiente.
+
+
+## Tarea 7 completada y revisada: trabajador y adaptadores
+
+Código hasta `9fb8e588d082480e03eabf45eaa0b4a798105ec0`: trabajador aislado
+por empresa, outbox durable y fases registradas antes de cada operación remota.
+La recuperación consulta resultados sin repetir transferencias, finalizaciones
+o publicaciones. El permiso proviene del único ACK de inicio; una retención
+previa requiere nueva revisión inmutable y nueva evaluación para reintentar.
+
+Facebook e Instagram admiten fotos y contratos de vídeo/reels. Instagram declara
+REELS con share_to_feed explícito; TikTok exige un recibo por contenido y pruebas
+externas; X conserva el bloqueo económico antes de cada endpoint. El estado de
+procesamiento y un ID de upload nunca se presentan como publicación confirmada.
+Facebook feed vídeo conserva incertidumbre hasta comprobar el post final real.
+
+La revisión detectó que Instagram descartaba FINISHED durante recuperación.
+Corregido: persiste prueba de procesamiento y retira el enlace temporal incluso
+tras otra caída, manteniendo incertidumbre si falta el ID final. Revisión acotada
+aprobada, sin nuevos hallazgos importantes.
+
+Pruebas relevantes iniciales: 441 correctas y dos fallos de fixture al cruzar
+medianoche Bogotá; fallo reproducido en el código base y corregido únicamente
+en la fecha del caso hoy, con seis casos finales correctos en ambos motores.
+Corrección Instagram: cinco fallos RED esperados y **58 pruebas finales correctas**
+en sus dos módulos afectados, incluyendo HTTP SQLite/PostgreSQL. Lint, formato
+y tipos focales pasan con nota heredada explícita; no se inventa un total443 PASS.
+La verificación systemd en el checkout no pasó por falta de la ruta runtime;
+instalación real y diagnósticos pendientes se conservan para tarea10.
+
+No se instalaron ni activaron timers, no hubo publicaciones reales. Panel y
+consentimiento/backend TikTok (8), operación Codex (9), gates integrados y
+despliegue/aceptación por canal (10) siguen pendientes.

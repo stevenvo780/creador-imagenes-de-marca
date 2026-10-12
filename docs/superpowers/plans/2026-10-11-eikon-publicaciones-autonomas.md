@@ -333,7 +333,7 @@ WHERE tenant_id=? AND id=? AND state='reserved'
 
 **Interfaces:** `run_once(client,outbox,adapters,now)->dict`; `ProviderAdapter.preflight(connection,variant,now)->dict`, `ProviderAdapter.publish(connection,variant,attempt_id)->ProviderResult`, `ProviderAdapter.reconcile(connection,result)->ProviderResult`.
 
-- [ ] Tests sin red real: decisión rechazada, política revocada, credencial ajena, sin stock, SHA distinto, inicio no confirmado, HTTP 5xx/timeout tras POST y fallo de X sin afectar Facebook.
+- [x] Tests sin red real: decisión rechazada, política revocada, credencial ajena, sin stock, SHA distinto, inicio no confirmado, HTTP 5xx/timeout tras POST y fallo de X sin afectar Facebook.
 
 ```python
 def test_unconfirmed_start_never_posts(dispatch_case):
@@ -346,7 +346,7 @@ def test_unconfirmed_start_never_posts(dispatch_case):
 
 `dispatch_case` utiliza dobles explícitos para cliente y adaptadores, con outbox SQLite temporal; no monkeypatch global de producción.
 
-- [ ] Ejecutar tests fallidos. Outbox local por tenant registra autorización antes de POST; recuperar la confirmación de Eikón, no interpretar un timeout como fallo. Una vez `attempt_started` no hay reintentos de publicación implícitos.
+- [x] Ejecutar tests fallidos. Outbox local por tenant registra autorización antes de POST; recuperar la confirmación de Eikón, no interpretar un timeout como fallo. Una vez `attempt_started` no hay reintentos de publicación implícitos.
 
 ```python
 started = client.start_attempt(claim)
@@ -358,11 +358,13 @@ outbox.record_result(claim, result)
 client.report_attempt(claim, result)
 ```
 
-- [ ] Facebook: portar contrato foto/feed conservador; añadir vídeo/reels mediante adaptador independiente y tests de recibo/procesamiento, sin usar módulos de anuncios. Instagram: foto JPEG exacta y vídeo/reels con contenedor/status/publish. No afirmar que PNG recibido por un test simulado es formato aceptado por Meta.
-- [ ] `media_delivery` emite URL HTTPS temporal del único archivo autorizado, sin cookies/token de redes en URL, sin publicar galería; registrar key/TTL/SHA y revocar tras procesamiento o vencimiento. Verificar dominio/método de entrega antes de TikTok.
-- [ ] X: conservar contrato v2 imagen y vídeo por fases y guardia económica antes de cualquier endpoint facturable. TikTok: implementar creator_info, OAuth scopes reales, init foto/vídeo, dominio verificado, commercial/AIGC/privacidad y status final; si falta consentimiento no iniciar transferencia. Las pruebas privadas no se presentan como publicación pública. No asumir que las cards de marca existentes cumplen las reglas TikTok: evaluar una variante específica y comprobar restricciones de branding/agua añadida, sin alterar ni redibujar logos oficiales para pasar la prueba.
-- [ ] Añadir matriz explícita `unknown|verified|requires_auth|requires_provider_review|requires_post_consent|blocked_by_budget|unsupported_media|rate_limited`. Los fallos por destino no detienen el barrido de otras cuentas. Timer nuevo inicialmente disabled, red de prueba sin proveedores reales.
-- [ ] Revisión del paquete/concurrencia y commit `feat: add isolated publisher worker and channel adapters`.
+- [x] Facebook: portar contrato foto/feed conservador; añadir vídeo/reels mediante adaptador independiente y tests de recibo/procesamiento, sin usar módulos de anuncios. Instagram: foto JPEG exacta y vídeo/reels con contenedor/status/publish. No afirmar que PNG recibido por un test simulado es formato aceptado por Meta.
+- [x] `media_delivery` emite URL HTTPS temporal del único archivo autorizado, sin cookies/token de redes en URL, sin publicar galería; registrar key/TTL/SHA y revocar tras procesamiento o vencimiento. Verificar dominio/método de entrega antes de TikTok.
+- [x] X: conservar contrato v2 imagen y vídeo por fases y guardia económica antes de cualquier endpoint facturable. TikTok: implementar creator_info, OAuth scopes reales, init foto/vídeo, dominio verificado, commercial/AIGC/privacidad y status final; si falta consentimiento no iniciar transferencia. Las pruebas privadas no se presentan como publicación pública. No asumir que las cards de marca existentes cumplen las reglas TikTok: evaluar una variante específica y comprobar restricciones de branding/agua añadida, sin alterar ni redibujar logos oficiales para pasar la prueba.
+- [x] Añadir matriz explícita `unknown|verified|requires_auth|requires_provider_review|requires_post_consent|blocked_by_budget|unsupported_media|rate_limited`. Los fallos por destino no detienen el barrido de otras cuentas. Timer nuevo inicialmente disabled, red de prueba sin proveedores reales.
+- [x] Revisión del paquete/concurrencia y commit `feat: add isolated publisher worker and channel adapters`.
+
+**Recibo local:** trabajador/adaptadores revisados hasta `9fb8e588d082480e03eabf45eaa0b4a798105ec0`, tras una corrección de recuperación Instagram. Las interfaces y pruebas locales quedan completas; prueba real de proveedores, revocación de URL y runtime permanecen en Task 10. TikTok GET/start de consentimiento pertenece a Task 8.
 
 ## Task 8: recorrido integrado, política y panel
 
