@@ -2,11 +2,164 @@
 
 import json
 import logging
+import subprocess
+import sys
+import textwrap
+from pathlib import Path
 
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from uvicorn.logging import AccessFormatter
+
+
+@pytest.fixture(autouse=True)
+def isolated_request_logging(caplog):
+    """Captura local y restaura configuración para no alterar otras pruebas."""
+    loggers = [
+        logging.getLogger(name)
+        for name in ("eikon.publication_requests", "uvicorn.access", "uvicorn.error", "httpx")
+    ]
+    states = [
+        (logger.level, logger.propagate, logger.handlers[:], logger.filters[:])
+        for logger in loggers
+    ]
+    loggers[0].addHandler(caplog.handler)
+    try:
+        yield
+    finally:
+        for logger, (level, propagate, handlers, filters) in zip(loggers, states, strict=True):
+            logger.setLevel(level)
+            logger.propagate = propagate
+            logger.handlers = handlers
+            logger.filters = filters
+
+
+@pytest.mark.parametrize("configured_handler", ["none", "root", "dedicated"])
+def test_default_uvicorn_runtime_emits_allowlisted_diagnostics_once(configured_handler):
+    """Sin caplog: detecta INFO perdido, handler ausente y emisiones duplicadas."""
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            textwrap.dedent(
+                """
+                import asyncio
+                import json
+                import logging
+                import logging.config
+                import sys
+
+                from uvicorn.config import LOGGING_CONFIG
+                from webapp.publications.request_logging import (
+                    PublicationRequestMiddleware,
+                    install_request_log_filters,
+                )
+
+                logging.config.dictConfig(LOGGING_CONFIG)
+                root = logging.getLogger()
+                logger = logging.getLogger("eikon.publication_requests")
+                other = logging.getLogger("eikon.unrelated")
+                other.setLevel(logging.ERROR)
+                existing = logging.StreamHandler(sys.stderr)
+                existing.setFormatter(logging.Formatter("%(message)s"))
+                if sys.argv[1] == "root":
+                    root.addHandler(existing)
+                elif sys.argv[1] == "dedicated":
+                    logger.addHandler(existing)
+                before = (root.level, tuple(root.handlers), other.level)
+                access = logging.getLogger("uvicorn.access")
+                error = logging.getLogger("uvicorn.error")
+                uvicorn_handlers = (tuple(access.handlers), tuple(error.handlers))
+                install_request_log_filters()
+                installed = tuple(logger.handlers)
+                install_request_log_filters()
+
+                async def receive():
+                    return {"type": "http.request", "body": b"NOBODY"}
+
+                async def send(message):
+                    pass
+
+                async def run():
+                    for path, headers, status, fail in (
+                        ("/api/v1/publications/oauth/callback", [], 201, False),
+                        ("/api/v1/publications/delivery-media/NOTICKET", [], 404, False),
+                        ("/health", [(b"referer", b"https://host/api/v1/publications/oauth/callback?code=NOCODE")], 202, False),
+                        ("/api/v1/publications/oauth/callback", [], 500, True),
+                    ):
+                        async def app(scope, receive, send):
+                            if fail:
+                                raise ValueError("NOCODE NOSTATE NOTICKET NOBODY")
+                            await send({"type": "http.response.start", "status": status, "headers": []})
+                            await send({"type": "http.response.body", "body": b"NOBODY"})
+
+                        await PublicationRequestMiddleware(app)(
+                            {"type": "http", "path": path, "method": "GET",
+                             "headers": headers + [(b"authorization", b"NOTOKEN")],
+                             "query_string": b"code=NOCODE&state=NOSTATE"},
+                            receive, send,
+                        )
+                        access.info('%s - "%s %s HTTP/%s" %d',
+                                    "127.0.0.1", "GET", path + "?code=NOCODE", "1.1", status,
+                                    extra={"referer": "https://host/api/v1/publications/oauth/callback?state=NOSTATE"})
+
+                asyncio.run(run())
+                other.info("unrelated-info")
+                print(json.dumps({"runtime": {
+                    "root_unchanged": before == (root.level, tuple(root.handlers), other.level),
+                    "uvicorn_handlers_unchanged": uvicorn_handlers == (tuple(access.handlers), tuple(error.handlers)),
+                    "installer_idempotent": installed == tuple(logger.handlers),
+                    "existing_handler_preserved": sys.argv[1] != "dedicated" or existing in logger.handlers,
+                    "effective_level": logger.getEffectiveLevel(),
+                }}))
+                """
+            ),
+            configured_handler,
+        ],
+        cwd=Path(__file__).resolve().parents[2],
+        capture_output=True,
+        text=True,
+        timeout=20,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    output = result.stdout + result.stderr
+    for marker in ("NOCODE", "NOSTATE", "NOTICKET", "NOBODY", "NOTOKEN", "Traceback"):
+        assert marker not in output
+    assert "unrelated-info" not in output
+    payloads = [json.loads(line) for line in output.splitlines() if line.startswith("{")]
+    events = [payload for payload in payloads if "request_id" in payload]
+    assert len(events) == 4
+    assert [(event["route_class"], event["status"], event["error_class"]) for event in events] == [
+        ("oauth_callback", 201, "none"),
+        ("delivery_media", 404, "none"),
+        ("sensitive_referer", 202, "none"),
+        ("oauth_callback", 500, "internal_error"),
+    ]
+    for event in events:
+        assert set(event) == {
+            "request_id",
+            "route_class",
+            "method",
+            "status",
+            "duration_ms",
+            "error_class",
+        }
+        assert event["method"] == "GET" and event["duration_ms"] >= 0
+        assert len(event["request_id"]) == 32
+    assert len({event["request_id"] for event in events}) == 4
+    runtime = next(payload["runtime"] for payload in payloads if "runtime" in payload)
+    assert runtime == {
+        "root_unchanged": True,
+        "uvicorn_handlers_unchanged": True,
+        "installer_idempotent": True,
+        "existing_handler_preserved": True,
+        "effective_level": logging.INFO,
+    }
+    access_lines = [line for line in result.stdout.splitlines() if '"GET ' in line]
+    assert len(access_lines) == 4
+    assert all("/publication/" in line for line in access_lines)
 
 
 @pytest.mark.parametrize(

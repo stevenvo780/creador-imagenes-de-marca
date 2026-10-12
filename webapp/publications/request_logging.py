@@ -72,6 +72,14 @@ class PublicationAccessFilter(logging.Filter):
 
 
 def install_request_log_filters() -> None:
+    diagnostics = logging.getLogger("eikon.publication_requests")
+    diagnostics.setLevel(logging.INFO)
+    if not diagnostics.handlers:
+        handler = logging.StreamHandler()
+        handler.setFormatter(logging.Formatter("%(message)s"))
+        diagnostics.addHandler(handler)
+    # Salida local única, sin depender del WARNING de root ni duplicar por propagación.
+    diagnostics.propagate = False
     for name in ("uvicorn.access", "uvicorn.error", "httpx"):
         logger = logging.getLogger(name)
         if not any(isinstance(item, PublicationAccessFilter) for item in logger.filters):
