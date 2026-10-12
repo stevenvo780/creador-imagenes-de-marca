@@ -1,0 +1,24 @@
+# Copiar como eikon-publisher@.service. Sin habilitar hasta gate Task10.
+[Unit]
+Description=Eikon publisher aislado por empresa %i
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/etc/eikon/publisher-%i.enabled
+
+[Service]
+Type=oneshot
+User=eikon-publisher
+Group=eikon-publisher
+WorkingDirectory=/opt/eikon
+EnvironmentFile=/etc/eikon/publisher-%i.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/opt/eikon/.venv/bin/python -m publisher_worker
+UMask=0077
+StateDirectory=eikon-publisher-%i
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+TimeoutStartSec=1200
+# Un kill no concede nuevo POST: el siguiente barrido sólo concilia outbox.
+Restart=no

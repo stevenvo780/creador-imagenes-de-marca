@@ -1,0 +1,13 @@
+# Copiar como eikon-publisher@.timer; instalación NO equivale enable/start.
+[Unit]
+Description=Barrido de publicaciones Eikon por empresa %i (disabled inicialmente)
+ConditionPathExists=/etc/eikon/publisher-%i.enabled
+
+[Timer]
+OnCalendar=*-*-* *:*:00
+RandomizedDelaySec=10
+Persistent=false
+Unit=eikon-publisher@%i.service
+
+[Install]
+WantedBy=timers.target

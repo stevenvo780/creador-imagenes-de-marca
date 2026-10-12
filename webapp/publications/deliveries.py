@@ -44,6 +44,69 @@ DBUrl = str | Path | None
 LEASE_SECONDS = 300
 _PRESTART = ("scheduled", "held", "reserved")
 _TERMINAL = ("published", "failed", "withdrawn")
+PRESTART_HOLD_REASONS = frozenset(
+    {
+        "unknown",
+        "requires_auth",
+        "requires_provider_review",
+        "requires_post_consent",
+        "blocked_by_budget",
+        "unsupported_media",
+        "rate_limited",
+    }
+)
+
+
+def _worker_hold_event(con: db.DualConnection, row: dict) -> dict | None:
+    return con.execute(
+        "SELECT payload_json FROM publication_events WHERE tenant_id=? AND attempt_id=? AND event_key='worker:prestart_hold' AND kind='held'",
+        (row["tenant_id"], row["attempt_id"]),
+    ).fetchone()
+
+
+def hold_claim(
+    db_url: DBUrl, principal: dict, claim_id: str, contract_hash: str, reason: str, now: int
+) -> dict:
+    """Retención durable antes de POST; nunca convierte un claim en autorización."""
+    if not isinstance(reason, str) or reason not in PRESTART_HOLD_REASONS:
+        raise InvalidInput("invalid_prestart_reason")
+    with db.connect(db_url) as con:
+        lock_tenant(con, _tenant(principal))
+        row = bound_claim(con, principal, claim_id, now, active=False)
+        if row["contract_hash"] != contract_hash or row["started_at"] is not None:
+            raise Conflict("prestart_hold_conflict")
+        old = _worker_hold_event(con, row)
+        if old is not None:
+            if json.loads(old["payload_json"])["reasons"] != [reason]:
+                raise Conflict("event_idempotency_conflict")
+            return _public(row)
+        bound_claim(con, principal, claim_id, now, active=True)
+        changed = con.execute(
+            "UPDATE publication_deliveries SET state='held',lease_until=NULL,hold_reasons_json=? WHERE tenant_id=? AND id=? AND claim_id=? AND worker_grant_id=? AND contract_hash=? AND state='reserved' AND started_at IS NULL AND lease_until>? AND expires_at>?",
+            (
+                json.dumps([reason]),
+                row["tenant_id"],
+                row["id"],
+                claim_id,
+                principal["grant_id"],
+                contract_hash,
+                now,
+                now,
+            ),
+        ).rowcount
+        if changed != 1:
+            raise Conflict("prestart_hold_conflict")
+        _event(
+            con,
+            row,
+            row["attempt_id"],
+            "worker:prestart_hold",
+            "held",
+            now,
+            worker_grant_id=principal["grant_id"],
+            reasons=[reason],
+        )
+        return _public(_delivery(con, row["tenant_id"], row["id"]))
 
 
 def _tenant(principal: dict) -> int:
@@ -356,6 +419,8 @@ def schedule_revision(db_url: DBUrl, tenant_id: int, revision_id: int, now: int)
         ).fetchone()
         if row is not None and (row["state"] not in _PRESTART or row["state"] == "reserved"):
             return _public(row)
+        if row is not None and _worker_hold_event(con, row) is not None:
+            return _public(row)
         if row is None:
             # No crea autorización: estado inicial held hasta revalidación dentro del mismo lock.
             con.execute(
@@ -393,6 +458,8 @@ def claim_due(db_url: DBUrl, principal: dict, now: int) -> Claim | None:
             (tenant, now),
         ).fetchall()
         for row in rows:
+            if _worker_hold_event(con, row) is not None:
+                continue
             if row["state"] == "reserved" and row["lease_until"] > now and now < row["expires_at"]:
                 continue
             reasons, eligibility = _reasons(con, row, now)

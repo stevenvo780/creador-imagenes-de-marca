@@ -303,11 +303,7 @@ def test_history_actual_day_and_ambiguous_time_hold(delivery_case, timestamp, re
     from webapp.publications.deliveries import claim_due, schedule_revision
 
     c = delivery_case
-    value = (
-        datetime.fromtimestamp(c["now"] - 7200, UTC).isoformat()
-        if timestamp == "today"
-        else timestamp
-    )
+    value = datetime.fromtimestamp(c["now"], UTC).isoformat() if timestamp == "today" else timestamp
     rows = [
         dict(
             source_delivery_id=str(i),

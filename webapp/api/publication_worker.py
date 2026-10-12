@@ -4,7 +4,7 @@ import logging
 import os
 import time
 from collections.abc import Callable, Iterator
-from typing import Annotated, Any, cast
+from typing import Annotated, Any, Literal, cast
 from urllib.parse import urlsplit
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request, Response
@@ -74,6 +74,18 @@ class StartInput(EmptyInput):
     contract_hash: StrictStr
 
 
+class HoldInput(StartInput):
+    reason: Literal[
+        "unknown",
+        "requires_auth",
+        "requires_provider_review",
+        "requires_post_consent",
+        "blocked_by_budget",
+        "unsupported_media",
+        "rate_limited",
+    ]
+
+
 class ReportInput(EmptyInput):
     event_key: StrictStr
     result: dict
@@ -140,6 +152,26 @@ async def start(
         principal,
         claim_id,
         body["contract_hash"],
+        int(time.time()),
+    )
+
+
+@router.post("/claims/{claim_id}/hold")
+async def hold(
+    claim_id: str,
+    request: Request,
+    response: Response,
+    principal: dict = Depends(publication_worker),
+) -> dict:
+    body = await _input(request, HoldInput)
+    _private(response)
+    return _call(
+        deliveries.hold_claim,
+        get_settings(request).db_url,
+        principal,
+        claim_id,
+        body["contract_hash"],
+        body["reason"],
         int(time.time()),
     )
 

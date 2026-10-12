@@ -6,6 +6,7 @@ import json
 import time
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Literal
 from zoneinfo import ZoneInfo
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr, ValidationError
@@ -36,6 +37,7 @@ from .policies import (
 
 class ChannelMetadata(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
+    publication_format: Literal["feed", "reel"] = "feed"
     links: list[StrictStr] = Field(default_factory=list, max_length=20)
     sources: list[StrictStr] = Field(default_factory=list, max_length=20)
     context: StrictStr = Field(default="", max_length=12000)
