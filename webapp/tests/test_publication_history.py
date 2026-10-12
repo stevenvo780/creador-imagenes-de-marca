@@ -757,3 +757,204 @@ def test_destination_mapping_event_cannot_be_inserted_via_generic_append(publica
         append_event(
             url, tenant, imported["attempt_id"], "history:destination", "destination_reconciled", {}
         )
+
+
+@pytest.mark.parametrize("field", ["receipt", "evidence"])
+@pytest.mark.parametrize("invalid", ["not-an-object", [{"remote_id": "1"}], True, False, None, {}])
+def test_latest_reconciliation_requires_nonempty_object_and_preserves_originals(
+    publication_db, field, invalid
+):
+    from webapp.publications.ledger import append_event, history_ready, import_history, seen_media
+
+    url, owners, _ = publication_db
+    tenant = owners[0][0]
+    row = item(state="uncertain")
+    imported = import_history(url, tenant, "uncertain", [row], evidence({"uncertain": [row]}))[
+        "items"
+    ][0]
+    with db.connect(url) as con:
+        original = con.execute(
+            "SELECT * FROM publication_history WHERE tenant_id=?", (tenant,)
+        ).fetchall()
+        guard = con.execute(
+            "SELECT * FROM publication_media_guards WHERE tenant_id=?", (tenant,)
+        ).fetchall()
+        event = con.execute(
+            "SELECT * FROM publication_events WHERE tenant_id=?", (tenant,)
+        ).fetchall()[0]
+    append_event(
+        url,
+        tenant,
+        imported["attempt_id"],
+        "confirmed",
+        "reconciled",
+        {"confirmed": True, "state": "published", "receipt": {"remote_id": "1"}},
+    )
+    assert history_ready(url, tenant, "facebook:7")
+    append_event(
+        url,
+        tenant,
+        imported["attempt_id"],
+        "malformed-latest",
+        "reconciled",
+        {"confirmed": True, "state": "published", field: invalid},
+    )
+    assert not history_ready(url, tenant, "facebook:7")
+    assert seen_media(url, tenant, "facebook:7", "a" * 64)
+    with db.connect(url) as con:
+        assert (
+            con.execute("SELECT * FROM publication_history WHERE tenant_id=?", (tenant,)).fetchall()
+            == original
+        )
+        assert (
+            con.execute(
+                "SELECT * FROM publication_media_guards WHERE tenant_id=?", (tenant,)
+            ).fetchall()
+            == guard
+        )
+        assert (
+            con.execute(
+                "SELECT * FROM publication_events WHERE tenant_id=? ORDER BY id", (tenant,)
+            ).fetchall()[0]
+            == event
+        )
+
+
+@pytest.mark.parametrize(
+    "receipt,evidence_value",
+    [
+        ({}, {"observation_id": "1"}),
+        ({"remote_id": "1"}, None),
+        ("not-an-object", {"observation_id": "1"}),
+    ],
+)
+def test_reconciliation_accepts_at_least_one_valid_nonempty_object(
+    publication_db, receipt, evidence_value
+):
+    from webapp.publications.ledger import append_event, history_ready, import_history
+
+    url, owners, _ = publication_db
+    tenant = owners[0][0]
+    row = item(state="uncertain")
+    imported = import_history(url, tenant, "uncertain", [row], evidence({"uncertain": [row]}))[
+        "items"
+    ][0]
+    append_event(
+        url,
+        tenant,
+        imported["attempt_id"],
+        "confirmed",
+        "reconciled",
+        {"confirmed": True, "state": "published", "receipt": receipt, "evidence": evidence_value},
+    )
+    assert history_ready(url, tenant, "facebook:7")
+
+
+def test_malformed_reconciliation_state_fails_closed_without_losing_guard(publication_db):
+    from webapp.publications.ledger import append_event, history_ready, import_history, seen_media
+
+    url, owners, _ = publication_db
+    tenant = owners[0][0]
+    row = item(state="uncertain")
+    imported = import_history(url, tenant, "uncertain", [row], evidence({"uncertain": [row]}))[
+        "items"
+    ][0]
+    append_event(
+        url,
+        tenant,
+        imported["attempt_id"],
+        "bad-state",
+        "reconciled",
+        {"confirmed": True, "state": ["published"], "receipt": {"remote_id": "1"}},
+    )
+    assert not history_ready(url, tenant, "facebook:7")
+    assert seen_media(url, tenant, "facebook:7", "a" * 64)
+
+
+def test_separate_cuts_close_independently_after_other_destination_mapping(publication_db):
+    from webapp.publications.ledger import (
+        history_ready,
+        import_history,
+        reconcile_history_destination,
+        seen_media,
+    )
+
+    url, owners, _ = publication_db
+    tenant = owners[0][0]
+    a = item(100, "instagram:900")
+    import_history(url, tenant, "source-a", [a], evidence({"source-a": [a]}, cut_id="cut-a"))
+    assert history_ready(url, tenant, "instagram:900")
+    b = item(200, None, platform="instagram")
+    imported = import_history(
+        url, tenant, "source-b", [b], evidence({"source-b": [b]}, cut_id="cut-b")
+    )["items"][0]
+    assert not history_ready(url, tenant, "instagram:900")
+    with db.connect(url) as con:
+        original_cuts = con.execute(
+            "SELECT * FROM publication_history_cuts WHERE tenant_id=? ORDER BY cut_id", (tenant,)
+        ).fetchall()
+    reconcile_history_destination(
+        url,
+        tenant,
+        "source-b",
+        "200",
+        imported["item_hash"],
+        "b" * 64,
+        "instagram:901",
+        mapping_proof(post_id="200", account_id="901", platform="instagram"),
+    )
+    assert history_ready(url, tenant, "instagram:900")
+    assert history_ready(url, tenant, "instagram:901")
+    assert seen_media(url, tenant, "instagram:900", "a" * 64)
+    assert seen_media(url, tenant, "instagram:901", "a" * 64)
+    with db.connect(url) as con:
+        assert (
+            con.execute(
+                "SELECT * FROM publication_history_cuts WHERE tenant_id=? ORDER BY cut_id",
+                (tenant,),
+            ).fetchall()
+            == original_cuts
+        )
+
+
+def test_effective_cut_selection_does_not_skip_missing_or_unmapped_items(publication_db):
+    from webapp.publications.ledger import (
+        history_ready,
+        import_history,
+        reconcile_history_destination,
+    )
+
+    url, owners, _ = publication_db
+    tenant = owners[0][0]
+    a = item(100, "instagram:900")
+    import_history(url, tenant, "source-a", [a], evidence({"source-a": [a]}, cut_id="cut-a"))
+    b, missing = item(200, None, platform="instagram"), item(201, None, platform="instagram")
+    proof = evidence({"source-b": [b], "missing-source": [missing]}, cut_id="cut-b")
+    first = import_history(url, tenant, "source-b", [b], proof)["items"][0]
+    reconcile_history_destination(
+        url,
+        tenant,
+        "source-b",
+        "200",
+        first["item_hash"],
+        "b" * 64,
+        "instagram:901",
+        mapping_proof(post_id="200", account_id="901", platform="instagram"),
+    )
+    assert not history_ready(url, tenant, "instagram:900")
+    assert not history_ready(url, tenant, "instagram:901")
+    second = import_history(url, tenant, "missing-source", [missing], proof)["items"][0]
+    assert not history_ready(url, tenant, "instagram:900")
+    assert not history_ready(url, tenant, "instagram:901")
+    reconcile_history_destination(
+        url,
+        tenant,
+        "missing-source",
+        "201",
+        second["item_hash"],
+        "b" * 64,
+        "instagram:901",
+        mapping_proof(post_id="201", account_id="901", platform="instagram"),
+    )
+    assert history_ready(url, tenant, "instagram:900")
+    assert history_ready(url, tenant, "instagram:901")

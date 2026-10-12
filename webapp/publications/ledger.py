@@ -595,10 +595,16 @@ def _reconciled(con: db.DualConnection, tenant_id: int, row: dict) -> bool:
     if event is None:
         return False
     payload = json.loads(event["payload_json"])
+    state = payload.get("state")
+    receipt, evidence = payload.get("receipt"), payload.get("evidence")
     return (
         payload.get("confirmed") is True
-        and payload.get("state") in {"published", "failed", "cancelled", "withdrawn"}
-        and bool(payload.get("receipt") or payload.get("evidence"))
+        and isinstance(state, str)
+        and state in {"published", "failed", "cancelled", "withdrawn"}
+        and (
+            (isinstance(receipt, dict) and bool(receipt))
+            or (isinstance(evidence, dict) and bool(evidence))
+        )
     )
 
 
@@ -644,6 +650,37 @@ def _cut_ready(con: db.DualConnection, tenant_id: int, dest: str, manifest: dict
     return relevant
 
 
+def _cut_relevant(con: db.DualConnection, tenant_id: int, dest: str, manifest: dict) -> bool:
+    """Null retiene su plataforma sólo hasta verificar su destino efectivo.
+
+    Una fila prevista todavía ausente o distinta conserva relevancia para la
+    plataforma: _cut_ready rechazará el corte sin omitir esa fuente/ítem.
+    """
+    platform = dest.split(":", 1)[0]
+    for source in manifest["sources"]:
+        for value in source["items"]:
+            expected = _item(value)
+            if expected["platform"] != platform:
+                continue
+            if expected.get("normalized_destination") is not None:
+                if (
+                    _canonical_destination(con, tenant_id, expected["normalized_destination"])
+                    == dest
+                ):
+                    return True
+                continue
+            row = con.execute(
+                "SELECT * FROM publication_history WHERE tenant_id=? AND source_id=? AND source_delivery_id=?",
+                (tenant_id, source["source_id"], expected["source_delivery_id"]),
+            ).fetchone()
+            if row is None or row["item_hash"] != canonical_hash(expected):
+                return True
+            effective = _effective_destination(con, tenant_id, dict(row))
+            if effective is None or effective == dest:
+                return True
+    return False
+
+
 def history_ready_in_transaction(
     con: db.DualConnection, tenant_id: int, normalized_destination: str
 ) -> bool:
@@ -660,15 +697,7 @@ def history_ready_in_transaction(
     relevant = []
     for cut in cuts:
         manifest = json.loads(cut["manifest_json"])
-        if any(
-            (
-                _canonical_destination(con, tenant_id, row["normalized_destination"]) == dest
-                if row.get("normalized_destination") is not None
-                else row["platform"] == dest.split(":")[0]
-            )
-            for source in manifest["sources"]
-            for row in source["items"]
-        ):
+        if _cut_relevant(con, tenant_id, dest, manifest):
             relevant.append(manifest)
     if not relevant or not all(_cut_ready(con, tenant_id, dest, manifest) for manifest in relevant):
         return False
