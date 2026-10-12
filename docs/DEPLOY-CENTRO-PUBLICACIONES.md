@@ -288,7 +288,11 @@ No se creó claim ni se llamó a un proveedor para publicar.
 
 El panel autenticado de Brave ya muestra las tres conexiones activas y política
 1; el error anterior desapareció tras la recarga. No se atribuye el cambio del
-panel a un levantamiento de Shields no comprobado. Campañas y entregas siguen
+panel a un levantamiento de Shields no comprobado. Después de revisión
+independiente se prepararon 17 campañas owner, una por marca/proyecto propio,
+IDs 1–17. GET de producción y el panel de Brave comprobaron el catálogo exacto.
+El operador conserva journal previo a cada POST y prohíbe repetición automática
+ante ACK incierto; no crea revisiones, decisiones ni entregas. Las entregas siguen
 vacías; el servicio/timer de server2 y las pruebas remotas permanecen pendientes.
 Se pidió reconectar únicamente el MCP de Eikón en Codex para cargar las nuevas
 herramientas, sin otra autenticación social ni traslado de cookies.
