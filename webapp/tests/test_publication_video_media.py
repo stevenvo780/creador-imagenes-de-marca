@@ -370,3 +370,210 @@ def test_supported_aac_audio_and_unsupported_mpeg4_video(video_case, tmp_path):
             assert response.json()["sha256"] == hashlib.sha256(path.read_bytes()).hexdigest()
         else:
             assert response.json()["detail"] == "unsupported_video_codec"
+
+
+@pytest.mark.parametrize("owner_state", ["rejected", "archived"])
+def test_ambiguous_commit_followed_by_owner_state_preserves_original(
+    video_case, mp4, monkeypatch, owner_state
+):
+    from contextlib import contextmanager
+
+    url, ((a, _, _, job), _), app = video_case
+    connect = db.connect
+    raised = False
+
+    @contextmanager
+    def ambiguous_commit(db_url):
+        nonlocal raised
+        with connect(db_url) as con:
+            before = con.execute("SELECT id,status FROM publication_video_media").fetchall()
+            yield con
+            after = con.execute("SELECT id,status FROM publication_video_media").fetchall()
+            admitted = [
+                row
+                for row in after
+                if row["status"] == "pending_review"
+                and {"id": row["id"], "status": "ingesting"} in before
+            ]
+        # Commit real completado; el owner avanza el estado antes de conciliar.
+        if admitted and not raised:
+            raised = True
+            with connect(db_url) as con:
+                con.execute(
+                    "UPDATE publication_video_media SET status=? WHERE id=?",
+                    (owner_state, admitted[0]["id"]),
+                )
+            raise OSError("injected-ambiguous-commit")
+
+    monkeypatch.setattr(db, "connect", ambiguous_commit)
+    response = video_upload(a, job, mp4)
+    assert response.status_code == 201, response.text
+    assert response.json()["status"] == owner_state
+    assert raised is True
+    with connect(url) as con:
+        row = con.execute("SELECT * FROM publication_video_media").fetchone()
+    assert row["status"] == owner_state
+    assert app.state.storage.open(row["tenant_id"], row["storage_key"]) == mp4
+
+
+def _chunked_video_request(
+    app, headers, job, file_chunks, path="/api/v1/publications/media/videos", *, trailer=True
+):
+    """ASGI real: conserva fronteras chunked y cuenta recepción de bytes de archivo."""
+    import asyncio
+
+    boundary = b"eikon-real-chunked-boundary"
+    prefix = b""
+    for name, value in (
+        ("brief_id", str(job["id"])),
+        ("source", "codex"),
+        ("provenance", "{}"),
+        ("rights", "owned"),
+    ):
+        prefix += (
+            b"--"
+            + boundary
+            + b'\r\nContent-Disposition: form-data; name="'
+            + name.encode()
+            + b'"\r\n\r\n'
+            + value.encode()
+            + b"\r\n"
+        )
+    prefix += (
+        b"--"
+        + boundary
+        + b'\r\nContent-Disposition: form-data; name="file"; filename="upload.mp4"\r\nContent-Type: video/mp4\r\n\r\n'
+    )
+    events = [
+        (prefix, 0),
+        *((chunk, len(chunk)) for chunk in file_chunks),
+        *(([(b"\r\n--" + boundary + b"--\r\n", 0)]) if trailer else []),
+    ]
+    received = {"calls": 0, "body_bytes": 0, "file_bytes": 0}
+    messages = []
+
+    async def receive():
+        index = received["calls"]
+        if index >= len(events):
+            return {"type": "http.disconnect"}
+        data, file_size = events[index]
+        received["calls"] += 1
+        received["body_bytes"] += len(data)
+        received["file_bytes"] += file_size
+        return {"type": "http.request", "body": data, "more_body": index < len(events) - 1}
+
+    async def send(message):
+        messages.append(message)
+
+    scope = {
+        "type": "http",
+        "asgi": {"version": "3.0"},
+        "http_version": "1.1",
+        "method": "POST",
+        "scheme": "http",
+        "path": path,
+        "raw_path": path.encode(),
+        "root_path": "",
+        "query_string": b"",
+        "headers": [
+            (b"content-type", b"multipart/form-data; boundary=" + boundary),
+            (b"idempotency-key", b"chunked"),
+            *headers,
+        ],
+        "client": ("test", 1),
+        "server": ("testserver", 80),
+    }
+    asyncio.run(app(scope, receive, send))
+    status = next(
+        message["status"] for message in messages if message["type"] == "http.response.start"
+    )
+    return status, received
+
+
+@pytest.mark.parametrize("authorized", [False, True])
+@pytest.mark.parametrize("route_role", ["owner", "planner"])
+def test_chunked_router_authenticates_before_parse_and_stops_at_file_limit(
+    campaign_case, monkeypatch, authorized, route_role
+):
+    import time
+
+    from starlette import formparsers
+
+    from webapp.api import publication_media
+    from webapp.publications.auth import issue_grant
+
+    url, (case, _), app = campaign_case
+    a, job = case["client"], case["brief"]
+    metrics = {"spools": 0, "written": 0}
+    files = []
+    spool = formparsers.SpooledTemporaryFile
+
+    class CountingSpool:
+        def __init__(self, *args, **kwargs):
+            metrics["spools"] += 1
+            self.file = spool(*args, **kwargs)
+            files.append(self.file)
+
+        def __getattr__(self, name):
+            return getattr(self.file, name)
+
+        def write(self, content):
+            metrics["written"] += len(content)
+            return self.file.write(content)
+
+    monkeypatch.setattr(formparsers, "SpooledTemporaryFile", CountingSpool)
+    monkeypatch.setattr(publication_media, "MAX_VIDEO_BYTES", 100)
+    if authorized and route_role == "owner":
+        cookie = "; ".join(f"{name}={value}" for name, value in a.cookies.items())
+        headers = [(b"cookie", cookie.encode())]
+    else:
+        if authorized:
+            key, _ = issue_grant(
+                url, case["tenant"], case["owner"], "planner", "codex", 1, int(time.time()) + 600
+            )
+        else:
+            key = a.post(
+                "/api/v1/auth/api-keys", json={"name": "old", "scopes": ["media:write"]}
+            ).json()["key"]
+        headers = [(b"authorization", f"Bearer {key}".encode())]
+    path = (
+        "/api/v1/publications/media/videos"
+        if route_role == "owner"
+        else "/api/v1/publications/planner/media/videos"
+    )
+    status, received = _chunked_video_request(
+        app, headers, job, [b"a" * 60, b"b" * 60, b"c" * 60], path
+    )
+    assert status == (413 if authorized else 403)
+    assert all(file.closed for file in files)
+    if authorized:
+        assert received["file_bytes"] == 120  # tercer bloque y trailer nunca recibidos
+        assert metrics["spools"] == 1
+        assert metrics["written"] == 60  # segundo bloque se rechaza antes del spool
+    else:
+        assert received["calls"] == 0 and received["body_bytes"] == 0
+        assert metrics == {"spools": 0, "written": 0}
+
+
+def test_incomplete_multipart_closes_original_spool(video_case, mp4, monkeypatch):
+    from starlette import formparsers
+
+    url, ((a, _, _, job), _), app = video_case
+    original = formparsers.SpooledTemporaryFile
+    files = []
+
+    def opened_spool(*args, **kwargs):
+        file = original(*args, **kwargs)
+        files.append(file)
+        return file
+
+    monkeypatch.setattr(formparsers, "SpooledTemporaryFile", opened_spool)
+    cookie = "; ".join(f"{name}={value}" for name, value in a.cookies.items())
+    status, received = _chunked_video_request(
+        app, [(b"cookie", cookie.encode())], job, [mp4], trailer=False
+    )
+    assert status == 422
+    assert received["file_bytes"] == len(mp4)
+    assert len(files) == 1 and files[0].closed is True
+    with db.connect(url) as con:
+        assert con.execute("SELECT * FROM publication_video_media").fetchall() == []

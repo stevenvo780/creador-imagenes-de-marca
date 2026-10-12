@@ -435,9 +435,9 @@ def _compensate_video(
     with db.connect(db_url) as con:
         lock_tenant(con, tenant_id)
         row = _row(con, tenant_id, mid)
-        if row["storage_key"] == key and row["status"] == "pending_review":
+        if row["storage_key"] == key and row["status"] not in ("ingesting", "failed"):
             return _public(row)
-        if row["storage_key"] == key:
+        if row["storage_key"] == key and row["status"] in ("ingesting", "failed"):
             # La clave sigue durable; retry exige limpieza exitosa.
             with suppress(Exception):
                 _delete(storage, tenant_id, key)
