@@ -332,3 +332,19 @@ Las restricciones oficiales TikTok de privacidad/consentimiento por contenido
 y auditoría se distinguen de pertinencia editorial IA. X conserva no gasto;
 no se consultó saldo actual ni se ejecutaron endpoints potencialmente cobrables.
 Estos requisitos externos siguen visibles, sin inventar publicaciones exitosas.
+
+
+## Plan aprobado: implementación reanudada
+
+El operador respondió «Apruebo el plan; implementa con subagentes». Queda
+resuelto el bloqueo de revisión del diseño/plan registrado anteriormente.
+La implementación utiliza un escritor por tarea y un revisor independiente;
+no requiere otra aprobación entre tareas dentro del alcance autorizado.
+
+Se reutiliza el worktree `codex/eikon-codex-publicaciones`. La primera tarea
+es política por empresa y concesiones exclusivas de planner/reviewer/worker,
+sin ampliar los seis scopes de galería. Se prepara una base PostgreSQL16
+efémera, sin red ni puertos publicados, para verificar ambos motores. La
+configuración de producción, credenciales y timers permanecen en el estado
+anterior durante esta etapa. Todavía no hay un runtime nuevo desplegado ni
+publicaciones acreditadas de esta implementación.

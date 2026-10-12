@@ -10,7 +10,7 @@
 
 **Spec:** `docs/superpowers/specs/2026-10-11-eikon-centro-publicaciones-design.md`, aprobado con enmiendas del operador del 11 de octubre de 2026.
 
-**Estado:** Plan escrito para revisión. No implementado. Método ya seleccionado: subagentes con revisión independiente de cada tarea. Una comprobación documental no acredita ejecución ni publicación.
+**Estado:** Plan aprobado expresamente por el operador. Implementación iniciada mediante subagentes con revisión independiente de cada tarea. El progreso verificado se registra en `docs/GOAL-CENTRO-PUBLICACIONES.md`; la aprobación del plan no acredita ejecución ni publicación.
 
 ## Global Constraints
 
@@ -429,4 +429,4 @@ def channel_complete(evidence):
 
 Cobertura: tareas 1–3 política/cuentas/candidatos; 4 historia; 5 evaluación real; 6 calendario; 7 todos los adaptadores/media; 8 panel; 9 operación diaria de cada Codex; 10 despliegue/pruebas por formato/canal. Familia visual ya entregada se conserva y entra en QA, sin redibujar logos ni reabrir generación previa.
 
-Las rutas, tablas, fixtures y firmas de este documento son **contratos a implementar**, salvo helpers existentes identificados. No hay runtime nuevo, nuevos scopes activos o publicación ejecutada por escribirlo. La elección de subagentes/revisión por tarea ya está preservada. El operador revisa este plan antes de que se implemente.
+Las rutas, tablas, fixtures y firmas de este documento son **contratos a implementar**, salvo helpers existentes identificados. No hay runtime nuevo, nuevos scopes activos o publicación ejecutada por escribirlo. La elección de subagentes/revisión por tarea ya está preservada. El operador aprobó este plan antes de iniciar su implementación.
