@@ -9,6 +9,7 @@ from urllib.parse import quote, urlsplit
 import httpx
 
 from webapp.publications.contracts import canonical_hash
+from webapp.publications.provider_results import _provider_result
 
 from .adapters.base import outcome
 from .adapters.tiktok import PostConsent
@@ -140,8 +141,6 @@ def _send_pending(client, outbox, claim, pending):
 
 
 def _save_report(client, outbox, claim, result, *, platform, confirmation=None):
-    from webapp.publications.deliveries import _provider_result
-
     try:
         result = _provider_result(result, platform)
     except Exception:
