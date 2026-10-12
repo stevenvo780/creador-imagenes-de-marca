@@ -397,3 +397,30 @@ e importación efectiva se comprobarán en tarea 10. X conserva bloqueo de gasto
 una vigencia o permiso no comprobable mantiene la conexión retenida. La próxima
 tarea congela campañas/revisiones y añade entrada privada validada de vídeo;
 la ruta anterior PNG/JPEG y revisión humana de galería conservan su significado.
+
+
+## Tarea 3 completada y revisada: campañas, revisiones y vídeo privado
+
+Código hasta `f2d7112679a73d01d4970133b7cb6b59b3cda8bb`: campañas por
+empresa/proyecto/marca y revisiones inmutables que fijan medio, hash, texto,
+fuentes, derechos, cuenta y horario UTC/zona. Imagen y vídeo tienen referencias
+distintas; el ingreso MP4 privado valida H264/AAC y decodificación real con
+límites de recepción, tamaño, duración, dimensiones, CPU y memoria.
+
+La revisión independiente encontró pérdida de originales admitidos tras un
+commit ambiguo y recepción multipart anterior a autenticar. Ambas se corrigieron
+y la revisión acotada confirmó los dos hallazgos resueltos, sin rompimientos
+nuevos. Las regresiones recorren el router y transacciones reales en SQLite y
+PostgreSQL: rechazo de acceso consume cero cuerpo; exceso corta la recepción;
+rechazo/archivo posteriores al commit conservan los bytes originales.
+
+Suite amplia del commit inicial `74a21f4`: **1.224 correctas y 2 omisiones
+previas de demos**. Suite final de campañas/vídeo en `f2d7112`: **102 correctas**,
+sin skips ni warnings, lint/diff limpios. Mypy sigue fallido con **35 errores
+introducidos en tarea 2**, idénticos antes/después de tarea 3; se conserva el
+resultado negativo para corregirlo en el triage de la rama completa.
+
+Esto acredita código local revisado. La imagen Docker, inspección IA real,
+cliente MCP nativo, panel y publicaciones por canal se probarán en la aceptación
+integrada. Ningún timer ni runtime productivo se activó aquí. La tarea siguiente
+conserva historial y guardias contra duplicados por destino.

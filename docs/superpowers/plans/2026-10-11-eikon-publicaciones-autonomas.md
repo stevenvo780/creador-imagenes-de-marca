@@ -189,7 +189,7 @@ WHERE tenant_id = ? AND owner_id = ? AND state_hash = ?
 - `get_revision(db_url, tenant_id, revision_id) -> dict` / `list_candidates(db_url, principal, cursor, limit) -> dict`.
 - Una revisión devuelve `contract_hash`, JSON congelado y `eligibility_reasons`; no entrega tokens ni declara éxito remoto.
 
-- [ ] Tests usan helpers `project`, `brand`, `brief`, `image_bytes` y subida de `media_helpers.py`; añadir campañas sobre cada tenant y conexión propia de tarea 2. Probar medio ajeno, archivo archivado/rechazado, campaña archivada y caption/metadata inválidos.
+- [x] Tests usan helpers `project`, `brand`, `brief`, `image_bytes` y subida de `media_helpers.py`; añadir campañas sobre cada tenant y conexión propia de tarea 2. Probar medio ajeno, archivo archivado/rechazado, campaña archivada y caption/metadata inválidos.
 
 ```python
 def test_contract_changes_for_caption_or_account():
@@ -201,7 +201,7 @@ def test_contract_changes_for_caption_or_account():
     assert canonical_hash(a) != canonical_hash({**a, "destination": "facebook:8"})
 ```
 
-- [ ] Ejecutar tests fallidos. Implementar snapshot con todos los campos de la spec, incluido ID remoto normalizado, fuente/derechos, versión de conexión, bytes/hash y metadata de privacidad/comercialidad cuando aplique. `scheduled_at` sin offset o ambiguo se rechaza; se almacena UTC y conserva zona de política.
+- [x] Ejecutar tests fallidos. Implementar snapshot con todos los campos de la spec, incluido ID remoto normalizado, fuente/derechos, versión de conexión, bytes/hash y metadata de privacidad/comercialidad cuando aplique. `scheduled_at` sin offset o ambiguo se rechaza; se almacena UTC y conserva zona de política.
 
 ```python
 from datetime import datetime
@@ -212,10 +212,10 @@ def normalize_schedule(value):
     return int(dt.timestamp())
 ```
 
-- [ ] Añadir ingreso privado de MP4 validado y acotado, con hash, metadatos reales, procedencia e identidad congelada en un catálogo separado de vídeos. Referencia explícita `media_kind`/ID distingue imagen de galería y vídeo. El endpoint y MCP de imagen existentes mantienen PNG/JPEG y sus permisos. Verificar un MP4 real, corrupción, límites, aislamiento, replay idempotente y compensación de storage. Esta ampliación corrige la ausencia de entrada de vídeo del plan original, necesaria para el alcance aprobado.
+- [x] Añadir ingreso privado de MP4 validado y acotado, con hash, metadatos reales, procedencia e identidad congelada en un catálogo separado de vídeos. Referencia explícita `media_kind`/ID distingue imagen de galería y vídeo. El endpoint y MCP de imagen existentes mantienen PNG/JPEG y sus permisos. Verificar un MP4 real, corrupción, límites, aislamiento, replay idempotente y compensación de storage. Esta ampliación corrige la ausencia de entrada de vídeo del plan original, necesaria para el alcance aprobado.
 
-- [ ] Una edición inserta revisión nueva; no actualiza bytes o contrato anterior. Variante JPEG, vídeo o canal con otro texto tiene medio/hash y decisión propios. Conectar candidatos a `generation_briefs` existentes sin cambiar retroactivamente encargos.
-- [ ] Probar fechas equivalentes con offsets distintos, cambios de día local y separación de plataformas; comprobar que imagen importada sigue pendiente de revisión humana aunque pueda entrar a evaluación autónoma. Revisión y commit `feat: freeze autonomous publication candidates`.
+- [x] Una edición inserta revisión nueva; no actualiza bytes o contrato anterior. Variante JPEG, vídeo o canal con otro texto tiene medio/hash y decisión propios. Conectar candidatos a `generation_briefs` existentes sin cambiar retroactivamente encargos.
+- [x] Probar fechas equivalentes con offsets distintos, cambios de día local y separación de plataformas; comprobar que imagen importada sigue pendiente de revisión humana aunque pueda entrar a evaluación autónoma. Revisión y commit `feat: freeze autonomous publication candidates`.
 
 ## Task 4: ledger e importación completa de historia
 
