@@ -583,6 +583,37 @@ def _immutable_consents(con: db.DualConnection) -> None:
             )
 
 
+_SUPERSESSION_SCHEMA = """
+CREATE TABLE IF NOT EXISTS publication_revision_supersessions (
+    tenant_id INTEGER NOT NULL,
+    predecessor_id INTEGER NOT NULL,
+    successor_id INTEGER NOT NULL,
+    predecessor_hash TEXT NOT NULL,
+    created_at BIGINT NOT NULL,
+    PRIMARY KEY(tenant_id,predecessor_id),
+    UNIQUE(tenant_id,successor_id),
+    CHECK(predecessor_id < successor_id),
+    FOREIGN KEY(tenant_id,predecessor_id) REFERENCES publication_revisions(tenant_id,id),
+    FOREIGN KEY(tenant_id,successor_id) REFERENCES publication_revisions(tenant_id,id)
+);
+"""
+
+
+def _immutable_supersessions(con: db.DualConnection) -> None:
+    if con.dialect == "sqlite":
+        for operation in ("UPDATE", "DELETE"):
+            con.execute(
+                f"CREATE TRIGGER IF NOT EXISTS publication_supersession_no_{operation.lower()} BEFORE {operation} ON publication_revision_supersessions BEGIN SELECT RAISE(ABORT, 'immutable_supersession'); END"
+            )
+    else:
+        con.execute(
+            "DROP TRIGGER IF EXISTS publication_supersession_immutable ON publication_revision_supersessions"
+        )
+        con.execute(
+            "CREATE TRIGGER publication_supersession_immutable BEFORE UPDATE OR DELETE ON publication_revision_supersessions FOR EACH ROW EXECUTE FUNCTION publication_revision_immutable()"
+        )
+
+
 def migrate_publications(db_url: str | Path | None) -> None:
     """Sin seeds: una instalación nueva no recibe autorización autónoma."""
     with db.connect(db_url) as con:
@@ -601,6 +632,7 @@ def migrate_publications(db_url: str | Path | None) -> None:
             + _EVALUATION_SCHEMA
             + _DELIVERY_SCHEMA
             + _CONSENT_SCHEMA
+            + _SUPERSESSION_SCHEMA
         )
         schema = db._schema_for_postgres(source) if con.dialect == "postgres" else source
         for statement in schema.split(";"):
@@ -617,6 +649,11 @@ def migrate_publications(db_url: str | Path | None) -> None:
         )
 
         _immutable_revisions(con)
+        _immutable_supersessions(con)
+        con.execute(
+            "INSERT INTO schema_migrations(version,applied_at) VALUES (?,?) ON CONFLICT(version) DO NOTHING",
+            ("publication_supersessions_v1", int(time.time())),
+        )
         _immutable_videos(con)
         con.execute(
             "INSERT INTO schema_migrations(version,applied_at) VALUES (?,?) ON CONFLICT(version) DO NOTHING",

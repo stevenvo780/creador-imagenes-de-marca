@@ -324,6 +324,8 @@ def test_get_consent_cannot_authorize_start_after_authority_changes(
                 a["tenant"],
                 c["campaign"]["id"],
                 **(c["args"] | {"caption": "Otra pieza"}),
+                supersedes_revision_id=c["revision"]["id"],
+                supersedes_contract_hash=c["revision"]["contract_hash"],
             )
             assert (
                 a["client"]
@@ -518,7 +520,12 @@ def test_flags_require_new_revision_and_ai_http(tiktok_case, flag):
     )
     new = a["client"].post(
         f"/api/v1/publications/campaigns/{c['campaign']['id']}/revisions",
-        json=c["args"] | {"channel_metadata": c["args"]["channel_metadata"] | {flag: changed}},
+        json=c["args"]
+        | {
+            "channel_metadata": c["args"]["channel_metadata"] | {flag: changed},
+            "supersedes_revision_id": old["id"],
+            "supersedes_contract_hash": old["contract_hash"],
+        },
     )
     assert new.status_code == 201, new.text
     r = new.json()
@@ -945,3 +952,31 @@ def test_exact_owner_replay_does_not_reopen_expired_claim_lease(tiktok_case, mon
                 ).fetchone()["lease_until"]
                 == claim["lease_until"]
             )
+
+
+def test_independent_identical_variant_cannot_inherit_or_invalidate_consent(tiktok_case):
+    from webapp.publications.campaigns import get_revision
+
+    c = tiktok_case
+    make_consent(c)
+    first = c["revision"]
+    independent = freeze_revision(c["url"], c["a"]["tenant"], c["campaign"]["id"], **c["args"])
+    assert independent["contract_hash"] == first["contract_hash"]
+    assert (
+        "needs_platform_consent"
+        not in get_revision(c["url"], c["a"]["tenant"], first["id"])["eligibility_reasons"]
+    )
+    assert "needs_platform_consent" in independent["eligibility_reasons"]
+    replacement = freeze_revision(
+        c["url"],
+        c["a"]["tenant"],
+        c["campaign"]["id"],
+        **c["args"],
+        supersedes_revision_id=first["id"],
+        supersedes_contract_hash=first["contract_hash"],
+    )
+    assert "needs_platform_consent" in replacement["eligibility_reasons"]
+    assert (
+        "revision_superseded"
+        in get_revision(c["url"], c["a"]["tenant"], first["id"])["eligibility_reasons"]
+    )

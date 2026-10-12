@@ -35,6 +35,10 @@ function ExactPreview({
     privatePreview(revision, c.signal)
       .then((result) => {
         release = result.release;
+        if (c.signal.aborted) {
+          release();
+          return;
+        }
         setUrl(result.url);
         onReady(true);
       })
@@ -71,7 +75,11 @@ function Candidate({
   owner,
   onRefresh,
   policyVersion,
+  previewOpen,
+  onPreview,
 }: {
+  previewOpen: boolean;
+  onPreview: () => void;
   revision: Revision;
   owner: boolean;
   onRefresh: () => void;
@@ -104,6 +112,9 @@ function Candidate({
     [receiptId, setReceiptId] = useState<number | null>(null);
   const operation = usePrivateOperation();
   const tiktok = r.connection.platform === "tiktok";
+  useEffect(() => {
+    if (!previewOpen) setReady(false);
+  }, [previewOpen]);
   useEffect(() => {
     if (!tiktok) return;
     const c = new AbortController();
@@ -182,7 +193,9 @@ function Candidate({
     });
   const confirm = () =>
     act(async () => {
-      if (!creator || !privacy || !music || !confirmed || !ready || changed)
+      if (
+        !creator || !privacy || !music || !confirmed || !ready || !previewOpen || changed
+      )
         return;
       const result = await consent(
         r,
@@ -228,7 +241,12 @@ function Candidate({
         )}
       </header>
       <div className="pub-candidate-grid">
-        <ExactPreview revision={r} onReady={setReady} />
+        <div>
+          <Button aria-expanded={previewOpen} onClick={onPreview}>
+            {previewOpen ? "Cerrar archivo exacto" : "Ver archivo exacto"}
+          </Button>
+          {previewOpen && <ExactPreview revision={r} onReady={setReady} />}
+        </div>
         <div>
           <h4>Evaluación IA</h4>
           <strong>
@@ -426,6 +444,7 @@ function Candidate({
                   !creator ||
                   !privacy ||
                   !ready ||
+                  !previewOpen ||
                   !music ||
                   !confirmed ||
                   changed ||
@@ -498,6 +517,8 @@ export function CampaignDetail({
   onRefresh: () => void;
   policyVersion?: number;
 }) {
+  const [previewId, setPreviewId] = useState<number | null>(null);
+  useEffect(() => setPreviewId(null), [campaign.id]);
   return (
     <section>
       <h2>
@@ -513,6 +534,10 @@ export function CampaignDetail({
           Galería del producto
         </Link>
       </nav>
+      <p>
+        Límite: 100 revisiones por campaña, incluido el historial. Al alcanzarlo,
+        crea otra campaña.
+      </p>
       {!campaign.revisions.length && (
         <p>
           Esta campaña aún no tiene candidatos. El cliente Codex prepara las
@@ -523,6 +548,8 @@ export function CampaignDetail({
         <Candidate
           key={`${r.id}:${r.contract_hash}`}
           revision={r}
+          previewOpen={previewId === r.id}
+          onPreview={() => setPreviewId(previewId === r.id ? null : r.id)}
           policyVersion={policyVersion}
           owner={owner}
           onRefresh={onRefresh}

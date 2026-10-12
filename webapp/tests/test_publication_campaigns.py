@@ -557,6 +557,7 @@ def test_campaign_schema_migration_rollback_no_seeds_and_idempotency(isolated_db
             "publication_ai_decisions",
             "publication_evaluations",
             "publication_material_deliveries",
+            "publication_revision_supersessions",
             "publication_revisions",
             "publication_video_media",
             "publication_campaigns",

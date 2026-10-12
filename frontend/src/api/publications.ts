@@ -204,6 +204,10 @@ export async function publicationRequest<T>(
         429: "El proveedor limitó las solicitudes. Intenta más tarde.",
       };
       const causes: Record<string, string> = {
+        campaign_revision_limit:
+          "Esta campaña alcanzó 100 revisiones. Crea otra campaña para continuar; el historial se conserva.",
+        revision_superseded:
+          "Esta revisión ya fue sustituida. Actualiza y edita su revisión vigente.",
         needs_platform_audit:
           "Falta evidencia privada de dominio, revisión de contenido o auditoría de TikTok.",
         creator_info_required:
@@ -291,6 +295,8 @@ export const revise = (
     `/campaigns/${revision.campaign_id}/revisions`,
     "POST",
     {
+      supersedes_revision_id: revision.id,
+      supersedes_contract_hash: revision.contract_hash,
       media_id: revision.media.id,
       media_kind: revision.media.kind,
       caption,

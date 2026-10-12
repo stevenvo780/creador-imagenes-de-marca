@@ -5,6 +5,7 @@ export const states: Record<string, string> = {
   reserved: "Reservada",
   attempt_started: "Intento iniciado",
   published: "Publicada",
+  withdrawn: "Retirada",
   failed: "Fallida",
   uncertain: "Resultado incierto",
   expired: "Fecha expirada",

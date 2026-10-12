@@ -80,6 +80,8 @@ def test_owner_edit_creates_new_hash_without_reusing_ai_decision(delivery_case):
             "media_id": s["media"]["id"],
             "media_kind": s["media"]["kind"],
             "caption": "Texto modificado",
+            "supersedes_revision_id": r["id"],
+            "supersedes_contract_hash": r["contract_hash"],
             "connection_id": s["connection"]["id"],
             "scheduled_at": "2080-10-12T00:30:00Z",
             "policy_version": s["policy_version"],
@@ -94,6 +96,7 @@ def test_owner_edit_creates_new_hash_without_reusing_ai_decision(delivery_case):
         campaign["revisions"][0]["id"] == new["id"] and campaign["revisions"][0]["decision"] is None
     )
     assert campaign["revisions"][1]["decision"]["outcome"] == "approve"
+    assert "revision_superseded" in campaign["revisions"][1]["eligibility_reasons"]
     preview = client.get(
         f"/api/v1/publications/revisions/{new['id']}/preview",
         params={"contract_hash": new["contract_hash"]},

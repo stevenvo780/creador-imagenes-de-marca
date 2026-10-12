@@ -290,6 +290,8 @@ class RevisionInput(BaseModel):
     scheduled_at: StrictStr
     policy_version: StrictInt
     channel_metadata: dict
+    supersedes_revision_id: StrictInt | None = None
+    supersedes_contract_hash: StrictStr | None = None
 
 
 async def _create_campaign(request: Request, tenant_id: int, actor: int | dict) -> dict:

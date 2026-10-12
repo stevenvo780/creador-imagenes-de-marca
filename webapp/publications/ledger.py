@@ -111,6 +111,53 @@ def _item(value: dict) -> dict:
     return row
 
 
+def _empty_inventory_proof(declaration: dict, manifest: dict) -> dict:
+    """Recibo del operador confiable; hash de integridad, no atestación remota."""
+    if not isinstance(declaration, dict) or set(declaration) != {"evidence", "evidence_sha256"}:
+        raise InvalidInput("invalid_empty_inventory")
+    proof = declaration["evidence"]
+    if not isinstance(proof, dict) or set(proof) != {
+        "tenant_id",
+        "normalized_destination",
+        "observed_at",
+        "provenance",
+        "coverage",
+        "item_count",
+    }:
+        raise InvalidInput("invalid_empty_inventory")
+    positive_integer(proof["tenant_id"], "invalid_tenant")
+    _destination(proof["normalized_destination"])
+    positive_integer(proof["observed_at"], "invalid_inventory_time")
+    if proof["observed_at"] > int(time.time()):
+        raise InvalidInput("invalid_inventory_time")
+    _text(proof["provenance"], "inventory_provenance_required")
+    if type(proof["item_count"]) is not int or proof["item_count"] != 0:
+        raise InvalidInput("invalid_empty_inventory")
+    coverage = [
+        {"source_id": source["source_id"], "source_sha256": source["source_sha256"]}
+        for source in manifest["sources"]
+    ]
+    if proof["coverage"] != coverage:
+        raise InvalidInput("inventory_coverage_mismatch")
+    if _sha(declaration["evidence_sha256"]) != canonical_hash(proof):
+        raise InvalidInput("inventory_evidence_mismatch")
+    return proof
+
+
+def _validate_empty_declarations(value: dict, total: int) -> None:
+    declarations = value.get("empty_inventories", [])
+    if not isinstance(declarations, list):
+        raise InvalidInput("invalid_empty_inventory")
+    destinations = set()
+    for declaration in declarations:
+        proof = _empty_inventory_proof(declaration, value)
+        if proof["normalized_destination"] in destinations:
+            raise InvalidInput("duplicate_empty_inventory")
+        destinations.add(proof["normalized_destination"])
+    if total == 0 and not declarations:
+        raise InvalidInput("empty_cut_manifest")
+
+
 def _manifest(value: dict) -> dict:
     canonical_json(value)
     _text(value.get("cut_id"), "invalid_cut")
@@ -134,8 +181,7 @@ def _manifest(value: dict) -> dict:
         if len({row["source_delivery_id"] for row in rows}) != len(rows):
             raise InvalidInput("duplicate_source_delivery")
         total += len(rows)
-    if total == 0:
-        raise InvalidInput("empty_cut_manifest")
+    _validate_empty_declarations(value, total)
     aliases = value.get("aliases", [])
     if not isinstance(aliases, list):
         raise InvalidInput("invalid_alias_mapping")
@@ -270,8 +316,33 @@ def append_event_in_transaction(
     return _event(con, tenant_id, attempt_id, event_key, kind, payload)
 
 
+def _validate_empty_destinations(con: db.DualConnection, tenant_id: int, value: dict) -> None:
+    for declaration in value.get("empty_inventories", []):
+        if declaration["evidence"]["tenant_id"] != tenant_id:
+            raise InvalidInput("inventory_tenant_mismatch")
+        dest = declaration["evidence"]["normalized_destination"]
+        if _canonical_destination(con, tenant_id, dest) != dest or any(
+            alias["alias"] == dest for alias in value.get("aliases", [])
+        ):
+            raise InvalidInput("inventory_canonical_destination_required")
+        for source in value["sources"]:
+            for item in source["items"]:
+                row = _item(item)
+                item_dest = row.get("normalized_destination")
+                if row["platform"] == dest.split(":", 1)[0] and (
+                    item_dest is None
+                    or _canonical_destination(con, tenant_id, item_dest) == dest
+                    or any(
+                        alias["alias"] == item_dest and alias["destination"] == dest
+                        for alias in value.get("aliases", [])
+                    )
+                ):
+                    raise InvalidInput("inventory_not_empty")
+
+
 def _register_cut(con: db.DualConnection, tenant_id: int, manifest: dict) -> None:
     value = _manifest(manifest)
+    _validate_empty_destinations(con, tenant_id, value)
     digest = canonical_hash(value)
     old = con.execute(
         "SELECT manifest_hash FROM publication_history_cuts WHERE tenant_id=? AND cut_id=?",
@@ -304,10 +375,13 @@ def _source(con: db.DualConnection, tenant_id: int, source_id: str, evidence: di
         _sha(evidence.get("receipt_sha256")),
     )
     old = con.execute(
-        "SELECT source_sha256,receipt_sha256 FROM publication_history_sources WHERE tenant_id=? AND source_id=?",
+        "SELECT source_sha256,receipt_sha256,evidence_json FROM publication_history_sources WHERE tenant_id=? AND source_id=?",
         (tenant_id, source_id),
     ).fetchone()
     if old is not None:
+        previous = json.loads(old["evidence_json"]).get("empty_inventory_receipts", [])
+        if previous != evidence.get("empty_inventory_receipts", []):
+            raise Conflict("history_source_conflict")
         if old["source_sha256"] != source_sha or old["receipt_sha256"] != receipt_sha:
             raise Conflict("history_source_conflict")
         return
@@ -387,6 +461,9 @@ def _import_history(
 ) -> dict:
     _text(source_id, "invalid_source")
     canonical_json(evidence)
+    receipts = evidence.get("empty_inventory_receipts", [])
+    if not isinstance(receipts, list) or any(not isinstance(receipt, dict) for receipt in receipts):
+        raise InvalidInput("invalid_empty_inventory_receipts")
     if not isinstance(items, list):
         raise InvalidInput("invalid_history_items")
     if "cut_manifest" in evidence:
@@ -608,14 +685,27 @@ def _reconciled(con: db.DualConnection, tenant_id: int, row: dict) -> bool:
     )
 
 
+def _empty_declaration(manifest: dict, tenant_id: int, dest: str) -> dict | None:
+    for declaration in manifest.get("empty_inventories", []):
+        proof = declaration["evidence"]
+        if proof["tenant_id"] == tenant_id and proof["normalized_destination"] == dest:
+            return dict(proof)
+    return None
+
+
 def _cut_ready(con: db.DualConnection, tenant_id: int, dest: str, manifest: dict) -> bool:
-    relevant = False
+    empty = _empty_declaration(manifest, tenant_id, dest)
+    relevant = empty is not None
     for source in manifest["sources"]:
         receipt = con.execute(
-            "SELECT source_sha256 FROM publication_history_sources WHERE tenant_id=? AND source_id=?",
+            "SELECT source_sha256,evidence_json FROM publication_history_sources WHERE tenant_id=? AND source_id=?",
             (tenant_id, source["source_id"]),
         ).fetchone()
         if receipt is None or receipt["source_sha256"] != source["source_sha256"]:
+            return False
+        if empty is not None and empty not in json.loads(receipt["evidence_json"]).get(
+            "empty_inventory_receipts", []
+        ):
             return False
         # La fuente debe estar incorporada en su totalidad, incluso los items
         # no dirigidos a esta cuenta; un ítem aislado no acredita una base.
@@ -656,6 +746,8 @@ def _cut_relevant(con: db.DualConnection, tenant_id: int, dest: str, manifest: d
     Una fila prevista todavía ausente o distinta conserva relevancia para la
     plataforma: _cut_ready rechazará el corte sin omitir esa fuente/ítem.
     """
+    if _empty_declaration(manifest, tenant_id, dest) is not None:
+        return True
     platform = dest.split(":", 1)[0]
     for source in manifest["sources"]:
         for value in source["items"]:

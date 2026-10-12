@@ -105,19 +105,9 @@ def _revision(con: db.DualConnection, tenant: int, rid: int, now: int) -> tuple[
         or media["status"] not in ("pending_review", "approved")
     ):
         raise Conflict("media_changed")
-    newer = con.execute(
-        "SELECT id FROM publication_revisions WHERE tenant_id=? AND campaign_id=? AND connection_id=? AND media_kind=? AND id>? AND (gallery_image_id=? OR video_media_id=?) LIMIT 1",
-        (
-            tenant,
-            row["campaign_id"],
-            row["connection_id"],
-            row["media_kind"],
-            rid,
-            row["gallery_image_id"],
-            row["video_media_id"],
-        ),
-    ).fetchone()
-    if newer or now >= s["expires_at_utc"]:
+    from .campaigns import revision_superseded
+
+    if revision_superseded(con, tenant, rid) or now >= s["expires_at_utc"]:
         raise Conflict("consent_revision_stale")
     return row, s
 
@@ -498,15 +488,11 @@ def status(db_url: DBUrl, tenant: int, owner: int, rid: int) -> dict:
             return {"consent": None, "reasons": [exc.code]}
 
 
-def eligibility_reasons(con: db.DualConnection, snapshot: dict, now: int) -> list[str]:
-    row = con.execute(
-        "SELECT id FROM publication_revisions WHERE tenant_id=? AND contract_hash=? ORDER BY id DESC LIMIT 1",
-        (snapshot["tenant_id"], canonical_hash(snapshot)),
-    ).fetchone()
-    if not row:
-        return ["needs_platform_consent", "needs_platform_audit"]
+def eligibility_reasons(
+    con: db.DualConnection, snapshot: dict, revision_id: int, now: int
+) -> list[str]:
     try:
-        authority(con, snapshot["tenant_id"], row["id"], now)
+        authority(con, snapshot["tenant_id"], revision_id, now)
         return []
     except (Conflict, Forbidden, NotFound, InvalidInput):
         return ["needs_platform_consent", "needs_platform_audit"]

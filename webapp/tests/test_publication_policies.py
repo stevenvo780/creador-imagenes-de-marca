@@ -337,6 +337,7 @@ def test_publication_migration_is_idempotent_and_rolls_back(isolated_db, monkeyp
             "publication_ai_decisions",
             "publication_evaluations",
             "publication_material_deliveries",
+            "publication_revision_supersessions",
             "publication_revisions",
             "publication_video_media",
             "publication_campaigns",

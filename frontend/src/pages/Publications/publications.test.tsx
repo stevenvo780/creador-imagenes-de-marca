@@ -184,3 +184,88 @@ it("descarta datos de la empresa anterior al cambiar de sesión", async () => {
     screen.queryByRole("link", { name: "Producto A: Campaña" }),
   ).toBeNull();
 });
+
+function previewCampaign(): import("../../api/publications").Campaign {
+  return {
+    id: 1, project_id: 2, brand_id: 3, project_name: "Proyecto", product_name: "Producto",
+    objective: "Campaña", archived: 0,
+    revisions: [1, 2].map(id => ({
+      id, campaign_id: 1, contract_hash: "a".repeat(64), caption: `Texto ${id}`,
+      policy_version: 1, scheduled_at_utc: 100, expires_at_utc: 3700, timezone: "UTC",
+      channel_metadata: { sources: [], rights: "owned" },
+      media: { id, kind: "gallery_image" as const, sha256: "b".repeat(64), mime: "image/jpeg", width: 100, height: 100 },
+      connection: { id: 1, platform: "facebook" as const, remote_id: "account", remote_name: "Cuenta" },
+      visual_review: { approval_current: false }, decision: null, eligibility_reasons: [],
+    })),
+  };
+}
+
+it("descarga sólo el preview solicitado y cancela/libera al cambiar o cerrar", async () => {
+  const api = await import("../../api/publications");
+  const { fireEvent, act } = await import("@testing-library/react");
+  let resolveFirst!: (value: { url: string; release: () => void }) => void;
+  const releases = [vi.fn(), vi.fn()];
+  const preview = vi.spyOn(api, "privatePreview")
+    .mockImplementationOnce(() => new Promise(resolve => { resolveFirst = resolve; }))
+    .mockResolvedValueOnce({ url: "blob:second", release: releases[1] });
+  const { unmount } = render(<MemoryRouter><CampaignDetail owner campaign={previewCampaign()} onRefresh={() => {}} /></MemoryRouter>);
+  expect(preview).not.toHaveBeenCalled();
+  fireEvent.click(screen.getAllByRole("button", { name: "Ver archivo exacto" })[0]);
+  expect(preview).toHaveBeenCalledTimes(1);
+  const firstSignal = preview.mock.calls[0][1];
+  fireEvent.click(screen.getByRole("button", { name: "Ver archivo exacto" }));
+  await screen.findByAltText("Archivo exacto de esta revisión");
+  expect(firstSignal.aborted).toBe(true);
+  expect(screen.getAllByAltText("Archivo exacto de esta revisión")).toHaveLength(1);
+  await act(async () => resolveFirst({ url: "blob:late", release: releases[0] }));
+  expect(releases[0]).toHaveBeenCalledTimes(1);
+  fireEvent.click(screen.getByRole("button", { name: "Cerrar archivo exacto" }));
+  expect(releases[1]).toHaveBeenCalledTimes(1);
+  expect(preview.mock.calls[1][1].aborted).toBe(true);
+  unmount();
+});
+
+it("envía el predecesor exacto al editar y su hash", async () => {
+  const api = await import("../../api/publications");
+  const fetcher = vi.spyOn(globalThis, "fetch").mockResolvedValue({ ok: true, status: 201, json: async () => ({}) } as Response);
+  const revision = previewCampaign().revisions[0];
+  await api.revise(revision, "nuevo", revision.channel_metadata);
+  const body = JSON.parse(fetcher.mock.calls[0][1]!.body as string);
+  expect(body.supersedes_revision_id).toBe(revision.id);
+  expect(body.supersedes_contract_hash).toBe(revision.contract_hash);
+});
+
+it("muestra retirada en estado y evento sin enlace ni republicación", () => {
+  render(<AttemptDetail attempt={{ state: "withdrawn", result: null, events: [{ id: 1, kind: "withdrawn", created_at: 100 }] }} />);
+  expect(screen.getAllByText(/Retirada/)).toHaveLength(2);
+  expect(screen.queryByRole("link")).toBeNull();
+  expect(screen.queryByRole("button")).toBeNull();
+});
+
+it("libera la URL privada real al cancelar y muestra el límite con un paso útil", async () => {
+  const api = await import("../../api/publications");
+  const realURL = globalThis.URL;
+  const revoke = vi.fn();
+  const create = vi.fn(() => "blob:exact-original");
+  class TestURL extends realURL {
+    static createObjectURL = create;
+    static revokeObjectURL = revoke;
+  }
+  vi.stubGlobal("URL", TestURL);
+  try {
+    const revision = previewCampaign().revisions[0];
+    revision.media.sha256 = "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad";
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({ ok: true, arrayBuffer: async () => new TextEncoder().encode("abc").buffer } as Response);
+    const controller = new AbortController();
+    const preview = await api.privatePreview(revision, controller.signal);
+    expect(create).toHaveBeenCalledTimes(1);
+    controller.abort();
+    expect(revoke).toHaveBeenCalledWith(preview.url);
+    preview.release();
+    expect(revoke).toHaveBeenCalledTimes(1);
+    vi.mocked(globalThis.fetch).mockResolvedValue({ ok: false, status: 409, json: async () => ({ detail: "campaign_revision_limit" }) } as Response);
+    await expect(api.revise(revision, "nuevo", revision.channel_metadata)).rejects.toThrow(/100 revisiones.*Crea otra campaña/);
+  } finally {
+    vi.unstubAllGlobals();
+  }
+});

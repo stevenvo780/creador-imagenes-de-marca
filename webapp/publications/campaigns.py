@@ -34,6 +34,8 @@ from .policies import (
     require_owner,
 )
 
+MAX_CAMPAIGN_REVISIONS = 100
+
 
 class ChannelMetadata(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
@@ -189,6 +191,62 @@ def _authorize_revision(
             raise Forbidden()
 
 
+def _validate_new_revision(
+    con: db.DualConnection,
+    tenant_id: int,
+    campaign_id: int,
+    supersedes_revision_id: int | None,
+    supersedes_contract_hash: str | None,
+) -> None:
+    if (supersedes_revision_id is None) != (supersedes_contract_hash is None):
+        raise InvalidInput("supersession_binding_required")
+    if supersedes_revision_id is not None:
+        positive_integer(supersedes_revision_id, "invalid_revision")
+        previous = con.execute(
+            "SELECT * FROM publication_revisions WHERE tenant_id=? AND id=?",
+            (tenant_id, supersedes_revision_id),
+        ).fetchone()
+        if previous is None:
+            raise NotFound()
+        if previous["campaign_id"] != campaign_id:
+            raise Conflict("revision_campaign_mismatch")
+        if previous["contract_hash"] != supersedes_contract_hash:
+            raise Conflict("contract_changed")
+        if revision_superseded(con, tenant_id, supersedes_revision_id):
+            raise Conflict("revision_superseded")
+    count = con.execute(
+        "SELECT COUNT(*) AS n FROM publication_revisions WHERE tenant_id=? AND campaign_id=?",
+        (tenant_id, campaign_id),
+    ).fetchone()
+    assert count is not None
+    if count["n"] >= MAX_CAMPAIGN_REVISIONS:
+        raise Conflict("campaign_revision_limit")
+
+
+def _supersede(
+    con: db.DualConnection,
+    tenant_id: int,
+    supersedes_revision_id: int,
+    rid: int,
+    supersedes_contract_hash: str | None,
+) -> None:
+    con.execute(
+        "INSERT INTO publication_revision_supersessions(tenant_id,predecessor_id,successor_id,predecessor_hash,created_at) VALUES (?,?,?,?,?)",
+        (tenant_id, supersedes_revision_id, rid, supersedes_contract_hash, int(time.time())),
+    )
+    # Retener sólo antes del intento, sin renovar/reasignar la reserva.
+    from .deliveries import _retain
+
+    for delivery in con.execute(
+        "SELECT * FROM publication_deliveries WHERE tenant_id=? AND revision_id=? AND started_at IS NULL AND state IN ('scheduled','reserved','held')",
+        (tenant_id, supersedes_revision_id),
+    ).fetchall():
+        reasons = list(
+            dict.fromkeys([*json.loads(delivery["hold_reasons_json"]), "revision_superseded"])
+        )
+        _retain(con, delivery, int(time.time()), reasons)
+
+
 def freeze_revision(
     db_url: str | Path | None,
     tenant_id: int,
@@ -202,6 +260,8 @@ def freeze_revision(
     *,
     media_kind: MediaKind = "gallery_image",
     actor: int | dict | None = None,
+    supersedes_revision_id: int | None = None,
+    supersedes_contract_hash: str | None = None,
 ) -> dict:
     """Operación interna tenant autenticado; routers resuelven owner/planner primero."""
     if (
@@ -222,6 +282,9 @@ def freeze_revision(
         _authorize_revision(con, tenant_id, actor, campaign, connection_id, policy_version)
         if campaign["archived"]:
             raise Conflict("campaign_archived")
+        _validate_new_revision(
+            con, tenant_id, campaign_id, supersedes_revision_id, supersedes_contract_hash
+        )
         media = _media(con, tenant_id, media_kind, media_id)
         if media["status"] not in ("pending_review", "approved"):
             raise Conflict("media_unavailable")
@@ -334,10 +397,25 @@ def freeze_revision(
             ),
         )
         rid = db.get_last_insert_id(db_url, con, "publication_revisions")
+        if supersedes_revision_id is not None:
+            _supersede(con, tenant_id, supersedes_revision_id, rid, supersedes_contract_hash)
         return _revision(con, tenant_id, rid)
 
 
-def _eligibility(con: db.DualConnection, snapshot: dict, now: int | None = None) -> list[str]:
+def revision_superseded(con: db.DualConnection, tenant: int, rid: int) -> bool:
+    """El vínculo explícito identifica una variante, nunca el medio o la cuenta."""
+    return (
+        con.execute(
+            "SELECT successor_id FROM publication_revision_supersessions WHERE tenant_id=? AND predecessor_id=?",
+            (tenant, rid),
+        ).fetchone()
+        is not None
+    )
+
+
+def _eligibility(
+    con: db.DualConnection, snapshot: dict, revision_id: int, now: int | None = None
+) -> list[str]:
     now = int(time.time()) if now is None else now
     tenant = snapshot["tenant_id"]
     reasons = []
@@ -385,7 +463,7 @@ def _eligibility(con: db.DualConnection, snapshot: dict, now: int | None = None)
         # El texto del planner no acredita consentimiento ni auditoría externa.
         from .consent import eligibility_reasons
 
-        reasons.extend(eligibility_reasons(con, snapshot, now))
+        reasons.extend(eligibility_reasons(con, snapshot, revision_id, now))
     return list(dict.fromkeys(reasons))
 
 
@@ -428,6 +506,9 @@ def _revision(con: db.DualConnection, tenant: int, rid: int, now: int | None = N
     if row is None:
         raise NotFound()
     snapshot = json.loads(row["frozen_json"])
+    reasons = _eligibility(con, snapshot, rid, now=now)
+    if revision_superseded(con, tenant, rid):
+        reasons.append("revision_superseded")
     return {
         "id": row["id"],
         "tenant_id": tenant,
@@ -436,7 +517,7 @@ def _revision(con: db.DualConnection, tenant: int, rid: int, now: int | None = N
         "contract_hash": row["contract_hash"],
         "frozen_json": row["frozen_json"],
         "snapshot": snapshot,
-        "eligibility_reasons": _eligibility(con, snapshot, now=now),
+        "eligibility_reasons": reasons,
     }
 
 

@@ -322,7 +322,10 @@ def _store_verified(
         except (Conflict, InvalidInput):
             return hold_connection(con, tenant_id, owner_id, cid, "vault_key_unavailable")
         scopes = sorted(set(account.scopes))
-        capabilities = {"publish": True, "image": row["platform"] != "tiktok", "video": True}
+        # Direct Post PHOTO y VIDEO comparten video.publish. Este permiso de
+        # transporte no acredita dominio, auditoría, medio ni consentimiento.
+        direct_post = row["platform"] != "tiktok" or "video.publish" in scopes
+        capabilities = {"publish": True, "image": direct_post, "video": direct_post}
         con.execute(
             "INSERT INTO publication_connection_vault(tenant_id,connection_id,envelope_json) VALUES (?,?,?) ON CONFLICT(tenant_id,connection_id) DO UPDATE SET envelope_json=excluded.envelope_json",
             (tenant_id, cid, canonical_json(envelope)),
