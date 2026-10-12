@@ -4,3 +4,4 @@ pydantic>=2.0
 httpx>=0.26
 # Requerido por los endpoints multipart (subida de PNG del render en cliente).
 python-multipart>=0.0.9
+cryptography>=42.0

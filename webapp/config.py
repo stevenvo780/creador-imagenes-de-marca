@@ -62,6 +62,15 @@ class Settings:
     cookie_secure: bool = field(default_factory=_get_cookie_secure)
     max_concurrent_jobs: int = field(default_factory=_get_max_concurrent_jobs)
     job_timeout_seconds: int = field(default_factory=_get_job_timeout)
+    publication_vault_key: str | None = field(
+        default_factory=lambda: os.environ.get("EIKON_PUBLICATION_VAULT_KEY"), repr=False
+    )
+    publication_vault_key_id: str | None = field(
+        default_factory=lambda: os.environ.get("EIKON_PUBLICATION_VAULT_KEY_ID")
+    )
+    publication_oauth_config_file: str | None = field(
+        default_factory=lambda: os.environ.get("EIKON_PUBLICATION_OAUTH_CONFIG_FILE"), repr=False
+    )
 
     def __post_init__(self) -> None:
         """Si db_url es None pero sqlite_path está seteado, usa sqlite_path como db_url."""
