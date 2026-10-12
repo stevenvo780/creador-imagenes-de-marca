@@ -477,3 +477,32 @@ retenido. Fuentes son contexto factual congelado y URLs, sin cuerpos remotos
 inventados. Esto acredita contrato local revisado: Codex real, GUI, heartbeat,
 importación productiva y publicaciones por las cuatro redes siguen en tarea10.
 La tarea6 compone elegibilidad, historial, deduplicación y CAS en la cola durable.
+
+
+## Tarea 6 completada y revisada: calendario y autoridad de envío
+
+Código hasta `05e3addcfe6630fa3fe354457114579216167878`: reservas e inicio
+único con CAS y guardias transaccionales, ventana de 60 minutos, cuotas por día
+en zona de la política y reportes idempotentes. Un ACK perdido nunca devuelve
+autoridad para otro POST. Owner y worker pueden conciliar con prueba ligada al
+intento/cuenta, conservando el historial y el identificador remoto canónico.
+
+El API sirve el original exacto y credencial de la reserva propia. Las URLs
+temporales permanecen deshabilitadas hasta comprobar logs y descarga desplegados;
+se limitan al archivo/intento y a un horizonte de procesamiento de 65 minutos.
+La credencial de conciliación puede tener scopes de escritura: su uso exclusivo
+para consultar el resultado depende del trabajador confiable de tarea7.
+
+La revisión detectó evidencia capaz de guardar credenciales y sustitución de ID
+remoto mediante un reporte incierto intermedio. Ambos corregidos y aprobados en
+revisión independiente. La evidencia pública acepta solo siete campos tipados;
+los mensajes completos del proveedor y URLs se rechazan antes de persistir.
+
+Pruebas: **787 correctas** en el commit inicial; tras las correcciones, **193
+correctas** en los módulos completos de entregas y medios, SQLite/PostgreSQL,
+sin omisiones. Lint/formato y tipos focales pasan; el aviso jinja2 y los tipos
+pendientes de tarea2 mantienen su atribución. No se repitió la suite anterior
+como prueba del nuevo commit.
+
+Faltan trabajador/adaptadores (7), panel integrado (8), operación Codex (9) y
+aceptación/despliegue (10). La automatización productiva sigue pendiente.

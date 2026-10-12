@@ -303,7 +303,7 @@ if response["outcome"] == "approve" and (
 
 **Interfaces:** `schedule_revision(db_url,tenant_id,revision_id,now)->dict`, `claim_due(db_url,principal,now)->Claim|None`, `start_attempt(db_url,principal,claim_id,contract_hash,now)->dict`, `report_attempt(db_url,principal,attempt_id,event_key,result:ProviderResult,now)->dict`, `cancel_delivery(db_url,tenant_id,owner_id,delivery_id,now)->dict`.
 
-- [ ] Pruebas con dos conexiones de DB reales: un claim, dos start concurrents, lease vencido sin inicio, lease vencido después de inicio, revoke y hora > ventana. Fixture `delivery_case` crea decisión válida/corte de historia listo; el reloj es inyectado.
+- [x] Pruebas con dos conexiones de DB reales: un claim, dos start concurrents, lease vencido sin inicio, lease vencido después de inicio, revoke y hora > ventana. Fixture `delivery_case` crea decisión válida/corte de historia listo; el reloj es inyectado.
 
 ```python
 def test_started_attempt_is_never_reclaimed(delivery_case):
@@ -315,7 +315,7 @@ def test_started_attempt_is_never_reclaimed(delivery_case):
     assert claim_due(db_url, principal, now + 7200) is None
 ```
 
-- [ ] Ejecutar en SQLite y PostgreSQL. Implementar reservas atómicas con `BEGIN IMMEDIATE`/locks PG y CAS por estado, claim, grant y hash; outbox/dedup por destino. El inicio confirma un único intento, el timeout de su ACK se concilia antes de POST.
+- [x] Ejecutar en SQLite y PostgreSQL. Implementar reservas atómicas con `BEGIN IMMEDIATE`/locks PG y CAS por estado, claim, grant y hash; outbox/dedup por destino. El inicio confirma un único intento, el timeout de su ACK se concilia antes de POST.
 
 ```sql
 UPDATE publication_deliveries SET state='attempt_started', started_at=?
@@ -323,9 +323,9 @@ WHERE tenant_id=? AND id=? AND state='reserved'
   AND claim_id=? AND worker_grant_id=? AND contract_hash=? AND lease_until>?;
 ```
 
-- [ ] `rowcount != 1` nunca concede intento. Caducidad es `due_at + 3600`; cuota diaria se evalúa en zona de política. Fuera de ventana registra `expired`; no programa tarde por sí mismo. Revocar después de inicio conserva incertidumbre/conciliación, no borra el intento.
-- [ ] API entrega original y credencial únicamente a reserva vigente de esa conexión/empresa; comprobar hash del PNG exacto. Reportes idempotentes; URLs remotas validadas por host/plataforma. Cancelación solo antes de inicio; retirada añade evento confirmado.
-- [ ] Pruebas de pérdida de ACK/report, servidor caído y eventos duplicados. Revisión y commit `feat: add durable calendar claims and conservative attempt states`.
+- [x] `rowcount != 1` nunca concede intento. Caducidad es `due_at + 3600`; cuota diaria se evalúa en zona de política. Fuera de ventana registra `expired`; no programa tarde por sí mismo. Revocar después de inicio conserva incertidumbre/conciliación, no borra el intento.
+- [x] API entrega original y credencial únicamente a reserva vigente de esa conexión/empresa; comprobar hash del PNG exacto. Reportes idempotentes; URLs remotas validadas por host/plataforma. Cancelación solo antes de inicio; retirada añade evento confirmado.
+- [x] Pruebas de pérdida de ACK/report, servidor caído y eventos duplicados. Revisión y commit `feat: add durable calendar claims and conservative attempt states`.
 
 ## Task 7: trabajador separado y adaptadores de todas las redes
 
