@@ -50,3 +50,22 @@ Decisiones de cierre, 12 de octubre:
 - Exigir en el recibo el modo de API y los permisos del catálogo actual, además del consentimiento TikTok por pieza y sus bindings. Motivo: una lista no vacía de permisos o un consentimiento global no prueban autoridad sobre el contenido exacto. Coste si está mal: falsa elegibilidad o retención excesiva; pruebas negativas y comprobación real del proveedor obligatorias. El recibo local continúa siendo declarado por el operador, sin atestación criptográfica remota.
 
 La comparación de Ruff contra el inicio real de la rama dio 47 diagnósticos entonces y 43 ahora, sin diagnósticos nuevos por código/archivo/mensaje. El gate global sigue fallando; la deuda histórica no se presenta como prueba aprobada. La revisión final resolverá su tratamiento.
+
+Decisiones de la ronda final:
+
+- Sustituir únicamente el predecessor exacto de la variante editada, mediante un registro durable e inmutable. La versión anterior pierde elegibilidad antes de iniciar; sus decisiones, hashes y guardias se conservan. Una entrega ya iniciada mantiene su conciliación. Motivo: impedir que se publique texto corregido sin cancelar variantes independientes. Coste si está mal: retener una variante legítima o perder recuperación; pruebas concurrentes SQLite/PostgreSQL y revisión obligatorias.
+- Acreditar inventario vacío sólo mediante una declaración privada confiable por empresa y destino canónico, con procedencia, fecha, cobertura y evidencia inmutables. Motivo: admitir empresas nuevas sin inventar publicaciones históricas. Coste si está mal: falsa completitud; una cuenta ajena o una fuente relevante fuera del corte debe continuar retenida.
+- Limitar inicialmente cada campaña a cien revisiones totales y una sola vista previa activa bajo demanda, conservando acceso al historial. Motivo: acotar el coste antes de operación diaria sin introducir paginación general en esta corrección. Coste si está mal: tener que abrir otra campaña antes de lo necesario o una interfaz aún pesada; no acredita carga real ni escalabilidad ilimitada.
+
+La revisión final clasifica Ruff y las dos omisiones demo como deuda anterior,
+sin regresión demostrada de publicaciones. Continúan siendo resultados negativos
+del gate literal; el verificador no los convierte en cero fallos u omisiones.
+La aprobación de la rama y el despliegue siguen pendientes de la corrección,
+revisión y comprobaciones reales descritas en QA.
+
+La única ronda final cerró los cinco hallazgos con revisión independiente
+aprobada sobre `a4389e8`. El nuevo ensayo añade exactamente una octava entrada,
+`publication_supersessions_v1`, al catálogo del recibo anterior de siete;
+conserva todas las filas originales y comprueba el segundo inicio idéntico.
+La revisión general anterior conserva su cobertura parcial; las comprobaciones
+reales y la aceptación total siguen pendientes.

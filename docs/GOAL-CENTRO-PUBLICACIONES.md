@@ -619,3 +619,30 @@ real, trabajador, publicación por cuenta/formato y segundo ciclo sin POST.
 Bitwarden sigue bloqueado; server2 no tiene ffmpeg/ffprobe y sudo requiere
 intervención. X sigue sin gasto; TikTok necesita los requisitos externos
 actuales. Producción continúa en su versión anterior y la meta sigue pendiente.
+
+## Revisión final y correcciones en curso
+
+La revisión del candidato `84db9f2` encontró tres problemas importantes:
+editar una pieza no retenía su versión anterior; OAuth impedía activar fotos
+de TikTok; un inventario legítimamente vacío no habilitaba una cuenta nueva.
+Se corrigen en una sola ronda con pruebas de sus recorridos completos y una
+revisión posterior del cambio. También se limita el crecimiento por campaña,
+se cargan previews bajo demanda y se distingue una retirada en el calendario.
+
+El informe revisó en profundidad las fronteras del centro de publicaciones;
+su cobertura de la galería anterior, recursos, lockfile y pruebas fue parcial.
+No constituye una aprobación exhaustiva de toda la rama. Los gates reales
+de la tarea10 permanecen pendientes; no se activó el trabajador diario.
+
+Las cinco correcciones quedaron en `a4389e898bb34bed876616afc052fd9499664dae`.
+Su revisión independiente aprobó el delta completo, sin hallazgos nuevos.
+La ejecución afectada conservó 873 PASS y nueve fallos de fixtures antiguos;
+tras reparar esos consumidores, campañas y consentimiento dieron128 PASS.
+No se suman esas corridas ni se presentan como una nueva suite global verde.
+Interfaz:16 pruebas y build correctos; lint de archivos propios y seis fuentes
+de tipos correctos, con la nota heredada de jinja2 conservada.
+
+Nuevo clon de la base respaldada:14→42 tablas, ocho entradas de migración
+previstas, datos originales preservados, segundo init estable y cero permisos
+o sustituciones creados por defecto. El paquete limpio del SHA corregido está
+preparado y su imagen se está construyendo; todavía no hay despliegue nuevo.
