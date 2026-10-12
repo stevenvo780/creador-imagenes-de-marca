@@ -16,6 +16,7 @@ from webapp.publications.decisions import (
     publication_eligibility,
     submit_evaluation,
 )
+from webapp.publications.deliveries import schedule_revision
 
 router = APIRouter(prefix="/api/v1/publications/reviewer", tags=["publication-reviewer"])
 _Id = Annotated[int, Path(ge=1, le=2**63 - 1)]
@@ -75,7 +76,20 @@ async def evaluate(
     try:
         payload = EvaluationInput.model_validate(await _body(request)).model_dump()
         response.headers["Cache-Control"] = "private, no-store"
-        return submit_evaluation(get_settings(request).db_url, principal, revision_id, **payload)
+        result = submit_evaluation(get_settings(request).db_url, principal, revision_id, **payload)
+        # Dos fases durables: un replay exacto recupera la programación tras pérdida de ACK.
+        # La segunda transacción revalida autorización e historia; approve no garantiza envío.
+        result["delivery"] = (
+            schedule_revision(
+                get_settings(request).db_url,
+                principal["tenant_id"],
+                result["decision"]["revision_id"],
+                int(time.time()),
+            )
+            if result["decision"]["outcome"] == "approve"
+            else None
+        )
+        return result
     except ValidationError as exc:
         raise HTTPException(422, detail="invalid_evaluation") from exc
     except PublicationError as exc:

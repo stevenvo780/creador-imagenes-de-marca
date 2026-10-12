@@ -416,6 +416,90 @@ def _immutable_evaluations(con: db.DualConnection) -> None:
             )
 
 
+_DELIVERY_SCHEMA = """
+CREATE TABLE IF NOT EXISTS publication_deliveries (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ revision_id INTEGER NOT NULL,
+ decision_id INTEGER,
+ contract_hash TEXT NOT NULL,
+ normalized_destination TEXT NOT NULL,
+ media_sha256 TEXT NOT NULL,
+ due_at BIGINT NOT NULL,
+ expires_at BIGINT NOT NULL,
+ state TEXT NOT NULL CHECK(state IN ('scheduled','held','reserved','attempt_started','published','failed','uncertain','expired','cancelled','withdrawn')),
+ hold_reasons_json TEXT NOT NULL DEFAULT '[]',
+ claim_id TEXT,
+ worker_grant_id INTEGER,
+ attempt_id TEXT,
+ lease_until BIGINT,
+ started_at BIGINT,
+ result_json TEXT,
+ created_at BIGINT NOT NULL,
+ UNIQUE(tenant_id,id), UNIQUE(tenant_id,revision_id),
+ FOREIGN KEY(tenant_id,revision_id) REFERENCES publication_revisions(tenant_id,id),
+ FOREIGN KEY(tenant_id,decision_id) REFERENCES publication_ai_decisions(tenant_id,id),
+ FOREIGN KEY(tenant_id,worker_grant_id) REFERENCES publication_grants(tenant_id,id)
+);
+CREATE INDEX IF NOT EXISTS publication_due ON publication_deliveries(tenant_id,state,due_at);
+CREATE TABLE IF NOT EXISTS publication_claims (
+ tenant_id INTEGER NOT NULL,
+ claim_id TEXT NOT NULL,
+ delivery_id INTEGER NOT NULL,
+ attempt_id TEXT NOT NULL,
+ worker_grant_id INTEGER NOT NULL,
+ contract_hash TEXT NOT NULL,
+ claimed_at BIGINT NOT NULL,
+ lease_until BIGINT NOT NULL,
+ PRIMARY KEY(tenant_id,claim_id), UNIQUE(tenant_id,attempt_id),
+ FOREIGN KEY(tenant_id,delivery_id) REFERENCES publication_deliveries(tenant_id,id),
+ FOREIGN KEY(tenant_id,worker_grant_id) REFERENCES publication_grants(tenant_id,id)
+);
+CREATE TABLE IF NOT EXISTS publication_claim_materials (
+ tenant_id INTEGER NOT NULL,
+ claim_id TEXT NOT NULL,
+ media_sha256 TEXT NOT NULL,
+ verified_at BIGINT NOT NULL,
+ PRIMARY KEY(tenant_id,claim_id),
+ FOREIGN KEY(tenant_id,claim_id) REFERENCES publication_claims(tenant_id,claim_id)
+);
+CREATE TABLE IF NOT EXISTS publication_media_tickets (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ tenant_id INTEGER NOT NULL,
+ claim_id TEXT NOT NULL,
+ attempt_id TEXT NOT NULL,
+ media_kind TEXT NOT NULL,
+ media_id INTEGER NOT NULL,
+ media_sha256 TEXT NOT NULL,
+ ticket_hash TEXT NOT NULL UNIQUE,
+ expires_at BIGINT NOT NULL,
+ revoked_at BIGINT,
+ created_at BIGINT NOT NULL,
+ UNIQUE(tenant_id,id),
+ FOREIGN KEY(tenant_id,claim_id) REFERENCES publication_claims(tenant_id,claim_id),
+ FOREIGN KEY(tenant_id,attempt_id) REFERENCES publication_claims(tenant_id,attempt_id)
+);
+"""
+
+
+def _immutable_claims(con: db.DualConnection) -> None:
+    if con.dialect == "postgres":
+        con.execute(
+            "CREATE OR REPLACE FUNCTION publication_claim_immutable() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'immutable_claim'; END $$"
+        )
+    for table in ("publication_claims", "publication_claim_materials"):
+        if con.dialect == "sqlite":
+            for operation in ("UPDATE", "DELETE"):
+                con.execute(
+                    f"CREATE TRIGGER IF NOT EXISTS {table}_no_{operation.lower()} BEFORE {operation} ON {table} BEGIN SELECT RAISE(ABORT, 'immutable_claim'); END"
+                )
+        else:
+            con.execute(f"DROP TRIGGER IF EXISTS {table}_immutable ON {table}")
+            con.execute(
+                f"CREATE TRIGGER {table}_immutable BEFORE UPDATE OR DELETE ON {table} FOR EACH ROW EXECUTE FUNCTION publication_claim_immutable()"
+            )
+
+
 def migrate_publications(db_url: str | Path | None) -> None:
     """Sin seeds: una instalación nueva no recibe autorización autónoma."""
     with db.connect(db_url) as con:
@@ -427,7 +511,12 @@ def migrate_publications(db_url: str | Path | None) -> None:
             "CREATE TABLE IF NOT EXISTS schema_migrations(version TEXT PRIMARY KEY,applied_at BIGINT NOT NULL)"
         )
         source = (
-            _SCHEMA + _CONNECTION_SCHEMA + _CAMPAIGN_SCHEMA + _HISTORY_SCHEMA + _EVALUATION_SCHEMA
+            _SCHEMA
+            + _CONNECTION_SCHEMA
+            + _CAMPAIGN_SCHEMA
+            + _HISTORY_SCHEMA
+            + _EVALUATION_SCHEMA
+            + _DELIVERY_SCHEMA
         )
         schema = db._schema_for_postgres(source) if con.dialect == "postgres" else source
         for statement in schema.split(";"):
@@ -455,7 +544,12 @@ def migrate_publications(db_url: str | Path | None) -> None:
             ("publication_history_v1", int(time.time())),
         )
         _immutable_evaluations(con)
+        _immutable_claims(con)
         con.execute(
             "INSERT INTO schema_migrations(version,applied_at) VALUES (?,?) ON CONFLICT(version) DO NOTHING",
             ("publication_evaluations_v1", int(time.time())),
+        )
+        con.execute(
+            "INSERT INTO schema_migrations(version,applied_at) VALUES (?,?) ON CONFLICT(version) DO NOTHING",
+            ("publication_deliveries_v1", int(time.time())),
         )

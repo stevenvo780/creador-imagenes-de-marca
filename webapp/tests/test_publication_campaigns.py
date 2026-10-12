@@ -545,6 +545,10 @@ def test_campaign_schema_migration_rollback_no_seeds_and_idempotency(isolated_db
     db.init_db(isolated_db)
     with db.connect(isolated_db) as con:
         for table in (
+            "publication_media_tickets",
+            "publication_claim_materials",
+            "publication_claims",
+            "publication_deliveries",
             "publication_ai_decisions",
             "publication_evaluations",
             "publication_material_deliveries",
