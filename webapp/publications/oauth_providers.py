@@ -84,6 +84,7 @@ class OfficialOAuthClient:
     def __init__(self, config: OAuthConfig, transport: httpx.BaseTransport | None = None):
         config.public()
         self.config = config
+        self._exchange_result: dict | None = None
         self._sensitive_material = {config.client_secret}
         self.transport = transport or httpx.HTTPTransport(retries=0, trust_env=False)
 
@@ -250,6 +251,42 @@ class OfficialOAuthClient:
         if not isinstance(result.get("access_token"), str) or not result["access_token"]:
             raise Conflict("provider_verification_failed")
         # Esta marca vive solo en memoria del transporte, nunca se importa como autoridad.
+        self._exchange_result = result
+        return result
+
+    def refresh_instagram_token(self, credential: dict) -> dict:
+        """Renueva sólo Instagram Login; el objeto remoto exacto acredita el TTL.
+
+        La respuesta aún requiere verify/import para acreditar cuenta, capacidad
+        y autorización vigente. Un intento nuevo invalida la procedencia anterior.
+        """
+        self._exchange_result = None
+        if self.config.platform != "instagram" or self.config.api_mode != "instagram_login":
+            raise Conflict("oauth_not_configured")
+        self.config.public()
+        token = credential.get("access_token") if isinstance(credential, dict) else None
+        if not isinstance(token, str) or not token.strip():
+            raise Conflict("provider_verification_failed")
+        try:
+            result = self._request(
+                "GET",
+                "https://graph.instagram.com/refresh_access_token",
+                params={"grant_type": "ig_refresh_token", "access_token": token},
+            )
+        except httpx.HTTPError as exc:
+            raise Conflict("provider_verification_failed") from exc
+        refreshed_token = result.get("access_token")
+        token_type = result.get("token_type")
+        expires = result.get("expires_in")
+        if (
+            not isinstance(refreshed_token, str)
+            or not refreshed_token.strip()
+            or not isinstance(token_type, str)
+            or token_type.lower() != "bearer"
+            or type(expires) is not int
+            or expires <= 0
+        ):
+            raise Conflict("provider_verification_failed")
         self._exchange_result = result
         return result
 
