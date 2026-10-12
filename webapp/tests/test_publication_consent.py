@@ -20,6 +20,7 @@ def test_consent_requires_exact_tiktok_revision_and_owner(delivery_case):
 
 
 import base64
+import json
 import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
@@ -476,11 +477,22 @@ def test_claim_pins_exact_receipt_before_start_and_never_switches_to_new_receipt
         first = worker.get(path + "/post-consent", headers=headers)
         assert first.status_code == 200
         assert worker.get(path + "/post-consent", headers=headers).json() == first.json()
+        refreshed = c["a"]["client"].post(
+            f"/api/v1/publications/revisions/{c['revision']['id']}/creator-info",
+            json={"contract_hash": c["revision"]["contract_hash"]},
+        )
+        assert refreshed.status_code == 200
         rotated = c["a"]["client"].post(
+            f"/api/v1/publications/revisions/{c['revision']['id']}/consent",
+            json=c["consent_body"] | {"creator_id": refreshed.json()["creator_id"]},
+        )
+        assert rotated.status_code == 201
+        assert rotated.json()["receipt_id"] != c["receipt_id"]
+        old_replay = c["a"]["client"].post(
             f"/api/v1/publications/revisions/{c['revision']['id']}/consent",
             json=c["consent_body"],
         )
-        assert rotated.status_code == 201
+        assert old_replay.status_code == 409
         started = worker.post(
             path + "/start", headers=headers, json={"contract_hash": claim["contract_hash"]}
         )
@@ -722,6 +734,14 @@ def test_scheduled_consent_outlives_creator_freshness_but_stale_preflight_cannot
     c["revision"] = freeze_revision(c["url"], c["a"]["tenant"], c["campaign"]["id"], **c["args"])
     c["proof"]["contract_hash"] = c["revision"]["contract_hash"]
     issued = make_consent(c)
+    unused_creator = (
+        c["a"]["client"]
+        .post(
+            f"/api/v1/publications/revisions/{c['revision']['id']}/creator-info",
+            json={"contract_hash": c["revision"]["contract_hash"]},
+        )
+        .json()["creator_id"]
+    )
     append_ai_decision(c["url"], c["principal"], evaluated(c) | {"policy_version": 2}, c["now"])
     history(
         c,
@@ -745,9 +765,13 @@ def test_scheduled_consent_outlives_creator_freshness_but_stale_preflight_cannot
     )
     later = c["now"] + 601
     monkeypatch.setattr("webapp.api.publication_worker.time.time", lambda: later)
-    stale = c["a"]["client"].post(
-        f"/api/v1/publications/revisions/{c['revision']['id']}/consent", json=c["consent_body"]
-    )
+    path = f"/api/v1/publications/revisions/{c['revision']['id']}/consent"
+    replay = c["a"]["client"].post(path, json=c["consent_body"])
+    assert replay.status_code == 201 and replay.json() == {
+        "receipt_id": c["receipt_id"],
+        "consent": issued,
+    }
+    stale = c["a"]["client"].post(path, json=c["consent_body"] | {"creator_id": unused_creator})
     assert stale.status_code == 409
     claim = deliveries.claim_due(c["url"], c["worker"], later)
     assert claim, "Fresh owner consent must remain authority at the scheduled time"
@@ -805,3 +829,119 @@ def test_worker_refreshes_creator_options_and_holds_incompatible_current_respons
     assert len(transport.calls) == 1
     assert transport.calls[0][1].endswith("/creator_info/query/")
     assert adapter.journal.read("init") is None
+
+
+@pytest.mark.parametrize("concurrent", [False, True])
+def test_exact_owner_replay_preserves_pinned_receipt_and_start(tiktok_case, concurrent):
+    c = tiktok_case
+    claim = prepare_tiktok(c)
+    headers = {"Authorization": "Bearer " + c["worker_token"]}
+    path = f"/api/v1/publications/worker/claims/{claim['claim_id']}"
+    with TestClient(c["app"], base_url="https://testserver") as worker:
+        original = worker.get(path + "/post-consent", headers=headers).json()
+        barrier = Barrier(2) if concurrent else None
+
+        def replay(_):
+            with TestClient(c["app"], base_url="https://testserver") as owner:
+                owner.cookies.update(c["a"]["client"].cookies)
+                if barrier:
+                    barrier.wait()
+                result = owner.post(
+                    f"/api/v1/publications/revisions/{c['revision']['id']}/consent",
+                    json=c["consent_body"],
+                )
+                assert result.status_code == 201, result.text
+                return result.json()
+
+        if concurrent:
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                results = list(pool.map(replay, range(2)))
+        else:
+            results = [replay(0)]
+        assert all(r == {"receipt_id": c["receipt_id"], "consent": original} for r in results)
+        with db.connect(c["url"]) as con:
+            assert (
+                con.execute(
+                    "SELECT COUNT(*) n FROM publication_post_consents WHERE tenant_id=? AND revision_id=?",
+                    (c["a"]["tenant"], c["revision"]["id"]),
+                ).fetchone()["n"]
+                == 1
+            )
+            pinned = con.execute(
+                "SELECT receipt_id FROM publication_claim_consents WHERE tenant_id=? AND claim_id=?",
+                (c["a"]["tenant"], claim["claim_id"]),
+            ).fetchone()
+            assert pinned["receipt_id"] == c["receipt_id"]
+            assert (
+                con.execute(
+                    "SELECT lease_until FROM publication_deliveries WHERE tenant_id=? AND claim_id=?",
+                    (c["a"]["tenant"], claim["claim_id"]),
+                ).fetchone()["lease_until"]
+                == claim["lease_until"]
+            )
+        started = worker.post(
+            path + "/start", headers=headers, json={"contract_hash": claim["contract_hash"]}
+        )
+        assert started.status_code == 200, started.text
+
+
+@pytest.mark.parametrize("invalid", ["revoked", "expired", "window_expired"])
+def test_exact_owner_replay_never_revives_or_renews_invalid_authority(
+    tiktok_case, monkeypatch, invalid
+):
+    c = tiktok_case
+    if invalid == "expired":
+        c["proof"]["expires_at"] = c["now"] + 20
+    issued = make_consent(c)
+    if invalid == "revoked":
+        assert (
+            c["a"]["client"].delete(f"/api/v1/publications/consents/{c['receipt_id']}").status_code
+            == 204
+        )
+    else:
+        later = (
+            issued["expires_at"] + 1
+            if invalid == "expired"
+            else c["revision"]["snapshot"]["expires_at_utc"] + 1
+        )
+        monkeypatch.setattr("webapp.api.publication_worker.time.time", lambda: later)
+    result = c["a"]["client"].post(
+        f"/api/v1/publications/revisions/{c['revision']['id']}/consent", json=c["consent_body"]
+    )
+    assert result.status_code == 409, result.text
+    with db.connect(c["url"]) as con:
+        rows = con.execute(
+            "SELECT payload_json FROM publication_post_consents WHERE tenant_id=? AND revision_id=?",
+            (c["a"]["tenant"], c["revision"]["id"]),
+        ).fetchall()
+        assert len(rows) == 1
+        assert json.loads(rows[0]["payload_json"])["expires_at"] == issued["expires_at"]
+
+
+def test_exact_owner_replay_does_not_reopen_expired_claim_lease(tiktok_case, monkeypatch):
+    c = tiktok_case
+    claim = prepare_tiktok(c)
+    path = f"/api/v1/publications/worker/claims/{claim['claim_id']}"
+    headers = {"Authorization": "Bearer " + c["worker_token"]}
+    with TestClient(c["app"], base_url="https://testserver") as worker:
+        issued = worker.get(path + "/post-consent", headers=headers).json()
+        later = claim["lease_until"] + 1
+        assert later < issued["expires_at"]
+        monkeypatch.setattr("webapp.api.publication_worker.time.time", lambda: later)
+        replay = c["a"]["client"].post(
+            f"/api/v1/publications/revisions/{c['revision']['id']}/consent", json=c["consent_body"]
+        )
+        assert replay.status_code == 201 and replay.json()["consent"] == issued
+        assert worker.get(path + "/post-consent", headers=headers).status_code == 409
+        started = worker.post(
+            path + "/start", headers=headers, json={"contract_hash": claim["contract_hash"]}
+        )
+        assert started.status_code == 409
+        with db.connect(c["url"]) as con:
+            assert (
+                con.execute(
+                    "SELECT lease_until FROM publication_claims WHERE tenant_id=? AND claim_id=?",
+                    (c["a"]["tenant"], claim["claim_id"]),
+                ).fetchone()["lease_until"]
+                == claim["lease_until"]
+            )

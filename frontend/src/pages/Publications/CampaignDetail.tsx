@@ -420,6 +420,7 @@ function Candidate({
                 estas opciones
               </label>
               <Button
+                style={{ whiteSpace: "normal", overflowWrap: "anywhere" }}
                 type="button"
                 disabled={
                   !creator ||
@@ -458,6 +459,7 @@ function Candidate({
           {owner && (
             <>
               <Button
+                style={{ whiteSpace: "normal", overflowWrap: "anywhere" }}
                 disabled={
                   busy ||
                   !(

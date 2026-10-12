@@ -425,6 +425,22 @@ def record_consent(db_url: DBUrl, tenant: int, owner: int, rid: int, payload: di
             raise Conflict("creator_info_required")
         if not proof:
             raise Conflict("needs_platform_audit")
+        previous = con.execute(
+            "SELECT * FROM publication_post_consents WHERE tenant_id=? AND revision_id=? AND owner_id=? AND creator_id=? AND proof_id=? ORDER BY id DESC LIMIT 1",
+            (tenant, rid, owner, creator["id"], proof["id"]),
+        ).fetchone()
+        previous_value = json.loads(previous["payload_json"]) if previous else {}
+        if previous and all(previous_value.get(k) == v for k, v in value.items()):
+            latest = con.execute(
+                "SELECT id FROM publication_post_consents WHERE tenant_id=? AND revision_id=? ORDER BY id DESC LIMIT 1",
+                (tenant, rid),
+            ).fetchone()
+            if latest is None or latest["id"] != previous["id"]:
+                raise Conflict("consent_receipt_changed")
+            # Replay no emite otra autorización, renueva expiry ni cambia el pin.
+            # Authority exige vigencia actual, pero no vuelve a exigir frescura
+            # del creator usado para una confirmación que ya fue emitida.
+            return {"receipt_id": previous["id"], "consent": authority(con, tenant, rid, now)}
         c = _valid_record(con, tenant, creator, None, binding, now)
         p = _valid_record(con, tenant, proof, "proof", binding, now)
         _choices(s, value, c, p)
