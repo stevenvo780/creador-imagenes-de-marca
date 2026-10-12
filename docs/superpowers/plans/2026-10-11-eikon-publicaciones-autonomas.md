@@ -103,7 +103,7 @@ class ProviderResult(TypedDict):
 
 Los errores de dominio son `NotFound`, `Conflict(code)`, `Forbidden` y `InvalidInput(code)` en `contracts.py`; las rutas responden 404, 409, 403 y 422 respectivamente, sin incluir excepciones o cuerpos remotos sensibles.
 
-## Tarea 1: política autónoma y concesiones separadas
+## Task 1: política autónoma y concesiones separadas
 
 **Files:** crear `webapp/publications/{__init__,contracts,migrations,policies,auth}.py`, `webapp/api/publications.py`, `webapp/tests/test_publication_policies.py`, `webapp/tests/test_publication_grants.py`; modificar `webapp/db.py::init_db`, `webapp/app.py` y `webapp/config.py` al integrar routers/configuración.
 
@@ -142,7 +142,7 @@ def canonical_hash(payload):
 - [ ] Política valida listas de proyectos/cuentas propias, zona IANA, frecuencia positiva, máximo diario por destino, fuentes y productos autorizados, vigencia, `spend_allowed=false` inicial. Nuevos tenants empiezan deshabilitados; Humanizar se habilita por el controlador con la autorización actual y recibo, no por slug ni seed global.
 - [ ] Probar SQLite y PostgreSQL, init dos veces y rollback transaccional; correr también `test_media_permissions.py` sin reinterpretar sus resultados. Revisión independiente y commit `feat: add tenant publication policies and dedicated grants`.
 
-## Tarea 2: conexiones, vault y OAuth por cuenta
+## Task 2: conexiones, vault y OAuth por cuenta
 
 **Files:** crear `webapp/publications/{connections,vault,oauth}.py`, `webapp/tests/test_publication_connections.py`, `webapp/tests/test_publication_oauth.py`; modificar migraciones, router/configuración de la tarea 1 y la lista de dependencias web para AES-GCM.
 
@@ -177,7 +177,7 @@ WHERE tenant_id = ? AND owner_id = ? AND state_hash = ?
 - [ ] Conservar en el test que `rowcount != 1` impide intercambiar el código. Importar credenciales existentes Humanizar mediante script privado guardado, sin emitir nuevos scopes ni tokens de otro perfil.
 - [ ] Correr tests con red simulada y ambos motores; revisar que JSON/logs no contienen token/ciphertext. Revisión independiente y commit `feat: isolate social connections and OAuth credentials`.
 
-## Tarea 3: campañas y revisiones exactas para todos los canales
+## Task 3: campañas y revisiones exactas para todos los canales
 
 **Files:** crear `webapp/publications/campaigns.py`, `webapp/tests/test_publication_campaigns.py`; ampliar contratos, migraciones y router owner/planner.
 
@@ -213,7 +213,7 @@ def normalize_schedule(value):
 - [ ] Una edición inserta revisión nueva; no actualiza bytes o contrato anterior. Variante JPEG, vídeo o canal con otro texto tiene medio/hash y decisión propios. Conectar candidatos a `generation_briefs` existentes sin cambiar retroactivamente encargos.
 - [ ] Probar fechas equivalentes con offsets distintos, cambios de día local y separación de plataformas; comprobar que imagen importada sigue pendiente de revisión humana aunque pueda entrar a evaluación autónoma. Revisión y commit `feat: freeze autonomous publication candidates`.
 
-## Tarea 4: ledger e importación completa de historia
+## Task 4: ledger e importación completa de historia
 
 **Files:** crear `webapp/publications/ledger.py`, `scripts/import_publication_history.py`, `webapp/tests/test_publication_history.py`; ampliar migraciones.
 
@@ -249,7 +249,7 @@ ON publication_events(tenant_id, attempt_id, event_key);
 - [ ] Cerrar migración por destino solo con todo su historial conocido conciliado. Conexiones X/TikTok con mapping pendiente siguen retenidas, sin frenar destinos Meta cuyo corte sí está acreditado. No declarar historial remoto universal a partir de las fuentes inventariadas.
 - [ ] Revisión de integridad/duplicados y commit `feat: preserve publication history and destination media guards`.
 
-## Tarea 5: evaluación IA real y herramientas MCP
+## Task 5: evaluación IA real y herramientas MCP
 
 **Files:** crear `webapp/publications/decisions.py`, `webapp/api/publication_reviewer.py`, `mcp_server/publication_tools.py`, `webapp/tests/test_publication_decisions.py`, `mcp_server/tests/test_publication_tools.py`; modificar `mcp_server/server.py` al registrar tools y `mcp_server/QUICKSTART.md`. El cliente planner/reviewer usa respectivamente `EIKON_PUBLICATION_PLANNER_TOKEN` y `EIKON_PUBLICATION_REVIEWER_TOKEN`; server2 usa `EIKON_PUBLICATION_WORKER_TOKEN`. Sin ellos las rutas nuevas no usan `EIKON_API_KEY` como fallback.
 
@@ -289,7 +289,7 @@ if response["outcome"] == "approve" and (
 - [ ] No alterar `asset_reviews`, `approval_current` o tests owner. Revalidar política/grant/media/conexión en transacción y crear entrega solo si `approve` vigente. Probar revocación antes del commit de decisión y mismo receipt aplicado idempotentemente.
 - [ ] Ejecutar stdio MCP con grant de prueba, luego cliente Codex real contra un candidato Humanizar cuando el runtime esté desplegado: inspección de archivo, razones, decisión y lectura posterior con el mismo hash. Dobles no cierran este gate. Revisión y commit `feat: authorize publications through tenant AI decisions`.
 
-## Tarea 6: calendario durable, reserva, inicio y reporte
+## Task 6: calendario durable, reserva, inicio y reporte
 
 **Files:** crear `webapp/publications/deliveries.py`, `webapp/api/publication_worker.py`, `webapp/tests/test_publication_delivery_concurrency.py`; ampliar migraciones y router de calendario.
 
@@ -319,7 +319,7 @@ WHERE tenant_id=? AND id=? AND state='reserved'
 - [ ] API entrega original y credencial únicamente a reserva vigente de esa conexión/empresa; comprobar hash del PNG exacto. Reportes idempotentes; URLs remotas validadas por host/plataforma. Cancelación solo antes de inicio; retirada añade evento confirmado.
 - [ ] Pruebas de pérdida de ACK/report, servidor caído y eventos duplicados. Revisión y commit `feat: add durable calendar claims and conservative attempt states`.
 
-## Tarea 7: trabajador separado y adaptadores de todas las redes
+## Task 7: trabajador separado y adaptadores de todas las redes
 
 **Files:** crear `publisher_worker/{__init__,__main__,client,outbox,media_delivery}.py`, `publisher_worker/adapters/{__init__,base,facebook,instagram,x,tiktok}.py`, `publisher_worker/tests/test_dispatch.py`, `publisher_worker/tests/test_adapters.py`, `deploy/eikon-publisher.service`, `deploy/eikon-publisher.timer`.
 
@@ -356,7 +356,7 @@ client.report_attempt(claim, result)
 - [ ] Añadir matriz explícita `unknown|verified|requires_auth|requires_provider_review|requires_post_consent|blocked_by_budget|unsupported_media|rate_limited`. Los fallos por destino no detienen el barrido de otras cuentas. Timer nuevo inicialmente disabled, red de prueba sin proveedores reales.
 - [ ] Revisión del paquete/concurrencia y commit `feat: add isolated publisher worker and channel adapters`.
 
-## Tarea 8: recorrido integrado, política y panel
+## Task 8: recorrido integrado, política y panel
 
 **Files:** crear `frontend/src/api/publications.ts`, `frontend/src/pages/Publications/{PublicationsPage,PolicyPanel,CampaignDetail,CalendarPanel,ConnectionPanel,AttemptDetail}.tsx` y sus tests; modificar `frontend/src/App.tsx`, `frontend/src/components/AppShell.tsx` y estilos de publicaciones.
 
@@ -376,7 +376,7 @@ it("no muestra publicado para un intento incierto", () => {
 - [ ] En TikTok mostrar cuenta, preview editable, selector de privacidad sin default y controles de divulgación/consentimiento requeridos; guardar evidencia del paso externo contra la revisión exacta. Editar texto/privacidad crea nueva revisión y evaluación, no altera una decisión ya congelada.
 - [ ] Mobile/desktop por navegador cliente real, sin usar screenshots de una maqueta como resultado de producción. Revisión de accesibilidad y copy; commit `feat: connect autonomous campaigns calendar and operational status`.
 
-## Tarea 9: funcionamiento diario del cliente Codex
+## Task 9: funcionamiento diario del cliente Codex
 
 **Files:** crear `docs/OPERACION-CODEX-PUBLICACIONES.md`, `mcp_server/tests/test_publication_stdio.py`; ampliar tools de tarea 5 y configuración de bandeja sin almacenar sesiones.
 
@@ -398,7 +398,7 @@ def test_disconnected_reviewer_does_not_authorize_candidate(candidate_without_de
 - [ ] Ejecutar una vez en cliente real; conservar correlación candidato→archivo→modelo→decisión→entrega, no solo registro de automation. Desconectar cliente en prueba controlada: déficit visible, ninguna evaluación inventada; las entregas autorizadas vigentes siguen su curso.
 - [ ] Revisión y commit `docs: validate daily tenant Codex production and evaluation`.
 
-## Tarea 10: despliegue y aceptación completa por canal
+## Task 10: despliegue y aceptación completa por canal
 
 **Files:** crear `docs/DEPLOY-CENTRO-PUBLICACIONES.md`, `docs/QA-CENTRO-PUBLICACIONES.md`, `scripts/check_publication_acceptance.py`; ampliar `docs/GOAL-CENTRO-PUBLICACIONES.md`. No escribir credenciales o backups en repo.
 
