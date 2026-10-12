@@ -644,5 +644,31 @@ de tipos correctos, con la nota heredada de jinja2 conservada.
 
 Nuevo clon de la base respaldada:14→42 tablas, ocho entradas de migración
 previstas, datos originales preservados, segundo init estable y cero permisos
-o sustituciones creados por defecto. El paquete limpio del SHA corregido está
-preparado y su imagen se está construyendo; todavía no hay despliegue nuevo.
+o sustituciones creados por defecto.
+
+## Despliegue comprobado, 12 de octubre
+
+La imagen del código `a4389e898bb34bed876616afc052fd9499664dae` está desplegada
+en `eikon-00061-6lk`, con el 100 % del tráfico. Digest OCI:
+`sha256:9eef3179f126238b288b71da071b86db3e5949459e2e41b99783b9717d420e4e`.
+Sólo cambió la imagen del servicio; configuración restante e IAM se conservaron.
+El contenedor aislado comprobó migraciones, rutas y redacción con el formatter
+real. Los tres orígenes públicos sirven exactamente la nueva SPA. La sesión
+API propia de Humanizar comprobó perfil, política, conexiones y overview con
+HTTP 200; esto no acredita la sesión del navegador ni publicación social.
+
+La exclusión de logs se limita a solicitudes gestionadas de callback/media y
+Referer sensibles de este servicio. Su primera calificación sintética conserva
+un resultado negativo: dos entradas stdout contienen un marcador añadido a
+la query ordinaria de /health. La prueba discriminante, con el marcador sólo
+en Referer, obtiene cero entradas sensibles y dos entradas de control normal;
+también se observan diez diagnósticos redactados de callback/media. No demuestra
+filtración del Referer. Esta prueba sintética pasa, pero los recorridos reales
+de sesión, descarga, revocación y errores todavía deben verificarse. La ingestión
+del diagnóstico JSON INFO propio tampoco quedó acreditada.
+
+El trabajador de server2, sus autorizaciones dedicadas, la evaluación IA real
+y las publicaciones por cuenta/formato permanecen pendientes. No se activó
+ningún timer ni se enviaron nuevas publicaciones durante este despliegue.
+X conserva el bloqueo de presupuesto; TikTok requiere habilitación real del
+proveedor. La meta completa sigue abierta.

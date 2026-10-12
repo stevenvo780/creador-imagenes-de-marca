@@ -1,7 +1,7 @@
 # Release del centro de publicaciones
 
-Task10A prepara código y gates locales. **Este documento no acredita despliegue,
-OAuth, ejecución diaria, publicación ni timer activo.** Task10B comienza después
+Task10A prepara código y gates locales. **El despliegue API/SPA está comprobado;
+OAuth, ejecución diaria, publicación y timer activo siguen pendientes.** Task10B comienza después
 de revisión independiente de Task10A y revisión de la rama completa. La entrega
 anterior de galería sigue separada: el WorkerPool de Cloud Run renderiza;
 el nuevo publicador consume autorizaciones de Eikón desde server2.
@@ -100,6 +100,25 @@ Referer sensibles; conservará _Required y otros logs. Probará nuevos marcadore
 tras latencia de ingestión y positivos de diagnósticos seguros, sin borrar el
 baseline. Vercel debe quedar fuera del trayecto sensible soportado, manteniendo
 proxy/UI normales; cero query hits no lo acredita. No hay cambio runtime todavía.
+
+## Avance operativo del 12 de octubre
+
+Imagen revisada `a4389e898bb34bed876616afc052fd9499664dae`, OCI
+`sha256:9eef3179f126238b288b71da071b86db3e5949459e2e41b99783b9717d420e4e`,
+desplegada en `eikon-00061-6lk` con 100 % del tráfico. Runtime salvo imagen e
+IAM permanecen iguales al respaldo. La nueva SPA coincide byte por byte en
+Cloud Run, dominio público y proxy; sesión API Humanizar owner comprobada en
+su origen original. No se transfirió la sesión a otro origen.
+
+La exclusión limitada de _Default ya se aplicó, conservando sus otras
+propiedades, _Required y el resto de logs. La prueba sintética de callback/media
+y Referer tiene controles positivos y diagnósticos Uvicorn redactados. El
+marcador exclusivo de Referer no aparece en las consultas; el resultado negativo
+anterior de dos queries ordinarias /health se conserva como prueba confundida,
+sin borrar entradas ni ampliar el filtrado a todas las rutas. No se acredita
+la ingestión del evento JSON INFO propio ni un flujo real de éxito, revocación,
+422/500/timeouts. Estos límites impiden cerrar el gate completo o activar OAuth
+y URLs temporales. Worker, grants, modelo nativo y publicaciones reales pendientes.
 
 ## Recuperación y rollback
 
