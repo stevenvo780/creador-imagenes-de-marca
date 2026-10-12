@@ -941,3 +941,210 @@ def test_remote_name_cannot_reflect_private_token_into_metadata(oauth_case):
     result = finish(oauth_case, start(oauth_case)["state"], EchoDouble())
     assert result["status"] == "held" and result["hold_reason"] == "provider_verification_failed"
     assert "fake-token" not in json.dumps(result)
+
+
+def test_oauth_initializes_legacy_catalog_before_remote_activation(oauth_case, publication_db):
+    url, owners, payloads = publication_db
+    cid = payloads[0]["connection_ids"][0]
+    case = (url, owners, {"id": cid}, oauth_case[3])
+    flow = start(case)
+    with db.connect(url) as con:
+        detail = con.execute(
+            "SELECT * FROM publication_connection_details WHERE tenant_id=? AND connection_id=?",
+            (owners[0][0], cid),
+        ).fetchone()
+        assert detail is not None
+        assert detail["owner_id"] == owners[0][1]
+        assert detail["hold_reason"] == "authorization_pending"
+        assert detail["scope_evidence"] == "unverified" and detail["verified_at"] is None
+    result = finish(case, flow["state"], ProviderDouble(remote_id="remote-test"))
+    assert result["status"] == "active" and result["remote_name"] == "Test Page"
+    assert result["verified_at"] == NOW + 10 and result["expiry_state"] == "known"
+    assert result["scopes"] == sorted(ProviderDouble().scopes)
+    assert result["scope_evidence"] == "remote_introspection" and result["hold_reason"] is None
+    with db.connect(url) as con:
+        detail = con.execute(
+            "SELECT * FROM publication_connection_details WHERE tenant_id=? AND connection_id=?",
+            (owners[0][0], cid),
+        ).fetchone()
+        assert detail["owner_id"] == owners[0][1] and detail["verified_at"] == NOW + 10
+        assert json.loads(detail["scopes_json"]) == result["scopes"]
+
+
+@pytest.mark.parametrize(
+    "operation,reflected",
+    [
+        ("oauth", "fake-user-token"),
+        ("oauth", "fake-app-secret"),
+        ("oauth", "fake-code"),
+        ("import", "fake-user-token"),
+        ("import", "fake-app-secret"),
+    ],
+)
+def test_meta_rejects_reflection_of_private_material_before_page_token(
+    oauth_case, operation, reflected
+):
+    import httpx
+
+    from webapp.publications.oauth_providers import OfficialOAuthClient
+
+    def network_double(request):
+        path = request.url.path
+        if path.endswith("/oauth/access_token"):
+            return httpx.Response(200, json={"access_token": "fake-user-token", "expires_in": 7200})
+        if path.endswith("/debug_token"):
+            return httpx.Response(
+                200,
+                json={
+                    "data": {
+                        "is_valid": True,
+                        "app_id": "fake-app",
+                        "expires_at": 0,
+                        "type": "USER"
+                        if request.url.params["input_token"] == "fake-user-token"
+                        else "PAGE",
+                        "scopes": sorted(ProviderDouble().scopes),
+                    }
+                },
+            )
+        if path.endswith("/me/accounts"):
+            return httpx.Response(
+                200,
+                json={
+                    "data": [
+                        {
+                            "id": "page-42",
+                            "access_token": "fake-page-token",
+                            "tasks": ["CREATE_CONTENT"],
+                        }
+                    ]
+                },
+            )
+        return httpx.Response(200, json={"id": "page-42", "name": "Reflected " + reflected})
+
+    client = OfficialOAuthClient(oauth_case[3], httpx.MockTransport(network_double))
+    try:
+        if operation == "oauth":
+            result = finish(oauth_case, start(oauth_case)["state"], client)
+        else:
+            from webapp.publications.oauth import import_credential
+
+            result = import_credential(
+                oauth_case[0],
+                *oauth_case[1][0],
+                oauth_case[2]["id"],
+                {"access_token": "fake-user-token"},
+                NOW,
+                client,
+                key=b"k" * 32,
+                key_id="test",
+                dry_run=False,
+            )
+        assert "sensitive_material" not in json.dumps(result)
+        assert (
+            result["status"] == "held" and result["hold_reason"] == "provider_verification_failed"
+        )
+        assert reflected not in json.dumps(result)
+        with db.connect(oauth_case[0]) as con:
+            assert con.execute("SELECT * FROM publication_connection_vault").fetchall() == []
+            details = con.execute(
+                "SELECT remote_name,scopes_json FROM publication_connection_details"
+            ).fetchall()
+            assert reflected not in json.dumps(details)
+    finally:
+        client.close()
+
+
+@pytest.mark.parametrize("reflected", ["fake-short-token", "fake-ig-secret", "fake-code"])
+def test_instagram_rejects_reflection_of_private_material_before_long_token(
+    publication_db, reflected
+):
+    import httpx
+
+    from webapp.publications.connections import put_connection
+    from webapp.publications.oauth import OAuthConfig, finish_oauth, start_oauth
+    from webapp.publications.oauth_providers import OfficialOAuthClient
+
+    url, owners, payloads = publication_db
+    row = put_connection(
+        url,
+        *owners[0],
+        {
+            **connection_payload(payloads[0]),
+            "platform": "instagram",
+            "api_mode": "instagram_login",
+            "remote_id": "ig-42",
+        },
+    )
+    config = OAuthConfig(
+        "instagram",
+        "instagram_login",
+        "fake-app",
+        "fake-ig-secret",
+        ("https://eikon.example.test/callback",),
+        "v25.0",
+    )
+    flow = start_oauth(
+        url,
+        *owners[0],
+        "instagram",
+        config.redirect_uris[0],
+        NOW,
+        session_binding=BINDING,
+        connection_id=row["id"],
+        config=config,
+    )
+
+    def network_double(request):
+        if request.url.host == "api.instagram.com":
+            return httpx.Response(200, json={"data": [{"access_token": "fake-short-token"}]})
+        if request.url.path == "/access_token":
+            assert request.url.params["access_token"] == "fake-short-token"
+            return httpx.Response(200, json={"access_token": "fake-long-token", "expires_in": 7200})
+        if request.url.path.endswith("/content_publishing_limit"):
+            return httpx.Response(
+                200,
+                json={
+                    "data": [
+                        {
+                            "quota_usage": 0,
+                            "config": {
+                                "quota_total": 100,
+                                "quota_duration": 86400,
+                            },
+                        }
+                    ]
+                },
+            )
+        return httpx.Response(200, json={"user_id": "ig-42", "username": "Reflected " + reflected})
+
+    client = OfficialOAuthClient(config, httpx.MockTransport(network_double))
+    try:
+        result = finish_oauth(
+            url,
+            {
+                "tenant_id": owners[0][0],
+                "user_id": owners[0][1],
+                "session_binding": BINDING,
+                "auth_method": "session",
+            },
+            flow["state"],
+            "fake-code",
+            NOW + 10,
+            client,
+            key=b"k" * 32,
+            key_id="test",
+        )
+        assert (
+            result["status"] == "held" and result["hold_reason"] == "provider_verification_failed"
+        )
+        assert reflected not in json.dumps(result)
+        with db.connect(url) as con:
+            assert con.execute("SELECT * FROM publication_connection_vault").fetchall() == []
+            assert reflected not in json.dumps(
+                con.execute(
+                    "SELECT remote_name,scopes_json FROM publication_connection_details"
+                ).fetchall()
+            )
+    finally:
+        client.close()

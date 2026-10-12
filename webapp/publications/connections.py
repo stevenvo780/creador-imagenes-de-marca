@@ -166,7 +166,11 @@ def put_connection(db_url: str | Path | None, tenant_id: int, owner_id: int, pay
         return connection_metadata(con, _connection(con, tenant_id, cid))
 
 
-def hold_connection(con: db.DualConnection, tenant_id: int, cid: int, reason: str) -> dict:
+def hold_connection(
+    con: db.DualConnection, tenant_id: int, owner_id: int, cid: int, reason: str
+) -> dict:
+    require_owner(con, tenant_id, owner_id)
+    _connection(con, tenant_id, cid)
     con.execute(
         "UPDATE publication_connections SET status='held',version=version+1,expires_at=NULL,capabilities_json='{}' WHERE tenant_id=? AND id=?",
         (tenant_id, cid),
@@ -176,7 +180,7 @@ def hold_connection(con: db.DualConnection, tenant_id: int, cid: int, reason: st
         (tenant_id, cid),
     )
     con.execute(
-        "UPDATE publication_connection_details SET remote_name=NULL,scopes_json='[]',scope_evidence='unverified',verified_at=NULL,expiry_state='unknown',hold_reason=? WHERE tenant_id=? AND connection_id=?",
-        (reason, tenant_id, cid),
+        "INSERT INTO publication_connection_details(tenant_id,connection_id,owner_id,hold_reason) VALUES (?,?,?,?) ON CONFLICT(tenant_id,connection_id) DO UPDATE SET owner_id=excluded.owner_id,remote_name=NULL,scopes_json='[]',scope_evidence='unverified',verified_at=NULL,expiry_state='unknown',hold_reason=excluded.hold_reason",
+        (tenant_id, cid, owner_id, reason),
     )
     return connection_metadata(con, _connection(con, tenant_id, cid))

@@ -82,6 +82,8 @@ class VerifiedAccount:
     scope_evidence: Literal["remote_introspection", "token_exchange", "capability_probe"] = (
         "remote_introspection"
     )
+    # Solo memoria privada: incluye tokens intermedios y secretos del transporte.
+    sensitive_material: tuple[str, ...] = field(default=(), repr=False)
 
 
 class VerificationClient(Protocol):
@@ -167,7 +169,7 @@ def start_oauth(
             "redirect_uri": redirect_uri,
         }
         # Reconectar retiene e invalida contratos antes de cualquier exchange.
-        held = hold_connection(con, tenant_id, row["id"], "authorization_pending")
+        held = hold_connection(con, tenant_id, owner_id, row["id"], "authorization_pending")
         con.execute(
             "INSERT INTO publication_oauth_states(tenant_id,owner_id,connection_id,connection_version,state_hash,session_hash,config_hash,flow_json,verifier_envelope_json,created_at,expires_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
             (
@@ -235,6 +237,8 @@ def _public_evidence_safe(account: VerifiedAccount) -> bool:
         or not isinstance(account.scopes, tuple)
         or not isinstance(account.evidence_hosts, tuple)
         or any(not isinstance(h, str) for h in account.evidence_hosts)
+        or not isinstance(account.sensitive_material, tuple)
+        or any(not isinstance(s, str) for s in account.sensitive_material)
     ):
         return False
     fields = (account.remote_id, account.name, *account.scopes)
@@ -243,6 +247,7 @@ def _public_evidence_safe(account: VerifiedAccount) -> bool:
     if any(not re.fullmatch(r"[a-z][a-z0-9_.:]{0,100}", scope) for scope in account.scopes):
         return False
     private = [v for v in account.credential.values() if isinstance(v, str) and v]
+    private.extend(secret for secret in account.sensitive_material if secret)
     if any(secret in value for secret in private for value in fields):
         return False
     try:
@@ -297,7 +302,7 @@ def _store_verified(
             except (Conflict, InvalidInput):
                 reason = "vault_key_unavailable"
         if reason:
-            return hold_connection(con, tenant_id, cid, reason)
+            return hold_connection(con, tenant_id, owner_id, cid, reason)
         scopes = sorted(set(account.scopes))
         capabilities = {"publish": True, "image": row["platform"] != "tiktok", "video": True}
         con.execute(
@@ -309,15 +314,16 @@ def _store_verified(
             (account.expires_at, canonical_json(capabilities), tenant_id, cid),
         )
         con.execute(
-            "UPDATE publication_connection_details SET remote_name=?,scopes_json=?,scope_evidence=?,verified_at=?,expiry_state=?,hold_reason=NULL WHERE tenant_id=? AND connection_id=?",
+            "INSERT INTO publication_connection_details(tenant_id,connection_id,owner_id,remote_name,scopes_json,scope_evidence,verified_at,expiry_state,hold_reason) VALUES (?,?,?,?,?,?,?,?,NULL) ON CONFLICT(tenant_id,connection_id) DO UPDATE SET owner_id=excluded.owner_id,remote_name=excluded.remote_name,scopes_json=excluded.scopes_json,scope_evidence=excluded.scope_evidence,verified_at=excluded.verified_at,expiry_state=excluded.expiry_state,hold_reason=NULL",
             (
+                tenant_id,
+                cid,
+                owner_id,
                 account.name,
                 json.dumps(scopes, separators=(",", ":")),
                 account.scope_evidence,
                 now,
                 account.expiry_state,
-                tenant_id,
-                cid,
             ),
         )
         return connection_metadata(con, _connection(con, tenant_id, cid))

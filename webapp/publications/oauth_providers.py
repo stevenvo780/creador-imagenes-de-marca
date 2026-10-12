@@ -6,6 +6,7 @@ import json
 import os
 import re
 import stat
+from dataclasses import replace
 from pathlib import Path
 
 import httpx
@@ -82,10 +83,41 @@ class OfficialOAuthClient:
     def __init__(self, config: OAuthConfig, transport: httpx.BaseTransport | None = None):
         config.public()
         self.config = config
+        self._sensitive_material = {config.client_secret}
         self.transport = transport or httpx.HTTPTransport(retries=0, trust_env=False)
 
     def close(self) -> None:
         self.transport.close()
+
+    def _remember_secrets(self, value: dict | list) -> None:
+        """Retiene material confidencial aunque luego se sustituya la credencial.
+
+        El conjunto nunca forma parte de JSON, metadatos ni del vault. También
+        cubre respuestas anidadas (IG corto y las páginas de Meta).
+        """
+        if isinstance(value, dict):
+            for key, item in value.items():
+                if (
+                    key
+                    in {
+                        "access_token",
+                        "refresh_token",
+                        "id_token",
+                        "client_secret",
+                        "code",
+                        "code_verifier",
+                        "input_token",
+                    }
+                    and isinstance(item, str)
+                    and item
+                ):
+                    self._sensitive_material.add(item)
+                elif isinstance(item, (dict, list)):
+                    self._remember_secrets(item)
+        elif isinstance(value, list):
+            for item in value:
+                if isinstance(item, (dict, list)):
+                    self._remember_secrets(item)
 
     def _request(
         self,
@@ -114,6 +146,12 @@ class OfficialOAuthClient:
             headers["Authorization"] = (
                 "Basic " + base64.b64encode((basic[0] + ":" + basic[1]).encode()).decode()
             )
+        self._remember_secrets(params or {})
+        self._remember_secrets(data or {})
+        if token:
+            self._sensitive_material.add(token)
+        if headers.get("Authorization"):
+            self._sensitive_material.add(headers["Authorization"])
         request = httpx.Request(
             method,
             url,
@@ -138,6 +176,7 @@ class OfficialOAuthClient:
             error = result.get("error")
             if error and (not isinstance(error, dict) or error.get("code") != "ok"):
                 raise Conflict("provider_verification_failed")
+            self._remember_secrets(result)
             return result
         except (ValueError, TypeError) as exc:
             raise Conflict("provider_verification_failed") from exc
@@ -255,6 +294,11 @@ class OfficialOAuthClient:
         return (min(dates), "known") if dates else (None, "non_expiring")
 
     def verify(self, flow: dict, credential: dict, now: int) -> VerifiedAccount:
+        self._remember_secrets(credential)
+        account = self._verify_account(flow, credential, now)
+        return replace(account, sensitive_material=tuple(sorted(self._sensitive_material)))
+
+    def _verify_account(self, flow: dict, credential: dict, now: int) -> VerifiedAccount:
         self._flow(flow)
         token = credential.get("access_token")
         if not isinstance(token, str) or not token:

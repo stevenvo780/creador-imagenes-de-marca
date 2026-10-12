@@ -376,3 +376,61 @@ def test_protected_import_main_defaults_dry_run_never_prints_material(
     )
     with db.connect(url) as con:
         assert con.execute("SELECT * FROM publication_connection_vault").fetchall() == []
+
+
+@pytest.mark.parametrize("verified", [True, False])
+def test_import_upgrades_legacy_catalog_with_owner_scoped_evidence(publication_db, verified):
+    from webapp.publications.connections import list_connections
+    from webapp.publications.oauth import import_credential
+    from webapp.tests.test_publication_oauth import NOW, ProviderDouble
+
+    url, owners, payloads = publication_db
+    tenant_id, owner_id = owners[0]
+    cid = payloads[0]["connection_ids"][0]
+    with db.connect(url) as con:
+        assert con.execute("SELECT * FROM publication_connection_details").fetchall() == []
+    client = ProviderDouble(remote_id="remote-test", scopes=None if verified else [])
+    result = import_credential(
+        url,
+        tenant_id,
+        owner_id,
+        cid,
+        {"access_token": "fake-token"},
+        NOW,
+        client,
+        key=b"k" * 32,
+        key_id="test",
+        dry_run=False,
+    )
+    with db.connect(url) as con:
+        details = con.execute("SELECT * FROM publication_connection_details").fetchall()
+        assert len(details) == 1
+        detail = details[0]
+        assert (detail["tenant_id"], detail["connection_id"], detail["owner_id"]) == (
+            tenant_id,
+            cid,
+            owner_id,
+        )
+        if verified:
+            assert detail["remote_name"] == result["remote_name"] == "Test Page"
+            assert json.loads(detail["scopes_json"]) == result["scopes"] == sorted(client.scopes)
+            assert detail["scope_evidence"] == result["scope_evidence"] == "remote_introspection"
+            assert detail["verified_at"] == result["verified_at"] == NOW
+            assert detail["expiry_state"] == result["expiry_state"] == "known"
+            assert detail["hold_reason"] is result["hold_reason"] is None
+            assert result["status"] == "active" and result["expires_at"] == client.expires_at
+            assert (
+                con.execute("SELECT connection_id FROM publication_connection_vault").fetchone()[
+                    "connection_id"
+                ]
+                == cid
+            )
+        else:
+            assert result["status"] == "held"
+            assert detail["hold_reason"] == result["hold_reason"] == "insufficient_scopes"
+            assert detail["remote_name"] is detail["verified_at"] is None
+            assert json.loads(detail["scopes_json"]) == []
+            assert detail["scope_evidence"] == "unverified" and detail["expiry_state"] == "unknown"
+            assert con.execute("SELECT * FROM publication_connection_vault").fetchall() == []
+    assert next(row for row in list_connections(url, *owners[0]) if row["id"] == cid) == result
+    assert all(row["id"] != cid for row in list_connections(url, *owners[1]))
