@@ -27,6 +27,7 @@ from webapp.publications.contracts import (
     NotFound,
     canonical_hash,
     canonical_json,
+    normalize_schedule,
     positive_integer,
 )
 
@@ -190,7 +191,7 @@ def _event(
             raise Conflict("event_idempotency_conflict")
         return dict(old)
     history = con.execute(
-        "SELECT normalized_destination,image_sha256 FROM publication_history WHERE tenant_id=? AND attempt_id=?",
+        "SELECT * FROM publication_history WHERE tenant_id=? AND attempt_id=?",
         (tenant_id, attempt_id),
     ).fetchone()
     previous = con.execute(
@@ -206,6 +207,8 @@ def _event(
         if previous
         else {}
     )
+    if history is not None:
+        base["normalized_destination"] = _effective_destination(con, tenant_id, dict(history))
     dest = payload.get("normalized_destination", base.get("normalized_destination"))
     sha = payload.get("image_sha256", base.get("image_sha256"))
     if base and (
@@ -262,6 +265,8 @@ def append_event_in_transaction(
     antes de revalidar/despachar. Un rollback revierte evento y guardia juntos.
     """
     positive_integer(tenant_id, "invalid_tenant")
+    if kind == "destination_reconciled" or event_key == "history:destination":
+        raise InvalidInput("destination_reconciliation_seam_required")
     return _event(con, tenant_id, attempt_id, event_key, kind, payload)
 
 
@@ -421,6 +426,165 @@ def import_history_batch(
         return results
 
 
+def _validate_destination_proof(row: dict, dest: str, evidence: dict) -> None:
+    """Valida bindings del recibo del importador; no atestación del proveedor."""
+    canonical_json(evidence)
+    account = evidence.get("account_identity")
+    post = evidence.get("historical_post")
+    if not isinstance(account, dict) or not isinstance(post, dict):
+        raise InvalidInput("destination_identity_proof_required")
+    platform, remote_id = _destination(dest).split(":", 1)
+    if platform != row["platform"] or account.get("platform") != platform:
+        raise InvalidInput("destination_platform_mismatch")
+    if account.get("remote_id") != remote_id or post.get("author_remote_id") != remote_id:
+        raise InvalidInput("historical_post_author_mismatch")
+    required_kind = "oauth_open_id" if platform == "tiktok" else "numeric_id"
+    if account.get("kind") != required_kind or (platform != "tiktok" and not remote_id.isdigit()):
+        raise InvalidInput("stable_account_identity_required")
+    _sha(account.get("receipt_sha256"))
+    _sha(post.get("receipt_sha256"))
+    normalize_schedule(_text(evidence.get("verified_at_utc"), "mapping_timestamp_required"))
+    post_id = _text(post.get("id"), "historical_post_identity_required")
+    receipt = json.loads(row["item_json"]).get("receipt", {})
+    id_keys = {
+        "remote_id",
+        "post_id",
+        "photo_id",
+        "media_id",
+        "remote_post_id",
+        "remote_photo_id",
+        "remote_media_id",
+    }
+    original_ids = {
+        str(value)
+        for key, value in receipt.items()
+        if key in id_keys and isinstance(value, (str, int)) and not isinstance(value, bool)
+    }
+    if not original_ids or post_id not in original_ids:
+        raise InvalidInput("historical_post_identity_mismatch")
+
+
+def _validate_mapping_binding(
+    con: db.DualConnection, tenant_id: int, row: dict, payload: dict
+) -> str:
+    source = con.execute(
+        "SELECT source_sha256 FROM publication_history_sources WHERE tenant_id=? AND source_id=?",
+        (tenant_id, row["source_id"]),
+    ).fetchone()
+    if (
+        source is None
+        or any(
+            payload.get(key) != row[key]
+            for key in ("source_id", "source_delivery_id", "item_hash", "platform", "image_sha256")
+        )
+        or payload.get("source_sha256") != source["source_sha256"]
+    ):
+        raise Conflict("destination_origin_conflict")
+    dest = _destination(payload.get("normalized_destination"))
+    proof = payload.get("evidence")
+    if not isinstance(proof, dict):
+        raise InvalidInput("destination_identity_proof_required")
+    _validate_destination_proof(row, dest, proof)
+    return _canonical_destination(con, tenant_id, dest)
+
+
+def _effective_destination(con: db.DualConnection, tenant_id: int, row: dict) -> str | None:
+    if row["normalized_destination"] is not None:
+        return _canonical_destination(con, tenant_id, row["normalized_destination"])
+    event = con.execute(
+        "SELECT kind,payload_json FROM publication_events WHERE tenant_id=? AND attempt_id=? AND event_key='history:destination'",
+        (tenant_id, row["attempt_id"]),
+    ).fetchone()
+    if event is None:
+        return None
+    if event["kind"] != "destination_reconciled":
+        raise Conflict("destination_mapping_conflict")
+    return _validate_mapping_binding(con, tenant_id, row, json.loads(event["payload_json"]))
+
+
+def reconcile_history_destination(
+    db_url: str | Path,
+    tenant_id: int,
+    source_id: str,
+    source_delivery_id: str,
+    expected_item_hash: str,
+    expected_source_sha256: str,
+    normalized_destination: str,
+    evidence: dict,
+) -> dict:
+    """Importador confiable: liga historia sin mapping a cuenta/post verificados.
+
+    No endpoint ni permiso planner/reviewer/worker. El importador obtiene y
+    verifica externamente los recibos reales de identidad y autor del post;
+    sus SHA y bindings no son una atestación criptográfica del proveedor.
+    Un único evento inmutable por origen permite replay idéntico, nunca remap.
+    Historia/fuente/corte conservan sus bytes; no programa ni autoriza envíos.
+    """
+    _text(source_id, "invalid_source")
+    _text(source_delivery_id, "invalid_source_delivery")
+    _sha(expected_item_hash)
+    _sha(expected_source_sha256)
+    with db.connect(db_url) as con:
+        _lock(con, tenant_id)
+        stored = con.execute(
+            "SELECT * FROM publication_history WHERE tenant_id=? AND source_id=? AND source_delivery_id=?",
+            (tenant_id, source_id, source_delivery_id),
+        ).fetchone()
+        if stored is None:
+            raise NotFound("history_origin_not_found")
+        row = dict(stored)
+        if row["normalized_destination"] is not None:
+            raise Conflict("history_destination_already_known")
+        payload = {
+            "source_id": source_id,
+            "source_delivery_id": source_delivery_id,
+            "item_hash": expected_item_hash,
+            "source_sha256": expected_source_sha256,
+            "platform": row["platform"],
+            "image_sha256": row["image_sha256"],
+            "normalized_destination": normalized_destination,
+            "evidence": evidence,
+        }
+        dest = _validate_mapping_binding(con, tenant_id, row, payload)
+        raw, digest = canonical_json(payload), canonical_hash(payload)
+        old = con.execute(
+            "SELECT * FROM publication_events WHERE tenant_id=? AND attempt_id=? AND event_key='history:destination'",
+            (tenant_id, row["attempt_id"]),
+        ).fetchone()
+        if old is not None:
+            if old["kind"] != "destination_reconciled" or old["payload_hash"] != digest:
+                raise Conflict("destination_mapping_conflict")
+            return dict(old)
+        now = int(time.time())
+        con.execute(
+            "INSERT INTO publication_events(tenant_id,attempt_id,event_key,kind,payload_json,payload_hash,created_at) VALUES (?,?,'history:destination','destination_reconciled',?,?,?)",
+            (tenant_id, row["attempt_id"], raw, digest, now),
+        )
+        event = con.execute(
+            "SELECT * FROM publication_events WHERE tenant_id=? AND attempt_id=? AND event_key='history:destination'",
+            (tenant_id, row["attempt_id"]),
+        ).fetchone()
+        assert event is not None
+        prior = con.execute(
+            "SELECT kind FROM publication_events WHERE tenant_id=? AND attempt_id=?",
+            (tenant_id, row["attempt_id"]),
+        ).fetchall()
+        if row["image_sha256"] is not None and any(value["kind"] in _GUARDED for value in prior):
+            con.execute(
+                "INSERT INTO publication_media_guards(tenant_id,normalized_destination,image_sha256,event_id,created_at) VALUES (?,?,?,?,?) ON CONFLICT(tenant_id,normalized_destination,image_sha256) DO NOTHING",
+                (tenant_id, dest, row["image_sha256"], event["id"], now),
+            )
+        return dict(event)
+
+
+def _mapping_hold(row: dict, effective_destination: str | None) -> bool:
+    return bool(row["hold_reason"]) and not (
+        row["hold_reason"] == "destination_mapping_required"
+        and effective_destination is not None
+        and row["image_sha256"] is not None
+    )
+
+
 def _reconciled(con: db.DualConnection, tenant_id: int, row: dict) -> bool:
     if row["state"] not in _UNRECONCILED:
         return True
@@ -457,15 +621,13 @@ def _cut_ready(con: db.DualConnection, tenant_id: int, dest: str, manifest: dict
             ).fetchone()
             if row is None or row["item_hash"] != canonical_hash(value):
                 return False
-            item_dest = row["normalized_destination"]
-            if item_dest is not None:
-                item_dest = _canonical_destination(con, tenant_id, item_dest)
+            item_dest = _effective_destination(con, tenant_id, dict(row))
             if item_dest is None and row["platform"] == dest.split(":", 1)[0]:
                 return False
             if item_dest != dest:
                 continue
             relevant = True
-            if row["hold_reason"] or not _reconciled(con, tenant_id, dict(row)):
+            if _mapping_hold(dict(row), item_dest) or not _reconciled(con, tenant_id, dict(row)):
                 return False
             for withdrawal in value.get("withdrawals", []):
                 event = con.execute(
@@ -523,12 +685,12 @@ def history_ready_in_transaction(
         (tenant_id, dest.split(":")[0]),
     ).fetchall()
     for row in rows:
-        item_dest = row["normalized_destination"]
-        if item_dest is not None and _canonical_destination(con, tenant_id, item_dest) != dest:
+        item_dest = _effective_destination(con, tenant_id, dict(row))
+        if item_dest is not None and item_dest != dest:
             continue
         if (
             (row["source_id"], row["source_delivery_id"]) not in covered
-            or row["hold_reason"]
+            or _mapping_hold(dict(row), item_dest)
             or not _reconciled(con, tenant_id, dict(row))
         ):
             return False

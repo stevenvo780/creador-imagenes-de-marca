@@ -2,6 +2,7 @@
 
 import json
 from concurrent.futures import ThreadPoolExecutor
+from copy import deepcopy
 from pathlib import Path
 
 import pytest
@@ -528,3 +529,231 @@ def test_history_migration_rolls_back_and_keeps_no_seed(isolated_db, monkeypatch
         )
         for table in tables:
             assert con.execute(f"SELECT * FROM {table}").fetchall() == []
+
+
+def mapping_proof(post_id="1", account_id="123", platform="x"):
+    return {
+        "account_identity": {
+            "platform": platform,
+            "remote_id": account_id,
+            "kind": "oauth_open_id" if platform == "tiktok" else "numeric_id",
+            "receipt_sha256": "d" * 64,
+        },
+        "historical_post": {
+            "id": post_id,
+            "author_remote_id": account_id,
+            "receipt_sha256": "e" * 64,
+        },
+        "verified_at_utc": "2026-10-11T22:00:00Z",
+    }
+
+
+def test_destination_reconciliation_is_append_only_idempotent_and_preserves_withdrawal_guard(
+    publication_db,
+):
+    from webapp.publications.ledger import (
+        append_event,
+        history_ready,
+        import_history,
+        reconcile_history_destination,
+        seen_media,
+    )
+
+    url, owners, _ = publication_db
+    tenant = owners[0][0]
+    row = item(
+        destination=None,
+        withdrawals=[{"event_key": "withdrawn:confirmed", "payload": {"confirmed": True}}],
+    )
+    proof = evidence({"unmapped": [row]})
+    imported = import_history(url, tenant, "unmapped", [row], proof)["items"][0]
+    with db.connect(url) as con:
+        originals = {
+            table: con.execute(f"SELECT * FROM {table} WHERE tenant_id=?", (tenant,)).fetchall()
+            for table in (
+                "publication_history",
+                "publication_history_sources",
+                "publication_history_cuts",
+            )
+        }
+    assert not history_ready(url, tenant, "x:123")
+    mapped = reconcile_history_destination(
+        url, tenant, "unmapped", "1", imported["item_hash"], "b" * 64, "x:123", mapping_proof()
+    )
+    assert (
+        reconcile_history_destination(
+            url, tenant, "unmapped", "1", imported["item_hash"], "b" * 64, "x:123", mapping_proof()
+        )
+        == mapped
+    )
+    assert history_ready(url, tenant, "x:123")
+    assert seen_media(url, tenant, "x:123", "a" * 64)
+    assert not seen_media(url, tenant, "x:456", "a" * 64)
+    assert not seen_media(url, owners[1][0], "x:123", "a" * 64)
+    append_event(
+        url, tenant, imported["attempt_id"], "withdraw-again", "withdrawn", {"confirmed": True}
+    )
+    assert seen_media(url, tenant, "x:123", "a" * 64)
+    with db.connect(url) as con:
+        for table, rows in originals.items():
+            assert (
+                con.execute(f"SELECT * FROM {table} WHERE tenant_id=?", (tenant,)).fetchall()
+                == rows
+            )
+        events = con.execute(
+            "SELECT kind FROM publication_events WHERE tenant_id=? ORDER BY id", (tenant,)
+        ).fetchall()
+        assert [event["kind"] for event in events] == [
+            "published",
+            "withdrawn",
+            "destination_reconciled",
+            "withdrawn",
+        ]
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "source_hash",
+        "item_hash",
+        "cross_tenant",
+        "platform",
+        "name_only",
+        "wrong_author",
+        "wrong_post",
+        "malformed_post",
+        "missing_proof",
+    ],
+)
+def test_destination_reconciliation_rejects_wrong_origin_identity_or_evidence(
+    publication_db, mutation
+):
+    from webapp.publications.contracts import InvalidInput
+    from webapp.publications.ledger import import_history, reconcile_history_destination, seen_media
+
+    url, owners, _ = publication_db
+    tenant = owners[0][0]
+    row = item(destination=None)
+    imported = import_history(url, tenant, "unmapped", [row], evidence({"unmapped": [row]}))[
+        "items"
+    ][0]
+    args = [tenant, "unmapped", "1", imported["item_hash"], "b" * 64, "x:123", mapping_proof()]
+    if mutation == "source_hash":
+        args[4] = "f" * 64
+    elif mutation == "item_hash":
+        args[3] = "f" * 64
+    elif mutation == "cross_tenant":
+        args[0] = owners[1][0]
+    elif mutation == "platform":
+        args[5] = "facebook:123"
+    elif mutation == "name_only":
+        args[5] = "x:BrandName"
+        args[6] = mapping_proof(account_id="BrandName")
+    elif mutation == "wrong_author":
+        args[6]["historical_post"]["author_remote_id"] = "456"
+    elif mutation == "wrong_post":
+        args[6]["historical_post"]["id"] = "999"
+    elif mutation == "malformed_post":
+        args[6]["historical_post"]["id"] = ["1"]
+    else:
+        args[6] = {}
+    with pytest.raises((InvalidInput, Conflict, NotFound)):
+        reconcile_history_destination(url, *args)
+    assert not seen_media(url, tenant, "x:123", "a" * 64)
+    with db.connect(url) as con:
+        assert con.execute("SELECT COUNT(*) AS n FROM publication_events").fetchone()["n"] == 1
+
+
+def test_destination_reconciliation_rejects_remapping_and_changed_receipt(publication_db):
+    from webapp.publications.ledger import import_history, reconcile_history_destination
+
+    url, owners, _ = publication_db
+    tenant = owners[0][0]
+    row = item(destination=None)
+    imported = import_history(url, tenant, "unmapped", [row], evidence({"unmapped": [row]}))[
+        "items"
+    ][0]
+    args = [url, tenant, "unmapped", "1", imported["item_hash"], "b" * 64]
+    reconcile_history_destination(*args, "x:123", mapping_proof())
+    with pytest.raises(Conflict):
+        reconcile_history_destination(*args, "x:456", mapping_proof(account_id="456"))
+    changed = deepcopy(mapping_proof())
+    changed["historical_post"]["receipt_sha256"] = "f" * 64
+    with pytest.raises(Conflict):
+        reconcile_history_destination(*args, "x:123", changed)
+
+
+def test_destination_reconciliation_does_not_close_missing_source_or_another_unknown_mapping(
+    publication_db,
+):
+    from webapp.publications.ledger import (
+        history_ready,
+        import_history,
+        reconcile_history_destination,
+        seen_media,
+    )
+
+    url, owners, _ = publication_db
+    tenant = owners[0][0]
+    one, two = item(destination=None), item(2, destination=None)
+    proof = evidence({"unmapped": [one, two], "remaining-source": []})
+    results = import_history(url, tenant, "unmapped", [one, two], proof)["items"]
+    reconcile_history_destination(
+        url, tenant, "unmapped", "1", results[0]["item_hash"], "b" * 64, "x:123", mapping_proof()
+    )
+    assert seen_media(url, tenant, "x:123", "a" * 64)
+    assert not history_ready(url, tenant, "x:123")
+    import_history(url, tenant, "remaining-source", [], proof)
+    assert not history_ready(url, tenant, "x:123")
+    reconcile_history_destination(
+        url,
+        tenant,
+        "unmapped",
+        "2",
+        results[1]["item_hash"],
+        "b" * 64,
+        "x:456",
+        mapping_proof(post_id="2", account_id="456"),
+    )
+    assert history_ready(url, tenant, "x:123")
+    assert history_ready(url, tenant, "x:456")
+
+
+def test_tiktok_reconciliation_requires_oauth_open_id_and_original_post(publication_db):
+    from webapp.publications.ledger import (
+        history_ready,
+        import_history,
+        reconcile_history_destination,
+        seen_media,
+    )
+
+    url, owners, _ = publication_db
+    tenant = owners[0][0]
+    row = item(destination=None, platform="tiktok")
+    imported = import_history(url, tenant, "manual", [row], evidence({"manual": [row]}))["items"][0]
+    reconcile_history_destination(
+        url,
+        tenant,
+        "manual",
+        "1",
+        imported["item_hash"],
+        "b" * 64,
+        "tiktok:open-id-123",
+        mapping_proof(account_id="open-id-123", platform="tiktok"),
+    )
+    assert history_ready(url, tenant, "tiktok:open-id-123")
+    assert seen_media(url, tenant, "tiktok:open-id-123", "a" * 64)
+
+
+def test_destination_mapping_event_cannot_be_inserted_via_generic_append(publication_db):
+    from webapp.publications.contracts import InvalidInput
+    from webapp.publications.ledger import append_event, import_history
+
+    url, owners, _ = publication_db
+    tenant = owners[0][0]
+    row = item(destination=None)
+    imported = import_history(url, tenant, "manual", [row], evidence({"manual": [row]}))["items"][0]
+    with pytest.raises(InvalidInput):
+        append_event(
+            url, tenant, imported["attempt_id"], "history:destination", "destination_reconciled", {}
+        )
