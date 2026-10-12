@@ -1,7 +1,8 @@
 # Eikón: campañas, conexiones y calendario por empresa
 
 Fecha: **11 de octubre de 2026**, America/Bogota.
-Estado: **diseño escrito para revisión; subsistemas nuevos no implementados**.
+Estado: **diseño aprobado por el operador el 11 de octubre, con las enmiendas
+de todas las redes y decisión editorial autónoma por IA; implementación pendiente**.
 Amplía la entrega de galería/Codex del 8 de octubre, sin reabrir su implementación.
 
 ## Objetivo y alcance
@@ -10,18 +11,19 @@ El operador aprobó avanzar desde galería y estudio a un centro de identidad de
 producto y publicaciones. Cada empresa utiliza su propio Codex y sus redes.
 Humanizar será el primer uso real. El recorrido de aceptación es:
 
-**producto → campaña → pieza y copy → revisión owner → fecha y cuenta → envío → recibo**.
+**producto → campaña → pieza y texto → evaluación IA de pertinencia → fecha y cuenta → envío → recibo**.
 
 La identidad común Humanizar se aplica como entrega acotada sobre el renderer
 existente. Este documento define los nuevos contratos de campañas, conexiones,
 calendario, trabajador y panel. Se implementarán por entregas verticales, no como
 cinco productos independientes ni como una reescritura de Eikón.
 
-Primera publicación: imagen Facebook en las cuentas actuales verificadas. La
-galería sigue privada. Instagram se habilita después de resolver un medio de
-entrega autorizado y revisar su formato exacto. Vídeos/reels y TikTok requieren
-adaptadores y pruebas posteriores; X conserva la exclusión de gasto. No se añade
-facturación, un proveedor de imágenes alternativo ni compra de créditos.
+Todas las redes forman parte del resultado: Facebook, Instagram, TikTok y X,
+con imágenes y vídeos según capacidades verificadas. La primera prueba técnica
+puede recorrer Facebook, pero no reduce la entrega al único canal. La galería
+sigue privada. No se añade facturación, otro proveedor de imágenes ni compra
+de créditos. La exclusión de gasto de X sigue vigente; los requisitos externos
+se muestran como bloqueos reales y no como publicaciones operativas.
 
 ## Decisión arquitectónica
 
@@ -74,19 +76,45 @@ Una `publication_revision` congela:
 - conexión, plataforma y **ID remoto de la cuenta**, no únicamente un alias;
 - fecha consciente de zona horaria, vencimiento y hash canónico del conjunto.
 
-El owner revisa imagen y texto, destino y fecha, y registra decisión, actor,
-fecha, hash y evidencias. Confirma expresamente fidelidad de marca, derechos y
-afirmaciones/fuentes sobre esa revisión. Una ruta de validación para contratos
-Eikón comprueba esta autorización humana, los checks y sus evidencias sin
-convertirla en scores numéricos. No fabrica `calidad_evaluacion` ni
-`image_review` para superar el validador antiguo; su ruta legacy sigue intacta.
-Cambiar cualquiera de esos campos crea una revisión
-nueva que necesita aprobación; la revisión anterior conserva su historial.
-No se convierte una aprobación visual en un score editorial inventado.
+El operador cambió expresamente el punto 4: una IA analiza pertinencia,
+calidad visual, identidad y afirmaciones, decide y permite publicar sin revisión
+manual obligatoria por pieza. El owner autoriza una **política por empresa**
+con proyectos, productos, cuentas, fuentes permitidas, límites de frecuencia,
+ventana, vigencia y gasto; puede detenerla o cambiarla. Esta política no se
+infiere para otras empresas y la IA no la modifica ni emite sus propias claves.
 
-Los permisos actuales de Codex conservan su alcance: crear encargos y entregar
-medios, sin aprobar, gestionar identidad, conectar cuentas o habilitar envíos.
-Una aprobación caducada por cambio de marca/proyecto no permite exportación.
+La decisión `approve`, `reject` o `hold` es append-only y registra principal IA,
+modelo/proveedor, versión de política, hash de la revisión completa, evidencias,
+razón y fecha. Solo una aprobación vigente dentro de la política programa el
+envío. Cambiar identidad, archivo, texto, destino, fecha, política o grant invalida
+la decisión anterior; no borra el historial. Rechazo, error, incertidumbre,
+cuota agotada, cliente desconectado o evidencia ausente retienen la pieza.
+No se sustituyen esos fallos por un score o aprobación ficticios.
+
+La IA debe recibir los bytes exactos de la imagen, texto y fuentes, comprobar
+su pertinencia para producto, empresa, audiencia y canal y emitir respuesta
+estructurada. Un indicador aportado por el cliente como `vision=true` no prueba
+inspección. El registro distingue recibo real del modelo/cliente, hashes de
+material entregado y razonamiento de evidencias verificadas; no promete una
+atestación criptográfica del proveedor si el cliente no la ofrece. Fuentes,
+texto e imágenes son datos no confiables y no pueden alterar la política.
+
+Codex actúa en el cliente propio de cada empresa por MCP. Encargos y producción
+conservan los seis scopes actuales. El evaluador utiliza una concesión nueva y
+separada ligada a empresa/política/candidatos y caducidad; nunca se convierte en
+usuario owner. No se conceden revisión, conexiones o despacho a claves antiguas.
+`asset_reviews` y `approval_current` conservan su significado de revisión humana
+visual. La autorización autónoma de publicación completa se registra aparte.
+Una pieza `pending_review` puede ser evaluada para una publicación autónoma;
+una pieza rechazada o archivada por el owner se retiene.
+
+El cliente Codex conectado atiende una bandeja diaria de candidatos y evaluación.
+La programación del cliente usa el mecanismo disponible de ese cliente, no una
+herramienta integrada de imágenes inventada en un timer del servidor. Server2
+publica stock exacto ya autorizado; no necesita que el cliente permanezca abierto
+para enviar una entrega vigente. Sin stock o evaluación vigente no hay fallback.
+La primera aceptación incluye ejecución real del cliente; instalar un heartbeat
+sin una llamada MCP correlacionada no demuestra operación diaria.
 
 ## Conexiones y credenciales
 
@@ -120,7 +148,7 @@ no aparecen en la galería ni en el navegador del revisor.
 
 ## Calendario, reservas e incertidumbre
 
-La aprobación crea una entrega programada para una revisión exacta. Eikón
+La aprobación crea una entrega programada para una revisión exacta autorizada por la IA dentro de la política. Eikón
 reserva atómicamente una entrega vencida y autorizada mediante un lease ligado
 a empresa, revisión, cuenta y worker. Dos workers no reciben el mismo envío.
 Después del preflight y antes del POST, el worker solicita a Eikón una
@@ -139,8 +167,8 @@ revocar autorización requiere conciliar su resultado o retirar la publicación.
 
 La ventana por defecto será de 60 minutos desde la fecha aprobada. Una entrega
 fuera de ventana queda vencida y visible, sin publicación tardía automática ni
-ráfaga de recuperación. El owner puede crear y aprobar una nueva revisión con
-otra fecha. Esta ventana es una decisión operativa para impedir envíos tardíos
+ráfaga de recuperación. El owner o planner puede preparar una nueva revisión con
+otra fecha; la IA vuelve a evaluar el contrato completo dentro de la política. Esta ventana es una decisión operativa para impedir envíos tardíos
 automáticos; no atribuye una causa al atraso observado en el incidente anterior.
 
 Estados de entrega: programada, retenida, reservada, intento_iniciado, publicada, fallida,
@@ -162,12 +190,39 @@ conciliación, cancelación y retirada registran actor, fecha, revisión, intent
 cuenta y evidencia. Los reportes del worker son idempotentes por intento/evento.
 Una retirada conserva el recibo original y la guardia, y registra confirmación
 posterior. Los cuatro borrados del 11 se importarán como eventos históricos, no
-como permiso para republicar. Antes del primer claim nuevo se importa
-idempotentemente **todo el historial de intentos y recibos legacy**, con SHA y
+como permiso para republicar. Antes del primer claim de un destino se importa
+idempotentemente **todo su historial de intentos y recibos legacy**, con SHA y
 destino comprobados: publicados conservados, retirados, fallidos, inciertos y
-en vuelo. Un corte de migración verificado bloquea envíos hasta acreditar la
-guardia histórica completa. Los ocho envíos antiguos repetidos siguen retenidos
+en vuelo. El corte de migración por destino bloquea sus envíos hasta acreditar la
+guardia histórica completa. Un mapping pendiente de X/TikTok no desbloquea esos
+destinos ni detiene otros cuyo corte ya está comprobado. Los ocho envíos antiguos repetidos siguen retenidos
 y no se convierten en nuevas autorizaciones.
+
+## Elegibilidad de todas las redes
+
+Cada cuenta tiene estado y capacidades verificadas, independientes de la
+aprobación IA. Instagram requiere una variante exacta en formato admitido y
+un URL de entrega autorizado, temporal y acotado al archivo; convertir PNG
+a JPEG crea nueva pieza/hash/decisión. Vídeos/reels tienen variantes y recibos
+propios, nunca se declaran soportados por el adaptador actual de fotos.
+
+TikTok exige preview, privacidad seleccionada manualmente y consentimiento
+por contenido; una app no auditada se limita a publicación privada. Es un
+requisito externo, no una revisión editorial manual elegida para Eikón. La IA
+prepara y decide pertinencia, pero la entrega queda `needs_platform_consent`
+o `needs_platform_audit` hasta acreditar el paso correspondiente. No hay
+fallback a automatización de navegador para omitirlo. Las variantes comerciales
+deben revisar las reglas de contenido/marca y declaración antes del envío.
+Fuente oficial comprobada: https://developers.tiktok.com/docs/en/content-sharing-guidelines.
+
+X requiere créditos para los endpoints facturables. Sin autorización de gasto
+y evidencia de capacidad disponible, el canal queda `blocked_budget`. No se
+compra, añade tarjeta, activa recarga ni llama endpoints cobrables para probar.
+Fuente oficial: https://docs.x.com/x-api/getting-started/pricing.
+
+Estos bloqueos se muestran por cuenta y campaña, con paso humano concreto.
+El alcance sigue incluyendo todos los canales; un bloqueo externo visible no
+se contabiliza como publicación exitosa ni automatización totalmente operativa.
 
 ## Datos y límites de autorización
 
@@ -175,13 +230,15 @@ y no se convierten en nuevas autorizaciones.
 |---|---|
 | Campaña | tenant/proyecto/producto, objetivo y resumen de variantes |
 | Revisión de publicación | inmutable; medio, identidad, copy, destino, fecha y hash |
-| Revisión editorial | append-only; owner, decisión, hash y comprobaciones |
+| Política autónoma | owner, versión, alcance, frecuencia, vigencia y gasto |
+| Decisión IA | append-only; evaluador autorizado, política, modelo, decisión, hash y evidencias |
 | Conexión social | tenant, identidad remota, permisos y metadatos de credencial cifrada |
 | Entrega | tenant, revisión aprobada, fecha, estado efectivo y lease |
 | Intento/evento | append-only; entrega, worker, claim, recibo y resultado/conciliación |
 
 Toda consulta, FK y unicidad que relacione estas entidades incluye tenant. El
-owner prepara y revisa sus campañas y conexiones en la primera entrega. No se
+owner administra campañas, política y conexiones; la IA prepara y evalúa las
+revisiones dentro de ese alcance. No se
 atribuye permiso de edición a miembros ni se añaden nuevos roles en esta entrega.
 Los grants de worker se emiten expresamente y no se heredan de claves legacy ni
 de las seis concesiones Codex actuales. Los endpoints de worker rechazan ese
@@ -204,7 +261,7 @@ solo cuando exista permiso y evidencia; el recibo y enlace son la base inicial.
 ## Verificación y despliegue
 
 Se reutilizan los guards de media, hash, review, preflight Meta, claims SQLite
-y resultados conservadores. La autorización editorial humana nueva tiene una
+y resultados conservadores. La autorización autónoma basada en política tiene una
 ruta explícita y pruebas propias; la evaluación y los scores legacy no se
 debilitan ni se inventan. Pruebas SQLite y PostgreSQL cubren aislamiento,
 reservas concurrentes y eventos idempotentes. Las pruebas de integración cubren:
@@ -219,7 +276,7 @@ reservas concurrentes y eventos idempotentes. Las pruebas de integración cubren
 8. GUI real de crear/revisar/programar/resultado en desktop y móvil.
 
 Primero se prueba sin llamadas de publicación y con dobles de red. La aceptación
-real exige una pieza final revisada por el owner, una reserva y un envío por
+real exige una pieza final decidida por una IA real bajo la política, una reserva y un envío por
 cuenta autorizada, con recibo y lectura posterior. Cada prueba registra SHA de
 código y pieza, cuenta, fecha, contrato y resultado; sin tokens en evidencia.
 
@@ -233,13 +290,23 @@ retrocede a una revisión que ignore grants nuevos o lea credenciales sin sus gu
 ## Orden de las entregas y cierre
 
 1. Familia/estado de identidad en el estudio existente y comprobación visual.
-2. Campaña, variantes y revisión completa, antes de cualquier envío nuevo.
-3. Conexión Humanizar/Facebook, lease y trabajador separado con pruebas de fallo.
+2. Política, campañas, variantes y evaluación IA completa, antes de cualquier envío nuevo.
+3. Conexiones de todas las redes, reservas y trabajador separado con pruebas de fallo; Facebook como primer recorrido técnico.
 4. Calendario/panel y recorrido real comprobado; otras empresas con sus propias cuentas.
-5. Instagram con medio exacto autorizado; después vídeos/reels y TikTok según elegibilidad.
+5. Pruebas propias de imágenes, vídeos/reels y todas las redes según elegibilidad; los bloqueos externos no se contabilizan como publicación operativa.
 
 La meta no se declara completa por una galería, una instalación, un health o un
-ACK. Debe existir el recorrido real revisado y publicado, estados visibles,
+ACK, ni por una decisión de modelo simulada. Debe existir el recorrido real revisado y publicado, estados visibles,
 historial preservado y aislamiento probado. Los canales bloqueados externamente
 se reportan como tales, con el paso humano concreto pendiente; no se registran
 como capacidades operativas.
+
+
+## Confirmación del operador
+
+Respuesta del 11 de octubre: 1 aprobado; 2 server2 aprobado; 3 todos deben
+publicar; 4 IA analiza pertinencia, decide por sí sola y publica; 5 ventana
+de 60 minutos aprobada; 6 protección contra duplicados aprobada. Estas enmiendas
+sustituyen la revisión humana obligatoria por pieza del diseño anterior.
+La ejecución con subagentes y revisión por tarea ya fue seleccionada; falta
+la revisión del plan escrito antes de implementarlo.

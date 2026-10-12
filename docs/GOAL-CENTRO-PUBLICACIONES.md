@@ -1,7 +1,7 @@
 # Meta: Eikón como centro de marca y publicaciones
 
 Creada por instrucción del operador el **11 de octubre de 2026**, America/Bogota.
-Estado: **bloqueada por revisión escrita pendiente** de los módulos nuevos.
+Estado de trabajo: **diseño aprobado con enmiendas; plan escrito pendiente de revisión**.
 La entrega de identidad y galería se conserva; el objetivo completo sigue pendiente. La meta del chat es el seguimiento principal; este documento
 conserva requisitos, avances y evidencia del repositorio.
 
@@ -311,3 +311,24 @@ completada. El alcance, piezas, historial y restricciones permanecen íntegros.
 
 Para desbloquear: el operador revisa y aprueba, o solicita cambios concretos en
 `docs/superpowers/specs/2026-10-11-eikon-centro-publicaciones-design.md`.
+
+
+## Diseño aprobado con decisión autónoma por IA
+
+El operador aprobó expresamente el diseño y server2, exigió todos los canales,
+sustituyó la revisión manual de cada pieza por evaluación/decisión autónoma IA
+y conservó la ventana de 60 minutos y protección contra duplicados. La IA
+evalúa y programa dentro de una política autorizada por empresa; no se presenta
+como owner ni se amplían los seis scopes existentes. Esta instrucción sustituye
+la revisión humana obligatoria del diseño anterior.
+
+El plan escrito es `superpowers/plans/2026-10-11-eikon-publicaciones-autonomas.md`.
+Incluye política/grants, conexiones cifradas, campañas, historia, evaluación real,
+calendario, todos los adaptadores, panel, cliente Codex diario y aceptación por
+canal/formato. El método previo de subagentes con revisión por tarea se conserva.
+No se implementó ni desplegó producto nuevo al redactarlo.
+
+Las restricciones oficiales TikTok de privacidad/consentimiento por contenido
+y auditoría se distinguen de pertinencia editorial IA. X conserva no gasto;
+no se consultó saldo actual ni se ejecutaron endpoints potencialmente cobrables.
+Estos requisitos externos siguen visibles, sin inventar publicaciones exitosas.
