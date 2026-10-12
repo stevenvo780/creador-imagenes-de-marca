@@ -449,3 +449,31 @@ correctos. La suite anterior de 415 casos conserva su atribución a su commit.
 La siguiente tarea añade evaluación/decisión IA y herramientas MCP. La aceptación
 real del cliente, importación productiva y publicaciones siguen en tarea10; el
 calendario debe demostrar primero su autoridad y CAS transaccionales en tarea6.
+
+
+## Tarea 5 completada y revisada: evaluación editorial por IA
+
+Código hasta `3ac2eea13d014e74a66f8a7ad0fee36b2eda0742`: roles planner/reviewer
+separados, entrega de medio y referencia exactos, recibos correlacionados y
+evaluación con seis criterios razonados. Las decisiones approve/reject/hold
+son inmutables; rechazo, ausencia de contexto, cambios de autorización o medios
+impiden la elegibilidad. La confianza está ligada al grant del evaluador: el
+recibo declara client_reported, sin atribuir atestación criptográfica al modelo.
+
+La prueba real de dos conexiones PostgreSQL reprodujo y corrigió una aprobación
+anterior al commit de rechazo visual. La relectura de medios bloqueados y el
+lock NO KEY UPDATE conservan CAS/revocación sin bloquear los FK del owner. Las
+operaciones lentas quedan fuera del lock, con revalidación antes de guardar recibos.
+La revisión independiente aprobó especificación y calidad, sin hallazgos bloqueantes.
+
+Pruebas finales: **331 casos de consumidores afectados y 121 propios**, ambos
+motores y stdio FastMCP/fallback; lint limpio y siete fuentes sin errores de tipos.
+La suite amplia anterior conserva **726 correctas y 4 fallos** de count22→27,
+corregidos y cubiertos por los consumidores finales. El aviso heredado de mypy
+sobre jinja2 y los 35 diagnósticos de tarea2 siguen en el triage global.
+
+Vídeo se evalúa por muestras visuales silenciosas; audio sin inspección queda
+retenido. Fuentes son contexto factual congelado y URLs, sin cuerpos remotos
+inventados. Esto acredita contrato local revisado: Codex real, GUI, heartbeat,
+importación productiva y publicaciones por las cuatro redes siguen en tarea10.
+La tarea6 compone elegibilidad, historial, deduplicación y CAS en la cola durable.

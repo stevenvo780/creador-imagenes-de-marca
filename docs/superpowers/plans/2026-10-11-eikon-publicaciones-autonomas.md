@@ -265,7 +265,7 @@ Tarea4 cerrada como implementación/local: importación y apply repetido verific
 - `publication_eligibility(db_url, tenant_id, revision_id, now) -> dict` devuelve `eligible`, `reasons`, `decision_id` y `contract_hash`.
 - Tools nativos: `eikon_list_publication_candidates(cursor,limit)`, `eikon_get_publication_candidate(revision_id)`, `eikon_submit_publication_evaluation(revision_id,expected_contract_hash,policy_version,material_hashes,model_receipt,response)`. El rol planner dispone además de `eikon_prepare_publication_candidate`; su grant no emite decisiones.
 
-- [ ] Tests: scope antigua, reviewer ajeno/caducado, grant worker, fuente con instrucción de cambiar cuenta, imagen no entregada, JSON inválido, rechazo, hold y decisión sobre versión vieja.
+- [x] Tests: scope antigua, reviewer ajeno/caducado, grant worker, fuente con instrucción de cambiar cuenta, imagen no entregada, JSON inválido, rechazo, hold y decisión sobre versión vieja.
 
 ```python
 def test_reject_never_becomes_dispatchable(decision_case):
@@ -279,7 +279,7 @@ def test_reject_never_becomes_dispatchable(decision_case):
 
 `decision_case` provisiona política, grant reviewer, revisión propia y evaluación de doble de modelo registrada con hashes correctos; este fixture solo prueba contrato, nunca aceptación real de IA.
 
-- [ ] Ejecutar tests fallidos. Implementar evaluaciones append-only ligadas al grant y snapshot, comprobación de hashes exactos de imagen/texto/fuentes y decisión cerrada. La respuesta exige pertinencia, fidelidad de logo, legibilidad, afirmaciones justificadas, derechos/contexto y adecuación al canal con razones; no se requiere ni inventa score legacy.
+- [x] Ejecutar tests fallidos. Implementar evaluaciones append-only ligadas al grant y snapshot, comprobación de hashes exactos de imagen/texto/fuentes y decisión cerrada. La respuesta exige pertinencia, fidelidad de logo, legibilidad, afirmaciones justificadas, derechos/contexto y adecuación al canal con razones; no se requiere ni inventa score legacy.
 
 ```python
 required = {"pertinence", "brand_fidelity", "legibility", "claims_supported",
@@ -291,10 +291,11 @@ if response["outcome"] == "approve" and (
     raise InvalidInput("incomplete_evaluation")
 ```
 
-- [ ] La concesión autoriza confiar en un evaluador específico, no en indicadores arbitrarios. El cliente debe mostrar que el modelo recibió el PNG exacto y devolver un recibo correlacionado con request/modelo/proveedor, hashes y respuesta; no afirmar atestación criptográfica inexistente. Las fuentes se delimitan como datos no confiables en el prompt.
-- [ ] Añadir herramienta planner de importación privada de vídeo; la evaluación conserva hash original y evidencia de lo realmente inspeccionado, incluidos contexto de audio cuando exista. No heredar una evaluación de imagen ni declarar inspección de vídeo completo a partir de una sola captura.
-- [ ] No alterar `asset_reviews`, `approval_current` o tests owner. Revalidar política/grant/media/conexión en transacción y crear entrega solo si `approve` vigente. Probar revocación antes del commit de decisión y mismo receipt aplicado idempotentemente.
-- [ ] Ejecutar stdio MCP con grant de prueba, luego cliente Codex real contra un candidato Humanizar cuando el runtime esté desplegado: inspección de archivo, razones, decisión y lectura posterior con el mismo hash. Dobles no cierran este gate. Revisión y commit `feat: authorize publications through tenant AI decisions`.
+- [x] La concesión autoriza confiar en un evaluador específico, no en indicadores arbitrarios. El cliente debe mostrar que el modelo recibió el PNG exacto y devolver un recibo correlacionado con request/modelo/proveedor, hashes y respuesta; no afirmar atestación criptográfica inexistente. Las fuentes se delimitan como datos no confiables en el prompt.
+- [x] Añadir herramienta planner de importación privada de vídeo; la evaluación conserva hash original y evidencia de lo realmente inspeccionado, incluidos contexto de audio cuando exista. No heredar una evaluación de imagen ni declarar inspección de vídeo completo a partir de una sola captura.
+- [x] No alterar `asset_reviews`, `approval_current` o tests owner. Revalidar política/grant/media/conexión en transacción y crear entrega solo si `approve` vigente. Probar revocación antes del commit de decisión y mismo receipt aplicado idempotentemente.
+- [x] Ejecutar stdio MCP con grant de prueba y revisar/commit `feat: authorize publications through tenant AI decisions`: código local revisado en `3ac2eea13d014e74a66f8a7ad0fee36b2eda0742`, 331 casos finales de consumidores afectados y 121 finales propios, SQLite/PostgreSQL y FastMCP/fallback. La entrega durable la compone tarea6 bajo la misma transacción.
+- [ ] Gate real obligatorio de tarea10: cliente Codex contra candidato Humanizar desplegado; inspección de archivo/referencia/contexto, razones, decisión y lectura posterior del mismo hash. Dobles y stdio contractual no cierran este gate; vídeo silencioso real y audio retenido también deben comprobarse.
 
 ## Task 6: calendario durable, reserva, inicio y reporte
 
