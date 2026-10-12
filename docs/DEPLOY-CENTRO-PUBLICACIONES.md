@@ -233,8 +233,8 @@ Los hashes de políticas, grants, campañas, revisiones, entregas, conexiones y
 vault se mantuvieron iguales antes/después/replay. No se afirma inventario
 remoto completo ni autorización editorial por importar esta historia.
 
-Pendientes: OAuth/revisión de TikTok, política y
-grants, reconexión del cliente a las herramientas nuevas, evaluación editorial real,
+Pendientes: OAuth/revisión de TikTok, reconexión del cliente a las herramientas
+nuevas, evaluación editorial real,
 instalación del servicio aislado y pruebas de envío/segunda ejecución diaria.
 No hay nuevo servicio o timer activado ni recurrencia nueva acreditada.
 TikTok conserva requisitos externos; X conserva la decisión de no gasto.
@@ -242,9 +242,10 @@ TikTok conserva requisitos externos; X conserva la decisión de no gasto.
 La conexión MCP nativa actual listó proyectos de Humanizar (tenant 17).
 Se amplió únicamente su allowlist local de seis herramientas de galería a
 doce, añadiendo bandeja, candidatos, evaluación, preparación y vídeo.
-El cliente aún no ha acreditado la recarga de esas herramientas y el launcher
-conserva sólo la clave de galería: faltan los grants planner/reviewer dedicados.
-Este cambio local no habilita publicación ni sustituye las pruebas reales.
+El cliente aún no ha acreditado la recarga de esas herramientas. Después de
+Task10F, el launcher conserva la clave de galería y carga los grants separados
+planner/reviewer desde archivos privados del propietario con permisos 0600;
+no recibe el grant worker. Este cambio local no sustituye las pruebas reales.
 
 La app de TikTok continúa en borrador. Se prepararon descripción y plataforma
 web, pero Save exige icono, categoría, términos, privacidad y URL de servicio;
@@ -252,3 +253,42 @@ no se confirmó el guardado. Products/scopes y demo de extremo a extremo
 siguen pendientes. No se envió a revisión ni se afirma permiso de publicación
 pública. La sesión de Instagram en Brave quedó en la pantalla de carga, sin
 prueba nueva de acceso social. X mantiene la restricción expresa de no gasto.
+
+### Task10F: permisos y transporte real, 12 de octubre
+
+Tras revisión independiente y respaldo privado nuevo, se creó política 1 de
+calificación para tenant 17/owner 4: los 17 proyectos y marcas, conexiones
+1/2/3, sólo `https://humanizar.tech/` y `https://catalogo.humanizar.tech/`,
+America/Bogota, frecuencia 1440 minutos, máximo 1 diario por destino, ventana
+60 minutos y sin gasto. Política y grants vencen el 13 de octubre de 2026 a
+las 22:28:39 UTC, 17:28:39 de Bogotá. No son una recurrencia ya aceptada.
+Se emitieron grants independientes planner 1, reviewer 2 y worker 3; secretos
+fuera de Git y registros públicos limitados a metadatos. Un proceso MCP stdio
+real llamó a galería, bandeja planner y candidatos reviewer contra producción:
+tenant 17/política 1, tres déficits de stock. Esto no acredita la recarga del
+cliente nativo ni una evaluación IA o publicación real.
+
+La primera verificación conservó un resultado negativo: worker devolvió 403
+`https_required` en proxy y origen directo. El contenedor recibe HTTP después
+de la terminación TLS de Cloud Run y Uvicorn sólo confiaba en loopback.
+Se reprodujo con la imagen fijada: siete casos aislados, sin DB, secretos ni
+red, comprobaron corrección, cabecera ausente/http/inválida, falta de permiso
+y conservación del rechazo local a peers no confiables. Revisión independiente
+aprobó configurar `FORWARDED_ALLOW_IPS=*` exclusivamente en este Cloud Run,
+cuyo ingreso pasa por Google. El wildcard confía en cualquier peer de ASGI:
+la defensa reside en el ingreso gestionado; no se aplica al Docker local.
+
+Revisión activa `eikon-00063-fgl`, 100 % del tráfico, misma imagen y cuenta de
+servicio. El único cambio de `template.spec` es esa variable; anotaciones del
+servicio y revisión se conservaron, salvo el UUID gestionado de la operación.
+Después, el GET worker de un claim inexistente devolvió 404 tanto en proxy
+como en origen directo, mientras planner/reviewer devolvieron 200 y sus roles
+cruzados 403. Worker sin grant conserva 403 `publication_grant_required`.
+No se creó claim ni se llamó a un proveedor para publicar.
+
+El panel autenticado de Brave ya muestra las tres conexiones activas y política
+1; el error anterior desapareció tras la recarga. No se atribuye el cambio del
+panel a un levantamiento de Shields no comprobado. Campañas y entregas siguen
+vacías; el servicio/timer de server2 y las pruebas remotas permanecen pendientes.
+Se pidió reconectar únicamente el MCP de Eikón en Codex para cargar las nuevas
+herramientas, sin otra autenticación social ni traslado de cookies.
