@@ -348,3 +348,25 @@ efémera, sin red ni puertos publicados, para verificar ambos motores. La
 configuración de producción, credenciales y timers permanecen en el estado
 anterior durante esta etapa. Todavía no hay un runtime nuevo desplegado ni
 publicaciones acreditadas de esta implementación.
+
+
+## Tarea 1 completada y revisada: política y grants
+
+Commit `46075cdd1e4d7f5949075a0403603295dcb57bf6`: política owner append-only
+por empresa con CAS, alcance de proyectos/productos/cuentas/fuentes, zona,
+frecuencia, vigencia, ventana de 60 minutos y gasto deshabilitado. Concesiones
+planner/reviewer/worker separadas con secreto hash-only y revocación; ninguna
+clave de los seis scopes anteriores obtiene autonomía. El catálogo de cuentas
+es estructural, sin OAuth/secrets/seed; su gestión real corresponde a tarea 2.
+
+Pruebas nuevas y existentes en SQLite/PostgreSQL: **1.021 correctas y 2 skips
+previos**, frente a la base de 895/2. La revisión independiente dio conformidad
+de especificación y calidad aprobada sin hallazgos pendientes. Siete avisos
+Ruff RUF036 de firmas anteriores en db.py se cotejaron con la base; los módulos
+nuevos y diff-check están limpios.
+
+Es una entrega de código en la rama de desarrollo. No se desplegó ni emitió
+política o grant productivo, no cambió el significado de revisión humana de
+medios y no se publicó contenido. Las pruebas reales de cliente/UI/operación
+mencionadas en tareas 5, 8 y 9 se conservan para la aceptación integrada de
+tarea 10, después del despliegue; no cuentan como aprobadas por pruebas locales.

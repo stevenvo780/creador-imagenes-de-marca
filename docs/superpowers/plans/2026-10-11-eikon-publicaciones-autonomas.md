@@ -39,7 +39,7 @@
 
 ## Límites, archivos e interfaces
 
-Un escritor por tarea; las siguientes tareas se integran secuencialmente. Una revisión puede rechazar una entrega sin descartar las anteriores. La exploración paralela es de solo lectura; los cambios a archivos compartidos se asignan explícitamente al integrador.
+Un escritor por tarea; las siguientes tareas se integran secuencialmente. Una revisión puede rechazar una entrega sin descartar las anteriores. Las comprobaciones productivas citadas en tareas 5, 8 y 9 se ejecutan en la tarea 10, tras su despliegue integrado; siguen siendo requisitos obligatorios de aceptación. La exploración paralela es de solo lectura; los cambios a archivos compartidos se asignan explícitamente al integrador.
 
 | Archivo nuevo | Responsabilidad |
 |---|---|
@@ -113,7 +113,7 @@ Los errores de dominio son `NotFound`, `Conflict(code)`, `Forbidden` y `InvalidI
 - `resolve_grant(db_url, token, expected_role, now) -> Principal`: solo prefijos y tabla nueva; política activa, owner autorizante vigente, expiración/revocación y rol exactos.
 - `canonical_hash(payload: dict) -> str` y `normalize_schedule(value: str) -> int` en `contracts.py`.
 
-- [ ] Escribir tests con el fixture `media_clients` existente para dos tenants. Crear política por owner A, denegar B y clave de los seis scopes; probar CAS con versión vieja, degradación del owner autorizante y grants de roles equivocados.
+- [x] Escribir tests con el fixture `media_clients` existente para dos tenants. Crear política por owner A, denegar B y clave de los seis scopes; probar CAS con versión vieja, degradación del owner autorizante y grants de roles equivocados.
 
 ```python
 def test_no_legacy_scope_can_enable_autonomy(media_clients):
@@ -128,8 +128,8 @@ def test_no_legacy_scope_can_enable_autonomy(media_clients):
     assert r.status_code == 403
 ```
 
-- [ ] Ejecutar `python -m pytest webapp/tests/test_publication_policies.py webapp/tests/test_publication_grants.py -q`; antes del cambio las rutas son inexistentes, no 403. Registrar el fallo.
-- [ ] Crear tablas `publication_policies` y `publication_grants` con `tenant_id`, owner, versión, timestamps, JSON canónico y secreto hash. Resolver principales nuevos sin tocar `current_user` ni ampliar `API_KEY_SCOPES`. La dependencia worker/reviewer rechaza presencia simultánea de cookie y Bearer, y cualquier token del rol distinto.
+- [x] Ejecutar `python -m pytest webapp/tests/test_publication_policies.py webapp/tests/test_publication_grants.py -q`; antes del cambio las rutas son inexistentes, no 403. Registrar el fallo.
+- [x] Crear tablas `publication_policies` y `publication_grants` con `tenant_id`, owner, versión, timestamps, JSON canónico y secreto hash. Resolver principales nuevos sin tocar `current_user` ni ampliar `API_KEY_SCOPES`. La dependencia worker/reviewer rechaza presencia simultánea de cookie y Bearer, y cualquier token del rol distinto.
 
 ```python
 def canonical_hash(payload):
@@ -139,8 +139,8 @@ def canonical_hash(payload):
     return hashlib.sha256(raw).hexdigest()
 ```
 
-- [ ] Política valida listas de proyectos/cuentas propias, zona IANA, frecuencia positiva, máximo diario por destino, fuentes y productos autorizados, vigencia, `spend_allowed=false` inicial. Nuevos tenants empiezan deshabilitados; Humanizar se habilita por el controlador con la autorización actual y recibo, no por slug ni seed global.
-- [ ] Probar SQLite y PostgreSQL, init dos veces y rollback transaccional; correr también `test_media_permissions.py` sin reinterpretar sus resultados. Revisión independiente y commit `feat: add tenant publication policies and dedicated grants`.
+- [x] Política valida listas de proyectos/cuentas propias, zona IANA, frecuencia positiva, máximo diario por destino, fuentes y productos autorizados, vigencia, `spend_allowed=false` inicial. Nuevos tenants empiezan deshabilitados; Humanizar se habilita por el controlador con la autorización actual y recibo, no por slug ni seed global.
+- [x] Probar SQLite y PostgreSQL, init dos veces y rollback transaccional; correr también `test_media_permissions.py` sin reinterpretar sus resultados. Revisión independiente y commit `feat: add tenant publication policies and dedicated grants`.
 
 ## Task 2: conexiones, vault y OAuth por cuenta
 
