@@ -589,3 +589,33 @@ la revisión integrada, despliegue respaldado, cliente/modelo/imagen reales,
 GUI Humanizar, pruebas por cuenta/formato y segunda ejecución sin duplicados.
 X mantiene la restricción de gasto; TikTok requiere evidencias y consentimiento
 reales. La meta completa continúa pendiente.
+
+
+## Integración local y preflight, 12 de octubre
+
+Código hasta `19ca555b9a98c749423db51be8615d2a1ab02901`: verificador de
+recibos por cuenta y formato, recuperación de Facebook vídeo y protección
+de registros de fuente. Revisión independiente aprobada tras corregir el
+formatter real de Uvicorn y limitar la sustitución de errores a callback/media.
+
+Snapshot integrado: 1.932 pruebas correctas y dos omisiones históricas de
+archivos demo; frontend 12 Vitest, 78 QA y build. El verificador final tuvo
+55 pruebas directas; el fix posterior de registros tuvo 191 casos focales
+correctos sin omisiones. No se atribuye el snapshot a una suite completa
+ejecutada después de esos cambios. Tipos configurados:109 fuentes; matriz
+explícita de producción:116. Los 34 diagnósticos OAuth quedaron corregidos.
+Ruff global conserva 43 diagnósticos anteriores al inicio de esta rama, sin
+nuevos por código/archivo/mensaje; el gate global sigue FAIL.
+
+Respaldo privado nuevo de DB/config/storage y del publicador anterior de
+server2. Clon DB sin red: 14 tablas originales preservadas, 41 tras migración,
+siete entradas esperadas de metadata añadidas, segundo init idéntico y cero
+autorizaciones creadas. Storage se restauró localmente con igualdad SHA de
+3.003 archivos; esto no prueba restauración operativa en Google Cloud Storage.
+
+Pendientes: revisión completa de rama, digest/despliegue, calificación de logs
+reales, Humanizar en GUI, permisos/cuentas actuales, MCP nativo28 y evaluación
+real, trabajador, publicación por cuenta/formato y segundo ciclo sin POST.
+Bitwarden sigue bloqueado; server2 no tiene ffmpeg/ffprobe y sudo requiere
+intervención. X sigue sin gasto; TikTok necesita los requisitos externos
+actuales. Producción continúa en su versión anterior y la meta sigue pendiente.
