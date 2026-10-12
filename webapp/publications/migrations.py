@@ -181,6 +181,93 @@ CREATE INDEX IF NOT EXISTS idx_publication_revisions_tenant_id ON publication_re
 """
 
 
+_HISTORY_SCHEMA = """
+CREATE TABLE IF NOT EXISTS publication_history_cuts (
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ cut_id TEXT NOT NULL,
+ manifest_hash TEXT NOT NULL,
+ manifest_json TEXT NOT NULL,
+ created_at BIGINT NOT NULL,
+ PRIMARY KEY(tenant_id,cut_id)
+);
+CREATE TABLE IF NOT EXISTS publication_history_sources (
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ source_id TEXT NOT NULL,
+ source_sha256 TEXT NOT NULL,
+ receipt_sha256 TEXT NOT NULL,
+ evidence_json TEXT NOT NULL,
+ created_at BIGINT NOT NULL,
+ PRIMARY KEY(tenant_id,source_id)
+);
+CREATE TABLE IF NOT EXISTS publication_history (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ source_id TEXT NOT NULL,
+ source_delivery_id TEXT NOT NULL,
+ attempt_id TEXT NOT NULL,
+ platform TEXT NOT NULL CHECK(platform IN ('facebook','instagram','tiktok','x')),
+ normalized_destination TEXT,
+ image_sha256 TEXT,
+ state TEXT NOT NULL CHECK(state IN ('published','failed','uncertain','inflight','attempt_started','held','cancelled','withdrawn')),
+ hold_reason TEXT,
+ item_hash TEXT NOT NULL,
+ item_json TEXT NOT NULL,
+ created_at BIGINT NOT NULL,
+ UNIQUE(tenant_id,id),
+ UNIQUE(tenant_id,attempt_id),
+ FOREIGN KEY(tenant_id,source_id) REFERENCES publication_history_sources(tenant_id,source_id)
+);
+CREATE UNIQUE INDEX IF NOT EXISTS publication_history_origin ON publication_history(tenant_id,source_id,source_delivery_id);
+CREATE TABLE IF NOT EXISTS publication_events (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ attempt_id TEXT NOT NULL,
+ event_key TEXT NOT NULL,
+ kind TEXT NOT NULL,
+ payload_json TEXT NOT NULL,
+ payload_hash TEXT NOT NULL,
+ created_at BIGINT NOT NULL,
+ UNIQUE(tenant_id,id)
+);
+CREATE UNIQUE INDEX IF NOT EXISTS publication_event_idempotency ON publication_events(tenant_id,attempt_id,event_key);
+CREATE TABLE IF NOT EXISTS publication_media_guards (
+ tenant_id INTEGER NOT NULL,
+ normalized_destination TEXT NOT NULL,
+ image_sha256 TEXT NOT NULL,
+ event_id INTEGER NOT NULL,
+ created_at BIGINT NOT NULL,
+ PRIMARY KEY(tenant_id,normalized_destination,image_sha256),
+ FOREIGN KEY(tenant_id,event_id) REFERENCES publication_events(tenant_id,id)
+);
+"""
+
+
+def _immutable_history(con: db.DualConnection) -> None:
+    """Ni una retirada ni SQL accidental puede borrar historia o guardias."""
+    tables = (
+        "publication_history_cuts",
+        "publication_history_sources",
+        "publication_history",
+        "publication_events",
+        "publication_media_guards",
+    )
+    if con.dialect == "postgres":
+        con.execute(
+            "CREATE OR REPLACE FUNCTION publication_history_immutable() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'immutable_history'; END $$"
+        )
+    for table in tables:
+        if con.dialect == "sqlite":
+            for operation in ("UPDATE", "DELETE"):
+                con.execute(
+                    f"CREATE TRIGGER IF NOT EXISTS {table}_no_{operation.lower()} BEFORE {operation} ON {table} BEGIN SELECT RAISE(ABORT, 'immutable_history'); END"
+                )
+        else:
+            con.execute(f"DROP TRIGGER IF EXISTS {table}_immutable ON {table}")
+            con.execute(
+                f"CREATE TRIGGER {table}_immutable BEFORE UPDATE OR DELETE ON {table} FOR EACH ROW EXECUTE FUNCTION publication_history_immutable()"
+            )
+
+
 def _immutable_revisions(con: db.DualConnection) -> None:
     """Impide sobrescribir/borrar el contrato aun con un escritor SQL accidental."""
     if con.dialect == "sqlite":
@@ -255,7 +342,7 @@ def migrate_publications(db_url: str | Path | None) -> None:
         con.execute(
             "CREATE TABLE IF NOT EXISTS schema_migrations(version TEXT PRIMARY KEY,applied_at BIGINT NOT NULL)"
         )
-        source = _SCHEMA + _CONNECTION_SCHEMA + _CAMPAIGN_SCHEMA
+        source = _SCHEMA + _CONNECTION_SCHEMA + _CAMPAIGN_SCHEMA + _HISTORY_SCHEMA
         schema = db._schema_for_postgres(source) if con.dialect == "postgres" else source
         for statement in schema.split(";"):
             if statement.strip():
@@ -275,4 +362,9 @@ def migrate_publications(db_url: str | Path | None) -> None:
         con.execute(
             "INSERT INTO schema_migrations(version,applied_at) VALUES (?,?) ON CONFLICT(version) DO NOTHING",
             ("publication_campaigns_v1", int(time.time())),
+        )
+        _immutable_history(con)
+        con.execute(
+            "INSERT INTO schema_migrations(version,applied_at) VALUES (?,?) ON CONFLICT(version) DO NOTHING",
+            ("publication_history_v1", int(time.time())),
         )
