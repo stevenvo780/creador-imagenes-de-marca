@@ -760,3 +760,39 @@ de publicación. La prueba diaria y el timer siguen pendientes. Consultar
 [App Review](https://developers.tiktok.com/docs/en/app-review-guidelines) y
 [Content Sharing](https://developers.tiktok.com/docs/en/content-sharing-guidelines)
 para los requisitos de proveedor consultados.
+
+## Sondeo del token actual de Instagram, 13 de octubre, 18:43 UTC
+
+Se verificó la credencial que usa la conexión 3, versión 2, de la empresa
+Humanizar 17, leyendo su vault actual y la configuración exacta de la revisión
+servida `eikon-hold-copy-20261013`. Se conservó la cuenta GCP autorizada y se
+comprobaron las referencias de secretos versión 1 contra los respaldos privados.
+La base de datos se abrió con `default_transaction_read_only=on`; tenant, owner,
+conexión y vault se consultaron por empresa. La comparación antes/después confirmó
+que conexión y vault no cambiaron.
+
+El verificador real `OfficialOAuthClient.verify` utilizó Graph `v24.0` con un
+transporte que permitía exclusivamente dos GET a `graph.instagram.com`, sin
+seguir redirecciones ni renovar tokens. `/me` devolvió HTTP 200 y confirmó
+`humanizar.news`, ID `17841434345672986`; `content_publishing_limit` también
+devolvió HTTP 200: uso 0, total 100, duración 86400 segundos. Estos valores se
+leyeron de la respuesta actual, sin fijar el límite en el sondeo. La evidencia
+de scopes conserva la categoría `capability_probe` del cliente: **no es una
+introspección completa de permisos ni prueba de publicación**.
+
+El operador se revisó independientemente antes de ejecutar. La revisión detectó
+una limpieza interrumpible y una lectura sin límite previo, ambas corregidas;
+las 26 pruebas locales de sus guardas y cierres pasaron. Un primer intento se
+retuvo antes del verificador por comparar el estado SQL con el texto de la UI
+`connected`; se corrigió a `active`, que es el estado persistido por `oauth.py`.
+Esa corrección no modificó datos ni permisos productivos y recibió revisión
+independiente antes del único nuevo intento.
+
+El recibo privado `instagram-readonly-live-20261013T184340-receipt.json`, modo
+0600, conserva únicamente campos seleccionados. Se comprobó la terminación del
+proxy propio y la ausencia de su directorio de sockets. Resultado: dos GET,
+cero POST a proveedores, sin refresh, sin cambio de política, cola o calendario.
+`new_api_publication_verified=false` permanece explícito. La publicación visible
+de Instagram, descarga/revocación real de media, segundo barrido sin POST y
+recurrencia por todos los destinos siguen pendientes; este sondeo no activa el
+timer ni sustituye la prueba controlada de las 22:00 Bogotá.
