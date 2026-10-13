@@ -555,3 +555,109 @@ y permanece ACTIVE en el mismo chat y horario. Conserva las programaciones
 nativas de X/TikTok sin reenvío y añade los tres puntos de recuperación, la
 relación OCI verificada y los gates pendientes de runtime/coherencia entre cortes.
 La actualización del heartbeat no activa el timer ni acredita publicaciones.
+
+## Recuperación del intérprete y dependencias de server2: 13 de octubre, 17:11 UTC
+
+El exportador de las 17:07:56 UTC conservó 1636 archivos y 115196033 bytes:
+Python 3.14.4, biblioteca estándar, venv privado y cierre de bibliotecas dinámicas.
+El TAR de 116797440 bytes tiene SHA256
+`968b49d4a21c2b24284f8b56f59327c1b624cbb134a2dbe2106c54429d135cec`.
+Se verificaron propietarios/permisos, tamaños y hashes antes de exportar; sin
+sudo ni cambio del timer. El intento anterior se detuvo por el enlace de
+`sitecustomize.py` al archivo del sistema y quedó conservado. El intento nuevo
+admite sólo esa pareja exacta de rutas, revisada con negativos específicos.
+
+La prueba real de las 17:11:48 UTC ejecutó el loader y el Python copiados, con
+caché del loader desactivada, `PYTHONHOME` restaurado y `-S`. Se cotejaron las
+13 dependencias, se ejercitaron Pydantic y el codec JPEG, y se importó el worker
+sin ejecutar su main. Las 37 imágenes nativas mapeadas procedieron del runtime
+restaurado; ninguna biblioteca del contenedor base sustituyó a las calificadas.
+
+La cola exportada pasó nuevamente dos inicializaciones, las cinco guardas y
+dos reservas duplicadas sin nuevos intentos/fases. Conservó los hashes de datos
+`5baea7aa418e71a669071de4c76bb18032ac4b5ff664e5626fbf85ccc9f1d257`
+y esquema `57ead8f8eb49cd302849b261c42b59e041f103f674046e6820412b3249712d3c`.
+Contenedor sin red, rootfs y código/runtime de sólo lectura, usuario no root y
+ningún archivo de credenciales montado; limpieza confirmada antes del recibo.
+
+`runtime_venv_restore_verified=true` y `original_python_version_recreated=true`
+actualizan las limitaciones de los cortes anteriores. Los hooks de personalización
+no se ejecutaron y no se reprodujeron rutas/propietarios del sistema server2.
+Las 33 pruebas del exportador y 14 del operador de restauración son comprobaciones
+locales de contrato; la ejecución real anterior acredita el runtime. Cero POST.
+
+## Configuración recuperada como bytes privados: 13 de octubre, 17:19 UTC
+
+Los cinco archivos fijos de configuración/token/unidades/sudoers del TAR
+calificado se copiaron a otro directorio privado. Dos lecturas comprobaron
+tamaños, SHA, propietario local, archivos regulares de un enlace, modo 0600
+y directorio 0700. Se eliminó la copia antes de emitir el recibo de las
+17:19:55 UTC. El digest del conjunto de hashes es
+`1a40cd949f0c6a179b9bc99c1ac80f7a6b206b326b61d5119153e8adaac2d9cb`.
+
+`private_config_bytes_restore_verified=true` acredita bytes recuperables en un
+clon privado; no ejecución del contenido, instalación en rutas del sistema,
+restauración de UID/GID de server2 ni activación de systemd. Diez casos sintéticos
+de rechazo/lectura pasaron; el recibo real conserva esa distinción. Ninguna
+contraseña ni token se incluyó en Git, documentación o salida pública. Cero POST.
+
+## Coherencia de referencias DB y storage: 13 de octubre, 17:20 UTC
+
+Se restauró el mismo dump calificado en otro clon PostgreSQL sin red y se
+montaron los bytes del respaldo de storage como sólo lectura. Una transacción
+`READ ONLY` comprobó 17 versiones de logos, 46 originales de galería, sus
+46 miniaturas, dos originales de vídeo y 291 variaciones legacy: 398 objetos
+distintos. LocalStorage abrió cada referencia con tenant/clave exactos y
+cotejó SHA/tamaño del manifiesto; originales y vídeos también coincidieron con
+SHA/tamaño de la DB. El puntero de logo actual debía resolver a su versión.
+
+Las 56 referencias a logos embebidos se limitaron al catálogo explícito
+`assets/logos`, con archivo/ancestros sin enlaces, formato de imagen válido
+y SHA igual al recurso independiente del repositorio. Código, configuración,
+assets desconocidos o modificados y enlaces se rechazaron en pruebas negativas.
+La revisión independiente cerró el hallazgo de lectura demasiado amplia antes
+de ejecutar. Los 29 casos locales pasaron; no hubo ingests incompletos en este
+corte y no se reinterpretan como referencias durables cuando los hay.
+
+El conjunto de referencias dio SHA256
+`7480c18d16ee53b18a8b08a03c545b60c77b82d7664843078d1898e568f47505`.
+Antes y después se conservaron los mismos hashes de filas/esquema de las
+42 tablas de la prueba DB anterior. Todos los contenedores propios y la copia
+temporal se eliminaron. `database_reference_coherence_verified=true` actualiza
+ese límite anterior; DB/storage siguen siendo cortes distintos, no una
+instantánea atómica. No se restauró otro bucket ni se inició un proveedor.
+
+Estos ensayos de recuperación no acreditan primera publicación de Instagram,
+descarga/revocación de media por Meta, visibilidad nativa después del horario
+ni segundo barrido sin POST. El timer permanece deshabilitado e inactivo.
+
+## Recuperación de claves y conexiones: 13 de octubre, 17:32 UTC
+
+La revisión productiva calificada usa nombres directos de Secret Manager,
+versión 1, namespace del proyecto autorizado y ningún mapeo de aliases.
+Las lecturas de las dos versiones OAuth/vault desde la cuenta explícita
+coincidieron byte por byte con las copias privadas ya guardadas. Se conservaron
+copias privadas exclusivas adicionales; ningún secreto apareció en la salida
+pública del operador, argv, Git o este documento. La validación rechaza otro namespace, versión,
+nombre o mapeo de alias; no infiere recursos por coincidencia de nombres.
+
+Un nuevo clon sin red restauró el mismo dump y montó sólo los materiales
+privados necesarios como lectura. El cargador real de Eikón abrió las cinco
+configuraciones OAuth; AES-GCM descifró las tres conexiones de tenant 17 usando
+AAD de empresa/conexión/key ID. El hash del token exportado de server2 coincidió
+con grant worker 6, política 2, sin revocación y vigente en ese corte. La
+transacción fue READ ONLY, las 42 tablas conservaron filas/esquema y todos los
+contenedores/copia temporal se eliminaron antes del recibo de 17:32:24 UTC.
+
+El primer intento falló antes de crear contenedores por una asunción incorrecta
+del operador sobre el formato del catálogo OAuth. Se comprobó el bootstrap
+real, se corrigió a lista de 1–5 entradas y se utilizó un prefijo nuevo; negativo
+y journal previos conservados. Las 27 pruebas sintéticas pasaron, y la revisión
+independiente aprobó el ajuste antes del ensayo real.
+
+`connection_vault_recovery_verified=true` y
+`worker_token_matches_restored_grant=true` acreditan recuperación del material
+y sus bindings históricos. `provider_authentication_or_publication_verified=false`
+conserva el límite: no se invocó ningún cliente oficial ni se probó OAuth remoto.
+El gate compuesto y la aceptación diaria por proveedor siguen abiertos; estos
+siete recibos parciales no activan el timer ni autorizan reintentos inciertos.

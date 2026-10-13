@@ -515,3 +515,35 @@ las referencias DB entre cortes. El runtime/venv/configuración ejecutable de
 server2 sigue sin reproducirse. Mantener el gate compuesto pendiente y el timer deshabilitado e inactivo
 hasta esas comprobaciones y la prueba real por canal; no contabilizar este
 respaldo como una publicación. Ver el [corte de storage](PRUEBAS-PUBLICACIONES-2026-10-12.md#respaldo-actual-de-storage-y-lectura-de-originales-restaurados-13-de-octubre-1641-utc).
+
+### Actualización de recuperación: runtime, configuración privada y referencias
+
+Los cortes posteriores del 13 de octubre actualizan los límites anteriores.
+A las 17:11 UTC, el loader/Python 3.14.4, biblioteca estándar y venv exportados
+se ejecutaron sin red: 13 dependencias verificadas, Pydantic/JPEG/import del
+worker y 37 imágenes nativas procedentes del respaldo. La cola volvió a pasar
+dos inicializaciones, guardas y reservas duplicadas sin cambios de hashes.
+El clon se eliminó. No se ejecutaron hooks de personalización ni credenciales.
+
+A las 17:19 UTC se recuperaron los cinco archivos de configuración de server2
+como bytes privados de modo 0600, con doble lectura y SHA conservados; copia
+eliminada. No equivale a instalar unidades/token en rutas y UID/GID del sistema.
+A las 17:20 UTC, otro clon DB comprobó 398 objetos referenciados y 56 referencias
+a logos embebidos, con hashes/tamaños, aislamiento por tenant y assets limitados
+al catálogo independiente. Las 42 tablas conservaron sus hashes antes/después
+y se eliminaron todos los contenedores. Los cortes DB/storage no son atómicos;
+la recuperación de archivos sigue cubriendo bytes locales, no otro bucket.
+
+Son evidencias de recuperación, con cero POST; la aceptación completa por canal
+y el timer continúan pendientes. Ver los cortes de
+[runtime](PRUEBAS-PUBLICACIONES-2026-10-12.md#recuperación-del-intérprete-y-dependencias-de-server2-13-de-octubre-1711-utc),
+[configuración](PRUEBAS-PUBLICACIONES-2026-10-12.md#configuración-recuperada-como-bytes-privados-13-de-octubre-1719-utc)
+y [referencias](PRUEBAS-PUBLICACIONES-2026-10-12.md#coherencia-de-referencias-db-y-storage-13-de-octubre-1720-utc).
+
+A las 17:32 UTC, las versiones fijas OAuth/vault se calificaron contra sus
+copias privadas. Otro clon sin red cargó cinco configuraciones con el lector
+real, descifró las tres conexiones de Humanizar y vinculó el token exportado al
+worker 6/política 2 del dump. Filas/esquema intactos y clon eliminado. No se
+probó autenticación o publicación ante proveedores; configuración en rutas
+del sistema, recuperación compuesta y prueba diaria conservan sus límites.
+Ver [claves y conexiones](PRUEBAS-PUBLICACIONES-2026-10-12.md#recuperación-de-claves-y-conexiones-13-de-octubre-1732-utc).
