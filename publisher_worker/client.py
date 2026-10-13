@@ -17,9 +17,23 @@ from .media_delivery import MediaDelivery
 
 
 class WorkerAPIError(Exception):
-    def __init__(self, status=None):
+    def __init__(self, status=None, *, code=None):
         self.status = status
-        super().__init__("worker_api_unavailable")
+        self.code = code or (
+            "worker_api_http_error" if status is not None else "status_unavailable"
+        )
+        super().__init__(self.code)
+
+    def result(self):
+        # Un error de autoridad HTTP no prueba un timeout del proveedor.
+        code = "status_unavailable" if self.status is not None else self.code
+        return outcome(code=code, status=self.status)
+
+    def hold(self):
+        result = {"state": "held", "reason": self.code}
+        if self.status is not None:
+            result["http_status"] = self.status
+        return result
 
 
 class WorkerClient:
@@ -58,6 +72,10 @@ class WorkerClient:
             return response.json() if response.status_code != 204 else None
         except WorkerAPIError:
             raise
+        except (httpx.TimeoutException, TimeoutError):
+            raise WorkerAPIError(code="network_timeout") from None
+        except httpx.TransportError:
+            raise WorkerAPIError(code="connection_error") from None
         except Exception:
             raise WorkerAPIError() from None
 
@@ -113,6 +131,24 @@ class WorkerClient:
         return self._request(
             "POST", self._attempt_path(claim) + "/media-ticket", json={"ttl_seconds": 3900}
         )
+
+    def media_delivery_readiness(self):
+        result = self._request("GET", "/media-delivery-readiness")
+        if result == {"ready": True, "hold_reason": None, "reason": None}:
+            # La igualdad Python también acepta 1; la respuesta exige bool.
+            if result["ready"] is True:
+                return result
+        elif (
+            isinstance(result, dict)
+            and result.get("ready") is False
+            and result.get("hold_reason") == "unknown"
+            and isinstance(result.get("reason"), str)
+            and result.get("reason")
+            in {"media_delivery_release_gate", "media_delivery_origin_required"}
+            and set(result) == {"ready", "hold_reason", "reason"}
+        ):
+            return result
+        raise WorkerAPIError()
 
     def revoke_ticket(self, attempt, ticket):
         return self._request(
@@ -228,12 +264,33 @@ def _prepare(client, claim, now):
     return snapshot, variant
 
 
+def _dispatch_failure(exc):
+    """Clasificación acotada; toda excepción tras start permanece incierta."""
+    if isinstance(exc, WorkerAPIError):
+        return exc.result()
+    if isinstance(exc, (httpx.TimeoutException, TimeoutError)):
+        return outcome(code="network_timeout")
+    if isinstance(exc, httpx.TransportError):
+        return outcome(code="connection_error")
+    return outcome(code="status_unavailable")
+
+
 def _dispatch(client, outbox, adapters, claim, clock):
     snapshot, variant = _prepare(client, claim, clock())
     if not outbox.reserve(claim, snapshot):
         return {"state": "held", "reason": "already_recorded"}
     attempt, platform = claim["attempt_id"], snapshot["connection"]["platform"]
     adapter = adapters[platform].bind(outbox.journal(attempt))
+    if adapter.needs_delivery:
+        readiness = client.media_delivery_readiness()
+        if readiness["ready"] is not True:
+            client.hold_claim(claim, readiness["hold_reason"])
+            outbox.finish_local(attempt)
+            return {
+                "state": "held",
+                "reason": readiness["reason"],
+                "hold_reason": readiness["hold_reason"],
+            }
     connection = snapshot["connection"] | {"credential": client.credential(claim)}
     checked = adapter.preflight(connection, variant, clock())
     if checked["state"] != "verified":
@@ -263,8 +320,8 @@ def _dispatch(client, outbox, adapters, claim, clock):
         if not outbox.stage(attempt, "start_confirmed", "dispatching"):
             return {"state": "held", "reason": "outbox_conflict"}
         result = adapter.publish(connection, variant, attempt)
-    except Exception:
-        result = outcome(code="network_timeout")
+    except Exception as exc:
+        result = _dispatch_failure(exc)
     saved = _save_report(client, outbox, claim, result, platform=platform)
     if getattr(adapter, "processing_complete", False):
         MediaDelivery(client, outbox).revoke(attempt)
@@ -284,11 +341,16 @@ def run_once(client, outbox, adapters, now) -> dict:
         for entry in outbox.active():
             try:
                 results.append(_recover(client, outbox, adapters, entry))
+            except WorkerAPIError as exc:
+                results.append(exc.hold())
             except Exception:
                 results.append({"state": "held", "reason": "recovery_unavailable"})
         for _ in range(100):
             try:
                 claim = client.claim_due()
+            except WorkerAPIError as exc:
+                results.append(exc.hold())
+                break
             except Exception:
                 results.append({"state": "held", "reason": "authority_unavailable"})
                 break
@@ -296,6 +358,10 @@ def run_once(client, outbox, adapters, now) -> dict:
                 break
             try:
                 results.append(_dispatch(client, outbox, adapters, claim, clock))
+            except WorkerAPIError as exc:
+                with suppress(Exception):
+                    client.hold_claim(claim, "unknown")
+                results.append(exc.hold())
             except Exception:
                 with suppress(Exception):
                     client.hold_claim(claim, "unknown")

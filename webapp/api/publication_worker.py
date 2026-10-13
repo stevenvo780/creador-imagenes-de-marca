@@ -278,6 +278,17 @@ def _media_origin() -> str:
     return raw.rstrip("/")
 
 
+@router.get("/media-delivery-readiness")
+def media_readiness(response: Response, principal: dict = Depends(publication_worker)) -> dict:
+    """Consulta el gate efectivo sin emitir capacidad ni conceder POST."""
+    _private(response)
+    try:
+        _media_origin()
+    except Conflict as exc:
+        return {"ready": False, "hold_reason": "unknown", "reason": exc.code}
+    return {"ready": True, "hold_reason": None, "reason": None}
+
+
 @router.post("/attempts/{attempt_id}/media-ticket")
 async def issue_ticket(
     attempt_id: str,
