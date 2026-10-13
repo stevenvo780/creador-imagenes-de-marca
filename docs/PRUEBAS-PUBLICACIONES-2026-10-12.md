@@ -910,3 +910,116 @@ abiertos.
 Una recarga autenticada del dominio canónico volvió a mostrar Humanizar,
 17 campañas, 10 entregas, tres cuentas conectadas y política 2 vigente. Los dos
 recibos anteriores de Facebook siguen visibles; esto no acredita un envío nuevo.
+
+## Alta inicial de TikTok: defecto reproducido, 13 de octubre, 20:27 UTC
+
+Una auditoría de sólo lectura encontró un bloqueo distinto del callback canónico:
+la UI y `ConnectionInput` exigen un `remote_id` antes de OAuth; `OAuthStartInput`
+exige una conexión existente y el motor fija ese ID como identidad esperada.
+TikTok devuelve un `open_id`, que el transporte cruza entre token y `user/info`,
+y el motor lo compara con el ID predeclarado. Un nombre de usuario no descubre ni
+reemplaza ese identificador. Esta comprobación es necesaria para reconexiones,
+pero el flujo carece de una modalidad de alta sin identidad previamente conocida.
+
+Se preservó un probe con SQLite temporal, credenciales ficticias y transporte
+HTTP simulado. Conexiones y DNS reales quedaron bloqueados. Resultados:
+
+| Caso | Resultado local observado |
+|---|---|
+| Alta sin `remote_id` | 422 `invalid_connection` |
+| Alta con ID vacío | 422 `invalid_destination` |
+| Inicio OAuth sin `connection_id` | 422 `invalid_connection` |
+| ID inicial `humanizar_systems`; token y perfil coinciden en `open-42` | `held / remote_identity_mismatch`; ID inicial conservado y vault ausente |
+| Mismo flujo con `open-42` predeclarado | `active` y vault presente |
+
+Pasaron 12 pruebas focales; siete variantes PostgreSQL se excluyeron expresamente.
+Se preservó la salida original, sin repetir esa suite. El probe corto se volvió
+a ejecutar sólo para capturar su salida: exit 0. El HEAD se capturó antes y
+después de esa repetición, `543be0a8…`; no se había capturado al inicio de la
+auditoría. Nueve hashes de fuentes verificaron y los archivos auditados quedaron
+sin cambios. Artefactos públicos `0444` en `/tmp/eikon_tiktok_bootstrap_*20261013*`:
+probe, recibo con comandos exactos, stdout y manifiestos. Revisión independiente:
+PASS de la reproducción; HOLD del alta sin `open_id` conocido. No se modificó
+código, esquema, portal OAuth ni autoridad productiva para resolverlo.
+
+En Brave se preparó una explicación de 647 caracteres que diferencia Direct Post
+implementado del flujo `video.upload` no implementado, y declara pendientes
+activación, demo sandbox y auditoría. El formulario bajó de cinco a cuatro errores:
+icono, términos, privacidad y demo. Ese texto permanece preparado; no acredita
+Save satisfactorio ni envío de revisión. Direct Post sigue apagado. La guía
+[oficial de TikTok](https://developers.tiktok.com/docs/en/content-sharing-guidelines)
+exige control y consentimiento del creador por contenido; el acceso de cuenta no
+lo sustituye. Sin auditoría, Direct Post tiene restricciones de visibilidad y de
+cuentas. Las programaciones nativas existentes no acreditan esa aprobación API.
+
+## Lectura real del planner mediante MCP, 13 de octubre, 20:33 UTC
+
+La herramienta nativa de este chat sigue devolviendo `configuration_error` para
+el planner. El launcher privado ya configurado carga los grants propios planner
+4 y reviewer 5 de la empresa 17. Un cliente MCP nuevo, con ese launcher de hash
+fijado, ejecutó exclusivamente `eikon_get_publication_inbox` y obtuvo una respuesta
+satisfactoria. Se comprobaron antes/después la revisión canónica actual y tráfico
+100 % sin tags, sin cambios. Recibos privados: `planner-mcp-readonly-20261013T203311Z`.
+
+La lectura confirmó empresa 17, política 2 vigente, 17 campañas y tres destinos
+Meta. Para el día local 13 de octubre, cada cuenta informó stock autorizado 0,
+déficit 1 y capacidad diaria restante 1. Las revisiones 5/6/7 aparecen entre las
+entregas retenidas con `frequency_limit` y `delivery_not_stock`. Este resultado no
+demuestra por sí solo si el worker las recupera al vencer la frecuencia. La
+revisión posterior del motor y su probe temporal confirmaron que `claim_due`
+considera una fila `held` sin inicio y vuelve a comprobar los requisitos; cuando
+desaparece la causa temporal, reserva la misma entrega con la misma decisión.
+`delivery_not_stock` pertenece a la proyección de inbox y no es una razón del
+despacho. No hace falta recrear las revisiones 5/6/7 ni repetir la evaluación IA.
+
+El cliente no reparó la conexión nativa del chat, cambió grants ni despachó
+publicaciones. La implementación de inbox usa GET. El cero POST del primer recibo
+era una inferencia por alcance, no un contador de egress: se conservó el recibo y
+la fuente ejecutada y se añadió `receipt-scope-clarification.json`; la fuente
+futura etiqueta explícitamente la inferencia y `provider_egress_measured=false`.
+
+## Recuperación de retenciones y colas nativas, 13 de octubre, 20:45 UTC
+
+En SQLite temporal, una publicación anterior contaba para la frecuencia de
+1440 minutos hasta `t0+10`. En `t0` y `t0+9`, `claim_due` no reservó y mantuvo
+`frequency_limit`. En el límite exacto `t0+10`, la proyección interna de inbox siguió mostrando
+stock 0 y `delivery_not_stock`, pero `claim_due` reservó la MISMA entrega: misma
+decisión, `started_at=None` y evaluaciones 1→1. Probe exit 0, sin worker,
+`start_attempt` ni red. Pasaron seis regresiones del servidor con conexiones y
+DNS bloqueados; seis variantes PostgreSQL se excluyeron. No es una prueba del
+despacho productivo, del timer ni de PostgreSQL. La revisión independiente fue
+PASS, sin Critical ni Important; su Minor distinguió `_stock_projection` de un
+GET HTTP en la frontera y se corrigió aquí. Los 14 artefactos de alta TikTok y
+frecuencia se copiaron byte a byte a un directorio privado duradero, con hashes
+verificados: `tiktok-bootstrap-and-held-evidence-20261013T204917Z`.
+
+Los eventos duraderos `worker:prestart_hold`, intentos con `started_at`, ventanas
+vencidas y guardias de medio no se recuperan por este mecanismo. Un intento
+iniciado conserva consumo de frecuencia incluso después de `failed_before_dispatch`.
+Las revisiones 5/6/7 podrán reservarse dentro de 22:00–23:00 Bogotá sólo si vence
+la frecuencia respecto de todos los timestamps contados y pasan los demás
+requisitos. La reserva no sustituye la autorización final de inicio ni acredita
+un POST. El servicio productivo continúa pendiente de su prueba controlada.
+
+Lectura de las pestañas existentes de Brave a las 20:45–20:46 UTC:
+
+| Red | Programaciones visibles, sin modificaciones en este corte |
+|---|---|
+| X, vía gratuita de Brave | Deméter 13 oct 22:00, imagen; Agentes 14 oct 22:00, vídeo de seis segundos |
+| TikTok Studio, `@humanizar.systems` | Deméter `7696012000295488775`, 13 oct 22:00; Agentes `7696024738354695425`, 14 oct 22:00 |
+
+Cada cola tiene dos filas visibles; no se recrearon ni adelantaron. Capturas:
+`x-scheduled-confirmed-20261013T2046.jpg` y
+`tiktok-scheduled-confirmed-20261013T2046.jpg` en el directorio de visualizaciones
+de este chat. La programación nativa no es aún prueba del envío al vencer la
+hora ni de una recurrencia indefinida. Falta validar las publicaciones reales y
+el siguiente barrido sin duplicados antes de declarar todas las redes operativas.
+
+Una lectura por SSH de las unidades productivas a las 20:48 UTC confirmó
+`eikon-publisher@17.service` inactivo y `eikon-publisher@17.timer` inactivo y
+deshabilitado; no se arrancaron. La agenda autenticada conservó 17 campañas,
+10 entregas y tres cuentas. Sus detalles históricos muestran, en hora Bogotá,
+los inicios del 12 de octubre: Facebook entrega 1 a las 21:11:13, Facebook
+entrega 2 a las 21:11:28 e Instagram entrega 4 a las 21:22:24. Esa última cerró
+como `failed_before_dispatch` a las 22:23:30 sin borrar su consumo ni su guardia
+de medio. Son eventos históricos de la UI, no evidencia de un envío en este corte.
