@@ -2,7 +2,7 @@
 .pub-shell, .publications {
   --bg: #f3f7f9; --surface: #fff; --surface-2: #f3f7f9;
   --text: #162e3c; --text-muted: #527080; --text-faint: #527080;
-  --teal: #117679; --teal-ink: #fff; --amber: #96590e; --danger: #96590e;
+  --teal: #117679; --teal-600: var(--teal); --teal-ink: #fff; --amber: #96590e; --danger: #96590e;
   --border: color-mix(in srgb, #527080 24%, #fff);
   --border-strong: color-mix(in srgb, #527080 50%, #fff);
   --display: "Space Grotesk", "Inter", sans-serif; --font-display: var(--display);
@@ -38,7 +38,7 @@
 .pub-products h2 { font-size: 1.125rem; }
 .publications label { display: block; margin: 16px 0; line-height: 1.5; }
 .publications .pub-search { font-size: .875rem; margin: 0 0 12px; }
-.publications input:not([type="checkbox"]), .publications textarea, .publications select { display: block; width: 100%; min-height: 44px; margin-top: 6px; border: 1px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); padding: 10px; font: inherit; box-sizing: border-box; }
+.publications input:not([type="checkbox"]), .publications textarea, .publications select { display: block; width: 100%; min-height: 44px; margin-top: 6px; border: 1px solid var(--text-muted); border-radius: 6px; background: var(--surface); color: var(--text); padding: 10px; font: inherit; box-sizing: border-box; }
 .publications input[type="checkbox"] { width: 20px; height: 20px; vertical-align: middle; margin-right: 8px; accent-color: var(--teal); }
 .publications textarea { min-height: 100px; resize: vertical; }
 .publications fieldset { border: 1px solid var(--border); padding: 16px; min-width: 0; }
