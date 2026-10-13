@@ -461,3 +461,21 @@ los contratos y las colas nativas. SSH confirma timer 17 disabled/inactive y
 servicio inactive. No se produjo un POST a proveedores en este release. La
 prueba diaria controlada de Instagram/media y el segundo barrido siguen siendo
 requisitos previos a activar el timer.
+
+### Restauración de DB comprobada; respaldo compuesto aún abierto
+
+El 13 de octubre, 07:26 UTC, el dump privado de 308062 bytes y SHA256
+`b70ffbd76646bf7e312a2817367b8587da250a033ce9e43928ed08609e130005`
+se restauró en un clon PostgreSQL sin red ni puertos. Dos ejecuciones directas
+de `init_db` con la imagen vigente y una con la imagen anterior de frontend
+conservaron las 42 tablas, hashes de filas, esquema, secuencias y estados de
+entregas. Las guardas de historial, medios y revisiones rechazaron UPDATE.
+Los once contenedores propios y los datos temporales se eliminaron y verificaron.
+
+El rollback ensayado conserva el backend entre estas dos imágenes; no acredita
+degradar el esquema ni restaurar un runtime viejo. No se ejecutaron workers ni
+POST de proveedor. Se mantuvieron los negativos y journals de los dos intentos
+anteriores y el recibo histórico del backup. Los recibos nuevos registran DB
+verificada, pero storage original, outbox de server2 y gate compuesto aún falsos.
+No usar esta evidencia parcial para habilitar el timer. Ver el
+[corte detallado de restauración](PRUEBAS-PUBLICACIONES-2026-10-12.md#restauración-real-de-db-y-conservación-de-guards-13-de-octubre-0726-utc).

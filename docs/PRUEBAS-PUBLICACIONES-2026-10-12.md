@@ -402,3 +402,55 @@ Este release produjo cero POST de publicación. Descarga/revocación real de
 media, primer recibo visible de Instagram, formatos por separado, segundo
 barrido posterior sin POST y recurrencia de todos los destinos siguen siendo
 gates abiertos de Task10. La corrección UI no habilita el timer ni cierra la meta.
+
+## Restauración real de DB y conservación de guards: 13 de octubre, 07:26 UTC
+
+Se restauró el dump privado del corte anterior en PostgreSQL local aislado:
+308062 bytes, SHA256
+`b70ffbd76646bf7e312a2817367b8587da250a033ce9e43928ed08609e130005`.
+El archivo indica origen PostgreSQL 17.9; el clon utilizó la imagen fijada
+`postgres@sha256:2d2b8998d31037bf721cfdf764d76ba74171b4fab3431b7f72c27c56ddbdf9e3`.
+Sin red, puertos ni credenciales productivas montadas; sólo recibió el dump de
+sólo lectura y una credencial nueva del clon. Se ejecutó `init_db` directamente,
+sin crear la aplicación ni iniciar workers o adaptadores.
+
+Las 42 tablas conservaron filas y hashes, definiciones de esquema, secuencias
+y estados de entregas tras dos inicializaciones con la imagen productiva
+`ba6927495a29fdc346636bf02b9358e184c741d17cd7186e5e0c753b711fd2a5`.
+Una inicialización adicional de la imagen anterior
+`9c52cbaf64865c3e10f39c63250bca0753926a2cc2010aa7f862b8d025863264`
+conservó lo mismo. Este ensayo de rollback cubre esas dos versiones de frontend
+con backend idéntico; no acredita un downgrade de esquema o código antiguo.
+Los triggers de historial, guardas de medios y revisiones rechazaron UPDATE
+con sus errores inmutables antes y después de las inicializaciones.
+
+Hash agregado de datos:
+`298a34001dedbc388482e09e1d0ec3dca6adc236d58f42e7f10790772e63caf9`;
+hash agregado de esquema/secuencias:
+`8f8853aae0fca264bb49f0bdbe53b0be51055caa787f1953b1e545712f5934ff`.
+Los recibos y snapshots con hashes por tabla permanecen privados, fuera de Git.
+Los once contenedores propios y el directorio de datos del clon quedaron
+eliminados, comprobados por nombre y por inventario de su etiqueta.
+
+Se conservan dos intentos fallidos anteriores. El primero arrancó PostgreSQL,
+pero su comprobación de disponibilidad omitía usuario/base y la comprobación
+de ausencia no admitía el mensaje de Docker en minúsculas. Se concilió la
+eliminación y se corrigieron ambas comprobaciones. El segundo restauró el dump,
+pero el UID local no podía importar el directorio de publicaciones 0750,
+propiedad de 1001:1001. Una prueba real de importación, sin DSN ni mounts,
+confirmó la causa y la solución: grupo 1001 sólo para el cliente de aplicación,
+manteniendo UID no root y sistema de archivos de sólo lectura. Cada nuevo
+intento tuvo prefijo/journal propio, sin borrar negativos ni reintentar el anterior.
+
+El operador pasó 18 tests aislados de cleanup, ownership, timeout/ACK perdido,
+inspección ambigua, diferencias de datos/esquema y argumentos de los clientes.
+La revisión independiente de las fuentes no dejó Critical/Important pendientes;
+esa revisión estática se distingue del recibo real exitoso del tercer intento.
+
+`restore_database_verified=true` acredita sólo esta restauración de DB.
+`worker_outbox_restore_verified=false`, `storage_originals_restore_verified=false`
+y `compound_runtime_gate_complete=false` se conservan. El recibo original del
+backup no se reescribe: su `restore_verified=false` era el estado al tomarlo.
+No hubo mutación productiva ni POST a proveedores. Timer 17 disabled/inactive
+y servicio inactive comprobados por SSH. La aceptación completa y la meta
+continúan pendientes de recuperación de archivos/outbox y pruebas por canal.
