@@ -21,9 +21,15 @@ from webapp.publications.contracts import (
     positive_integer,
 )
 from webapp.publications.oauth import OAuthConfig, finish_oauth, start_oauth
+from webapp.publications.oauth_onboarding import (
+    OnboardingInput,
+    finish_onboarding,
+    start_onboarding,
+)
 from webapp.publications.oauth_providers import OfficialOAuthClient, load_provider_configs
 from webapp.publications.policies import get_policy, set_policy
 from webapp.publications.vault import service_key
+from webapp.security import decode_jwt
 
 from .deps import current_user, get_settings
 from .permissions import require_owner_session
@@ -155,15 +161,20 @@ def _oauth_cookie(request: Request) -> tuple[str, bool]:
     return ("__Host-eikon_publication_oauth" if secure else "eikon_publication_oauth_dev"), secure
 
 
-def _oauth_runtime(
-    request: Request, platform: str, mode: str
-) -> tuple[OAuthConfig, OfficialOAuthClient]:
+def _oauth_config(request: Request, platform: str, mode: str) -> OAuthConfig:
     configs = getattr(request.app.state, "publication_oauth_configs", None)
     if configs is None:
         configs = load_provider_configs(get_settings(request).publication_oauth_config_file)
     config = configs.get((platform, mode))
     if config is None:
         raise Conflict("oauth_not_configured")
+    return config
+
+
+def _oauth_runtime(
+    request: Request, platform: str, mode: str
+) -> tuple[OAuthConfig, OfficialOAuthClient]:
+    config = _oauth_config(request, platform, mode)
     client = getattr(request.app.state, "publication_oauth_clients", {}).get((platform, mode))
     return config, client or OfficialOAuthClient(config)
 
@@ -227,6 +238,37 @@ async def start_oauth_endpoint(
             client.close()
 
 
+@router.post("/oauth/onboarding/start")
+async def start_onboarding_endpoint(
+    request: Request, response: Response, user: dict = Depends(publication_owner)
+) -> dict:
+    try:
+        payload = OnboardingInput.model_validate(await _body(request))
+        config = _oauth_config(request, payload.platform, payload.api_mode)
+        binding = secrets.token_urlsafe(32)
+        result = start_onboarding(
+            get_settings(request).db_url,
+            user["tenant_id"],
+            user["user_id"],
+            payload.platform,
+            payload.redirect_uri,
+            int(time.time()),
+            project_ids=payload.project_ids,
+            session_binding=binding,
+            config=config,
+        )
+        name, secure = _oauth_cookie(request)
+        response.set_cookie(
+            name, binding, httponly=True, secure=secure, samesite="lax", path="/", max_age=600
+        )
+        response.headers["Cache-Control"] = "private, no-store"
+        return result
+    except ValidationError as exc:
+        raise HTTPException(422, detail="invalid_oauth_start") from exc
+    except PublicationError as exc:
+        raise HTTPException(exc.status_code, detail=exc.code) from exc
+
+
 @router.get("/oauth/callback")
 def finish_oauth_endpoint(
     request: Request, response: Response, user: dict = Depends(publication_owner)
@@ -241,11 +283,19 @@ def finish_oauth_endpoint(
         binding = request.cookies.get(name)
         if not binding:
             raise Forbidden()
+        onboarding = False
         with db.connect(settings.db_url) as con:
+            params = (user["tenant_id"], user["user_id"], _hash(state), _hash(binding))
             row = con.execute(
-                "SELECT flow_json FROM publication_oauth_states WHERE tenant_id=? AND owner_id=? AND state_hash=?",
-                (user["tenant_id"], user["user_id"], _hash(state)),
+                "SELECT flow_json FROM publication_oauth_states WHERE tenant_id=? AND owner_id=? AND state_hash=? AND session_hash=?",
+                params,
             ).fetchone()
+            if row is None:
+                row = con.execute(
+                    "SELECT flow_json FROM publication_oauth_onboarding_states WHERE tenant_id=? AND owner_id=? AND state_hash=? AND session_hash=?",
+                    params,
+                ).fetchone()
+                onboarding = row is not None
         if row is None:
             raise Forbidden()
         flow = json.loads(row["flow_json"])
@@ -254,9 +304,23 @@ def finish_oauth_endpoint(
             key = service_key(settings.publication_vault_key)
         except Conflict:
             key = None
-        result = finish_oauth(
+        finish = finish_onboarding if onboarding else finish_oauth
+        options = (
+            {"config_getter": lambda: _oauth_config(request, flow["platform"], flow["api_mode"])}
+            if onboarding
+            else {}
+        )
+        session_owner = {**user, "session_binding": binding}
+        if onboarding:
+            try:
+                session_owner["session_expires_at"] = decode_jwt(
+                    request.cookies.get(settings.cookie_name, ""), settings.jwt_secret
+                )["exp"]
+            except (ValueError, TypeError, KeyError):
+                raise Forbidden() from None
+        result = finish(
             settings.db_url,
-            {**user, "session_binding": binding},
+            session_owner,
             state,
             request.query_params.get("code", ""),
             int(time.time()),
@@ -264,7 +328,9 @@ def finish_oauth_endpoint(
             key=key,
             key_id=settings.publication_vault_key_id,
             provider_error="error" in request.query_params,
+            **options,
         )
+        response.headers["Cache-Control"] = "private, no-store"
         response.delete_cookie(name, path="/", secure=secure, httponly=True, samesite="lax")
         return result
     except PublicationError as exc:

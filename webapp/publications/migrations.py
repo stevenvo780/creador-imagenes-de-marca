@@ -107,6 +107,23 @@ CREATE TABLE IF NOT EXISTS publication_oauth_states (
 """
 
 
+_ONBOARDING_SCHEMA = """
+CREATE TABLE IF NOT EXISTS publication_oauth_onboarding_states (
+ tenant_id INTEGER NOT NULL REFERENCES tenants(id),
+ owner_id INTEGER NOT NULL,
+ state_hash TEXT NOT NULL UNIQUE,
+ session_hash TEXT NOT NULL,
+ config_hash TEXT NOT NULL,
+ flow_json TEXT NOT NULL,
+ created_at BIGINT NOT NULL,
+ expires_at BIGINT NOT NULL,
+ consumed_at BIGINT,
+ PRIMARY KEY(tenant_id,state_hash),
+ FOREIGN KEY(tenant_id,owner_id) REFERENCES users(tenant_id,id)
+);
+"""
+
+
 _CAMPAIGN_SCHEMA = """
 CREATE UNIQUE INDEX IF NOT EXISTS idx_publication_briefs_tenant_id ON generation_briefs(tenant_id,id);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_publication_images_tenant_id ON media_assets(tenant_id,id);
@@ -627,6 +644,7 @@ def migrate_publications(db_url: str | Path | None) -> None:
         source = (
             _SCHEMA
             + _CONNECTION_SCHEMA
+            + _ONBOARDING_SCHEMA
             + _CAMPAIGN_SCHEMA
             + _HISTORY_SCHEMA
             + _EVALUATION_SCHEMA
@@ -646,6 +664,11 @@ def migrate_publications(db_url: str | Path | None) -> None:
         con.execute(
             "INSERT INTO schema_migrations(version,applied_at) VALUES (?,?) ON CONFLICT(version) DO NOTHING",
             ("publication_connections_v1", int(time.time())),
+        )
+
+        con.execute(
+            "INSERT INTO schema_migrations(version,applied_at) VALUES (?,?) ON CONFLICT(version) DO NOTHING",
+            ("publication_oauth_onboarding_v1", int(time.time())),
         )
 
         _immutable_revisions(con)
