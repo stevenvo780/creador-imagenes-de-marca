@@ -704,3 +704,59 @@ arranque completo con lifespan; `live_authentication_or_publication_verified=fal
 y `compound_runtime_gate_complete=false` conservan el límite de aceptación.
 La primera publicación visible de Instagram, descarga/revocación real de media,
 segundo barrido sin POST y recurrencia por todos los destinos siguen pendientes.
+
+## Corte de accesos y app TikTok, 13 de octubre, 18:06–18:16 UTC
+
+Brave vuelve a cargar la configuración de la app `Humanizar Publicaciones`
+(`7694252858519275528`). El bloqueo anterior `Network Error` dejó de reproducirse
+en esta lectura. **Production continúa Draft, sin auditoría ni OAuth TikTok
+completados.** En el formulario se prepararon nombre `Eikón`, descripción,
+categoría Business, plataforma Web y URL del servicio. Save rechazó la operación
+por seis requisitos: icono, Terms, Privacy, verificación de URL, explicación de
+revisión y vídeo de demostración. No se acredita persistencia de esos cambios.
+
+En ese mismo borrador se añadieron Login Kit y Content Posting API; no se
+generaron claves nuevas, no se otorgó consentimiento OAuth y no se envió la app
+a revisión. **Direct Post permanece desactivado** mientras se espera respuesta
+del operador a la ampliación concreta `user.info.basic` + `video.publish`. El
+scope `video.upload` que añadió automáticamente el formulario no se presenta
+como permiso aprobado ni como configuración final. La captura de ese estado se
+conservó fuera del repositorio y se mostró al operador.
+
+Las fuentes oficiales de TikTok exigen sitio desarrollado accesible, condiciones
+y privacidad visibles, permisos mínimos y una demostración real de Sandbox.
+Para publicar por API con visibilidad pública es necesaria auditoría; la vía
+sin auditar requiere cuenta privada y `SELF_ONLY`. Se conserva pública la cuenta
+de Humanizar y su programación existente en Studio. Ni el borrador de la app ni
+la programación nativa acreditan publicación pública por API.
+
+Se revisaron las prácticas reales del código mediante un explorador read-only y
+se preparó `EIKON-POLITICAS-BORRADOR-2026-10-13.md`. Revisión independiente técnica
+y editorial: PASS como borrador, con tres precisiones incorporadas. No es una
+validación jurídica ni una política publicada: faltan responsable/contacto,
+conservación y procedimiento de atención de solicitudes. El diseño acotado de
+las páginas públicas está presentado, a la espera de aprobación; no se modificó
+código de producto ni se desplegaron textos legales.
+
+Lectura actual de Instagram en Brave: sesión `humanizar.news`, controles de
+Editar perfil y dos publicaciones anteriores visibles. No hubo nuevo envío ni
+se dio por superado el fallo anterior de la API. Lectura autenticada de Eikón:
+empresa `humanizar`, 17 campañas, diez entregas, dos recibos Facebook confirmados,
+tres conexiones Meta con vigencia visible y TikTok/X sin conectar en Eikón.
+Deméter conserva el 13 de octubre a las 22:00 Bogotá y Agentes el día 14 a las
+22:00, con motivos de retención que se volverán a comprobar antes del envío.
+No se adelantaron horarios, reiniciaron cuotas ni recrearon revisiones.
+
+SSH de las 18:16 UTC confirmó servicio inactivo y timer disabled/inactive.
+`sudo -n -l` permite iniciar únicamente el servicio 17 y activar/desactivar su
+timer sin contraseña; la lectura de su cursor de journal también funcionó. No
+se inició el servicio en esta comprobación. La prueba controlada nocturna puede
+utilizar ese inicio autorizado, sin volver a solicitar sudo para reinstalar el
+publicador o repetir el respaldo ya terminado. Un inicio futuro debe obtener su
+propio InvocationID, resultado y recibos, y no hereda prueba de este acceso.
+
+Este corte añade evidencia de acceso y requisitos de conexión; no nuevos recibos
+de publicación. La prueba diaria y el timer siguen pendientes. Consultar
+[App Review](https://developers.tiktok.com/docs/en/app-review-guidelines) y
+[Content Sharing](https://developers.tiktok.com/docs/en/content-sharing-guidelines)
+para los requisitos de proveedor consultados.
