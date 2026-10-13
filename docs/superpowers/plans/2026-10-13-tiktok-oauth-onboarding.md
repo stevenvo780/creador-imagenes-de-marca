@@ -94,9 +94,9 @@ expect(body).toEqual({
 
 **Interfaces:** Consumes commits/reviews PASS de Task1/2; produces build verificado, pruebas integradas, entrega al servicio existente y checkpoint/seguimiento actualizados sin dar consentimiento TikTok por completado.
 
-- [ ] Ejecutar suite Python del proyecto (pytest testpaths completo), PostgreSQL efímero para nuevos tests y reconexión/migración, lint/mypy pertinentes y `npm run build`. Registrar todos los fallos preexistentes; no confundir skips con PG verificado.
-- [ ] Revisión integrada en Codex GPT-6 Astra del rango completo desde baseline y diff empaquetado. Una única ronda de fixes integrada si aparece riesgo nuevo; no tocar proveedores o otros pendientes.
-- [ ] Build de imagen misma receta del servicio actual; calificar una nueva revisión 0% con OAuth config2/IAM/recursos/secretos intactos. Prueba de migración idempotente y callback/alta usando fixtures aisladas; nunca activar conexiones/worker de empresa17 con un doble remoto.
-- [ ] Promover sólo imagen/revisión después de gates; comprobar frontend autenticado, alta sin campo ID, rechazo anónimo del endpoint, callbacks canónicos, rutas públicas TikTok TXT/PNG y cuentas/cola/política preservadas.
-- [ ] Mantener service/timer17 apagados hasta prueba real prevista22–23Bogotá; no recrear Deméter5/6/7, Agentes8/9/10 ni colas nativas X/TikTok.
+- [x] Ejecutar suite Python del proyecto (pytest testpaths completo), PostgreSQL efímero para nuevos tests y reconexión/migración, lint/mypy pertinentes y `npm run build`. Registrar todos los fallos preexistentes; no confundir skips con PG verificado.
+- [x] Revisión integrada en Codex GPT-6 Astra del rango completo desde baseline y diff empaquetado. Una única ronda de fixes integrada si aparece riesgo nuevo; no tocar proveedores o otros pendientes.
+- [x] Build de imagen misma receta del servicio actual; calificar una nueva revisión 0% con OAuth config2/IAM/recursos/secretos intactos. Prueba de migración idempotente y callback/alta usando fixtures aisladas; nunca activar conexiones/worker de empresa17 con un doble remoto. Se heredó el digest actual para conservar dependencias exactas; overlay y único label de fuente verificados.
+- [x] Promover sólo imagen/revisión después de gates; comprobar frontend autenticado, alta sin campo ID, rechazo anónimo del endpoint, callbacks canónicos, rutas públicas TikTok TXT/PNG y cuentas/cola/política preservadas.
+- [x] Mantener service/timer17 apagados hasta prueba real prevista22–23Bogotá; no recrear Deméter5/6/7, Agentes8/9/10 ni colas nativas X/TikTok.
 - [ ] Actualizar documentación, checkpoint y heartbeat existente21:45 con nuevo release y estado aprobado/implementado. El consentimiento remoto, cuatro requisitos del portal y recurrencia real conservan sus gates y no se marcan completos por este despliegue.

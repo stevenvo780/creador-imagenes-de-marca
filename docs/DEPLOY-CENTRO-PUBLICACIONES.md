@@ -566,3 +566,28 @@ los datos nuevos y el ledger; no restaura el dump sobre producción. La
 recuperación offline y esta reversión acotada quedan verificadas, con cero POST.
 Instagram/media, visibilidad y segundo barrido siguen pendientes y el timer
 permanece apagado. Ver el [ensayo de rutas](PRUEBAS-PUBLICACIONES-2026-10-12.md#rollback-de-frontend-y-autoridad-de-rutas-13-de-octubre-1749-utc).
+
+### Alta TikTok sin open_id previo entregada, 13 de octubre
+
+La revisión productiva `eikon-tiktok-onboarding-20261013` recibe 100 % sin tags.
+Imagen índice `4c0fb68338c29f9ea600fa8abb915438be8d67d2d0644ed7cb5cd848ba398deb`,
+descriptor Linux amd64 `1b68d779db1667932ea19873bb5e7a5850a258be31ab707370abed1982624109`,
+fuente `c2e80cf`, backend `f6dc9e361461df905c0f5255f095242bfd9f52823abc15d4e7b18ee904547d49`.
+Se heredaron las dependencias de producción y se verificó el overlay de fuente
+y frontend. Se conserva OAuth config2, IAM, recursos y demás configuración.
+
+Gates reales: 2090 pruebas Python PASS, dos skips por demo ausente; 71 frontend
+PASS; lint/types/build; revisiones independientes del producto y operadores;
+clon privado de la migración 42→43, idempotencia, guards y rechazo seguro del
+callback anterior. Promoción calificada 0→100 y conciliada sin repetir después
+del fallo de formato de salida del comando de tráfico. El recibo final verifica
+imagen/manifest/gates, runtime/IAM y los tres orígenes con rechazo anónimo.
+Recibos privados referenciados por `tiktok-onboarding-build-location` fuera de Git.
+
+Brave autenticado comprobó Humanizar, 17 campañas, 10 entregas, tres cuentas Meta,
+política 2 y formulario nuevo TikTok sin ID remoto. Esto verifica la entrega
+del software; no concede OAuth, publica contenido ni cierra la auditoría TikTok.
+Service/timer17 siguen apagados antes de la ventana controlada. Mantener abiertos
+los requisitos de portal, consentimiento y publicación visible por canal y
+segundo barrido sin duplicados. Los recibos históricos de recuperación sólo
+cubren sus imágenes originales. Ver el [corte de entrega](PRUEBAS-PUBLICACIONES-2026-10-12.md#alta-tiktok-entregada-y-comprobada-en-brave-13-de-octubre-2152-utc).

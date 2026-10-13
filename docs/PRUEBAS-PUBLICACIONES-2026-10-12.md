@@ -1023,3 +1023,101 @@ los inicios del 12 de octubre: Facebook entrega 1 a las 21:11:13, Facebook
 entrega 2 a las 21:11:28 e Instagram entrega 4 a las 21:22:24. Esa última cerró
 como `failed_before_dispatch` a las 22:23:30 sin borrar su consumo ni su guardia
 de medio. Son eventos históricos de la UI, no evidencia de un envío en este corte.
+
+## Corrección del alta TikTok aprobada, 13 de octubre
+
+El usuario aprobó implementar el alta sin conocer `open_id`. Los commits
+`3536c8a` y `c2e80cf` incorporan el formulario y el motor. El nuevo endpoint
+`POST /api/v1/publications/oauth/onboarding/start` acepta plataforma, modo,
+proyectos y callback; no acepta identidad predeclarada ni crea una conexión
+provisional. La tabla aditiva `publication_oauth_onboarding_states` liga el
+intento a empresa, owner, sesión, configuración y proyectos durante diez minutos.
+El callback consume el intento una sola vez antes del exchange, cruza la
+identidad de token y perfil y revalida autoridad, proyectos y caducidad bajo
+lock antes de guardar conexión y vault juntos. Una conexión existente conserva
+la identidad original y el vault ante un alta duplicada. Las reconexiones siguen
+exigiendo el ID original.
+
+| Verificación | Evidencia observada |
+|---|---|
+| Backend focal, SQLite y PostgreSQL | 202 PASS, sin skips; Ruff y mypy pertinentes PASS |
+| Interfaz completa configurada | 71 PASS en nueve archivos; 24 casos focales; TypeScript PASS |
+| Suite Python completa, PostgreSQL efímero | 2090 PASS, dos skips, exit 0, 529,15 segundos |
+| Build de interfaz | PASS; JavaScript principal `index-jvW_EF4d.js` |
+| Revisiones independientes | PASS servidor, interfaz, rango integrado y prerrequisitos de imagen |
+
+Los dos skips corresponden exclusivamente a `tests/test_ranking_isotype_penalty.py`,
+por falta del output demo. No son exclusiones de PostgreSQL. El primer intento
+de suite completa se conserva: tres FAIL, 1503 PASS, dos skips y 585 errores al
+agotarse el tmpfs de 512 MiB del PostgreSQL efímero (`DiskFull` y después
+`ConnectionRefused`). Se repitió con un contenedor propio nuevo de 4 GiB; no se
+relajaron assertions. Los transportes remotos usan fixtures; estas pruebas no
+acreditan un consentimiento ni una publicación ante TikTok.
+
+La receta general de Docker actualizaba dos dependencias sin necesidad del
+cambio. Se descartó esa imagen y se heredó el digest productivo `5e9a0f6a…`,
+copiando el servidor y frontend revisados. Se incluyeron tres prerrequisitos
+versionados que aún faltaban en producción: extracción pura del normalizador
+de resultados y método aditivo de renovación de Instagram sin caller productivo
+automático. Una revisión nueva comprobó equivalencia por AST de la extracción.
+La atestación de root comprobó 258 archivos públicos de runtime contra `c2e80cf`,
+frontend contra el build, assets exactos y `pip freeze` idéntico al base. La
+configuración de contenedor sólo admite actualizar el label de revisión fuente.
+Índice candidato `4c0fb683…`; backend SHA256 `f6dc9e36…`.
+
+El respaldo privado fresco de las 21:10 UTC tiene SHA256
+`c5a9cab52fce5442ab90d0b047e4bc92700a46f57f434e1ff266dd778fd5ce41`.
+La calificación y promoción se documentan por separado después de sus recibos
+reales. El consentimiento OAuth, la configuración del portal TikTok, la
+aceptación por canal y la recurrencia completa siguen pendientes.
+
+## Alta TikTok entregada y comprobada en Brave, 13 de octubre, 21:52 UTC
+
+La imagen final se subió una sola vez y el registro confirmó índice local/remoto
+idéntico `sha256:4c0fb68338c29f9ea600fa8abb915438be8d67d2d0644ed7cb5cd848ba398deb`
+y descriptor Linux amd64
+`sha256:1b68d779db1667932ea19873bb5e7a5850a258be31ab707370abed1982624109`.
+El clon privado sin red ni puertos restauró el respaldo fresco y ensayó esa
+imagen inmutable: 42→43 tablas; dos inicializaciones actuales y una anterior
+explícita conservaron filas, esquema y secuencias existentes. Las guardas
+rechazaron modificaciones. El callback anterior respondió 403 a un intento nuevo,
+sin consumirlo ni iniciar worker/proveedor. El recibo `migration-qualified-v2.json`
+liga commit, índice, backend, manifiesto y dump; el recibo preliminar permanece
+histórico. Los tres contenedores propios y su volumen de socket se eliminaron.
+
+La revisión `eikon-tiktok-onboarding-20261013` se calificó sin tráfico y después
+recibió 100 %. IAM, recursos, referencias a secretos y demás configuración
+permanecieron iguales; OAuth conserva la versión 2 del mismo secreto. La
+primera promoción terminó como HOLD: el comando de tráfico ejecutó con éxito,
+pero su salida JSON no era un objeto y el operador la trataba como observación.
+Se concilió por lectura y se confirmó 100 %, sin repetir la mutación. La nueva
+corrección separa éxito de mutación de observaciones estrictas. Otra revisión
+independiente y 70 pruebas ficticias comprobaron conciliación, rechazo de tráfico
+0 %, contratos reales del cliente, limpieza y ausencia de repetición.
+
+El operador final, SHA256
+`b72bfbebd9e8be64f9c369ceb85f30f01896a0065db91f3522899c990e80ad85`,
+concilió de nuevo sólo por lectura. Después de verificar bindings, gates,
+revisión/digest, tráfico, IAM/runtime y HTTP creó `promoted.json` exclusivo.
+TXT, PNG, SPA y JavaScript fueron exactos en dominio canónico, Cloud Run y proxy
+Vercel; el alta anónima fue rechazada en los tres. `provider_posts:0` describe
+las acciones de este operador, no un contador global de proveedores.
+
+Brave mostró temporalmente `ERR_NETWORK_CHANGED`. La sesión y overview del
+servidor respondían 200; al volver a la agenda canónica en una pestaña nueva
+se recuperó la carga, sin cambiar credenciales ni protecciones. Humanizar
+conservó 17 campañas, 10 entregas, tres cuentas Meta y política 2 vigente.
+En Cuentas → Añadir cuenta → TikTok se comprobó la desaparición del campo ID
+remoto, modo `oauth2` y texto de identificación durante autorización. No se
+envió el formulario ni se concedieron permisos remotos. Captura de viewport:
+`eikon-tiktok-onboarding-completo-20261013.jpg` en las visualizaciones del chat;
+la captura de página completa no respondió y se conservó la alternativa visible.
+
+SSH a las 21:41 UTC volvió a confirmar service 17 inactive/dead, sin InvocationID,
+y timer disabled/inactive, sin próxima ejecución. Las ventanas y filas existentes
+Deméter 5/6/7 y Agentes 8/9/10 se conservaron; ninguna cola nativa se modificó.
+El portal TikTok aún requiere icono, términos, privacidad y demo, además del
+guardado/configuración, consentimiento y auditoría pertinentes. El nuevo flujo
+de alta está entregado; la conexión TikTok real y la meta de publicaciones
+recurrentes en todas las redes permanecen abiertas. Los ocho ensayos históricos
+de recuperación no se extienden automáticamente a esta imagen/backend nuevos.
