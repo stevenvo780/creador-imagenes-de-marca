@@ -155,3 +155,96 @@ La meta permanece abierta hasta comprobar las publicaciones recurrentes de todos
 los destinos. Pendientes adicionales: completar la API de TikTok, recargar el
 MCP de Desktop (el launcher nativo funcionó con roles separados), comprobar el
 perfil final de TikTok y recuperar control total del perfil antiguo de Facebook.
+
+## Continuación del 13 de octubre: siguiente pieza y calendario
+
+Los apartados anteriores conservan el corte del 12 de octubre. El siguiente
+contenido es Deméter, con hechos comprobados en humanizar.tech: distribuidoras
+de alimentos, pedidos, rutas, inventario y entregas. Se conservó la referencia
+vigente de Eikón, marca 110/version 4, sin presentarla como un logo histórico
+independiente confirmado. La conversión de PNG a JPEG sólo adaptó el formato;
+no redibujó ni modificó la composición o la referencia.
+
+JPEG 1080×1350, 191953 bytes, SHA256
+`99836aae9569ed692bc3605de70f2b4c2ad830c979e83693ba5922d08dc1ae80`.
+Se importó como media 47, con procedencia de las imágenes 32/16 y brief 46.
+El original de galería conserva `pending_review`; la aprobación editorial de
+publicaciones tiene un flujo separado y no cambia la revisión owner de galería.
+
+El agente Codex actual inspeccionó los bytes reales, la referencia y los hechos.
+Un cliente MCP stdio real del launcher existente preparó contratos y entregó
+las imágenes al agente; éste registró evaluaciones 5/6/7 y decisiones elegibles
+5/6/7, política 2. El recibo identifica honestamente el agente actual y no inventa
+un slug de modelo o una atestación criptográfica del proveedor. El launcher sólo
+carga galería/planner/reviewer; no recibe el grant worker. El error de configuración
+del conector de Desktop sigue pendiente de recarga y no se contó como éxito.
+
+| Destino | Siguiente pieza | Hora de Bogotá | Estado comprobado |
+|---|---|---|---|
+| Facebook Systems | Deméter, delivery 5 / revisión 5 | 13 oct, 22:00 | Calendario canónico de Eikón; sin inicio ni POST nuevo |
+| Facebook Humanizar | Deméter, delivery 6 / revisión 6 | 13 oct, 22:00 | Calendario canónico de Eikón; sin inicio ni POST nuevo |
+| Instagram News | Deméter, delivery 7 / revisión 7 | 13 oct, 22:00 | Calendario canónico; primera publicación API aún pendiente |
+| TikTok @humanizar.systems | Deméter, ID 7696012000295488775 | 13 oct, 22:00 | Programada realmente en Studio; fila nueva, fecha futura y distintivo de reloj |
+| X @HumanizarSystem | Un borrador Deméter con JPEG y etiqueta IA | Ventana 22:00–23:00 | Lista Scheduled vacía; borrador conservado, programación no confirmada |
+
+El calendario de Eikón conserva `held`, con `daily_quota_reached` y
+`frequency_limit` del corte inicial. `started_at` sigue vacío en las tres entregas
+nuevas; el claim reevalúa las restricciones en su horario. No se borraron los
+guards ni se adelantó el horario. El intento viejo 4 de Instagram sigue cerrado;
+el nuevo medio tiene procedencia y evaluación propias y nunca se intentó antes
+en estos destinos.
+
+TikTok recibió un solo envío de programación, con marca propia y etiqueta IA,
+sin música añadida ni ubicación. Una pestaña nueva de Studio confirmó el ID y
+el reloj del 13 de octubre, 22:00. La miniatura de esa fila aún no cargaba en
+la captura; no se presenta como comprobación visual final de la publicación.
+Su visibilidad pública se verificará después de la hora programada. No repetir
+el envío de TikTok desde el seguimiento diario si la fila ya existe.
+
+X conserva el borrador tras conciliar que Scheduled estaba vacío. El intento
+de programación no se contó como éxito y no se repitió el botón final. La vía
+gratuita de publicación directa en la ventana diaria permanece pendiente.
+
+## Calificación gestionada de logging: 13 de octubre
+
+Se probó el módulo real de logging de la imagen fijada mediante un fixture
+sintético sin DB, almacenamiento de producción ni llamadas a redes sociales.
+Cloud Run mantuvo `eikon-00067-bmn` al 100 % mientras la revisión sintética
+`eikon-logq-20261013` atendía únicamente su tag. Luego se retiró el tag y se
+restauró la plantilla API original; la revisión de plantilla sin tráfico quedó
+`eikon-00069-fwg`. IAM se conservó. No promover `latest` como atajo.
+
+Se observaron HTTP 200, 422, 500 y timeout gestionado 504. Las respuestas
+ordinarias protegidas conservan `private, no-store` y `no-referrer`; el 504
+gestionado no se atribuye al middleware de la aplicación. Las consultas de
+logging dieron cero coincidencias del marcador sensible, dos controles ordinarios
+positivos y seis diagnósticos JSON con campos permitidos. La exclusión acotada
+de _Default permaneció intacta; no se ampliaron filtros ni se borraron logs.
+Esto acredita retención en los sinks comprobados, no ausencia absoluta de
+procesamiento o de buffers de Log Router.
+
+Se conservó un resultado negativo del transporte: la interrupción después de
+cabeceras produjo `RemoteProtocolError` local, pero el proxy gestionado entregó
+HTTP 200 completo al cliente. El diagnóstico seguro fue `response_interrupted`.
+El timeout devolvió 504 al cliente y el handler terminó posteriormente con un
+diagnóstico 200 a los seis segundos. No se ocultaron esas diferencias.
+
+Once pruebas aisladas de recuperación del operador de logging pasaron, además
+de las pruebas HTTP del módulo empaquetado. Las sondas sintéticas no acreditan
+descarga con ticket real, revocación ni publicación Instagram. La activación
+controlada de media tiene revisión independiente y diez pruebas de recuperación;
+la aceptación completa y el timer siguen sujetos a la prueba real del horario.
+
+La habilitación controlada terminó en `eikon-media-20261013`, 100 % del tráfico,
+mismo digest y únicamente las dos variables de entrega añadidas. Candidata y
+origen directo dieron readiness autenticado `ready=true`, health 200, rechazo
+anónimo y ticket inexistente 404 con las cabeceras previstas. IAM y runtime
+restante se conservaron; el tag se retiró y worker/timer siguen apagados. Cero
+claims, tickets reales y POST de proveedor en esta operación. El gate de
+aceptación completa sigue abierto hasta comprobar descarga, revocación y el
+primer envío real de Instagram. No confundir el readiness con ese resultado.
+
+La cuota se consultó otra vez el 13 de octubre a las 05:07 UTC: la app de la
+misma cuenta pasó a `ordinaryUsageAllowed=true`, uso semanal 0 %. Se conserva
+el resultado anterior del 100 % como histórico; no se cambió de cuenta ni se
+compraron créditos para resolverlo.

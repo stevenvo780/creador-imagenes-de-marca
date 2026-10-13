@@ -339,3 +339,61 @@ Próxima prueba Instagram: medio nuevo, a partir del 13 de octubre a las
 capacidad temporal, comprobar descarga, publicación y recibo visible, y repetir
 el barrido sin POST nuevo. Después se puede activar el timer 17; los timers
 legacy permanecen apagados. Las dos variables de entrega siguen ausentes.
+
+### Corte operativo del 13 de octubre: habilitación controlada de media
+
+Se calificaron los casos gestionados 200/422/500/timeout con el módulo de
+logging del digest actual, una revisión sintética sin tráfico general y cero
+llamadas a redes sociales. La prueba conserva la diferencia de interrupción
+local frente a HTTP 200 del proxy gestionado. Cero marcadores sensibles, dos
+controles ordinarios y seis diagnósticos seguros acreditan los sinks consultados;
+no significan ausencia de procesamiento previo. Se retiró el tag sintético y
+se restauró la plantilla API. Ver la evidencia y límites en
+[Pruebas por destino](PRUEBAS-PUBLICACIONES-2026-10-12.md#calificación-gestionada-de-logging-13-de-octubre).
+
+Tras revisión independiente y diez pruebas aisladas del operador, se desplegó
+la revisión API `eikon-media-20261013`, primero candidata con 0 % de tráfico
+general y después 100 % por nombre exacto. Conserva la imagen
+`sha256:9c52cbaf64865c3e10f39c63250bca0753926a2cc2010aa7f862b8d025863264`,
+bootstrap, secretos fijados, cuenta de servicio, recursos, SPA e IAM. El único
+delta de configuración funcional son:
+
+- `EIKON_PUBLICATION_MEDIA_DELIVERY_ENABLED=1`.
+- `EIKON_PUBLICATION_MEDIA_ORIGIN=https://eikon-6dalnsowyq-uc.a.run.app`.
+
+La candidata y el origen de producción respondieron health 200, readiness
+autenticado `ready=true` con worker 6, rechazo sin autenticación y 404 para un
+ticket inexistente. Las respuestas comprobadas conservaron `private, no-store`
+y `no-referrer`. No se emitió ningún ticket real ni se creó un claim o un POST
+de proveedor durante este despliegue. El tag de candidata quedó retirado.
+
+Esta habilitación permite la **prueba controlada** de la capacidad temporal.
+No cierra el gate de aceptación completo: faltan descarga real, revocación,
+primera publicación Instagram visible y segundo barrido sin POST adicional.
+La emisión sólo admite un intento canónico ya iniciado, media exacta, grant
+vigente y TTL; activar la variable no autoriza un intento ni elimina guards.
+El worker/timer de server2 siguen inactivos, el timer deshabilitado y legacy
+apagado. No habilitar recurrencia de servidor por el readiness solamente.
+
+La restauración usa el snapshot privado fijado y conserva base de datos,
+almacenamiento, intentos y guards. Ante ACK incierto se concilia el mismo
+estado sin repetir mutaciones. Un fallo terminal confirmado admite rollback;
+una operación aún pendiente no. La salud HTTP de la versión retirada no
+impide restaurarla. Las pruebas del operador son mocks; las sondas HTTP
+anteriores son las comprobaciones reales y no sustituyen el primer envío.
+
+Deméter ya tiene evaluaciones editoriales 5/6/7 y entregas canónicas 5/6/7
+para Facebook Systems, Facebook Humanizar e Instagram News, el 13 de octubre
+a las 22:00 de Bogotá. No reiniciar el intento antiguo 4 ni quitar su consumo.
+TikTok Studio confirmó la programación nativa de Deméter, ID
+`7696012000295488775`, a esa misma hora; verificar después su visibilidad sin
+volver a enviarlo. X conserva un único borrador y Scheduled vacío: publicarlo
+desde Brave en la ventana autorizada si la conciliación no encuentra otro envío.
+
+El seguimiento diario oficial conserva 21:45, este chat, política 2, roles
+separados y gasto desactivado. Debe reutilizar las piezas ya evaluadas y la
+programación existente antes de preparar contenido adicional. Si el conector
+Desktop aún informa configuration_error, el agente actual puede usar el puente
+MCP stdio comprobado del launcher, con sus grants planner/reviewer separados;
+no requiere copiar una sesión o inventar una evaluación. La lectura nueva de
+cuota de la misma cuenta ya permite uso ordinario tras reinicio semanal.
