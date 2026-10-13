@@ -431,3 +431,33 @@ sin error de reproducción. El viewport y tema se restauraron. Esta evidencia
 no cierra toda la aceptación UI/accesibilidad ni los formatos del proveedor.
 El texto genérico de retención temporal aún requiere ajuste de copy. Ver el
 [corte de pruebas](PRUEBAS-PUBLICACIONES-2026-10-12.md#vídeo-nativo-y-lectura-posterior-13-de-octubre).
+
+### Revisión vigente de interfaz: retenciones temporales
+
+El 13 de octubre se promovió `eikon-hold-copy-20261013`, digest
+`sha256:ba6927495a29fdc346636bf02b9358e184c741d17cd7186e5e0c753b711fd2a5`,
+frontend de `c50e820c5681fe1b8126f4550aee296e7cc55abe`, después de calificar
+la candidata con 0 % de tráfico. Sustituye únicamente los archivos SPA sobre
+la imagen `eikon-media-20261013`; backend, funcionalidad de media, configuración,
+IAM, secretos y roles se conservan. La promoción fijó la revisión nombrada al
+100 % y retiró el tag. Sondas reales verificaron salud/landing 200, index exacto
+en `/publications`, bundle exacto y worker anónimo rechazado.
+
+La corrección distingue las retenciones temporales de frecuencia/cuota de los
+requisitos y de la expiración; no altera la ejecución. Se verificó la sesión
+owner en escritorio y móvil 390×844, temas claro/oscuro. La aceptación UI
+compuesta y los formatos del proveedor siguen abiertos.
+
+El operador conservó journals tras dos paradas de comprobación y calificó la
+candidata existente mediante reconciliación de sólo lectura, sin repetir la
+creación. La recuperación ante una promoción incierta o un fallo posterior
+sigue requiriendo observar la revisión y el tráfico remotos; no borrar journals
+para reintentar ni seleccionar latest. El respaldo nuevo conserva
+`restore_verified=false`. Los detalles y límites están en el
+[corte de pruebas](PRUEBAS-PUBLICACIONES-2026-10-12.md#corrección-de-retenciones-y-despliegue-13-de-octubre).
+
+El heartbeat oficial se actualizó con el digest vigente y conserva el horario,
+los contratos y las colas nativas. SSH confirma timer 17 disabled/inactive y
+servicio inactive. No se produjo un POST a proveedores en este release. La
+prueba diaria controlada de Instagram/media y el segundo barrido siguen siendo
+requisitos previos a activar el timer.

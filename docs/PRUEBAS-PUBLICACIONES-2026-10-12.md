@@ -345,3 +345,60 @@ revisión también aparece junto a retenciones temporales de frecuencia, aunque 
 claim reevalúa esos guards en horario. No usar ese texto para forzar revisiones
 alternativas o borrar historia. El ajuste de copy y la prueba final por formato
 siguen pendientes; el timer de servidor permanece deshabilitado.
+
+## Corrección de retenciones y despliegue: 13 de octubre
+
+El límite de copy del corte anterior quedó corregido en
+`c50e820c5681fe1b8126f4550aee296e7cc55abe`. Las retenciones compuestas sólo por
+frecuencia/cuota explican que los límites se comprobarán antes del envío y que
+se conserva la misma pieza. Las retenciones de requisitos, mixtas o sin razón
+conservan la indicación de revisión del requisito. Una entrega expirada ya no
+muestra simultáneamente la instrucción genérica de retención. No cambia el
+claim, la política, los permisos, el ledger ni las acciones de cancelación.
+
+La regresión reprodujo cinco fallos antes del cambio; después pasaron 13 tests
+del calendario, la suite frontend completa de 47 tests y el build TypeScript/Vite.
+El procedimiento privado de release pasó 17 pruebas aisladas de deriva,
+ACK perdido, journals, recuperación sin repetir escritura y sondas de SPA.
+La revisión independiente no dejó hallazgos Critical/Important. Estos mocks
+no acreditan publicación en proveedores ni restauración real de la base.
+
+Cloud Run sirve `eikon-hold-copy-20261013` con el 100 % del tráfico y digest
+`sha256:ba6927495a29fdc346636bf02b9358e184c741d17cd7186e5e0c753b711fd2a5`.
+La imagen hereda la base fijada del corte de media y sustituye sólo
+`frontend/dist`: hash del backend y Config de imagen iguales, configuración
+de ejecución e IAM conservados. El respaldo privado conserva dump de 308062
+bytes, SHA256 `b70ffbd76646bf7e312a2817367b8587da250a033ce9e43928ed08609e130005`,
+con `restore_verified=false`.
+
+Se creó una única candidata con 0 % del tráfico y se mantuvo la revisión
+anterior al 100 %. Dos comprobaciones detuvieron la calificación: metadata de
+procedencia añadida por gcloud y comparación de la landing pública con el
+index de la SPA. Se corrigió el operador para admitir sólo la pareja observada
+`gcloud/570.0.0` y comprobar el index en `/publications`. Los journals y paradas
+se conservaron; la reconciliación fue de sólo lectura y no repitió la creación
+de la candidata. La promoción usó la revisión nombrada y retiró el tag.
+
+Las sondas reales de candidata y producción confirmaron salud 200, landing
+200, SHA256 exacto de `/publications` y del bundle principal, y rechazo 403 al
+worker anónimo. La sesión owner humanizar en Brave mostró diez entregas,
+las seis retenciones temporales con el texto nuevo y la entrega expirada sin
+el párrafo contradictorio. Se inspeccionó el texto en escritorio y viewport
+390×844 con temas oscuro/claro; ancho de documento 375 px con scrollbar, sin
+desbordamiento del contenido. Tema oscuro y viewport normal restaurados.
+Capturas `eikon-retencion-temporal-corregida.png`,
+`eikon-retencion-temporal-movil-oscuro.png` y
+`eikon-retencion-temporal-movil-claro.png` en el directorio de evidencia del día.
+
+TikTok Developers se comprobó de nuevo en Brave: la lista muestra la app
+Humanizar Publicaciones, pero su configuración conserva `Network Error`.
+La captura `tiktok-developers-error-actual.png` acredita ese bloqueo actual;
+no se solicitaron nuevos permisos ni se repitieron las programaciones nativas.
+La automatización oficial existente sigue ACTIVE, mismo chat y horario 21:45,
+actualizada con la revisión productiva y los límites pendientes.
+
+La consulta SSH final conserva timer 17 disabled/inactive y servicio inactive.
+Este release produjo cero POST de publicación. Descarga/revocación real de
+media, primer recibo visible de Instagram, formatos por separado, segundo
+barrido posterior sin POST y recurrencia de todos los destinos siguen siendo
+gates abiertos de Task10. La corrección UI no habilita el timer ni cierra la meta.
