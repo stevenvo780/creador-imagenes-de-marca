@@ -796,3 +796,59 @@ cero POST a proveedores, sin refresh, sin cambio de política, cola o calendario
 de Instagram, descarga/revocación real de media, segundo barrido sin POST y
 recurrencia por todos los destinos siguen pendientes; este sondeo no activa el
 timer ni sustituye la prueba controlada de las 22:00 Bogotá.
+
+## Sitio de Eikón verificado por TikTok, 13 de octubre, 19:28 UTC
+
+TikTok Developers confirmó **«Your property has been verified»** para el prefijo
+`https://eikon.humanizar.cloud/`; después lo mostró en **Verified properties**
+del entorno Production de la app `7694252858519275528`. Se conservó una captura
+del resultado. Esta comprobación acredita propiedad del sitio, no autorización
+OAuth, aprobación de la aplicación ni publicación mediante API.
+
+El archivo oficial de verificación antes devolvía el HTML de la SPA. Se corrigió
+con una imagen derivada del digest productivo `ba692749...`, incorporando sólo
+ese TXT de 68 bytes y un PNG RGBA 1024 × 1024 del SVG existente de Eikón. No se
+rediseñó el logo ni se reconstruyó la aplicación. El manifiesto completo del
+frontend quedó igual al anterior más esos dos archivos; Config, capas heredadas
+y hash backend se comprobaron antes del ensayo y del despliegue.
+
+La imagen final es
+`us-central1-docker.pkg.dev/emergent-enterprises/eikon/eikon@sha256:5e9a0f6a9449e9f4388713566d5b10310bff0eda1cc7861d85b271bc191af30a`.
+Su único descriptor Linux/amd64 se verificó contra los bytes y el digest del
+registro: `sha256:c696e6b7c7e7b3b0215173f1ed18368dcfce538eef09a00b03d6d3f97af3a4ed`.
+La revisión `eikon-tiktok-url-20261013` ejecuta ese descriptor, con 100 % del
+tráfico y sin tags después de la promoción. Se verificaron configuración completa
+e IAM del servicio sin cambios, salvo la imagen y el reparto autorizado.
+
+El operador recibió revisión independiente y pasaron sus 13 pruebas sintéticas
+de guardas, incluida la deriva de secretos, recursos y cuenta de servicio. En la
+imagen real, un contenedor sin red, credenciales ni mounts privados produjo
+siete respuestas ASGI: TXT, PNG, SPA y JavaScript con bytes exactos; política,
+conexiones y readiness del worker rechazaron acceso anónimo con 401/403. Usó
+SQLite y clave sintéticos, sin iniciar lifespan ni worker.
+
+La primera calificación se retuvo al encontrar el descriptor resuelto de Cloud
+Run; se verificó su unión exacta al índice y se revisó la corrección. El comando
+de promoción se ejecutó; la validación de su resultado se retuvo porque devolvió
+una lista JSON en vez del objeto esperado. En ambos casos se reconciliaron las
+revisiones existentes mediante lecturas y GET; **no se repitieron las
+mutaciones**. La reconciliación final comprobó TXT, PNG, SPA,
+JavaScript y negativos anónimos en los tres orígenes públicos existentes: dominio,
+Cloud Run y proxy Vercel. No se cambiaron DNS, dominio, facturación, permisos,
+base de datos, grants, calendario ni timers.
+
+Recibos privados en `tiktok-static-20261013-live1922`: build, ASGI aislado,
+manifiestos del registro, unión index/descriptor, respaldo de servicio/IAM,
+journals, calificación y promoción reconciliadas. Logs y recibos permanecen
+privados; los directorios temporales de autenticación y construcción se
+eliminaron. Las operaciones del ensayo no enviaron POST de publicaciones a
+proveedores.
+
+El icono está listo y disponible en `/eikon-app-icon-1024.png`, pero **su carga
+en el formulario de TikTok no está confirmada**: el selector de archivos no
+respondió a la extensión. La app permanece Draft y Direct Post desactivado.
+Siguen pendientes políticas públicas con responsable/contacto confirmados,
+callback, demostración del flujo real, consentimiento OAuth y revisión de TikTok.
+Las colas nativas de X/TikTok y las ventanas del 13 y 14 de octubre no se
+recrearon ni adelantaron. El timer 17 continúa retenido y la meta completa de
+publicaciones recurrentes en todas las redes permanece abierta.
