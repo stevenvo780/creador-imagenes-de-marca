@@ -1208,3 +1208,77 @@ ventana. El paso del tiempo por sí solo no ejecuta el worker. Resultado:
 PASS de correlación y fechas; HOLD de publicación autónoma y recuperación
 del backend actual. Informe local `eikon-xenia-continuity-review-20261013.md`,
 SHA256 `e7194b5aadce5950238839130652bf70d1423dec3ea03c2868ba6cb7cdf1418e`.
+
+### Recuperación de DB y arranque de la imagen actual; carga del icono TikTok
+
+Corte del 13 de octubre, 23:08 UTC. Se tomó un respaldo nuevo de la revisión
+servida `eikon-tiktok-onboarding-20261013`: índice `4c0fb683…`, hijo AMD64
+`1b68d779…` y backend `f6dc9e36…`. Antes y después se comprobaron tráfico
+100 % sin tags, configuración e IAM. La configuración de DB se obtuvo de
+la revisión inmutable y de la instancia Cloud SQL exacta, no de una plantilla
+pendiente. Dump de 318012 bytes, SHA256
+`e01a46f0c0ae59446e74be27bf4fe6440a08dee00d3f93e23c274906547ea49d`;
+proxy, socket y cliente del dump quedaron eliminados. No se mutó producción.
+
+La restauración final usó una copia privada de ese dump con hash idéntico,
+sin volver a consultar la DB productiva. PostgreSQL y su cliente usan el UID
+local 1000; los clientes de aplicación usan el usuario real de la imagen,
+1001:1001. Esto permite leer sus archivos 0600 sin cambiar sus permisos.
+El socket compartido admite únicamente al grupo local; el directorio padre
+permanece 0700. El inspector distingue los clientes registrados y comprueba
+imagen, usuario, label de propiedad, red desactivada, ausencia de puertos,
+rootfs de lectura, capacidades retiradas y prohibición de nuevos privilegios.
+
+Resultado real, exit 0 a las 23:07:56 UTC:
+
+- 43 tablas restauradas, incluida `publication_oauth_onboarding_states`.
+- Dos llamadas explícitas a init, además de las inicializaciones habituales
+  de la aplicación; filas, esquema, secuencias y estados de entregas intactos.
+- Las tres guardas de historia, medios y revisiones rechazaron UPDATE.
+- Las 43 respuestas ASGI de autoridad correspondieron a lo esperado, usando
+  las dependencias reales y retirando las credenciales ficticias del clon.
+- Entrada y salida reales del lifespan: WorkerPool de galería iniciado,
+  lectura DB con cero batches pendientes y tareas/executor cerrados al salir.
+- Los 10 contenedores registrados y los datos temporales quedaron eliminados.
+
+El proceso de galería no es el publicador social. Este ensayo no verifica
+autenticación ante proveedores, una publicación, coherencia con GCS ni rollback
+al backend anterior. Los ocho ensayos históricos se conservan con su alcance;
+`compound_runtime_gate_complete=false` y `publication_acceptance=false` siguen
+siendo obligatorios. El operador no realizó POST a proveedores; este cero
+describe sus acciones y no un contador global de producción.
+
+Se conservaron las intenciones fallidas y su diagnóstico: comparación literal
+de índice/hijo, socket de 130 bytes frente al límite de 107 y cliente de prueba
+sin permiso para leer archivos de la imagen. Cada ajuste tuvo revisión
+independiente antes de una nueva intención; no se repitieron las anteriores.
+Las 42 guardas finales pasaron. Fuente final del operador, SHA256
+`8ef5c916f89213244c8536d168670647ac0c59e81778238644fbe09887b11012`;
+revisión de fuentes v5, SHA256
+`4314c2b9b9fc33e0b87eaa03333a051c37968384a96a4d5cccfd499555ead561`.
+Recibo privado `current-backend-recovery-receipt.json`, bajo
+`current-backend-recovery-20261013T230741Z-application-user`, SHA256
+`5fa596ceeeb3456388e3d79c1b1278b107f66c14bc5ccd2cc5837c6c3039f73e`.
+
+La revisión independiente del agregado y los recibos confirmó sus hashes,
+bindings, comparación y límites: PASS acotado de recuperación DB/autoridad/
+arranque. No repitió el ensayo ni accedió a dumps, snapshots privados o
+proveedores. Informe `eikon-current-backend-recovery-evidence-review-20261013.md`,
+SHA256 `2391177bf7c376f2912ff07171685c47373c71065b46199a98018844d27cace6`.
+
+El selector nativo del icono TikTok sí respondió: seleccionó el PNG propio
+1024×1024 y mostró la carga, pero el proveedor terminó con «Failed to upload».
+Hubo un intento nuevo, sin reintento, guardado de formulario ni envío a revisión.
+La causa específica no quedó demostrada. Recibo privado
+`tiktok-icon-upload-attempt-20261013T2247-receipt.json`, SHA256
+`42f81de127e04f943323aca28e2cfbafd1d9d98992353a3fdf509bf0601628eb`;
+captura `tiktok-icon-upload-failed-20261013T2250.jpg`. El logo de la app aún
+no está confirmado y los requisitos de privacidad, términos y demo continúan.
+
+La consulta SSH posterior confirmó servicio 17 inactive/dead, sin InvocationID,
+y timer inactive/dead/disabled, sin próxima ejecución. No se recrearon ni
+adelantaron Deméter 5/6/7, Agentes 8/9/10, Xenía 11/12/13 o las programaciones
+nativas de 13/14/15 de octubre. La prueba debida de las 22:00–23:00 Bogotá,
+sus recibos remotos/media/revocación, el segundo barrido con cero POST y la
+revisión previa a activar el timer permanecen pendientes. La meta de todas las
+redes continúa ACTIVE e incompleta.
