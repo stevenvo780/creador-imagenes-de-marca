@@ -158,7 +158,7 @@ async function fetchSystemCss(signal: AbortSignal): Promise<string> {
  * Monta la plantilla en un div oculto, aplica vars/data-attrs/isotipo/textos,
  * y retorna el nodo del contenedor.
  */
-function createAndMountContainer(
+export function createAndMountContainer(
   templateHtml: string,
   combination: RenderCombination,
   viewport: { w: number; h: number },
@@ -166,6 +166,7 @@ function createAndMountContainer(
 ): HTMLDivElement {
   // Crear contenedor oculto
   const container = document.createElement("div");
+  container.className = "eikon-render-root";
   container.style.position = "fixed";
   container.style.left = "-99999px";
   container.style.top = "-99999px";
@@ -187,23 +188,16 @@ function createAndMountContainer(
   bodyContent.style.minHeight = `${viewport.h}px`;
   bodyContent.style.boxSizing = "border-box";
 
-  // Vars de la marca como CSS custom properties (:root)
+  // La marca vive en el lienzo. Las variantes del body conservan su precedencia.
+  const scopeCss = (css: string) => css.replace(/:root\b/g, ".eikon-render-root");
   const styleElement = document.createElement("style");
-  let styleContent = `:root {`;
+  let styleContent = ".eikon-render-root {";
   for (const [key, value] of Object.entries(combination.vars)) {
     styleContent += `\n  --${key}: ${value};`;
   }
-  styleContent += "\n}";
-  styleElement.textContent = styleContent;
-
-  // Python uses underscore keys; templates consume hyphenated font tokens.
-  // Set them on the template body so its own defaults cannot hide brand typography.
-  for (const [key, cssKey] of [
-    ["font_titulo", "--font-titulo"],
-    ["font_cuerpo", "--font-cuerpo"],
-  ]) {
-    if (combination.vars[key])
-      bodyContent.style.setProperty(cssKey, combination.vars[key]);
+  styleElement.textContent = styleContent + "\n}";
+  for (const [key, cssKey] of [["font_titulo", "--font-titulo"], ["font_cuerpo", "--font-cuerpo"]]) {
+    if (combination.vars[key]) bodyContent.style.setProperty(cssKey, combination.vars[key]);
   }
 
   // Setear data-* DIRECTAMENTE sobre el body de la plantilla.
@@ -225,17 +219,19 @@ function createAndMountContainer(
   // 1) eikon-system.css (fuentes + tokens globales)
   if (systemCss) {
     const systemCssElement = document.createElement("style");
-    systemCssElement.textContent = systemCss;
+    systemCssElement.textContent = scopeCss(systemCss);
     container.appendChild(systemCssElement);
   }
   // 2) el <style> EMBEBIDO de la plantilla (vivía en <head>; si no se copia, la
   //    plantilla rinde SIN estilo → fondo/composición rotos). CRÍTICO para compuestas.
   doc.querySelectorAll("style").forEach((s) => {
-    container.appendChild(s.cloneNode(true));
+    const scoped = s.cloneNode(true) as HTMLStyleElement;
+    scoped.textContent = scopeCss(scoped.textContent || "");
+    container.appendChild(scoped);
   });
-  // 3) las vars de la marca (:root) — sobreescriben los defaults de la plantilla.
+  // 3) variables de marca después de los defaults locales de la plantilla.
   container.appendChild(styleElement);
-  // 4) el body de la plantilla.
+  // 4) el body conserva variables de variante y fuentes exactas.
   container.appendChild(bodyContent);
 
   // Inyectar isotipo como <img> en [data-isotype-container]

@@ -5,6 +5,7 @@ import { type FormEvent, useState } from "react";
 import { ApiError } from "../api/client";
 import { slugify } from "../utils/format";
 import type { Session } from "./useSession";
+import { ThemeSelector } from "../theme/ThemeProvider";
 
 interface Props {
   session: Session;
@@ -51,6 +52,7 @@ export function LoginPage({ session }: Props) {
 
   return (
     <main
+      className="eikon-login"
       style={{
         minHeight: "100vh",
         display: "flex",
@@ -70,6 +72,7 @@ export function LoginPage({ session }: Props) {
           boxShadow: "var(--shadow-md)",
         }}
       >
+        <div className="eikon-login-theme"><ThemeSelector /></div>
         {/* Marca */}
         <div style={{ textAlign: "center", marginBottom: "var(--space-6)" }}>
           <h1
@@ -244,7 +247,7 @@ export function LoginPage({ session }: Props) {
               background: busy
                 ? "var(--color-primary-muted)"
                 : "var(--color-primary)",
-              color: "#fff",
+              color: "var(--teal-ink)",
               border: "none",
               borderRadius: "var(--radius-md)",
               fontSize: "var(--font-size-base)",

@@ -6,6 +6,7 @@
 import React, { useState } from "react";
 import { ApiKeysPanel } from "../pages/Media/ApiKeysPanel";
 import { Link, NavLink, useLocation } from "react-router-dom";
+import { ThemeSelector } from "../theme/ThemeProvider";
 
 export interface AppShellProps {
   children: React.ReactNode;
@@ -165,6 +166,7 @@ export function AppShell({
 
           {/* Área de usuario */}
           <div
+            className="eikon-appbar-actions"
             style={{
               display: "flex",
               alignItems: "center",
@@ -172,6 +174,7 @@ export function AppShell({
               flexShrink: 0,
             }}
           >
+            <ThemeSelector />
             {owner && (
               <button
                 type="button"

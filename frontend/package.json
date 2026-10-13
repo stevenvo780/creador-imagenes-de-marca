@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test": "vitest --environment jsdom src/pages/Publications"
+    "test": "vitest --environment jsdom src/pages/Publications src/theme"
   },
   "dependencies": {
     "modern-screenshot": "^4.4.37",

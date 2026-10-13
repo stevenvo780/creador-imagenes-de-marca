@@ -25,7 +25,7 @@ const STATUS_LABEL: Record<BatchStatus, string> = {
 const STATUS_COLOR: Record<BatchStatus, string> = {
   pending:   "var(--slate-500)",
   running:   "var(--teal-600)",
-  completed: "#16a34a",
+  completed: "var(--ok)",
   failed:    "var(--error)",
   cancelled: "var(--slate-500)",
 };
@@ -303,8 +303,8 @@ export function StepBatchProgress({
                 width: "24px",
                 height: "24px",
                 borderRadius: "50%",
-                background: "#16a34a",
-                color: "#fff",
+                background: "var(--ok)",
+                color: "var(--status-ink)",
                 display: "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -324,7 +324,7 @@ export function StepBatchProgress({
                 height: "24px",
                 borderRadius: "50%",
                 background: "var(--error)",
-                color: "#fff",
+                color: "var(--status-ink)",
                 display: "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -391,17 +391,17 @@ export function StepBatchProgress({
         {batch.status === "completed" && (
           <div
             style={{
-              background: "rgba(22, 163, 74, 0.08)",
+              background: "var(--success-bg)",
               padding: "var(--space-3) var(--space-4)",
               borderRadius: "var(--radius-md)",
-              borderLeft: "4px solid #16a34a",
+              borderLeft: "4px solid var(--ok)",
             }}
           >
-            <p style={{ margin: 0, fontSize: "var(--font-size-sm)", color: "#166534", fontWeight: 600 }}>
+            <p style={{ margin: 0, fontSize: "var(--font-size-sm)", color: "var(--ok)", fontWeight: 600 }}>
               Generación completada
             </p>
             {counts && (
-              <p style={{ margin: "var(--space-1) 0 0", fontSize: "var(--font-size-sm)", color: "#166534" }}>
+              <p style={{ margin: "var(--space-1) 0 0", fontSize: "var(--font-size-sm)", color: "var(--ok)" }}>
                 {counts.rendered ?? 0} variaciones creadas
               </p>
             )}

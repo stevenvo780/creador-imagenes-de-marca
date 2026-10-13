@@ -22,15 +22,15 @@ const variantMap: Record<
     icon: 'ℹ',
   },
   success: {
-    bg: '#e6f9f0',
-    color: '#1a7a4a',
-    border: '#a7e0c4',
+    bg: 'var(--success-bg)',
+    color: 'var(--ok)',
+    border: 'var(--ok)',
     icon: '✓',
   },
   error: {
     bg: 'var(--error-bg)',
     color: 'var(--error)',
-    border: '#f5b4b0',
+    border: 'var(--danger)',
     icon: '✕',
   },
 };

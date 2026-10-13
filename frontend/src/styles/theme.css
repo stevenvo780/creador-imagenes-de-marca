@@ -1,5 +1,5 @@
 /* ============================================================
-   Eikon Editorial Design System — Dark Atelier
+   Eikón — temas globales claro y oscuro
    ============================================================ */
 
 @font-face {
@@ -74,7 +74,8 @@
   font-display: swap;
 }
 
-:root {
+:root, :root[data-theme="dark"] {
+  color-scheme: dark;
   --bg: #0e1416;
   --surface: #151c1f;
   --surface-2: #1b2429;
@@ -82,12 +83,14 @@
   --border-strong: #37454c;
   --text: #ece7dd;
   --text-muted: #97a1a3;
-  --text-faint: #626d70;
+  --text-faint: #97a1a3;
   --teal: #43b5a6;
   --teal-ink: #0e1416;
   --amber: #e0a85e;
-  --danger: #d66a5a;
+  --danger: #ed9384;
   --ok: #5bbf9a;
+  --status-ink: #0e1416;
+  --success-bg: color-mix(in srgb, var(--ok) 12%, var(--surface));
 
   --space-1: 4px;
   --space-2: 8px;
@@ -106,7 +109,7 @@
   --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.2);
   --shadow-2: 0 4px 12px rgba(0, 0, 0, 0.3);
 
-  --display: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  --display: "Space Grotesk", "Inter", sans-serif;
   --body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --mono: "JetBrains Mono", "SFMono-Regular", "Liberation Mono", Consolas, monospace;
 
@@ -175,6 +178,27 @@
   --slate-500: var(--text-muted);
   --slate-600: var(--text-muted);
   --slate-700: var(--text);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f3f7f9;
+  --surface: #ffffff;
+  --surface-2: #eaf0f3;
+  --border: #ccd6dc;
+  --border-strong: #a3b5bf;
+  --text: #162e3c;
+  --text-muted: #527080;
+  --text-faint: #527080;
+  --teal: #117679;
+  --teal-ink: #ffffff;
+  --amber: #96590e;
+  --danger: #b33b36;
+  --ok: #226c4a;
+  --status-ink: #ffffff;
+  --shadow-1: 0 1px 3px rgba(22, 46, 60, .06);
+  --shadow-2: 0 4px 12px rgba(22, 46, 60, .10);
+  --shadow-lg: 0 16px 44px rgba(22, 46, 60, .16);
 }
 
 *,
@@ -284,7 +308,7 @@ select,
 textarea {
   color: var(--text);
   background: var(--surface-2);
-  border: 1.5px solid var(--border);
+  border: 1.5px solid var(--text-muted);
   border-radius: var(--r-md);
 }
 
@@ -320,6 +344,22 @@ textarea:focus {
 .eikon-container {
   width: min(100% - (var(--space-4) * 2), var(--content-max));
   margin-inline: auto;
+}
+
+.eikon-theme-selector { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: var(--text-sm); }
+.eikon-theme-selector select { min-height: 44px; padding: 6px 8px; max-width: 110px; cursor: pointer; }
+.eikon-login-theme { display: flex; justify-content: flex-end; margin-bottom: var(--space-6); }
+
+@media (max-width: 1100px) {
+  .eikon-appbar-inner { flex-wrap: wrap; height: auto !important; padding-block: 8px !important; gap: 12px !important; }
+  .eikon-appbar-nav { order: 3; flex-basis: 100% !important; min-width: 0; }
+  .eikon-appbar-nav ul { overflow-x: auto; }
+}
+
+@media (max-width: 560px) {
+  .eikon-theme-selector > span { display: none; }
+  .eikon-appbar-actions { flex-wrap: wrap; margin-left: auto; gap: 8px !important; }
+  .eikon-appbar-actions > .media-text-button { max-width: 85px; }
 }
 
 @keyframes eikon-spin {

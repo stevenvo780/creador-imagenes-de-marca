@@ -1,14 +1,5 @@
-/* Tema local del centro de publicaciones. */
-.pub-shell, .publications {
-  --bg: #f3f7f9; --surface: #fff; --surface-2: #f3f7f9;
-  --text: #162e3c; --text-muted: #527080; --text-faint: #527080;
-  --teal: #117679; --teal-600: var(--teal); --teal-ink: #fff; --amber: #96590e; --danger: #96590e;
-  --border: color-mix(in srgb, #527080 24%, #fff);
-  --border-strong: color-mix(in srgb, #527080 50%, #fff);
-  --display: "Space Grotesk", "Inter", sans-serif; --font-display: var(--display);
-  --font-body: "Inter", sans-serif; --shadow-1: none; --r-md: 8px;
-  color: var(--text); background: var(--bg);
-}
+/* La distribución es local; la paleta se hereda del tema global. */
+.pub-shell, .publications { color: var(--text); background: var(--bg); }
 .pub-shell { min-height: 100vh; }
 .pub-shell #main-content { max-width: 1360px !important; padding: 28px 32px !important; }
 .pub-shell .eikon-appbar-inner { max-width: 1360px !important; }

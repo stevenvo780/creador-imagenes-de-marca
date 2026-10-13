@@ -266,7 +266,7 @@ export function StepConfigureAxes({
                     alignItems: "center",
                     gap: "var(--space-2)",
                     padding: "var(--space-2) var(--space-3)",
-                    background: "rgba(47, 168, 154, 0.12)",
+                    background: "color-mix(in srgb, var(--teal) 12%, transparent)",
                     borderRadius: "var(--radius-md)",
                     fontSize: "var(--font-size-sm)",
                     color: "var(--teal-600)",

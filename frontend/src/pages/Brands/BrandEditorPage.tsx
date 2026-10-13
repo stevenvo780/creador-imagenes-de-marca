@@ -573,11 +573,11 @@ const errorBannerStyle: React.CSSProperties = {
 
 const successBannerStyle: React.CSSProperties = {
   margin: 0,
-  color: "#1a7a4a",
-  background: "#e6f9f0",
+  color: "var(--ok)",
+  background: "var(--success-bg)",
   padding: "var(--space-3) var(--space-4)",
   borderRadius: "var(--radius-md)",
-  border: "1px solid #a7e0c4",
+  border: "1px solid var(--ok)",
   fontSize: "var(--font-size-sm)",
   display: "flex",
   alignItems: "center",
