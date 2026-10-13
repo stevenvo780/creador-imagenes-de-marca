@@ -296,3 +296,46 @@ ante ACK incierto; no crea revisiones, decisiones ni entregas. Las entregas sigu
 vacías; el servicio/timer de server2 y las pruebas remotas permanecen pendientes.
 Se pidió reconectar únicamente el MCP de Eikón en Codex para cargar las nuevas
 herramientas, sin otra autenticación social ni traslado de cookies.
+
+### Corte operativo actual: 12 de octubre, 22:51 Bogotá
+
+La evidencia detallada vigente está en
+[Pruebas reales por destino](PRUEBAS-PUBLICACIONES-2026-10-12.md).
+Los apartados anteriores conservan sus resultados históricos.
+
+La revisión activa es `eikon-00067-bmn`, imagen fijada
+`sha256:9c52cbaf64865c3e10f39c63250bca0753926a2cc2010aa7f862b8d025863264`,
+código `adb6f4a0a6e88bf00821dc42b5d4b1aab66b8de6`. Readiness se comprueba
+antes del inicio. El intento 4 de Instagram terminó de forma canónica como
+`failed_before_dispatch`, con cuarentena y ACK del worker original. El SHA,
+fecha de inicio y presupuesto consumido permanecen intactos; no se reintenta.
+
+Facebook tiene dos fotos reales verificadas; X una foto visible por Brave;
+TikTok Studio muestra la pieza nueva en modo «Todo el mundo» y la cuenta
+`humanizar.systems` con avatar oficial. Todavía no hay publicación real de
+Instagram ni ejecución recurrente comprobada. TikTok Developers sigue bloqueado.
+
+La política actual es versión 2, 30 días, los mismos 17 proyectos y conexiones
+1/2/3, máximo diario 1 y frecuencia 1440 minutos por destino, sin gasto.
+Caduca el 11 de noviembre a las 22:32:11 de Bogotá. Roles nuevos: planner 4,
+reviewer 5, worker 6; los anteriores están revocados. La credencial 6 ya está
+instalada en server2, root:worker 0640, con tres barridos `idle/processed=0`.
+
+El marcador permite pruebas controladas, pero el timer sigue disabled/inactive.
+El usuario SSH `server` puede ejecutar sin contraseña sólo tres comandos
+exactos con `NOSETENV`: iniciar `eikon-publisher@17.service`, habilitar e iniciar
+`eikon-publisher@17.timer`, o deshabilitar y detener ese timer. No tiene sudo
+general sin contraseña; unidades, código y configuración siguen bajo root.
+Estos permisos no sustituyen el gate de media ni la prueba requerida.
+
+La automatización local `humanizar-publicaciones-diarias` está ACTIVE en el
+mismo chat: 21:45 Bogotá, ventana prevista 22:00–23:00. Requiere ordenador y
+Codex disponibles y Brave autenticado para X/TikTok. Preparar el calendario
+no acredita ejecución recurrente. La cuota semanal Codex usada llegó al 100 %;
+no se cambió cuenta. Conservar este límite si impide evaluación editorial real.
+
+Próxima prueba Instagram: medio nuevo, a partir del 13 de octubre a las
+21:22:23 de Bogotá. Primero calificar origen directo HTTPS y logging, emitir
+capacidad temporal, comprobar descarga, publicación y recibo visible, y repetir
+el barrido sin POST nuevo. Después se puede activar el timer 17; los timers
+legacy permanecen apagados. Las dos variables de entrega siguen ausentes.
