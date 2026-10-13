@@ -852,3 +852,61 @@ callback, demostración del flujo real, consentimiento OAuth y revisión de TikT
 Las colas nativas de X/TikTok y las ventanas del 13 y 14 de octubre no se
 recrearon ni adelantaron. El timer 17 continúa retenido y la meta completa de
 publicaciones recurrentes en todas las redes permanece abierta.
+
+## Callback canónico de TikTok: ajuste desplegado, 13 de octubre, 20:08 UTC
+
+Se reprodujo un rechazo interno que impedía iniciar TikTok desde el dominio
+habitual: `ConnectionPanel` construye el callback con `window.location.origin`,
+pero la configuración anterior sólo permitía el origen de Cloud Run. En la
+imagen productiva, una fixture con SQLite, empresas y credenciales sintéticas
+ejecutó siete comprobaciones del motor real: rechazo canónico con la lista
+anterior, aceptación canónica con la nueva, conservación del callback anterior,
+rechazo de dominio externo, HTTP, query añadida y conexión de otra empresa.
+El contenedor fue read-only, sin red ni mounts privados y sin ejecutar lifespan;
+el ensayo no completó rutas HTTP, cookies, intercambio de tokens ni OAuth real.
+
+La configuración ahora conserva el callback de Cloud Run y añade únicamente
+`https://eikon.humanizar.cloud/api/v1/publications/oauth/callback` a TikTok.
+Las cinco entradas, identificadores, secretos, modos y demás valores quedaron
+iguales al original. Se respaldaron en archivos privados el original, los bytes
+de la versión 1 real, la candidata y las políticas/configuración existentes.
+La igualdad original/versión 1 se comprobó byte a byte.
+
+El procedimiento tuvo revisión independiente antes de las fases mutantes. La
+revisión encontró y se corrigió una guarda incompleta de aliases de secretos:
+ahora exige el proyecto `633619052458`, rechaza mappings no vacíos de secretos
+en servicio/plantilla/revisión y restringe las versiones al proyecto autorizado.
+Pasaron 33 comprobaciones sintéticas, incluidas las negativas del defecto.
+El operador final tiene SHA-256
+`04596eec11c257ceb944b42662210385f1a2c7c5e8dd343746896eb75bdeb3db`.
+
+Se creó y verificó la versión **2 del mismo secreto**
+`eikon-publication-oauth-config-v1`; no se creó otro secreto ni se modificó IAM.
+La revisión `eikon-tiktok-callback-20261013` se calificó inicialmente con 0 %
+y la anterior al 100 %. Tras comprobarla, se promovió la revisión existente
+al 100 % y se retiró su tag. Conserva el índice `5e9a0f6a…` y descriptor
+`c696e6b7…` del corte anterior; no se reconstruyó ni cambió la imagen.
+La comparación completa del servicio permitió sólo esa versión del secretRef,
+nombre de revisión, metadatos de cliente esperados y tráfico autorizado.
+Se comprobaron secreto referenciado, revisión Ready, imagen, namespace, ausencia
+de aliases y conservación de IAM y demás configuración. Los tres orígenes
+públicos sirvieron TXT, PNG, SPA y JavaScript exactos y rechazaron acceso anónimo
+al worker y campañas. Recibos/journals privados:
+`tiktok-callback-20261013-live2000`. No se repitieron mutaciones.
+
+En TikTok Developers se introdujo la misma URL canónica, pero Save respondió
+«Please correct all errors before you save changes». Quedaron cinco requisitos
+incompletos: icono, términos, privacidad, explicación y demo. **El guardado del
+callback en TikTok sigue sin acreditarse**; app Draft, Direct Post desactivado,
+sin consentimiento OAuth, revisión enviada ni publicación API nueva.
+
+SSH volvió a confirmar servicio 17 inactive/dead y timer inactive/disabled.
+No se iniciaron envíos ni se alteraron las colas nativas o ventanas del 13/14
+de octubre. La prueba real de Instagram/media y segundo barrido sigue pendiente.
+La aceptación histórica de recuperación no se extiende a esta nueva combinación
+de revisión y configuración; el gate compuesto y la meta completa continúan
+abiertos.
+
+Una recarga autenticada del dominio canónico volvió a mostrar Humanizar,
+17 campañas, 10 entregas, tres cuentas conectadas y política 2 vigente. Los dos
+recibos anteriores de Facebook siguen visibles; esto no acredita un envío nuevo.
