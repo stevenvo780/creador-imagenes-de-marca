@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ApiError, beginSessionWork } from "../../api/client";
 import {
   Connection,
   Platform,
@@ -22,6 +23,26 @@ const modes: Record<Platform, string[]> = {
   tiktok: ["oauth2"],
   x: ["oauth2"],
 };
+function navigateOAuth(
+  authorizationUrl: string,
+  work: ReturnType<typeof beginSessionWork>,
+) {
+  const url = new URL(authorizationUrl);
+  const hosts = [
+    "www.facebook.com",
+    "www.instagram.com",
+    "www.tiktok.com",
+    "twitter.com",
+    "x.com",
+  ];
+  if (
+    url.protocol !== "https:" || url.username || url.password ||
+    !hosts.includes(url.hostname)
+  )
+    throw new Error("OAuth no disponible");
+  work.check();
+  window.location.assign(url.href);
+}
 export function ConnectionPanel({
   connections,
   onRefresh,
@@ -36,10 +57,34 @@ export function ConnectionPanel({
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
   const operation = usePrivateOperation();
+  const onboarding = platform === "tiktok" && mode === "oauth2";
   const create = async () => {
+    const work = beginSessionWork(operation.current.signal);
     setBusy(true);
     setError("");
     try {
+      work.check();
+      const projectIds = projects.split(",").map((p) => Number(p.trim()));
+      if (onboarding) {
+        if (
+          projects.split(",").some((p) => !/^\d+$/.test(p.trim())) ||
+          projectIds.some((id) => !Number.isSafeInteger(id) || id <= 0)
+        )
+          throw new ApiError(422, "Indica IDs de proyectos válidos, mayores que cero y separados por coma.");
+        const result = await publicationRequest<{ authorization_url: string }>(
+          "/oauth/onboarding/start",
+          "POST",
+          {
+            platform: "tiktok",
+            api_mode: "oauth2",
+            project_ids: projectIds,
+            redirect_uri: window.location.origin + "/api/v1/publications/oauth/callback",
+          },
+          work.signal,
+        );
+        navigateOAuth(result.authorization_url, work);
+        return;
+      }
       await publicationRequest(
         "/connections",
         "POST",
@@ -47,21 +92,25 @@ export function ConnectionPanel({
           platform,
           api_mode: mode,
           remote_id: remote,
-          project_ids: projects.split(",").map((p) => Number(p.trim())),
+          project_ids: projectIds,
         },
-        operation.current.signal,
+        work.signal,
       );
+      work.check();
       onRefresh?.();
     } catch (e) {
-      if (!isAbort(e)) setError(errorMessage(e));
+      if (!work.signal.aborted && !isAbort(e)) setError(errorMessage(e));
     } finally {
-      if (!operation.current.signal.aborted) setBusy(false);
+      if (!work.signal.aborted) setBusy(false);
+      work.finish();
     }
   };
   const connect = async (c: Connection) => {
+    const work = beginSessionWork(operation.current.signal);
     setBusy(true);
     setError("");
     try {
+      work.check();
       const result = await publicationRequest<{ authorization_url: string }>(
         "/oauth/start",
         "POST",
@@ -71,28 +120,14 @@ export function ConnectionPanel({
           redirect_uri:
             window.location.origin + "/api/v1/publications/oauth/callback",
         },
-        operation.current.signal,
+        work.signal,
       );
-      const url = new URL(result.authorization_url);
-      const hosts = [
-        "www.facebook.com",
-        "www.instagram.com",
-        "www.tiktok.com",
-        "twitter.com",
-        "x.com",
-      ];
-      if (
-        url.protocol !== "https:" ||
-        url.username ||
-        url.password ||
-        !hosts.includes(url.hostname)
-      )
-        throw new Error("OAuth no disponible");
-      window.location.assign(url.href);
+      navigateOAuth(result.authorization_url, work);
     } catch (e) {
-      if (!isAbort(e)) setError(errorMessage(e));
+      if (!work.signal.aborted && !isAbort(e)) setError(errorMessage(e));
     } finally {
-      if (!operation.current.signal.aborted) setBusy(false);
+      if (!work.signal.aborted) setBusy(false);
+      work.finish();
     }
   };
   return (
@@ -175,7 +210,7 @@ export function ConnectionPanel({
                 ))}
               </select>
             </label>
-            <label>
+            {!onboarding && <label>
               ID remoto de cuenta
               <input
                 value={remote}
@@ -183,7 +218,7 @@ export function ConnectionPanel({
                 pattern="[A-Za-z0-9_-]{1,128}"
                 onChange={(e) => setRemote(e.target.value)}
               />
-            </label>
+            </label>}
             <label>
               Proyectos autorizados (IDs separados por coma)
               <input
@@ -194,8 +229,9 @@ export function ConnectionPanel({
               />
             </label>
             <p>
-              Una sola cuenta canónica puede servir a varios productos. Añadirla
-              no verifica permisos: completa después OAuth.
+              {onboarding
+                ? "TikTok identificará tu cuenta al autorizar su conexión. Una sola cuenta puede servir a varios proyectos."
+                : "Una sola cuenta canónica puede servir a varios productos. Añadirla no verifica permisos: completa después OAuth."}
             </p>
             <Button type="submit">Añadir cuenta</Button>
           </fieldset>

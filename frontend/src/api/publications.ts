@@ -174,7 +174,7 @@ export async function publicationRequest<T>(
   signal?: AbortSignal,
 ): Promise<T> {
   if (
-    !/^\/(overview|campaigns(?:\?.*|\/\d+\/revisions)?|calendar(?:\?.*|\/deliveries\/\d+\/cancel)?|connections|policy|deliveries\/\d+|revisions\/\d+\/(?:creator-info|consent)|consents\/\d+|oauth\/start)$/.test(
+    !/^\/(overview|campaigns(?:\?.*|\/\d+\/revisions)?|calendar(?:\?.*|\/deliveries\/\d+\/cancel)?|connections|policy|deliveries\/\d+|revisions\/\d+\/(?:creator-info|consent)|consents\/\d+|oauth\/(?:start|onboarding\/start))$/.test(
       path,
     )
   )
