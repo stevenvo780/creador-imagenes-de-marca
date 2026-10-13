@@ -1121,3 +1121,90 @@ guardado/configuración, consentimiento y auditoría pertinentes. El nuevo flujo
 de alta está entregado; la conexión TikTok real y la meta de publicaciones
 recurrentes en todas las redes permanecen abiertas. Los ocho ensayos históricos
 de recuperación no se extienden automáticamente a esta imagen/backend nuevos.
+
+### Continuidad del 15 de octubre y prueba real del inicio OAuth de TikTok
+
+Corte del 13 de octubre, 22:22 UTC. Se consultaron los 17 proyectos y la
+bandeja del planner mediante su cliente MCP scoped, sin recargar la conexión
+global ni cambiar grants. La herramienta nativa de bandeja seguía devolviendo
+`configuration_error`; el cliente stdio configurado devolvió la política 2 y
+las tres cuentas Meta. Se preservaron Deméter 5/6/7 y Agentes 8/9/10.
+
+La pieza propia de Xenía media 34 se exportó a JPEG para transporte, sin
+recortar ni cambiar su diseño. Encargo 48, media 48, identidad versión 4,
+1080×1350, 149238 bytes, SHA256
+`cf954028cfee154de0c1cc519ad0de8d70d48a1ee49f25b26d1aaaed1364a325`.
+La ilustración sigue siendo de Codex; el logo SVG original se conserva.
+La fuente pública `https://humanizar.tech/` respondió 200, con HTML SHA256
+`a7860e20b74da1daf8cdb5ec99c756442c7fc0b790ecd8a6079f5ace0d035aa5`.
+El texto se limita a CRM para PYME, contactos, oportunidades y actividad,
+sin cifras privadas, tecnologías ni promesas universales.
+
+El Codex principal recibió por MCP los contratos, JPEG exacto y render del
+logo y evaluó los seis checks. Las evaluaciones y decisiones 12/13/14 fueron
+`approve`, correlacionadas con contratos distintos por destino. Estos recibos
+son declaraciones del cliente (`client_reported`), no una atestación
+criptográfica ni una prueba de publicación. Se crearon las entregas 11/12/13
+para Facebook Systems, Facebook Humanizar e Instagram humanizar.news,
+respectivamente. Su ventana es 15-oct-2026 22:00–23:00 Bogotá
+(`due_at=1792119600`, `expires_at=1792123200`). Las filas quedaron `held` por
+`frequency_limit`, sin intento ni `started_at`; corresponde reclamar las mismas
+filas cuando se despeje el límite, conservando su horario y sin recrearlas.
+
+Brave confirmó en la cola nativa de X una única nueva pieza de Xenía para
+15-oct-2026 22:00, con JPEG y texto alternativo que declara ilustración de IA.
+El menú de imágenes requiere elegir «Upload» después de abrir «Add media»;
+abrir el menú por sí solo no produce un selector. Los clics semánticos de
+programación no cambiaron el estado: se comprobaron pantalla y cola antes
+de usar el botón visible. La cola remota confirmó tres elementos, uno por
+día 13/14/15, evitando reenviar ante un resultado incierto.
+
+TikTok Studio aceptó un clip propio de seis segundos de la pieza de Xenía,
+H.264, yuv420p, 1080×1920, 30 fps, sin audio ni recorte, SHA256
+`c9b0dc9b530f983c0077cf0fb1ef311e58246f254f4cf80d630d2e87a0ab37cb`.
+Se inspeccionaron fotogramas a 0/3/5,9 segundos; `full_video_watched=false`.
+La muestra inicial en Studio indicaba duración cero y no había un elemento
+DOM video, por lo que no se afirma reproducción completa. Tras el envío,
+la cola confirmó duración 00:06, cuenta `humanizar.systems`, acceso público
+y fecha 15-oct 22:00, ID `7696281237262224661`. Antes del envío se comprobaron
+etiqueta IA, «Tu marca» activada, marca de terceros desactivada, sin ubicación
+seleccionada ni música añadida. Los IDs nativos de Deméter y Agentes quedaron
+intactos. Son tres programaciones futuras por red; todavía no prueban una
+recurrencia ilimitada ni la visibilidad de las publicaciones cuando sean debidas.
+
+El formulario nuevo de Eikón se envió una vez para iniciar OAuth de TikTok
+con los 17 proyectos reales de Humanizar, sin introducir `open_id`. Llegó
+al proveedor con `user.info.basic,video.publish` y callback canónico, pero
+TikTok devolvió `unauthorized_client`, tipo `client_key`, antes del
+consentimiento. La clave pública coincide con la de la app
+`7694252858519275528`; se volvió a ocultar y no se mostró el secreto.
+No se guardaron tokens ni se creó una conexión. La app permanece Draft,
+con Direct Post apagado y cuatro requisitos pendientes: icono, términos,
+privacidad y demo. El estado incompleto es una causa probable que se debe
+comprobar; el rechazo por sí solo no demuestra una causa específica.
+
+SSH a las 22:22 UTC confirmó service 17 inactive/dead, sin InvocationID,
+ExecMainStatus 0, y timer inactive/dead/disabled sin próxima ejecución.
+No se inició el worker ni se habilitó el timer. La verificación real de
+esta noche, los recibos remotos/media, la revocación y la segunda ejecución
+con cero POST siguen pendientes; tampoco se extiende la prueba histórica
+de recuperación al backend actual. La meta completa continúa abierta.
+
+Recibo privado: `xenia-continuity-20261013T2225-receipt.json`, SHA256
+`45d23ba27532bc291611e3e72c4252d63fb9ffac73e40b88fa04a1856ead46ee`.
+Capturas en visualizaciones de este chat:
+`x-publicaciones-13-14-15oct-20261013.jpg`,
+`tiktok-publicaciones-13-14-15oct-20261013.jpg` y
+`tiktok-oauth-client-error-20261013.jpg`.
+
+La vista autenticada de Eikón volvió a cargar tras una única actualización:
+17 campañas, 13 entregas, tres cuentas Meta y política 2. La captura
+`eikon-envios-15oct-20261013.jpg` muestra las tres filas del 15 de octubre
+retenidas por frecuencia, con su horario original. Una revisión independiente
+de solo lectura recalculó los hashes de las tres solicitudes y resultados MCP,
+confirmó la correlación revisión/decisión 12/13/14 → entrega 11/12/13 y verificó
+que `claim_due` reevalúa la misma fila cuando sea debida sin modificar su
+ventana. El paso del tiempo por sí solo no ejecuta el worker. Resultado:
+PASS de correlación y fechas; HOLD de publicación autónoma y recuperación
+del backend actual. Informe local `eikon-xenia-continuity-review-20261013.md`,
+SHA256 `e7194b5aadce5950238839130652bf70d1423dec3ea03c2868ba6cb7cdf1418e`.
