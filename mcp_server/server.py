@@ -808,6 +808,10 @@ async def eikon_get_publication_candidate_tool(revision_id: int) -> list[Any]:
         result["candidate"]["delivered_materials"] = [
             {k: v for k, v in material.items() if k != "data"} for material in materials
         ]
+        # Los bytes de referencia viajan como ImageContent; el texto conserva metadatos.
+        reference_original = result["candidate"].get("reference_original")
+        if isinstance(reference_original, dict):
+            reference_original.pop("data", None)
         for material in materials:
             key = "mime_type" if "mime_type" in ImageContent.model_fields else "mimeType"
             images.append(
@@ -911,7 +915,10 @@ _HANDLERS.update({function.__name__: function for function in _OLD_HANDLERS})
 if USE_FASTMCP:
     mcp = FastMCP("Eikón")
     for tool_name, handler in _HANDLERS.items():
-        mcp.tool(name=tool_name)(handler)
+        if tool_name == "eikon_get_publication_candidate":
+            mcp.tool(name=tool_name, structured_output=False)(handler)
+        else:
+            mcp.tool(name=tool_name)(handler)
 else:
     import inspect
 
