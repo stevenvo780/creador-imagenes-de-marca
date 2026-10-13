@@ -38,6 +38,7 @@ from webapp.api.media import router as media_router
 from webapp.api.media_reviews import router as media_reviews_router
 from webapp.api.projects import router as projects_router
 from webapp.api.publication_media import router as publication_media_router
+from webapp.api.publication_pre_dispatch import router as publication_pre_dispatch_router
 from webapp.api.publication_reviewer import router as publication_reviewer_router
 from webapp.api.publication_worker import (
     calendar_router as publication_calendar_router,
@@ -230,6 +231,7 @@ def create_app(
     app.include_router(publication_reviewer_router)
     install_capability_log_filter()
     app.include_router(publication_worker_router)
+    app.include_router(publication_pre_dispatch_router)
     app.include_router(publication_calendar_router)
     app.include_router(publication_delivery_media_router)
     app.include_router(generation_briefs_router)
