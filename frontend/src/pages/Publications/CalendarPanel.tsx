@@ -39,6 +39,7 @@ export function CalendarPanel({ owner, onContent }: { owner: boolean; onContent?
       const p = await getCalendar(cursor, operation.current.signal);
       setItems((old) => [...old, ...p.items]);
       setCursor(p.next_cursor);
+      setError("");
     } catch (e) {
       if (!isAbort(e)) setError(errorMessage(e));
     } finally {
@@ -69,6 +70,7 @@ export function CalendarPanel({ owner, onContent }: { owner: boolean; onContent?
       const p = await getCalendar(0, operation.current.signal);
       setItems(p.items);
       setCursor(p.next_cursor);
+      setError("");
     } catch (e) {
       if (!isAbort(e)) setError(errorMessage(e));
     } finally {

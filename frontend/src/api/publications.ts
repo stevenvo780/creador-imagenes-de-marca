@@ -189,6 +189,11 @@ export async function publicationRequest<T>(
       signal: work.signal,
       headers: { "Content-Type": "application/json" },
       ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+    }).catch((error: unknown) => {
+      work.check();
+      if (error instanceof TypeError)
+        throw new ApiError(0, "No se pudo conectar con el servidor. Revisa tu conexión y vuelve a intentarlo.");
+      throw error;
     });
     work.check();
     if (res.status === 204) return undefined as T;
