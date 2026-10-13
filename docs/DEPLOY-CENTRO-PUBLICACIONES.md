@@ -547,3 +547,22 @@ worker 6/política 2 del dump. Filas/esquema intactos y clon eliminado. No se
 probó autenticación o publicación ante proveedores; configuración en rutas
 del sistema, recuperación compuesta y prueba diaria conservan sus límites.
 Ver [claves y conexiones](PRUEBAS-PUBLICACIONES-2026-10-12.md#recuperación-de-claves-y-conexiones-13-de-octubre-1732-utc).
+
+### Reversión de frontend calificada; aceptación de publicación pendiente
+
+El corte de las 17:49 UTC añade comprobación real de autoridad al ensayo de
+conservación de datos. Las imágenes exactas vigente `ba692749…` y anterior
+`9c52cbaf…`, con el mismo backend, respondieron igual a 43 casos ASGI cada una:
+scopes y sesión owner, roles de grants, revocación/expiración, política vigente,
+aislamiento entre empresas, HTTPS y autenticación ambigua. Los controles de
+rutas legacy continuaron activos. Credenciales exclusivas del clon, sin
+overrides ni WorkerPool; fixtures retirados, 42 tablas/secuencias/esquema
+intactos y guardas inmutables comprobadas. Clon y contenedores eliminados.
+
+La única reversión calificada es ese par de digests con backend idéntico.
+El operador rechaza tags, otro par u otro backend antes del ensayo. No cubre
+downgrade de esquema, arranque con lifespan ni cambio real de tráfico. Conserva
+los datos nuevos y el ledger; no restaura el dump sobre producción. La
+recuperación offline y esta reversión acotada quedan verificadas, con cero POST.
+Instagram/media, visibilidad y segundo barrido siguen pendientes y el timer
+permanece apagado. Ver el [ensayo de rutas](PRUEBAS-PUBLICACIONES-2026-10-12.md#rollback-de-frontend-y-autoridad-de-rutas-13-de-octubre-1749-utc).

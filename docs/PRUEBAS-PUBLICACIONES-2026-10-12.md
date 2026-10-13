@@ -661,3 +661,46 @@ y sus bindings históricos. `provider_authentication_or_publication_verified=fal
 conserva el límite: no se invocó ningún cliente oficial ni se probó OAuth remoto.
 El gate compuesto y la aceptación diaria por proveedor siguen abiertos; estos
 siete recibos parciales no activan el timer ni autorizan reintentos inciertos.
+
+## Rollback de frontend y autoridad de rutas: 13 de octubre, 17:49 UTC
+
+Un octavo ensayo restauró el dump calificado en otro PostgreSQL sin red ni
+puertos. Se ejecutó la aplicación real de las imágenes exactas vigente
+`sha256:ba6927495a29fdc346636bf02b9358e184c741d17cd7186e5e0c753b711fd2a5`
+y anterior de frontend
+`sha256:9c52cbaf64865c3e10f39c63250bca0753926a2cc2010aa7f862b8d025863264`.
+Ambas conservaron el SHA del backend
+`9f62652425de1969d245eb5bf84561908fc7ab1d44158c7d3a475a624646a10a`.
+La selección del operador rechaza otros pares, orden inverso, tags o backend
+distinto; no autoriza rollback de esquema, otro backend ni otro digest.
+
+Cada imagen pasó la misma matriz de 43 respuestas reales ASGI, con controles
+positivos de worker, sesión owner y lectura por scopes. Se rechazaron grants
+revocados/expirados, política sustituida, owner degradado, empresa ajena,
+HTTP sin TLS, cookie mezclada con bearer y ampliación de scopes hacia autoridad
+owner. Un grant worker tampoco abrió rutas legacy, planner o reviewer. Las
+mutaciones legacy de marca, identidad, selección, generación y lotes respetaron
+los permisos correspondientes. Todas las respuestas tuvieron el status esperado.
+
+Las credenciales fueron fixtures creadas exclusivamente en el clon: secreto
+JWT aleatorio, hash temporal de grant 6 y dos API keys con IDs explícitos.
+No se cargaron JWT, tokens de redes ni claves de vault productivos. No hubo
+`dependency_overrides` ni entrada al lifespan; WorkerPool no arrancó. Los
+fixtures se retiraron y se restituyeron grant/owner antes de comparar las
+42 tablas, esquema, secuencias y estados con el corte original. Hash de filas
+`298a34001dedbc388482e09e1d0ec3dca6adc236d58f42e7f10790772e63caf9`
+y de esquema
+`8f8853aae0fca264bb49f0bdbe53b0be51055caa787f1953b1e545712f5934ff`
+intactos. Las guardas inmutables de history, media guards y revisions volvieron
+a rechazar UPDATE en ambas imágenes. Todos los contenedores y el clon se
+eliminaron antes del recibo de 17:49:22 UTC. Cero POST a proveedores.
+
+Las 19 pruebas locales calificaron contratos de selección y estructura del
+operador; las 86 respuestas ASGI anteriores constituyen el ensayo real. La
+revisión independiente de fuentes aprobó ejecutar y cerrar este subgate sólo
+para ese par con backend idéntico. `supported_rollback_routes_verified=true`
+acredita esa reversión acotada. No se modificó tráfico productivo ni se probó
+arranque completo con lifespan; `live_authentication_or_publication_verified=false`
+y `compound_runtime_gate_complete=false` conservan el límite de aceptación.
+La primera publicación visible de Instagram, descarga/revocación real de media,
+segundo barrido sin POST y recurrencia por todos los destinos siguen pendientes.
