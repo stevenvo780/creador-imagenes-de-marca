@@ -53,6 +53,26 @@ como resuelto por los temas. La revisión identifica el mensaje como un error
 fuera de `ApiError`, compatible con rechazo de fetch antes de recibir HTTP;
 no demuestra si la causa es red, proxy o navegador.
 
+### Corrección posterior de recuperación de agenda
+
+Fuente `6fabd4b44d4b9737534d97df56744def54c28b06`, revisión
+`eikon-00066-gmp`, Ready y 100 % del tráfico. Imagen
+`us-central1-docker.pkg.dev/emergent-enterprises/eikon/eikon@sha256:d24f706677f6209a715ee04aa58f6e186acf21b156ba58b1fd027c25bf0f11ab`.
+Conserva los temas globales y el mismo backend/configuración; cambia únicamente
+los archivos SPA. Respaldo previo privado: 273552 bytes, SHA256
+`ce1686591e2ea5ed134d1358e6ed1b687a15a6e24ab932726e3e42007ea059bc`.
+
+La agenda limpia la alerta cuando un GET posterior recupera la lista o el estado
+vacío, y después de cancelar y recargar correctamente. El cliente distingue un
+rechazo de transporte de errores HTTP y JSON. No añade repetición automática de
+POST. Ocho pruebas nuevas cubren fallo/recuperación, cancelación, abortos y
+clasificación; suite completa 42/42, build y diff-check aprobados. La revisión
+del diff por el integrador aprobó el alcance de tres archivos.
+
+Se comprobaron otra vez los bytes servidos en los tres orígenes y las lecturas
+autenticadas de tenant 17. Esta corrección no acredita arreglar la causa externa
+de conexión; permite recuperarse y mostrar una explicación más precisa.
+
 ## Publicador
 
 Este release no activa worker/timer ni efectúa publicaciones. La lectura
