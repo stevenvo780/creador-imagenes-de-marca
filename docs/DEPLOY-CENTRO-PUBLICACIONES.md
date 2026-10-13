@@ -397,3 +397,37 @@ Desktop aún informa configuration_error, el agente actual puede usar el puente
 MCP stdio comprobado del launcher, con sus grants planner/reviewer separados;
 no requiere copiar una sesión o inventar una evaluación. La lectura nueva de
 cuota de la misma cuenta ya permite uso ordinario tras reinicio semanal.
+
+### Corte siguiente: colas confirmadas y evaluación real de vídeo
+
+X ya confirmó en Scheduled las dos piezas de @HumanizarSystem: Deméter el
+13 de octubre, 22:00 Bogotá, y Agentes de IA a la medida el 14, 22:00, MP4
+silencioso de seis segundos. TikTok Studio confirmó @humanizar.systems con
+IDs `7696012000295488775` y `7696024738354695425`, respectivamente, mismas
+fechas y visibilidad Todo el mundo. Un envío final por pieza y conciliación
+posterior de la cola; no repetir uploads o publicaciones desde la automatización.
+Todavía no se acredita visibilidad después del horario.
+
+El vídeo 1 de Eikón tiene revisiones/decisiones 8–10 y entregas 8–10 para las
+dos páginas Facebook e Instagram News, el 14 de octubre a las 22:00–23:00.
+Las tres conservan `held/frequency_limit` y `started_at=null`. El agente actual
+evaluó materiales reales; cuatro GET posteriores confirmaron los mismos hashes
+y decisiones. El vídeo 2/revisión 11 con audio no inspeccionado quedó `ai_held`
+y sin entrega; es un fixture privado que nunca debe publicarse. El gate de
+Task5 fue revisado y cerrado con los límites `frames_only_silent`,
+`full_video_watched=false` y recibo `client_reported`.
+
+Dos arranques reales controlados del servicio dieron `idle/processed=0` antes
+de las fechas; el timer sigue disabled/inactive. No son la segunda ejecución
+sin POST después de publicar. El seguimiento oficial existente conserva el
+horario y añade las colas de ambos días, los contratos exactos y la retención
+del fixture. Mantener la prueba controlada de Instagram/media, recibo visible
+y segunda ejecución como requisitos previos a habilitar el timer.
+
+La agenda owner real cargó diez entregas y política 2. Se comprobó en Brave
+escritorio y móvil 390×844, temas oscuro/claro, apertura de recibo, filtro de
+producto, cuatro evaluaciones y original de vídeo con metadata 1080×1920/6s
+sin error de reproducción. El viewport y tema se restauraron. Esta evidencia
+no cierra toda la aceptación UI/accesibilidad ni los formatos del proveedor.
+El texto genérico de retención temporal aún requiere ajuste de copy. Ver el
+[corte de pruebas](PRUEBAS-PUBLICACIONES-2026-10-12.md#vídeo-nativo-y-lectura-posterior-13-de-octubre).

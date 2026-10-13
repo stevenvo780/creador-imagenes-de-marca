@@ -248,3 +248,100 @@ La cuota se consultó otra vez el 13 de octubre a las 05:07 UTC: la app de la
 misma cuenta pasó a `ordinaryUsageAllowed=true`, uso semanal 0 %. Se conserva
 el resultado anterior del 100 % como histórico; no se cambió de cuenta ni se
 compraron créditos para resolverlo.
+
+## Vídeo nativo y lectura posterior: 13 de octubre
+
+Se convirtió la composición existente de Agentes de IA a la medida en un MP4
+estático silencioso de seis segundos, H.264/yuv420p, 1080×1920 y 30 fps. El padding
+conserva la composición entera y el logo oficial; no se redibujó la identidad ni
+se produjo una animación nueva. Original 345720 bytes, SHA256
+`d395bd2a9cbd8b09066dd04e2138b32f3f596062f8e86e991d1a0faf5616590c`.
+La fuente de imagen 45 conserva su revisión owner pendiente. El cliente MCP real
+importó el vídeo privado 1 con brief 47 y creó contratos nuevos para las tres
+cuentas; la evaluación de imagen no se heredó al vídeo.
+
+El agente Codex actual inspeccionó frames de 0, 3 y 5,9 segundos, la referencia
+original y el contexto de humanizar.tech. Registró razones para los seis checks
+y decisiones 8–10 elegibles. El recibo conserva `frames_only_silent`,
+`full_video_watched=false`, `client_reported` e identificación limitada del
+modelo; no presenta una reproducción completa ni atestación criptográfica.
+La variante privada con tono generado, vídeo 2/revisión 11, quedó `hold/ai_held`
+por audio no inspeccionado y derechos limitados al fixture. No creó entrega de
+publicación y no se subió a ninguna red.
+
+| Revisión | Cuenta | Decisión posterior | Entrega de publicación | Fecha Bogotá |
+|---|---|---|---|---|
+| 8 | Facebook Systems | 8, elegible | 8, sin inicio | 14 oct, 22:00 |
+| 9 | Facebook Humanizar | 9, elegible | 9, sin inicio | 14 oct, 22:00 |
+| 10 | Instagram News, reel | 10, elegible | 10, sin inicio | 14 oct, 22:00 |
+| 11 | Instagram News, fixture con audio | 11, retenida por IA | Ninguna | Sin despacho |
+
+Cuatro GET MCP independientes posteriores entregaron materiales 20–23 y
+confirmaron los mismos contratos/hashes y decisiones 8–11. La revisión
+independiente recalculó hashes de snapshots y recibos, sin hallazgos Critical o
+Important. Esto cierra el gate de evaluación real de Task5. Task10 sigue abierto:
+evaluar, programar y leer decisiones no acredita descarga/revocación de tickets,
+publicación visible ni recurrencia del proveedor.
+
+Las entregas 8–10 conservaron `held/frequency_limit` y `started_at=null`;
+el horario y la ventana siguen siendo 14 de octubre, 22:00–23:00. Dos arranques
+reales del servicio de server2 dieron `idle/processed=0`, salida 0 y timer
+disabled/inactive antes del vencimiento. Esas ejecuciones no sustituyen la
+segunda ejecución sin POST después de una publicación real. No se borraron
+guards ni se adelantó el calendario.
+
+## Colas nativas conciliadas: 13 y 14 de octubre
+
+Este corte reemplaza el estado anterior de X sin borrar la evidencia histórica
+del intento no confirmado. X mostró en Scheduled una fila Deméter del 13 de
+octubre a las 22:00 y otra del vídeo Agentes del 14 a las 22:00. Cada envío final
+se activó una vez; la cola confirmó caption, fecha y miniatura, con duración
+0:06 para el vídeo. La subida de vídeo requiere primero el menú Upload del
+botón de medios; una espera de filechooser anterior a abrir ese menú no acredita
+fallo de permisos. Se usó Brave, etiqueta IA y cero gasto API.
+
+TikTok Studio confirmó ambas filas de @humanizar.systems: Deméter ID
+`7696012000295488775`, 13 de octubre, 22:00, y vídeo Agentes ID
+`7696024738354695425`, 14 de octubre, 22:00, duración 00:06. La vista previa del
+archivo silencioso conserva el logo y la composición completos. Se seleccionó
+Todo el mundo, marca propia y etiqueta IA, sin música añadida ni ubicación.
+Cada programación tuvo un solo envío final.
+
+| Destino | 13 oct, 22:00 | 14 oct, 22:00 | Límite actual |
+|---|---|---|---|
+| Facebook Systems | Deméter, calendario Eikón 5 | Agentes, calendario Eikón 8 | Claim/envío en horario aún pendiente |
+| Facebook Humanizar | Deméter, calendario Eikón 6 | Agentes, calendario Eikón 9 | Claim/envío en horario aún pendiente |
+| Instagram News | Deméter, calendario Eikón 7 | Agentes reel, calendario Eikón 10 | Primer recibo API y media real pendientes |
+| TikTok | Programación nativa confirmada | Programación nativa confirmada | Visibilidad después del horario pendiente; API Developers bloqueada |
+| X | Programación nativa confirmada | Programación nativa confirmada | Visibilidad después del horario pendiente; API sin créditos |
+
+Las capturas `x-agentes-video-programado.png` y
+`tiktok-agentes-video-programado.png` conservan evidencia de la cola en el
+directorio de visualizaciones del 13 de octubre. Los diarios y recibos privados
+conservan los originales y hashes, fuera de Git. No volver a enviar estas piezas
+desde el seguimiento diario: primero conciliar la fila o publicación existente.
+La automatización oficial existente mantiene 21:45, este chat, política y roles;
+se actualizó con ambas fechas/IDs y la prohibición de publicar el fixture 11.
+
+## Comprobación visual de agenda en móvil: 13 de octubre
+
+La sesión owner humanizar abrió la agenda real en Brave y Actualizar cargó diez
+entregas, diecisiete campañas y política 2. Se inspeccionó visualmente la agenda
+de escritorio y el viewport móvil 390×844, modo oscuro y claro: el contenido
+principal cabe sin desbordamiento horizontal y el menú conserva su scroll propio.
+En móvil se abrió el detalle real de entrega 1 con reserva/inicio/recibo, se filtró
+Agentes y se abrió la campaña 17 con las cuatro evaluaciones. Esto acredita esas
+interacciones y tamaños, sin declarar auditoría completa de accesibilidad,
+dispositivos físicos o todas las vistas. La aceptación UI compuesta sigue abierta.
+
+El original exacto de revisión 10 cargó y se inspeccionó visualmente dentro de
+la sesión owner: vídeo 1080×1920, duración 6 segundos, readyState 4, pausado y
+sin error. El hash mostrado coincide con el evaluado. Es vista previa privada
+de galería; no sustituye el ticket temporal para el proveedor. No se afirmó
+reproducción completa. Se restauraron tema oscuro y viewport de escritorio.
+
+La agenda conserva un límite de copy observado: el mensaje genérico de nueva
+revisión también aparece junto a retenciones temporales de frecuencia, aunque el
+claim reevalúa esos guards en horario. No usar ese texto para forzar revisiones
+alternativas o borrar historia. El ajuste de copy y la prueba final por formato
+siguen pendientes; el timer de servidor permanece deshabilitado.
