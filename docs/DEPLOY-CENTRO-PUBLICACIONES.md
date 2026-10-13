@@ -479,3 +479,39 @@ anteriores y el recibo histórico del backup. Los recibos nuevos registran DB
 verificada, pero storage original, outbox de server2 y gate compuesto aún falsos.
 No usar esta evidencia parcial para habilitar el timer. Ver el
 [corte detallado de restauración](PRUEBAS-PUBLICACIONES-2026-10-12.md#restauración-real-de-db-y-conservación-de-guards-13-de-octubre-0726-utc).
+
+
+### Recuperación de cola comprobada; runtime completo aún pendiente
+
+El 13 de octubre, 16:19 UTC, se obtuvo un respaldo privado de server2 con una
+instantánea SQLite obtenida de DB/WAL, código, requisitos y cinco configuraciones
+fijas. SQLite abrió
+únicamente la copia privada; hashes originales DB/WAL/SHM conservados y cero
+intentos en curso. La contraseña de sudo sólo transitó por stdin y no se guardó.
+A las 16:28 UTC, un contenedor sin red restauró la cola y el código exportados:
+seis tablas/esquema idénticos tras dos inicializaciones, cinco rechazos reales
+de guardas y dos reservas duplicadas sin nuevos intentos. La copia se eliminó.
+
+Esta prueba cierra la recuperación de outbox con el código exacto en la imagen
+productiva de comprobación. Conserva abierta la reproducción de Python 3.14.4,
+venv y configuración ejecutable de server2, así como el storage y el gate
+compuesto. No inicia envíos ni sustituye el primer Instagram visible y el segundo
+barrido sin POST. Ver el [corte de outbox](PRUEBAS-PUBLICACIONES-2026-10-12.md#respaldo-privado-de-server2-y-restauración-real-de-outbox-13-de-octubre-1628-utc).
+
+
+### Storage actual recuperable en copia local; aceptación compuesta abierta
+
+El 13 de octubre, 16:41 UTC, se respaldaron 3009 objetos actuales, 1130853543
+bytes, vinculados a la revisión productiva nombrada y su manifiesto OCI de
+plataforma. Inventarios de generaciones/metageneraciones/tamaños/MD5 iguales
+antes/después; SHA local individual conservado. Una copia separada sin red fue
+leída dos veces con el backend LocalStorage de la imagen fijada, incluidos los
+originales exactos de Deméter y Agentes. Contenedor y copia temporal eliminados;
+respaldo privado conservado fuera de Git.
+
+DB, cola y bytes de storage tienen recibos reales de recuperación distintos.
+El ensayo de storage cubre bytes locales: no otro bucket ni coherencia de todas
+las referencias DB entre cortes. El runtime/venv/configuración ejecutable de
+server2 sigue sin reproducirse. Mantener el gate compuesto pendiente y el timer deshabilitado e inactivo
+hasta esas comprobaciones y la prueba real por canal; no contabilizar este
+respaldo como una publicación. Ver el [corte de storage](PRUEBAS-PUBLICACIONES-2026-10-12.md#respaldo-actual-de-storage-y-lectura-de-originales-restaurados-13-de-octubre-1641-utc).

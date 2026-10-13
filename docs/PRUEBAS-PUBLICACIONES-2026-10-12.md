@@ -454,3 +454,104 @@ backup no se reescribe: su `restore_verified=false` era el estado al tomarlo.
 No hubo mutación productiva ni POST a proveedores. Timer 17 disabled/inactive
 y servicio inactive comprobados por SSH. La aceptación completa y la meta
 continúan pendientes de recuperación de archivos/outbox y pruebas por canal.
+
+
+## Respaldo privado de server2 y restauración real de outbox: 13 de octubre, 16:28 UTC
+
+La contraseña suministrada mediante la ventana enmascarada se utilizó sólo por
+stdin de SSH/sudo para exportar el respaldo autorizado; no se guardó. El corte
+real de las 16:19:27 UTC contiene la cola SQLite, fuentes Python desplegadas,
+requisitos y cinco archivos fijos de configuración privada. El archivo de
+286720 bytes y su manifiesto de 26 entradas permanecen fuera de Git. SHA256:
+`92ab2b5fd9002338c1c4d5d57facd5aa85b51ad8d650a09d46433aabf58831b8`.
+
+Bajo el lock original y con servicio/timer detenidos, se copiaron DB y WAL a un
+directorio privado. SQLite sólo abrió esa copia: nunca la cola productiva,
+ni se copió su SHM. El hash de los archivos originales DB/WAL/SHM permaneció
+igual antes/después; la copia pasó integrity_check y tenía cero intentos en
+curso. El exportador pasó 26 pruebas aisladas y revisión independiente de fuente.
+
+La restauración de las 16:28:29 UTC extrajo únicamente cola y código a otro
+clon privado. Los cinco módulos necesarios coincidieron por SHA256 con el
+repositorio. El cliente usó la imagen productiva fijada `ba692749...`, UID no root,
+red desactivada y raíz de sólo lectura, sin configuración ni tokens
+montados y sin ejecutar clientes de proveedor. Las seis tablas y su esquema quedaron idénticos después
+de dos inicializaciones con el código exacto exportado. Las guardas de manifest
+pre-dispatch y acknowledgement rechazaron UPDATE y DELETE; la cuarentena
+rechazó la reapertura. Dos reservas del mismo intento terminado devolvieron
+False, sin añadir intentos ni fases.
+
+Hash agregado de datos de la cola:
+`5baea7aa418e71a669071de4c76bb18032ac4b5ff664e5626fbf85ccc9f1d257`;
+hash agregado de esquema:
+`57ead8f8eb49cd302849b261c42b59e041f103f674046e6820412b3249712d3c`.
+El único contenedor y el directorio del clon quedaron eliminados; se verificó
+la ausencia por nombre y etiqueta. El operador pasó 16 tests sintéticos de
+extracción, errores de cola/guardas y duplicados; la revisión estática aprobó
+la fuente antes del intento real. Estos tests se distinguen del recibo real.
+
+`worker_outbox_restore_verified=true` acredita esta cola con su código exacto.
+`config_backup_only_verified=true` no acredita arrancar su configuración.
+La imagen de comprobación usa Python 3.12; server2 usa Python 3.14.4, cuya venv
+no se incluyó en el respaldo ni se reprodujo. El recibo conserva falsos los
+gates de venv, storage original y recuperación compuesta. La comprobación del
+timer incluida en el recibo se atribuye a la hora de exportación. Una consulta
+SSH posterior confirmó timer 17 disabled/inactive y servicio inactive. Esta
+operación produjo cero POST de proveedor y no habilita la publicación diaria.
+
+
+## Respaldo actual de storage y lectura de originales restaurados: 13 de octubre, 16:41 UTC
+
+Se respaldaron los 3009 objetos actuales del almacén usado por la revisión
+servida `eikon-hold-copy-20261013`: 1130853543 bytes. Las 3003 copias anteriores
+se reutilizaron únicamente después de cotejar tamaño y MD5 con sus metadatos
+remotos actuales; los seis objetos nuevos se descargaron por generación fijada.
+El inventario paginado completo de nombres, generaciones, metageneraciones,
+tamaños y MD5 coincidió antes/después. Cada objeto se guardó con SHA256 propio
+en el manifiesto privado; hash del manifiesto:
+`12eb81a955870c4b04bcf06428c579d3de87513ab7a75596be453907e2ddbb89`.
+
+La fuente fue la configuración inmutable de la revisión nombrada que recibe
+100 % de tráfico sin tag, comprobado antes/después; no la plantilla deseada de
+un despliegue pendiente. Su imagen observada
+`c024d017ac1010cac1396e9552d239809e41bb192d291f68bacb8ef6569bd5af`
+es el único manifiesto Linux/amd64 contenido en el índice OCI fijado
+`ba6927495a29fdc346636bf02b9358e184c741d17cd7186e5e0c753b711fd2a5`.
+Se comprobó el SHA de los bytes originales del índice y la pertenencia exacta
+del hijo; el cliente de restauración usa ese índice. La política IAM consultada
+no contenía miembros públicos; no se generaliza esta lectura a todas las ACL.
+
+Se creó otra copia privada de los bytes y se montó de sólo lectura en un
+contenedor sin red, credenciales ni configuración productiva. El backend real
+LocalStorage de la imagen fijada leyó todos los archivos dos veces y cotejó
+cada tamaño/SHA. Se rechazaron traversal, rutas absolutas y expansión de home;
+se verificaron permisos, propietario e inventario local sin archivos extra.
+Se conservaron los originales exactos previstos: JPEG Deméter SHA256
+`99836aae9569ed692bc3605de70f2b4c2ad830c979e83693ba5922d08dc1ae80`
+y MP4 silencioso de Agentes SHA256
+`d395bd2a9cbd8b09066dd04e2138b32f3f596062f8e86e991d1a0faf5616590c`.
+El único contenedor y los datos temporales del clon se eliminaron y verificaron;
+el respaldo privado independiente permanece fuera de Git.
+
+El operador pasó 35 tests aislados de metadatos, checksum, paginación, paths,
+permisos, fuente de revisión y vínculo OCI. La revisión independiente cerró
+un hallazgo sobre la plantilla deseada y aprobó el código antes del intento real.
+El primer intento se detuvo antes de journal/backup/descarga porque comparaba
+el digest del índice con el digest de plataforma de Cloud Run. Se investigó
+la relación por lecturas, se conservaron los negativos y se utilizó un prefijo
+nuevo para el intento calificado; no hubo mutación productiva.
+
+`storage_originals_restore_verified=true` acredita el respaldo y la lectura de
+bytes en un clon local. `cloud_storage_restore_verified=false` conserva fuera
+el ensayo en otro bucket. `database_reference_coherence_verified=false` conserva
+fuera la correspondencia de todas las referencias del dump con este corte de
+archivos; los cortes DB/storage no se presentan como una instantánea atómica.
+El entorno completo de server2 y el gate compuesto también siguen abiertos.
+Estas operaciones produjeron cero POST de proveedor. No acreditan descarga
+por Meta, revocación de URL, primera publicación Instagram ni ejecución diaria.
+
+La automatización oficial existente se actualizó por la herramienta de la app
+y permanece ACTIVE en el mismo chat y horario. Conserva las programaciones
+nativas de X/TikTok sin reenvío y añade los tres puntos de recuperación, la
+relación OCI verificada y los gates pendientes de runtime/coherencia entre cortes.
+La actualización del heartbeat no activa el timer ni acredita publicaciones.
