@@ -74,7 +74,7 @@
   font-display: swap;
 }
 
-:root, :root[data-theme="dark"] {
+:root {
   color-scheme: dark;
   --bg: #0e1416;
   --surface: #151c1f;
@@ -358,7 +358,7 @@ textarea:focus {
 
 @media (max-width: 560px) {
   .eikon-theme-selector > span { display: none; }
-  .eikon-appbar-actions { flex-wrap: wrap; margin-left: auto; gap: 8px !important; }
+  .eikon-appbar-actions { flex: 1; min-width: 0; flex-wrap: wrap; justify-content: flex-end; margin-left: auto; gap: 8px !important; }
   .eikon-appbar-actions > .media-text-button { max-width: 85px; }
 }
 
