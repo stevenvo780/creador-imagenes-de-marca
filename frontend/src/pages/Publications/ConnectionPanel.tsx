@@ -15,6 +15,7 @@ const reasons: Record<string, string> = {
   needs_platform_audit: "Falta acreditar auditoría o revisión de TikTok.",
   blocked_budget: "X permanece bloqueado por gasto no autorizado.",
 };
+const names: Record<Platform, string> = { facebook: "Facebook", instagram: "Instagram", tiktok: "TikTok", x: "X" };
 const modes: Record<Platform, string[]> = {
   facebook: ["page", "facebook_login"],
   instagram: ["instagram_login", "facebook_login"],
@@ -95,8 +96,9 @@ export function ConnectionPanel({
     }
   };
   return (
-    <section aria-labelledby="accounts-heading">
-      <h2 id="accounts-heading">Cuentas y requisitos</h2>
+    <section className="pub-accounts" aria-labelledby="accounts-heading">
+      <h2 id="accounts-heading">Cuentas de la empresa</h2>
+      <p>Conectar una cuenta permite revisar sus permisos. Cada envío necesita su propia decisión y requisitos.</p>
       {error && <p role="alert">{error}</p>}
       {!connections.length && (
         <p>
@@ -108,22 +110,21 @@ export function ConnectionPanel({
         {connections.map((c) => (
           <li key={c.id}>
             <h3>{c.remote_name || c.remote_id}</h3>
-            <p>
-              {c.platform} · {c.remote_id} · cuenta {c.id}
-            </p>
-            <p>Proyectos: {c.project_ids.join(", ")}</p>
-            <p>
-              {c.status === "active" ? "Conexión activa" : "Conexión retenida"}
-            </p>
+            <p className="pub-account-status">{names[c.platform]} · {c.expires_at && c.expires_at <= Date.now() / 1000 ? "Conexión vencida" : c.status === "active" ? "Conectada" : "Conexión pendiente o retenida"}</p>
             {c.expires_at && (
               <p>Vence: {new Date(c.expires_at * 1000).toLocaleString()}</p>
             )}
+            <details>
+              <summary>Permisos y datos de la cuenta</summary>
+              <p>ID remoto: {c.remote_id} · Cuenta {c.id}</p>
+              <p>Proyectos autorizados: {c.project_ids.join(", ")}</p>
             <p>
               Permisos:{" "}
               {c.scopes.length
                 ? c.scopes.join(", ")
                 : "Sin permisos comprobados"}
             </p>
+            </details>
             {c.hold_reason && <p>{reasons[c.hold_reason] || c.hold_reason}</p>}
             {c.platform === "tiktok" && (
               <p>
@@ -137,6 +138,10 @@ export function ConnectionPanel({
             </Button>
           </li>
         ))}
+        {(Object.keys(names) as Platform[]).filter(p => !connections.some(c => c.platform === p)).map(p => <li key={p} className="pub-account-unconnected">
+          <h3>{names[p]}</h3><p>Sin conectar</p>
+          <p>Añade una cuenta de esta red para iniciar su conexión.</p>
+        </li>)}
       </ul>
       <details>
         <summary>Añadir cuenta para varios proyectos</summary>

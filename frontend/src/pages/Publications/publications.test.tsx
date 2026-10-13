@@ -177,11 +177,11 @@ it("descarta datos de la empresa anterior al cambiar de sesión", async () => {
       <PublicationsPage owner tenant="B" />
     </MemoryRouter>,
   );
-  await screen.findByRole("link", { name: "Producto B: Campaña" });
+  await screen.findByRole("link", { name: /Producto B/ });
   resolveA(overview("A"));
   await new Promise((resolve) => setTimeout(resolve, 0));
   expect(
-    screen.queryByRole("link", { name: "Producto A: Campaña" }),
+    screen.queryByRole("link", { name: /Producto A/ }),
   ).toBeNull();
 });
 

@@ -5,7 +5,7 @@
  */
 import React, { useState } from "react";
 import { ApiKeysPanel } from "../pages/Media/ApiKeysPanel";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 
 export interface AppShellProps {
   children: React.ReactNode;
@@ -32,8 +32,10 @@ export function AppShell({
   owner,
 }: AppShellProps) {
   const [keysOpen, setKeysOpen] = useState(false);
+  const pathname = useLocation().pathname;
+  const publications = pathname === "/publications" || pathname.startsWith("/publications/");
   return (
-    <>
+    <div className={publications ? "pub-shell" : undefined}>
       {/* Skip link — accesibilidad por teclado */}
       <a
         href="#main-content"
@@ -249,6 +251,6 @@ export function AppShell({
       >
         {children}
       </main>
-    </>
+    </div>
   );
 }

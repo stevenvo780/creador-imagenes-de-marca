@@ -8,6 +8,13 @@ import {
   publicationRequest,
 } from "../../api/publications";
 import { usePrivateOperation } from "../Media/usePrivateOperation";
+export function policyStatus(policy: Policy, now = Date.now() / 1000) {
+  if (!policy.enabled) return "Detenida";
+  if (policy.expires_at && policy.expires_at <= now) return "Vencida";
+  if (policy.valid_from && policy.valid_from > now) return "Aún no vigente";
+  if (!policy.valid_from || !policy.expires_at) return "Vigencia sin comprobar";
+  return "Vigente";
+}
 export function PolicyPanel({
   policy,
   owner,
@@ -43,10 +50,10 @@ export function PolicyPanel({
     }
   };
   return (
-    <section aria-labelledby="policy-heading">
+    <section className="pub-policy" aria-labelledby="policy-heading">
       <h2 id="policy-heading">Autonomía editorial</h2>
       <p>
-        Política {policy.version} · {policy.enabled ? "Activa" : "Detenida"}. La
+        Política {policy.version} · {policyStatus(policy)}. La
         IA decide pertinencia; cada red mantiene sus propios requisitos.
       </p>
       {error && <p role="alert">{error}</p>}
@@ -60,7 +67,7 @@ export function PolicyPanel({
             Detener autonomía
           </Button>
           <details>
-            <summary>Editar alcance y vigencia</summary>
+            <summary>Configuración de alcance y vigencia</summary>
             <form
               onSubmit={(e) => {
                 e.preventDefault();

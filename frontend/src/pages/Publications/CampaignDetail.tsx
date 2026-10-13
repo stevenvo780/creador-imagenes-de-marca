@@ -520,24 +520,21 @@ export function CampaignDetail({
   const [previewId, setPreviewId] = useState<number | null>(null);
   useEffect(() => setPreviewId(null), [campaign.id]);
   return (
-    <section>
-      <h2>
-        {campaign.product_name}: {campaign.objective}
-      </h2>
-      <p>
-        Proyecto {campaign.project_name} ({campaign.project_id}) · Producto{" "}
-        {campaign.brand_id}
-      </p>
+    <section className="pub-campaign-detail">
+      <h2>{campaign.product_name}</h2>
+      <p className="pub-objective">{campaign.objective}</p>
+      <p className="pub-list-meta">{campaign.project_name} · Campaña {campaign.id}</p>
       <nav aria-label="Producto">
         <Link to={`/brands/${campaign.brand_id}/identity`}>Identidad</Link>{" "}
         <Link to={`/gallery?project=${campaign.project_id}`}>
           Galería del producto
         </Link>
       </nav>
-      <p>
-        Límite: 100 revisiones por campaña, incluido el historial. Al alcanzarlo,
-        crea otra campaña.
-      </p>
+      <details className="pub-contract-details">
+        <summary>Datos de la campaña y límite de revisiones</summary>
+        <p>Proyecto {campaign.project_id} · Producto {campaign.brand_id}</p>
+        <p>Límite: 100 revisiones por campaña, incluido el historial. Al alcanzarlo, crea otra campaña.</p>
+      </details>
       {!campaign.revisions.length && (
         <p>
           Esta campaña aún no tiene candidatos. El cliente Codex prepara las
