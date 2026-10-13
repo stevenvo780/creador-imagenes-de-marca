@@ -1282,3 +1282,74 @@ nativas de 13/14/15 de octubre. La prueba debida de las 22:00–23:00 Bogotá,
 sus recibos remotos/media/revocación, el segundo barrido con cero POST y la
 revisión previa a activar el timer permanecen pendientes. La meta de todas las
 redes continúa ACTIVE e incompleta.
+
+### Cotejo incremental de medios de Humanizar con el dump actual
+
+Corte del 13 de octubre, 23:46 UTC. El dump actual ya calificado
+`e01a46f0…` se restauró nuevamente sólo para extraer sus referencias y cotejar
+los archivos de Humanizar, tenant 17. No se repitieron init, ASGI o lifespan,
+ni se consultó otra vez la DB productiva. Imagen índice `4c0fb683…`, hijo
+AMD64 `1b68d779…` y backend `f6dc9e36…` coinciden con la revisión servida
+`eikon-tiktok-onboarding-20261013`.
+
+El respaldo histórico de storage precedía a la incorporación de Xenía48.
+Se consultaron mediante GET únicamente los metadatos GCS de las referencias
+actuales de Humanizar. Cada archivo reutilizado se revalidó contra tamaño y
+MD5 remoto y contra SHA/tamaño de DB cuando existían; las dos descargas nuevas
+fijaron generación y precondición. El conjunto referido conservó generación,
+metageneración, tamaño y MD5 entre los dos cortes. Configuración servida e IAM
+privado del bucket permanecieron iguales.
+
+Resultado real, exit 0:
+
+- 116 objetos y 90991870 bytes: 17 logos versionados, 46 originales,
+  46 miniaturas, dos vídeos y cinco variaciones legacy.
+- 114 archivos históricos revalidados y dos descargados: exactamente el
+  original de Xenía48, SHA256 `cf954028…`, y su miniatura asociada en DB.
+- Lectura y cotejo mediante LocalStorage de la imagen actual, usuario
+  1001:1001, red desactivada y copia en tmpfs privada recibida por stdin.
+- Ambas lecturas de referencias usaron transacciones READ ONLY. Las filas,
+  esquema, secuencias y estados de las 43 tablas del clon quedaron intactos.
+- Los seis contenedores registrados y el directorio de datos quedaron
+  eliminados; no se leyeron medios de otras empresas.
+
+El respaldo es un subconjunto completo de las referencias durables del tenant
+17 en ese dump. No restaura objetos en GCS, no forma una instantánea atómica
+DB/storage y no acredita recuperación compuesta o publicación. El cero POST
+describe este operador y la lectura MCP siguiente, no el tráfico global.
+La aceptación de todas las redes continúa pendiente.
+
+Las 17 pruebas puras y la revisión de fuentes v2 pasaron antes del ensayo.
+La primera revisión detectó preparación del workspace fuera de la limpieza;
+se corrigió con un contexto que cubre también fallos de chmod, mkdir y journal,
+verificados localmente. El informe negativo original se conservó. Fuente final,
+SHA256 `4f15e62f3a39b9bab795d974f583329f38eed935fe8d8c47519361a0a4d3610d`;
+revisión v2, SHA256
+`ccd35adf58f0b072e4f372fde45abc652f53b229f4e77dc86c42a7ff66f10a5f`.
+Recibo privado `current-media-coherence-receipt.json`, bajo
+`current-media-coherence-20261013T234526Z`, SHA256
+`154b5588188aa6de5ef46ffdea4a8bd28190dcdeaf2e3e5b1e30ccc7da3fa446`.
+La revisión independiente del agregado y los tres recibos dio PASS del alcance
+DB actual → medios de tenant 17, sin repetir el ensayo ni acceder a manifiesto,
+inbox, dumps o medios privados. La asignación de las dos descargas a original y
+miniatura de Xenía y los contadores del inbox proceden del cotejo saneado de root.
+Informe `eikon-current-media-evidence-review-20261013.md`, SHA256
+`611c35fb753f01ce0e863d77ec7c77e65c3d670e437e1e8866ab491df241d7fb`;
+agregado `eikon-current-media-evidence-20261013.json`, SHA256
+`f4b0259be9c0062a0501dc1933ecc16563cd5c2b34232b6e66b7e55b4601b8a6`.
+
+La lectura del planner por el conector nativo de este chat devolvió
+`configuration_error`, por ausencia de su token dedicado. El cliente MCP
+privado existente sí obtuvo una respuesta autenticada: tenant 17, política 2,
+17 campañas y tres conexiones Meta activas. Las revisiones 5/6/7 siguen
+retenidas por frecuencia para su ventana original. Se cambió únicamente el
+pin de revisión del lector; no se recargó ni reparó el conector global.
+Recibo privado `planner-mcp-readonly-20261013T234210Z/receipt.json`, SHA256
+`575ace4754df6d26e14d2418ec3516ca4ee2ba3262b784c4ade5f462ad4b5fa8`.
+Este resultado acredita lectura del cliente privado y conserva explícitamente
+`native_tool_configuration_repaired=false`.
+
+No hubo inicio de server2, habilitación del timer, nueva publicación verificada,
+recreación de entregas ni cambios a las programaciones nativas en este corte.
+La ventana de 22:00–23:00 Bogotá del 13 de octubre, sus recibos y visibilidad,
+el segundo barrido sin POST y su revisión siguen siendo el siguiente paso.
