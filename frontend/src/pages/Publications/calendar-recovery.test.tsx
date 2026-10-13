@@ -16,6 +16,44 @@ function response(value: unknown, status = 200) {
   return { ok: status >= 200 && status < 300, status, json: async () => value } as Response;
 }
 
+it.each([
+  { reasons: ["frequency_limit"] },
+  { reasons: ["daily_quota_reached"] },
+  { reasons: ["daily_quota_reached", "frequency_limit"] },
+])("conserva la pieza retenida por límites temporales sin pedir otra revisión ($reasons)", async ({ reasons }) => {
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(response({
+    items: [{ ...delivery, state: "held", hold_reasons: reasons }], next_cursor: null,
+  })));
+  render(<CalendarPanel owner />);
+  await screen.findByText("Cuenta de prueba");
+  expect(screen.getByText("Retenida")).toBeTruthy();
+  expect(screen.getByText(/los límites se vuelven a comprobar antes del envío/i)).toBeTruthy();
+  expect(screen.queryByText(/requiere una nueva revisión/i)).toBeNull();
+});
+
+it("no promete reintento automático para una retención que también necesita autenticación", async () => {
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(response({
+    items: [{ ...delivery, state: "held", hold_reasons: ["frequency_limit", "requires_auth"] }], next_cursor: null,
+  })));
+  render(<CalendarPanel owner />);
+  await screen.findByText("Cuenta de prueba");
+  expect(screen.queryByText(/los límites se vuelven a comprobar antes del envío/i)).toBeNull();
+  expect(screen.getByText(/si el intento fue retenido por el trabajador/i)).toBeTruthy();
+  expect(screen.getByText("requires_auth")).toBeTruthy();
+});
+
+it("una retención expirada muestra la nueva fecha requerida sin instrucciones temporales contradictorias", async () => {
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(response({
+    items: [{ ...delivery, state: "held", expires_at: 1, hold_reasons: ["frequency_limit"] }], next_cursor: null,
+  })));
+  render(<CalendarPanel owner />);
+  await screen.findByText("Cuenta de prueba");
+  expect(screen.getByText("Fecha expirada")).toBeTruthy();
+  expect(screen.getByText(/otra fecha y una nueva evaluación IA/i)).toBeTruthy();
+  expect(screen.queryByText(/retención del trabajador/i)).toBeNull();
+  expect(screen.queryByText(/los límites se vuelven a comprobar antes del envío/i)).toBeNull();
+});
+
 it.each([{ label: "vacía", items: [] as Delivery[] }, { label: "con entregas", items: [delivery] }])("recupera la agenda tras un GET fallido y retira la alerta ($label)", async ({ items }) => {
   const fetcher = vi.fn().mockRejectedValueOnce(new TypeError("Failed to fetch"))
     .mockResolvedValueOnce(response({ items, next_cursor: null }));

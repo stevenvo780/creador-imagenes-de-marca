@@ -92,7 +92,17 @@ export function CalendarPanel({ owner, onContent }: { owner: boolean; onContent?
         {onContent && <Button onClick={onContent}>Ir a Contenido</Button>}
       </div>}
       <ol className="pub-agenda">
-        {items.map((d) => (
+        {items.map((d) => {
+          const state =
+            !d.started_at &&
+            ["scheduled", "held"].includes(d.state) &&
+            d.expires_at <= Date.now() / 1000
+              ? "expired"
+              : d.state;
+          const temporaryHold = d.hold_reasons.length > 0 && d.hold_reasons.every(
+            (reason) => ["frequency_limit", "daily_quota_reached"].includes(reason),
+          );
+          return (
           <li key={d.id}>
             <div className="pub-delivery-date">
               <strong>{d.normalized_destination}</strong>
@@ -107,21 +117,17 @@ export function CalendarPanel({ owner, onContent }: { owner: boolean; onContent?
             <AttemptDetail
               attempt={{
                 ...d,
-                state:
-                  !d.started_at &&
-                  ["scheduled", "held"].includes(d.state) &&
-                  d.expires_at <= Date.now() / 1000
-                    ? "expired"
-                    : d.state,
+                state,
               }}
             />
             {d.hold_reasons.map((r) => (
               <p key={r}>{r}</p>
             ))}
-            {d.state === "held" && (
+            {state === "held" && (
               <p>
-                Tras una retención del trabajador se requiere una nueva revisión
-                y decisión IA.
+                {temporaryHold
+                  ? "Los límites se vuelven a comprobar antes del envío. Conserva esta pieza sin crear otra revisión para eludirlos."
+                  : "Revisa los requisitos indicados. Si el intento fue retenido por el trabajador, necesitará una nueva revisión y decisión IA."}
               </p>
             )}
             </div>
@@ -138,7 +144,8 @@ export function CalendarPanel({ owner, onContent }: { owner: boolean; onContent?
               )}
             </div>
           </li>
-        ))}
+          );
+        })}
       </ol>
       {!loading && cursor !== null && (
         <Button disabled={busy} onClick={more}>
