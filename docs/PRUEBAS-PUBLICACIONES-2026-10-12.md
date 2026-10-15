@@ -1353,3 +1353,136 @@ No hubo inicio de server2, habilitación del timer, nueva publicación verificad
 recreación de entregas ni cambios a las programaciones nativas en este corte.
 La ventana de 22:00–23:00 Bogotá del 13 de octubre, sus recibos y visibilidad,
 el segundo barrido sin POST y su revisión siguen siendo el siguiente paso.
+
+
+## Deméter: entrega real del 13 de octubre y control del 14
+
+Este corte sustituye el estado pendiente del apartado anterior únicamente para
+las entregas 5/6/7. La invocación controlada del 13 de octubre, 22:00:41–22:02:14
+Bogotá, terminó con salida 0 y `completed_sweep/processed3`. InvocationID
+`1aa6e8bdaf334a8b90a0d5b6d6548f15`. Cada cuenta conserva un intento y un recibo
+terminal propio, sin rearmar el intento fallido histórico de Instagram.
+
+| Destino | Entrega | ID remoto | Publicación |
+|---|---:|---|---|
+| Facebook Systems | 5 | 1045986888587355_122127578901283523 | [Deméter](https://www.facebook.com/122127579183283523/posts/122127578901283523) |
+| Facebook Humanizar | 6 | 110421192090737_1010840832052858 | [Deméter](https://www.facebook.com/1008644758939132/posts/1010840832052858) |
+| Instagram humanizar.news | 7 | 18148186327573817 | [Deméter](https://www.instagram.com/p/DedXpJeEWOF/) |
+
+El operador obtuvo GET 200 de los tres proveedores, cotejó autor, caption y
+fecha y vio en Brave las tres piezas completas con su imagen. La descarga
+previa del original JPEG produjo 191953 bytes y SHA256
+`99836aae9569ed692bc3605de70f2b4c2ad830c979e83693ba5922d08dc1ae80`.
+El ticket de Instagram 1 quedó revocado a las 22:02:13 con el ACK terminal;
+la fuente calificada rechaza capacidades revocadas. No se conservó la URL raw,
+no se ejecutó GET posterior de esa misma URL ni se midió su fetch por logs.
+La imagen visible corrobora el consumo del medio sin atribuir un contador de
+bytes o petición de descarga a Meta.
+
+Un segundo barrido real, InvocationID `03b0e80388f8458bba266bcc0aebc8ba`,
+22:17:10–22:17:11, terminó con salida 0 e `idle/processed0`. Los snapshots de
+claims, materiales, entregas, eventos y tickets fueron idénticos byte a byte:
+SHA256 `293a635c536bd729fe668dd3db207de9cfba431c41ab897c7b94371722ac29e2`.
+Los doce archivos Python del runtime coinciden con la fuente revisada.
+El flujo instalado no puede devolver idle0 tras ejecutar dispatch/recover;
+esta correlación acredita cero POST social de ese segundo proceso. No es un
+contador de tráfico global ni una lectura directa del outbox protegido.
+
+La revisión independiente final dio PASS acotado del segundo barrido y la
+revocación registrada, sin bloqueador concreto adicional para habilitar el
+timer Meta. Informe `eikon-daily-dispatch-code-review-20261014.md`, SHA256
+`31e90460cd0ea8e945c0442fe636a15140df61e901de5b8c590859a65b2fba83`.
+Recibo agregado `second-sweep-evidence-receipt.json`, SHA256
+`b9829c140381333d3ce23a9163f4503f63b258bd9ab5d59923206882e60dbd63`.
+El timer todavía estaba disabled en la lectura del 14 de octubre, 21:53
+Bogotá; la revisión no lo activó.
+
+X publicó mediante su programación nativa a las 22:00 del 13 de octubre:
+[Deméter de @HumanizarSystem](https://x.com/HumanizarSystem/status/2110203943074795990).
+El operador verificó autor, texto, hora e imagen en Brave, sin API facturable
+ni envío manual nuevo. TikTok mostró autor y texto del ID 7696012000295488775,
+pero un CAPTCHA impidió completar la comprobación de reproducción; conserva
+ese alcance parcial y el handoff existente. No hubo nueva subida nativa.
+
+El preflight de las 21:54 del 14 de octubre confirma las mismas filas 5/6/7
+publicadas y 8/9/10 sin inicio. Instagram respondió como humanizar.news,
+cuota 1 de 100 en 86400 segundos. El siguiente paso es la entrega de Agentes
+8/9/10 en su ventana original, conservando 24 horas desde los starts previos:
+22:00:45, 22:00:55 y 22:01:03, respectivamente. Vídeo1 silencioso sigue
+aprobado por frames; no equivale a visionado completo. Vídeo2 con audio y
+revisión11 permanece retenido. Xenía 11/12/13 y las programaciones nativas
+del 14/15 de octubre se conservan. La meta de cinco destinos y los17 productos
+sigue incompleta; estas dos ejecuciones no prueban recurrencia ilimitada.
+
+
+## Agentes: ejecución del 14 de octubre, 22:01 Bogotá
+
+Se conservaron las entregas8/9/10 y sus decisiones8/9/10, sin recreación ni
+cambio de fecha. El preflight de las21:55 verificó política2, owner4,
+grants4/5/6, conexiones vigentes y hashes canónicos de los tres contratos.
+La descarga efectiva del vídeo1, 345720 bytes, coincidió con SHA256
+`d395bd2a9cbd8b09066dd04e2138b32f3f596062f8e86e991d1a0faf5616590c`.
+Es una tarjeta estática MP4 de6s, H2641080x1920/30fps, sin audio. Su revisión
+editorial conserva `frames_only_silent/full_video_watched=false`.
+
+La invocación `6c21e53be287456e83345f1f345f3ae2`,22:01:11–22:01:44,
+terminó con exit0 y completed_sweep/processed3. Empezó después de las24h
+de los starts de ayer; no adelantó envíos. Facebook respondió con IDs de
+subida y processing_pending, que se conservaron como uncertain. El barrido
+controlado de conciliación `86ef3a65141a49e2a7a3310624baaaeb`,22:03:26–35,
+utilizó los mismos intentos con credenciales reconcile_only/post_permittedfalse
+y terminó completed_sweep/processed2, sin volver a subir los vídeos.
+
+| Destino | Entrega | Resultado verificado |
+|---|---:|---|
+| Facebook Systems | 8 | [Agentes](https://www.facebook.com/reel/1673375187480840/), ID1045986888587355_122127665355283523 |
+| Facebook Humanizar | 9 | [Agentes](https://www.facebook.com/reel/1312779384208581/), ID110421192090737_1011814401955501 |
+| Instagram humanizar.news | 10 | held/unsupported_media antes de start, sin ticket ni POST social |
+| X HumanizarSystem | nativa | [Agentes](https://x.com/HumanizarSystem/status/2110566335994548732),14Oct22:00Bogotá |
+| TikTok humanizar.systems | nativa7696024738354695425 | Verificación pendiente por CAPTCHA existente; no nueva subida |
+
+Los dos GET de Facebook devolvieron200 con autor/caption/ID exactos. Brave
+mostró ambas publicaciones públicas y la composición completa. La conciliación
+correlacionó los IDs de subida con el post de cada página. created_time del
+objeto feed y published_at del proveedor conservan sus valores distintos;
+no se sustituyen por el instante posterior del ACK. X mostró autor, texto,
+fecha22:00, marcaIA y reproducción del vídeo; no se inspeccionó íntegramente
+el vídeo ni se usó API facturable. Se guardaron screenshots reales.
+
+Instagram no envió el archivo: el validador local detectó unsupported_media
+antes de start. El diagnóstico del original exacto encontró moov antes de
+mdat y una lista de edición MP4. `_qualify_video` rechaza esa estructura para
+Instagram. Este resultado identifica una condición suficiente del bloqueo
+local; no es un rechazo remoto de Meta. Se mantiene la exclusión durable de
+la entrega10. Corregir futuros originales requiere nueva calificación y
+revisión; no se debilita la regla, altera el original ni rearma esa fila.
+
+El timer existente de Meta se habilitó el14Oct22:05:01 con el comando fijo
+sudo -n y quedó active/waiting/enabled, próxima activación22:06:05. Su gate
+es la entrega real de fotografías del día anterior, el segundo barrido0POST
+y la revisión independiente31e90460…, con los mismos doce archivos de runtime
+revalidados hoy. No se atribuye éxito de vídeo Instagram ni de todos los
+destinos a esa habilitación. La política conserva frecuencia1440min,
+1publicación/destino/día, ventana60min y exclusión de gasto. Timer y heartbeat
+diario cumplen funciones distintas: ejecutar entregas vigentes y preparar/
+verificar decisiones editoriales, respectivamente.
+
+Recibos privados del corte: `daily-dispatch-20261015-agentes/`, preflight
+`agentes-preflight-20261015T025513-private.json` SHA256
+`7a4e537c850458f0b3d190432c040aa184f0e82fd4ff114f15fd7d6210b3775e`;
+DB después de conciliación SHA256
+`5308e7d251259ea963f42dcc471fe92860e467ba3bcbfa777b8eae7d75442df0`;
+GET remotos `agentes-remote-verification-20261015T030409-private.json`
+SHA256 `bce05efed08499f921abbf7764423b08fdc1d2d7b29af54c2b027e52227a60d6`.
+La meta global sigue incompleta. No se reparó OAuthTikTok, CAPTCHA, conectorMCP
+nativo ni acceso de edición del perfil FacebookHumanizar; no se desplegó código,
+rotaron grants o repitieron respaldos/migraciones/pruebas de recuperación.
+
+
+La primera activación automática del timer produjo la invocación
+`17e2b0e15b1f4ce4a0917b0ffc7df0dc` a las22:06:17: idle/processed0 y
+finalización normal. La DB seleccionada antes y después quedó idéntica
+byte a byte, SHA2565308e7d251259ea963f42dcc471fe92860e467ba3bcbfa777b8eae7d75442df0.
+Esto mantiene intentos/IDs/recibos, retención10 y futuros11–13; no hubo
+POST social en esa ejecución conforme al flujo calificado. No es medición de
+tráfico global. El timer quedó active/waiting/enabled con próxima activación.
