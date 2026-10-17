@@ -1486,3 +1486,120 @@ byte a byte, SHA2565308e7d251259ea963f42dcc471fe92860e467ba3bcbfa777b8eae7d75442
 Esto mantiene intentos/IDs/recibos, retención10 y futuros11–13; no hubo
 POST social en esa ejecución conforme al flujo calificado. No es medición de
 tráfico global. El timer quedó active/waiting/enabled con próxima activación.
+
+## Xenía: publicación automática del 15 de octubre y cotejo del 17
+
+Las mismas entregas 11/12/13 se publicaron dentro de su ventana original,
+sin start manual ni cambio de fecha. El timer ejecutó
+`cdbe660ccae54947a8e02bac928d6686` a las 22:00 Bogotá: completed_sweep1,
+Instagram 13. La invocación automática
+`b81fbbeaab0e4cfd945152b3bc81a02b`,22:02:27–22:02:47, terminó
+completed_sweep2 para ambas páginas Facebook. El barrido de 22:01 fue idle0.
+
+| Destino | Entrega | ID remoto | Publicación |
+|---|---:|---|---|
+| Facebook Systems | 11 | 1045986888587355_122127745635283523 | [Xenía](https://www.facebook.com/122127579183283523/posts/122127745635283523) |
+| Facebook Humanizar | 12 | 110421192090737_1012811445189130 | [Xenía](https://www.facebook.com/1008644758939132/posts/1012811445189130) |
+| Instagram humanizar.news | 13 | 17947995993347020 | [Xenía](https://www.instagram.com/p/DeihHyskXVr/) |
+
+El GET de cada proveedor devolvió 200 el 16 de octubre y nuevamente el 17 de octubre a las 20:48 UTC,
+con autor, caption exacto, ID y fecha dentro de la ventana. Las imágenes
+servidas por CDN se descargaron anónimamente el 16 de octubre y se inspeccionaron:
+Facebook entregó en ambas cuentas los mismos 33421 bytes/JPEG 720x900,
+SHA256 `dee37b49e0e6b3ea8f0c9aeb6f295c0e721f1e4c718f6b68cb929fe7f2cc07a1`;
+Instagram, 134308 bytes/JPEG 1080x1350,
+SHA256 `c2d3ccef71db97cc196e7e9a7770a77f733bdbc7fcffb1f89b47f47bd2838253`.
+La composición completa conserva Xenía, su logo y el paraguas Humanizar.
+Es evidencia API/CDN e inspección visual de archivos; no una visita en Brave.
+
+Los barridos automáticos posteriores quedaron idle0. Las filas seleccionadas
+de entregas, claims, materiales, tickets y eventos permanecieron iguales entre
+03:04:25 y03:05:41UTC del 16 de octubre; hash canónico conjunto
+`266c284ae20797efe6b66e602af1a07164ea1abc8f51701db805b249024334b5`.
+Los doce archivos del worker coinciden con la fuente revisada. Esa correlación
+acredita ausencia de POST adicional en esos procesos idle; no es un contador
+global ni una lectura directa del outbox. El snapshot readonly del 17 de octubre
+confirmó esas mismas cinco tablas sin nuevas publicaciones antes de preparar
+el nuevo ciclo de Graf. No se afirma igualdad de toda la base.
+
+El ticket de Instagram 2 quedó revocado en el ACK terminal. No se observó su
+URL raw ni se hizo GET posterior de esa misma URL; tampoco se midieron bytes
+descargados por Meta. La revisión independiente final prevista el 16 de octubre se
+interrumpió sin producir informe: no se le atribuye PASS. El preflight sí
+conserva su revisión acotada anterior.
+
+Corrección de frecuencia: `_limits` tiene en cuenta tanto el inicio como
+`published_at` del proveedor cuando está disponible. Para Facebook del 15 de octubre
+el mínimo derivado del resultado de Agentes era 22:01:45 y 22:02:02,
+respectivamente; el start automático de 22:02:27 respetó ambos. No debe
+reutilizarse la estimación anterior basada sólo en los starts 22:01:18/32.
+
+Recibos privados: `daily-timer-20261016-xenia/automatic-dispatch-journals-receipt.json`,
+SHA256 `6ee1ae91c9b55c9d153cae75b86af415b988bd0db25c85b94506e115de5c83a1`;
+`post-publication-no-duplicate-receipt.json`,
+SHA256 `7924a9db91356c517d7a85d59b5ee226e6d139dd02c2807490533d487c467d76`;
+GET actual `remote-verify-20261017T204834249532-receipt.json`,
+SHA256 `63576592dda6a3c08b24237506635c51b9f5158eb1c73b991b6be7ddd2b9e428`.
+
+## Graf Commerce: nuevo ciclo del 17 de octubre, aún futuro
+
+El trabajo interrumpido del 16 de octubre había creado revisiones 15/16/17 y archivos
+de evaluación local sin enviarlos. Su ventana venció sin decisiones ni
+entregas. Esas revisiones, fechas y archivos se conservan; no se envían ahora
+ni se presentan como publicaciones. Por ello no se acredita publicación
+diaria ininterrumpida el 16 de octubre a partir de este flujo.
+
+El 17 de octubre se inspeccionaron de nuevo el JPEG 49 y la referencia oficial Graf 111/v4,
+y se consultó [la fuente pública de Humanizar](https://humanizar.tech/).
+El caption se limita a catálogo, inventario por tienda, clientes y reportes,
+con CTA para solicitar demostración en Humanizar. La dirección admin.graf.com.co
+que aparece en la pieza corresponde al administrador; no prueba acceso a una
+tienda pública. La imagen es una ilustración, no una captura funcional.
+
+Media 49 conserva el original 33 y el SVG oficial: es una conversión declarada
+de formato PNG→JPEG, 1080x1350, 228608 bytes,
+SHA256 `605732a13530364090b8684b3b7ee83105dc5981062fc49eb3539cee4aaa02f3`.
+No hubo generación de imagen IA nueva ni sustitución del logo.
+
+Se congelaron contratos nuevos y el coordinador Codex realizó tres evaluaciones
+editoriales reales, vinculadas a los materiales entregados por MCP y al hash
+de cada contrato. Son recibos `client_reported`, no una atestación criptográfica
+de razonamiento. La aprobación y creación de entrega se confirmaron por API:
+
+| Conexión | Revisión nueva | Decisión/evaluación | Entrega | Estado observado |
+|---|---:|---:|---:|---|
+| Facebook Systems | 18 | 15 | 14 | scheduled, sin start ni intento |
+| Facebook Humanizar | 19 | 16 | 15 | scheduled, sin start ni intento |
+| Instagram humanizar.news | 20 | 17 | 16 | scheduled, sin start ni intento |
+
+Las tres tienen ventana 17 de octubre, 22:15–23:15 Bogotá, campaña 5/proyecto 9,
+política 2 y medio 49. Inbox autenticado del 17 de octubre confirma 17 campañas, tres
+conexiones activas y stock autorizado 1/déficit 0 en cada cuenta para ese día.
+Esto acredita programación de un ciclo, no publicación futura ni recurrencia
+indefinida. El claim volverá a verificar permisos, frecuencia, cuota y medio.
+Recibo `recurrence-20261017/graf/evaluations-and-scheduled-deliveries-receipt.json`,
+SHA256 `1fc82d8cd64d74eacca8ce1efdaa2d38dcce3c153580cca36846281b7f7dee83`.
+
+El 17 de octubre el timer sigue active/waiting/enabled, con barridos idle0 entre ventanas.
+El operador no inició el servicio ni hizo POST social en este corte; las
+mutaciones fueron nuevos contratos, decisiones y entregas privadas futuras.
+Se mantienen el hold permanente de Instagram 10, el intento 4 fallido y vídeo 2
+retenido, sin cambios de guardas ni nuevos permisos. Brave no aparece en el
+inventario actual; la pregunta de reconexión ya existe y no se duplica.
+X/TikTok del 15 de octubre siguen sin verificación nueva. OAuth/legal/CAPTCHA de TikTok,
+edición del perfil Facebook Humanizar y cobertura recurrente de 17 productos/
+cinco cuentas siguen pendientes. La meta global permanece incompleta.
+
+La revisión independiente nueva del 17 de octubre terminó con **PASS acotado**,
+sin hallazgos bloqueantes para estas afirmaciones y las tres entregas futuras.
+Recalculó los hashes de contratos, materiales y respuestas de Graf, cotejó
+los recibos de Xenía e inspeccionó el JPEG y el render oficial de Graf.
+No hizo consultas remotas ni interpretó los snapshots completos: verificó
+sus hashes y conservó la comparación saneada del coordinador. No amplía
+la evidencia a UI Brave, tráfico global, fetch de Meta, publicaciones futuras
+o aceptación de las cinco redes. Informe privado
+`recurrence-20261017/independent-evidence-review.md`, SHA256
+`9b23dbd571c503edc875bb0912213ae8cae125ee82fdc080e63de5f39ce4cafe`.
+Se ejecutó con un subagente Codex de la cuenta actual en Kratos; la cuota
+consultada seguía desconocida, sin interpretarla como saldo disponible ni
+cambiar de cuenta. No se generaron nuevas imágenes o gastos.
