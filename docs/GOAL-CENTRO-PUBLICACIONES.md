@@ -672,3 +672,45 @@ y las publicaciones por cuenta/formato permanecen pendientes. No se activó
 ningún timer ni se enviaron nuevas publicaciones durante este despliegue.
 X conserva el bloqueo de presupuesto; TikTok requiere habilitación real del
 proveedor. La meta completa sigue abierta.
+
+
+## Operación recurrente: corte del17 de octubre,22:26 Bogotá
+
+La meta global continúa **incompleta/blocked**. El timer por empresa17 ya
+funciona en server2; las publicaciones Meta de Deméter13Oct, Facebook Agentes14Oct
+y Xenía15Oct conservan sus recibos históricos. No se acredita continuidad
+diaria del16Oct: las revisiones Graf de ese día vencieron sin evaluación/envío.
+Los ensayos de recuperación y coherencia del backend actual ya están terminados
+en sus alcances acotados; no son nuevos requisitos para el siguiente envío.
+
+Graf17Oct se despachó con la invocación automática
+`1bc6408922804ca0aa322f25792448a8`,22:15:02–22:16:37Bogotá, tres resultados.
+El snapshot PG posterior confirma entregas14/15/16 published y tres IDs
+remotos distintos. La comprobación API dio200 con autor/caption/fecha exactos y tres descargas
+CDN anónimas permitieron inspeccionar las piezas. Tres barridos idle íntegros
+quedaron entre dos snapshots con cinco tablas seleccionadas idénticas; fuentes
+y12 archivos runtime correlacionados sustentan cero POST extra de esos
+procesos, sin contador global ni igualdad de toda la DB. No hay verificación
+UI Brave ni medición del fetch de Meta o GET del mismo ticket raw revocado.
+Ninguna publicación se reinició. La revisión independiente terminó PASS
+acotado con62 comprobaciones, sin ampliar ese resultado a las cinco cuentas.
+El informe conserva un P2 de trazabilidad del stdout privado, contenido al
+recalcular por separado los hashes de cada archivo.
+
+Quedaron programadas, todavía sin enviar, Agora18Oct y Chrónos19Oct,
+22:45–23:45Bogotá, para ambas páginas Facebook e Instagram. Se conservan logos,
+composiciones Codex originales y revisión editorial real de cada contrato;
+las imágenes nuevas de galería son conversiones técnicas JPEG. La aprobación
+owner de galería continúa separada y pendiente. La frecuencia/cuota futuras
+se reevaluarán sobre las mismas filas, según la publicación anterior real.
+Los recibos y revisiones independientes están enlazados por hash en
+`docs/PRUEBAS-PUBLICACIONES-2026-10-12.md`.
+
+Todavía faltan recurrencia comprobada en X/TikTok, acceso Brave actualmente
+ausente y requisitos/consentimientos pendientes de TikTok Developers. X sigue
+sin gasto. Facebook Humanizar permite publicar pero no se ha obtenido control
+total para corregir logo/datos. Las17 campañas no equivalen a17 productos con
+publicaciones verificadas: Humanizar News carece de pieza propia en la galería
+y varias piezas aún necesitan evaluación y ciclos reales. El heartbeat21:45
+Bogotá permanece activo, con decisión IA real y comprobación posterior; el
+timer solo despacha stock ya autorizado y no lo genera por sí mismo.

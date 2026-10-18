@@ -1603,3 +1603,179 @@ o aceptación de las cinco redes. Informe privado
 Se ejecutó con un subagente Codex de la cuenta actual en Kratos; la cuota
 consultada seguía desconocida, sin interpretarla como saldo disponible ni
 cambiar de cuenta. No se generaron nuevas imágenes o gastos.
+
+
+## Corte del 17 de octubre, 22:03 Bogotá: Graf previo y Agora futura
+
+La comprobación previa de Graf terminó con 26/26 verificaciones correctas:
+owner, política2, grants4/5/6 vigentes, contratos18/19/20, decisiones15/16/17,
+medio49 exacto, identidad111v4, límites y permisos registrados. Las hipótesis
+para due/due+120s están separadas del snapshot PG actual de 21:52:39 Bogotá.
+La lectura fijada por generación de GCS verificó JPEG1080x1350/228608bytes y
+SHA esperado. Doce archivos actuales del worker en server2 coinciden con las
+fuentes calificadas. IG respondió dos GET200 como humanizar.news y cuota
+actual0/100; no es una promesa de cuota posterior ni una introspección FB nueva.
+El timer existente sigue habilitado, sin start manual, reinstalación o despliegue.
+
+Recibo privado `daily-observation-20261018-graf/preflight-validation-20261018T025458814183-receipt.json`,
+SHA256 `2f65caeb52bdfb4303ad3097eb34137cb737ba1e7dc609300e7339a4d7ad60af`.
+A este corte Graf todavía tiene su ventana futura17Oct22:15–23:15 y las mismas
+entregas14/15/16; la comprobación no las recreó ni acreditó una publicación.
+
+Se preparó el siguiente ciclo de **Agora para18Oct22:45–23:45 Bogotá**,
+campaña8/proyecto12/marca114v4, conservando el SVG oficial y el PNG36.
+El JPEG50,1080x1350/255434bytes, es una conversión técnica de formato sin
+recorte, redibujo o generación IA nueva, SHA256
+`3300c308bb07ba5d26b7226c01666310f51c6db54845934cac40ddd5051c5192`.
+El coordinador inspeccionó los materiales exactos y la referencia oficial,
+leyó el catálogo HTTP actual y evaluó cada contrato de publicación. La pieza
+ilustra escritura/investigación con figuras sintéticas; no son testimonios
+ni una captura funcional. No promete verdad formal universal, métricas,
+funcionamiento offline, cifrado o sincronización probados. El CTA dirige a
+la demostración en Humanizar.
+
+| Destino | Revisión | Evaluación/decisión | Entrega social | Estado confirmado |
+|---|---:|---:|---:|---|
+| Facebook Systems | 21 | 18 | 17 | scheduled, sin start/intento |
+| Facebook Humanizar | 22 | 19 | 18 | scheduled, sin start/intento |
+| Instagram humanizar.news | 23 | 20 | 19 | scheduled, sin start/intento |
+
+Las solicitudes de materiales33/34/35 son distintas de esas entregas sociales.
+Las decisiones son `client_reported`, vinculadas a hashes/request_id exactos;
+el script transmite la decisión del coordinador y no llama a otro modelo ni
+ofrece atestación criptográfica de razonamiento. La galería conserva
+pending_review/approval_current=false; no se añadió revisión owner.
+La frecuencia depende de la hora real de Graf, no sólo de su due; el claim
+futuro reevalúa el mismo registro dentro de la ventana autorizada.
+Recibo `next-cycle-agora-20261018/evaluations-and-scheduled-deliveries-receipt.json`,
+SHA256 `bc4d743539b6181ea27cec4d2610695061afc56bce335e7bbbf85a4c80686b85`.
+
+La revisión independiente nueva verificó esas correlaciones y materiales,
+26 comprobaciones de preflight y52 fixtures locales de los lectores GET:
+**PASS acotado**, sin hallazgos bloqueantes sustentados. No hizo llamadas
+remotas ni amplía la evidencia a publicación, cuota futura, UI o cinco redes.
+Informe `recurrence-20261018/independent-review.md`, SHA256
+`c133947905dcec2504415233cc0bedfd16be51636e5e93f99562b57bf2d7a0f0`.
+La app aportó cuota actual de Codex:35% y después38% semanal usado; el sondeo
+local permaneció apagado y no se cambiaron cuentas/proveedores ni compraron créditos.
+
+El inventario MCP actual conserva17 campañas; Humanizar News carece de un
+medio propio en esta galería y varias campañas aún requieren evaluación y
+publicación. Brave sigue ausente del inventario; no se repite la pregunta de
+reconexión. X/TikTok, los permisos/políticas pendientes de TikTok y el control
+total del perfil Facebook Humanizar mantienen sus límites anteriores.
+La meta global sigue incompleta y blocked; ni esta cola ni los ensayos
+acreditan recurrencia en cinco cuentas o cobertura de17 productos.
+
+
+### Chrónos: ciclo del19 de octubre, todavía sin envío
+
+También quedaron programadas las entregas20/21/22 para19Oct22:45–23:45
+Bogotá, conexiones1/2/3, campaña12/proyecto16/marca118v4, revisiones24/25/26
+y evaluaciones/decisiones21/22/23. El recibo final de03:04:16UTC confirma
+scheduled/holds[]; los submits tienen start e intento nulos. Son distintas de
+las solicitudes de materiales36/37/38. No acreditan publicación futura.
+
+Media51 es JPEG1080x1350/225343bytes, SHA256
+`d2bdd72d9fbc30973e483c3d65ed21091c5e06dac0fed5a9c0db6bf7b7116542`.
+Es conversión de formato del PNG40 original, conservado junto al SVG oficial;
+no se generó una imagen IA nueva ni se redibujó el logo. El subagente Codex
+inspeccionó individualmente las piezas/referencias, contratos y seis criterios.
+El catálogo y HTML públicos HTTP200 sustentan horas, proyectos, tarifas y
+cuentas de cobro; no se prometen factura electrónica, DIAN, cumplimiento legal,
+funciones autenticadas probadas o métricas. La attestation sigue siendo
+client_reported y la aprobación owner de galería permanece pendiente.
+
+Recibo privado `next-cycle-chronos-20261019/evaluations-and-scheduled-deliveries-receipt.json`,
+SHA256 `e674e4c62b06ccb85f1f441d457f4f5121610591b63fd3ec9be680a10caafc16`.
+Relectura final `final-scheduled-verification-receipt.json`, SHA256
+`f0c9b15ebdae67af996b93bc2bc62a7fd6e371e29cb224b3cc880eb92912ea80`.
+Los19 contratos previos conservaron sus hashes, incluidos Graf, Agora y los
+retenidos10/11. El claim futuro volverá a calcular frecuencia desde el envío
+real anterior:24h entre horarios programados no garantizan24h entre publicaciones.
+La revisión independiente posterior terminó PASS acotado,25/25 comprobaciones y
+104 referencias hash concordantes. Informe `recurrence-20261018/chronos-independent-review.md`,
+SHA256 `70aaac9649fe1e11242e9d8a35801deb5adb16bf4f24ed06d63529a41b0b0ecd`.
+Encontró un P2 de reutilización en el preparador privado de este ciclo: una
+variable fuera de scope abortaría al detectar un candidato ya existente,
+antes de crear. La fixture local lo reprodujo sin red. No afecta los submits
+confirmados; la fuente se conserva como evidencia y no se reutilizará.
+
+
+## Graf publicado automáticamente:17 de octubre,22:15–22:16 Bogotá
+
+La invocación `1bc6408922804ca0aa322f25792448a8` arrancó con el timer existente
+a las22:15:02 y terminó a las22:16:37, `completed_sweep/processed3/exit0`.
+No hubo start manual, nuevo upload nativo, reenviados o cambios de fechas.
+El siguiente barrido automático `bfc80c1996454ab5b4ef00b70a86373c` fue idle0.
+Los snapshots PG actuales confirman14/15/16 published, un claim y tres eventos
+reserved/start/published por entrega, materiales49 verificados y worker/grant6.
+Los nueve eventos nuevos son128–136; la numeración máxima no equivale al
+número de filas del tenant. La fila15 conserva started_at1792293315 y su evento
+start1792293316, sin corregir artificialmente esa diferencia de un segundo.
+
+| Destino | ID remoto | Fecha publicada del proveedor, Bogotá | Enlace |
+|---|---|---|---|
+| Systems | 1045986888587355_122127932043283523 |17Oct22:15:07|[Publicación](https://www.facebook.com/122127579183283523/posts/122127932043283523)|
+| Humanizar |110421192090737_1014678701669071|17Oct22:15:16|[Publicación](https://www.facebook.com/1008644758939132/posts/1014678701669071)|
+| humanizar.news |18035286086852873|17Oct22:16:31|[Publicación](https://www.instagram.com/p/Densd0eFWnV/)|
+
+Los tres GET del proveedor respondieron200 y comprobaron autor, caption exacta,
+ID y fecha dentro de la ventana original. Recibo privado
+`daily-timer-20261018-graf/remote-verify-20261018T031946723965-receipt.json`,
+SHA256 `968e949655e9f7bf86c4adac3100d1c0c2f1160b6291c6a39c05551744196e04`.
+
+Las tres descargas CDN anónimas también fueron200. Facebook sirvió dos archivos
+idénticos de35107bytes/JPEG720x900, SHA256
+`67071a6f56c9d45b2acaab07b7b64e14abd3acb4f488171d6e009a91a56a1cff`;
+Instagram sirvió205248bytes/JPEG1080x1350, SHA256
+`04907af820cf486d261749d496826df684631c2ccf2707532814504dc5247e31`.
+Se inspeccionaron los dos materiales visuales distintos, cotejando original y
+referencia oficial: título, logo, pie Humanizar y textos legibles sin recortes.
+El segundo archivo FB se cotejó por igualdad íntegra de bytes con el inspeccionado.
+Se conserva que admin.graf.com.co es el administrador y que la escena es una
+ilustración sintética, sin atribuir testimonio a un cliente real.
+Recibo CDN `remote-media-verify-20261018T031946716511-receipt.json`, SHA256
+`83b0c31a0114f4b58f8b2e4274656da9cdec20987bc91e1b56dae43b0835df3e`;
+inspección suplementaria `recurrence-20261018/graf-cdn-visual-review-receipt.json`,
+SHA256 `589c914287751f3cc2c8cf7450d7a3b732fa38bfe971dffb69cf8c43d1eded4a`.
+El recibo CDN original mantiene visual_content_reviewed=false y no se reescribió.
+
+Entre22:16:52.325981 y22:19:56.386439 Bogotá quedaron idénticas las cinco tablas
+seleccionadas: deliveries22, claims16, claim_materials16, media_tickets3,
+events102. Hash canónico conjunto
+`8cae6d3aa1f38f5a75200753b61520327274e9a2e3328e7e09d56c4948502d7e`.
+Los barridos automáticos ef46cea2c0a34829b699af91947ff645,
+1b9c6c89048f4d81a30bbd020cee84c8 y140e7e19083b48cfa2562798018fc29b
+empiezan y terminan dentro de ese intervalo con idle/processed0. Doce archivos
+actuales del runtime de server2 siguen coincidentes con las fuentes calificadas;
+la fuente de run_once/CLI correlaciona idle0 con ausencia de nuevo dispatch.
+Es evidencia de cero POST social adicional de **esos procesos**, sin contador
+global, lectura directa del outbox o igualdad de toda la DB. Recibo
+`recurrence-20261018/graf-postdispatch-idle-comparison-receipt.json`, SHA256
+`b5a2b58e18fe8263d43668121a09c4e0da5fb555b5b002d954f48aaecb908d1e`.
+
+Las entregas1–13,17–22 y los contratos/decisiones/holds anteriores se conservaron.
+IG10 sigue retenido por unsupported_media antes de start; el intento4 sigue
+failed_before_dispatch con su ACK original. El ticket IG3/media49 se revocó en
+ACK terminal1792293395. No se observó ni se solicitó su misma URL raw después,
+ni se midió el fetch o los bytes descargados por Meta: no se acredita404.
+Las sondas GET/PG cerraron sus proxies y sockets propios; no refrescaron tokens.
+
+Esta es evidencia API/CDN e inspección de archivos, **sin verificación UI Brave**.
+El timer sigue active/waiting/enabled, su servicio oneshot inactive/dead/success
+entre ticks es normal. Los tres destinos Meta de este ciclo están publicados;
+la recurrencia global en cinco cuentas y17 productos continúa sin acreditarse.
+La revisión independiente terminó **PASS acotado**:62/62 comprobaciones,
+51 cotejos SHA sobre43 archivos únicos, contratos/claims/eventos/ACK y
+Graph/CDN concordantes. Informe
+`recurrence-20261018/graf-dispatch-independent-review.md`, SHA256
+`649ccf43de368a918fcbc78a16e8cbf432c66bdc26773abe7ccb26c371c6939b`.
+Documentó un P2 de trazabilidad del observador privado: su stdout sobrescribe
+el SHA del resumen con el SHA del raw. Ambos archivos son íntegros y sus
+hashes se recalcularon por separado; no se usa ese stdout como hash del resumen.
+La fuente se conserva sin reescribir la evidencia. Este PASS no acredita UI,
+tráfico global, fetch de Meta, cuotas futuras o publicaciones de Agora/Chrónos.
+La cuota actual de la app a03:18UTC fue42% semanal usado/58% restante para
+la misma cuenta Codex; get_ai_quotas conservó Codex desconocido y el sondeo
+local no se reactivó. No se cambió cuenta/proveedor ni se abrió gasto nuevo.
