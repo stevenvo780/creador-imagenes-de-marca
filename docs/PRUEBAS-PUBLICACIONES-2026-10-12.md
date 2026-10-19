@@ -1779,3 +1779,139 @@ tráfico global, fetch de Meta, cuotas futuras o publicaciones de Agora/Chrónos
 La cuota actual de la app a03:18UTC fue42% semanal usado/58% restante para
 la misma cuenta Codex; get_ai_quotas conservó Codex desconocido y el sondeo
 local no se reactivó. No se cambió cuenta/proveedor ni se abrió gasto nuevo.
+
+
+## Corte del18Oct: Agora automático y reserva de Meta hasta24Oct
+
+El timer existente despachó Agora a22:45:01–22:45:41Bogotá,18Oct2026,
+invocación `3f6a2cdd63f246398ac35f5cb77f975e`, completed_sweep3/exit0.
+No hubo start manual, nueva subida del operador ni modificación del timer.
+Se conservan campaña8/proyecto12/marca114v4/media50 y las revisiones21/22/23,
+decisiones18/19/20 y entregas17/18/19 originales. Medio JPEG1080x1350,
+255434bytes, SHA256 `3300c308bb07ba5d26b7226c01666310f51c6db54845934cac40ddd5051c5192`.
+
+| Destino | ID remoto | Hora proveedor Bogotá | Enlace |
+| --- | --- | --- | --- |
+|Facebook Systems|1045986888587355_122128022361283523|22:45:08|https://www.facebook.com/122127579183283523/posts/122128022361283523 |
+|Facebook Humanizar|110421192090737_1015715104898764|22:45:19|https://www.facebook.com/1008644758939132/posts/1015715104898764 |
+|Instagram humanizar.news|17872888590640292|22:45:36|https://www.instagram.com/p/DeqUs4pjpLC/ |
+
+Los tres GET Graph200 del lector específico de imágenes comprobaron autor,
+caption exacto, identificador, tipo IMAGE en Instagram y fecha dentro de la
+ventana. El lector genérico auxiliar no llegó a conectar a PG: agotó su guardia
+de20s esperando el socket del proxy; cerró antes de DB/vault/Graph y no se
+repitió. No se conoce la causa subyacente y ese intento no se presenta como
+PASS. El lector específico sí completó las tres verificaciones Graph y CDN.
+
+Las descargas CDN anónimas dieron200: ambos Facebook sirvieron JPEG720x900,
+40139bytes, SHA256 `526ba5f801c4ff6e7addeb030626d4117f114d5764e14552e3095f2cd49c49a0`;
+Instagram sirvió JPEG1080x1350,232684bytes, SHA256
+`a6ff2afab88ebf4478b96a8ed2f8d14c5e02c4772f1c56ff3118e5d70ea5d6b2`.
+Se vieron realmente los dos archivos distintos, composición original y
+referencia. FB18 se cotejó byte a byte con FB17. Logo, titulares, composición
+y pie Humanizar permanecen legibles, sin recortes. No se acredita UI Brave.
+
+La correlación predue/post confirma sólo tres claims/materiales nuevos,
+nueve eventos152–160 y ticket4 nuevos; las otras34 entregas1–16/20–37 y
+los grupos de autoridad/holds/historial seleccionados se conservaron.
+Los starts17/18/19 son1792381506/1517/1528; created_at de cada evento start
+es un segundo posterior. Los result_json mantienen published_at_utc/permalink
+nulos: las fechas y enlaces de la tabla proceden de Graph, no de ese campo PG.
+Ticket4 quedó revocado en ACK terminal1792381539. No se observó ni solicitó
+su URL raw, no se midieron bytes descargados por Meta y no se afirma404.
+
+Los snapshots PG de epochs1792381630.866201 y1792381839.584169 contienen las
+mismas cinco tablas seleccionadas de tenant17:37 entregas,19 claims,19
+materiales de claim,4 tickets y126 eventos. Hash canónico conjunto:
+`b0ba3496e66bab3bcd2b2a54cd77d2a54d6bb9b8a166815da71643bb64915b67`.
+Entre ambos quedaron completos tres procesos idle0:
+`53d09b621b814b69aff99ef0c3bf84a6`,
+`8b70498f30454d96b231e2b537ddc555` y
+`e7734302a8384c62a03dea8aaf443697`.
+El comparadorV3 cotejó mensajes contra diario raw y hashes separados; las12
+fuentes runtime coinciden con las locales/calificadas. La correlación de
+run_once/CLI, esas fuentes, los idle0 y las cinco tablas idénticas sustenta
+cero POST social adicional de ESOS procesos. No demuestra cero HTTP de control,
+un contador global, igualdad de toda la DB o lectura directa del outbox.
+
+Recibos privados preservados; se documentan nombres y hashes, sin secretos:
+
+| Evidencia | SHA256 |
+| --- | --- |
+|agora-prewindow-boundary-current-receipt.json|7f0e911518fe8404132bf78abd305682466e947ca876d85b4f5a74d3f1a8bf6b|
+|remote-media-verify-20261019T034700103997-receipt.json|226ecde330c20662adfe5322fc8b4ebe5903e6c84c8fc484899db4e5a0b29835|
+|agora-cdn-visual-review-receipt.json|254aaa230110260b1aa35396141bd2ade03cbafdb9deecd4a1d0c31cd4f595ad|
+|agora-dispatch-correlation-receipt.json|cba463b020183d0631e295909996e6c895b3f13d7f879790b7165a36f467b964|
+|agora-postdispatch-idle-comparison-20261019T035309550247-receipt.json|a96a88aef99b2418dae600f48b3ab3e368dcf10f4b0f6ee7d400d99258c834cd|
+|worker-runtime-readonly-20261019T035017148771-receipt.json|abfd0d6fc909ab5243615173933b9e301d99765f81127878293e593ca58c634f|
+|agora-generic-reader-readiness-failure-receipt.json|0cc81076d0a6fa7d29e0a8b8ecc4e05d961a6eeb2dc3890ed8f5d50000842f9e|
+
+La revisión independiente terminó **PASS ACOTADO**:309 aserciones locales,
+12pins recalculados y medios realmente vistos por el revisor. No hizo
+consultas remotas ni ejecutó operadores originales. Informe
+`agora-dispatch-independent-review.md`, SHA256
+`6f4f0bc046e5941b059617681fb56a0ef3ea7884eecb6d45c78472dac486ba63`;
+manifiesto `agora-dispatch-independent-review-manifest.json`, SHA256
+`e89534783262a227975530791bcf23b2245f89cc80f59ac7b63316fa4401edea`.
+El PASS permanece limitado al despacho17–19 y al intervalo seleccionado.
+
+### Reserva futura de Meta, todavía sin envíos acreditados
+
+Las cinco incorporaciones se evaluaron realmente por IA sobre seis criterios,
+con contrato/materiales exactos y atestación client_reported. Cada área tuvo
+revisión independiente local PASS acotado. Las composiciones son Codex previas,
+convertidas técnicamente de PNG a JPEG opaco1080x1350; no se generó IA nueva,
+redibujó un logo ni se cambió el original. Owner de galería sigue pending_review
+y approval_currentfalse, separado de las aprobaciones editoriales.
+El PG posterior al despacho conserva estos estados y sin inicios/claims:
+
+| Fecha22:45–23:45Bogotá | Producto | Media / SHA256 | Revisiones | Decisiones | Entregas | Estado |
+| --- | --- | --- | --- | --- | --- | --- |
+|19Oct|Chrónos|51 / d2bdd72d9fbc30973e483c3d65ed21091c5e06dac0fed5a9c0db6bf7b7116542|24/25/26|21/22/23|20/21/22|scheduled|
+|20Oct|Koinonía|52 / 36372e33a87ee181bb25277361082b1d44746012eb56d727a7b88c2a6febe4fd|27/28/29|24/25/26|23/24/25|held/frequency_limit|
+|21Oct|Cauce|53 / 50e5f3070d502424363fe0c057850bad96c73c97f2cd4af932c23cf171bf6bb8|30/31/32|27/28/29|26/27/28|held/frequency_limit|
+|22Oct|Aletheia|54 / c7f2df8f815e65a7117c0dbb1858a5d1a12c7505c12ce41237e83812c651cca3|33/34/35|30/31/32|29/30/31|held/frequency_limit|
+|23Oct|Apothḗke|55 / a335250aa2dd0efe294a93f29f935428f40d01405cb154570861cd9e4cc7b7a5|36/37/38|33/34/35|32/33/34|held/frequency_limit|
+|24Oct|Gravitatoria|56 / 9767a744703125bf8baea0f5a97040418c8041fb191be640d3f6441455c59053|39/40/41|36/37/38|35/36/37|held/frequency_limit|
+
+Se conservan las mismas filas: el worker reevalúa frecuencia/cuota al claim
+debido; no borrar eventos, guardas o consumos, alterar fechas ni recrear
+revisiones para forzar publicación. Frecuencia1440min considera starts y
+published_at del proveedor cuando está disponible;24h entre due no prueba
+la elegibilidad del día siguiente. No reutilizar el preparador Chrónos con
+NameError(connection) documentado. No repetir solicitudes completadas.
+
+| Revisión independiente local | SHA256 |
+| --- | --- |
+|koinonia-independent-review.md|0fd3a2b7fd50c4087fea29d3f601724096b855362b6d93de7c4f6b547f0680e9|
+|cauce-independent-review.md|b8bde4d8620e3c98f85a9b834930df73af2ba7ce4256019575bd57ca8a53628c|
+|aletheia-independent-review.md|0b10a80788fc7f4fca9a96f3097d76270d828b989b1c81da10d4567b6dcfad15|
+|apotheke-independent-review.md|70f4e11aea5a7f090abe32c0f7a6b076c40d7c827ee73d7ad575122e5af2344b|
+|gravitatoria-independent-review.md|52788a7280c1cbe09452c5fd8b3d0bfac24e8467ef5365408c5316881c6d4fe8|
+
+Los hechos se limitaron a fuentes actuales. Koinonía se presenta como portal
+para comunidades y evaluación piloto, sin clientes o asistencia inventados.
+Aletheia no promete conectores Instagram activos ni confunde asociación con
+causalidad. Apothḗke conserva su referencia116v4 compartida con el conjunto
+Mouseîon, comprobada dos veces por MCP; el mismo hash que Chrónos no se atribuye
+a una referencia exclusiva nueva. Gravitatoria usa la propuesta pública actual
+de red social de comercios, reconoce que el catálogo heredado describe logística
+y evita trasladar esa descripción antigua al caption o imagen.
+
+La app de Codex consultada19Oct03:47UTC marcó64% semanal usado/36% restante,
+cuenta actual terminada en6fd3, ordinaryUsageAllowedtrue. ai-usage conserva
+Codex desconocido por sondeo deliberadamente apagado. Se usaron subagentes
+Codex nativos/heredados de esa misma cuenta en Kratos, un escritor por área,
+sin cloud, cambio de cuenta/proveedor, nuevas APIs facturables ni gasto nuevo.
+Es una lectura fechada, no saldo futuro.
+
+Brave sigue ausente del inventario; no se utilizó Chrome. No hay nuevos envíos
+nativos X/TikTok posteriores al15Oct confirmados ni nuevas verificaciones de
+sus pendientes. Las preguntas ya realizadas de reconexión, CAPTCHA/login y
+TikTok Developers se conservan sin duplicarlas. Facebook Humanizar permite
+publicar pero el logo/datos de perfil aún requieren control total. News sigue
+sin pieza propia en la galería capturada; cobertura y recurrencia de17 productos
+en cinco destinos siguen sin acreditarse. Instagram10prestart y revisión11con
+audio siguen retenidos; intento4failed_before_dispatch y revisiones Graf15–17
+vencidas no se rearmaron. Recuperación acotada y producción sin redeploy se
+conservan; compound y aceptación social global permanecenfalse.

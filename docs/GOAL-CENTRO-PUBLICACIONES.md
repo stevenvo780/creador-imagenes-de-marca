@@ -674,43 +674,58 @@ X conserva el bloqueo de presupuesto; TikTok requiere habilitación real del
 proveedor. La meta completa sigue abierta.
 
 
-## Operación recurrente: corte del17 de octubre,22:26 Bogotá
+## Operación recurrente: 18 de octubre, Agora y reserva de contenido
 
-La meta global continúa **incompleta/blocked**. El timer por empresa17 ya
-funciona en server2; las publicaciones Meta de Deméter13Oct, Facebook Agentes14Oct
-y Xenía15Oct conservan sus recibos históricos. No se acredita continuidad
-diaria del16Oct: las revisiones Graf de ese día vencieron sin evaluación/envío.
-Los ensayos de recuperación y coherencia del backend actual ya están terminados
-en sus alcances acotados; no son nuevos requisitos para el siguiente envío.
+La meta global continúa **incompleta y bloqueada**: falta acreditar recurrencia
+en las cinco cuentas y cobertura de los17 productos. El timer17 permanece
+habilitado y ejecuta únicamente entregas elegibles bajo política2; no genera
+contenido por sí mismo.
 
-Graf17Oct se despachó con la invocación automática
-`1bc6408922804ca0aa322f25792448a8`,22:15:02–22:16:37Bogotá, tres resultados.
-El snapshot PG posterior confirma entregas14/15/16 published y tres IDs
-remotos distintos. La comprobación API dio200 con autor/caption/fecha exactos y tres descargas
-CDN anónimas permitieron inspeccionar las piezas. Tres barridos idle íntegros
-quedaron entre dos snapshots con cinco tablas seleccionadas idénticas; fuentes
-y12 archivos runtime correlacionados sustentan cero POST extra de esos
-procesos, sin contador global ni igualdad de toda la DB. No hay verificación
-UI Brave ni medición del fetch de Meta o GET del mismo ticket raw revocado.
-Ninguna publicación se reinició. La revisión independiente terminó PASS
-acotado con62 comprobaciones, sin ampliar ese resultado a las cinco cuentas.
-El informe conserva un P2 de trazabilidad del stdout privado, contenido al
-recalcular por separado los hashes de cada archivo.
+Agora18Oct se publicó automáticamente en Facebook Systems, Facebook Humanizar
+e Instagram mediante la invocación `3f6a2cdd63f246398ac35f5cb77f975e`,
+22:45:01–22:45:41Bogotá. Las entregas17/18/19 quedaron published. Los tres GET
+Graph del lector de imágenes confirmaron autor, caption exacto, ID y fecha;
+las tres descargas CDN anónimas dieron200. Se inspeccionaron los dos archivos
+distintos y la referencia: las dos copias Facebook son idénticas en bytes,
+conservan composición, logo y pie Humanizar. Esta evidencia es API/CDN y
+visualización de archivos; no demuestra la vista autenticada en Brave.
 
-Quedaron programadas, todavía sin enviar, Agora18Oct y Chrónos19Oct,
-22:45–23:45Bogotá, para ambas páginas Facebook e Instagram. Se conservan logos,
-composiciones Codex originales y revisión editorial real de cada contrato;
-las imágenes nuevas de galería son conversiones técnicas JPEG. La aprobación
-owner de galería continúa separada y pendiente. La frecuencia/cuota futuras
-se reevaluarán sobre las mismas filas, según la publicación anterior real.
-Los recibos y revisiones independientes están enlazados por hash en
-`docs/PRUEBAS-PUBLICACIONES-2026-10-12.md`.
+Tres barridos automáticos idle0 íntegros quedaron entre dos snapshots PG con
+cinco tablas seleccionadas de tenant17 idénticas. Esa comparación, correlacionada
+con run_once/CLI y12 fuentes runtime coincidentes, sustenta cero POST social
+extra de esos procesos; no es un contador global, lectura directa del outbox
+ni igualdad de toda la base. El ticket Instagram4 quedó revocado en ACK;
+no se solicitó su misma URL raw ni se midió la descarga de Meta.
+La revisión independiente terminó PASS acotado:309 aserciones locales y12
+pins recalculados, sin extender el resultado a las cinco cuentas o envíos futuros.
 
-Todavía faltan recurrencia comprobada en X/TikTok, acceso Brave actualmente
-ausente y requisitos/consentimientos pendientes de TikTok Developers. X sigue
-sin gasto. Facebook Humanizar permite publicar pero no se ha obtenido control
-total para corregir logo/datos. Las17 campañas no equivalen a17 productos con
-publicaciones verificadas: Humanizar News carece de pieza propia en la galería
-y varias piezas aún necesitan evaluación y ciclos reales. El heartbeat21:45
-Bogotá permanece activo, con decisión IA real y comprobación posterior; el
-timer solo despacha stock ya autorizado y no lo genera por sí mismo.
+La reserva de contenido de Meta ahora alcanza el24Oct, siempre22:45–23:45Bogotá:
+
+| Día | Producto | Entregas | Estado observado, todavía sin publicar |
+| --- | --- | --- | --- |
+|19Oct|Chrónos|20/21/22|scheduled, sin inicio|
+|20Oct|Koinonía|23/24/25|held por frequency_limit, sin inicio|
+|21Oct|Cauce|26/27/28|held por frequency_limit, sin inicio|
+|22Oct|Aletheia|29/30/31|held por frequency_limit, sin inicio|
+|23Oct|Apothḗke|32/33/34|held por frequency_limit, sin inicio|
+|24Oct|Gravitatoria|35/36/37|held por frequency_limit, sin inicio|
+
+Cada una de las cinco incorporaciones tuvo evaluación editorial IA real de
+sus contratos exactos, inspección de materiales y revisión independiente
+acotada. Son conversiones JPEG de composiciones Codex existentes: se conservan
+PNG originales, referencias y paraguas Humanizar. La aprobación owner de la
+galería continúa pendiente y separada de la decisión editorial de publicación.
+Los estados se verificaron en PG; las fechas futuras no son prueba de envío.
+La retención de frecuencia se reevalúa sobre la misma fila al vencer su fecha:
+no se recrean revisiones, cambian fechas ni eliminan guardas para forzar envíos.
+Veinticuatro horas entre fechas programadas no garantizan elegibilidad futura.
+
+Brave sigue ausente del inventario disponible; no se utilizó Chrome. X y TikTok
+continúan sin nuevas programaciones posteriores al15Oct confirmadas, y siguen
+pendientes las intervenciones ya solicitadas para Brave/TikTok Developers.
+X conserva cero gasto. Facebook Humanizar permite publicar con acceso a tareas,
+pero no tiene resuelta la edición del logo/datos de perfil. News carece de pieza
+propia en la galería capturada; los otros productos pendientes requieren ciclos
+reales. Se mantienen retenidos el vídeo Instagram10 y la revisión con audio11.
+El heartbeat diario21:45Bogotá permanece activo; recibos, límites y revisiones
+se detallan en `docs/PRUEBAS-PUBLICACIONES-2026-10-12.md`.
