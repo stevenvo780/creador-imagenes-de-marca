@@ -729,3 +729,73 @@ propia en la galería capturada; los otros productos pendientes requieren ciclos
 reales. Se mantienen retenidos el vídeo Instagram10 y la revisión con audio11.
 El heartbeat diario21:45Bogotá permanece activo; recibos, límites y revisiones
 se detallan en `docs/PRUEBAS-PUBLICACIONES-2026-10-12.md`.
+
+## Reserva ampliada: corte19Oct22:25Bogotá
+
+La lectura real de PG contiene55 entregas. Conserva las37 filas anteriores y
+los13 grupos seleccionados de autoridad, contratos, medios e historial; Chrónos
+20/21/22 continúa scheduled y sin inicio, antes de su ventana22:45–23:45.
+Las33 entregas futuras23–55 están held/frequency_limit y sin inicio, intento,
+claim, lease ni resultado. La reserva de Meta alcanza ahora el30Oct:
+
+| Fecha22:45–23:45Bogotá | Producto | Entregas nuevas |
+| --- | --- | --- |
+|25Oct|Prizma|38/39/40|
+|26Oct|Práxis|41/42/43|
+|27Oct|Érgon|44/45/46|
+|28Oct|Humanizar Systems|47/48/49|
+|29Oct|Humanizar News|53/54/55|
+|30Oct|Sinergia|50/51/52|
+
+Cada contrato exacto recibió evaluación editorial IA real de seis criterios,
+materiales vistos y revisión independiente local acotada. Prizma, Práxis y
+Érgon utilizan conversiones técnicas de composiciones Codex existentes. Systems,
+News y Sinergia incorporan tres escenas nuevas del generador integrado de Codex,
+con composición nativa, referencias y bytes de logos conservados. No se usó
+Google AI, una API de generación facturable ni otra cuenta. La pieza antigua
+de prueba de Systems se excluyó; News ya tiene pieza propia institucional,
+sin funciones de producto inventadas. Sinergia conserva la composición histórica
+y usa una escena nueva para este ciclo.
+
+Los contenidos futuros cubren la planificación de los17 productos junto con el
+histórico, pero no acreditan publicaciones ni recurrencia de los17. La aprobación
+owner de galería sigue pendiente y separada de las decisiones editoriales.
+La fecha futura y el estado eligible de un candidato tampoco sustituyen el
+estado mutable held de su entrega. El timer está activo, con12 fuentes runtime
+cotejadas; sólo despacha filas que superen los requisitos vigentes al claim.
+La meta global sigue **incompleta y bloqueada** por la cobertura pendiente,
+Brave ausente y los accesos/requisitos ya preguntados de X/TikTok. No se usaron
+Chrome ni IAB como sustitutos ni se repitieron publicaciones históricas.
+
+### Chrónos19Oct: envío automático y verificación remota
+
+La invocación automática `2a5a15f297e546aca1a34c5907c3fb6d` ejecutó las tres
+entregas20/21/22 entre22:45:06 y22:46:45Bogotá, completed_sweep3/exit0.
+Graph confirmó los tres identificadores, autor, texto exacto y fecha; las tres
+descargas CDN anónimas dieron200. Se vieron realmente ambas imágenes distintas,
+el original y la referencia. Las copias Facebook son idénticas entre sí;
+logo, composición y pie Humanizar se conservaron. Es evidencia API/CDN y
+archivos, sin atribuir una vista autenticada de Brave.
+
+- Facebook Systems: https://www.facebook.com/122127579183283523/posts/122128124091283523
+- Facebook Humanizar: https://www.facebook.com/1008644758939132/posts/1016657021471239
+- Instagram humanizar.news: https://www.instagram.com/p/Des5gagDfPK/
+
+La meta global permanece incompleta: esta evidencia acredita el ciclo de
+Chrónos en esos tres destinos; no sustituye recurrencia de X/TikTok, los17
+productos publicados, aprobación owner de galería ni edición del perfil de
+Facebook Humanizar.
+
+El seguimiento de Chrónos conserva las otras52 entregas y13 grupos de datos
+seleccionados. Tres barridos idle0 completos quedaron entre dos snapshots PG
+con cinco tablas iguales; correlacionados con run_once/CLI y los12 pins runtime
+medidos antes del envío, sustentan cero POST social adicional de esos procesos.
+No es un contador global ni comparación de toda la base. La reserva futura
+23–55 sigue held y sin inicio. Ticket Instagram5 revocado en ACK, sin medición
+de su fetch ni GET posterior de la misma URL raw.
+
+La revisión independiente de Chrónos terminó PASS acotado, sin P1/P2 en esas
+correlaciones:42 fuentes recalculadas y medios realmente vistos. Conserva
+los límites API/CDN/archivos, la medición runtime anterior a la ventana y la
+meta global bloqueada. El siguiente ciclo existente es Koinonía20Oct22:45,
+con las mismas entregas23/24/25; no hay que recrearlo.

@@ -1915,3 +1915,187 @@ en cinco destinos siguen sin acreditarse. Instagram10prestart y revisión11con
 audio siguen retenidos; intento4failed_before_dispatch y revisiones Graf15–17
 vencidas no se rearmaron. Recuperación acotada y producción sin redeploy se
 conservan; compound y aceptación social global permanecenfalse.
+
+## 19Oct: reserva Meta hasta30Oct y comprobación previa de Chrónos
+
+Corte PG20Oct03:24:53UTC, antes del vencimiento de Chrónos19Oct22:45Bogotá:
+55 entregas,19 claims,19 materiales de claim,4 tickets y144 eventos. Las37
+entregas de la lectura anterior y13 grupos seleccionados de autoridad,
+contratos, medios e historial permanecen iguales. Las tres filas20/21/22
+siguen scheduled, sin inicio, intento, claim, lease, resultado o worker asignado.
+Las33 futuras23–55 permanecen held/frequency_limit sin esos campos.
+Snapshot `chronos-snapshot-20261020T032442379774-private.json`, SHA256
+`ea67cda2c17a45fde89f25b93fc52f67d81d3e4489da8f74272a6ae3a9320416`;
+validación `chronos-predue-55-deliveries-validation-receipt.json`, SHA256
+`215ff453f7c7f57c01b9db79dbe1337d5074d002abffd6b986b147ccde6d2098`.
+Es una comparación de las proyecciones indicadas, no de toda la base.
+
+Las seis incorporaciones conservan la ventana22:45–23:45Bogotá y los tres
+destinos Meta autorizados, sin desplazar fechas ni recrear filas retenidas:
+
+| Fecha | Producto | Media JPEG / SHA256 | Revisiones | Decisiones | Entregas |
+| --- | --- | --- | --- | --- | --- |
+|25Oct|Prizma|57 / 6b12b50058531407b4beddee21e2add74287abed1a7dfd563cfc1c92a552fa67|42/43/44|39/40/41|38/39/40|
+|26Oct|Práxis|59 / f8104ad242672b04d8d0c0b7e65b3218b8c39283ddd3e5e1c6f0e41621d3cc5a|48/49/50|42/43/44|41/42/43|
+|27Oct|Érgon|58 / d6b1baf9efb504b12fbe27dad6d874468cbd3aa1c802f1dcf4a846465eaf59e5|45/46/47|45/46/47|44/45/46|
+|28Oct|Systems|63 / 1b30501c9048fa3799bfeb0a9119b8bf854a1666bca9732c506ab2e271c89588|51/52/53|48/49/50|47/48/49|
+|29Oct|News|61 / 655d29ab69b781bab24893a8365ffcad390e3bfb0fdefca7b9c65a4287b97daf|57/58/59|54/55/56|53/54/55|
+|30Oct|Sinergia|65 / f300c84f7fcd697ec2c15dc99067da495e4aa12c263df8a9a34cd062dae22bf3|54/55/56|51/52/53|50/51/52|
+
+Cada contrato tuvo evaluación IA real y explícita de seis criterios y materiales
+MCP efectivamente vistos. La atestación es client_reported, sin atribuirle prueba
+criptográfica del razonamiento. Las decisiones y entregas se confirmaron mediante
+respuestas guardadas antes de validarlas, más la lectura PG anterior. El owner
+de galería permanece pending_review/approval_currentfalse, una aprobación distinta.
+
+Prizma, Práxis y Érgon convierten composiciones Codex existentes a JPEG opaco
+1080x1350. Systems, News y Sinergia incorporan tres escenas nuevas mediante el
+generador integrado de Codex, sin API key externa, Google AI ni cambio de cuenta.
+La composición nativa conserva los bytes exactos del logo/referencia y los
+originales; las conversiones JPEG se reprodujeron byte a byte en revisión.
+Systems excluye media1, la antigua prueba de galería. News se limita a identidad
+institucional y CTA a Humanizar: no inventa servicio periodístico, verificación
+automática o aplicación funcional. Sinergia conserva sus imágenes históricas
+PNG31 de Facebook y JPEG46 de Instagram; el nuevo ciclo no las vuelve a enviar.
+
+Las afirmaciones se limitaron a fuentes actuales: Érgon es un servicio con demos
+próximas, no una aplicación ya disponible; Prizma no promete integración DIAN
+operativa; Sinergia no añade DIAN ni métricas ficticias. La referencia compartida
+Mouseîon se conserva donde corresponde, sin inventar un logo exclusivo.
+
+| Revisión independiente local en recurrence-20261020 | SHA256 |
+| --- | --- |
+|prizma-independent-review.md|a1ffb297267a152637c02f711fbcc080071703f95d6720dd7e2c1362ac03ac31|
+|praxis-independent-review.md|175571a289320afc6c89035d554993cf11f28ac81c1d4cff4bea2a6710ce550c|
+|ergon-independent-review.md|ea60638920a512b1aed4f99bd126f7e36e8c706ac3837b058794ff69dcbb8f59|
+|systems-independent-review.md|1ca01ae4518fa1721c49538383a8cd548971aa5005ef8cacce9522eb5e9d49ed|
+|news-independent-review.md|e25855472b7e75e4b9aa4abe6477935f80afba2444059b8984f372964276903e|
+|sinergia-independent-review.md|9013c0ceb86873991236acb2a659b57f8c35856d43d2b6a7979d441e5292d23e|
+
+Todos son PASS acotados locales, con inspección de materiales, contratos,
+vínculos y preservación del historial. No acreditan envíos futuros, estado
+mutable posterior al snapshot, elegibilidad futura, UI Brave o las cinco redes.
+
+Los incidentes locales se conservaron sin replay de operaciones completadas.
+El primer preparador News no se ejecutó: su revisión P2 exigió comprobar las
+tres cuentas/scopes, toda la ventana y el vínculo exacto medio/brief antes de
+mutar; V2 añadió esas guardas y pasó63 fixtures independientes. Dos constructores
+locales anteriores se detuvieron por una comprobación de substring demasiado
+amplia, antes de escribir el ejecutable o llamar a MCP. Una lectura inicial del
+logo recibió PNG donde se esperaba SVG y se detuvo; el diagnóstico comprobó
+los bytes PNG correctos. El raw externo de imagegen conserva permisos0640,
+directorio0750; los artefactos privados de la tarea son0600/0700.
+En Sinergia faltó CairoSVG antes de importar y se usó el renderizador ya presente;
+un KeyError local posterior a prepare/get de conexión1 se resolvió leyendo sus
+resultados guardados y continuando sólo2/3. No hubo replay del primer prepare.
+
+La comprobación readonly de server2 terminó03:26UTC: timer17 active/waiting/
+enabled, servicio oneshot inactive/dead/success entre ticks y12 fuentes runtime
+coincidentes. Recibo `worker-runtime-readonly-20261020T032553042896-receipt.json`,
+SHA256 `38ac17e5f85a6b7124b3f721c3c22874fdd236568c5dd048e90a87db1d475671`.
+No se reinstaló, habilitó de nuevo ni lanzó manualmente. El preflight anterior
+conserva29/32 y su frequency_limit en la fecha exacta de Chrónos; el cálculo
+due+120s es sólo hipótesis. La misma fila se reevalúa al claim debido.
+Las versiones locales descartadas de los correladores siguen conservadas;
+para el resultado real se prepararon versiones revisadas que vinculan claims,
+materiales, eventos, ACK y ticket, sin tratarlas aún como prueba de publicación.
+
+Brave sigue ausente del inventario20Oct02:48UTC; no se utilizó Chrome ni IAB.
+Las preguntas pendientes de reconexión, CAPTCHA y TikTok Developers permanecen
+sin duplicación. X conserva cero gasto y no hay nuevas programaciones nativas
+posteriores al15Oct confirmadas. El logo/perfil de Facebook Humanizar requiere
+control total. IG10, vídeo con audio/revisión11, intentoIG4 y Graf vencido
+conservan sus exclusiones. Producción, recuperación previa y secretos se
+conservan; la aceptación global y compound siguenfalse.
+
+### Chrónos19Oct: tres publicaciones reales de la misma cola
+
+Invocación automática `2a5a15f297e546aca1a34c5907c3fb6d`, desde
+1792467906.830648 hasta1792468005.3221,22:45:06–22:46:45Bogotá:
+completed_sweep3 y finalización correcta. El operador no llamó a start,
+enable, subida ni publicación. Se conservaron las mismas entregas20/21/22,
+revisiones24/25/26, decisiones21/22/23 y media51. El timer seguía habilitado
+y ya había completado barridos idle0 posteriores a las22:47.
+
+| Destino | ID remoto | Fecha proveedor Bogotá | Enlace |
+| --- | --- | --- | --- |
+|Facebook Systems|1045986888587355_122128124091283523|19Oct22:45:12|https://www.facebook.com/122127579183283523/posts/122128124091283523 |
+|Facebook Humanizar|110421192090737_1016657021471239|19Oct22:45:25|https://www.facebook.com/1008644758939132/posts/1016657021471239 |
+|Instagram humanizar.news|17901547038603961|19Oct22:46:40|https://www.instagram.com/p/Des5gagDfPK/ |
+
+El lector específico readonly V2 ejecutó tres GET Graph200 y tres GET CDN200.
+Comprobó identidad, caption exacto, tipo IMAGE y fecha dentro de la ventana
+original. No se refrescaron tokens ni hubo POST del lector. Los Facebook
+sirvieron JPEG720x900 de34620bytes idénticos, SHA256
+`8cbaf743fbd7e616ee2187e9cd309e3787a43283cfc5be017b9bd947ee0a2a59`;
+Instagram sirvió JPEG1080x1350 de204247bytes, SHA256
+`d9043d26bf2f9f264027217018edc6d8ee1f44021ebedb2315645f953da005af`.
+Se inspeccionaron realmente los dos archivos distintos junto con el original
+y el render de referencia118v4. Título, símbolo teal compartido, escritorio,
+texto y footer Humanizar permanecen legibles y sin recortes. FB21 se cotejó
+byte a byte con FB20. No se acredita vista UI Brave, aún ausente.
+
+Recibo `remote-media-verify-20261020T034742012646-receipt.json`, SHA256
+`6be9154196dbee8d8c4e889b0e6f1c186ca7566e7796b648b6eb2e7f8f779f2d`;
+visual suplementario `chronos-cdn-visual-review-receipt.json`, SHA256
+`e58552acd889c92a03f33dfd9cfc1efbafda7b1766746f571acdad4ea80a898a`.
+El recibo original mantiene visual_content_reviewedfalse; la inspección real
+posterior está en el suplemento, sin modificar la evidencia original.
+
+La correlación local V3 del baseline de55 filas con POST1 confirma únicamente
+tres claims/materiales, nueve eventos179–187 y ticket5 nuevos. Las otras52
+entregas y13 grupos seleccionados de autoridad, contratos, medios e historial
+quedaron iguales. Los starts20/21/22 son1792467910/7923/7933; sus ACK se
+registraron en1792467919/7930/8004. Cada start superó el límite de frecuencia
+de su cuenta dentro del primer tick, sin añadir eventos held en este ciclo. El
+preflight29/32 a la fecha exacta se conserva como observación anterior, no
+se reemplaza retroactivamente por este resultado real.
+
+Ticket5 vincula media51, claim e intento de22 y quedó revocado en el ACK
+terminal1792468004. No se observó ni solicitó su misma URL raw, no se midió
+el fetch de Meta y no se afirma404. Los result_json PG siguen con
+published_at_utc/permalink nulos: los valores públicos de la tabla proceden
+de Graph. No se rellenó la base para hacer coincidir esta evidencia.
+Recibo `chronos-dispatch-correlation-receipt.json`, SHA256
+`33fae0fad3c71d19555486d74128ef9ef2e5564c0b11c8bef0e4625927fd57d4`.
+
+Los dos snapshots PG posteriores, epochs1792468117.707246 y1792468317.965843,
+conservan iguales55 entregas,22 claims,22 materiales de claim,5 tickets y153
+eventos, hash canónico conjunto
+`45ad1b5afcc2aaa633caf5bd86135eee26ffb99e595232e943bdbc15096a1fc0`.
+Tres invocaciones idle0 completas quedaron estrictamente entre esos epochs:
+`9998854b8eb54ac68efb906659e265fc`, `31ee487d2c82443cb833693ad4608fdb`
+y `02ad747670724f3f96e5ea835768682e`. Diario raw y resumen tienen hashes
+distintos cotejados; no se atribuye al resumen el hash raw de su campo sha256.
+El comparador V4 terminó correctamente y referencia la medición runtime
+03:25UTC anterior al envío, con12 pins cotejados y fuentes locales conservadas;
+no la presenta como otra medición remota posterior al despacho.
+
+La correlación de run_once/CLI, los pins, los idle0 y esas cinco tablas iguales
+sustenta cero POST social adicional de ESOS procesos. No prueba cero HTTP de
+control, contador global, igualdad de toda la base ni lectura directa del outbox.
+POST1 SHA256 `15814e6abc46ee77e7c02c290c403e353726d8b0793174930dfd75b20a3a46c9`;
+POST2 SHA256 `2ca93ba9158ddc49df55b5a833108814c1a227a1f6c4d7f3a97ce03c62d83a9d`;
+recibo `chronos-postdispatch-idle-comparison-20261020T035452449732-receipt.json`,
+SHA256 `7398a7fa887cdf44b550e792ced30a5ee736f102dc5c4081a61bb4fd66a5a53b`.
+
+La cuota app consultada20Oct03:47UTC fue71% semanal usado/29% restante,
+ordinaryUsageAllowedtrue, cuenta actual terminada en6fd3. ai-usage conserva
+Codex desconocido y no se reactivó el sondeo local. La revisión del despacho
+usa un agente Codex nativo/heredado de esa misma cuenta en Kratos; no cloud,
+cambio de cuenta/proveedor, nueva API facturable ni gasto API adicional.
+Es una lectura fechada, no una garantía de cuota futura.
+
+La revisión independiente del despacho real terminó **PASS ACOTADO**, sin
+hallazgos P1/P2 en las correlaciones revisadas. Recalculó42 fuentes, contratos,
+hashes de solicitudes/respuestas, claims, materiales, eventos, ACK, ticket y
+comparaciones; vio realmente los dos CDN distintos, original y referencia.
+Sólo hizo lecturas y cálculos locales, sin ejecutar operadores originales o
+consultar upstream. Informe `chronos-dispatch-independent-review.md`, SHA256
+`cd9bd1abb457702c159cee89a302eebfc49d042bf25bf1a6a1767b263895b9ab`;
+manifiesto `chronos-dispatch-independent-review-manifest.json`, SHA256
+`3b550153f3e0a8d7882efdb12026c105292789f65004c795ef9ea1273cda453a`.
+No extiende el PASS a Brave, fetch de Meta, toda la base, outbox directo,
+stock futuro ni cinco destinos/17productos. El siguiente ciclo ya existente
+es Koinonía20Oct22:45–23:45Bogotá, entregas23/24/25; conservar sus filas y
+fechas. La meta global y compound siguen incompletos/bloqueados.
