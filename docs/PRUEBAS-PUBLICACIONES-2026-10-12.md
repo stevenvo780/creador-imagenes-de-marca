@@ -3,7 +3,22 @@
 Tenant Humanizar: 17. Fecha local: America/Bogota. Las publicaciones de prueba
 no acreditan todavía una recurrencia diaria activa en todas las redes.
 
-## Resultado comprobado por destino
+## Estado vigente — 21 de octubre, 03:57 UTC
+
+Koinonía, ciclo del 20 de octubre, se publicó automáticamente en Facebook
+Systems, Facebook Humanizar e Instagram dentro de su ventana original. Graph
+confirmó los tres posts y se descargaron e inspeccionaron las imágenes servidas.
+Cinco barridos posteriores completos terminaron idle0, con las cinco tablas
+seleccionadas sin cambios. El detalle y los límites están en el último apartado.
+El timer sigue activo. La cobertura global de cinco cuentas y 17 productos
+permanece **incompleta y bloqueada**; Brave continúa ausente y X/TikTok siguen
+con las intervenciones previamente solicitadas pendientes.
+
+Las tablas y estados fechados que siguen conservan su valor histórico. El timer
+apagado y la primera prueba de Instagram pendiente corresponden al 12 de octubre;
+no describen el estado vigente.
+
+## Resultado comprobado por destino — corte histórico del 12 de octubre
 
 | Destino | Prueba de imagen | Vía | Recurrencia nueva |
 |---|---|---|---|
@@ -2099,3 +2114,137 @@ No extiende el PASS a Brave, fetch de Meta, toda la base, outbox directo,
 stock futuro ni cinco destinos/17productos. El siguiente ciclo ya existente
 es Koinonía20Oct22:45–23:45Bogotá, entregas23/24/25; conservar sus filas y
 fechas. La meta global y compound siguen incompletos/bloqueados.
+
+
+## Corte del 21 de octubre de 2026 — Koinonía publicada automáticamente
+
+Ciclo local del 20 de octubre, ventana original 22:45–23:45 Bogotá,
+due1792554300/expires1792557900. Se conservaron las entregas23/24/25,
+revisiones27/28/29, decisiones24/25/26, campaña11/proyecto15/marca117v4 y
+media52. JPEG1080×1350,306481bytes, SHA256
+`36372e33a87ee181bb25277361082b1d44746012eb56d727a7b88c2a6febe4fd`.
+No se crearon filas, se movieron fechas ni se repitieron evaluaciones editoriales.
+La revisión original de Koinonía conserva su alcance de piloto y su atestación
+client_reported; la aprobación owner de galería permanece separada y pendiente.
+
+### Requisitos actuales y ejecución
+
+El preflight readonly comprobó release, propietario4, política2, grants4/5/6,
+permisos, caducidad, tres conexiones activas, medio y contratos exactos. Instagram
+respondió GET200 con la cuenta humanizar.news y consumo1/100 en86400s. El GCS
+original se leyó por generación1792378414133447 con hash y dimensiones exactos,
+sin cambios antes/después. Las12 fuentes runtime remotas coincidían con las
+locales/calificadas a las03:05UTC, antes de la ventana; no es otra medición
+remota postdispatch. Los snapshots readonly no alteraron la autoridad o el medio.
+
+El primer tick debido, invocación `cf96d2b466754360969bcbb1b2f655bd`,
+22:45:04–22:45:06Bogotá, terminó idle0. La observación de frecuencia en la
+fecha exacta y las hipótesis de elegibilidad futura se conservaron; no se
+adelantó el envío. La siguiente invocación automática
+`0bf0d36267514668ba8b9bec0bfb2dce`,22:46:09–22:46:46Bogotá, terminó
+completed_sweep3/exit0. El operador no llamó a start/enable ni realizó envíos.
+El timer sigue active/waiting/enabled; oneshot inactive/dead/success entre ticks
+es normal. No se reinstaló o habilitó nuevamente.
+
+| Destino | ID remoto | Fecha del proveedor en Bogotá | Enlace |
+| --- | --- | --- | --- |
+| Facebook Systems | 1045986888587355_122128210719283523 | 20Oct22:46:14 | https://www.facebook.com/122127579183283523/posts/122128210719283523 |
+| Facebook Humanizar | 110421192090737_1017574441379497 | 20Oct22:46:25 | https://www.facebook.com/1008644758939132/posts/1017574441379497 |
+| Instagram humanizar.news | 18032533778857826 | 20Oct22:46:41 | https://www.instagram.com/p/DeveaqZFRd9/ |
+
+### API, medios servidos y límites
+
+Tres GET Graph200 confirmaron autor, caption exacto, fecha e imagen, y tres GET
+CDN anónimos dieron200. Facebook sirvió dos JPEG720×900 de46514bytes idénticos,
+SHA256 `9f0463594db344416d71a5b6e75b15ded64a3a07abe1127255d10afb3d564947`.
+Instagram sirvió JPEG1080×1350 de280375bytes, SHA256
+`2974519ac425e128d58e729a6497ff67c89c30fe1faaa7b02e0e987695b2f1d7`.
+Se inspeccionaron realmente ambos archivos distintos junto con el original
+preservado y la referencia oficial117v4. Logo, título, escena de comunidad,
+texto y pie Humanizar permanecen íntegros y legibles; FB24 es idéntico aFB23
+byte a byte. El recibo original del lector conserva visual_content_reviewedfalse;
+la inspección posterior se registra en un suplemento, sin reescribir el original.
+
+Recibo `remote-media-verify-20261021T035218431751-receipt.json`, SHA256
+`dcd6f4c92164e52d624c0d33c7ce40b3565ccea5173cfa12febeb3539dbaf82f`;
+suplemento `koinonia-cdn-visual-review-receipt.json`, SHA256
+`27ccaa5788be65096a0e7fde446f93b62ebb434de34a34b795612993857ee35d`.
+No se acredita UI autenticada de Brave. El inventario de02:49:35–02:52:04UTC
+sólo mostró Chromeid5; no se seleccionó ni operó Chrome/IAB. La precisión
+horaria del bootstrap se corrigió con un suplemento sin modificar su original.
+No se repitió la petición de reconexión ni las preguntas humanas pendientes.
+
+Los starts23/24/25 son1792554372/4384/4393 y sus ACK1792554381/4390/4404.
+Cada start superó la frecuencia aplicable;24horas entre fechas programadas no
+se usaron como prueba de elegibilidad. Los result_json PG mantienen
+published_at_utc/permalink nulos: fechas y enlaces públicos proceden de Graph,
+sin rellenar la base para hacerla coincidir. Ticket Instagram6 está vinculado
+al claim/intento/media52 y quedó revocado en ACK1792554404, antes de caducar.
+No se observó ni pidió su misma URL raw, no se midió el fetch de Meta y no se
+afirma404.
+
+### Conservación de filas y ausencia acotada de repetición
+
+La correlación real V4 del baseline con POST1 confirmó sólo3claims/materiales,
+9eventos188–196 y ticket6 nuevos. Las otras52 entregas y13 grupos seleccionados
+de autoridad, contratos, medios e historial se conservaron iguales. El primer
+tick idle no añadió nuevos eventos held. Recibo
+`koinonia-dispatch-correlation-receipt.json`, SHA256
+`f338cee7bb4dba6b6f8345f51534fb4dad20aa48c53ff73a873b6868b9280c2d`.
+
+POST1/POST2, epochs1792554507.127121–1792554792.899166, conservaron iguales las
+cinco tablas seleccionadas:55deliveries/25claims/25materials/6tickets/162events.
+Hash canónico conjunto
+`927338b81e15ca85f4a9499c4ae07b9aef3242ecd782fa6eb4c8de5dc5cb286c`.
+Cinco invocaciones idle0 completas quedaron estrictamente entre ambos epochs:
+`169920efc252426cbfcdf9e2627a5805`, `e4051b1275fc4e5097f68139b86ab731`,
+`13362b6cbd964f24b523e0d922f5fd59`, `c50ee4c102f1483884c88a80b19b0ece`
+y `f73a1dfe15d146faba696c062981e342`. El resumen se cotejó con el diario raw;
+sus hashes son distintos y el campo sha256 del resumen corresponde al raw.
+Recibo `koinonia-postdispatch-idle-comparison-20261021T035719784566-receipt.json`,
+SHA256 `10b90cff6add9ea431d3b508a5059d192a57b2a903e5a45652cf05bfda63477d`.
+La correlación de esas ejecuciones con run_once/CLI, los12 pins predue y las
+cinco tablas iguales sustenta cero POST social adicional de ESOS procesos;
+no es contador global, cero HTTP de control, igualdad de todaDB ni lectura
+directa del outbox.
+
+Las30 entregas futuras26–55 siguen held/frequency_limit, sin start, claim,
+intento, lease, resultado o worker. Son10ciclos existentes para21–30Oct, no
+publicaciones ni elegibilidad garantizada; se reevalúan esas mismas filas al
+claim debido. Recibo `current-future-ten-cycles-receipt.json`, SHA256
+`a610d06daddbbdd37233aca3e4320907467e86dd525ecb765e99a8607ac7e822`.
+El siguiente es Cauce21Oct22:45–23:45Bogotá, entregas26/27/28, media53, con
+sus fechas originales. IG10, intentoIG4, vídeo2/revisión11 y Graf16Oct vencido
+conservan sus exclusiones. Los envíos históricos no se repitieron.
+
+La cuota app actual21Oct03:56UTC fue18%semanal usado/82%restante,
+ordinaryUsageAllowedtrue, cuenta actual terminada en6fd3. ai-usage Codex
+permanece desconocido por sondeo deliberadamente apagado, sin reactivarlo.
+Se reutilizaron agentes Codex nativos/heredados de esa misma cuenta en Kratos,
+con un escritor por archivo y revisión por área; no cloud, cambio de cuenta o
+proveedor, generación nueva de imágenes, gasto API o despliegue nuevo.
+La revisión estática de operadores detectó y corrigió localmente unP2 de
+intervalos del observador antes de su uso: V4 exige que el resultado esté dentro
+de su propia invocación; V3 se preservó y no se ejecutó contra esta evidencia.
+
+
+La revisión independiente del despacho real terminó **PASS ACOTADO**, sin P1/P2
+abiertos en las correlaciones actuales:2041comprobaciones mecánicas sobre46
+archivos, contratos y materiales recalculados y los dos CDN distintos vistos
+junto con original y referencia. El revisor sólo leyó y calculó localmente;
+no ejecutó operadores originales ni consultas remotas. Informe
+`koinonia-dispatch-independent-review.md`, SHA256
+`2fb7822a88a299c1008f7d9acc0b427784708348d61318c4bba869a08cf5cf96`;
+manifiesto `koinonia-dispatch-independent-manifest.json`, SHA256
+`efb6acb7b161e834759742d172c7ef9d8babafacb9035080acd28201cb828a89`.
+El tipo IMAGE de Instagram está capturado directamente; la attachment photo
+única de Facebook fue validada por la guarda del lector congelado, pero su
+subconjunto público no retiene attachments/type ni el cuerpo raw Graph. Los
+headers y el carácter anónimo del CDN se sustentan en el contrato de ejecución,
+no en captura de paquetes. Se conservan estos límites sin repetir lecturas.
+
+La consulta de cuota de cierre04:00:24–04:00:46UTC registró19%usado/81%restante
+para la misma cuenta y ai-usage Codex desconocido con sondeo apagado. No se
+cambió de cuenta/proveedor. El seguimiento diario21:45Bogotá permanece activo;
+la meta global y compound siguen incompletos, con X/TikTok y la publicación
+verificada de los 17 productos todavía pendientes de cobertura completa.

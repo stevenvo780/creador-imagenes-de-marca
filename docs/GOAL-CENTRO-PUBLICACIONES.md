@@ -1,9 +1,24 @@
 # Meta: Eikón como centro de marca y publicaciones
 
 Creada por instrucción del operador el **11 de octubre de 2026**, America/Bogota.
-Estado de trabajo: **plan aprobado; implementación con subagentes en curso**.
+Estado inicial al 11 de octubre: **plan aprobado; implementación con subagentes en curso**.
 La entrega de identidad y galería se conserva; el objetivo completo sigue pendiente. La meta del chat es el seguimiento principal; este documento
 conserva requisitos, avances y evidencia del repositorio.
+
+## Estado vigente — 21 de octubre, 03:57 UTC
+
+**Meta global incompleta y bloqueada.** Koinonía del 20 de octubre ya se publicó por el
+timer existente en los tres destinos Meta, con comprobación Graph, imágenes
+CDN inspeccionadas y cinco barridos posteriores sin cambios en las tablas
+seleccionadas. Quedan diez ciclos Meta existentes del 21 al 30 de octubre: 30 entregas
+retenidas por frecuencia y todavía sin inicio. El próximo es Cauce, el 21 de octubre,
+22:45–23:45 Bogotá, conservando las entregas 26/27/28.
+
+La planificación cubre los 17 productos junto con el histórico, pero no acredita
+los 17 publicados ni recurrencia en cinco cuentas. Brave sigue sin conexión;
+X/TikTok y los datos/logo del perfil Facebook Humanizar mantienen sus pendientes.
+Los apartados fechados posteriores conservan la historia de implementación;
+el detalle actual de Koinonía figura al final y en el registro de pruebas.
 
 ## Resultado esperado
 
@@ -799,3 +814,41 @@ correlaciones:42 fuentes recalculadas y medios realmente vistos. Conserva
 los límites API/CDN/archivos, la medición runtime anterior a la ventana y la
 meta global bloqueada. El siguiente ciclo existente es Koinonía20Oct22:45,
 con las mismas entregas23/24/25; no hay que recrearlo.
+
+
+## Corte del 21 de octubre — Koinonía20Oct verificada en Meta
+
+El timer existente publicó las mismas entregas23/24/25 en la invocación
+`0bf0d36267514668ba8b9bec0bfb2dce`,22:46:09–22:46:46Bogotá, con tres
+resultados publicados y exit0. El primer tick22:45 fue idle0; no se adelantó
+el envío ni hubo start manual. Graph confirmó tres posts y las descargas CDN
+anónimas200 mostraron el logo y composición correctos frente al original y
+referencia oficial. La fecha y el enlace proceden del proveedor, mientras
+published_at_utc/permalink continúan nulos en los recibos PG.
+
+- Facebook Systems: https://www.facebook.com/122127579183283523/posts/122128210719283523
+- Facebook Humanizar: https://www.facebook.com/1008644758939132/posts/1017574441379497
+- Instagram humanizar.news: https://www.instagram.com/p/DeveaqZFRd9/
+
+Las otras52 entregas y13 grupos seleccionados se conservaron. Cinco barridos
+idle0 completos quedaron entre dos snapshots de cinco tablas idénticas; junto
+con las fuentes y12 pins medidos antes de la ventana sustentan cero POST social
+adicional de esos procesos, sin extenderlo a tráfico global o toda la base.
+TicketIG6 revocado en ACK, sin GET posterior de su misma URLraw ni medición del
+fetch de Meta. Las protecciones de IG10, intento4, vídeo2 y Graf vencido siguen
+intactas. El detalle reproducible y hashes están en el registro de pruebas.
+
+La reserva original26–55 conserva10ciclos Meta para21–30Oct, held/frequency_limit
+sin inicio ni claim. Cauce21Oct22:45–23:45Bogotá es el próximo: se observan las
+mismas entregas26/27/28, sin recrear o mover fechas. La planificación de17
+productos no acredita17 publicados, cinco destinos o recurrencia indefinida.
+Brave sigue ausente; X/TikTok y el control total del perfil Facebook Humanizar
+mantienen las intervenciones ya preguntadas. No se usaron Chrome/IAB como
+sustitutos ni se amplió el gasto. La meta global permanece bloqueada e incompleta.
+
+
+La revisión independiente de Koinonía terminó PASS acotado sin P1/P2 abiertos:
+46fuentes recalculadas y2041comprobaciones mecánicas, con los dos CDN, original
+y referencia realmente vistos. No se amplía a una nueva consulta upstream,
+Brave, fetch de Meta, tráfico global, todaDB, cinco destinos o17productos. Se
+conservan la evidencia y las preguntas humanas pendientes, sin nuevos envíos.
