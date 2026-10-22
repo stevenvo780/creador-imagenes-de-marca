@@ -5,20 +5,20 @@ Estado inicial al 11 de octubre: **plan aprobado; implementación con subagentes
 La entrega de identidad y galería se conserva; el objetivo completo sigue pendiente. La meta del chat es el seguimiento principal; este documento
 conserva requisitos, avances y evidencia del repositorio.
 
-## Estado vigente — 21 de octubre, 03:57 UTC
+## Estado vigente — 22 de octubre, 03:56 UTC
 
-**Meta global incompleta y bloqueada.** Koinonía del 20 de octubre ya se publicó por el
-timer existente en los tres destinos Meta, con comprobación Graph, imágenes
-CDN inspeccionadas y cinco barridos posteriores sin cambios en las tablas
-seleccionadas. Quedan diez ciclos Meta existentes del 21 al 30 de octubre: 30 entregas
-retenidas por frecuencia y todavía sin inicio. El próximo es Cauce, el 21 de octubre,
-22:45–23:45 Bogotá, conservando las entregas 26/27/28.
+**Meta global incompleta y bloqueada.** Cauce del 21 de octubre ya se publicó por
+el timer existente en los tres destinos Meta, con comprobación Graph, imágenes
+CDN inspeccionadas y cinco idle0 posteriores completos con cinco tablas iguales.
+La correlación completa usa POST2, porque POST1 antecede al cierre del proceso
+publicado. Quedan nueve ciclos Meta existentes22–30Oct:27entregas retenidas
+por frecuencia y sin inicio. Aletheia22Oct22:45–23:45Bogotá es el próximo,
+conservando entregas29/30/31.
 
-La planificación cubre los 17 productos junto con el histórico, pero no acredita
-los 17 publicados ni recurrencia en cinco cuentas. Brave sigue sin conexión;
-X/TikTok y los datos/logo del perfil Facebook Humanizar mantienen sus pendientes.
-Los apartados fechados posteriores conservan la historia de implementación;
-el detalle actual de Koinonía figura al final y en el registro de pruebas.
+La planificación de17productos no acredita17publicados ni recurrencia en cinco
+cuentas. Brave sigue sin conexión; X/TikTok y los datos/logo del perfil Facebook
+Humanizar conservan sus pendientes. Los apartados fechados conservan historia;
+el detalle actual de Cauce figura al final y en el registro de pruebas.
 
 ## Resultado esperado
 
@@ -852,3 +852,34 @@ La revisión independiente de Koinonía terminó PASS acotado sin P1/P2 abiertos
 y referencia realmente vistos. No se amplía a una nueva consulta upstream,
 Brave, fetch de Meta, tráfico global, todaDB, cinco destinos o17productos. Se
 conservan la evidencia y las preguntas humanas pendientes, sin nuevos envíos.
+
+
+### Cauce21Oct: ejecución automática y verificación del22Oct
+
+El timer publicó las entregas26/27/28 dentro de su ventana original; no hubo
+start manual, fechas nuevas ni reenvíos. Los barridos22:45/22:46 fueron idle0.
+La invocación2394feab3c0047c294dc1ead9c865f97,22:47:03–22:48:44Bogotá, terminó
+completed_sweep3. GraphGET200 confirmó las dos páginas Facebook y humanizar.news
+con autor, caption y fecha exactos. Se descargaron tres CDN y se vieron las dos
+imágenes distintas con el original y logo, conservando texto y pie Humanizar.
+Es comprobación API/CDN/archivos, sin interfaz Brave. Los enlaces y hashes están
+en el registro de pruebas.
+
+Las otras52entregas y13grupos seleccionados se conservaron. La correlación del
+envío usa PRE→POST2: POST1 ya tenía tres ACK pero antecedía al FINISH por1.06s.
+POST1→POST2 sólo compara cinco tablas idénticas y cinco procesos idle0 completos.
+La evidencia sustenta cero POST social adicional de esos idle, sin extenderlo
+a tráfico global, todaDB, outbox o el tramo final de la invocación publicada.
+IGticket7 se revocó en ACK, sin GET de su misma URLraw ni medición del fetch de
+Meta. Las protecciones deIG10, intento4, vídeo2 y Graf vencido siguen intactas.
+La revisión independiente LOCAL terminó PASS acotado, sin P1/P2 nuevos, con
+2370 comprobaciones y 89 fuentes recalculadas. Vio los dos CDN, original y
+referencia; no hizo upstream ni ejecutó operadores originales. El PASS conserva
+los límites anteriores y no acredita cinco destinos, 17productos o envíos futuros.
+
+La reserva29–55 conserva nueve ciclos Meta22–30Oct held/frequency_limit,
+sin inicio ni claim. Aletheia22Oct22:45–23:45Bogotá es el próximo. La planificación
+de17productos no acredita17publicados, cinco destinos o recurrencia indefinida.
+Brave sigue ausente y se conservan las intervenciones humanas pendientes.
+No se usaron Chrome/IAB como sustitutos ni se amplió el gasto. El seguimiento
+diario sigue activo y la meta global permanece bloqueada e incompleta.

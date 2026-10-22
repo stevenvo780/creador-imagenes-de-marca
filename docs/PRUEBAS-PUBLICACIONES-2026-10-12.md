@@ -3,16 +3,17 @@
 Tenant Humanizar: 17. Fecha local: America/Bogota. Las publicaciones de prueba
 no acreditan todavía una recurrencia diaria activa en todas las redes.
 
-## Estado vigente — 21 de octubre, 03:57 UTC
+## Estado vigente — 22 de octubre, 03:56 UTC
 
-Koinonía, ciclo del 20 de octubre, se publicó automáticamente en Facebook
-Systems, Facebook Humanizar e Instagram dentro de su ventana original. Graph
-confirmó los tres posts y se descargaron e inspeccionaron las imágenes servidas.
-Cinco barridos posteriores completos terminaron idle0, con las cinco tablas
-seleccionadas sin cambios. El detalle y los límites están en el último apartado.
-El timer sigue activo. La cobertura global de cinco cuentas y 17 productos
-permanece **incompleta y bloqueada**; Brave continúa ausente y X/TikTok siguen
-con las intervenciones previamente solicitadas pendientes.
+Cauce, ciclo del 21 de octubre, se publicó automáticamente en Facebook Systems,
+Facebook Humanizar e Instagram dentro de su ventana original. Graph confirmó
+los tres posts y se descargaron e inspeccionaron las imágenes servidas. Cinco
+barridos idle0 completos quedaron entre dos snapshots de cinco tablas iguales.
+El detalle, la distinción entre ambos snapshots y los límites figuran al final.
+El timer sigue activo y quedan nueve ciclos Meta existentes para el 22–30 de
+octubre: 27 entregas retenidas por frecuencia y sin inicio. La cobertura global
+de cinco cuentas y 17 productos permanece **incompleta y bloqueada**. Brave
+continúa ausente y se conservan las intervenciones ya solicitadas de X/TikTok.
 
 Las tablas y estados fechados que siguen conservan su valor histórico. El timer
 apagado y la primera prueba de Instagram pendiente corresponden al 12 de octubre;
@@ -2248,3 +2249,103 @@ para la misma cuenta y ai-usage Codex desconocido con sondeo apagado. No se
 cambió de cuenta/proveedor. El seguimiento diario21:45Bogotá permanece activo;
 la meta global y compound siguen incompletos, con X/TikTok y la publicación
 verificada de los 17 productos todavía pendientes de cobertura completa.
+
+
+## Cauce21Oct — publicación automática y evidencia del 22 de octubre
+
+**Ciclo Meta completado; meta global incompleta.** Se conservaron las entregas
+26/27/28, revisiones30/31/32, decisiones27/28/29, campaña7, proyecto11 y marca113v4.
+Media53 es el JPEG de 1080×1350 y220534bytes, SHA256
+`50e5f3070d502424363fe0c057850bad96c73c97f2cd4af932c23cf171bf6bb8`.
+No se reimportó contenido, creó una revisión nueva, cambió una fecha ni inició
+manualmente el servicio. La ventana original fue21Oct22:45–23:45Bogotá.
+
+Los barridos de22:45 y22:46 terminaron idle0; no publicaron. Los límites PG de
+24horas se cumplían a22:46:12/24/33 según destino. La invocación automática
+`2394feab3c0047c294dc1ead9c865f97` corrió de22:47:03.650752 a22:48:44.034759,
+con completed_sweep3 y salida normal. Los starts fueron1792640832/0842/0851;
+son distintos de las fechas públicas siguientes, verificadas con GraphGET200.
+
+| Destino | ID remoto | Fecha pública en Bogotá | Enlace |
+|---|---|---|---|
+| Facebook Systems |1045986888587355_122128310061283523|21Oct22:47:14|[Publicación](https://www.facebook.com/122127579183283523/posts/122128310061283523)|
+| Facebook Humanizar |110421192090737_1018504701286471|21Oct22:47:23|[Publicación](https://www.facebook.com/1008644758939132/posts/1018504701286471)|
+| Instagram humanizar.news |18108880826209002|21Oct22:48:38|[Publicación](https://www.instagram.com/p/DeyDUdxDS5J/)|
+
+Graph confirmó autor y caption exactos. El lector multimedia acotado descargó
+los tres CDN mediante GET anónimo200. Facebook sirvió dos JPEG720×900 de35769bytes
+idénticos, SHA256
+`5184803b8a30a62606aee3272d1c19ba46bbcb1eaa79fd1f977bca4c1de0448b`.
+Instagram sirvió un JPEG1080×1350 de197403bytes, SHA256
+`b3320de6041bd202c8a9d36ae4f019337c078963005d123423850b255c78cb87`.
+El coordinador vio ambos archivos distintos, además del original y referencia:
+logo CauceV3, composición, textos y pie Humanizar íntegros. Es evidencia
+API/CDN e inspección de archivos; no acredita la interfaz de Brave. El subtipo
+photo de Facebook fue validado por la guarda del lector; el recibo público no
+retiene attachments/type ni el cuerpo rawGraph para una lectura posterior.
+
+El snapshot POST1, epoch1792640922.978037, ya contiene los tres ACK, pero antecede
+al FINISH de la invocación por unos1.06segundos. Por eso la correlación del envío
+usa PRE→POST2, epoch1792641166.455859, que sí contiene la invocación completa.
+POST1→POST2 se usa sólo para comparar las cinco tablas y los idle0 completos.
+No se cambió una captura ni se repitió una consulta para acomodar ese límite.
+
+Las otras52 entregas y13 grupos seleccionados permanecieron iguales. Sólo se
+agregaron tres claims/materiales, nueve eventos197–205 y ticketIG7, revocado
+al ACK1792640922. No se observó ni solicitó su misma URLraw; no se acredita
+404 ni se midieron bytes descargados por Meta. PG conserva published_at_utc y
+permalink nulos en result_json: fechas y enlaces públicos proceden de Graph.
+
+Entre POST1 y POST2 quedaron cinco idle0 completos:
+`5971486d79dc4491a6a960f48e767bfb`, `1bf75f79ccd34bc09b5c2252a592c750`,
+`384feacf19e646689b5b41b9e547efcd`, `a781962a26734cf8afa06d63540e8985` y
+`275c2dae16a344fbb08c4ade678dca06`. Las cinco tablas seleccionadas fueron
+idénticas:55deliveries/28claims/28materials/7tickets/171events, hash canónico
+`599d436fae280e18cec4237d40b2f553066f4629048805188b4c9241ded5f83f`.
+La correlación con run_once/CLI y12pins medidos antes de la ventana sustenta
+cero POST social adicional de esos procesos idle; no es un contador global,
+una lectura directa del outbox, igualdad de todaDB o cero HTTP de control.
+No incluye el cierre de la invocación publicada como si fuera un idle0.
+
+La comprobación previa actual cotejó58diagnósticos, actor/política/grants,
+revisión desplegada, doce fuentes, media53 por generaciónGCS1792378773498324,
+seis materiales locales y logo113v4. Instagram respondió como humanizar.news,
+con cuota1/100. Su primer lector de materiales se lanzó por error antes de
+existir el snapshot PG y se detuvo localmente en max(empty), antes de upstream.
+Se conservaron fallo e intención; una ejecución correctiva posterior al PG
+completó la lectura del objeto exacto. No se repitió una operación upstream
+ya completada. El wrapperV1 tenía un timeout que podía impedir finally;
+se preservó y corrigió antes de uso, con revisión local de nueve fuentes,
+246comprobaciones y49referencias. Estos controles no acreditan publicaciones
+por sí solos. La revisión independiente LOCAL de las evidencias reales terminó
+PASS acotado, sin P1/P2 nuevos: 2370 comprobaciones sobre 89 fuentes, con rehash
+de cierre y visión real de los dos CDN, original y referencia. No ejecutó
+operadores originales ni consultas remotas; no extiende el resultado a Brave,
+fetch de Meta, tráfico global, todaDB, cinco destinos, 17productos o futuros envíos.
+
+Recibos relativos a la raíz privada habitual, sin secretos en Git:
+
+- `daily-timer-20261022-cauce/remote-media-verify-20261022T035149521351-receipt.json`, SHA256`bd9dc6c016b1ce6516835890221d3f5c27769613484dacf9da36f3cfcbd66973`.
+- `recurrence-20261022/cauce-cdn-visual-review-receipt.json`, SHA256`075e7b3525130027abfd4981643fc0f06dcd73b5ce7b0c194044219e636b4110`.
+- `recurrence-20261022/cauce-dispatch-correlation-receipt.json`, SHA256`e29fea78afcd7d2c303a5302c8618374a6afe993eebc128d9f991c6f4ce878fc`.
+- `recurrence-20261022/cauce-postdispatch-idle-comparison-20261022T035623753687-receipt.json`, SHA256`627aa7e7a0b72a5ffe29010e0279c65770ea5068969fd101ffc311b673882c3e`.
+- `recurrence-20261022/current-future-nine-cycles-receipt.json`, SHA256`d832023a40245826a3e4ea9e1d6ae3de23b206743a57c295ed165450ed9fe254`.
+
+Quedan nueve ciclos existentes22–30Oct:27filas29–55 held/frequency_limit,
+sin start/claim/attempt/lease/worker/resultado. Aletheia22Oct22:45–23:45Bogotá
+es el próximo; media54 y entregas29/30/31 conservan sus fechas y contratos.
+El claim reevalúa las mismas filas; no se garantiza elegibilidad futura.
+La planificación de17productos sigue separada de publicación y recurrencia.
+Los holds deIG10, intentoIG4, vídeo2 y Graf vencido continúan intactos.
+Brave sigue ausente del inventario actual; sólo se observó Chrome5 y no se
+operó. No se repitieron las preguntas humanas ni se usó Chrome/IAB como
+sustituto. X/TikTok y el control total del perfil Facebook Humanizar conservan
+sus pendientes. No hubo redeploy, generación, gasto API nuevo o POST social
+del operador; el envío real lo hizo el timer existente. El seguimiento diario
+permanece activo y la meta completa permanece bloqueada e incompleta.
+
+
+Revisión independiente de Cauce:
+
+- `recurrence-20261022/cauce-dispatch-independent-review.md`, SHA256`09048a0bd71cc232a1cd1bf287c42552e95ebddfed544234db6ed141200e938e`.
+- `recurrence-20261022/cauce-dispatch-independent-review-manifest.json`, SHA256`e42e0ffccd1be575ee77810796f85947b44504492ae578836b8a36fd1d81450f`.
