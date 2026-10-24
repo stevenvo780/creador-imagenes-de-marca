@@ -883,3 +883,33 @@ de17productos no acredita17publicados, cinco destinos o recurrencia indefinida.
 Brave sigue ausente y se conservan las intervenciones humanas pendientes.
 No se usaron Chrome/IAB como sustitutos ni se amplió el gasto. El seguimiento
 diario sigue activo y la meta global permanece bloqueada e incompleta.
+
+
+### Aletheia22Oct: publicación verificada el24Oct sin reenvío
+
+El timer publicó29/30/31 en22Oct22:48–22:49Bogotá, invocación
+f9cc60bc9e5a4a44b9d361ca672aeb4c completed_sweep3/exit0. GraphGET200 confirmó
+las dos páginas Facebook e Instagram humanizar.news con autor, caption y
+fechas correctos. Los tres CDN devolvieron200; se vieron dos imágenes distintas
+frente al original y logo, con textos y pieHumanizar intactos. La verificación
+se recuperó por lecturas el24Oct después de una interrupción de la observación;
+no hubo start manual ni reenvío. Los enlaces y hashes están en el registro de
+pruebas. Es evidencia API/CDN/archivos, sin interfaz Brave ni medición del fetch
+de Meta o GET de la misma URLraw del ticket8, revocado en ACK.
+
+Otras52entregas y13grupos seleccionados se conservaron. Siete procesos idle0
+completos quedaron entre dos snapshots del24Oct de cinco tablas idénticas;
+la correlación sólo sustenta cero POST social adicional de esos procesos,
+sin extenderlo a todaDB, outbox directo o tráfico global. Se conservan todas
+las protecciones y límites históricos. La meta global de cinco destinos y17
+productos sigue bloqueada e incompleta.
+
+La revisión independiente de Aletheia terminó PASS acotado, sin P1/P2, con33
+fuentes recalculadas y cuatro imágenes vistas. No hizo upstream ni amplía los
+límites anteriores. La reserva restante original32–55 corresponde a ocho ciclos
+Meta23–30Oct. Apothḗke23Oct22:45–23:45Bogotá conserva sus mismas filas32/33/34;
+se verificaron59condicionesPG,12pins, perfil/cuotaIGGET200 y media55 exacta por
+generación1792379277124580. El observador readonly revisado quedó vivo con
+recibo de inicio24Oct03:03:59UTC; espera la ventana original, sin iniciar worker
+ni repetir envíos. Esta preparación todavía no demuestra la publicación de
+Apothḗke. Brave continúa ausente y se conservan las preguntas humanas pendientes.

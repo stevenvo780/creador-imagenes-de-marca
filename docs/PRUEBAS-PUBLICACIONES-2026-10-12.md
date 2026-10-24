@@ -2349,3 +2349,67 @@ Revisión independiente de Cauce:
 
 - `recurrence-20261022/cauce-dispatch-independent-review.md`, SHA256`09048a0bd71cc232a1cd1bf287c42552e95ebddfed544234db6ed141200e938e`.
 - `recurrence-20261022/cauce-dispatch-independent-review-manifest.json`, SHA256`e42e0ffccd1be575ee77810796f85947b44504492ae578836b8a36fd1d81450f`.
+
+
+## Verificación recuperada el24Oct — Aletheia22Oct publicada por el timer
+
+Las entregas originales29/30/31 se publicaron dentro de22:45–23:45Bogotá,
+sin start manual ni reenvío. Los tres ticks22:45/22:46/22:47 fueron idle0;
+la invocación `f9cc60bc9e5a4a44b9d361ca672aeb4c`,22:48:13.699–22:49:02.610,
+terminó completed_sweep3/exit0. Los starts1792727302/7314/7326 superaron
+los límites de frecuencia observados previamente; no se agregaron eventosheld.
+La observación interactiva del23Oct se interrumpió antes de la ventana, por lo
+que se recuperaron sólo lecturas el24Oct: no se atribuye observación en vivo
+al momento del envío ni se ejecutaron otra vez los envíos.
+
+GraphGET200 confirmó autor, caption exacto, IDs y fechas del proveedor:
+
+| Destino | ID | Fecha Bogotá | Enlace |
+| --- | --- | --- | --- |
+| Facebook Systems |1045986888587355_122128412079283523|22Oct22:48:24|https://www.facebook.com/122127579183283523/posts/122128412079283523|
+| Facebook Humanizar |110421192090737_1019457814524493|22Oct22:48:36|https://www.facebook.com/1008644758939132/posts/1019457814524493|
+| Instagram humanizar.news |18131792683695958|22Oct22:48:56|https://www.instagram.com/p/De0oQm2lfAd/|
+
+Los tres CDN anónimos devolvieron200. Facebook sirvió dos JPEG720x900/35158B
+idénticos SHA256 `66170f3515234cd6704b517ab7ad5fa88e3acfe18578e7b83d61f19b56bdaac0`;
+Instagram1080x1350/202007B SHA256
+`1d0ca16b75cd4ae2845dbb8b8b52fdce2f5a7f05103c0cbe9b7913af5dbe6e76`.
+Se vieron ambas imágenes distintas, JPEG54 original y logo115v4: composición,
+textos y pieHumanizar conservados. Es evidencia API/CDN/archivos, sin interfaz
+Brave. Los enlaces y fechas proceden deGraph; `published_at_utc` y `permalink`
+siguen nulos en el resultadoPG. La guarda valida photo/IMAGE en memoria;
+no se retuvo rawbodyGraph ni attachments/typeFacebook. TicketIG8 revocado
+al ACK1792727341, sin observar o solicitar su misma URLraw, sin404 ni medición
+del fetch de Meta.
+
+PRE→POST2 conservó otras52entregas y13grupos seleccionados; sólo añadió
+3claims/materiales,9eventos206–214 yticket8. POST1→POST2 del24Oct, epochs
+1792810225.572857–1792810654.560624, dejó idénticas cinco tablas seleccionadas:
+55deliveries/31claims/31materials/8tickets/180events, SHA canónico conjunto
+`29ec70ec7cffd1895683910ad3fd5144f23771d9523705e879e2316805676fa2`.
+Siete invocaciones idle0 completas quedaron dentro del intervalo. Junto con
+run_once/CLI y12pins medidos23Oct03:04UTC, esa correlación sustenta cero POST
+social adicional de esos procesos; no es un contador global, todaDB, outbox
+directo o medición remota actual del runtime después del envío. El journal usa
+dos intervalos disjuntos:22Oct22:44–23:46Bogotá y24Oct02:48–02:57UTC. No cubre
+el hueco entre ellos. Los hashes del RAW y resumen se conservan por separado.
+
+Recibos reproducibles, sin credenciales ni URLs firmadas:
+
+- `remote-media-verify-20261024T025601900337-receipt.json`: `fd0cb57cd8c724fc8ba2fe691f83aa95a98c178b9e4eef35c2e50f7fd41d4b68`.
+- `aletheia-cdn-visual-review-receipt.json`: `5e8e6e072af08d82910c052da447eb89606c4e1a1e32fa090ee2a0006829821f`.
+- `aletheia-dispatch-correlation-receipt.json`: `e5e6268e4236f7f6cad8219e4dab27e1438cfa13dbfa7c5d92f64d6a4868a679`.
+- `aletheia-postdispatch-idle-comparison-20261024T030026108204-receipt.json`: `9b06be5342e6e41326b7301553bd78cb61c5750aed7d74b6fd9eece1ff0cd892`.
+
+Las proteccionesIG10, intento4, vídeo2 y Graf16Oct vencido permanecen intactas.
+La meta de cinco destinos y17productos continúa bloqueada e incompleta.
+
+La revisión independiente local terminó **PASS acotado**, sin P1/P2 reproducidos:
+33fuentes recalculadas, cuatro imágenes realmente vistas, contratos,3/3resultados,
+9eventos,52otrasfilas/13grupos y cinco tablas con siete idle completos. Informe
+`aletheia-dispatch-independent-review.md` SHA256
+`0256bf1295f6eaa3cb6aeba525251f1b6501afa626be0eab5187e344f2beded4`; manifiesto
+`aletheia-dispatch-independent-review-manifest.json` SHA256
+`a2934d5f40008be014fda1ec9a8e4ab63b096dfa4009220b97fa45c4723900f0`.
+El revisor no hizo consultas upstream ni ejecutó main originales. El PASS no
+amplía los límites anteriores ni acredita cinco destinos o17productos.
