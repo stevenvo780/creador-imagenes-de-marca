@@ -913,3 +913,42 @@ generación1792379277124580. El observador readonly revisado quedó vivo con
 recibo de inicio24Oct03:03:59UTC; espera la ventana original, sin iniciar worker
 ni repetir envíos. Esta preparación todavía no demuestra la publicación de
 Apothḗke. Brave continúa ausente y se conservan las preguntas humanas pendientes.
+
+
+### Apothḗke, 23 de octubre: publicación automática y verificación
+
+El timer publicó las mismas entregas 32/33/34 a las 22:49 de Bogotá, dentro
+de la ventana original y después del límite de frecuencia. La invocación
+`fa87205894ef4980aafef8178f54bfa5` terminó con tres entregas procesadas y
+salida 0. Graph respondió 200 para las dos páginas de Facebook e Instagram,
+con autor, texto y fechas correctos. Las tres descargas públicas de imágenes
+respondieron 200. La inspección de los dos archivos distintos contra el
+original y la referencia compartida confirmó el logo, los textos y el pie de
+Humanizar. Los enlaces y hashes están en el registro de pruebas.
+
+Es evidencia de API, CDN y archivos inspeccionados. No se comprobó la interfaz
+de Brave, el volumen descargado por Meta ni la respuesta de la misma URL del
+ticket 9, revocado en el ACK. No hubo inicio manual, reenvío o cambio de fechas,
+guardas o política.
+
+El observador de sólo lectura completó sus fases y terminó con salida 0. Se
+conservaron las otras 52 entregas y 13 grupos seleccionados. Cuatro procesos
+completos sin entregas y cinco tablas seleccionadas iguales sustentan que
+esos procesos no añadieron publicaciones. Este resultado no mide todo el
+tráfico, toda la base de datos ni directamente el outbox. Las protecciones
+históricas siguen intactas.
+
+La reserva original de entregas 35–55 tiene siete ciclos de Meta, del 24 al
+30 de octubre, retenidos por frecuencia y sin inicio o claim. Gravitatoria
+conserva las filas 35/36/37 y su ventana del 24 de octubre, 22:45–23:45 de
+Bogotá. La planificación de 17 productos sigue sin acreditar su publicación
+recurrente o los cinco destinos. Brave no aparece conectado; X y TikTok
+conservan las intervenciones humanas pendientes. El seguimiento diario sigue
+activo y la meta global continúa bloqueada e incompleta.
+
+La revisión independiente local de las publicaciones reales terminó con PASS
+acotado y sin P1/P2 abiertos. Incluye inspección propia de cuatro imágenes y
+reconstrucción de contratos, snapshots y journal. El informe y su manifiesto
+están identificados por SHA en el registro de pruebas. La revisión conserva
+los límites de API, archivos y código medido antes de la ventana; no acredita
+Brave, tráfico global o el conjunto de cinco destinos y 17 productos.

@@ -2413,3 +2413,99 @@ La revisión independiente local terminó **PASS acotado**, sin P1/P2 reproducid
 `a2934d5f40008be014fda1ec9a8e4ab63b096dfa4009220b97fa45c4723900f0`.
 El revisor no hizo consultas upstream ni ejecutó main originales. El PASS no
 amplía los límites anteriores ni acredita cinco destinos o17productos.
+
+
+## Corte del 24 de octubre — Apothḗke publicada automáticamente el 23
+
+Las mismas entregas 32/33/34, revisiones 36/37/38 y decisiones 33/34/35 se
+publicaron en la ventana original de 22:45–23:45, hora de Bogotá. No se
+rearmaron filas, cambiaron fechas o hicieron inicios manuales. La invocación
+`fa87205894ef4980aafef8178f54bfa5`, de 22:49:06.074 a 22:49:51.970, terminó
+con `completed_sweep`, tres entregas procesadas y salida 0. Los inicios fueron
+1792813750/3762/3776 y los ACK 1792813758/3772/3790. Los barridos previos fueron
+`idle/0` y no añadieron eventos de retención. El claim reevaluó las mismas filas
+después del límite de 1440 minutos, sin borrar consumos o guardas.
+
+Graph respondió 200 y confirmó autor, texto exacto, ID y fecha del proveedor:
+
+| Destino | ID | Fecha en Bogotá | Enlace |
+| --- | --- | --- | --- |
+| Facebook Systems | 1045986888587355_122128506609283523 | 23Oct 22:49:13 | https://www.facebook.com/122127579183283523/posts/122128506609283523 |
+| Facebook Humanizar | 110421192090737_1020394894430785 | 23Oct 22:49:25 | https://www.facebook.com/1008644758939132/posts/1020394894430785 |
+| Instagram humanizar.news | 18195748291399300 | 23Oct 22:49:47 | https://www.instagram.com/p/De3NJ0WkdDD/ |
+
+Las tres descargas anónimas de CDN respondieron 200. Facebook sirvió dos
+JPEG idénticos de 720×900 y 40989 bytes, SHA256
+`96e1875d484d195105a6e5c28bc2f16e26f43b907b39860e7b88caf8f846d729`.
+Instagram sirvió un JPEG de 1080×1350 y 230801 bytes, SHA256
+`46ad725f0873cc0ac9db3976e9d624d25cba46e24258a905899828911b8c046d`.
+Se inspeccionaron las dos imágenes distintas, el original 55 y la referencia
+compartida Mouseîon 116v4. El logo, las estanterías, las cajas, el portapapeles,
+los textos y el pie de Humanizar se conservaron íntegros. La referencia sigue
+siendo compartida; no se atribuye un logo exclusivo.
+
+Es evidencia de API, CDN y archivos inspeccionados, sin interfaz Brave.
+`published_at_utc` y `permalink` siguen nulos en el resultado de PostgreSQL;
+las fechas y enlaces proceden de Graph. El lector validó photo/IMAGE mediante
+su guarda, sin retener el cuerpo Graph ni attachments/type de Facebook.
+El ticket 9 de Instagram se revocó en el ACK 1792813790. No se observó ni pidió
+su misma URL raw, no se midió la descarga de Meta ni se comprobó una respuesta 404.
+
+La comparación PRE→POST2 conservó las otras 52 entregas y 13 grupos
+seleccionados. Sólo añadió tres claims y sus materiales, nueve eventos
+215–223 y el ticket 9. Entre los epochs de PostgreSQL 1792813878.88394 y
+1792814155.073355 quedaron cuatro invocaciones completas `idle/0`, con cinco
+proyecciones idénticas: 55 deliveries, 34 claims, 34 materials, 9 tickets y
+189 events. SHA canónico conjunto:
+`79dd45ca8a9dc400c95dd0243e21dcb289e36801a3526a792afe3584b0679b20`.
+La correlación de run_once/CLI y 12 fuentes medidas el 24Oct a las 02:59 UTC,
+antes de la ventana, sustenta cero POST social adicional de esos cuatro procesos.
+No mide un contador global, todo el tráfico HTTP, toda la base de datos o
+directamente el outbox; tampoco es una lectura remota del runtime posterior
+al despacho.
+
+El observador persistente de sólo lectura completó sus fases a las 03:58:36 UTC,
+con salida 0, sin repetir operaciones ni iniciar el worker. Su recibo conserva
+`visual_review_complete=false` e `independent_review_complete=false`, pues esas
+tareas posteriores se acreditan por separado. Los originales no se modificaron.
+El wrapper recibió el baseline actual de Aletheia por ruta y SHA; la lectura
+de materiales dependió del snapshot de PostgreSQL terminado con limpieza.
+El preflight real confirmó 59/59 comprobaciones de PostgreSQL, las 12 fuentes,
+perfil y cuota de Instagram con GET 200 (uso 1/100) y la media 55 exacta por
+generación 1792379277124580. La consulta a due+600 fue una hipótesis, sin nuevo
+horario ni garantía futura. No se cambiaron producción, credenciales, política
+o cola.
+
+Recibos reproducibles:
+
+- Graph/CDN `remote-media-verify-20261024T035332121609-receipt.json`: `24514c09fcbe22dfea78abfec8cde4b0cb951197d94e1f793d10f20e296150c5`.
+- Visual `apotheke-cdn-visual-review-receipt.json`: `47bd9d052a4228c9539bd87af0eb31ae8693cb4066e132453fa55db5ebb8c3d3`.
+- Correlación `apotheke-dispatch-correlation-receipt.json`: `8c8c024a566491219c0060b3060fccebe69f825d01f0c50f3cbcb1f847b1ffab`.
+- Idle `apotheke-postdispatch-idle-comparison-20261024T035835999984-receipt.json`: `48be4a832844cefcec429a12369f63670f5d330152d31101988e9afb9ea40f79`.
+- Observador `watcher-completed-receipt.json`: `3e365b1e3063fdfdab25bd6a1e3024955de631e8d68c2a9e17c4ed844137731d`.
+- Reserva `current-future-seven-cycles-receipt.json`: `2eb467a40523835cb447631d34943ae81ab5e1e9cdd9c74b3c6ad441dde329b7`.
+
+La reserva original 35–55 conserva siete ciclos del 24 al 30Oct: Gravitatoria,
+Prizma, Práxis, Érgon, Systems, News y Sinergia. Las 21 filas siguen
+`held/frequency_limit`, sin inicio, claim, intento, lease, resultado o worker;
+no hay claims futuros en el snapshot 1792814155.073355. No se recrean filas ni
+se mueven fechas. Es planificación, sin garantía de publicación futura o
+cobertura recurrente de los 17 productos. Brave sigue ausente; no se operaron
+Chrome o IAB. X y TikTok conservan las intervenciones humanas ya preguntadas.
+La meta de cinco destinos y 17 productos continúa bloqueada e incompleta, con
+el seguimiento diario activo. No hubo despliegue, gasto nuevo, uploads nativos,
+renovación de grants, respaldo o restauración rutinarios.
+
+La revisión independiente local cerró **PASS acotado de publicación real**, sin
+P1/P2 abiertos. Cotejó 74 evidencias, nueve fuentes y nueve fases, inspeccionó
+cuatro imágenes propias y reconstruyó contratos, snapshots y journal sin
+consultar upstream ni ejecutar los operadores originales. Su lectura del
+runtime se limita al preflight de las 02:59 UTC; no hay relectura remota
+posterior. No amplía las conclusiones a Brave, cinco destinos, 17 productos,
+tráfico global o descarga de Meta. Informe
+`apotheke-dispatch-independent-review.md`, SHA256
+`3e3532d31f7a88a6941bdc20eefdb744cb844b0287d6c97dec072d39eb641a9f`;
+manifest `apotheke-dispatch-independent-review-manifest.json`, SHA256
+`758371aac15bc0cba5c19f621b0a5e98a32b4969e7935d3d3cebe1acf9280be0`.
+Los recibos originales del observador conservan sus booleanos sin alterar;
+el informe y el suplemento visual acreditan las tareas posteriores.
