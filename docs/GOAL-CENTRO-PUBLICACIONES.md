@@ -952,3 +952,45 @@ reconstrucción de contratos, snapshots y journal. El informe y su manifiesto
 están identificados por SHA en el registro de pruebas. La revisión conserva
 los límites de API, archivos y código medido antes de la ventana; no acredita
 Brave, tráfico global o el conjunto de cinco destinos y 17 productos.
+
+
+### Gravitatoria, 24 de octubre: tres publicaciones verificadas y límite del journal
+
+El timer publicó las entregas originales 35/36/37 a las 22:49–22:50 de Bogotá,
+dentro de la ventana 22:45–23:45 y respetando la frecuencia. La invocación
+`c8a63e3ddf604fb984084a966cac1de9` terminó con tres entregas procesadas y
+salida normal. Graph confirmó autor, texto y fechas de las dos páginas de
+Facebook e Instagram. Las tres imágenes públicas respondieron 200; la
+inspección del original, la referencia y los dos CDN distintos confirmó
+logo, textos, composición y pie de Humanizar. Los enlaces y hashes constan
+en el registro de pruebas. No hubo inicio manual ni reenvío.
+
+Es evidencia de API, CDN y archivos inspeccionados, sin interfaz Brave.
+El ticket 10 de Instagram se revocó en el ACK; no se probó su misma URL raw
+ni se midió la descarga de Meta. La reserva original del 25 al 30 de octubre
+conserva seis ciclos y 18 entregas retenidas por frecuencia, sin inicio o claim.
+El próximo es Prizma, con sus mismas filas 38/39/40 y ventana 22:45–23:45.
+
+El observador terminó cerrado al fallar su comparador local: una salida
+`idle/0` anterior al primer snapshot posterior no conserva identificador de
+invocación. No se atribuye por proximidad horaria ni se presenta ese comparador
+como aprobado. Las lecturas remotas ya terminadas se conservaron sin repetir.
+Las publicaciones verificadas y ese límite de trazabilidad son resultados
+distintos. El suplemento local posterior conserva las otras 52 entregas y
+13 grupos; valida cinco procesos completos con ID dentro de dos snapshots
+de cinco tablas iguales. La correlación con run_once/CLI sustenta cero POST
+social adicional de esos cinco procesos, sin atribuir la salida sin ID ni
+ampliar la conclusión a todo el journal, el tráfico o la base de datos.
+El fallo original y el defecto de metadata permanecen documentados.
+
+Brave sigue sin aparecer conectado. Las intervenciones pendientes de X, TikTok y
+control total de la página Humanizar se conservan, sin nuevas solicitudes
+duplicadas. La meta de recurrencia en cinco destinos y 17 productos sigue
+bloqueada e incompleta; el seguimiento diario permanece activo y sin gasto nuevo.
+
+La revisión independiente REAL cerró PASS acotado para las tres publicaciones
+y los cinco idle completos. La observación de metadata permanece abierta y
+el collector/correlador original conserva su fallo. El informe y manifiesto
+fijan 95 archivos, 11 fuentes y seis inspecciones visuales propias; sus hashes
+están en el registro de pruebas. No acredita el journal completo, Brave,
+tráfico global, descarga de Meta o el conjunto de cinco destinos y 17 productos.

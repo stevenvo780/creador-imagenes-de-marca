@@ -2509,3 +2509,113 @@ manifest `apotheke-dispatch-independent-review-manifest.json`, SHA256
 `758371aac15bc0cba5c19f621b0a5e98a32b4969e7935d3d3cebe1acf9280be0`.
 Los recibos originales del observador conservan sus booleanos sin alterar;
 el informe y el suplemento visual acreditan las tareas posteriores.
+
+
+## Gravitatoria, 24 de octubre: publicación automática y verificación del 25Oct
+
+Las filas originales 35/36/37, revisiones 39/40/41 y decisiones 36/37/38,
+conservaron media 56 y su ventana 22:45–23:45 de Bogotá. El JPEG de
+1080×1350 y 385116 bytes tiene SHA256
+`9767a744703125bf8baea0f5a97040418c8041fb191be640d3f6441455c59053`.
+La invocación automática `c8a63e3ddf604fb984084a966cac1de9` comenzó a
+las 22:49:02.777807 y terminó a las 22:50:05.711310 de Bogotá, con
+`completed_sweep/processed=3`. Los inicios 1792900160/0175/0189 y los ACK
+1792900171/0184/0203 quedaron dentro de la ventana y después de los límites
+de frecuencia. No hubo inicio manual, nueva subida o cambio de fechas.
+
+Graph respondió 200 con autor, texto exacto, ID y fecha:
+
+| Destino | ID | Fecha de Graph en Bogotá | Enlace |
+| --- | --- | --- | --- |
+| Facebook Systems | 1045986888587355_122128595217283523 | 24Oct 22:49:22 | https://www.facebook.com/122127579183283523/posts/122128595217283523 |
+| Facebook Humanizar | 110421192090737_1021313434338931 | 24Oct 22:49:38 | https://www.facebook.com/1008644758939132/posts/1021313434338931 |
+| Instagram humanizar.news | 18135271582655056 | 24Oct 22:49:59 | https://www.instagram.com/p/De5x-GOlSIs/ |
+
+Los tres CDN anónimos respondieron 200. Facebook sirvió dos JPEG idénticos
+de 720×900 y 56085 bytes, SHA256
+`57b2bf7c050f6a7a2550288afbb83a9f655cc4361341d035dc824e40ca606ed9`.
+Instagram sirvió JPEG de 1080×1350 y 356634 bytes, SHA256
+`12396be3c606697cd30a29eb21f54ebc6df13e8a95bd47e8222b8c10752125cb`.
+Coordinador y revisor abrieron los dos CDN distintos, el original y la
+referencia 119v4: cubo azul, textos, red de comercios, composición y pie
+Humanizar íntegros. Gravitatoria conserva la descripción actual de comercios;
+el conflicto con el catálogo heredado de logística sigue reconocido, sin
+cambiar fuentes públicas ni trasladar esa promesa antigua al contenido.
+
+Es evidencia API/CDN/archivos, sin interfaz Brave. Los campos
+`published_at_utc` y `permalink` del resultado PostgreSQL siguen nulos;
+las fechas y enlaces proceden de Graph. El lector validó photo/IMAGE mediante
+su guarda, sin conservar rawbodyGraph ni attachments/type de Facebook.
+El ticket 10 de Instagram se revocó en el ACK 1792900203. No se observó ni
+solicitó su misma URL raw, no se midió el fetch de Meta ni se probó un 404.
+Las cabeceras del CDN no son una captura de paquetes.
+
+El observador de sólo lectura completó las cinco fases remotas originales,
+sin repetirlas. Después falló cerrado el comparador local, con salida 1 y
+evento `stopped_closed_without_retry` a las 04:03:33.389218 UTC. No ejecutó
+el comparador idle original ni creó un recibo de finalización satisfactoria.
+La sesión 88634 devolvió 143 y el PID 753139 dejó de existir; la causa de esa
+diferencia de códigos permanece desconocida. Estos datos no se convierten
+en éxito del observador.
+
+El journal final conserva una salida `idle/0` sin identificador de invocación
+a epoch 1792900404.530621. Aunque cae entre START y FINISH de
+`cdd2a9d9ad954b43a7345939aa81ab4c`, no se le atribuye por hora, unidad o PID.
+Está antes de POST1 y queda excluida de cualquier prueba de procesos completos.
+Se conserva el fallo del validador original. Un suplemento nuevo, ejecutado
+una sola vez y sólo localmente después de revisión estática independiente,
+validó por separado la invocación positiva con ID literal y los idle completos
+con ID dentro de POST1→POST2, sin ampliar esa conclusión a todo el journal.
+
+PRE→POST2 conservó las otras 52 entregas y 13 grupos seleccionados, con tres
+claims/materiales, nueve eventos 224–232 y el ticket 10 nuevos. Entre los
+epochs POST1 1792900584.080364 y POST2 1792900877.064136 quedaron cinco
+procesos completos `idle/0`, todos con START, resultado y FINISH identificados:
+`509b57a589094d2f82c03dba0759ea1c`, `4109ffcee341430d8fc7ca0f251bae8c`,
+`8a0300dded66418596834afeacfcea42`, `7cb91a7807a042af902b830a6b308267`
+y `c35e34b9f02144888b31784b2e5fbbb3`. Las cinco tablas seleccionadas son
+idénticas: 55 deliveries, 37 claims, 37 materials, 10 tickets y 198 events;
+SHA canónico conjunto `b1866ecf38bd1e4fe0e37a3888fb211045683076c5612144ff449625ecb149ba`.
+La correlación con run_once/CLI y 12 fuentes medidas antes de la ventana
+sustenta cero POST social adicional de esos cinco procesos. No es un contador
+global, una lectura directa del outbox, igualdad de toda la base de datos o
+una prueba de todas las invocaciones del journal. El resultado sin ID queda
+sin atribuir, fuera de esa prueba; no se declara resuelto el defecto de metadata.
+
+Recibos ya cerrados:
+
+- Graph/CDN `remote-media-verify-20261025T035842352321-receipt.json`: `75a75352322478bfadeca57861722e74a78228e0a9c62ef4310eccd1242c41d1`.
+- Visual `gravitatoria-cdn-visual-review-receipt.json`: `a6d208590b423a1787e19bba92c8943ff4ae67c086d38671bd8dc070484c2b7f`.
+- Terminal `watcher-terminal-observation-receipt.json`: `42d270df76eed7f5840083d113b32fc537445d9e3e293f2e460c1aef6df77381`.
+- Reserva `current-future-six-cycles-receipt.json`: `f5fe08bd8dc39b541b0f4e65966f8203b8157e26bb6d50c20bf1b5fcb419f2d9`.
+- Suplemento local `gravitatoria-bounded-local-supplement-20261025T041057370655-receipt.json`: `34726d8f0f2b35a391d0a2224a24022383619ac076f93b5152438e028608dd5c`.
+- Ejecución local `bounded-local-supplement-execution-receipt.json`: `6d48552802756f212403aca86a9d6baf602bd84e0d3aac05badffc503aa3ec2f`.
+- Revisión estática del suplemento `gravitatoria-bounded-supplement-static-review.json`: `9585e829e03ba79cdbdfd27dc061c926eae77b57de0f851af1bc88ebca509fe9`.
+
+El snapshot POST2, epoch 1792900877.064136, confirma seis ciclos originales
+del 25 al 30Oct y 18 entregas 38–55, iguales al PRE: held/frequency_limit,
+sin inicio, claim, intento, lease, worker o resultado. Prizma es el próximo
+con las mismas filas 38/39/40 y ventana 25Oct22:45–23:45 de Bogotá.
+La elegibilidad se reevalúa en la misma fila; no se recrea, reimporta o mueve
+una fecha para evitar el hold. Las protecciones históricas permanecen intactas.
+
+El preflight comprobó 59 condiciones PostgreSQL, 12 fuentes del runtime,
+perfil y cuota de Instagram GET 200 (uso 1/100) y media 56 exacta por generación
+1792379312480495. Los pins corresponden al preflight 25Oct03:00–03:01 UTC,
+sin relectura remota postdispatch. No hubo nuevos ciclos, MCP, despliegue,
+renovación de grants, backup, restauración, uploads nativos o gasto nuevo.
+Brave continúa ausente, sin sustituirlo con Chrome o IAB. X y TikTok conservan
+las intervenciones ya preguntadas. La meta global de cinco destinos y
+17 productos continúa bloqueada e incompleta, con seguimiento diario activo.
+
+La revisión independiente REAL cerró **COMPLETA ACOTADA: PASS de los segmentos
+A y B**, con la observación de metadata expresamente abierta y sin reparación
+declarada. Fijó 95 archivos y 11 fuentes actuales, cotejó nueve cadenas readonly
+y el suplemento local, e inspeccionó seis imágenes personalmente. No ejecutó
+upstream ni los operadores originales. El collector/correlador original sigue
+NO PASS. Informe `gravitatoria-dispatch-independent-review.md`, SHA256
+`eb9a5f6965323a3d6bc1ba0e9a594ae2a4a0dd5f162d43eedfe573cc507b7358`;
+manifest `gravitatoria-dispatch-independent-review-manifest.json`, SHA256
+`50ee31617424ad85e7395f2bd8f482e4c084f4e333e4d33314db006844e7ffed`.
+El dictamen no acredita todo el journal, tráfico global, outbox, Brave,
+descarga de Meta, cinco destinos, 17 productos o futuras publicaciones.
