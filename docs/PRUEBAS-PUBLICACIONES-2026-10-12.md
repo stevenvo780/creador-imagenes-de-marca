@@ -3,21 +3,25 @@
 Tenant Humanizar: 17. Fecha local: America/Bogota. Las publicaciones de prueba
 no acreditan todavía una recurrencia diaria activa en todas las redes.
 
-## Estado vigente — 22 de octubre, 03:56 UTC
+## Estado vigente — 28 de octubre, 22:00 UTC
 
-Cauce, ciclo del 21 de octubre, se publicó automáticamente en Facebook Systems,
-Facebook Humanizar e Instagram dentro de su ventana original. Graph confirmó
-los tres posts y se descargaron e inspeccionaron las imágenes servidas. Cinco
-barridos idle0 completos quedaron entre dos snapshots de cinco tablas iguales.
-El detalle, la distinción entre ambos snapshots y los límites figuran al final.
-El timer sigue activo y quedan nueve ciclos Meta existentes para el 22–30 de
-octubre: 27 entregas retenidas por frecuencia y sin inicio. La cobertura global
-de cinco cuentas y 17 productos permanece **incompleta y bloqueada**. Brave
-continúa ausente y se conservan las intervenciones ya solicitadas de X/TikTok.
+Prizma25Oct, Práxis26Oct y Érgon27Oct se publicaron por el timer existente en
+Facebook Systems, Facebook Humanizar e Instagram: **9/9 verificadas** mediante
+Graph200, CDN anónimo200, contratos/autor/texto/fecha e inspección de imágenes.
+La revisión independiente local terminó PASS acotado. Es evidencia API/CDN y
+archivos, sin interfaz Brave ni aceptación global de cinco destinos/17productos.
 
-Las tablas y estados fechados que siguen conservan su valor histórico. El timer
-apagado y la primera prueba de Instagram pendiente corresponden al 12 de octubre;
-no describen el estado vigente.
+Por petición humana se eliminó el seguimiento automático que reactivaba este
+chat. El timer de producción de server2 quedó sin modificar y activo, con tres
+ciclos originales pendientes28–30Oct (Systems, News y Sinergia). El destino de
+los agentes responsables sigue pendiente; no se activó una migración ni un nuevo
+programador. El detalle, los enlaces públicos, recibos, límites y reparto de
+responsabilidades figuran en el
+[traspaso del 28 de octubre](TRASPASO-AGENTES-PUBLICACIONES-2026-10-28.md).
+
+Las tablas y estados fechados que siguen son historia. Las referencias antiguas
+al seguimiento diario ACTIVE quedan sustituidas por la eliminación expresa del
+28 de octubre. La meta global sigue **incompleta y bloqueada**.
 
 ## Resultado comprobado por destino — corte histórico del 12 de octubre
 

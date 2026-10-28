@@ -5,20 +5,28 @@ Estado inicial al 11 de octubre: **plan aprobado; implementación con subagentes
 La entrega de identidad y galería se conserva; el objetivo completo sigue pendiente. La meta del chat es el seguimiento principal; este documento
 conserva requisitos, avances y evidencia del repositorio.
 
-## Estado vigente — 22 de octubre, 03:56 UTC
+## Estado vigente — 28 de octubre, 22:00 UTC
 
-**Meta global incompleta y bloqueada.** Cauce del 21 de octubre ya se publicó por
-el timer existente en los tres destinos Meta, con comprobación Graph, imágenes
-CDN inspeccionadas y cinco idle0 posteriores completos con cinco tablas iguales.
-La correlación completa usa POST2, porque POST1 antecede al cierre del proceso
-publicado. Quedan nueve ciclos Meta existentes22–30Oct:27entregas retenidas
-por frecuencia y sin inicio. Aletheia22Oct22:45–23:45Bogotá es el próximo,
-conservando entregas29/30/31.
+**Meta global incompleta y bloqueada.** Prizma25Oct, Práxis26Oct y Érgon27Oct
+se publicaron automáticamente en Facebook Systems, Facebook Humanizar e
+Instagram: nueve entregas originales comprobadas por Graph/CDN, archivos
+inspeccionados y revisión independiente local acotada. No hubo reenvíos durante
+esta auditoría. Las otras46entregas y ocho grupos comparables permanecen iguales.
 
-La planificación de17productos no acredita17publicados ni recurrencia en cinco
-cuentas. Brave sigue sin conexión; X/TikTok y los datos/logo del perfil Facebook
-Humanizar conservan sus pendientes. Los apartados fechados conservan historia;
-el detalle actual de Cauce figura al final y en el registro de pruebas.
+**El seguimiento que reactivaba este chat fue eliminado por petición expresa
+del operador el 28 de octubre. No recrearlo automáticamente.** El timer del
+publicador de server2 quedó sin modificar y activo. Su reserva original alcanza
+Systems28Oct, News29Oct y Sinergia30Oct: nueve filas retenidas por frecuencia,
+sin inicio en el snapshot actual. El timer no genera nuevo contenido.
+
+Se prepara el traspaso a agentes responsables; su destino sigue pendiente de
+definición y no se ha activado la migración. Ver el
+[traspaso y auditoría del 28 de octubre](TRASPASO-AGENTES-PUBLICACIONES-2026-10-28.md).
+Los estados fechados posteriores de este documento conservan historia, incluida
+la antigua instrucción de mantener el seguimiento activo, sustituida por esta
+petición humana. Brave ausente, X/TikTok y control total del perfil Facebook
+Humanizar conservan pendientes. Planificación de17productos no acredita su
+recurrencia en cinco destinos.
 
 ## Resultado esperado
 
