@@ -5,7 +5,9 @@ Estado inicial al 11 de octubre: **plan aprobado; implementación con subagentes
 La entrega de identidad y galería se conserva; el objetivo completo sigue pendiente. La meta del chat es el seguimiento principal; este documento
 conserva requisitos, avances y evidencia del repositorio.
 
-## Estado vigente — 28 de octubre, 22:00 UTC
+## Estado vigente — 28 de octubre, 22:18 UTC
+
+Actualización del traspaso; la auditoría social conserva el corte de las 22:00 UTC.
 
 **Meta global incompleta y bloqueada.** Prizma25Oct, Práxis26Oct y Érgon27Oct
 se publicaron automáticamente en Facebook Systems, Facebook Humanizar e
@@ -19,8 +21,10 @@ publicador de server2 quedó sin modificar y activo. Su reserva original alcanza
 Systems28Oct, News29Oct y Sinergia30Oct: nueve filas retenidas por frecuencia,
 sin inicio en el snapshot actual. El timer no genera nuevo contenido.
 
-Se prepara el traspaso a agentes responsables; su destino sigue pendiente de
-definición y no se ha activado la migración. Ver el
+El operador confirmó el destino **Cauce**. El encargo durable se remitió a Argos
+(mensaje `6e777f0b-6802-44fe-b8e0-b30d7a0e6048`); su primera lectura de recibo
+es `accepted`, sin respuesta ni ejecución acreditadas. La confirmación del
+destino y el envío no acreditan una migración activada. Ver el
 [traspaso y auditoría del 28 de octubre](TRASPASO-AGENTES-PUBLICACIONES-2026-10-28.md).
 Los estados fechados posteriores de este documento conservan historia, incluida
 la antigua instrucción de mantener el seguimiento activo, sustituida por esta

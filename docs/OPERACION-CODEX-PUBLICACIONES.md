@@ -1,5 +1,13 @@
 # Operación diaria de publicaciones con el Codex de cada empresa
 
+**Humanizar, instrucción vigente del 28 de octubre de 2026:** el seguimiento
+automático de este chat fue eliminado por petición del operador, quien confirmó
+el traspaso a agentes de Cauce. No recrear ese heartbeat. El timer de despacho
+existente de server2 permanece separado y sin cambios. El encargo a Argos tiene
+recibo de publicación y primera entrega `accepted`; eso no acredita ejecución ni
+operación recurrente ya transferida. Ver el
+[traspaso vigente](TRASPASO-AGENTES-PUBLICACIONES-2026-10-28.md).
+
 Estado de Task 9: interfaces y pruebas locales. **La operación nativa diaria no
 está validada todavía**. La conexión/launcher privado, imágenes, evaluación de
 modelo real, primera ejecución, heartbeat y publicación con lectura posterior
@@ -204,13 +212,17 @@ Un `publish_id` de TikTok necesita conciliación y no acredita publicación fina
    continúa retenido, con déficit visible. La entrega ya autorizada y vigente
    puede seguir mediante el worker independiente; no crear evaluación de fallback.
    Registrar límites, no atribuir una publicación real a un test local de claim/start.
-6. Revisar automations existentes en el runtime efectivo para evitar duplicados.
-   Solo después del gate diario real, crear/actualizar mediante la herramienta
-   oficial `automation_update` un **heartbeat para este mismo chat**. Conservar
-   la política de silencio anterior. Cada empresa instala su automatización en
-   su cliente propio. Un heartbeat guardado sin ejecución correlacionada no es
-   operación diaria validada. El cliente/máquina deben estar disponibles para
-   generar/evaluar; server2 continúa solo con stock vigente ya autorizado.
+6. Revisar mecanismos recurrentes existentes en el runtime efectivo para evitar
+   duplicados y respetar la decisión actual del operador. **Humanizar transfiere
+   esa responsabilidad a Cauce: no crear ni actualizar un heartbeat de este chat.**
+   El responsable debe identificar el mecanismo de Cauce, su cuenta/modelo,
+   autoridad, zona horaria y prueba real de producción/evaluación y verificación.
+   Un mensaje aceptado o una configuración guardada no es operación validada.
+   Para otras empresas, sólo configurar la automatización que su propietario
+   autorice en su cliente propio después del gate diario real; si elige un
+   heartbeat, usar la herramienta oficial y su política de notificaciones.
+   El cliente/máquina deben estar disponibles para generar/evaluar; server2
+   continúa solo con stock vigente ya autorizado.
 
 No se ha modificado launcher, sesión, proveedor, credencial, automation, timer,
 servicio desplegado ni cuenta real durante la implementación de Task 9.

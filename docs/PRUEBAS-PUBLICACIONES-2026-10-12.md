@@ -3,7 +3,9 @@
 Tenant Humanizar: 17. Fecha local: America/Bogota. Las publicaciones de prueba
 no acreditan todavía una recurrencia diaria activa en todas las redes.
 
-## Estado vigente — 28 de octubre, 22:00 UTC
+## Estado vigente — 28 de octubre, 22:18 UTC
+
+Actualización del traspaso; la auditoría social conserva el corte de las 22:00 UTC.
 
 Prizma25Oct, Práxis26Oct y Érgon27Oct se publicaron por el timer existente en
 Facebook Systems, Facebook Humanizar e Instagram: **9/9 verificadas** mediante
@@ -13,8 +15,9 @@ archivos, sin interfaz Brave ni aceptación global de cinco destinos/17productos
 
 Por petición humana se eliminó el seguimiento automático que reactivaba este
 chat. El timer de producción de server2 quedó sin modificar y activo, con tres
-ciclos originales pendientes28–30Oct (Systems, News y Sinergia). El destino de
-los agentes responsables sigue pendiente; no se activó una migración ni un nuevo
+ciclos originales pendientes28–30Oct (Systems, News y Sinergia). El operador
+confirmó Cauce y el encargo fue publicado para Argos: primera entrega `accepted`,
+sin respuesta ni ejecución acreditadas. No se activó una migración ni un nuevo
 programador. El detalle, los enlaces públicos, recibos, límites y reparto de
 responsabilidades figuran en el
 [traspaso del 28 de octubre](TRASPASO-AGENTES-PUBLICACIONES-2026-10-28.md).

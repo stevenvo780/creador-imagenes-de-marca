@@ -1,10 +1,11 @@
 # Traspaso de publicaciones de Humanizar a agentes responsables
 
-Corte: **28 de octubre de 2026, 22:00 UTC / 17:00 Bogotá**. Empresa 17.
-Estado: auditoría de los tres últimos ciclos completada; destino de los agentes
-pendiente de definición. Este documento prepara el traspaso: **no acredita una
-migración activada**. La meta global de cinco destinos y 17 productos continúa
-incompleta y bloqueada.
+Corte del traspaso: **28 de octubre de 2026, 22:18 UTC / 17:18 Bogotá**.
+Auditoría social: corte anterior de las 22:00 UTC. Empresa Eikón 17.
+El operador confirmó que los responsables serán los **agentes de Cauce**.
+El encargo durable se envió a Argos; su entrega está aceptada, sin respuesta
+ni ejecución acreditadas en este corte. **No se declara activada la migración.**
+La meta global de cinco destinos y 17 productos continúa incompleta y bloqueada.
 
 ## Decisión del operador
 
@@ -95,13 +96,42 @@ consumos ni rearmar entregas para forzar una ejecución.
 | Conexión de redes pendientes | Brave autorizado y respuestas humanas concretas | Completar X sin gasto y TikTok sin saltar CAPTCHA/MFA, consentimientos o requisitos del proveedor. No sustituir navegador o copiar sesiones. |
 | Propietario de la marca | Control total de la página Facebook Humanizar | Resolver logo/datos antiguos; el acceso actual a tareas permite publicar, pero no acredita esa edición. |
 
-El destino concreto de estos agentes está pendiente de respuesta del operador.
-No se han creado agentes persistentes, trasladado secretos, cambiado grants ni
-activado un nuevo planificador. El traspaso efectivo deberá registrar identidad
-del responsable, tenant y scopes mínimos mediante mecanismos privados; los
-tokens, contraseñas y respaldos no se incluyen en este documento ni en Git.
+El destino confirmado es Cauce. Se remitió a **Steven/argos**, coordinador de
+desarrollo según el inventario documental, en la sala `grp.steven`, para que
+concrete el responsable editorial/implementador y el verificador independiente,
+coordinando con Kant la operación de server2 cuando corresponda. La presencia
+actual de esos agentes no prueba capacidad, acceso o asunción del servicio.
+La empresa Cauce `Steven` y la empresa Eikón `17` son espacios de identidad
+distintos; no intercambiar sus IDs ni extender permisos por coincidencia de dueño.
+
+Se utilizó el plugin Cauce autorizado y la conexión existente del operador.
+El mensaje identifica expresamente a Codex como origen de este traspaso; el
+actor durable atribuido por la conexión es `Steven/kant`, que no demuestra por
+sí solo la identidad de un modelo o dispositivo. No se han creado agentes
+persistentes, trasladado secretos, cambiado grants ni activado un nuevo
+planificador. El traspaso efectivo deberá registrar identidad del responsable,
+tenant y scopes mínimos mediante mecanismos privados; los tokens, contraseñas
+y respaldos no se incluyen en este documento ni en Git.
 Los grants 4/5/6 vencen el **11 de noviembre a las 22:32:11 Bogotá** según
 el corte actual; revisar antes de vencer, sin renovación rutinaria anticipada.
+
+### Recibo del encargo en Cauce
+
+- Destinatario: `Steven/argos`; sala `grp.steven`.
+- Message ID: `6e777f0b-6802-44fe-b8e0-b30d7a0e6048`.
+- Delivery ID: `d66434aa-1d75-49f3-8f27-b54bfdc2977c`.
+- Request key conservada: `1141315d-9fb9-42ce-919d-c37f49873d17`.
+- Publicación del mensaje: confirmada, `duplicate=false`.
+- Primera lectura de recibo: `accepted`, intento 1, `reply=null`, cadena abierta.
+  No acredita lectura por Argos, ejecución ni migración terminada.
+
+El encargo incluye la reserva existente, la reposición editorial real antes de
+agotarse, un solo ejecutor, separación planner/reviewer/worker, restricciones de
+gasto y navegador, exclusiones históricas y preguntas humanas pendientes. Pide
+responsables concretos, acceso comprobado al repositorio/MCP/servidor/generación,
+mecanismo recurrente Cauce identificado y prueba real antes de declarar asunción.
+Si el resultado del envío fuese incierto, conciliar con la misma clave y cuerpo;
+no crear un segundo encargo con otra clave para superar un error.
 
 ## Pendientes que impiden declarar las cinco redes completas
 
